@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<script src="../../lib/js/socket.io.js"></script>
+<script src="../../lib/js/jquery-1.8.2.js"></script>
+<script src="agentAPI.js"></script>
+
+
+<form id = "serverIpForm" >
+    <div>Enter server IP </div>
+    <input type = "text" id = "serverIp" name="serverIp" value = "http://localhost:3000/b7bf4657-c751-4899-ac55-a74ca84dac55">
+    <input type="button" value="Submit" onclick=createAgent()>
+</form>
+
+<br>
+<form>
+    <input type = "number" id = "posX" name="posX" value = 10>
+    <input type = "number" id = "posY" name="posY" value = 10>
+    <input type = "text" id = "sbgnclass" name="sbgnclass" value = "macromolecule">
+    <input type="button" value="Add node" onclick=addNode()>
+</form>
+
+<ul id = 'operationHistory'>
+
+</ul>
+</body>
+
+
+<script>
+
+    var agent;
+    var newId = 0;
+    function createAgent(){
+        agent = new Agent("HAL");
+        var socket = agent.connectToServer($('#serverIp')[0].value);
+
+
+        socket.on('connect', function(){
+            agent.getModel();
+
+            agent.listen();
+
+        });
+    }
+
+    function addNode(){
+        var x = $('#posX')[0].value;
+        var y = $('#posY')[0].value;
+        var sbgnclass = $('#sbgnclass')[0].value;
+        var id = "" + newId++;
+        agent.addNode(id,x,y,sbgnclass);
+    }
+
+
+
+</script>
+
+</html>
