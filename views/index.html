@@ -851,6 +851,11 @@
             scrollToBottom('messages');
 
         });
+        $('#messages-list').bind('DOMSubtreeModified', function(){
+
+            scrollToBottom('messages-list');
+
+        });
 
 
 
@@ -873,7 +878,7 @@
     <chat-message:>
       <div class="message">
         <div class="time">{{_page.showTime && formatTime(#message)}}</div>
-        <b><div style = font-color:{{users[#pUserId].colorCode}}> {{users[#message.userId].name}}</div></b>
+        <b><div style = font-color:{{users[#message.userId].colorCode}}> {{#message.userName}}</div></b>
         <p>{{#message.comment}}</p>
       </div>
 

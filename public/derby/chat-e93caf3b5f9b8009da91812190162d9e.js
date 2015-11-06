@@ -5,826 +5,832 @@ require=(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof requ
  *  Event handlers of model updates
  *	Author: Funda Durupinar Babur<f.durupinar@gmail.com>
  */
-    var app = module.exports = require('derby').createApp('chat', __filename);
+var app = module.exports = require('derby').createApp('chat', __filename);
 
 
-    app.loadViews(__dirname + '/views');
-    //app.loadStyles(__dirname + '/styles');
-    //app.serverUse(module, 'derby-stylus');
+app.loadViews(__dirname + '/views');
+//app.loadStyles(__dirname + '/styles');
+//app.serverUse(module, 'derby-stylus');
 
 
-    var ONE_DAY = 1000 * 60 * 60 * 24;
+var ONE_DAY = 1000 * 60 * 60 * 24;
 
-    var ONE_HOUR = 1000 * 60 * 60;
+var ONE_HOUR = 1000 * 60 * 60;
 
-    var ONE_MINUTE = 1000 * 60;
+var ONE_MINUTE = 1000 * 60;
 
-    var docReady = false;
+var docReady = false;
 
-    var menu;
-
-
-    var userCount;
-    var socket;
-
-    app.on('model', function (model) {
+var menu;
 
 
-        //Convert to array
-        //model.fn('getCommandArray', function(items){
-        //
-        //    var commands =[];
-        //    for (key in items) {
-        //        commands.push({id: key.id, name: key.name, time: key.time});
-        //    }
-        //
-        //    return commands;
-        //});
-        model.fn('pluckUserIds', function (items, additional) {
-            var ids, item, key;
+var userCount;
+var socket;
+
+app.on('model', function (model) {
 
 
-            if (items == null) {
-                items = {};
+    //Convert to array
+    //model.fn('getCommandArray', function(items){
+    //
+    //    var commands =[];
+    //    for (key in items) {
+    //        commands.push({id: key.id, name: key.name, time: key.time});
+    //    }
+    //
+    //    return commands;
+    //});
+    model.fn('pluckUserIds', function (items, additional) {
+        var ids, item, key;
+
+
+        if (items == null) {
+            items = {};
+        }
+        ids = {};
+        if (additional) {
+            ids[additional] = true;
+
+        }
+        for (key in items) {
+            item = items[key];
+            //do not include previous messages
+
+            if (item != null ? item.userId : void 0) {
+                ids[item.userId] = true;
             }
-            ids = {};
-            if (additional) {
-                ids[additional] = true;
-
-            }
-            for (key in items) {
-                item = items[key];
-                //do not include previous messages
-
-                if (item != null ? item.userId : void 0) {
-                    ids[item.userId] = true;
-                }
-            }
+        }
 
 
-            return Object.keys(ids);
-        });
-
-        model.fn('biggerTime', function (item) {
-            var duration = model.get('_page.durationId');
-            var startTime;
-            if (duration < 0)
-                startTime = 0;
-            else
-                startTime = new Date - duration;
-
-            return item.time > startTime;
-        });
-
-        model.fn('isMessageForMe', function(item){
-            var myId = model.get('_session.userId');
-
-
-            if(item.targets && item.targets.indexOf(myId) > -1)
-                return true;
-            else
-                return false;
-
-        } );
-
+        return Object.keys(ids);
     });
 
-    app.get('/', function (page, model, params) {
-        function getId() {
-            return model.id();
-        }
+    model.fn('biggerTime', function (item) {
+        var duration = model.get('_page.durationId');
+        var startTime;
+        if (duration < 0)
+            startTime = 0;
+        else
+            startTime = new Date - duration;
 
-        function idIsReserved() {
-            var ret = model.get('documents.' + docId) != undefined;
-            return ret;
-        }
-
-        var docId = getId();
-
-        while (idIsReserved()) {
-            docId = getId();
-        }
-
-        return page.redirect('/' + docId);
+        return item.time > startTime;
     });
 
-//called in the server?????
-    app.get('/:docId', function (page, model, arg, next) {
-        var messagesQuery, room;
-        room = arg.docId;
+    model.fn('isMessageForMe', function(item){
+        var myId = model.get('_session.userId');
+
+
+        if(item.targets && item.targets.indexOf(myId) > -1)
+            return true;
+        else
+            return false;
+
+    } );
+
+});
+
+app.get('/', function (page, model, params) {
+    function getId() {
+        return model.id();
+    }
+
+    function idIsReserved() {
+        var ret = model.get('documents.' + docId) != undefined;
+        return ret;
+    }
+
+    var docId = getId();
+
+    while (idIsReserved()) {
+        docId = getId();
+    }
+
+    return page.redirect('/' + docId);
+});
+
+
+app.get('/:docId', function (page, model, arg, next) {
+    var messagesQuery, room;
+    room = arg.docId;
 
 
 
-        var docPath = 'documents.' + arg.docId;
+    var docPath = 'documents.' + arg.docId;
 
 
-        model.subscribe(docPath, 'cy', function(err) {
-
-
-                if (err) {
-                    return next(err);
-                }
-                model.setNull(docPath, { // create the empty new doc if it doesn't already exist
-                    id: arg.docId
-                });
-
-
-                // create a reference to the document
-                model.ref('_page.doc', 'documents.' + arg.docId);
-
-
-            }
-
-        );
-
-
-
-        //chat related
-        model.set('_page.room', room);
-
-        model.set('_page.durations', [{name: 'All', id: -1}, {name: 'One day', id: ONE_DAY}, {
-            name: 'One hour',
-            id: ONE_HOUR
-        }, {name: 'One minute', id: ONE_MINUTE}]);
-
-
-        model.set('_sbgnviz.samples',
-                [{name: 'Activated STAT1alpha induction of the IRF1 gene', id: 0},
-                {name: 'Glycolysis', id: 1},
-                {name: 'MAPK cascade', id: 2},
-                {name: 'MAPK cascade', id: 2},
-                {name: 'PolyQ proteins interference', id: 3},
-                {name: 'Insulin-like Growth Factor (IGF) signalling', id: 4},
-                {name: 'ATM mediated phosphorylation of repair proteins', id: 5},
-                {name: 'Vitamins B6 activation to pyridoxal phosphate', id: 6}
-
-            ]);
-
-
-
-
-
-        messagesQuery = model.query('messages', {
-            room: room,
-            time: {
-                $gt: 0
-            }
-        });
-
-        messagesQuery.subscribe(function (err) {
-
+    model.subscribe(docPath, 'cy', function(err) {
             if (err) {
                 return next(err);
             }
+            model.setNull(docPath, { // create the empty new doc if it doesn't already exist
+                id: arg.docId
+            });
 
 
-            //just to initialize
-            model.set('_page.userIds',[model.get('_session.userId')]);
-            var  usersQuery = model.query('users', '_page.userIds');
+            // create a reference to the document
+            model.ref('_page.doc', 'documents.' + arg.docId);
 
-            usersQuery.subscribe(function (err) {
-               if (err) {
+
+        }
+
+    );
+
+
+
+    //chat related
+    model.set('_page.room', room);
+
+    model.set('_page.durations', [{name: 'All', id: -1}, {name: 'One day', id: ONE_DAY}, {
+        name: 'One hour',
+        id: ONE_HOUR
+    }, {name: 'One minute', id: ONE_MINUTE}]);
+
+
+    model.set('_sbgnviz.samples',
+        [{name: 'Activated STAT1alpha induction of the IRF1 gene', id: 0},
+            {name: 'Glycolysis', id: 1},
+            {name: 'MAPK cascade', id: 2},
+            {name: 'MAPK cascade', id: 2},
+            {name: 'PolyQ proteins interference', id: 3},
+            {name: 'Insulin-like Growth Factor (IGF) signalling', id: 4},
+            {name: 'ATM mediated phosphorylation of repair proteins', id: 5},
+            {name: 'Vitamins B6 activation to pyridoxal phosphate', id: 6}
+
+        ]);
+
+
+
+
+
+    messagesQuery = model.query('messages', {
+        room: room,
+        time: {
+            $gt: 0
+        }
+    });
+
+    messagesQuery.subscribe(function (err) {
+
+        if (err) {
+            return next(err);
+        }
+
+
+        //just to initialize
+        model.set('_page.userIds',[model.get('_session.userId')]);
+
+        model.subscribe('users');
+        var  usersQuery = model.query('users', '_page.userIds');
+        usersQuery.subscribe(function (err) {
+            if (err) {
+                return next(err);
+            }
+            var  user = model.at('users.' + model.get('_session.userId'));
+
+
+
+            userCount = model.at('chat.userCount');
+
+
+
+            return userCount.fetch(function (err) {
+                if(user.get()) {
+                    if(user.get('colorCode') == null ){
+                        user.set('colorCode', getNewColor());
+                    }
+                    if(user.get('name') != null)
+                        return page.render();
+
+                }
+                if (err) {
+                    return next(err);
+                }
+
+                return userCount.increment(function (err) {
+                    if (err) {
                         return next(err);
                     }
-                var  user = model.at('users.' + model.get('_session.userId'));
-
-
-                   userCount = model.at('chat.userCount');
-
-
-
-
-                    return userCount.fetch(function (err) {
-
-                        if(user.get()) {
-
-                            if(user.get('colorCode') == null ){
-                                user.set('colorCode', getNewColor());
-                            }
-                            if(user.get('name') != null)
-                                return page.render();
-
-                        }
-                        if (err) {
-                            return next(err);
-                        }
-
-                        return userCount.increment(function (err) {
-
-
-                            if (err) {
-                                return next(err);
-                            }
-                            user.set({
-                                name: 'User ' + userCount.get(),
-                                colorCode: getNewColor()
-                            });
-
-
-
-
-                            return page.render();
-                        });
+                    user.set({
+                        name: 'User ' + userCount.get(),
+                        colorCode: getNewColor()
                     });
+
+
+
+
+                    return page.render();
                 });
+            });
         });
+    });
+});
+
+
+
+function getNewColor(){
+    var gR = 1.618033988749895; //golden ratio
+    var h = Math.floor((Math.random() * gR * 360));//Math.floor((cInd * gR - Math.floor(cInd * gR))*360);
+    var cHsl = [h, 70 + Math.random() * 30, 60 + Math.random() * 10];
+
+    return ('hsla('+cHsl[0]  +', '+ cHsl[1] + '%, ' + cHsl[2] +'%, 1)');
+
+}
+
+function playSound() {
+    try {
+        document.getElementById('notificationAudio').play();
+        if (!document)
+            throw err;
+    }
+    catch (err) {
+        return err;
+    }
+
+
+}
+
+
+
+app.proto.changeDuration = function () {
+
+    return this.model.filter('messages', 'biggerTime').ref('_page.list');
+
+
+};
+
+
+
+app.proto.init = function (model) {
+    var timeSort;
+
+
+
+
+    model.on('all', '_page.doc.cy.nodes.*', function(id, op, val, prev, passed){
+
+
+        if(docReady &&  passed.user == null) {
+            var node  = model.get('_page.doc.cy.nodes.' + id);
+
+            if(!node || !node.id){ //node is deleted
+
+                deleteElement(id);
+            }
+            //else insertion
+        }
+
+    });
+
+    model.on('all', '_page.doc.cy.edges.*', function(id, op, val, prev, passed){
+
+
+        if(docReady &&  passed.user == null) {
+            var edge  = model.get('_page.doc.cy.edges.' + id);
+            if(!edge|| !edge.id){ //node is deleted
+                deleteElement(id);
+            }
+            //else insertion
+        }
+
+    });
+
+    model.on('all', '_page.doc.sampleInd', function(op, ind, prev, passed){
+
+
+        if(docReady && passed.user == null) {
+            menu.updateSample(ind);
+        }
+
+    });
+
+    model.on('all', '_page.doc.layoutProperties', function(index){
+
+        if(docReady && menu ){
+            var layoutProps = model.get('_page.doc.layoutProperties');
+            menu.updateLayoutProperties(layoutProps);
+
+        }
+
+    });
+    model.on('all', '_page.doc.cy.nodes.*.sbgnclass', function(id, op, sbgnclass, prev, passed){ //this property must be something that is only changed during insertion
+
+
+        if(docReady && passed.user == null) {
+
+            var pos = model.get('_page.doc.cy.nodes.'+ id + '.position');
+
+
+            insertNode({id:id, position:pos,  sbgnclass: sbgnclass});
+
+
+        }
+
+    });
+
+    model.on('all', '_page.doc.cy.edges.*.sbgnclass', function(id,op, sbgnclass, prev, passed){//this property must be something that is only changed during insertion
+
+        if(docReady && passed.user == null ){
+            //check if edge id exists in the current inspector graph
+            var source = model.get('_page.doc.cy.edges.'+ id + '.source');
+            var target = model.get('_page.doc.cy.edges.'+ id + '.target');
+
+            insertEdge(source, target);
+        }
+
+    });
+
+    model.on('change', '_page.doc.cy.nodes.*.position', function(id, pos, prev, passed){
+        if(docReady && passed.user == null)
+            updateElementProperty(id, 'position', pos, 'position');
+
+
+    });
+
+    model.on('change', '_page.doc.cy.nodes.*.highlightColor', function(id, highlightColor, prev,passed){
+
+
+        if(docReady && passed.user == null) {
+
+            var color;
+            if (highlightColor != null)
+                color = cytoscape.util.tuple2hex(cytoscape.util.hsl2tuple(highlightColor));
+            else
+                color = model.get('_page.doc.cy.nodes.' + id + '.backgroundColor');
+
+
+            updateElementProperty(id, 'background-color', color, 'css');
+        }
+
+    });
+    model.on('all', '_page.doc.cy.nodes.*.sbgnlabel', function(id, op, label,prev, passed){
+
+        if(docReady && passed.user == null) {
+            updateElementProperty(id, 'sbgnlabel', label, 'data');
+        }
+    });
+    model.on('change', '_page.doc.cy.nodes.*.borderColor', function(id, borderColor,prev, passed){
+
+        if(docReady && passed.user == null) {
+            updateElementProperty(id,  'borderColor', borderColor, 'data');
+        }
+    });
+
+    model.on('change', '_page.doc.cy.nodes.*.borderWidth', function(id, borderWidth,prev, passed){
+
+        if(docReady && passed.user == null) {
+            updateElementProperty(id,  'border-width', borderWidth, 'css');
+        }
+    });
+
+    model.on('change', '_page.doc.cy.nodes.*.backgroundColor', function(id, backgroundColor,prev, passed){
+
+        if(docReady && passed.user == null) {
+            updateElementProperty(id,  'background-color', backgroundColor, 'css');
+        }
+    });
+
+
+    model.on('change', '_page.doc.cy.nodes.*.isMultimer', function(id, isMultimer,prev, passed){
+
+        if(docReady && passed.user == null) {
+            updateMultimerStatus(id, isMultimer);
+
+        }
+    });
+
+    model.on('change', '_page.doc.cy.nodes.*.isCloneMarker', function(id, isCloneMarker,prev, passed){
+
+        if(docReady && passed.user == null) {
+            updateCloneMarkerStatus(id, isCloneMarker);
+        }
+    });
+
+    model.on('change', '_page.doc.cy.nodes.*.parent', function(id, parent,prev, passed){
+
+        if(docReady && passed.user == null) {
+            updateElementProperty(id,  'parent', parent, 'data');
+        }
+    });
+
+    model.on('change', '_page.doc.cy.nodes.*.width', function(id, width ,prev, passed){
+
+        if(docReady && passed.user == null) {
+            updateElementProperty(id,  'width', width, 'data');
+        }
+    });
+
+    model.on('change', '_page.doc.cy.nodes.*.height', function(id, height, prev, passed){
+
+        if(docReady && passed.user == null) {
+            updateElementProperty(id,  'height', height, 'data');
+        }
+    });
+
+    model.on('change', '_page.doc.cy.nodes.*.sbgnbboxW', function(id, width ,prev, passed){
+
+        if(docReady && passed.user == null) {
+            updateElementProperty(id,  'sbgnbbox.w', width, 'data');
+        }
+    });
+    model.on('change', '_page.doc.cy.nodes.*.sbgnbboxH', function(id, height, prev, passed){
+
+        if(docReady && passed.user == null) {
+            updateElementProperty(id,  'sbgnbbox.h', height, 'data');
+        }
+    });
+
+
+    model.on('change', '_page.doc.cy.nodes.*.sbgnStatesAndInfos', function(id, sbgnStatesAndInfos,prev, passed){
+
+        if(docReady && passed.user == null) {
+            updateElementProperty(id,  'sbgnstatesandinfos', sbgnStatesAndInfos, 'data');
+
+        }
+    });
+
+    model.on('change', '_page.doc.cy.edges.*.lineColor', function(id, lineColor,prev, passed){
+
+
+        if(docReady && passed.user == null) {
+            updateElementProperty(id,  'lineColor', lineColor, 'data');
+        }
+    });
+    model.on('change', '_page.doc.cy.edges.*.highlightColor', function(id, highlightColor,prev, passed){
+
+        if(docReady && passed.user == null) {
+            var color;
+            if (highlightColor != null)
+                color = cytoscape.util.tuple2hex(cytoscape.util.hsl2tuple(highlightColor));
+            else
+                color = model.get('_page.doc.cy.edges.' + id + '.lineColor');
+
+            updateElementProperty(id, 'lineColor', color, 'data');
+        }
+
+    });
+
+
+    model.on('change', '_page.doc.cy.edges.*.width', function(id, width,prev, passed){
+
+        if(docReady && passed.user == null) {
+            updateElementProperty(id,  'width', width, 'css');
+        }
+    });
+
+    model.on('change', '_page.doc.cy.edges.*.cardinality', function(id, cardinality,prev, passed){
+
+        if(docReady && passed.user == null) {
+            updateElementProperty(id,  'sbgncardinality', cardinality, 'data');
+        }
+    });
+
+
+    model.on('insert', '_page.list', function (index) {
+
+
+        var com = model.get('_page.list');
+        var myId = model.get('_session.userId');
+
+
+
+        if (com[com.length - 1].userId != myId) {
+
+            playSound();
+
+        }
+    });
+
+    timeSort = function (a, b) {
+        return (a != null ? a.time : void 0) - (b != null ? b.time : void 0);
+    };
+
+
+
+
+    //console.log(model.get('messages'));
+    //return model.filter('messages', 'isMessageForMe').ref('_page.list');
+
+    return model.sort('messages', timeSort).ref('_page.list');
+};
+
+
+app.proto.create = function (model) {
+    model.set('_page.showTime', true);
+    docReady = true;
+
+
+
+    socket = io();
+
+    var id = model.get('_session.userId');
+    var name = model.get('users.' + id +'.name');
+    socket.emit("subscribeHuman", {userName:name, pageDoc: model.get('_page.doc'), room:  model.get('_page.room'), userId: id}); //subscribe to current doc as a new room
+
+    socket.on('userList', function(userList) {
+
+        userIds =[];
+        userList.forEach(function(user){
+            //if(userIds.indexOf(userList[i].userId) < 0)
+            userIds.push(user.userId);
+            var  userPath = model.at('users.' +  user.userId);
+
+            if(userPath!=null)
+                userPath.set('name', user.userName);
+          //  console.log(userPath.get('name'));
+
+            if(userPath == null){
+                userPath.set('name', user.userName);
+
+            }
+
+        });
+
+        model.set('_page.userIds', userIds );
+
+
+
     });
 
 
 
-    function getNewColor(){
-        var gR = 1.618033988749895; //golden ratio
-        var h = Math.floor((Math.random() * gR * 360));//Math.floor((cInd * gR - Math.floor(cInd * gR))*360);
-        var cHsl = [h, 70 + Math.random() * 30, 60 + Math.random() * 10];
+    var modelManager = require('./public/sample-app/sampleapp-components/js/modelManager.js')(model);
 
-        return ('hsla('+cHsl[0]  +', '+ cHsl[1] + '%, ' + cHsl[2] +'%, 1)');
 
-    }
+    menu =  require('./public/sample-app/sampleapp-components/js/sample-app-menu-functions.js');
 
-    function playSound() {
-        try {
-            document.getElementById('notificationAudio').play();
-            if (!document)
-                throw err;
-        }
-        catch (err) {
-            return err;
-        }
+    //send modelManager to web client
+    menu.start(modelManager);
 
 
-    }
+    //send model to server
 
+    //socket.emit('pageDoc',{room:model.get('_page.room'), pageDoc: model.get('_page.doc')});
 
+    this.atBottom = true;
 
-    app.proto.changeDuration = function () {
 
-        return this.model.filter('messages', 'biggerTime').ref('_page.list');
 
+    return model.on('all', '_page.list', (function (_this) {
 
-    };
-
-
-
-    app.proto.init = function (model) {
-        var timeSort;
-
-
-
-        model.on('all', '_page.doc.cy.nodes.*', function(id, op, val, prev, passed){
-
-
-            if(docReady &&  passed.user == null) {
-                var node  = model.get('_page.doc.cy.nodes.' + id);
-
-                if(!node || !node.id){ //node is deleted
-
-                    deleteElement(id);
-                }
-               //else insertion
-            }
-
-        });
-
-        model.on('all', '_page.doc.cy.edges.*', function(id, op, val, prev, passed){
-
-
-            if(docReady &&  passed.user == null) {
-                var edge  = model.get('_page.doc.cy.edges.' + id);
-                if(!edge|| !edge.id){ //node is deleted
-                    deleteElement(id);
-                }
-                //else insertion
-            }
-
-        });
-
-        model.on('all', '_page.doc.sampleInd', function(op, ind, prev, passed){
-
-
-            if(docReady && passed.user == null) {
-                menu.updateSample(ind);
-            }
-
-        });
-
-        model.on('all', '_page.doc.layoutProperties', function(index){
-
-            if(docReady && menu ){
-                var layoutProps = model.get('_page.doc.layoutProperties');
-                menu.updateLayoutProperties(layoutProps);
-
-            }
-
-        });
-        model.on('all', '_page.doc.cy.nodes.*.sbgnclass', function(id, op, sbgnclass, prev, passed){ //this property must be something that is only changed during insertion
-
-            console.log(id);
-             if(docReady && passed.user == null) {
-
-                var pos = model.get('_page.doc.cy.nodes.'+ id + '.position');
-
-
-                insertNode({id:id, position:pos,  sbgnclass: sbgnclass});
-
-
-            }
-
-        });
-
-        model.on('all', '_page.doc.cy.edges.*.sbgnclass', function(id,op, sbgnclass, prev, passed){//this property must be something that is only changed during insertion
-
-            if(docReady && passed.user == null ){
-                //check if edge id exists in the current inspector graph
-                var source = model.get('_page.doc.cy.edges.'+ id + '.source');
-                var target = model.get('_page.doc.cy.edges.'+ id + '.target');
-
-                insertEdge(source, target);
-            }
-
-        });
-
-        model.on('change', '_page.doc.cy.nodes.*.position', function(id, pos, prev, passed){
-            if(docReady && passed.user == null)
-                updateElementProperty(id, 'position', pos, 'position');
-
-
-        });
-
-        model.on('change', '_page.doc.cy.nodes.*.highlightColor', function(id, highlightColor, prev,passed){
-
-
-            if(docReady && passed.user == null) {
-
-                var color;
-                if (highlightColor != null)
-                    color = cytoscape.util.tuple2hex(cytoscape.util.hsl2tuple(highlightColor));
-                else
-                    color = model.get('_page.doc.cy.nodes.' + id + '.backgroundColor');
-
-
-                updateElementProperty(id, 'background-color', color, 'css');
-            }
-
-        });
-        model.on('all', '_page.doc.cy.nodes.*.sbgnlabel', function(id, op, label,prev, passed){
-
-               if(docReady && passed.user == null) {
-                updateElementProperty(id, 'sbgnlabel', label, 'data');
-            }
-        });
-        model.on('change', '_page.doc.cy.nodes.*.borderColor', function(id, borderColor,prev, passed){
-
-            if(docReady && passed.user == null) {
-                updateElementProperty(id,  'borderColor', borderColor, 'data');
-            }
-        });
-
-        model.on('change', '_page.doc.cy.nodes.*.borderWidth', function(id, borderWidth,prev, passed){
-
-            if(docReady && passed.user == null) {
-                updateElementProperty(id,  'border-width', borderWidth, 'css');
-            }
-        });
-
-        model.on('change', '_page.doc.cy.nodes.*.backgroundColor', function(id, backgroundColor,prev, passed){
-
-               if(docReady && passed.user == null) {
-                updateElementProperty(id,  'background-color', backgroundColor, 'css');
-            }
-        });
-
-
-        model.on('change', '_page.doc.cy.nodes.*.isMultimer', function(id, isMultimer,prev, passed){
-
-            if(docReady && passed.user == null) {
-                updateMultimerStatus(id, isMultimer);
-
-            }
-        });
-
-        model.on('change', '_page.doc.cy.nodes.*.isCloneMarker', function(id, isCloneMarker,prev, passed){
-
-            if(docReady && passed.user == null) {
-                updateCloneMarkerStatus(id, isCloneMarker);
-            }
-        });
-
-        model.on('change', '_page.doc.cy.nodes.*.parent', function(id, parent,prev, passed){
-
-            if(docReady && passed.user == null) {
-                updateElementProperty(id,  'parent', parent, 'data');
-            }
-        });
-
-        model.on('change', '_page.doc.cy.nodes.*.width', function(id, width ,prev, passed){
-
-            if(docReady && passed.user == null) {
-                updateElementProperty(id,  'width', width, 'data');
-            }
-        });
-
-        model.on('change', '_page.doc.cy.nodes.*.height', function(id, height, prev, passed){
-
-            if(docReady && passed.user == null) {
-                updateElementProperty(id,  'height', height, 'data');
-            }
-        });
-
-        model.on('change', '_page.doc.cy.nodes.*.sbgnbboxW', function(id, width ,prev, passed){
-
-            if(docReady && passed.user == null) {
-                updateElementProperty(id,  'sbgnbbox.w', width, 'data');
-            }
-        });
-        model.on('change', '_page.doc.cy.nodes.*.sbgnbboxH', function(id, height, prev, passed){
-
-            if(docReady && passed.user == null) {
-                updateElementProperty(id,  'sbgnbbox.h', height, 'data');
-            }
-        });
-
-
-        model.on('change', '_page.doc.cy.nodes.*.sbgnStatesAndInfos', function(id, sbgnStatesAndInfos,prev, passed){
-
-            if(docReady && passed.user == null) {
-                updateElementProperty(id,  'sbgnstatesandinfos', sbgnStatesAndInfos, 'data');
-
-            }
-        });
-
-        model.on('change', '_page.doc.cy.edges.*.lineColor', function(id, lineColor,prev, passed){
-
-
-            if(docReady && passed.user == null) {
-                updateElementProperty(id,  'lineColor', lineColor, 'data');
-            }
-        });
-        model.on('change', '_page.doc.cy.edges.*.highlightColor', function(id, highlightColor,prev, passed){
-
-            if(docReady && passed.user == null) {
-                var color;
-                if (highlightColor != null)
-                    color = cytoscape.util.tuple2hex(cytoscape.util.hsl2tuple(highlightColor));
-                else
-                    color = model.get('_page.doc.cy.edges.' + id + '.lineColor');
-
-                updateElementProperty(id, 'lineColor', color, 'data');
-            }
-
-        });
-
-
-        model.on('change', '_page.doc.cy.edges.*.width', function(id, width,prev, passed){
-
-            if(docReady && passed.user == null) {
-                updateElementProperty(id,  'width', width, 'css');
-            }
-        });
-
-        model.on('change', '_page.doc.cy.edges.*.cardinality', function(id, cardinality,prev, passed){
-
-            if(docReady && passed.user == null) {
-                updateElementProperty(id,  'sbgncardinality', cardinality, 'data');
-            }
-        });
-
-
-        model.on('insert', '_page.list', function (index) {
-
-
-            var com = model.get('_page.list');
-            var myId = model.get('_session.userId');
-
-
-
-            if (com[com.length - 1].userId != myId) {
-
-                playSound();
-
-            }
-        });
-
-        timeSort = function (a, b) {
-            return (a != null ? a.time : void 0) - (b != null ? b.time : void 0);
-        };
-
-
-
-
-        //console.log(model.get('messages'));
-        //return model.filter('messages', 'isMessageForMe').ref('_page.list');
-
-        return model.sort('messages', timeSort).ref('_page.list');
-    };
-
-
-    app.proto.create = function (model) {
-        model.set('_page.showTime', true);
-        docReady = true;
-
-
-
-        socket = io();
-
-        socket.emit("subscribe", {pageDoc: model.get('_page.doc'), room:  model.get('_page.room'), userId: model.get('_session.userId'), userType: "human"}); //subscribe to current doc as a new room
-
-        socket.on('userList', function(userList) {
-            userIds =[];
-           userList.forEach(function(user){
-
-            //if(userIds.indexOf(userList[i].userId) < 0)
-                userIds.push(user.userId);
-                var  userPath = model.at('users.' +  user.userId);
-                if(userPath == null && user.userType == "agent"){
-                   userPath.set('name', user.userId);
-
-                }
-
-            });
-
-
-            model.set('_page.userIds', userIds );
-
-
-
-
-        });
-
-
-
-
-        var modelManager = require('./public/sample-app/sampleapp-components/js/modelManager.js')(model);
-
-
-        menu =  require('./public/sample-app/sampleapp-components/js/sample-app-menu-functions.js');
-
-        //send modelManager to web client
-        menu.start(modelManager);
-
-
-        //send model to server
-
-        //socket.emit('pageDoc',{room:model.get('_page.room'), pageDoc: model.get('_page.doc')});
-
-        this.atBottom = true;
-
-
-
-        return model.on('all', '_page.list', (function (_this) {
-
-            return function () {
-                if (!_this.atBottom) {
-                    return;
-                }
-                return _this.container.scrollTop = _this.list.offsetHeight;
-            };
-        })(this));
-    };
-
-
-    app.proto.onScroll = function () {
-        var bottom, containerHeight, scrollBottom;
-        bottom = this.list.offsetHeight;
-        containerHeight = this.container.offsetHeight;
-        scrollBottom = this.container.scrollTop + containerHeight;
-
-        return this.atBottom = bottom < containerHeight || scrollBottom > bottom - 10;
-    };
-
-
-    app.proto.changeColorCode = function(){
-
-        var  user = this.model.at('users.' + this.model.get('_session.userId'));
-
-        user.set('colorCode', getNewColor());
-
-    };
-
-    app.proto.add = function () {
-
-
-        var model = this.model;
-        this.atBottom = true;
-
-        socket.emit('getTime', function(){}) ;
-        socket.on("currentTime", function (val) {
-
-
-            var comment;
-            comment = model.del('_page.newComment'); //to clear  the input box
-            if (!comment) {
+        return function () {
+            if (!_this.atBottom) {
                 return;
             }
-
-            var targets  = [];
-            var users = model.get('_page.userIds');
-
-            var myId = model.get('_session.userId');
-            for(var i = 0; i < users.length; i++){
-                var user = users[i];
-                    if(user == myId ||  document.getElementById(user).checked){
-                        targets.push(user);
-                    }
-                }
-
-            model.add('messages', {
-                room: model.get('_page.room'),
-                targets: targets,
-                userId: model.get('_session.userId'),
-                comment: comment,
-                //  time: +(new Date)
-                time: val
-            });
-
-            model.filter('messages', 'isMessageForMe').ref('_page.list');
-        });
-
-    };
+            return _this.container.scrollTop = _this.list.offsetHeight;
+        };
+    })(this));
+};
 
 
+app.proto.onScroll = function () {
+    var bottom, containerHeight, scrollBottom;
+    bottom = this.list.offsetHeight;
+    containerHeight = this.container.offsetHeight;
+    scrollBottom = this.container.scrollTop + containerHeight;
+
+    return this.atBottom = bottom < containerHeight || scrollBottom > bottom - 10;
+};
 
 
-    app.proto.count = function (value) {
-        return Object.keys(value || {}).length;
-    };
+app.proto.changeColorCode = function(){
+
+    var  user = this.model.at('users.' + this.model.get('_session.userId'));
+
+    user.set('colorCode', getNewColor());
+
+};
+
+app.proto.add = function () {
+
+
+    var model = this.model;
+    this.atBottom = true;
+
+    socket.emit('getTime', function(){}) ;
 
 
 
-    app.proto.formatTime = function (message) {
-        var hours, minutes, seconds, period, time;
-        time = message && message.time;
-        if (!time) {
+    socket.on("currentTime", function (val) {
+
+
+        var comment;
+        comment = model.del('_page.newComment'); //to clear  the input box
+        if (!comment) {
             return;
         }
-        time = new Date(time);
-        hours = time.getHours();
 
-        minutes = time.getMinutes();
+        var targets  = [];
+        var users = model.get('_page.userIds');
 
-        seconds = time.getSeconds();
-
-        if (minutes < 10) {
-            minutes = '0' + minutes;
+        var myId = model.get('_session.userId');
+        for(var i = 0; i < users.length; i++){
+            var user = users[i];
+            if(user == myId ||  document.getElementById(user).checked){
+                targets.push(user);
+            }
         }
-        if (seconds < 10) {
-            seconds = '0' + seconds;
-        }
-        return hours + ':' + minutes + ':' + seconds;
-    };
 
-    app.proto.formatObj = function(obj){
+        var msgUserId = model.get('_session.userId');
+        var msgUserName = model.get('users.' + msgUserId +'.name');
 
-        return JSON.stringify(obj);
+        model.add('messages', {
+            room: model.get('_page.room'),
+            targets: targets,
+            userId: msgUserId,
+            userName: msgUserName,
+            comment: comment,
+            //  time: +(new Date)
+            time: val
+        });
+
+
+
+
+        model.filter('messages', 'isMessageForMe').ref('_page.list');
+    });
+
+};
+
+
+
+
+app.proto.count = function (value) {
+    return Object.keys(value || {}).length;
+};
+
+
+
+app.proto.formatTime = function (message) {
+    var hours, minutes, seconds, period, time;
+    time = message && message.time;
+    if (!time) {
+        return;
     }
+    time = new Date(time);
+    hours = time.getHours();
+
+    minutes = time.getMinutes();
+
+    seconds = time.getSeconds();
+
+    if (minutes < 10) {
+        minutes = '0' + minutes;
+    }
+    if (seconds < 10) {
+        seconds = '0' + seconds;
+    }
+    return hours + ':' + minutes + ':' + seconds;
+};
+
+app.proto.formatObj = function(obj){
+
+    return JSON.stringify(obj);
+}
 
 
-    //Function declarations for model update
+//Function declarations for model update
 
-    function deleteElement(elId){
-        setTimeout(function(){
-            try{
+function deleteElement(elId){
+    setTimeout(function(){
+        try{
             var el = cy.$(('#' + elId));
             //         cy.elements().unselect(); //unselect others
 
             //todo element is already selected? el.select(); //select this one
 
-             addRemoveUtilities.removeEles(el);
+            addRemoveUtilities.removeEles(el);
 
-                  }
+        }
         catch (err) {
             console.log("Please reload page. " + err);
         }
     }, 0);
 
-    }
+}
 
-    function insertNode(nodeData){
-        setTimeout(function(){
-            try{
+function insertNode(nodeData){
+    setTimeout(function(){
+        try{
 
-                var param = {};
-                param.newNode = {
-                    x: nodeData.position.x,
-                    y: nodeData.position.y,
-                    sbgnclass: nodeData.sbgnclass
-                };
-                param.firstTime = true;
-                var newNode = addRemoveUtilities.addNode(param.newNode.x, param.newNode.y, param.newNode.sbgnclass);
+            var param = {};
+            param.newNode = {
+                x: nodeData.position.x,
+                y: nodeData.position.y,
+                sbgnclass: nodeData.sbgnclass
+            };
+            param.firstTime = true;
+            var newNode = addRemoveUtilities.addNode(param.newNode.x, param.newNode.y, param.newNode.sbgnclass);
 
 
 
+        }
+        catch (err) {
+            console.log("Please reload page. " + err);
+        }
+    }, 0);
+
+}
+
+
+function insertEdge (sourceId, targetId){
+    setTimeout(function(){
+        try {
+            var param = {};
+            param.newEdge = {
+                source: sourceId,
+                target: targetId,
+                sbgnclass: modeHandler.elementsHTMLNameToName[modeHandler.selectedEdgeType]
+            };
+            param.firstTime = true;
+
+            addRemoveUtilities.addEdge(param.newEdge.source, param.newEdge.target, param.newEdge.sbgnclass);
+
+
+        }
+        catch (err) {
+            console.log("Please reload page. " + err);
+        }
+    }, 0);
+}
+
+
+
+
+function updateElementProperty(elId, propName, propValue, propType){
+
+    setTimeout(function(){
+        try {
+            var el = cy.$(('#' + elId));
+            if (propType == 'position')
+                el[propType](propValue);
+            else
+                el[propType](propName, propValue);
+
+
+            /*
+             //TODO: correct resizing
+             if(propName == 'width')
+             el._private.style.width.value = propValue;
+             else if(propName == 'height')
+             el._private.style.height.value = propValue;
+             */
+
+
+            cy.forceRender();
+
+        }
+
+        catch (err) {
+            console.log("Please reload page. " + err + " " + propName);
+        }
+    },0);
+}
+
+//Update the inspector as well
+function updateMultimerStatus(elId, isMultimer){
+    setTimeout(function(){
+        try {
+            var node = cy.$(('#' + elId));
+
+
+            var sbgnclass = node.data('sbgnclass');
+            if (isMultimer) {
+                //if not multimer already
+                if(sbgnclass.indexOf(' multimer') <= -1) //todo funda changed
+                    node.data('sbgnclass', sbgnclass + ' multimer');
             }
-            catch (err) {
-                console.log("Please reload page. " + err);
-            }
-        }, 0);
-
-    }
-
-
-    function insertEdge (sourceId, targetId){
-        setTimeout(function(){
-            try {
-                var param = {};
-                param.newEdge = {
-                    source: sourceId,
-                    target: targetId,
-                    sbgnclass: modeHandler.elementsHTMLNameToName[modeHandler.selectedEdgeType]
-                };
-                param.firstTime = true;
-
-               addRemoveUtilities.addEdge(param.newEdge.source, param.newEdge.target, param.newEdge.sbgnclass);
-
-
-            }
-            catch (err) {
-                console.log("Please reload page. " + err);
-            }
-        }, 0);
-    }
-
-
-
-
-    function updateElementProperty(elId, propName, propValue, propType){
-
-        setTimeout(function(){
-            try {
-                var el = cy.$(('#' + elId));
-                if (propType == 'position')
-                    el[propType](propValue);
-                else
-                    el[propType](propName, propValue);
-
-
-
-                /*
-                //TODO: correct resizing
-                if(propName == 'width')
-                    el._private.style.width.value = propValue;
-                else if(propName == 'height')
-                    el._private.style.height.value = propValue;
-*/
-
-
-                cy.forceRender();
-
-            }
-
-            catch (err) {
-                console.log("Please reload page. " + err + " " + propName);
-            }
-        },0);
-    }
-
-    //Update the inspector as well
-    function updateMultimerStatus(elId, isMultimer){
-        setTimeout(function(){
-            try {
-                var node = cy.$(('#' + elId));
-
-
-                var sbgnclass = node.data('sbgnclass');
-                if (isMultimer) {
-                    //if not multimer already
-                    if(sbgnclass.indexOf(' multimer') <= -1) //todo funda changed
-                        node.data('sbgnclass', sbgnclass + ' multimer');
-                }
-                else {
-                    node.data('sbgnclass', sbgnclass.replace(' multimer', ''));
-                }
-
+            else {
+                node.data('sbgnclass', sbgnclass.replace(' multimer', ''));
             }
 
-            catch (err) {
-                console.log("Please reload page. " + err);
-            }
-        },0);
-    }
+        }
 
-    function updateCloneMarkerStatus(elId, isCloneMarker){
+        catch (err) {
+            console.log("Please reload page. " + err);
+        }
+    },0);
+}
 
-        setTimeout(function(){
+function updateCloneMarkerStatus(elId, isCloneMarker){
 
-            try{
-                var node = cy.$(('#' + elId));
+    setTimeout(function(){
+
+        try{
+            var node = cy.$(('#' + elId));
 
 
-                node.data('sbgnclonemarker', isCloneMarker?true:undefined);
+            node.data('sbgnclonemarker', isCloneMarker?true:undefined);
 
             //    node._private.data.sbgnclonemarker = isCloneMarker?true:undefined;
 
 
 
-            }
-            catch (err) {
-                console.log("Please reload page. " + err);
-            }
-        }, 0);
-    }
-
-
-
+        }
+        catch (err) {
+            console.log("Please reload page. " + err);
+        }
+    }, 0);
+}
 }).call(this,"/index.js","/")
 },{"./public/sample-app/sampleapp-components/js/modelManager.js":86,"./public/sample-app/sampleapp-components/js/sample-app-menu-functions.js":88,"derby":"4eZCmJ"}],"4eZCmJ":[function(require,module,exports){
 var Derby = require('./lib/Derby');
@@ -856,8 +862,8 @@ function App(derby, name, filename) {
   this.derby = derby;
   this.name = name;
   this.filename = filename;
-  this.scriptHash = 'ba6d50de3d28f5c0a57d98c5ed36707f';
-  this.bundledAt = 1446750318066;
+  this.scriptHash = 'e93caf3b5f9b8009da91812190162d9e';
+  this.bundledAt = 1446847978448;
   this.Page = createAppPage();
   this.proto = this.Page.prototype;
   this.views = new derbyTemplates.templates.Views();
@@ -1615,7 +1621,7 @@ function textUpdate(binding, element, pass) {
 util.serverRequire(module, './Page.server');
 
 },{"./Controller":5,"./documentListeners":11,"./eventmodel":12,"./textDiff":13,"derby-templates":14,"racer/lib/util":45}],9:[function(require,module,exports){
-/*DERBY_SERIALIZED_VIEWS*/module.exports = function(derbyTemplates, views) {var expressions = derbyTemplates.expressions;var templates = derbyTemplates.templates;views.register('TitleElement', '<title><view name="{{$render.prefix}}Title"></view></title>').template = new templates.Template([new templates.Element('title', void 0, [new templates.Block(new templates.Template([new templates.DynamicText(new expressions.PathExpression(['$render', 'prefix'], new expressions.ExpressionMeta('$render.prefix'))), new templates.Text('Title')], '{{$render.prefix}}Title'), [new templates.DynamicViewInstance(new templates.Template([new templates.DynamicText(new expressions.PathExpression(['$render', 'prefix'], new expressions.ExpressionMeta('$render.prefix'))), new templates.Text('Title')], '{{$render.prefix}}Title'), {})])], void 0, false)]);views.register('BodyElement', '<body class="{{$bodyClass($render.ns)}}"><view name="{{$render.prefix}}Body"></view>').template = new templates.Template([new templates.Element('body', {'class': new templates.DynamicAttribute(new expressions.FnExpression(['$bodyClass'], [new expressions.PathExpression(['$render', 'ns'])], void 0, new expressions.ExpressionMeta('$bodyClass($render.ns)')))}, [new templates.Block(new templates.Template([new templates.DynamicText(new expressions.PathExpression(['$render', 'prefix'], new expressions.ExpressionMeta('$render.prefix'))), new templates.Text('Body')], '{{$render.prefix}}Body'), [new templates.DynamicViewInstance(new templates.Template([new templates.DynamicText(new expressions.PathExpression(['$render', 'prefix'], new expressions.ExpressionMeta('$render.prefix'))), new templates.Text('Body')], '{{$render.prefix}}Body'), {})])], void 0, false, true)]);views.register('Title', '\n    SBGNViz Collaborative Editor ({{count(messages)}}) - {{users[_session.userId].name}} - {{_page.doc.sampleInd}}\n\n').template = new templates.Template([new templates.Text('SBGNViz Collaborative Editor ('), new templates.DynamicText(new expressions.FnExpression(['count'], [new expressions.PathExpression(['messages'])], void 0, new expressions.ExpressionMeta('count(messages)'))), new templates.Text(') - '), new templates.DynamicText(new expressions.BracketsExpression(new expressions.PathExpression(['users']), new expressions.PathExpression(['_session', 'userId']), ['name'], new expressions.ExpressionMeta('users[_session.userId].name'))), new templates.Text(' - '), new templates.DynamicText(new expressions.PathExpression(['_page', 'doc', 'sampleInd'], new expressions.ExpressionMeta('_page.doc.sampleInd')))]);views.register('Head', '\n    <meta name="viewport" content="width=device-width">\n    <!--Css files-->\n    <link href="lib/css/jquery-ui-1.10.3.custom.css" rel="stylesheet">\n    <link href="lib/css/jquery.fancybox-1.3.4.css" rel="stylesheet">\n    <link href="lib/css/bootstrap.css" rel="stylesheet">\n    <link href="lib/css/cytoscape.js-panzoom.css" rel="stylesheet">\n    <link href="lib/css/font-awesome-4.0.3/css/font-awesome.css" rel="stylesheet">\n    <link href="lib/css/jquery.qtip.min.css" rel="stylesheet">\n    <link href="sample-app/sampleapp-components/css/sbgn-viz.css" rel="stylesheet">\n\n\n').template = new templates.Template([new templates.Element('meta', {'name': new templates.Attribute('viewport'), 'content': new templates.Attribute('width=device-width')}, null, void 0, false), new templates.Element('link', {'href': new templates.Attribute('lib/css/jquery-ui-1.10.3.custom.css'), 'rel': new templates.Attribute('stylesheet')}, null, void 0, false), new templates.Element('link', {'href': new templates.Attribute('lib/css/jquery.fancybox-1.3.4.css'), 'rel': new templates.Attribute('stylesheet')}, null, void 0, false), new templates.Element('link', {'href': new templates.Attribute('lib/css/bootstrap.css'), 'rel': new templates.Attribute('stylesheet')}, null, void 0, false), new templates.Element('link', {'href': new templates.Attribute('lib/css/cytoscape.js-panzoom.css'), 'rel': new templates.Attribute('stylesheet')}, null, void 0, false), new templates.Element('link', {'href': new templates.Attribute('lib/css/font-awesome-4.0.3/css/font-awesome.css'), 'rel': new templates.Attribute('stylesheet')}, null, void 0, false), new templates.Element('link', {'href': new templates.Attribute('lib/css/jquery.qtip.min.css'), 'rel': new templates.Attribute('stylesheet')}, null, void 0, false), new templates.Element('link', {'href': new templates.Attribute('sample-app/sampleapp-components/css/sbgn-viz.css'), 'rel': new templates.Attribute('stylesheet')}, null, void 0, false)]);views.register('Body', '\n    <!-- External Libraries -->\n    <script src="lib/js/jquery-1.8.2.js"></script>\n    <script src="lib/js/jquery.fancybox-1.3.4.pack.js"></script>\n    <script src="lib/js/jquery.expander-min.js"></script>\n    <script src="lib/js/jquery.qtip.js"></script>\n    <script src="lib/js/bootstrap.min.js"></script>\n    <script src="lib/js/jquery-ui-1.10.3.custom.min.js"></script>\n    <script src="lib/js/underscore.js"></script>\n    <script src="lib/js/cytoscape.js"></script>\n    <script src="lib/js/cytoscape.js-panzoom.js"></script>\n    <script src="lib/js/cytoscape.js-qtip.js"></script>\n    <script src="lib/js/cytoscape-edgehandles.js"></script>\n    <script src="lib/js/cytoscape-noderesize.js"></script>\n\n    <script src="lib/js/FileSaver.js"></script>\n    <script src="lib/js/jquery.noty.packaged.min.js"></script>\n    <script src="lib/js/socket.io.js"></script>\n\n\n    <!--Core SBGNViz components-->\n    <script src="src/sbgn-extensions/cytoscape-cose-bilkent.js"></script>\n    <script src="src/sbgn-extensions/cytoscape.renderer.canvas.sbgn-renderer.js"></script>\n    <script src="src/utilities/json-to-sbgnml-converter.js"></script>\n    <script src="src/utilities/sbgnml-to-json-converter.js"></script>\n    <script src="src/utilities/sbgn-filtering.js"></script>\n    <script src="src/utilities/expand-collapse-utilities.js"></script>\n    <script src="src/utilities/add-remove-utilities.js"></script>\n    <script src="src/utilities/sbgn-element-utilities.js"></script>\n\n    <script src="sample-app/sampleapp-components/js/sample-app-mode-handler.js"></script>\n    <script src="sample-app/sampleapp-components/js/sample-app-helper-functions.js"></script>\n\n\n    <!--<div id = "sbgnviz">-->\n         <div class="nav-menu">\n             <nav class="navbar navbar-default sbgn-nav-bar" role="navigation">\n                 <div>\n                     <ul class="nav navbar-nav navbar-left">\n\n                         <li class="dropdown">\n                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">\n                                 File\n                                 <b class="caret"></b>\n                             </a>\n                             <ul class="dropdown-menu">\n                                 <input id="file-input" type="file" style="..." />\n                                 <li><a href="#" type="file" id="new-file">New</a></li>\n                                 <li><a href="#" type="file" id="load-file">Load...</a></li>\n                                 <li class="dropdown-submenu">\n                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">\n                                         Samples\n                                     </a>\n                                     <!--<div id = "samples">-->\n                                     <ul id = "samples" class="dropdown-menu">\n                                         {{each _sbgnviz.samples as #pSample}}\n                                         <li><a href="#" id="{{#pSample.id}}">{{#pSample.name}}</a></li>\n                                         {{/each}}\n                                     </ul>\n                                <!--</div>-->\n                                 </li>\n                                 <li><a href="#" id="save-as-sbgnml">Save...</a></li>\n                                 <li><a href="#" id="save-command-history">Save operation history...</a></li>\n\n                                 <li class="dropdown-submenu">\n                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">\n                                         Save as Image\n                                     </a>\n                                     <ul class="dropdown-menu">\n                                         <li><a href="#" id="save-as-png">PNG</a></li>\n                                         <li><a href="#" id="save-as-jpg">JPG</a></li>\n                                     </ul>\n                                 </li>\n                                 <li><a href="#" id="sbgn-properties">Properties...</a></li>\n                             </ul>\n                         </li>\n\n\n\n                         <li class="dropdown">\n                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">\n                                 Edit\n                                 <b class="caret"></b>\n                             </a>\n                             <ul class="dropdown-menu">\n                                 <li><a href="#" id="select-edit">Select/Edit</a></li>\n                                 <li class="dropdown-submenu">\n                                     <a href="#" id="add-node-menu-option" class="dropdown-toggle" data-toggle="dropdown">\n                                         Add Node\n                                         <!--<b class="right-caret"></b>-->\n                                     </a>\n                                     <ul class="dropdown-menu" id="add-node-submenu">\n                                         <li><a href="#" class="add-node-menu-item" name="macromolecule">Macromolecule</a></li>\n                                         <li><a href="#" class="add-node-menu-item" name="simple-chemical">Simple Chemical</a></li>\n                                         <li><a href="#" class="add-node-menu-item" name="complex">Complex</a></li>\n                                         <li class="dropdown-submenu">\n                                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" id="process-menu-option">\n                                                 Process\n                                                 <!--<b class="right-caret"></b>-->\n                                             </a>\n                                             <ul class="dropdown-menu">\n                                                 <li><a href="#" class="add-node-menu-item process-type" name="process" >Process</a></li>\n                                                 <li><a href="#" class="add-node-menu-item process-type" name="omitted-process">Omitted Process</a></li>\n                                                 <li><a href="#" class="add-node-menu-item process-type" name="uncertain-process">Uncertain Process</a></li>\n                                                 <li><a href="#" class="add-node-menu-item process-type" name="association">Association</a></li>\n                                                 <li><a href="#" class="add-node-menu-item process-type" name="dissociation">Dissociation</a></li>\n                                             </ul>\n                                         </li>\n                                         <li><a href="#" class="add-node-menu-item" name="phenotype">Phenotype</a></li>\n                                         <li><a href="#" class="add-node-menu-item" name="compartment">Compartment</a></li>\n                                         <li><a href="#" class="add-node-menu-item" name="unspecified-entity">Unspecified Entry</a></li>\n                                         <li><a href="#" class="add-node-menu-item" name="nucleic-acid-feature">Nucleic Acid Feature</a></li>\n                                         <li><a href="#" class="add-node-menu-item" name="source-and-sink">Source or Sink</a></li>\n                                         <li><a href="#" class="add-node-menu-item" name="perturbing-agent">Perturbing Agend</a></li>\n                                         <li><a href="#" class="add-node-menu-item" name="tag">Tag</a></li>\n                                         <li class="dropdown-submenu">\n                                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" id="logical-operator-menu-option">\n                                                 Logical Operators\n                                                 <!--<b class="right-caret"></b>-->\n                                             </a>\n                                             <ul class="dropdown-menu">\n                                                 <li><a href="#" class="logical-operator-type add-node-menu-item" name="and">AND</a></li>\n                                                 <li><a href="#" class="logical-operator-type add-node-menu-item" name="or">OR</a></li>\n                                                 <li><a href="#" class="logical-operator-type add-node-menu-item" name="not">NOT</a></li>\n                                             </ul>\n                                         </li>\n                                     </ul>\n                                 </li>\n\n                                 <li class="dropdown-submenu">\n                                     <a href="#" id="add-edge-menu-option" class="dropdown-toggle" data-toggle="dropdown">\n                                         Add Interaction\n                                     </a>\n                                     <ul class="dropdown-menu" id="add-edge-submenu">\n                                         <li><a href="#" class="add-edge-menu-item" name="consumption">Consumption</a></li>\n                                         <li><a href="#" class="add-edge-menu-item" name="production">Production</a></li>\n                                         <li class="divider"></li>\n                                         <li><a href="#" class="add-edge-menu-item" name="modulation">Modulation</a></li>\n                                         <li><a href="#" class="add-edge-menu-item" name="stimulation">Simulation</a></li>\n                                         <li><a href="#" class="add-edge-menu-item" name="catalysis">Catalysis</a></li>\n                                         <li><a href="#" class="add-edge-menu-item" name="inhibition">Inhibition</a></li>\n                                         <li><a href="#" class="add-edge-menu-item" name="necessary-stimulation">Necessary Stimulation</a></li>\n                                         <li class="divider"></li>\n                                         <li><a href="#" class="add-edge-menu-item" name="logic-arc">Logic Arc</a></li>\n                                         <li class="divider"></li>\n                                         <li><a href="#" class="add-edge-menu-item" name="equivalence-arc">Equivalence Arc</a></li>\n                                     </ul>\n                                 </li>\n\n                                 <li class="divider"></li>\n                                 <li><a href="#" id="make-compound-complex" >Add Complex for Selected</a></li>\n                                 <li><a href="#" id="make-compound-compartment" >Add Compartment for Selected</a></li>\n\n                                 <li class="divider"></li>\n\n                                 <li><a href="#" id="delete-selected-simple">Delete Selected Simple</a></li>\n                                 <li><a href="#" id="delete-selected-smart">Delete Selected Smart</a></li>\n\n                                 <li class="divider"></li>\n                                 <li class="disabled"><a href="#" id="undo-last-action" >Undo</a></li>\n                                 <li class="disabled"><a href="#" id="redo-last-action" >Redo</a></li>\n\n                             </ul>\n                         </li>\n\n                         <li class="dropdown">\n                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">\n                                 View\n                                 <b class="caret"></b>\n                             </a>\n                             <ul class="dropdown-menu">\n                                 <li class="dropdown-submenu">\n                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">\n                                         Hide/Show\n                                         <!--<b class="right-caret"></b>-->\n                                     </a>\n                                     <ul class="dropdown-menu">\n                                         <li><a href="#" id="hide-selected">Hide Selected</a></li>\n                                         <li><a href="#" id="show-selected">Show Selected</a></li>\n                                         <li><a href="#" id="show-all">Show All</a></li>\n                                     </ul>\n                                 </li>\n\n                                 <li class="dropdown-submenu">\n                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">\n                                         Collapse/Expand\n                                         <!--<b class="right-caret"></b>-->\n                                     </a>\n                                     <ul class="dropdown-menu">\n                                         <li><a href="#" id="collapse-selected">Collapse Selected</a></li>\n                                         <li><a href="#" id="expand-selected">Expand Selected</a></li>\n                                         <li><a href="#" id="collapse-all">Collapse All</a></li>\n                                         <li><a href="#" id="expand-all">Expand All</a></li>\n                                     </ul>\n                                 </li>\n\n                                 <li class="dropdown-submenu">\n                                     <a href="#" id="add-node-menu-option" class="dropdown-toggle" data-toggle="dropdown">\n                                         Align\n                                         <!--<b class="right-caret"></b>-->\n                                     </a>\n                                     <ul class="dropdown-menu" id="add-node-submenu">\n                                         <li class="dropdown-submenu">\n                                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">\n                                                 Horizontal\n                                                 <!--<b class="right-caret"></b>-->\n                                             </a>\n                                             <ul class="dropdown-menu">\n                                                 <li><a href="#" id="align-horizontal-top">Top</a></li>\n                                                 <li><a href="#" id="align-horizontal-middle">Middle</a></li>\n                                                 <li><a href="#" id="align-horizontal-bottom">Bottom</a></li>\n                                             </ul>\n                                         </li>\n                                         <li class="dropdown-submenu">\n                                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">\n                                                 Vertical\n                                                 <!--<b class="right-caret"></b>-->\n                                             </a>\n                                             <ul class="dropdown-menu">\n                                                 <li><a href="#" id="align-vertical-left">Left</a></li>\n                                                 <li><a href="#" id="align-vertical-center">Center</a></li>\n                                                 <li><a href="#" id="align-vertical-right">Right</a></li>\n                                             </ul>\n                                         </li>\n                                     </ul>\n                                 </li>\n                             </ul>\n                         </li>\n\n                         <li class="dropdown">\n                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">\n                                 Highlight\n                                 <b class="caret"></b>\n                             </a>\n                             <ul class="dropdown-menu">\n                                 <li><a href="#" id="neighbors-of-selected">Neighbors of Selected</a></li>\n                                 <li><a href="#" id="processes-of-selected">Processes of Selected</a></li>\n                                 <li><a href="#" id="remove-highlights">Remove Highlights</a></li>\n\n                             </ul>\n                         </li>\n\n                         <li class="dropdown">\n                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">\n                                 Layout\n                                 <b class="caret"></b>\n                             </a>\n                             <ul class="dropdown-menu">\n                                 <li><a href="#" id="perform-layout">Perform Layout</a></li>\n                                 <li><a href="#" id="perform-incremental-layout" style="display: none"></a></li>\n                                 <li><a href="#" id="layout-properties">Layout Properties...</a></li>\n                             </ul>\n                         </li>\n\n\n                         <li class="dropdown">\n                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">\n                                 Legends\n                                 <b class="caret"></b>\n                             </a>\n                             <ul class="dropdown-menu">\n                                 <li><a href="#" id="node-legend">Node Legend</a></li>\n                                 <li><a href="#" id="edge-legend">Interaction Legend</a></li>\n                             </ul>\n                         </li>\n\n\n                         <li class="dropdown">\n                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">\n                                 Help\n                                 <b class="caret"></b>\n                             </a>\n                             <ul class="dropdown-menu">\n                                 <li><a href="#" id="quick-help">Quick Help</a></li>\n                                 <li><a href="#" id="how-to-use">How to Use</a></li>\n                                 <li><a href="#" id="about">About</a></li>\n                             </ul>\n                         </li>\n                     </ul>\n                     <span class="input-file" id="file-name"></span>\n                 </div>\n             </nav>\n         </div>\n\n         <div id="sbgn-toolbar" style="margin-top: 5px;">\n             <!--<table width="100%" height="100%" align="center" valign="center">-->\n                 <!--<tr>-->\n             <div class="inside-menu">\n                 <img id="new-file-icon" class="sbgn-toolbar-element" src="sample-app/sampleapp-images/new.png" title="New File">\n                 <img id="load-file-icon" class="sbgn-toolbar-element" src="sample-app/sampleapp-images/load.png" title="Load">\n                 <img id="save-icon" class="sbgn-toolbar-element" src="sample-app/sampleapp-images/save.png" title="Save">\n                <img id="properties-icon" class="sbgn-toolbar-element" src="sample-app/sampleapp-images/toolbar-icons/properties.png" title="Properties" >\n             </div>\n\n             <div class="menu-break-large sbgn-toolbar-element"></div>\n             <div class="inside-menu">\n                 <img id="select-icon" class="sbgn-toolbar-element" src="sample-app/sampleapp-images/toolbar-icons/select.png" title="Select" >\n                 <div class="btn-group sbgn-toolbar-element" role="group" id="node-list">\n                     <button id="node-list-set-mode-btn" title="Macromolecule" type="button" class="btn" aria-haspopup="true" aria-expanded="false">\n                         <div style="height: 16px;">\n                             <img style="float: left; height: 16px; width: auto;" id="sbgn-selected-node-img" src="sample-app/sampleapp-images/nodes/macromolecule.png"/>\n                             <!--<span style="float: right;" class="caret"></span>-->\n                         </div>\n                     </button>\n                     <button id="node-list-dd-button" type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">\n                         <div style="height: 16px;">\n                             <span class="caret"></span>\n                             <span class="sr-only"></span>\n                         </div>\n                     </button>\n\n                     <ul id="node-list-menu" class="dropdown-menu" >\n                         <li class="sbgn-select-node-item" id="first-sbgn-select-node-item"><a href="#"><img src="sample-app/sampleapp-images/nodes/macromolecule.png" class="sbgn-select-img" value="macromolecule"/>Macromolecule</a></li>\n                         <li class="sbgn-select-node-item"><a href="#"><img src="sample-app/sampleapp-images/nodes/simplechemical.png" class="sbgn-select-img" value="simple-chemical"/>Simple Chemical</a></li>\n                         <li class="sbgn-select-node-item"><a href="#"><img src="sample-app/sampleapp-images/nodes/complex.png" class="sbgn-select-img" value="complex"/>Complex</a></li>\n                         <li class="sbgn-select-node-item"><a href="#"><img src="sample-app/sampleapp-images/nodes/process.png" class="sbgn-select-img" value="process"/>Process</a></li>\n                         <li class="sbgn-select-node-item"><a href="#"><img src="sample-app/sampleapp-images/nodes/omittedprocess.png" class="sbgn-select-img" value="omitted-process"/>Omitted Process</a></li>\n                         <li class="sbgn-select-node-item"><a href="#"><img src="sample-app/sampleapp-images/nodes/uncertainprocess.png" class="sbgn-select-img" value="uncertain-process"/>Uncertain Process</a></li>\n                         <li class="sbgn-select-node-item"><a href="#"><img src="sample-app/sampleapp-images/nodes/association.png" class="sbgn-select-img" value="association"/>Association</a></li>\n                         <li class="sbgn-select-node-item"><a href="#"><img src="sample-app/sampleapp-images/nodes/dissociation.png" class="sbgn-select-img" value="dissociation"/>Dissociation</a></li>\n                         <li class="sbgn-select-node-item"><a href="#"><img src="sample-app/sampleapp-images/nodes/phenotype.png" class="sbgn-select-img" value="phenotype"/>Phenotype</a></li>\n                         <li class="sbgn-select-node-item"><a href="#"><img src="sample-app/sampleapp-images/nodes/compartment.png" class="sbgn-select-img" value="compartment"/>Compartment</a></li>\n                         <li class="sbgn-select-node-item"><a href="#"><img src="sample-app/sampleapp-images/nodes/unspecifiedentity.png" class="sbgn-select-img" value="unspecified-entity"/>Unspecified Entity</a></li>\n                         <li class="sbgn-select-node-item"><a href="#"><img src="sample-app/sampleapp-images/nodes/nucleicacidfeature.png" class="sbgn-select-img" value="nucleic-acid-feature"/>Nucleic Acid Feature</a></li>\n\n                         <li class="sbgn-select-node-item"><a href="#"><img src="sample-app/sampleapp-images/nodes/sourceandsink.png" class="sbgn-select-img" value="source-and-sink"/>Source and Sink</a></li>\n                         <li class="sbgn-select-node-item"><a href="#"><img src="sample-app/sampleapp-images/nodes/perturbingagent.png" class="sbgn-select-img" value="perturbing-agent"/>Perturbing Agent</a></li>\n                         <li class="sbgn-select-node-item"><a href="#"><img src="sample-app/sampleapp-images/nodes/tag.png" class="sbgn-select-img" value="tag"/>Tag</a></li>\n\n                         <li class="sbgn-select-node-item"><a href="#"><img src="sample-app/sampleapp-images/nodes/and.png" class="sbgn-select-img" value="and"/>AND</a></li>\n                         <li class="sbgn-select-node-item"><a href="#"><img src="sample-app/sampleapp-images/nodes/or.png" class="sbgn-select-img" value="or"/>OR</a></li>\n                         <li class="sbgn-select-node-item"><a href="#"><img src="sample-app/sampleapp-images/nodes/not.png" class="sbgn-select-img" value="not"/>NOT</a></li>\n                     </ul>\n                 </div>\n\n                 <div class="btn-group sbgn-toolbar-element" role="group" id="edge-list">\n                     <button id="edge-list-set-mode-btn" type="button" class="btn" title="consumption" aria-haspopup="true" aria-expanded="false">\n                         <div style="height: 16px;">\n                             <img style="float: left;" id="sbgn-selected-edge-img" src="sample-app/sampleapp-images/edges/consumption.png" class="sbgn-select-img"/>\n                             <!--<span style="float: right;" class="caret"></span>-->\n                         </div>\n                     </button>\n                     <button id="edge-list-dd-button" type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">\n                         <div style="height: 16px;">\n                             <span class="caret"></span>\n                             <span class="sr-only"></span>\n                         </div>\n                     </button>\n                     <ul id="edge-list-menu" class="dropdown-menu" >\n                         <li id="first-sbgn-select-edge-item" class="sbgn-select-edge-item"><a href="#"><img src="sample-app/sampleapp-images/edges/consumption.png" class="sbgn-select-img" value="consumption"/>Consumption</a></li>\n                         <li class="sbgn-select-edge-item"><a href="#"><img src="sample-app/sampleapp-images/edges/production.png" class="sbgn-select-img" value="production"/>Production</a></li>\n                         <li class="sbgn-select-edge-item"><a href="#"><img src="sample-app/sampleapp-images/edges/modulation.png" class="sbgn-select-img" value="modulation"/>Modulation</a></li>\n                         <li class="sbgn-select-edge-item"><a href="#"><img src="sample-app/sampleapp-images/edges/stimulation.png" class="sbgn-select-img" value="stimulation"/>Stimulation</a></li>\n                         <li class="sbgn-select-edge-item"><a href="#"><img src="sample-app/sampleapp-images/edges/catalysis.png" class="sbgn-select-img" value="catalysis"/>Catalysis</a></li>\n                         <li class="sbgn-select-edge-item"><a href="#"><img src="sample-app/sampleapp-images/edges/inhibition.png" class="sbgn-select-img" value="inhibition"/>Inhibition</a></li>\n                         <li class="sbgn-select-edge-item"><a href="#"><img src="sample-app/sampleapp-images/edges/necessarystimulation.png" class="sbgn-select-img" value="necessary-stimulation"/>Necessary Stimulation</a></li>\n                         <li class="sbgn-select-edge-item"><a href="#"><img src="sample-app/sampleapp-images/edges/logicarc.png" class="sbgn-select-img" value="logic-arc"/>Logic Arc</a></li>\n                         <li class="sbgn-select-edge-item"><a class="dd-list-href" href="#"><img src="sample-app/sampleapp-images/edges/logicarc.png" class="sbgn-select-img" value="equivalence-arc"/>Equivalence Arc</a></li>\n                     </ul>\n                 </div>\n\n                 <div class="menu-break-small sbgn-toolbar-element"></div>\n                 <img id="delete-selected-simple-icon" class="sbgn-toolbar-element" src="sample-app/sampleapp-images/toolbar-icons/deletesimple.png" title="Delete Selected Simple" >\n                 <img id="delete-selected-smart-icon" class="sbgn-toolbar-element" src="sample-app/sampleapp-images/toolbar-icons/deletesmart.png" title="Delete Selected Smart" >\n\n                 <div class="menu-break-small sbgn-toolbar-element"></div>\n                 <img id="undo-icon" class="sbgn-toolbar-element" src="sample-app/sampleapp-images/toolbar-icons/undo.png" title="Undo" >\n                 <img id="redo-icon" class="sbgn-toolbar-element" src="sample-app/sampleapp-images/toolbar-icons/redo.png" title="Redo" >\n             </div>\n\n             <div class="menu-break-large sbgn-toolbar-element"></div>\n             <div class="inside-menu">\n                 <img id="hide-selected-icon" class="sbgn-toolbar-element" src="sample-app/sampleapp-images/toolbar-icons/hideselected.png" title="Hide Selected" >\n                 <img id="show-selected-icon" class="sbgn-toolbar-element" src="sample-app/sampleapp-images/toolbar-icons/showselected.png" title="Show Selected" >\n\n                 <div class="menu-break-small sbgn-toolbar-element"></div>\n                 <img id="collapse-selected-icon" class="sbgn-toolbar-element" src="sample-app/sampleapp-images/toolbar-icons/collapseselected.png" title="Collapse Selected" >\n                 <img id="expand-selected-icon" class="sbgn-toolbar-element" src="sample-app/sampleapp-images/toolbar-icons/expandselected.png" title="Expand Selected" >\n\n                 <div class="menu-break-small sbgn-toolbar-element"></div>\n                 <div class="btn-group sbgn-toolbar-element" role="group" id="align-list">\n                     <button id="align-button" title="Align" type="button" class="btn" aria-haspopup="true" aria-expanded="false">\n                         <div style="height: 16px;">\n                             <img style="float: left; height: 16px; width: auto;" id="sbgn-align-img" src="sample-app/sampleapp-images/align/align.png"/>\n                             <!--<span style="float: right;" class="caret"></span>-->\n                         </div>\n                     </button>\n                     <button id="align-dd-button" type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">\n                         <div style="height: 16px;">\n                             <span class="caret"></span>\n                             <span class="sr-only"></span>\n                         </div>\n                     </button>\n                     <ul id="align-menu" class="dropdown-menu" >\n                         <li><a class="dd-list-href" href="#" id="align-horizontal-top-icon"><img src="sample-app/sampleapp-images/align/align-horizontal-top.png" class="sbgn-select-img"/>Align Horizontal Top</a></li>\n                         <li><a class="dd-list-href" href="#" id="align-horizontal-middle-icon"><img src="sample-app/sampleapp-images/align/align-horizontal-middle.png" class="sbgn-select-img"/>Align Horizontal Middle</a></li>\n                         <li><a class="dd-list-href" href="#" id="align-horizontal-bottom-icon"><img src="sample-app/sampleapp-images/align/align-horizontal-bottom.png" class="sbgn-select-img"/>Align Horizontal Bottom</a></li>\n                         <li><a class="dd-list-href" href="#" id="align-vertical-left-icon"><img src="sample-app/sampleapp-images/align/align-vertical-left.png" class="sbgn-select-img"/>Align Vertical Left</a></li>\n                         <li><a class="dd-list-href" href="#" id="align-vertical-center-icon"><img src="sample-app/sampleapp-images/align/align-vertical-center.png" class="sbgn-select-img"/>Align Vertical Center</a></li>\n                         <li><a class="dd-list-href" href="#" id="align-vertical-right-icon"><img src="sample-app/sampleapp-images/align/align-vertical-right.png" class="sbgn-select-img"/>Align Vertical Right</a></li>\n                     </ul>\n                 </div>\n             </div>\n             <div class="menu-break-large sbgn-toolbar-element"></div>\n             <div class="inside-menu">\n                 <img id="highlight-neighbors-of-selected-icon" class="sbgn-toolbar-element" src="sample-app/sampleapp-images/toolbar-icons/highlightneighborsofselected.png" title="Highlight Neighbors of Selected" >\n                 <img id="remove-highlights-icon" class="sbgn-toolbar-element" src="sample-app/sampleapp-images/toolbar-icons/removehighlights.png" title="Remove Highlights" >\n             </div>\n\n             <div class="menu-break-large sbgn-toolbar-element"></div>\n             <div class="inside-menu">\n                 <img id="perform-layout-icon" class="sbgn-toolbar-element" src="sample-app/sampleapp-images/toolbar-icons/layout-cose.png" title="Perform Layout" >\n                 <img id="layout-properties-icon" class="sbgn-toolbar-element" src="sample-app/sampleapp-images/toolbar-icons/layoutproperties.png" title="Layout Properties" >\n             </div>\n\n                 <!--</tr>-->\n             <!--</table>-->\n         </div>\n\n\n        <div id="sbgn-network-container"></div>\n        <div id="sbgn-inspector"></div>\n\n        <div id="sbgn-layout-table" title="Layout Properties">\n             <!-- sbgn layout table will be shown here -->\n         </div>\n\n         <div id="sbgn-properties-table" title="Properties" style="display: inline">\n             <!-- sbgn properties table will be shown here -->\n         </div>\n\n         <div id="biogene-container" style="display: none">\n         </div>\n\n         <div id="box">\n         </div>\n\n         <input id="node-label-textbox" type="text">\n\n         <!-- templates -->\n         <script type="text/template" id="node-legend-template">\n             <div class="sbgn-frame">\n                 <h2 class="sbgn-text">Node Legend</h2>\n                 <img src="sample-app/sampleapp-images/node_legend_sbgn.png" alt="" class="centered">\n             </div>\n         </script>\n\n         <script type="text/template" id="edge-legend-template">\n             <div class="sbgn-frame">\n                 <h2 class="sbgn-text">Interaction Legend</h2>\n                 <img src="sample-app/sampleapp-images/interaction_legend_sbgn.png" alt="" class="centered">\n             </div>\n         </script>\n\n         <script type="text/template" id="about-template">\n             <div class="sbgn-frame">\n                 <h2 class="sbgn-text">About</h2>\n\n                 <table width="100%" height="100%" align="center" valign="center">\n                     <tr><td>\n                         <img src="sample-app/sampleapp-images/i-vis.png" alt="" class="centered">\n                     </td></tr>\n\n                     <tr><td>\n                         <img src="sample-app/sampleapp-images/cbio.png" alt="" class="centered">\n                     </td></tr>\n\n                     <tr><td>\n                         <p class="sbgn-text">SBGN<i>Viz</i>.js version 1.2</p>\n                     </td></tr>\n\n                     <tr><td>\n                         <p class="address-text marg">i-Vis information Visualization Group</p>\n                         <p class="address-text">Bilkent University, Ankara, Turkey</p>\n                     </td></tr>\n\n                     <tr><td>\n                         <p class="address-text marg">Memorial Sloan-Kettering Cancer Center</p>\n                         <p class="address-text">New York, USA</p>\n                     </td></tr>\n\n                     <tr><td>\n                         <p class="address-text marg">\n                             <a href="mailto:ivis@cs.bilkent.edu.tr" target="_top">ivis@cs.bilkent.edu.tr</a>\n                         </p>\n                         <p class="address-text">\n                             <a href="https://github.com/PathwayCommons/sbgnviz-js" target="_blank">https://github.com/PathwayCommons/sbgnviz-js</a>\n                         </p>\n                     </td></tr>\n                 </table>\n             </div>\n         </script>\n\n         <script type="text/template" id="quick-help-template">\n             <div class="sbgn-frame quick-help">\n                 <h2 class="sbgn-text">Quick Help</h2>\n                 <div class="quick-help-content">\n                     <table align="center" valign="center">\n                         <tr>\n                             <td><b>File | Samples | &lt;sample file&gt;</b>:\n                                 Load a sample model from file in SBGN-ML</td>\n                         </tr>\n                         <tr>\n                             <td><b>File | Load</b>:\n                                 Load a model from file in SBGN-ML</td>\n                         </tr>\n                         <tr>\n                             <td><b>Left-click</b>:\n                                 Full label of the node</td>\n                         </tr>\n                         <tr>\n                             <td><b>Right-click</b>:\n                                 Detailed properties of a macro-molecule from BioGene</td>\n                         </tr>\n                     </table>\n                 </div>\n             </div>\n         </script>\n\n         <script type="text/template" id="loading-small-template">\n             <p class="sbgn-text"> <%= name %> </p>\n             <img class="centered" src="sample-app/sampleapp-images/loading-small.gif" height="auto" width="auto" align="middle">\n         </script>\n\n         <script type="text/template" id="layout-settings-template">\n             <table class="table-condensed layout-table">\n                 <tr>\n                     <td>\n                         <span class="add-on layout-text"> Node Repulsion </span>\n                     </td>\n                     <td>\n                         <input id="node-repulsion" type="text" class="input-small layout-text" value= <%= nodeRepulsion %> >\n                     </td>\n                 </tr>\n\n                 <tr>\n                     <td>\n                         <span class="add-on layout-text"> Node Overlap </span>\n                     </td>\n                     <td>\n                         <input id="node-overlap" type="text" class="input-small layout-text" value= <%= nodeOverlap %> >\n                     </td>\n                 </tr>\n\n                 <tr>\n                     <td>\n                         <span class="add-on layout-text"> Ideal Edge Length </span>\n                     </td>\n                     <td>\n                         <input id="ideal-edge-length" type="text" class="input-small layout-text" value= <%= idealEdgeLength %> >\n                     </td>\n                 </tr>\n\n                 <tr>\n                     <td>\n                         <span class="add-on layout-text"> Edge Elasticity </span>\n                     </td>\n                     <td>\n                         <input id="edge-elasticity" type="text" class="input-small layout-text" value= <%= edgeElasticity %> >\n                     </td>\n                 </tr>\n\n                 <tr>\n                     <td>\n                         <span class="add-on layout-text"> Nesting Factor </span>\n                     </td>\n                     <td>\n                         <input id="nesting-factor" type="text" class="input-small layout-text" value= <%= nestingFactor %> >\n                     </td>\n                 </tr>\n\n                 <tr>\n                     <td>\n                         <span class="add-on layout-text"> Gravity </span>\n                     </td>\n                     <td>\n                         <input id="gravity" type="text" class="input-small layout-text" value= <%= gravity %> >\n                     </td>\n                 </tr>\n\n                 <tr>\n                     <td>\n                         <span class="add-on layout-text"> Number of Iterations </span>\n                     </td>\n                     <td>\n                         <input id="num-iter" type="text" class="input-small layout-text" value= <%= numIter %> >\n                     </td>\n                 </tr>\n\n                 <tr>\n                     <td>\n                         <span class="add-on layout-text"> Tile Disconnected </span>\n                     </td>\n\n                     <td>\n                         <input id="tile" type="checkbox" class="input-small layout-text" <% if (tile){ %> checked<%}%>>\n                     </td>\n                 </tr>\n\n                 <tr>\n                     <td>\n                         <span class="add-on layout-text"> Animate </span>\n                     </td>\n\n                     <td>\n                         <input id="animate" type="checkbox" class="input-small layout-text" <% if (animate){ %> checked<%}%>>\n                     </td>\n                 </tr>\n                 <tr>\n                     <td>\n                         <span class="add-on layout-text"> Incremental </span>\n                     </td>\n\n                     <td>\n                         <input id="incremental" type="checkbox" class="input-small layout-text" <% if (!randomize){ %> checked<%}%>>\n                     </td>\n                 </tr>\n                 <tr>\n                     <td><br>\n                     </td>\n                 </tr>\n\n                 <tr id="layout-buttons">\n                     <td>\n                         <button id="save-layout" class="btn btn-default" >Save</button>\n                     </td>\n                     <td>\n                         <button id="default-layout" class="btn btn-default">Default</button>\n                     </td>\n                 </tr>\n             </table>\n         </script>\n\n         <script type="text/template" id="sbgn-properties-template">\n             <table class="table-condensed layout-table">\n                 <tr>\n                     <td>\n                         <span class="add-on layout-text"> Compound Padding </span>\n                     </td>\n\n                     <td>\n                         <input id="compound-padding" type="text" class="input-small layout-text" value= <%= compoundPadding %> > %\n                     </td>\n                 </tr>\n\n                 <tr>\n                     <td>\n                         <span class="add-on layout-text"> Label Size </span>\n                     </td>\n\n                     <td>\n                         <select name="dynamic-label-size">\n                             <option id="dynamic-label-size_small" value="small" <% if (dynamicLabelSize == \'small\'){ %> selected<%}%> > Small </option>\n                             <option id="dynamic-label-size_regular" value="regular" <% if (dynamicLabelSize == \'regular\'){ %> selected<%}%> > Regular </option>\n                             <option id="dynamic-label-size_large" value="large" <% if (dynamicLabelSize == \'large\'){ %> selected<%}%> > Large </option>\n                         </select>\n                     </td>\n                 </tr>\n\n                 <tr>\n                     <td>\n                         <span class="add-on layout-text"> Fit Labels To Nodes </span>\n                     </td>\n\n                     <td>\n                         <input id="fit-labels-to-nodes" type="checkbox" class="input-small layout-text" <% if (fitLabelsToNodes){ %> checked<%}%>>\n                     </td>\n                 </tr>\n\n                 <tr>\n                     <td>\n                         <span class="add-on layout-text"> Layout After Expand / Collapse </span>\n                     </td>\n\n                     <td>\n                         <input id="incremental-layout-after-expand-collapse" type="checkbox" class="input-small layout-text" <% if (incrementalLayoutAfterExpandCollapse){ %> checked<%}%>>\n                     </td>\n                 </tr>\n\n                 <tr id="sbgn-buttons">\n                     <td>\n                         <button id="save-sbgn" class="btn btn-default" >Save</button>\n                     </td>\n                     <td>\n                         <button id="default-sbgn" class="btn btn-default">Default</button>\n                     </td>\n                 </tr>\n             </table>\n         </script>\n\n         <!-- BioGeneView template for backbone.js -->\n         <script type="text/template" id="biogene-template">\n             <div class=\'node-details-text\'>\n                 <table class="table table-condensed table-striped" cellspacing="10">\n                     <tr class="biogene-info biogene-description node-details-summary">\n                         <th valign="top">Gene Summary:</th>\n                         <td colspan="2" class="expandable">\n                             <%=geneSummary %>\n                         </td>\n                     </tr>\n                     <tr class="biogene-info biogene-aliases">\n                         <th valign="top">Aliases:</th>\n                         <td>\n                             <%=geneAliases %>\n                         </td>\n                     </tr>\n                     <tr class="biogene-info biogene-description">\n                         <th>Description:</th>\n                         <td class="expandable">\n                             <%=geneDescription %>\n                         </td>\n                     </tr>\n                     <tr class="biogene-info biogene-location">\n                         <th valign="top">Chromosome Location:</th>\n                         <td>\n                             <%=geneLocation %>\n                         </td>\n                     </tr>\n                     <tr class="biogene-info biogene-uniprot-links">\n                         <th valign="top">UniProt ID:</th>\n                         <td>\n                             <a href=\'http://www.uniprot.org/uniprot/<%= geneUniprotId %>\' target=\'blank\'>\n                                 <%=geneUniprotId %>\n                             </a>\n            <span class=\'biogene-uniprot-links-extra\'>\n            <%= geneUniprotLinks %>\n            </span>\n                         </td>\n                     </tr>\n                     <tr class="biogene-info biogene-id">\n                         <th valign="top">Gene ID:</th>\n                         <td>\n                             <a href=\'http://www.ncbi.nlm.nih.gov/gene?term=<%= geneId %>\' target=\'blank\'>\n                                 <%=geneId %>\n                             </a>\n                         </td>\n                     </tr>\n                 </table>\n             </div>\n         </script>\n\n         <script type="text/template" id="uniprot-link-template">\n             <a href="http://www.uniprot.org/uniprot/<%= id %>" target="_blank">\n                 <%=id %>\n             </a>\n         </script>\n\n         <script type="text/template" id="noty-info">\n             Right click to a node to see its detailed information\n         </script>\n\n\n\n     <!--</div>-->\n\n\n\n    <div id ="chat-area">\n        <div id = "users" as="container"  on-change = "onScroll()">\n          <!--<ul id ="user-list" as = "list">-->\n            <form action=""">\n          {{each _page.userIds as #pUserId}}\n\n            <!--<li>-->\n                <view name="chat-user"></view>\n            <!--</li>-->\n          {{/each}}\n            </form>\n                <!--</ul>-->\n\n        <div id = "chat-history">Show chat history\n          <select  id = "durationSelect" on-change= "changeDuration()" >\n            {{each _page.durations as #pDur}}\n            <option value = "{{#pDur.id}}"  selected = "{{_page.durationId=== #pDur.id}}"> {{ #pDur.name}} </option>\n            {{/each}}\n          </select>\n        </div>\n\n        <button id = "change-user-color" on-click ="changeColorCode()">Change user color</button>\n\n        </div>\n\n\n\n        <div id="messages" as="container" >\n        <ul id="messages-list" as="list">\n          {{each _page.list as #message}}\n          <li><view name="chat-message"></view></li>\n          {{/each}}\n        </ul>\n        </div>\n        <div id="inputs">\n          <input id="inputs-name" value="{{users[_session.userId].name}}">\n          <form id="inputs-form" on-submit="add()">\n            <input id="inputs-comment"  value="{{_page.newComment}}" autofocus> <button>Send</button>\n\n          </form>\n        </div>\n\n    </div>\n\n\n    <div id ="command-history-area">\n\n        <ul id ="command-list" as = "list" >\n        {{each _page.doc.history as #pCommand}}\n            <li> <b>{{#pCommand.userName}} {{formatTime(#pCommand)}} > </b>{{#pCommand.name}} {{#pCommand.id}} {{formatObj(#pCommand.param)}}\n            </li>\n            {{/each}}\n        </ul>\n\n    </div>\n      <!-- Scroll to bottom immediately on page render and on a resize. -->\n\n\n    <script>\n\n        function scrollToBottom(docId){\n            document.getElementById(docId).scrollTop = document.getElementById(docId).scrollHeight;\n        }\n\n      (window.onresize = function() {\n          scrollToBottom(\'messages-list\');\n          scrollToBottom(\'command-history-area\');\n      })();\n\n        $(\'#command-history-area\').bind(\'DOMSubtreeModified\', function(){\n            scrollToBottom(\'command-history-area\');\n\n        });\n\n        $(\'#messages\').bind(\'DOMSubtreeModified\', function(){\n\n            scrollToBottom(\'messages\');\n\n        });\n\n\n\n    </script>\n\n    <audio id="notificationAudio" src="http://www.talkingwav.com/various/beep_02.wav" preload="auto"></audio>\n\n\n\n\n    ').template = new templates.Template([new templates.Element('script', {'src': new templates.Attribute('lib/js/jquery-1.8.2.js')}, [], void 0, false), new templates.Element('script', {'src': new templates.Attribute('lib/js/jquery.fancybox-1.3.4.pack.js')}, [], void 0, false), new templates.Element('script', {'src': new templates.Attribute('lib/js/jquery.expander-min.js')}, [], void 0, false), new templates.Element('script', {'src': new templates.Attribute('lib/js/jquery.qtip.js')}, [], void 0, false), new templates.Element('script', {'src': new templates.Attribute('lib/js/bootstrap.min.js')}, [], void 0, false), new templates.Element('script', {'src': new templates.Attribute('lib/js/jquery-ui-1.10.3.custom.min.js')}, [], void 0, false), new templates.Element('script', {'src': new templates.Attribute('lib/js/underscore.js')}, [], void 0, false), new templates.Element('script', {'src': new templates.Attribute('lib/js/cytoscape.js')}, [], void 0, false), new templates.Element('script', {'src': new templates.Attribute('lib/js/cytoscape.js-panzoom.js')}, [], void 0, false), new templates.Element('script', {'src': new templates.Attribute('lib/js/cytoscape.js-qtip.js')}, [], void 0, false), new templates.Element('script', {'src': new templates.Attribute('lib/js/cytoscape-edgehandles.js')}, [], void 0, false), new templates.Element('script', {'src': new templates.Attribute('lib/js/cytoscape-noderesize.js')}, [], void 0, false), new templates.Element('script', {'src': new templates.Attribute('lib/js/FileSaver.js')}, [], void 0, false), new templates.Element('script', {'src': new templates.Attribute('lib/js/jquery.noty.packaged.min.js')}, [], void 0, false), new templates.Element('script', {'src': new templates.Attribute('lib/js/socket.io.js')}, [], void 0, false), new templates.Element('script', {'src': new templates.Attribute('src/sbgn-extensions/cytoscape-cose-bilkent.js')}, [], void 0, false), new templates.Element('script', {'src': new templates.Attribute('src/sbgn-extensions/cytoscape.renderer.canvas.sbgn-renderer.js')}, [], void 0, false), new templates.Element('script', {'src': new templates.Attribute('src/utilities/json-to-sbgnml-converter.js')}, [], void 0, false), new templates.Element('script', {'src': new templates.Attribute('src/utilities/sbgnml-to-json-converter.js')}, [], void 0, false), new templates.Element('script', {'src': new templates.Attribute('src/utilities/sbgn-filtering.js')}, [], void 0, false), new templates.Element('script', {'src': new templates.Attribute('src/utilities/expand-collapse-utilities.js')}, [], void 0, false), new templates.Element('script', {'src': new templates.Attribute('src/utilities/add-remove-utilities.js')}, [], void 0, false), new templates.Element('script', {'src': new templates.Attribute('src/utilities/sbgn-element-utilities.js')}, [], void 0, false), new templates.Element('script', {'src': new templates.Attribute('sample-app/sampleapp-components/js/sample-app-mode-handler.js')}, [], void 0, false), new templates.Element('script', {'src': new templates.Attribute('sample-app/sampleapp-components/js/sample-app-helper-functions.js')}, [], void 0, false), new templates.Element('div', {'class': new templates.Attribute('nav-menu')}, [new templates.Element('nav', {'class': new templates.Attribute('navbar navbar-default sbgn-nav-bar'), 'role': new templates.Attribute('navigation')}, [new templates.Element('div', void 0, [new templates.Element('ul', {'class': new templates.Attribute('nav navbar-nav navbar-left')}, [new templates.Element('li', {'class': new templates.Attribute('dropdown')}, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('dropdown-toggle'), 'data-toggle': new templates.Attribute('dropdown')}, [new templates.Text('File'), new templates.Element('b', {'class': new templates.Attribute('caret')}, [], void 0, false)], void 0, false), new templates.Element('ul', {'class': new templates.Attribute('dropdown-menu')}, [new templates.Element('input', {'id': new templates.Attribute('file-input'), 'type': new templates.Attribute('file'), 'style': new templates.Attribute('...')}, null, void 0, true), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'type': new templates.Attribute('file'), 'id': new templates.Attribute('new-file')}, [new templates.Text('New')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'type': new templates.Attribute('file'), 'id': new templates.Attribute('load-file')}, [new templates.Text('Load...')], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('dropdown-submenu')}, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('dropdown-toggle'), 'data-toggle': new templates.Attribute('dropdown')}, [new templates.Text('Samples')], void 0, false), new templates.Element('ul', {'id': new templates.Attribute('samples'), 'class': new templates.Attribute('dropdown-menu')}, [new templates.EachBlock(new expressions.PathExpression(['_sbgnviz', 'samples'], new expressions.ExpressionMeta('each _sbgnviz.samples as #pSample', 'each', void 0, '#pSample')), [new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.DynamicAttribute(new expressions.AliasPathExpression('#pSample', ['id'], new expressions.ExpressionMeta('#pSample.id')))}, [new templates.DynamicText(new expressions.AliasPathExpression('#pSample', ['name'], new expressions.ExpressionMeta('#pSample.name')))], void 0, false)], void 0, false)])], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('save-as-sbgnml')}, [new templates.Text('Save...')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('save-command-history')}, [new templates.Text('Save operation history...')], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('dropdown-submenu')}, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('dropdown-toggle'), 'data-toggle': new templates.Attribute('dropdown')}, [new templates.Text('Save as Image')], void 0, false), new templates.Element('ul', {'class': new templates.Attribute('dropdown-menu')}, [new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('save-as-png')}, [new templates.Text('PNG')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('save-as-jpg')}, [new templates.Text('JPG')], void 0, false)], void 0, false)], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('sbgn-properties')}, [new templates.Text('Properties...')], void 0, false)], void 0, false)], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('dropdown')}, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('dropdown-toggle'), 'data-toggle': new templates.Attribute('dropdown')}, [new templates.Text('Edit'), new templates.Element('b', {'class': new templates.Attribute('caret')}, [], void 0, false)], void 0, false), new templates.Element('ul', {'class': new templates.Attribute('dropdown-menu')}, [new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('select-edit')}, [new templates.Text('Select/Edit')], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('dropdown-submenu')}, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('add-node-menu-option'), 'class': new templates.Attribute('dropdown-toggle'), 'data-toggle': new templates.Attribute('dropdown')}, [new templates.Text('Add Node')], void 0, false), new templates.Element('ul', {'class': new templates.Attribute('dropdown-menu'), 'id': new templates.Attribute('add-node-submenu')}, [new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('add-node-menu-item'), 'name': new templates.Attribute('macromolecule')}, [new templates.Text('Macromolecule')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('add-node-menu-item'), 'name': new templates.Attribute('simple-chemical')}, [new templates.Text('Simple Chemical')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('add-node-menu-item'), 'name': new templates.Attribute('complex')}, [new templates.Text('Complex')], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('dropdown-submenu')}, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('dropdown-toggle'), 'data-toggle': new templates.Attribute('dropdown'), 'id': new templates.Attribute('process-menu-option')}, [new templates.Text('Process')], void 0, false), new templates.Element('ul', {'class': new templates.Attribute('dropdown-menu')}, [new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('add-node-menu-item process-type'), 'name': new templates.Attribute('process')}, [new templates.Text('Process')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('add-node-menu-item process-type'), 'name': new templates.Attribute('omitted-process')}, [new templates.Text('Omitted Process')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('add-node-menu-item process-type'), 'name': new templates.Attribute('uncertain-process')}, [new templates.Text('Uncertain Process')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('add-node-menu-item process-type'), 'name': new templates.Attribute('association')}, [new templates.Text('Association')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('add-node-menu-item process-type'), 'name': new templates.Attribute('dissociation')}, [new templates.Text('Dissociation')], void 0, false)], void 0, false)], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('add-node-menu-item'), 'name': new templates.Attribute('phenotype')}, [new templates.Text('Phenotype')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('add-node-menu-item'), 'name': new templates.Attribute('compartment')}, [new templates.Text('Compartment')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('add-node-menu-item'), 'name': new templates.Attribute('unspecified-entity')}, [new templates.Text('Unspecified Entry')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('add-node-menu-item'), 'name': new templates.Attribute('nucleic-acid-feature')}, [new templates.Text('Nucleic Acid Feature')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('add-node-menu-item'), 'name': new templates.Attribute('source-and-sink')}, [new templates.Text('Source or Sink')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('add-node-menu-item'), 'name': new templates.Attribute('perturbing-agent')}, [new templates.Text('Perturbing Agend')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('add-node-menu-item'), 'name': new templates.Attribute('tag')}, [new templates.Text('Tag')], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('dropdown-submenu')}, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('dropdown-toggle'), 'data-toggle': new templates.Attribute('dropdown'), 'id': new templates.Attribute('logical-operator-menu-option')}, [new templates.Text('Logical Operators')], void 0, false), new templates.Element('ul', {'class': new templates.Attribute('dropdown-menu')}, [new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('logical-operator-type add-node-menu-item'), 'name': new templates.Attribute('and')}, [new templates.Text('AND')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('logical-operator-type add-node-menu-item'), 'name': new templates.Attribute('or')}, [new templates.Text('OR')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('logical-operator-type add-node-menu-item'), 'name': new templates.Attribute('not')}, [new templates.Text('NOT')], void 0, false)], void 0, false)], void 0, false)], void 0, false)], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('dropdown-submenu')}, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('add-edge-menu-option'), 'class': new templates.Attribute('dropdown-toggle'), 'data-toggle': new templates.Attribute('dropdown')}, [new templates.Text('Add Interaction')], void 0, false), new templates.Element('ul', {'class': new templates.Attribute('dropdown-menu'), 'id': new templates.Attribute('add-edge-submenu')}, [new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('add-edge-menu-item'), 'name': new templates.Attribute('consumption')}, [new templates.Text('Consumption')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('add-edge-menu-item'), 'name': new templates.Attribute('production')}, [new templates.Text('Production')], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('divider')}, [], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('add-edge-menu-item'), 'name': new templates.Attribute('modulation')}, [new templates.Text('Modulation')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('add-edge-menu-item'), 'name': new templates.Attribute('stimulation')}, [new templates.Text('Simulation')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('add-edge-menu-item'), 'name': new templates.Attribute('catalysis')}, [new templates.Text('Catalysis')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('add-edge-menu-item'), 'name': new templates.Attribute('inhibition')}, [new templates.Text('Inhibition')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('add-edge-menu-item'), 'name': new templates.Attribute('necessary-stimulation')}, [new templates.Text('Necessary Stimulation')], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('divider')}, [], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('add-edge-menu-item'), 'name': new templates.Attribute('logic-arc')}, [new templates.Text('Logic Arc')], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('divider')}, [], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('add-edge-menu-item'), 'name': new templates.Attribute('equivalence-arc')}, [new templates.Text('Equivalence Arc')], void 0, false)], void 0, false)], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('divider')}, [], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('make-compound-complex')}, [new templates.Text('Add Complex for Selected')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('make-compound-compartment')}, [new templates.Text('Add Compartment for Selected')], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('divider')}, [], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('delete-selected-simple')}, [new templates.Text('Delete Selected Simple')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('delete-selected-smart')}, [new templates.Text('Delete Selected Smart')], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('divider')}, [], void 0, false), new templates.Element('li', {'class': new templates.Attribute('disabled')}, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('undo-last-action')}, [new templates.Text('Undo')], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('disabled')}, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('redo-last-action')}, [new templates.Text('Redo')], void 0, false)], void 0, false)], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('dropdown')}, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('dropdown-toggle'), 'data-toggle': new templates.Attribute('dropdown')}, [new templates.Text('View'), new templates.Element('b', {'class': new templates.Attribute('caret')}, [], void 0, false)], void 0, false), new templates.Element('ul', {'class': new templates.Attribute('dropdown-menu')}, [new templates.Element('li', {'class': new templates.Attribute('dropdown-submenu')}, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('dropdown-toggle'), 'data-toggle': new templates.Attribute('dropdown')}, [new templates.Text('Hide/Show')], void 0, false), new templates.Element('ul', {'class': new templates.Attribute('dropdown-menu')}, [new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('hide-selected')}, [new templates.Text('Hide Selected')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('show-selected')}, [new templates.Text('Show Selected')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('show-all')}, [new templates.Text('Show All')], void 0, false)], void 0, false)], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('dropdown-submenu')}, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('dropdown-toggle'), 'data-toggle': new templates.Attribute('dropdown')}, [new templates.Text('Collapse/Expand')], void 0, false), new templates.Element('ul', {'class': new templates.Attribute('dropdown-menu')}, [new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('collapse-selected')}, [new templates.Text('Collapse Selected')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('expand-selected')}, [new templates.Text('Expand Selected')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('collapse-all')}, [new templates.Text('Collapse All')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('expand-all')}, [new templates.Text('Expand All')], void 0, false)], void 0, false)], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('dropdown-submenu')}, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('add-node-menu-option'), 'class': new templates.Attribute('dropdown-toggle'), 'data-toggle': new templates.Attribute('dropdown')}, [new templates.Text('Align')], void 0, false), new templates.Element('ul', {'class': new templates.Attribute('dropdown-menu'), 'id': new templates.Attribute('add-node-submenu')}, [new templates.Element('li', {'class': new templates.Attribute('dropdown-submenu')}, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('dropdown-toggle'), 'data-toggle': new templates.Attribute('dropdown')}, [new templates.Text('Horizontal')], void 0, false), new templates.Element('ul', {'class': new templates.Attribute('dropdown-menu')}, [new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('align-horizontal-top')}, [new templates.Text('Top')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('align-horizontal-middle')}, [new templates.Text('Middle')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('align-horizontal-bottom')}, [new templates.Text('Bottom')], void 0, false)], void 0, false)], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('dropdown-submenu')}, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('dropdown-toggle'), 'data-toggle': new templates.Attribute('dropdown')}, [new templates.Text('Vertical')], void 0, false), new templates.Element('ul', {'class': new templates.Attribute('dropdown-menu')}, [new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('align-vertical-left')}, [new templates.Text('Left')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('align-vertical-center')}, [new templates.Text('Center')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('align-vertical-right')}, [new templates.Text('Right')], void 0, false)], void 0, false)], void 0, false)], void 0, false)], void 0, false)], void 0, false)], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('dropdown')}, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('dropdown-toggle'), 'data-toggle': new templates.Attribute('dropdown')}, [new templates.Text('Highlight'), new templates.Element('b', {'class': new templates.Attribute('caret')}, [], void 0, false)], void 0, false), new templates.Element('ul', {'class': new templates.Attribute('dropdown-menu')}, [new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('neighbors-of-selected')}, [new templates.Text('Neighbors of Selected')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('processes-of-selected')}, [new templates.Text('Processes of Selected')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('remove-highlights')}, [new templates.Text('Remove Highlights')], void 0, false)], void 0, false)], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('dropdown')}, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('dropdown-toggle'), 'data-toggle': new templates.Attribute('dropdown')}, [new templates.Text('Layout'), new templates.Element('b', {'class': new templates.Attribute('caret')}, [], void 0, false)], void 0, false), new templates.Element('ul', {'class': new templates.Attribute('dropdown-menu')}, [new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('perform-layout')}, [new templates.Text('Perform Layout')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('perform-incremental-layout'), 'style': new templates.Attribute('display: none')}, [], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('layout-properties')}, [new templates.Text('Layout Properties...')], void 0, false)], void 0, false)], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('dropdown')}, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('dropdown-toggle'), 'data-toggle': new templates.Attribute('dropdown')}, [new templates.Text('Legends'), new templates.Element('b', {'class': new templates.Attribute('caret')}, [], void 0, false)], void 0, false), new templates.Element('ul', {'class': new templates.Attribute('dropdown-menu')}, [new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('node-legend')}, [new templates.Text('Node Legend')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('edge-legend')}, [new templates.Text('Interaction Legend')], void 0, false)], void 0, false)], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('dropdown')}, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('dropdown-toggle'), 'data-toggle': new templates.Attribute('dropdown')}, [new templates.Text('Help'), new templates.Element('b', {'class': new templates.Attribute('caret')}, [], void 0, false)], void 0, false), new templates.Element('ul', {'class': new templates.Attribute('dropdown-menu')}, [new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('quick-help')}, [new templates.Text('Quick Help')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('how-to-use')}, [new templates.Text('How to Use')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('about')}, [new templates.Text('About')], void 0, false)], void 0, false)], void 0, false)], void 0, false)], void 0, false), new templates.Element('span', {'class': new templates.Attribute('input-file'), 'id': new templates.Attribute('file-name')}, [], void 0, false)], void 0, false)], void 0, false)], void 0, false), new templates.Element('div', {'id': new templates.Attribute('sbgn-toolbar'), 'style': new templates.Attribute('margin-top: 5px;')}, [new templates.Element('div', {'class': new templates.Attribute('inside-menu')}, [new templates.Element('img', {'id': new templates.Attribute('new-file-icon'), 'class': new templates.Attribute('sbgn-toolbar-element'), 'src': new templates.Attribute('sample-app/sampleapp-images/new.png'), 'title': new templates.Attribute('New File')}, null, void 0, false), new templates.Element('img', {'id': new templates.Attribute('load-file-icon'), 'class': new templates.Attribute('sbgn-toolbar-element'), 'src': new templates.Attribute('sample-app/sampleapp-images/load.png'), 'title': new templates.Attribute('Load')}, null, void 0, false), new templates.Element('img', {'id': new templates.Attribute('save-icon'), 'class': new templates.Attribute('sbgn-toolbar-element'), 'src': new templates.Attribute('sample-app/sampleapp-images/save.png'), 'title': new templates.Attribute('Save')}, null, void 0, false), new templates.Element('img', {'id': new templates.Attribute('properties-icon'), 'class': new templates.Attribute('sbgn-toolbar-element'), 'src': new templates.Attribute('sample-app/sampleapp-images/toolbar-icons/properties.png'), 'title': new templates.Attribute('Properties')}, null, void 0, false)], void 0, false), new templates.Element('div', {'class': new templates.Attribute('menu-break-large sbgn-toolbar-element')}, [], void 0, false), new templates.Element('div', {'class': new templates.Attribute('inside-menu')}, [new templates.Element('img', {'id': new templates.Attribute('select-icon'), 'class': new templates.Attribute('sbgn-toolbar-element'), 'src': new templates.Attribute('sample-app/sampleapp-images/toolbar-icons/select.png'), 'title': new templates.Attribute('Select')}, null, void 0, false), new templates.Element('div', {'class': new templates.Attribute('btn-group sbgn-toolbar-element'), 'role': new templates.Attribute('group'), 'id': new templates.Attribute('node-list')}, [new templates.Element('button', {'id': new templates.Attribute('node-list-set-mode-btn'), 'title': new templates.Attribute('Macromolecule'), 'type': new templates.Attribute('button'), 'class': new templates.Attribute('btn'), 'aria-haspopup': new templates.Attribute('true'), 'aria-expanded': new templates.Attribute('false')}, [new templates.Element('div', {'style': new templates.Attribute('height: 16px;')}, [new templates.Element('img', {'style': new templates.Attribute('float: left; height: 16px; width: auto;'), 'id': new templates.Attribute('sbgn-selected-node-img'), 'src': new templates.Attribute('sample-app/sampleapp-images/nodes/macromolecule.png')}, null, void 0, true)], void 0, false)], void 0, false), new templates.Element('button', {'id': new templates.Attribute('node-list-dd-button'), 'type': new templates.Attribute('button'), 'class': new templates.Attribute('btn dropdown-toggle'), 'data-toggle': new templates.Attribute('dropdown'), 'aria-haspopup': new templates.Attribute('true'), 'aria-expanded': new templates.Attribute('false')}, [new templates.Element('div', {'style': new templates.Attribute('height: 16px;')}, [new templates.Element('span', {'class': new templates.Attribute('caret')}, [], void 0, false), new templates.Element('span', {'class': new templates.Attribute('sr-only')}, [], void 0, false)], void 0, false)], void 0, false), new templates.Element('ul', {'id': new templates.Attribute('node-list-menu'), 'class': new templates.Attribute('dropdown-menu')}, [new templates.Element('li', {'class': new templates.Attribute('sbgn-select-node-item'), 'id': new templates.Attribute('first-sbgn-select-node-item')}, [new templates.Element('a', {'href': new templates.Attribute('#')}, [new templates.Element('img', {'src': new templates.Attribute('sample-app/sampleapp-images/nodes/macromolecule.png'), 'class': new templates.Attribute('sbgn-select-img'), 'value': new templates.Attribute('macromolecule')}, null, void 0, true), new templates.Text('Macromolecule')], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('sbgn-select-node-item')}, [new templates.Element('a', {'href': new templates.Attribute('#')}, [new templates.Element('img', {'src': new templates.Attribute('sample-app/sampleapp-images/nodes/simplechemical.png'), 'class': new templates.Attribute('sbgn-select-img'), 'value': new templates.Attribute('simple-chemical')}, null, void 0, true), new templates.Text('Simple Chemical')], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('sbgn-select-node-item')}, [new templates.Element('a', {'href': new templates.Attribute('#')}, [new templates.Element('img', {'src': new templates.Attribute('sample-app/sampleapp-images/nodes/complex.png'), 'class': new templates.Attribute('sbgn-select-img'), 'value': new templates.Attribute('complex')}, null, void 0, true), new templates.Text('Complex')], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('sbgn-select-node-item')}, [new templates.Element('a', {'href': new templates.Attribute('#')}, [new templates.Element('img', {'src': new templates.Attribute('sample-app/sampleapp-images/nodes/process.png'), 'class': new templates.Attribute('sbgn-select-img'), 'value': new templates.Attribute('process')}, null, void 0, true), new templates.Text('Process')], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('sbgn-select-node-item')}, [new templates.Element('a', {'href': new templates.Attribute('#')}, [new templates.Element('img', {'src': new templates.Attribute('sample-app/sampleapp-images/nodes/omittedprocess.png'), 'class': new templates.Attribute('sbgn-select-img'), 'value': new templates.Attribute('omitted-process')}, null, void 0, true), new templates.Text('Omitted Process')], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('sbgn-select-node-item')}, [new templates.Element('a', {'href': new templates.Attribute('#')}, [new templates.Element('img', {'src': new templates.Attribute('sample-app/sampleapp-images/nodes/uncertainprocess.png'), 'class': new templates.Attribute('sbgn-select-img'), 'value': new templates.Attribute('uncertain-process')}, null, void 0, true), new templates.Text('Uncertain Process')], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('sbgn-select-node-item')}, [new templates.Element('a', {'href': new templates.Attribute('#')}, [new templates.Element('img', {'src': new templates.Attribute('sample-app/sampleapp-images/nodes/association.png'), 'class': new templates.Attribute('sbgn-select-img'), 'value': new templates.Attribute('association')}, null, void 0, true), new templates.Text('Association')], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('sbgn-select-node-item')}, [new templates.Element('a', {'href': new templates.Attribute('#')}, [new templates.Element('img', {'src': new templates.Attribute('sample-app/sampleapp-images/nodes/dissociation.png'), 'class': new templates.Attribute('sbgn-select-img'), 'value': new templates.Attribute('dissociation')}, null, void 0, true), new templates.Text('Dissociation')], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('sbgn-select-node-item')}, [new templates.Element('a', {'href': new templates.Attribute('#')}, [new templates.Element('img', {'src': new templates.Attribute('sample-app/sampleapp-images/nodes/phenotype.png'), 'class': new templates.Attribute('sbgn-select-img'), 'value': new templates.Attribute('phenotype')}, null, void 0, true), new templates.Text('Phenotype')], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('sbgn-select-node-item')}, [new templates.Element('a', {'href': new templates.Attribute('#')}, [new templates.Element('img', {'src': new templates.Attribute('sample-app/sampleapp-images/nodes/compartment.png'), 'class': new templates.Attribute('sbgn-select-img'), 'value': new templates.Attribute('compartment')}, null, void 0, true), new templates.Text('Compartment')], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('sbgn-select-node-item')}, [new templates.Element('a', {'href': new templates.Attribute('#')}, [new templates.Element('img', {'src': new templates.Attribute('sample-app/sampleapp-images/nodes/unspecifiedentity.png'), 'class': new templates.Attribute('sbgn-select-img'), 'value': new templates.Attribute('unspecified-entity')}, null, void 0, true), new templates.Text('Unspecified Entity')], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('sbgn-select-node-item')}, [new templates.Element('a', {'href': new templates.Attribute('#')}, [new templates.Element('img', {'src': new templates.Attribute('sample-app/sampleapp-images/nodes/nucleicacidfeature.png'), 'class': new templates.Attribute('sbgn-select-img'), 'value': new templates.Attribute('nucleic-acid-feature')}, null, void 0, true), new templates.Text('Nucleic Acid Feature')], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('sbgn-select-node-item')}, [new templates.Element('a', {'href': new templates.Attribute('#')}, [new templates.Element('img', {'src': new templates.Attribute('sample-app/sampleapp-images/nodes/sourceandsink.png'), 'class': new templates.Attribute('sbgn-select-img'), 'value': new templates.Attribute('source-and-sink')}, null, void 0, true), new templates.Text('Source and Sink')], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('sbgn-select-node-item')}, [new templates.Element('a', {'href': new templates.Attribute('#')}, [new templates.Element('img', {'src': new templates.Attribute('sample-app/sampleapp-images/nodes/perturbingagent.png'), 'class': new templates.Attribute('sbgn-select-img'), 'value': new templates.Attribute('perturbing-agent')}, null, void 0, true), new templates.Text('Perturbing Agent')], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('sbgn-select-node-item')}, [new templates.Element('a', {'href': new templates.Attribute('#')}, [new templates.Element('img', {'src': new templates.Attribute('sample-app/sampleapp-images/nodes/tag.png'), 'class': new templates.Attribute('sbgn-select-img'), 'value': new templates.Attribute('tag')}, null, void 0, true), new templates.Text('Tag')], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('sbgn-select-node-item')}, [new templates.Element('a', {'href': new templates.Attribute('#')}, [new templates.Element('img', {'src': new templates.Attribute('sample-app/sampleapp-images/nodes/and.png'), 'class': new templates.Attribute('sbgn-select-img'), 'value': new templates.Attribute('and')}, null, void 0, true), new templates.Text('AND')], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('sbgn-select-node-item')}, [new templates.Element('a', {'href': new templates.Attribute('#')}, [new templates.Element('img', {'src': new templates.Attribute('sample-app/sampleapp-images/nodes/or.png'), 'class': new templates.Attribute('sbgn-select-img'), 'value': new templates.Attribute('or')}, null, void 0, true), new templates.Text('OR')], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('sbgn-select-node-item')}, [new templates.Element('a', {'href': new templates.Attribute('#')}, [new templates.Element('img', {'src': new templates.Attribute('sample-app/sampleapp-images/nodes/not.png'), 'class': new templates.Attribute('sbgn-select-img'), 'value': new templates.Attribute('not')}, null, void 0, true), new templates.Text('NOT')], void 0, false)], void 0, false)], void 0, false)], void 0, false), new templates.Element('div', {'class': new templates.Attribute('btn-group sbgn-toolbar-element'), 'role': new templates.Attribute('group'), 'id': new templates.Attribute('edge-list')}, [new templates.Element('button', {'id': new templates.Attribute('edge-list-set-mode-btn'), 'type': new templates.Attribute('button'), 'class': new templates.Attribute('btn'), 'title': new templates.Attribute('consumption'), 'aria-haspopup': new templates.Attribute('true'), 'aria-expanded': new templates.Attribute('false')}, [new templates.Element('div', {'style': new templates.Attribute('height: 16px;')}, [new templates.Element('img', {'style': new templates.Attribute('float: left;'), 'id': new templates.Attribute('sbgn-selected-edge-img'), 'src': new templates.Attribute('sample-app/sampleapp-images/edges/consumption.png'), 'class': new templates.Attribute('sbgn-select-img')}, null, void 0, true)], void 0, false)], void 0, false), new templates.Element('button', {'id': new templates.Attribute('edge-list-dd-button'), 'type': new templates.Attribute('button'), 'class': new templates.Attribute('btn dropdown-toggle'), 'data-toggle': new templates.Attribute('dropdown'), 'aria-haspopup': new templates.Attribute('true'), 'aria-expanded': new templates.Attribute('false')}, [new templates.Element('div', {'style': new templates.Attribute('height: 16px;')}, [new templates.Element('span', {'class': new templates.Attribute('caret')}, [], void 0, false), new templates.Element('span', {'class': new templates.Attribute('sr-only')}, [], void 0, false)], void 0, false)], void 0, false), new templates.Element('ul', {'id': new templates.Attribute('edge-list-menu'), 'class': new templates.Attribute('dropdown-menu')}, [new templates.Element('li', {'id': new templates.Attribute('first-sbgn-select-edge-item'), 'class': new templates.Attribute('sbgn-select-edge-item')}, [new templates.Element('a', {'href': new templates.Attribute('#')}, [new templates.Element('img', {'src': new templates.Attribute('sample-app/sampleapp-images/edges/consumption.png'), 'class': new templates.Attribute('sbgn-select-img'), 'value': new templates.Attribute('consumption')}, null, void 0, true), new templates.Text('Consumption')], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('sbgn-select-edge-item')}, [new templates.Element('a', {'href': new templates.Attribute('#')}, [new templates.Element('img', {'src': new templates.Attribute('sample-app/sampleapp-images/edges/production.png'), 'class': new templates.Attribute('sbgn-select-img'), 'value': new templates.Attribute('production')}, null, void 0, true), new templates.Text('Production')], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('sbgn-select-edge-item')}, [new templates.Element('a', {'href': new templates.Attribute('#')}, [new templates.Element('img', {'src': new templates.Attribute('sample-app/sampleapp-images/edges/modulation.png'), 'class': new templates.Attribute('sbgn-select-img'), 'value': new templates.Attribute('modulation')}, null, void 0, true), new templates.Text('Modulation')], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('sbgn-select-edge-item')}, [new templates.Element('a', {'href': new templates.Attribute('#')}, [new templates.Element('img', {'src': new templates.Attribute('sample-app/sampleapp-images/edges/stimulation.png'), 'class': new templates.Attribute('sbgn-select-img'), 'value': new templates.Attribute('stimulation')}, null, void 0, true), new templates.Text('Stimulation')], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('sbgn-select-edge-item')}, [new templates.Element('a', {'href': new templates.Attribute('#')}, [new templates.Element('img', {'src': new templates.Attribute('sample-app/sampleapp-images/edges/catalysis.png'), 'class': new templates.Attribute('sbgn-select-img'), 'value': new templates.Attribute('catalysis')}, null, void 0, true), new templates.Text('Catalysis')], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('sbgn-select-edge-item')}, [new templates.Element('a', {'href': new templates.Attribute('#')}, [new templates.Element('img', {'src': new templates.Attribute('sample-app/sampleapp-images/edges/inhibition.png'), 'class': new templates.Attribute('sbgn-select-img'), 'value': new templates.Attribute('inhibition')}, null, void 0, true), new templates.Text('Inhibition')], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('sbgn-select-edge-item')}, [new templates.Element('a', {'href': new templates.Attribute('#')}, [new templates.Element('img', {'src': new templates.Attribute('sample-app/sampleapp-images/edges/necessarystimulation.png'), 'class': new templates.Attribute('sbgn-select-img'), 'value': new templates.Attribute('necessary-stimulation')}, null, void 0, true), new templates.Text('Necessary Stimulation')], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('sbgn-select-edge-item')}, [new templates.Element('a', {'href': new templates.Attribute('#')}, [new templates.Element('img', {'src': new templates.Attribute('sample-app/sampleapp-images/edges/logicarc.png'), 'class': new templates.Attribute('sbgn-select-img'), 'value': new templates.Attribute('logic-arc')}, null, void 0, true), new templates.Text('Logic Arc')], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('sbgn-select-edge-item')}, [new templates.Element('a', {'class': new templates.Attribute('dd-list-href'), 'href': new templates.Attribute('#')}, [new templates.Element('img', {'src': new templates.Attribute('sample-app/sampleapp-images/edges/logicarc.png'), 'class': new templates.Attribute('sbgn-select-img'), 'value': new templates.Attribute('equivalence-arc')}, null, void 0, true), new templates.Text('Equivalence Arc')], void 0, false)], void 0, false)], void 0, false)], void 0, false), new templates.Element('div', {'class': new templates.Attribute('menu-break-small sbgn-toolbar-element')}, [], void 0, false), new templates.Element('img', {'id': new templates.Attribute('delete-selected-simple-icon'), 'class': new templates.Attribute('sbgn-toolbar-element'), 'src': new templates.Attribute('sample-app/sampleapp-images/toolbar-icons/deletesimple.png'), 'title': new templates.Attribute('Delete Selected Simple')}, null, void 0, false), new templates.Element('img', {'id': new templates.Attribute('delete-selected-smart-icon'), 'class': new templates.Attribute('sbgn-toolbar-element'), 'src': new templates.Attribute('sample-app/sampleapp-images/toolbar-icons/deletesmart.png'), 'title': new templates.Attribute('Delete Selected Smart')}, null, void 0, false), new templates.Element('div', {'class': new templates.Attribute('menu-break-small sbgn-toolbar-element')}, [], void 0, false), new templates.Element('img', {'id': new templates.Attribute('undo-icon'), 'class': new templates.Attribute('sbgn-toolbar-element'), 'src': new templates.Attribute('sample-app/sampleapp-images/toolbar-icons/undo.png'), 'title': new templates.Attribute('Undo')}, null, void 0, false), new templates.Element('img', {'id': new templates.Attribute('redo-icon'), 'class': new templates.Attribute('sbgn-toolbar-element'), 'src': new templates.Attribute('sample-app/sampleapp-images/toolbar-icons/redo.png'), 'title': new templates.Attribute('Redo')}, null, void 0, false)], void 0, false), new templates.Element('div', {'class': new templates.Attribute('menu-break-large sbgn-toolbar-element')}, [], void 0, false), new templates.Element('div', {'class': new templates.Attribute('inside-menu')}, [new templates.Element('img', {'id': new templates.Attribute('hide-selected-icon'), 'class': new templates.Attribute('sbgn-toolbar-element'), 'src': new templates.Attribute('sample-app/sampleapp-images/toolbar-icons/hideselected.png'), 'title': new templates.Attribute('Hide Selected')}, null, void 0, false), new templates.Element('img', {'id': new templates.Attribute('show-selected-icon'), 'class': new templates.Attribute('sbgn-toolbar-element'), 'src': new templates.Attribute('sample-app/sampleapp-images/toolbar-icons/showselected.png'), 'title': new templates.Attribute('Show Selected')}, null, void 0, false), new templates.Element('div', {'class': new templates.Attribute('menu-break-small sbgn-toolbar-element')}, [], void 0, false), new templates.Element('img', {'id': new templates.Attribute('collapse-selected-icon'), 'class': new templates.Attribute('sbgn-toolbar-element'), 'src': new templates.Attribute('sample-app/sampleapp-images/toolbar-icons/collapseselected.png'), 'title': new templates.Attribute('Collapse Selected')}, null, void 0, false), new templates.Element('img', {'id': new templates.Attribute('expand-selected-icon'), 'class': new templates.Attribute('sbgn-toolbar-element'), 'src': new templates.Attribute('sample-app/sampleapp-images/toolbar-icons/expandselected.png'), 'title': new templates.Attribute('Expand Selected')}, null, void 0, false), new templates.Element('div', {'class': new templates.Attribute('menu-break-small sbgn-toolbar-element')}, [], void 0, false), new templates.Element('div', {'class': new templates.Attribute('btn-group sbgn-toolbar-element'), 'role': new templates.Attribute('group'), 'id': new templates.Attribute('align-list')}, [new templates.Element('button', {'id': new templates.Attribute('align-button'), 'title': new templates.Attribute('Align'), 'type': new templates.Attribute('button'), 'class': new templates.Attribute('btn'), 'aria-haspopup': new templates.Attribute('true'), 'aria-expanded': new templates.Attribute('false')}, [new templates.Element('div', {'style': new templates.Attribute('height: 16px;')}, [new templates.Element('img', {'style': new templates.Attribute('float: left; height: 16px; width: auto;'), 'id': new templates.Attribute('sbgn-align-img'), 'src': new templates.Attribute('sample-app/sampleapp-images/align/align.png')}, null, void 0, true)], void 0, false)], void 0, false), new templates.Element('button', {'id': new templates.Attribute('align-dd-button'), 'type': new templates.Attribute('button'), 'class': new templates.Attribute('btn dropdown-toggle'), 'data-toggle': new templates.Attribute('dropdown'), 'aria-haspopup': new templates.Attribute('true'), 'aria-expanded': new templates.Attribute('false')}, [new templates.Element('div', {'style': new templates.Attribute('height: 16px;')}, [new templates.Element('span', {'class': new templates.Attribute('caret')}, [], void 0, false), new templates.Element('span', {'class': new templates.Attribute('sr-only')}, [], void 0, false)], void 0, false)], void 0, false), new templates.Element('ul', {'id': new templates.Attribute('align-menu'), 'class': new templates.Attribute('dropdown-menu')}, [new templates.Element('li', void 0, [new templates.Element('a', {'class': new templates.Attribute('dd-list-href'), 'href': new templates.Attribute('#'), 'id': new templates.Attribute('align-horizontal-top-icon')}, [new templates.Element('img', {'src': new templates.Attribute('sample-app/sampleapp-images/align/align-horizontal-top.png'), 'class': new templates.Attribute('sbgn-select-img')}, null, void 0, true), new templates.Text('Align Horizontal Top')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'class': new templates.Attribute('dd-list-href'), 'href': new templates.Attribute('#'), 'id': new templates.Attribute('align-horizontal-middle-icon')}, [new templates.Element('img', {'src': new templates.Attribute('sample-app/sampleapp-images/align/align-horizontal-middle.png'), 'class': new templates.Attribute('sbgn-select-img')}, null, void 0, true), new templates.Text('Align Horizontal Middle')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'class': new templates.Attribute('dd-list-href'), 'href': new templates.Attribute('#'), 'id': new templates.Attribute('align-horizontal-bottom-icon')}, [new templates.Element('img', {'src': new templates.Attribute('sample-app/sampleapp-images/align/align-horizontal-bottom.png'), 'class': new templates.Attribute('sbgn-select-img')}, null, void 0, true), new templates.Text('Align Horizontal Bottom')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'class': new templates.Attribute('dd-list-href'), 'href': new templates.Attribute('#'), 'id': new templates.Attribute('align-vertical-left-icon')}, [new templates.Element('img', {'src': new templates.Attribute('sample-app/sampleapp-images/align/align-vertical-left.png'), 'class': new templates.Attribute('sbgn-select-img')}, null, void 0, true), new templates.Text('Align Vertical Left')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'class': new templates.Attribute('dd-list-href'), 'href': new templates.Attribute('#'), 'id': new templates.Attribute('align-vertical-center-icon')}, [new templates.Element('img', {'src': new templates.Attribute('sample-app/sampleapp-images/align/align-vertical-center.png'), 'class': new templates.Attribute('sbgn-select-img')}, null, void 0, true), new templates.Text('Align Vertical Center')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'class': new templates.Attribute('dd-list-href'), 'href': new templates.Attribute('#'), 'id': new templates.Attribute('align-vertical-right-icon')}, [new templates.Element('img', {'src': new templates.Attribute('sample-app/sampleapp-images/align/align-vertical-right.png'), 'class': new templates.Attribute('sbgn-select-img')}, null, void 0, true), new templates.Text('Align Vertical Right')], void 0, false)], void 0, false)], void 0, false)], void 0, false)], void 0, false), new templates.Element('div', {'class': new templates.Attribute('menu-break-large sbgn-toolbar-element')}, [], void 0, false), new templates.Element('div', {'class': new templates.Attribute('inside-menu')}, [new templates.Element('img', {'id': new templates.Attribute('highlight-neighbors-of-selected-icon'), 'class': new templates.Attribute('sbgn-toolbar-element'), 'src': new templates.Attribute('sample-app/sampleapp-images/toolbar-icons/highlightneighborsofselected.png'), 'title': new templates.Attribute('Highlight Neighbors of Selected')}, null, void 0, false), new templates.Element('img', {'id': new templates.Attribute('remove-highlights-icon'), 'class': new templates.Attribute('sbgn-toolbar-element'), 'src': new templates.Attribute('sample-app/sampleapp-images/toolbar-icons/removehighlights.png'), 'title': new templates.Attribute('Remove Highlights')}, null, void 0, false)], void 0, false), new templates.Element('div', {'class': new templates.Attribute('menu-break-large sbgn-toolbar-element')}, [], void 0, false), new templates.Element('div', {'class': new templates.Attribute('inside-menu')}, [new templates.Element('img', {'id': new templates.Attribute('perform-layout-icon'), 'class': new templates.Attribute('sbgn-toolbar-element'), 'src': new templates.Attribute('sample-app/sampleapp-images/toolbar-icons/layout-cose.png'), 'title': new templates.Attribute('Perform Layout')}, null, void 0, false), new templates.Element('img', {'id': new templates.Attribute('layout-properties-icon'), 'class': new templates.Attribute('sbgn-toolbar-element'), 'src': new templates.Attribute('sample-app/sampleapp-images/toolbar-icons/layoutproperties.png'), 'title': new templates.Attribute('Layout Properties')}, null, void 0, false)], void 0, false)], void 0, false), new templates.Element('div', {'id': new templates.Attribute('sbgn-network-container')}, [], void 0, false), new templates.Element('div', {'id': new templates.Attribute('sbgn-inspector')}, [], void 0, false), new templates.Element('div', {'id': new templates.Attribute('sbgn-layout-table'), 'title': new templates.Attribute('Layout Properties')}, [], void 0, false), new templates.Element('div', {'id': new templates.Attribute('sbgn-properties-table'), 'title': new templates.Attribute('Properties'), 'style': new templates.Attribute('display: inline')}, [], void 0, false), new templates.Element('div', {'id': new templates.Attribute('biogene-container'), 'style': new templates.Attribute('display: none')}, [], void 0, false), new templates.Element('div', {'id': new templates.Attribute('box')}, [], void 0, false), new templates.Element('input', {'id': new templates.Attribute('node-label-textbox'), 'type': new templates.Attribute('text')}, null, void 0, false), new templates.Element('script', {'type': new templates.Attribute('text/template'), 'id': new templates.Attribute('node-legend-template')}, [new templates.Text('<div class="sbgn-frame"><h2 class="sbgn-text">Node Legend</h2><img src="sample-app/sampleapp-images/node_legend_sbgn.png" alt="" class="centered"></div>')], void 0, false), new templates.Element('script', {'type': new templates.Attribute('text/template'), 'id': new templates.Attribute('edge-legend-template')}, [new templates.Text('<div class="sbgn-frame"><h2 class="sbgn-text">Interaction Legend</h2><img src="sample-app/sampleapp-images/interaction_legend_sbgn.png" alt="" class="centered"></div>')], void 0, false), new templates.Element('script', {'type': new templates.Attribute('text/template'), 'id': new templates.Attribute('about-template')}, [new templates.Text('<div class="sbgn-frame"><h2 class="sbgn-text">About</h2><table width="100%" height="100%" align="center" valign="center"><tr><td><img src="sample-app/sampleapp-images/i-vis.png" alt="" class="centered"></td></tr><tr><td><img src="sample-app/sampleapp-images/cbio.png" alt="" class="centered"></td></tr><tr><td><p class="sbgn-text">SBGN<i>Viz</i>.js version 1.2</p></td></tr><tr><td><p class="address-text marg">i-Vis information Visualization Group</p><p class="address-text">Bilkent University, Ankara, Turkey</p></td></tr><tr><td><p class="address-text marg">Memorial Sloan-Kettering Cancer Center</p><p class="address-text">New York, USA</p></td></tr><tr><td><p class="address-text marg"><a href="mailto:ivis@cs.bilkent.edu.tr" target="_top">ivis@cs.bilkent.edu.tr</a></p><p class="address-text"><a href="https://github.com/PathwayCommons/sbgnviz-js" target="_blank">https://github.com/PathwayCommons/sbgnviz-js</a></p></td></tr></table></div>')], void 0, false), new templates.Element('script', {'type': new templates.Attribute('text/template'), 'id': new templates.Attribute('quick-help-template')}, [new templates.Text('<div class="sbgn-frame quick-help"><h2 class="sbgn-text">Quick Help</h2><div class="quick-help-content"><table align="center" valign="center"><tr><td><b>File | Samples | &lt;sample file&gt;</b>:Load a sample model from file in SBGN-ML</td></tr><tr><td><b>File | Load</b>:Load a model from file in SBGN-ML</td></tr><tr><td><b>Left-click</b>:Full label of the node</td></tr><tr><td><b>Right-click</b>:Detailed properties of a macro-molecule from BioGene</td></tr></table></div></div>')], void 0, false), new templates.Element('script', {'type': new templates.Attribute('text/template'), 'id': new templates.Attribute('loading-small-template')}, [new templates.Text('<p class="sbgn-text"> <%= name %> </p><img class="centered" src="sample-app/sampleapp-images/loading-small.gif" height="auto" width="auto" align="middle">')], void 0, false), new templates.Element('script', {'type': new templates.Attribute('text/template'), 'id': new templates.Attribute('layout-settings-template')}, [new templates.Text('<table class="table-condensed layout-table"><tr><td><span class="add-on layout-text"> Node Repulsion </span></td><td><input id="node-repulsion" type="text" class="input-small layout-text" value= <%= nodeRepulsion %> ></td></tr><tr><td><span class="add-on layout-text"> Node Overlap </span></td><td><input id="node-overlap" type="text" class="input-small layout-text" value= <%= nodeOverlap %> ></td></tr><tr><td><span class="add-on layout-text"> Ideal Edge Length </span></td><td><input id="ideal-edge-length" type="text" class="input-small layout-text" value= <%= idealEdgeLength %> ></td></tr><tr><td><span class="add-on layout-text"> Edge Elasticity </span></td><td><input id="edge-elasticity" type="text" class="input-small layout-text" value= <%= edgeElasticity %> ></td></tr><tr><td><span class="add-on layout-text"> Nesting Factor </span></td><td><input id="nesting-factor" type="text" class="input-small layout-text" value= <%= nestingFactor %> ></td></tr><tr><td><span class="add-on layout-text"> Gravity </span></td><td><input id="gravity" type="text" class="input-small layout-text" value= <%= gravity %> ></td></tr><tr><td><span class="add-on layout-text"> Number of Iterations </span></td><td><input id="num-iter" type="text" class="input-small layout-text" value= <%= numIter %> ></td></tr><tr><td><span class="add-on layout-text"> Tile Disconnected </span></td><td><input id="tile" type="checkbox" class="input-small layout-text" <% if (tile){ %> checked<%}%>></td></tr><tr><td><span class="add-on layout-text"> Animate </span></td><td><input id="animate" type="checkbox" class="input-small layout-text" <% if (animate){ %> checked<%}%>></td></tr><tr><td><span class="add-on layout-text"> Incremental </span></td><td><input id="incremental" type="checkbox" class="input-small layout-text" <% if (!randomize){ %> checked<%}%>></td></tr><tr><td><br></td></tr><tr id="layout-buttons"><td><button id="save-layout" class="btn btn-default" >Save</button></td><td><button id="default-layout" class="btn btn-default">Default</button></td></tr></table>')], void 0, false), new templates.Element('script', {'type': new templates.Attribute('text/template'), 'id': new templates.Attribute('sbgn-properties-template')}, [new templates.Text('<table class="table-condensed layout-table"><tr><td><span class="add-on layout-text"> Compound Padding </span></td><td><input id="compound-padding" type="text" class="input-small layout-text" value= <%= compoundPadding %> > %</td></tr><tr><td><span class="add-on layout-text"> Label Size </span></td><td><select name="dynamic-label-size"><option id="dynamic-label-size_small" value="small" <% if (dynamicLabelSize == \'small\'){ %> selected<%}%> > Small </option><option id="dynamic-label-size_regular" value="regular" <% if (dynamicLabelSize == \'regular\'){ %> selected<%}%> > Regular </option><option id="dynamic-label-size_large" value="large" <% if (dynamicLabelSize == \'large\'){ %> selected<%}%> > Large </option></select></td></tr><tr><td><span class="add-on layout-text"> Fit Labels To Nodes </span></td><td><input id="fit-labels-to-nodes" type="checkbox" class="input-small layout-text" <% if (fitLabelsToNodes){ %> checked<%}%>></td></tr><tr><td><span class="add-on layout-text"> Layout After Expand / Collapse </span></td><td><input id="incremental-layout-after-expand-collapse" type="checkbox" class="input-small layout-text" <% if (incrementalLayoutAfterExpandCollapse){ %> checked<%}%>></td></tr><tr id="sbgn-buttons"><td><button id="save-sbgn" class="btn btn-default" >Save</button></td><td><button id="default-sbgn" class="btn btn-default">Default</button></td></tr></table>')], void 0, false), new templates.Element('script', {'type': new templates.Attribute('text/template'), 'id': new templates.Attribute('biogene-template')}, [new templates.Text('<div class=\'node-details-text\'><table class="table table-condensed table-striped" cellspacing="10"><tr class="biogene-info biogene-description node-details-summary"><th valign="top">Gene Summary:</th><td colspan="2" class="expandable"><%=geneSummary %></td></tr><tr class="biogene-info biogene-aliases"><th valign="top">Aliases:</th><td><%=geneAliases %></td></tr><tr class="biogene-info biogene-description"><th>Description:</th><td class="expandable"><%=geneDescription %></td></tr><tr class="biogene-info biogene-location"><th valign="top">Chromosome Location:</th><td><%=geneLocation %></td></tr><tr class="biogene-info biogene-uniprot-links"><th valign="top">UniProt ID:</th><td><a href=\'http://www.uniprot.org/uniprot/<%= geneUniprotId %>\' target=\'blank\'><%=geneUniprotId %></a><span class=\'biogene-uniprot-links-extra\'><%= geneUniprotLinks %></span></td></tr><tr class="biogene-info biogene-id"><th valign="top">Gene ID:</th><td><a href=\'http://www.ncbi.nlm.nih.gov/gene?term=<%= geneId %>\' target=\'blank\'><%=geneId %></a></td></tr></table></div>')], void 0, false), new templates.Element('script', {'type': new templates.Attribute('text/template'), 'id': new templates.Attribute('uniprot-link-template')}, [new templates.Text('<a href="http://www.uniprot.org/uniprot/<%= id %>" target="_blank"><%=id %></a>')], void 0, false), new templates.Element('script', {'type': new templates.Attribute('text/template'), 'id': new templates.Attribute('noty-info')}, [new templates.Text('Right click to a node to see its detailed information')], void 0, false), new templates.Element('div', {'id': new templates.Attribute('chat-area')}, [new templates.Element('div', {'id': new templates.Attribute('users')}, [new templates.Element('form', {'action': new templates.Attribute(''), '"': new templates.Attribute(true)}, [new templates.EachBlock(new expressions.PathExpression(['_page', 'userIds'], new expressions.ExpressionMeta('each _page.userIds as #pUserId', 'each', void 0, '#pUserId')), [new templates.ViewInstance('chat-user', {})])], void 0, false), new templates.Element('div', {'id': new templates.Attribute('chat-history')}, [new templates.Text('Show chat history'), new templates.Element('select', {'id': new templates.Attribute('durationSelect')}, [new templates.EachBlock(new expressions.PathExpression(['_page', 'durations'], new expressions.ExpressionMeta('each _page.durations as #pDur', 'each', void 0, '#pDur')), [new templates.Element('option', {'value': new templates.DynamicAttribute(new expressions.AliasPathExpression('#pDur', ['id'], new expressions.ExpressionMeta('#pDur.id'))), 'selected': new templates.DynamicAttribute(new expressions.OperatorExpression('===', [new expressions.PathExpression(['_page', 'durationId']), new expressions.AliasPathExpression('#pDur', ['id'])], void 0, new expressions.ExpressionMeta('_page.durationId=== #pDur.id')))}, [new templates.Text(' '), new templates.DynamicText(new expressions.AliasPathExpression('#pDur', ['name'], new expressions.ExpressionMeta('#pDur.name'))), new templates.Text(' ')], void 0, false)])], [new templates.ElementOn('change', new expressions.FnExpression(['changeDuration'], []))], false)], void 0, false), new templates.Element('button', {'id': new templates.Attribute('change-user-color')}, [new templates.Text('Change user color')], [new templates.ElementOn('click', new expressions.FnExpression(['changeColorCode'], []))], false)], [new templates.AsProperty(['container']), new templates.ElementOn('change', new expressions.FnExpression(['onScroll'], []))], false), new templates.Element('div', {'id': new templates.Attribute('messages')}, [new templates.Element('ul', {'id': new templates.Attribute('messages-list')}, [new templates.EachBlock(new expressions.PathExpression(['_page', 'list'], new expressions.ExpressionMeta('each _page.list as #message', 'each', void 0, '#message')), [new templates.Element('li', void 0, [new templates.ViewInstance('chat-message', {})], void 0, false)])], [new templates.AsProperty(['list'])], false)], [new templates.AsProperty(['container'])], false), new templates.Element('div', {'id': new templates.Attribute('inputs')}, [new templates.Element('input', {'id': new templates.Attribute('inputs-name'), 'value': new templates.DynamicAttribute(new expressions.BracketsExpression(new expressions.PathExpression(['users']), new expressions.PathExpression(['_session', 'userId']), ['name'], new expressions.ExpressionMeta('users[_session.userId].name')))}, null, void 0, false), new templates.Element('form', {'id': new templates.Attribute('inputs-form')}, [new templates.Element('input', {'id': new templates.Attribute('inputs-comment'), 'value': new templates.DynamicAttribute(new expressions.PathExpression(['_page', 'newComment'], new expressions.ExpressionMeta('_page.newComment'))), 'autofocus': new templates.Attribute(true)}, null, void 0, false), new templates.Text(' '), new templates.Element('button', void 0, [new templates.Text('Send')], void 0, false)], [new templates.ElementOn('submit', new expressions.FnExpression(['add'], [])), new templates.ElementOn('submit', new expressions.FnExpression(['$preventDefault'], [new expressions.PathExpression(['$event'])]))], false)], void 0, false)], void 0, false), new templates.Element('div', {'id': new templates.Attribute('command-history-area')}, [new templates.Element('ul', {'id': new templates.Attribute('command-list')}, [new templates.EachBlock(new expressions.PathExpression(['_page', 'doc', 'history'], new expressions.ExpressionMeta('each _page.doc.history as #pCommand', 'each', void 0, '#pCommand')), [new templates.Element('li', void 0, [new templates.Text(' '), new templates.Element('b', void 0, [new templates.DynamicText(new expressions.AliasPathExpression('#pCommand', ['userName'], new expressions.ExpressionMeta('#pCommand.userName'))), new templates.Text(' '), new templates.DynamicText(new expressions.FnExpression(['formatTime'], [new expressions.AliasPathExpression('#pCommand', [])], void 0, new expressions.ExpressionMeta('formatTime(#pCommand)'))), new templates.Text(' > ')], void 0, false), new templates.DynamicText(new expressions.AliasPathExpression('#pCommand', ['name'], new expressions.ExpressionMeta('#pCommand.name'))), new templates.Text(' '), new templates.DynamicText(new expressions.AliasPathExpression('#pCommand', ['id'], new expressions.ExpressionMeta('#pCommand.id'))), new templates.Text(' '), new templates.DynamicText(new expressions.FnExpression(['formatObj'], [new expressions.AliasPathExpression('#pCommand', ['param'])], void 0, new expressions.ExpressionMeta('formatObj(#pCommand.param)')))], void 0, false)])], [new templates.AsProperty(['list'])], false)], void 0, false), new templates.Element('script', void 0, [new templates.Text('function scrollToBottom(docId){document.getElementById(docId).scrollTop = document.getElementById(docId).scrollHeight;}(window.onresize = function() {scrollToBottom(\'messages-list\');scrollToBottom(\'command-history-area\');})();$(\'#command-history-area\').bind(\'DOMSubtreeModified\', function(){scrollToBottom(\'command-history-area\');});$(\'#messages\').bind(\'DOMSubtreeModified\', function(){scrollToBottom(\'messages\');});')], void 0, false), new templates.Element('audio', {'id': new templates.Attribute('notificationAudio'), 'src': new templates.Attribute('http://www.talkingwav.com/various/beep_02.wav'), 'preload': new templates.Attribute('auto')}, [], void 0, false)]);views.register('Tail', '').template = new templates.Template([]);views.register('chat-user', '\n        <div class="user" style = background:{{users[#pUserId].colorCode}}>\n            {{if _session.userId === #pUserId}}\n            <div> {{users[#pUserId].name}}</div>\n            {{else}}\n            <input type="checkbox" id = {{#pUserId}} checked> {{users[#pUserId].name}}<br>\n            {{/if}}\n        </div>\n\n    ').template = new templates.Template([new templates.Element('div', {'class': new templates.Attribute('user'), 'style': new templates.DynamicAttribute(new templates.Template([new templates.Text('background:'), new templates.DynamicText(new expressions.BracketsExpression(new expressions.PathExpression(['users']), new expressions.AliasPathExpression('#pUserId', []), ['colorCode'], new expressions.ExpressionMeta('users[#pUserId].colorCode')))], 'background:{{users[#pUserId].colorCode}}'))}, [new templates.ConditionalBlock([new expressions.OperatorExpression('===', [new expressions.PathExpression(['_session', 'userId']), new expressions.AliasPathExpression('#pUserId', [])], void 0, new expressions.ExpressionMeta('if _session.userId === #pUserId', 'if')), new expressions.Expression(new expressions.ExpressionMeta('else', 'else'))], [[new templates.Element('div', void 0, [new templates.Text(' '), new templates.DynamicText(new expressions.BracketsExpression(new expressions.PathExpression(['users']), new expressions.AliasPathExpression('#pUserId', []), ['name'], new expressions.ExpressionMeta('users[#pUserId].name')))], void 0, false)], [new templates.Element('input', {'type': new templates.Attribute('checkbox'), 'id': new templates.DynamicAttribute(new expressions.AliasPathExpression('#pUserId', [], new expressions.ExpressionMeta('#pUserId'))), 'checked': new templates.Attribute(true)}, null, void 0, false), new templates.Text(' '), new templates.DynamicText(new expressions.BracketsExpression(new expressions.PathExpression(['users']), new expressions.AliasPathExpression('#pUserId', []), ['name'], new expressions.ExpressionMeta('users[#pUserId].name'))), new templates.Element('br', void 0, null, void 0, false)]])], void 0, false)]);views.register('chat-message', '\n      <div class="message">\n        <div class="time">{{_page.showTime && formatTime(#message)}}</div>\n        <b><div style = font-color:{{users[#pUserId].colorCode}}> {{users[#message.userId].name}}</div></b>\n        <p>{{#message.comment}}</p>\n      </div>\n\n\n\n').template = new templates.Template([new templates.Element('div', {'class': new templates.Attribute('message')}, [new templates.Element('div', {'class': new templates.Attribute('time')}, [new templates.DynamicText(new expressions.OperatorExpression('&&', [new expressions.PathExpression(['_page', 'showTime']), new expressions.FnExpression(['formatTime'], [new expressions.AliasPathExpression('#message', [])])], void 0, new expressions.ExpressionMeta('_page.showTime && formatTime(#message)')))], void 0, false), new templates.Element('b', void 0, [new templates.Element('div', {'style': new templates.DynamicAttribute(new templates.Template([new templates.Text('font-color:'), new templates.DynamicText(new expressions.BracketsExpression(new expressions.PathExpression(['users']), new expressions.AliasPathExpression('#pUserId', []), ['colorCode'], new expressions.ExpressionMeta('users[#pUserId].colorCode')))], 'font-color:{{users[#pUserId].colorCode}}'))}, [new templates.Text(' '), new templates.DynamicText(new expressions.BracketsExpression(new expressions.PathExpression(['users']), new expressions.AliasPathExpression('#message', ['userId']), ['name'], new expressions.ExpressionMeta('users[#message.userId].name')))], void 0, false)], void 0, false), new templates.Element('p', void 0, [new templates.DynamicText(new expressions.AliasPathExpression('#message', ['comment'], new expressions.ExpressionMeta('#message.comment')))], void 0, false)], void 0, false)]);};/*DERBY_SERIALIZED_VIEWS_END*/
+/*DERBY_SERIALIZED_VIEWS*/module.exports = function(derbyTemplates, views) {var expressions = derbyTemplates.expressions;var templates = derbyTemplates.templates;views.register('TitleElement', '<title><view name="{{$render.prefix}}Title"></view></title>').template = new templates.Template([new templates.Element('title', void 0, [new templates.Block(new templates.Template([new templates.DynamicText(new expressions.PathExpression(['$render', 'prefix'], new expressions.ExpressionMeta('$render.prefix'))), new templates.Text('Title')], '{{$render.prefix}}Title'), [new templates.DynamicViewInstance(new templates.Template([new templates.DynamicText(new expressions.PathExpression(['$render', 'prefix'], new expressions.ExpressionMeta('$render.prefix'))), new templates.Text('Title')], '{{$render.prefix}}Title'), {})])], void 0, false)]);views.register('BodyElement', '<body class="{{$bodyClass($render.ns)}}"><view name="{{$render.prefix}}Body"></view>').template = new templates.Template([new templates.Element('body', {'class': new templates.DynamicAttribute(new expressions.FnExpression(['$bodyClass'], [new expressions.PathExpression(['$render', 'ns'])], void 0, new expressions.ExpressionMeta('$bodyClass($render.ns)')))}, [new templates.Block(new templates.Template([new templates.DynamicText(new expressions.PathExpression(['$render', 'prefix'], new expressions.ExpressionMeta('$render.prefix'))), new templates.Text('Body')], '{{$render.prefix}}Body'), [new templates.DynamicViewInstance(new templates.Template([new templates.DynamicText(new expressions.PathExpression(['$render', 'prefix'], new expressions.ExpressionMeta('$render.prefix'))), new templates.Text('Body')], '{{$render.prefix}}Body'), {})])], void 0, false, true)]);views.register('Title', '\n    SBGNViz Collaborative Editor ({{count(messages)}}) - {{users[_session.userId].name}} - {{_page.doc.sampleInd}}\n\n').template = new templates.Template([new templates.Text('SBGNViz Collaborative Editor ('), new templates.DynamicText(new expressions.FnExpression(['count'], [new expressions.PathExpression(['messages'])], void 0, new expressions.ExpressionMeta('count(messages)'))), new templates.Text(') - '), new templates.DynamicText(new expressions.BracketsExpression(new expressions.PathExpression(['users']), new expressions.PathExpression(['_session', 'userId']), ['name'], new expressions.ExpressionMeta('users[_session.userId].name'))), new templates.Text(' - '), new templates.DynamicText(new expressions.PathExpression(['_page', 'doc', 'sampleInd'], new expressions.ExpressionMeta('_page.doc.sampleInd')))]);views.register('Head', '\n    <meta name="viewport" content="width=device-width">\n    <!--Css files-->\n    <link href="lib/css/jquery-ui-1.10.3.custom.css" rel="stylesheet">\n    <link href="lib/css/jquery.fancybox-1.3.4.css" rel="stylesheet">\n    <link href="lib/css/bootstrap.css" rel="stylesheet">\n    <link href="lib/css/cytoscape.js-panzoom.css" rel="stylesheet">\n    <link href="lib/css/font-awesome-4.0.3/css/font-awesome.css" rel="stylesheet">\n    <link href="lib/css/jquery.qtip.min.css" rel="stylesheet">\n    <link href="sample-app/sampleapp-components/css/sbgn-viz.css" rel="stylesheet">\n\n\n').template = new templates.Template([new templates.Element('meta', {'name': new templates.Attribute('viewport'), 'content': new templates.Attribute('width=device-width')}, null, void 0, false), new templates.Element('link', {'href': new templates.Attribute('lib/css/jquery-ui-1.10.3.custom.css'), 'rel': new templates.Attribute('stylesheet')}, null, void 0, false), new templates.Element('link', {'href': new templates.Attribute('lib/css/jquery.fancybox-1.3.4.css'), 'rel': new templates.Attribute('stylesheet')}, null, void 0, false), new templates.Element('link', {'href': new templates.Attribute('lib/css/bootstrap.css'), 'rel': new templates.Attribute('stylesheet')}, null, void 0, false), new templates.Element('link', {'href': new templates.Attribute('lib/css/cytoscape.js-panzoom.css'), 'rel': new templates.Attribute('stylesheet')}, null, void 0, false), new templates.Element('link', {'href': new templates.Attribute('lib/css/font-awesome-4.0.3/css/font-awesome.css'), 'rel': new templates.Attribute('stylesheet')}, null, void 0, false), new templates.Element('link', {'href': new templates.Attribute('lib/css/jquery.qtip.min.css'), 'rel': new templates.Attribute('stylesheet')}, null, void 0, false), new templates.Element('link', {'href': new templates.Attribute('sample-app/sampleapp-components/css/sbgn-viz.css'), 'rel': new templates.Attribute('stylesheet')}, null, void 0, false)]);views.register('Body', '\n    <!-- External Libraries -->\n    <script src="lib/js/jquery-1.8.2.js"></script>\n    <script src="lib/js/jquery.fancybox-1.3.4.pack.js"></script>\n    <script src="lib/js/jquery.expander-min.js"></script>\n    <script src="lib/js/jquery.qtip.js"></script>\n    <script src="lib/js/bootstrap.min.js"></script>\n    <script src="lib/js/jquery-ui-1.10.3.custom.min.js"></script>\n    <script src="lib/js/underscore.js"></script>\n    <script src="lib/js/cytoscape.js"></script>\n    <script src="lib/js/cytoscape.js-panzoom.js"></script>\n    <script src="lib/js/cytoscape.js-qtip.js"></script>\n    <script src="lib/js/cytoscape-edgehandles.js"></script>\n    <script src="lib/js/cytoscape-noderesize.js"></script>\n\n    <script src="lib/js/FileSaver.js"></script>\n    <script src="lib/js/jquery.noty.packaged.min.js"></script>\n    <script src="lib/js/socket.io.js"></script>\n\n\n    <!--Core SBGNViz components-->\n    <script src="src/sbgn-extensions/cytoscape-cose-bilkent.js"></script>\n    <script src="src/sbgn-extensions/cytoscape.renderer.canvas.sbgn-renderer.js"></script>\n    <script src="src/utilities/json-to-sbgnml-converter.js"></script>\n    <script src="src/utilities/sbgnml-to-json-converter.js"></script>\n    <script src="src/utilities/sbgn-filtering.js"></script>\n    <script src="src/utilities/expand-collapse-utilities.js"></script>\n    <script src="src/utilities/add-remove-utilities.js"></script>\n    <script src="src/utilities/sbgn-element-utilities.js"></script>\n\n    <script src="sample-app/sampleapp-components/js/sample-app-mode-handler.js"></script>\n    <script src="sample-app/sampleapp-components/js/sample-app-helper-functions.js"></script>\n\n\n    <!--<div id = "sbgnviz">-->\n         <div class="nav-menu">\n             <nav class="navbar navbar-default sbgn-nav-bar" role="navigation">\n                 <div>\n                     <ul class="nav navbar-nav navbar-left">\n\n                         <li class="dropdown">\n                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">\n                                 File\n                                 <b class="caret"></b>\n                             </a>\n                             <ul class="dropdown-menu">\n                                 <input id="file-input" type="file" style="..." />\n                                 <li><a href="#" type="file" id="new-file">New</a></li>\n                                 <li><a href="#" type="file" id="load-file">Load...</a></li>\n                                 <li class="dropdown-submenu">\n                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">\n                                         Samples\n                                     </a>\n                                     <!--<div id = "samples">-->\n                                     <ul id = "samples" class="dropdown-menu">\n                                         {{each _sbgnviz.samples as #pSample}}\n                                         <li><a href="#" id="{{#pSample.id}}">{{#pSample.name}}</a></li>\n                                         {{/each}}\n                                     </ul>\n                                <!--</div>-->\n                                 </li>\n                                 <li><a href="#" id="save-as-sbgnml">Save...</a></li>\n                                 <li><a href="#" id="save-command-history">Save operation history...</a></li>\n\n                                 <li class="dropdown-submenu">\n                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">\n                                         Save as Image\n                                     </a>\n                                     <ul class="dropdown-menu">\n                                         <li><a href="#" id="save-as-png">PNG</a></li>\n                                         <li><a href="#" id="save-as-jpg">JPG</a></li>\n                                     </ul>\n                                 </li>\n                                 <li><a href="#" id="sbgn-properties">Properties...</a></li>\n                             </ul>\n                         </li>\n\n\n\n                         <li class="dropdown">\n                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">\n                                 Edit\n                                 <b class="caret"></b>\n                             </a>\n                             <ul class="dropdown-menu">\n                                 <li><a href="#" id="select-edit">Select/Edit</a></li>\n                                 <li class="dropdown-submenu">\n                                     <a href="#" id="add-node-menu-option" class="dropdown-toggle" data-toggle="dropdown">\n                                         Add Node\n                                         <!--<b class="right-caret"></b>-->\n                                     </a>\n                                     <ul class="dropdown-menu" id="add-node-submenu">\n                                         <li><a href="#" class="add-node-menu-item" name="macromolecule">Macromolecule</a></li>\n                                         <li><a href="#" class="add-node-menu-item" name="simple-chemical">Simple Chemical</a></li>\n                                         <li><a href="#" class="add-node-menu-item" name="complex">Complex</a></li>\n                                         <li class="dropdown-submenu">\n                                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" id="process-menu-option">\n                                                 Process\n                                                 <!--<b class="right-caret"></b>-->\n                                             </a>\n                                             <ul class="dropdown-menu">\n                                                 <li><a href="#" class="add-node-menu-item process-type" name="process" >Process</a></li>\n                                                 <li><a href="#" class="add-node-menu-item process-type" name="omitted-process">Omitted Process</a></li>\n                                                 <li><a href="#" class="add-node-menu-item process-type" name="uncertain-process">Uncertain Process</a></li>\n                                                 <li><a href="#" class="add-node-menu-item process-type" name="association">Association</a></li>\n                                                 <li><a href="#" class="add-node-menu-item process-type" name="dissociation">Dissociation</a></li>\n                                             </ul>\n                                         </li>\n                                         <li><a href="#" class="add-node-menu-item" name="phenotype">Phenotype</a></li>\n                                         <li><a href="#" class="add-node-menu-item" name="compartment">Compartment</a></li>\n                                         <li><a href="#" class="add-node-menu-item" name="unspecified-entity">Unspecified Entry</a></li>\n                                         <li><a href="#" class="add-node-menu-item" name="nucleic-acid-feature">Nucleic Acid Feature</a></li>\n                                         <li><a href="#" class="add-node-menu-item" name="source-and-sink">Source or Sink</a></li>\n                                         <li><a href="#" class="add-node-menu-item" name="perturbing-agent">Perturbing Agend</a></li>\n                                         <li><a href="#" class="add-node-menu-item" name="tag">Tag</a></li>\n                                         <li class="dropdown-submenu">\n                                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" id="logical-operator-menu-option">\n                                                 Logical Operators\n                                                 <!--<b class="right-caret"></b>-->\n                                             </a>\n                                             <ul class="dropdown-menu">\n                                                 <li><a href="#" class="logical-operator-type add-node-menu-item" name="and">AND</a></li>\n                                                 <li><a href="#" class="logical-operator-type add-node-menu-item" name="or">OR</a></li>\n                                                 <li><a href="#" class="logical-operator-type add-node-menu-item" name="not">NOT</a></li>\n                                             </ul>\n                                         </li>\n                                     </ul>\n                                 </li>\n\n                                 <li class="dropdown-submenu">\n                                     <a href="#" id="add-edge-menu-option" class="dropdown-toggle" data-toggle="dropdown">\n                                         Add Interaction\n                                     </a>\n                                     <ul class="dropdown-menu" id="add-edge-submenu">\n                                         <li><a href="#" class="add-edge-menu-item" name="consumption">Consumption</a></li>\n                                         <li><a href="#" class="add-edge-menu-item" name="production">Production</a></li>\n                                         <li class="divider"></li>\n                                         <li><a href="#" class="add-edge-menu-item" name="modulation">Modulation</a></li>\n                                         <li><a href="#" class="add-edge-menu-item" name="stimulation">Simulation</a></li>\n                                         <li><a href="#" class="add-edge-menu-item" name="catalysis">Catalysis</a></li>\n                                         <li><a href="#" class="add-edge-menu-item" name="inhibition">Inhibition</a></li>\n                                         <li><a href="#" class="add-edge-menu-item" name="necessary-stimulation">Necessary Stimulation</a></li>\n                                         <li class="divider"></li>\n                                         <li><a href="#" class="add-edge-menu-item" name="logic-arc">Logic Arc</a></li>\n                                         <li class="divider"></li>\n                                         <li><a href="#" class="add-edge-menu-item" name="equivalence-arc">Equivalence Arc</a></li>\n                                     </ul>\n                                 </li>\n\n                                 <li class="divider"></li>\n                                 <li><a href="#" id="make-compound-complex" >Add Complex for Selected</a></li>\n                                 <li><a href="#" id="make-compound-compartment" >Add Compartment for Selected</a></li>\n\n                                 <li class="divider"></li>\n\n                                 <li><a href="#" id="delete-selected-simple">Delete Selected Simple</a></li>\n                                 <li><a href="#" id="delete-selected-smart">Delete Selected Smart</a></li>\n\n                                 <li class="divider"></li>\n                                 <li class="disabled"><a href="#" id="undo-last-action" >Undo</a></li>\n                                 <li class="disabled"><a href="#" id="redo-last-action" >Redo</a></li>\n\n                             </ul>\n                         </li>\n\n                         <li class="dropdown">\n                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">\n                                 View\n                                 <b class="caret"></b>\n                             </a>\n                             <ul class="dropdown-menu">\n                                 <li class="dropdown-submenu">\n                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">\n                                         Hide/Show\n                                         <!--<b class="right-caret"></b>-->\n                                     </a>\n                                     <ul class="dropdown-menu">\n                                         <li><a href="#" id="hide-selected">Hide Selected</a></li>\n                                         <li><a href="#" id="show-selected">Show Selected</a></li>\n                                         <li><a href="#" id="show-all">Show All</a></li>\n                                     </ul>\n                                 </li>\n\n                                 <li class="dropdown-submenu">\n                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">\n                                         Collapse/Expand\n                                         <!--<b class="right-caret"></b>-->\n                                     </a>\n                                     <ul class="dropdown-menu">\n                                         <li><a href="#" id="collapse-selected">Collapse Selected</a></li>\n                                         <li><a href="#" id="expand-selected">Expand Selected</a></li>\n                                         <li><a href="#" id="collapse-all">Collapse All</a></li>\n                                         <li><a href="#" id="expand-all">Expand All</a></li>\n                                     </ul>\n                                 </li>\n\n                                 <li class="dropdown-submenu">\n                                     <a href="#" id="add-node-menu-option" class="dropdown-toggle" data-toggle="dropdown">\n                                         Align\n                                         <!--<b class="right-caret"></b>-->\n                                     </a>\n                                     <ul class="dropdown-menu" id="add-node-submenu">\n                                         <li class="dropdown-submenu">\n                                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">\n                                                 Horizontal\n                                                 <!--<b class="right-caret"></b>-->\n                                             </a>\n                                             <ul class="dropdown-menu">\n                                                 <li><a href="#" id="align-horizontal-top">Top</a></li>\n                                                 <li><a href="#" id="align-horizontal-middle">Middle</a></li>\n                                                 <li><a href="#" id="align-horizontal-bottom">Bottom</a></li>\n                                             </ul>\n                                         </li>\n                                         <li class="dropdown-submenu">\n                                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">\n                                                 Vertical\n                                                 <!--<b class="right-caret"></b>-->\n                                             </a>\n                                             <ul class="dropdown-menu">\n                                                 <li><a href="#" id="align-vertical-left">Left</a></li>\n                                                 <li><a href="#" id="align-vertical-center">Center</a></li>\n                                                 <li><a href="#" id="align-vertical-right">Right</a></li>\n                                             </ul>\n                                         </li>\n                                     </ul>\n                                 </li>\n                             </ul>\n                         </li>\n\n                         <li class="dropdown">\n                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">\n                                 Highlight\n                                 <b class="caret"></b>\n                             </a>\n                             <ul class="dropdown-menu">\n                                 <li><a href="#" id="neighbors-of-selected">Neighbors of Selected</a></li>\n                                 <li><a href="#" id="processes-of-selected">Processes of Selected</a></li>\n                                 <li><a href="#" id="remove-highlights">Remove Highlights</a></li>\n\n                             </ul>\n                         </li>\n\n                         <li class="dropdown">\n                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">\n                                 Layout\n                                 <b class="caret"></b>\n                             </a>\n                             <ul class="dropdown-menu">\n                                 <li><a href="#" id="perform-layout">Perform Layout</a></li>\n                                 <li><a href="#" id="perform-incremental-layout" style="display: none"></a></li>\n                                 <li><a href="#" id="layout-properties">Layout Properties...</a></li>\n                             </ul>\n                         </li>\n\n\n                         <li class="dropdown">\n                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">\n                                 Legends\n                                 <b class="caret"></b>\n                             </a>\n                             <ul class="dropdown-menu">\n                                 <li><a href="#" id="node-legend">Node Legend</a></li>\n                                 <li><a href="#" id="edge-legend">Interaction Legend</a></li>\n                             </ul>\n                         </li>\n\n\n                         <li class="dropdown">\n                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">\n                                 Help\n                                 <b class="caret"></b>\n                             </a>\n                             <ul class="dropdown-menu">\n                                 <li><a href="#" id="quick-help">Quick Help</a></li>\n                                 <li><a href="#" id="how-to-use">How to Use</a></li>\n                                 <li><a href="#" id="about">About</a></li>\n                             </ul>\n                         </li>\n                     </ul>\n                     <span class="input-file" id="file-name"></span>\n                 </div>\n             </nav>\n         </div>\n\n         <div id="sbgn-toolbar" style="margin-top: 5px;">\n             <!--<table width="100%" height="100%" align="center" valign="center">-->\n                 <!--<tr>-->\n             <div class="inside-menu">\n                 <img id="new-file-icon" class="sbgn-toolbar-element" src="sample-app/sampleapp-images/new.png" title="New File">\n                 <img id="load-file-icon" class="sbgn-toolbar-element" src="sample-app/sampleapp-images/load.png" title="Load">\n                 <img id="save-icon" class="sbgn-toolbar-element" src="sample-app/sampleapp-images/save.png" title="Save">\n                <img id="properties-icon" class="sbgn-toolbar-element" src="sample-app/sampleapp-images/toolbar-icons/properties.png" title="Properties" >\n             </div>\n\n             <div class="menu-break-large sbgn-toolbar-element"></div>\n             <div class="inside-menu">\n                 <img id="select-icon" class="sbgn-toolbar-element" src="sample-app/sampleapp-images/toolbar-icons/select.png" title="Select" >\n                 <div class="btn-group sbgn-toolbar-element" role="group" id="node-list">\n                     <button id="node-list-set-mode-btn" title="Macromolecule" type="button" class="btn" aria-haspopup="true" aria-expanded="false">\n                         <div style="height: 16px;">\n                             <img style="float: left; height: 16px; width: auto;" id="sbgn-selected-node-img" src="sample-app/sampleapp-images/nodes/macromolecule.png"/>\n                             <!--<span style="float: right;" class="caret"></span>-->\n                         </div>\n                     </button>\n                     <button id="node-list-dd-button" type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">\n                         <div style="height: 16px;">\n                             <span class="caret"></span>\n                             <span class="sr-only"></span>\n                         </div>\n                     </button>\n\n                     <ul id="node-list-menu" class="dropdown-menu" >\n                         <li class="sbgn-select-node-item" id="first-sbgn-select-node-item"><a href="#"><img src="sample-app/sampleapp-images/nodes/macromolecule.png" class="sbgn-select-img" value="macromolecule"/>Macromolecule</a></li>\n                         <li class="sbgn-select-node-item"><a href="#"><img src="sample-app/sampleapp-images/nodes/simplechemical.png" class="sbgn-select-img" value="simple-chemical"/>Simple Chemical</a></li>\n                         <li class="sbgn-select-node-item"><a href="#"><img src="sample-app/sampleapp-images/nodes/complex.png" class="sbgn-select-img" value="complex"/>Complex</a></li>\n                         <li class="sbgn-select-node-item"><a href="#"><img src="sample-app/sampleapp-images/nodes/process.png" class="sbgn-select-img" value="process"/>Process</a></li>\n                         <li class="sbgn-select-node-item"><a href="#"><img src="sample-app/sampleapp-images/nodes/omittedprocess.png" class="sbgn-select-img" value="omitted-process"/>Omitted Process</a></li>\n                         <li class="sbgn-select-node-item"><a href="#"><img src="sample-app/sampleapp-images/nodes/uncertainprocess.png" class="sbgn-select-img" value="uncertain-process"/>Uncertain Process</a></li>\n                         <li class="sbgn-select-node-item"><a href="#"><img src="sample-app/sampleapp-images/nodes/association.png" class="sbgn-select-img" value="association"/>Association</a></li>\n                         <li class="sbgn-select-node-item"><a href="#"><img src="sample-app/sampleapp-images/nodes/dissociation.png" class="sbgn-select-img" value="dissociation"/>Dissociation</a></li>\n                         <li class="sbgn-select-node-item"><a href="#"><img src="sample-app/sampleapp-images/nodes/phenotype.png" class="sbgn-select-img" value="phenotype"/>Phenotype</a></li>\n                         <li class="sbgn-select-node-item"><a href="#"><img src="sample-app/sampleapp-images/nodes/compartment.png" class="sbgn-select-img" value="compartment"/>Compartment</a></li>\n                         <li class="sbgn-select-node-item"><a href="#"><img src="sample-app/sampleapp-images/nodes/unspecifiedentity.png" class="sbgn-select-img" value="unspecified-entity"/>Unspecified Entity</a></li>\n                         <li class="sbgn-select-node-item"><a href="#"><img src="sample-app/sampleapp-images/nodes/nucleicacidfeature.png" class="sbgn-select-img" value="nucleic-acid-feature"/>Nucleic Acid Feature</a></li>\n\n                         <li class="sbgn-select-node-item"><a href="#"><img src="sample-app/sampleapp-images/nodes/sourceandsink.png" class="sbgn-select-img" value="source-and-sink"/>Source and Sink</a></li>\n                         <li class="sbgn-select-node-item"><a href="#"><img src="sample-app/sampleapp-images/nodes/perturbingagent.png" class="sbgn-select-img" value="perturbing-agent"/>Perturbing Agent</a></li>\n                         <li class="sbgn-select-node-item"><a href="#"><img src="sample-app/sampleapp-images/nodes/tag.png" class="sbgn-select-img" value="tag"/>Tag</a></li>\n\n                         <li class="sbgn-select-node-item"><a href="#"><img src="sample-app/sampleapp-images/nodes/and.png" class="sbgn-select-img" value="and"/>AND</a></li>\n                         <li class="sbgn-select-node-item"><a href="#"><img src="sample-app/sampleapp-images/nodes/or.png" class="sbgn-select-img" value="or"/>OR</a></li>\n                         <li class="sbgn-select-node-item"><a href="#"><img src="sample-app/sampleapp-images/nodes/not.png" class="sbgn-select-img" value="not"/>NOT</a></li>\n                     </ul>\n                 </div>\n\n                 <div class="btn-group sbgn-toolbar-element" role="group" id="edge-list">\n                     <button id="edge-list-set-mode-btn" type="button" class="btn" title="consumption" aria-haspopup="true" aria-expanded="false">\n                         <div style="height: 16px;">\n                             <img style="float: left;" id="sbgn-selected-edge-img" src="sample-app/sampleapp-images/edges/consumption.png" class="sbgn-select-img"/>\n                             <!--<span style="float: right;" class="caret"></span>-->\n                         </div>\n                     </button>\n                     <button id="edge-list-dd-button" type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">\n                         <div style="height: 16px;">\n                             <span class="caret"></span>\n                             <span class="sr-only"></span>\n                         </div>\n                     </button>\n                     <ul id="edge-list-menu" class="dropdown-menu" >\n                         <li id="first-sbgn-select-edge-item" class="sbgn-select-edge-item"><a href="#"><img src="sample-app/sampleapp-images/edges/consumption.png" class="sbgn-select-img" value="consumption"/>Consumption</a></li>\n                         <li class="sbgn-select-edge-item"><a href="#"><img src="sample-app/sampleapp-images/edges/production.png" class="sbgn-select-img" value="production"/>Production</a></li>\n                         <li class="sbgn-select-edge-item"><a href="#"><img src="sample-app/sampleapp-images/edges/modulation.png" class="sbgn-select-img" value="modulation"/>Modulation</a></li>\n                         <li class="sbgn-select-edge-item"><a href="#"><img src="sample-app/sampleapp-images/edges/stimulation.png" class="sbgn-select-img" value="stimulation"/>Stimulation</a></li>\n                         <li class="sbgn-select-edge-item"><a href="#"><img src="sample-app/sampleapp-images/edges/catalysis.png" class="sbgn-select-img" value="catalysis"/>Catalysis</a></li>\n                         <li class="sbgn-select-edge-item"><a href="#"><img src="sample-app/sampleapp-images/edges/inhibition.png" class="sbgn-select-img" value="inhibition"/>Inhibition</a></li>\n                         <li class="sbgn-select-edge-item"><a href="#"><img src="sample-app/sampleapp-images/edges/necessarystimulation.png" class="sbgn-select-img" value="necessary-stimulation"/>Necessary Stimulation</a></li>\n                         <li class="sbgn-select-edge-item"><a href="#"><img src="sample-app/sampleapp-images/edges/logicarc.png" class="sbgn-select-img" value="logic-arc"/>Logic Arc</a></li>\n                         <li class="sbgn-select-edge-item"><a class="dd-list-href" href="#"><img src="sample-app/sampleapp-images/edges/logicarc.png" class="sbgn-select-img" value="equivalence-arc"/>Equivalence Arc</a></li>\n                     </ul>\n                 </div>\n\n                 <div class="menu-break-small sbgn-toolbar-element"></div>\n                 <img id="delete-selected-simple-icon" class="sbgn-toolbar-element" src="sample-app/sampleapp-images/toolbar-icons/deletesimple.png" title="Delete Selected Simple" >\n                 <img id="delete-selected-smart-icon" class="sbgn-toolbar-element" src="sample-app/sampleapp-images/toolbar-icons/deletesmart.png" title="Delete Selected Smart" >\n\n                 <div class="menu-break-small sbgn-toolbar-element"></div>\n                 <img id="undo-icon" class="sbgn-toolbar-element" src="sample-app/sampleapp-images/toolbar-icons/undo.png" title="Undo" >\n                 <img id="redo-icon" class="sbgn-toolbar-element" src="sample-app/sampleapp-images/toolbar-icons/redo.png" title="Redo" >\n             </div>\n\n             <div class="menu-break-large sbgn-toolbar-element"></div>\n             <div class="inside-menu">\n                 <img id="hide-selected-icon" class="sbgn-toolbar-element" src="sample-app/sampleapp-images/toolbar-icons/hideselected.png" title="Hide Selected" >\n                 <img id="show-selected-icon" class="sbgn-toolbar-element" src="sample-app/sampleapp-images/toolbar-icons/showselected.png" title="Show Selected" >\n\n                 <div class="menu-break-small sbgn-toolbar-element"></div>\n                 <img id="collapse-selected-icon" class="sbgn-toolbar-element" src="sample-app/sampleapp-images/toolbar-icons/collapseselected.png" title="Collapse Selected" >\n                 <img id="expand-selected-icon" class="sbgn-toolbar-element" src="sample-app/sampleapp-images/toolbar-icons/expandselected.png" title="Expand Selected" >\n\n                 <div class="menu-break-small sbgn-toolbar-element"></div>\n                 <div class="btn-group sbgn-toolbar-element" role="group" id="align-list">\n                     <button id="align-button" title="Align" type="button" class="btn" aria-haspopup="true" aria-expanded="false">\n                         <div style="height: 16px;">\n                             <img style="float: left; height: 16px; width: auto;" id="sbgn-align-img" src="sample-app/sampleapp-images/align/align.png"/>\n                             <!--<span style="float: right;" class="caret"></span>-->\n                         </div>\n                     </button>\n                     <button id="align-dd-button" type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">\n                         <div style="height: 16px;">\n                             <span class="caret"></span>\n                             <span class="sr-only"></span>\n                         </div>\n                     </button>\n                     <ul id="align-menu" class="dropdown-menu" >\n                         <li><a class="dd-list-href" href="#" id="align-horizontal-top-icon"><img src="sample-app/sampleapp-images/align/align-horizontal-top.png" class="sbgn-select-img"/>Align Horizontal Top</a></li>\n                         <li><a class="dd-list-href" href="#" id="align-horizontal-middle-icon"><img src="sample-app/sampleapp-images/align/align-horizontal-middle.png" class="sbgn-select-img"/>Align Horizontal Middle</a></li>\n                         <li><a class="dd-list-href" href="#" id="align-horizontal-bottom-icon"><img src="sample-app/sampleapp-images/align/align-horizontal-bottom.png" class="sbgn-select-img"/>Align Horizontal Bottom</a></li>\n                         <li><a class="dd-list-href" href="#" id="align-vertical-left-icon"><img src="sample-app/sampleapp-images/align/align-vertical-left.png" class="sbgn-select-img"/>Align Vertical Left</a></li>\n                         <li><a class="dd-list-href" href="#" id="align-vertical-center-icon"><img src="sample-app/sampleapp-images/align/align-vertical-center.png" class="sbgn-select-img"/>Align Vertical Center</a></li>\n                         <li><a class="dd-list-href" href="#" id="align-vertical-right-icon"><img src="sample-app/sampleapp-images/align/align-vertical-right.png" class="sbgn-select-img"/>Align Vertical Right</a></li>\n                     </ul>\n                 </div>\n             </div>\n             <div class="menu-break-large sbgn-toolbar-element"></div>\n             <div class="inside-menu">\n                 <img id="highlight-neighbors-of-selected-icon" class="sbgn-toolbar-element" src="sample-app/sampleapp-images/toolbar-icons/highlightneighborsofselected.png" title="Highlight Neighbors of Selected" >\n                 <img id="remove-highlights-icon" class="sbgn-toolbar-element" src="sample-app/sampleapp-images/toolbar-icons/removehighlights.png" title="Remove Highlights" >\n             </div>\n\n             <div class="menu-break-large sbgn-toolbar-element"></div>\n             <div class="inside-menu">\n                 <img id="perform-layout-icon" class="sbgn-toolbar-element" src="sample-app/sampleapp-images/toolbar-icons/layout-cose.png" title="Perform Layout" >\n                 <img id="layout-properties-icon" class="sbgn-toolbar-element" src="sample-app/sampleapp-images/toolbar-icons/layoutproperties.png" title="Layout Properties" >\n             </div>\n\n                 <!--</tr>-->\n             <!--</table>-->\n         </div>\n\n\n        <div id="sbgn-network-container"></div>\n        <div id="sbgn-inspector"></div>\n\n        <div id="sbgn-layout-table" title="Layout Properties">\n             <!-- sbgn layout table will be shown here -->\n         </div>\n\n         <div id="sbgn-properties-table" title="Properties" style="display: inline">\n             <!-- sbgn properties table will be shown here -->\n         </div>\n\n         <div id="biogene-container" style="display: none">\n         </div>\n\n         <div id="box">\n         </div>\n\n         <input id="node-label-textbox" type="text">\n\n         <!-- templates -->\n         <script type="text/template" id="node-legend-template">\n             <div class="sbgn-frame">\n                 <h2 class="sbgn-text">Node Legend</h2>\n                 <img src="sample-app/sampleapp-images/node_legend_sbgn.png" alt="" class="centered">\n             </div>\n         </script>\n\n         <script type="text/template" id="edge-legend-template">\n             <div class="sbgn-frame">\n                 <h2 class="sbgn-text">Interaction Legend</h2>\n                 <img src="sample-app/sampleapp-images/interaction_legend_sbgn.png" alt="" class="centered">\n             </div>\n         </script>\n\n         <script type="text/template" id="about-template">\n             <div class="sbgn-frame">\n                 <h2 class="sbgn-text">About</h2>\n\n                 <table width="100%" height="100%" align="center" valign="center">\n                     <tr><td>\n                         <img src="sample-app/sampleapp-images/i-vis.png" alt="" class="centered">\n                     </td></tr>\n\n                     <tr><td>\n                         <img src="sample-app/sampleapp-images/cbio.png" alt="" class="centered">\n                     </td></tr>\n\n                     <tr><td>\n                         <p class="sbgn-text">SBGN<i>Viz</i>.js version 1.2</p>\n                     </td></tr>\n\n                     <tr><td>\n                         <p class="address-text marg">i-Vis information Visualization Group</p>\n                         <p class="address-text">Bilkent University, Ankara, Turkey</p>\n                     </td></tr>\n\n                     <tr><td>\n                         <p class="address-text marg">Memorial Sloan-Kettering Cancer Center</p>\n                         <p class="address-text">New York, USA</p>\n                     </td></tr>\n\n                     <tr><td>\n                         <p class="address-text marg">\n                             <a href="mailto:ivis@cs.bilkent.edu.tr" target="_top">ivis@cs.bilkent.edu.tr</a>\n                         </p>\n                         <p class="address-text">\n                             <a href="https://github.com/PathwayCommons/sbgnviz-js" target="_blank">https://github.com/PathwayCommons/sbgnviz-js</a>\n                         </p>\n                     </td></tr>\n                 </table>\n             </div>\n         </script>\n\n         <script type="text/template" id="quick-help-template">\n             <div class="sbgn-frame quick-help">\n                 <h2 class="sbgn-text">Quick Help</h2>\n                 <div class="quick-help-content">\n                     <table align="center" valign="center">\n                         <tr>\n                             <td><b>File | Samples | &lt;sample file&gt;</b>:\n                                 Load a sample model from file in SBGN-ML</td>\n                         </tr>\n                         <tr>\n                             <td><b>File | Load</b>:\n                                 Load a model from file in SBGN-ML</td>\n                         </tr>\n                         <tr>\n                             <td><b>Left-click</b>:\n                                 Full label of the node</td>\n                         </tr>\n                         <tr>\n                             <td><b>Right-click</b>:\n                                 Detailed properties of a macro-molecule from BioGene</td>\n                         </tr>\n                     </table>\n                 </div>\n             </div>\n         </script>\n\n         <script type="text/template" id="loading-small-template">\n             <p class="sbgn-text"> <%= name %> </p>\n             <img class="centered" src="sample-app/sampleapp-images/loading-small.gif" height="auto" width="auto" align="middle">\n         </script>\n\n         <script type="text/template" id="layout-settings-template">\n             <table class="table-condensed layout-table">\n                 <tr>\n                     <td>\n                         <span class="add-on layout-text"> Node Repulsion </span>\n                     </td>\n                     <td>\n                         <input id="node-repulsion" type="text" class="input-small layout-text" value= <%= nodeRepulsion %> >\n                     </td>\n                 </tr>\n\n                 <tr>\n                     <td>\n                         <span class="add-on layout-text"> Node Overlap </span>\n                     </td>\n                     <td>\n                         <input id="node-overlap" type="text" class="input-small layout-text" value= <%= nodeOverlap %> >\n                     </td>\n                 </tr>\n\n                 <tr>\n                     <td>\n                         <span class="add-on layout-text"> Ideal Edge Length </span>\n                     </td>\n                     <td>\n                         <input id="ideal-edge-length" type="text" class="input-small layout-text" value= <%= idealEdgeLength %> >\n                     </td>\n                 </tr>\n\n                 <tr>\n                     <td>\n                         <span class="add-on layout-text"> Edge Elasticity </span>\n                     </td>\n                     <td>\n                         <input id="edge-elasticity" type="text" class="input-small layout-text" value= <%= edgeElasticity %> >\n                     </td>\n                 </tr>\n\n                 <tr>\n                     <td>\n                         <span class="add-on layout-text"> Nesting Factor </span>\n                     </td>\n                     <td>\n                         <input id="nesting-factor" type="text" class="input-small layout-text" value= <%= nestingFactor %> >\n                     </td>\n                 </tr>\n\n                 <tr>\n                     <td>\n                         <span class="add-on layout-text"> Gravity </span>\n                     </td>\n                     <td>\n                         <input id="gravity" type="text" class="input-small layout-text" value= <%= gravity %> >\n                     </td>\n                 </tr>\n\n                 <tr>\n                     <td>\n                         <span class="add-on layout-text"> Number of Iterations </span>\n                     </td>\n                     <td>\n                         <input id="num-iter" type="text" class="input-small layout-text" value= <%= numIter %> >\n                     </td>\n                 </tr>\n\n                 <tr>\n                     <td>\n                         <span class="add-on layout-text"> Tile Disconnected </span>\n                     </td>\n\n                     <td>\n                         <input id="tile" type="checkbox" class="input-small layout-text" <% if (tile){ %> checked<%}%>>\n                     </td>\n                 </tr>\n\n                 <tr>\n                     <td>\n                         <span class="add-on layout-text"> Animate </span>\n                     </td>\n\n                     <td>\n                         <input id="animate" type="checkbox" class="input-small layout-text" <% if (animate){ %> checked<%}%>>\n                     </td>\n                 </tr>\n                 <tr>\n                     <td>\n                         <span class="add-on layout-text"> Incremental </span>\n                     </td>\n\n                     <td>\n                         <input id="incremental" type="checkbox" class="input-small layout-text" <% if (!randomize){ %> checked<%}%>>\n                     </td>\n                 </tr>\n                 <tr>\n                     <td><br>\n                     </td>\n                 </tr>\n\n                 <tr id="layout-buttons">\n                     <td>\n                         <button id="save-layout" class="btn btn-default" >Save</button>\n                     </td>\n                     <td>\n                         <button id="default-layout" class="btn btn-default">Default</button>\n                     </td>\n                 </tr>\n             </table>\n         </script>\n\n         <script type="text/template" id="sbgn-properties-template">\n             <table class="table-condensed layout-table">\n                 <tr>\n                     <td>\n                         <span class="add-on layout-text"> Compound Padding </span>\n                     </td>\n\n                     <td>\n                         <input id="compound-padding" type="text" class="input-small layout-text" value= <%= compoundPadding %> > %\n                     </td>\n                 </tr>\n\n                 <tr>\n                     <td>\n                         <span class="add-on layout-text"> Label Size </span>\n                     </td>\n\n                     <td>\n                         <select name="dynamic-label-size">\n                             <option id="dynamic-label-size_small" value="small" <% if (dynamicLabelSize == \'small\'){ %> selected<%}%> > Small </option>\n                             <option id="dynamic-label-size_regular" value="regular" <% if (dynamicLabelSize == \'regular\'){ %> selected<%}%> > Regular </option>\n                             <option id="dynamic-label-size_large" value="large" <% if (dynamicLabelSize == \'large\'){ %> selected<%}%> > Large </option>\n                         </select>\n                     </td>\n                 </tr>\n\n                 <tr>\n                     <td>\n                         <span class="add-on layout-text"> Fit Labels To Nodes </span>\n                     </td>\n\n                     <td>\n                         <input id="fit-labels-to-nodes" type="checkbox" class="input-small layout-text" <% if (fitLabelsToNodes){ %> checked<%}%>>\n                     </td>\n                 </tr>\n\n                 <tr>\n                     <td>\n                         <span class="add-on layout-text"> Layout After Expand / Collapse </span>\n                     </td>\n\n                     <td>\n                         <input id="incremental-layout-after-expand-collapse" type="checkbox" class="input-small layout-text" <% if (incrementalLayoutAfterExpandCollapse){ %> checked<%}%>>\n                     </td>\n                 </tr>\n\n                 <tr id="sbgn-buttons">\n                     <td>\n                         <button id="save-sbgn" class="btn btn-default" >Save</button>\n                     </td>\n                     <td>\n                         <button id="default-sbgn" class="btn btn-default">Default</button>\n                     </td>\n                 </tr>\n             </table>\n         </script>\n\n         <!-- BioGeneView template for backbone.js -->\n         <script type="text/template" id="biogene-template">\n             <div class=\'node-details-text\'>\n                 <table class="table table-condensed table-striped" cellspacing="10">\n                     <tr class="biogene-info biogene-description node-details-summary">\n                         <th valign="top">Gene Summary:</th>\n                         <td colspan="2" class="expandable">\n                             <%=geneSummary %>\n                         </td>\n                     </tr>\n                     <tr class="biogene-info biogene-aliases">\n                         <th valign="top">Aliases:</th>\n                         <td>\n                             <%=geneAliases %>\n                         </td>\n                     </tr>\n                     <tr class="biogene-info biogene-description">\n                         <th>Description:</th>\n                         <td class="expandable">\n                             <%=geneDescription %>\n                         </td>\n                     </tr>\n                     <tr class="biogene-info biogene-location">\n                         <th valign="top">Chromosome Location:</th>\n                         <td>\n                             <%=geneLocation %>\n                         </td>\n                     </tr>\n                     <tr class="biogene-info biogene-uniprot-links">\n                         <th valign="top">UniProt ID:</th>\n                         <td>\n                             <a href=\'http://www.uniprot.org/uniprot/<%= geneUniprotId %>\' target=\'blank\'>\n                                 <%=geneUniprotId %>\n                             </a>\n            <span class=\'biogene-uniprot-links-extra\'>\n            <%= geneUniprotLinks %>\n            </span>\n                         </td>\n                     </tr>\n                     <tr class="biogene-info biogene-id">\n                         <th valign="top">Gene ID:</th>\n                         <td>\n                             <a href=\'http://www.ncbi.nlm.nih.gov/gene?term=<%= geneId %>\' target=\'blank\'>\n                                 <%=geneId %>\n                             </a>\n                         </td>\n                     </tr>\n                 </table>\n             </div>\n         </script>\n\n         <script type="text/template" id="uniprot-link-template">\n             <a href="http://www.uniprot.org/uniprot/<%= id %>" target="_blank">\n                 <%=id %>\n             </a>\n         </script>\n\n         <script type="text/template" id="noty-info">\n             Right click to a node to see its detailed information\n         </script>\n\n\n\n     <!--</div>-->\n\n\n\n    <div id ="chat-area">\n        <div id = "users" as="container"  on-change = "onScroll()">\n          <!--<ul id ="user-list" as = "list">-->\n            <form action=""">\n          {{each _page.userIds as #pUserId}}\n\n            <!--<li>-->\n                <view name="chat-user"></view>\n            <!--</li>-->\n          {{/each}}\n            </form>\n                <!--</ul>-->\n\n        <div id = "chat-history">Show chat history\n          <select  id = "durationSelect" on-change= "changeDuration()" >\n            {{each _page.durations as #pDur}}\n            <option value = "{{#pDur.id}}"  selected = "{{_page.durationId=== #pDur.id}}"> {{ #pDur.name}} </option>\n            {{/each}}\n          </select>\n        </div>\n\n        <button id = "change-user-color" on-click ="changeColorCode()">Change user color</button>\n\n        </div>\n\n\n\n        <div id="messages" as="container" >\n        <ul id="messages-list" as="list">\n          {{each _page.list as #message}}\n          <li><view name="chat-message"></view></li>\n          {{/each}}\n        </ul>\n        </div>\n        <div id="inputs">\n          <input id="inputs-name" value="{{users[_session.userId].name}}">\n          <form id="inputs-form" on-submit="add()">\n            <input id="inputs-comment"  value="{{_page.newComment}}" autofocus> <button>Send</button>\n\n          </form>\n        </div>\n\n    </div>\n\n\n    <div id ="command-history-area">\n\n        <ul id ="command-list" as = "list" >\n        {{each _page.doc.history as #pCommand}}\n            <li> <b>{{#pCommand.userName}} {{formatTime(#pCommand)}} > </b>{{#pCommand.name}} {{#pCommand.id}} {{formatObj(#pCommand.param)}}\n            </li>\n            {{/each}}\n        </ul>\n\n    </div>\n      <!-- Scroll to bottom immediately on page render and on a resize. -->\n\n\n    <script>\n\n        function scrollToBottom(docId){\n            document.getElementById(docId).scrollTop = document.getElementById(docId).scrollHeight;\n        }\n\n      (window.onresize = function() {\n          scrollToBottom(\'messages-list\');\n          scrollToBottom(\'command-history-area\');\n      })();\n\n        $(\'#command-history-area\').bind(\'DOMSubtreeModified\', function(){\n            scrollToBottom(\'command-history-area\');\n\n        });\n\n        $(\'#messages\').bind(\'DOMSubtreeModified\', function(){\n\n            scrollToBottom(\'messages\');\n\n        });\n        $(\'#messages-list\').bind(\'DOMSubtreeModified\', function(){\n\n            scrollToBottom(\'messages-list\');\n\n        });\n\n\n\n    </script>\n\n    <audio id="notificationAudio" src="http://www.talkingwav.com/various/beep_02.wav" preload="auto"></audio>\n\n\n\n\n    ').template = new templates.Template([new templates.Element('script', {'src': new templates.Attribute('lib/js/jquery-1.8.2.js')}, [], void 0, false), new templates.Element('script', {'src': new templates.Attribute('lib/js/jquery.fancybox-1.3.4.pack.js')}, [], void 0, false), new templates.Element('script', {'src': new templates.Attribute('lib/js/jquery.expander-min.js')}, [], void 0, false), new templates.Element('script', {'src': new templates.Attribute('lib/js/jquery.qtip.js')}, [], void 0, false), new templates.Element('script', {'src': new templates.Attribute('lib/js/bootstrap.min.js')}, [], void 0, false), new templates.Element('script', {'src': new templates.Attribute('lib/js/jquery-ui-1.10.3.custom.min.js')}, [], void 0, false), new templates.Element('script', {'src': new templates.Attribute('lib/js/underscore.js')}, [], void 0, false), new templates.Element('script', {'src': new templates.Attribute('lib/js/cytoscape.js')}, [], void 0, false), new templates.Element('script', {'src': new templates.Attribute('lib/js/cytoscape.js-panzoom.js')}, [], void 0, false), new templates.Element('script', {'src': new templates.Attribute('lib/js/cytoscape.js-qtip.js')}, [], void 0, false), new templates.Element('script', {'src': new templates.Attribute('lib/js/cytoscape-edgehandles.js')}, [], void 0, false), new templates.Element('script', {'src': new templates.Attribute('lib/js/cytoscape-noderesize.js')}, [], void 0, false), new templates.Element('script', {'src': new templates.Attribute('lib/js/FileSaver.js')}, [], void 0, false), new templates.Element('script', {'src': new templates.Attribute('lib/js/jquery.noty.packaged.min.js')}, [], void 0, false), new templates.Element('script', {'src': new templates.Attribute('lib/js/socket.io.js')}, [], void 0, false), new templates.Element('script', {'src': new templates.Attribute('src/sbgn-extensions/cytoscape-cose-bilkent.js')}, [], void 0, false), new templates.Element('script', {'src': new templates.Attribute('src/sbgn-extensions/cytoscape.renderer.canvas.sbgn-renderer.js')}, [], void 0, false), new templates.Element('script', {'src': new templates.Attribute('src/utilities/json-to-sbgnml-converter.js')}, [], void 0, false), new templates.Element('script', {'src': new templates.Attribute('src/utilities/sbgnml-to-json-converter.js')}, [], void 0, false), new templates.Element('script', {'src': new templates.Attribute('src/utilities/sbgn-filtering.js')}, [], void 0, false), new templates.Element('script', {'src': new templates.Attribute('src/utilities/expand-collapse-utilities.js')}, [], void 0, false), new templates.Element('script', {'src': new templates.Attribute('src/utilities/add-remove-utilities.js')}, [], void 0, false), new templates.Element('script', {'src': new templates.Attribute('src/utilities/sbgn-element-utilities.js')}, [], void 0, false), new templates.Element('script', {'src': new templates.Attribute('sample-app/sampleapp-components/js/sample-app-mode-handler.js')}, [], void 0, false), new templates.Element('script', {'src': new templates.Attribute('sample-app/sampleapp-components/js/sample-app-helper-functions.js')}, [], void 0, false), new templates.Element('div', {'class': new templates.Attribute('nav-menu')}, [new templates.Element('nav', {'class': new templates.Attribute('navbar navbar-default sbgn-nav-bar'), 'role': new templates.Attribute('navigation')}, [new templates.Element('div', void 0, [new templates.Element('ul', {'class': new templates.Attribute('nav navbar-nav navbar-left')}, [new templates.Element('li', {'class': new templates.Attribute('dropdown')}, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('dropdown-toggle'), 'data-toggle': new templates.Attribute('dropdown')}, [new templates.Text('File'), new templates.Element('b', {'class': new templates.Attribute('caret')}, [], void 0, false)], void 0, false), new templates.Element('ul', {'class': new templates.Attribute('dropdown-menu')}, [new templates.Element('input', {'id': new templates.Attribute('file-input'), 'type': new templates.Attribute('file'), 'style': new templates.Attribute('...')}, null, void 0, true), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'type': new templates.Attribute('file'), 'id': new templates.Attribute('new-file')}, [new templates.Text('New')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'type': new templates.Attribute('file'), 'id': new templates.Attribute('load-file')}, [new templates.Text('Load...')], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('dropdown-submenu')}, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('dropdown-toggle'), 'data-toggle': new templates.Attribute('dropdown')}, [new templates.Text('Samples')], void 0, false), new templates.Element('ul', {'id': new templates.Attribute('samples'), 'class': new templates.Attribute('dropdown-menu')}, [new templates.EachBlock(new expressions.PathExpression(['_sbgnviz', 'samples'], new expressions.ExpressionMeta('each _sbgnviz.samples as #pSample', 'each', void 0, '#pSample')), [new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.DynamicAttribute(new expressions.AliasPathExpression('#pSample', ['id'], new expressions.ExpressionMeta('#pSample.id')))}, [new templates.DynamicText(new expressions.AliasPathExpression('#pSample', ['name'], new expressions.ExpressionMeta('#pSample.name')))], void 0, false)], void 0, false)])], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('save-as-sbgnml')}, [new templates.Text('Save...')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('save-command-history')}, [new templates.Text('Save operation history...')], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('dropdown-submenu')}, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('dropdown-toggle'), 'data-toggle': new templates.Attribute('dropdown')}, [new templates.Text('Save as Image')], void 0, false), new templates.Element('ul', {'class': new templates.Attribute('dropdown-menu')}, [new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('save-as-png')}, [new templates.Text('PNG')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('save-as-jpg')}, [new templates.Text('JPG')], void 0, false)], void 0, false)], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('sbgn-properties')}, [new templates.Text('Properties...')], void 0, false)], void 0, false)], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('dropdown')}, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('dropdown-toggle'), 'data-toggle': new templates.Attribute('dropdown')}, [new templates.Text('Edit'), new templates.Element('b', {'class': new templates.Attribute('caret')}, [], void 0, false)], void 0, false), new templates.Element('ul', {'class': new templates.Attribute('dropdown-menu')}, [new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('select-edit')}, [new templates.Text('Select/Edit')], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('dropdown-submenu')}, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('add-node-menu-option'), 'class': new templates.Attribute('dropdown-toggle'), 'data-toggle': new templates.Attribute('dropdown')}, [new templates.Text('Add Node')], void 0, false), new templates.Element('ul', {'class': new templates.Attribute('dropdown-menu'), 'id': new templates.Attribute('add-node-submenu')}, [new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('add-node-menu-item'), 'name': new templates.Attribute('macromolecule')}, [new templates.Text('Macromolecule')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('add-node-menu-item'), 'name': new templates.Attribute('simple-chemical')}, [new templates.Text('Simple Chemical')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('add-node-menu-item'), 'name': new templates.Attribute('complex')}, [new templates.Text('Complex')], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('dropdown-submenu')}, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('dropdown-toggle'), 'data-toggle': new templates.Attribute('dropdown'), 'id': new templates.Attribute('process-menu-option')}, [new templates.Text('Process')], void 0, false), new templates.Element('ul', {'class': new templates.Attribute('dropdown-menu')}, [new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('add-node-menu-item process-type'), 'name': new templates.Attribute('process')}, [new templates.Text('Process')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('add-node-menu-item process-type'), 'name': new templates.Attribute('omitted-process')}, [new templates.Text('Omitted Process')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('add-node-menu-item process-type'), 'name': new templates.Attribute('uncertain-process')}, [new templates.Text('Uncertain Process')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('add-node-menu-item process-type'), 'name': new templates.Attribute('association')}, [new templates.Text('Association')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('add-node-menu-item process-type'), 'name': new templates.Attribute('dissociation')}, [new templates.Text('Dissociation')], void 0, false)], void 0, false)], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('add-node-menu-item'), 'name': new templates.Attribute('phenotype')}, [new templates.Text('Phenotype')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('add-node-menu-item'), 'name': new templates.Attribute('compartment')}, [new templates.Text('Compartment')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('add-node-menu-item'), 'name': new templates.Attribute('unspecified-entity')}, [new templates.Text('Unspecified Entry')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('add-node-menu-item'), 'name': new templates.Attribute('nucleic-acid-feature')}, [new templates.Text('Nucleic Acid Feature')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('add-node-menu-item'), 'name': new templates.Attribute('source-and-sink')}, [new templates.Text('Source or Sink')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('add-node-menu-item'), 'name': new templates.Attribute('perturbing-agent')}, [new templates.Text('Perturbing Agend')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('add-node-menu-item'), 'name': new templates.Attribute('tag')}, [new templates.Text('Tag')], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('dropdown-submenu')}, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('dropdown-toggle'), 'data-toggle': new templates.Attribute('dropdown'), 'id': new templates.Attribute('logical-operator-menu-option')}, [new templates.Text('Logical Operators')], void 0, false), new templates.Element('ul', {'class': new templates.Attribute('dropdown-menu')}, [new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('logical-operator-type add-node-menu-item'), 'name': new templates.Attribute('and')}, [new templates.Text('AND')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('logical-operator-type add-node-menu-item'), 'name': new templates.Attribute('or')}, [new templates.Text('OR')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('logical-operator-type add-node-menu-item'), 'name': new templates.Attribute('not')}, [new templates.Text('NOT')], void 0, false)], void 0, false)], void 0, false)], void 0, false)], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('dropdown-submenu')}, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('add-edge-menu-option'), 'class': new templates.Attribute('dropdown-toggle'), 'data-toggle': new templates.Attribute('dropdown')}, [new templates.Text('Add Interaction')], void 0, false), new templates.Element('ul', {'class': new templates.Attribute('dropdown-menu'), 'id': new templates.Attribute('add-edge-submenu')}, [new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('add-edge-menu-item'), 'name': new templates.Attribute('consumption')}, [new templates.Text('Consumption')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('add-edge-menu-item'), 'name': new templates.Attribute('production')}, [new templates.Text('Production')], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('divider')}, [], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('add-edge-menu-item'), 'name': new templates.Attribute('modulation')}, [new templates.Text('Modulation')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('add-edge-menu-item'), 'name': new templates.Attribute('stimulation')}, [new templates.Text('Simulation')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('add-edge-menu-item'), 'name': new templates.Attribute('catalysis')}, [new templates.Text('Catalysis')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('add-edge-menu-item'), 'name': new templates.Attribute('inhibition')}, [new templates.Text('Inhibition')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('add-edge-menu-item'), 'name': new templates.Attribute('necessary-stimulation')}, [new templates.Text('Necessary Stimulation')], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('divider')}, [], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('add-edge-menu-item'), 'name': new templates.Attribute('logic-arc')}, [new templates.Text('Logic Arc')], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('divider')}, [], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('add-edge-menu-item'), 'name': new templates.Attribute('equivalence-arc')}, [new templates.Text('Equivalence Arc')], void 0, false)], void 0, false)], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('divider')}, [], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('make-compound-complex')}, [new templates.Text('Add Complex for Selected')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('make-compound-compartment')}, [new templates.Text('Add Compartment for Selected')], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('divider')}, [], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('delete-selected-simple')}, [new templates.Text('Delete Selected Simple')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('delete-selected-smart')}, [new templates.Text('Delete Selected Smart')], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('divider')}, [], void 0, false), new templates.Element('li', {'class': new templates.Attribute('disabled')}, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('undo-last-action')}, [new templates.Text('Undo')], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('disabled')}, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('redo-last-action')}, [new templates.Text('Redo')], void 0, false)], void 0, false)], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('dropdown')}, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('dropdown-toggle'), 'data-toggle': new templates.Attribute('dropdown')}, [new templates.Text('View'), new templates.Element('b', {'class': new templates.Attribute('caret')}, [], void 0, false)], void 0, false), new templates.Element('ul', {'class': new templates.Attribute('dropdown-menu')}, [new templates.Element('li', {'class': new templates.Attribute('dropdown-submenu')}, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('dropdown-toggle'), 'data-toggle': new templates.Attribute('dropdown')}, [new templates.Text('Hide/Show')], void 0, false), new templates.Element('ul', {'class': new templates.Attribute('dropdown-menu')}, [new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('hide-selected')}, [new templates.Text('Hide Selected')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('show-selected')}, [new templates.Text('Show Selected')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('show-all')}, [new templates.Text('Show All')], void 0, false)], void 0, false)], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('dropdown-submenu')}, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('dropdown-toggle'), 'data-toggle': new templates.Attribute('dropdown')}, [new templates.Text('Collapse/Expand')], void 0, false), new templates.Element('ul', {'class': new templates.Attribute('dropdown-menu')}, [new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('collapse-selected')}, [new templates.Text('Collapse Selected')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('expand-selected')}, [new templates.Text('Expand Selected')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('collapse-all')}, [new templates.Text('Collapse All')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('expand-all')}, [new templates.Text('Expand All')], void 0, false)], void 0, false)], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('dropdown-submenu')}, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('add-node-menu-option'), 'class': new templates.Attribute('dropdown-toggle'), 'data-toggle': new templates.Attribute('dropdown')}, [new templates.Text('Align')], void 0, false), new templates.Element('ul', {'class': new templates.Attribute('dropdown-menu'), 'id': new templates.Attribute('add-node-submenu')}, [new templates.Element('li', {'class': new templates.Attribute('dropdown-submenu')}, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('dropdown-toggle'), 'data-toggle': new templates.Attribute('dropdown')}, [new templates.Text('Horizontal')], void 0, false), new templates.Element('ul', {'class': new templates.Attribute('dropdown-menu')}, [new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('align-horizontal-top')}, [new templates.Text('Top')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('align-horizontal-middle')}, [new templates.Text('Middle')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('align-horizontal-bottom')}, [new templates.Text('Bottom')], void 0, false)], void 0, false)], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('dropdown-submenu')}, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('dropdown-toggle'), 'data-toggle': new templates.Attribute('dropdown')}, [new templates.Text('Vertical')], void 0, false), new templates.Element('ul', {'class': new templates.Attribute('dropdown-menu')}, [new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('align-vertical-left')}, [new templates.Text('Left')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('align-vertical-center')}, [new templates.Text('Center')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('align-vertical-right')}, [new templates.Text('Right')], void 0, false)], void 0, false)], void 0, false)], void 0, false)], void 0, false)], void 0, false)], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('dropdown')}, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('dropdown-toggle'), 'data-toggle': new templates.Attribute('dropdown')}, [new templates.Text('Highlight'), new templates.Element('b', {'class': new templates.Attribute('caret')}, [], void 0, false)], void 0, false), new templates.Element('ul', {'class': new templates.Attribute('dropdown-menu')}, [new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('neighbors-of-selected')}, [new templates.Text('Neighbors of Selected')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('processes-of-selected')}, [new templates.Text('Processes of Selected')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('remove-highlights')}, [new templates.Text('Remove Highlights')], void 0, false)], void 0, false)], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('dropdown')}, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('dropdown-toggle'), 'data-toggle': new templates.Attribute('dropdown')}, [new templates.Text('Layout'), new templates.Element('b', {'class': new templates.Attribute('caret')}, [], void 0, false)], void 0, false), new templates.Element('ul', {'class': new templates.Attribute('dropdown-menu')}, [new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('perform-layout')}, [new templates.Text('Perform Layout')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('perform-incremental-layout'), 'style': new templates.Attribute('display: none')}, [], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('layout-properties')}, [new templates.Text('Layout Properties...')], void 0, false)], void 0, false)], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('dropdown')}, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('dropdown-toggle'), 'data-toggle': new templates.Attribute('dropdown')}, [new templates.Text('Legends'), new templates.Element('b', {'class': new templates.Attribute('caret')}, [], void 0, false)], void 0, false), new templates.Element('ul', {'class': new templates.Attribute('dropdown-menu')}, [new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('node-legend')}, [new templates.Text('Node Legend')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('edge-legend')}, [new templates.Text('Interaction Legend')], void 0, false)], void 0, false)], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('dropdown')}, [new templates.Element('a', {'href': new templates.Attribute('#'), 'class': new templates.Attribute('dropdown-toggle'), 'data-toggle': new templates.Attribute('dropdown')}, [new templates.Text('Help'), new templates.Element('b', {'class': new templates.Attribute('caret')}, [], void 0, false)], void 0, false), new templates.Element('ul', {'class': new templates.Attribute('dropdown-menu')}, [new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('quick-help')}, [new templates.Text('Quick Help')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('how-to-use')}, [new templates.Text('How to Use')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'href': new templates.Attribute('#'), 'id': new templates.Attribute('about')}, [new templates.Text('About')], void 0, false)], void 0, false)], void 0, false)], void 0, false)], void 0, false), new templates.Element('span', {'class': new templates.Attribute('input-file'), 'id': new templates.Attribute('file-name')}, [], void 0, false)], void 0, false)], void 0, false)], void 0, false), new templates.Element('div', {'id': new templates.Attribute('sbgn-toolbar'), 'style': new templates.Attribute('margin-top: 5px;')}, [new templates.Element('div', {'class': new templates.Attribute('inside-menu')}, [new templates.Element('img', {'id': new templates.Attribute('new-file-icon'), 'class': new templates.Attribute('sbgn-toolbar-element'), 'src': new templates.Attribute('sample-app/sampleapp-images/new.png'), 'title': new templates.Attribute('New File')}, null, void 0, false), new templates.Element('img', {'id': new templates.Attribute('load-file-icon'), 'class': new templates.Attribute('sbgn-toolbar-element'), 'src': new templates.Attribute('sample-app/sampleapp-images/load.png'), 'title': new templates.Attribute('Load')}, null, void 0, false), new templates.Element('img', {'id': new templates.Attribute('save-icon'), 'class': new templates.Attribute('sbgn-toolbar-element'), 'src': new templates.Attribute('sample-app/sampleapp-images/save.png'), 'title': new templates.Attribute('Save')}, null, void 0, false), new templates.Element('img', {'id': new templates.Attribute('properties-icon'), 'class': new templates.Attribute('sbgn-toolbar-element'), 'src': new templates.Attribute('sample-app/sampleapp-images/toolbar-icons/properties.png'), 'title': new templates.Attribute('Properties')}, null, void 0, false)], void 0, false), new templates.Element('div', {'class': new templates.Attribute('menu-break-large sbgn-toolbar-element')}, [], void 0, false), new templates.Element('div', {'class': new templates.Attribute('inside-menu')}, [new templates.Element('img', {'id': new templates.Attribute('select-icon'), 'class': new templates.Attribute('sbgn-toolbar-element'), 'src': new templates.Attribute('sample-app/sampleapp-images/toolbar-icons/select.png'), 'title': new templates.Attribute('Select')}, null, void 0, false), new templates.Element('div', {'class': new templates.Attribute('btn-group sbgn-toolbar-element'), 'role': new templates.Attribute('group'), 'id': new templates.Attribute('node-list')}, [new templates.Element('button', {'id': new templates.Attribute('node-list-set-mode-btn'), 'title': new templates.Attribute('Macromolecule'), 'type': new templates.Attribute('button'), 'class': new templates.Attribute('btn'), 'aria-haspopup': new templates.Attribute('true'), 'aria-expanded': new templates.Attribute('false')}, [new templates.Element('div', {'style': new templates.Attribute('height: 16px;')}, [new templates.Element('img', {'style': new templates.Attribute('float: left; height: 16px; width: auto;'), 'id': new templates.Attribute('sbgn-selected-node-img'), 'src': new templates.Attribute('sample-app/sampleapp-images/nodes/macromolecule.png')}, null, void 0, true)], void 0, false)], void 0, false), new templates.Element('button', {'id': new templates.Attribute('node-list-dd-button'), 'type': new templates.Attribute('button'), 'class': new templates.Attribute('btn dropdown-toggle'), 'data-toggle': new templates.Attribute('dropdown'), 'aria-haspopup': new templates.Attribute('true'), 'aria-expanded': new templates.Attribute('false')}, [new templates.Element('div', {'style': new templates.Attribute('height: 16px;')}, [new templates.Element('span', {'class': new templates.Attribute('caret')}, [], void 0, false), new templates.Element('span', {'class': new templates.Attribute('sr-only')}, [], void 0, false)], void 0, false)], void 0, false), new templates.Element('ul', {'id': new templates.Attribute('node-list-menu'), 'class': new templates.Attribute('dropdown-menu')}, [new templates.Element('li', {'class': new templates.Attribute('sbgn-select-node-item'), 'id': new templates.Attribute('first-sbgn-select-node-item')}, [new templates.Element('a', {'href': new templates.Attribute('#')}, [new templates.Element('img', {'src': new templates.Attribute('sample-app/sampleapp-images/nodes/macromolecule.png'), 'class': new templates.Attribute('sbgn-select-img'), 'value': new templates.Attribute('macromolecule')}, null, void 0, true), new templates.Text('Macromolecule')], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('sbgn-select-node-item')}, [new templates.Element('a', {'href': new templates.Attribute('#')}, [new templates.Element('img', {'src': new templates.Attribute('sample-app/sampleapp-images/nodes/simplechemical.png'), 'class': new templates.Attribute('sbgn-select-img'), 'value': new templates.Attribute('simple-chemical')}, null, void 0, true), new templates.Text('Simple Chemical')], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('sbgn-select-node-item')}, [new templates.Element('a', {'href': new templates.Attribute('#')}, [new templates.Element('img', {'src': new templates.Attribute('sample-app/sampleapp-images/nodes/complex.png'), 'class': new templates.Attribute('sbgn-select-img'), 'value': new templates.Attribute('complex')}, null, void 0, true), new templates.Text('Complex')], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('sbgn-select-node-item')}, [new templates.Element('a', {'href': new templates.Attribute('#')}, [new templates.Element('img', {'src': new templates.Attribute('sample-app/sampleapp-images/nodes/process.png'), 'class': new templates.Attribute('sbgn-select-img'), 'value': new templates.Attribute('process')}, null, void 0, true), new templates.Text('Process')], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('sbgn-select-node-item')}, [new templates.Element('a', {'href': new templates.Attribute('#')}, [new templates.Element('img', {'src': new templates.Attribute('sample-app/sampleapp-images/nodes/omittedprocess.png'), 'class': new templates.Attribute('sbgn-select-img'), 'value': new templates.Attribute('omitted-process')}, null, void 0, true), new templates.Text('Omitted Process')], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('sbgn-select-node-item')}, [new templates.Element('a', {'href': new templates.Attribute('#')}, [new templates.Element('img', {'src': new templates.Attribute('sample-app/sampleapp-images/nodes/uncertainprocess.png'), 'class': new templates.Attribute('sbgn-select-img'), 'value': new templates.Attribute('uncertain-process')}, null, void 0, true), new templates.Text('Uncertain Process')], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('sbgn-select-node-item')}, [new templates.Element('a', {'href': new templates.Attribute('#')}, [new templates.Element('img', {'src': new templates.Attribute('sample-app/sampleapp-images/nodes/association.png'), 'class': new templates.Attribute('sbgn-select-img'), 'value': new templates.Attribute('association')}, null, void 0, true), new templates.Text('Association')], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('sbgn-select-node-item')}, [new templates.Element('a', {'href': new templates.Attribute('#')}, [new templates.Element('img', {'src': new templates.Attribute('sample-app/sampleapp-images/nodes/dissociation.png'), 'class': new templates.Attribute('sbgn-select-img'), 'value': new templates.Attribute('dissociation')}, null, void 0, true), new templates.Text('Dissociation')], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('sbgn-select-node-item')}, [new templates.Element('a', {'href': new templates.Attribute('#')}, [new templates.Element('img', {'src': new templates.Attribute('sample-app/sampleapp-images/nodes/phenotype.png'), 'class': new templates.Attribute('sbgn-select-img'), 'value': new templates.Attribute('phenotype')}, null, void 0, true), new templates.Text('Phenotype')], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('sbgn-select-node-item')}, [new templates.Element('a', {'href': new templates.Attribute('#')}, [new templates.Element('img', {'src': new templates.Attribute('sample-app/sampleapp-images/nodes/compartment.png'), 'class': new templates.Attribute('sbgn-select-img'), 'value': new templates.Attribute('compartment')}, null, void 0, true), new templates.Text('Compartment')], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('sbgn-select-node-item')}, [new templates.Element('a', {'href': new templates.Attribute('#')}, [new templates.Element('img', {'src': new templates.Attribute('sample-app/sampleapp-images/nodes/unspecifiedentity.png'), 'class': new templates.Attribute('sbgn-select-img'), 'value': new templates.Attribute('unspecified-entity')}, null, void 0, true), new templates.Text('Unspecified Entity')], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('sbgn-select-node-item')}, [new templates.Element('a', {'href': new templates.Attribute('#')}, [new templates.Element('img', {'src': new templates.Attribute('sample-app/sampleapp-images/nodes/nucleicacidfeature.png'), 'class': new templates.Attribute('sbgn-select-img'), 'value': new templates.Attribute('nucleic-acid-feature')}, null, void 0, true), new templates.Text('Nucleic Acid Feature')], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('sbgn-select-node-item')}, [new templates.Element('a', {'href': new templates.Attribute('#')}, [new templates.Element('img', {'src': new templates.Attribute('sample-app/sampleapp-images/nodes/sourceandsink.png'), 'class': new templates.Attribute('sbgn-select-img'), 'value': new templates.Attribute('source-and-sink')}, null, void 0, true), new templates.Text('Source and Sink')], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('sbgn-select-node-item')}, [new templates.Element('a', {'href': new templates.Attribute('#')}, [new templates.Element('img', {'src': new templates.Attribute('sample-app/sampleapp-images/nodes/perturbingagent.png'), 'class': new templates.Attribute('sbgn-select-img'), 'value': new templates.Attribute('perturbing-agent')}, null, void 0, true), new templates.Text('Perturbing Agent')], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('sbgn-select-node-item')}, [new templates.Element('a', {'href': new templates.Attribute('#')}, [new templates.Element('img', {'src': new templates.Attribute('sample-app/sampleapp-images/nodes/tag.png'), 'class': new templates.Attribute('sbgn-select-img'), 'value': new templates.Attribute('tag')}, null, void 0, true), new templates.Text('Tag')], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('sbgn-select-node-item')}, [new templates.Element('a', {'href': new templates.Attribute('#')}, [new templates.Element('img', {'src': new templates.Attribute('sample-app/sampleapp-images/nodes/and.png'), 'class': new templates.Attribute('sbgn-select-img'), 'value': new templates.Attribute('and')}, null, void 0, true), new templates.Text('AND')], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('sbgn-select-node-item')}, [new templates.Element('a', {'href': new templates.Attribute('#')}, [new templates.Element('img', {'src': new templates.Attribute('sample-app/sampleapp-images/nodes/or.png'), 'class': new templates.Attribute('sbgn-select-img'), 'value': new templates.Attribute('or')}, null, void 0, true), new templates.Text('OR')], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('sbgn-select-node-item')}, [new templates.Element('a', {'href': new templates.Attribute('#')}, [new templates.Element('img', {'src': new templates.Attribute('sample-app/sampleapp-images/nodes/not.png'), 'class': new templates.Attribute('sbgn-select-img'), 'value': new templates.Attribute('not')}, null, void 0, true), new templates.Text('NOT')], void 0, false)], void 0, false)], void 0, false)], void 0, false), new templates.Element('div', {'class': new templates.Attribute('btn-group sbgn-toolbar-element'), 'role': new templates.Attribute('group'), 'id': new templates.Attribute('edge-list')}, [new templates.Element('button', {'id': new templates.Attribute('edge-list-set-mode-btn'), 'type': new templates.Attribute('button'), 'class': new templates.Attribute('btn'), 'title': new templates.Attribute('consumption'), 'aria-haspopup': new templates.Attribute('true'), 'aria-expanded': new templates.Attribute('false')}, [new templates.Element('div', {'style': new templates.Attribute('height: 16px;')}, [new templates.Element('img', {'style': new templates.Attribute('float: left;'), 'id': new templates.Attribute('sbgn-selected-edge-img'), 'src': new templates.Attribute('sample-app/sampleapp-images/edges/consumption.png'), 'class': new templates.Attribute('sbgn-select-img')}, null, void 0, true)], void 0, false)], void 0, false), new templates.Element('button', {'id': new templates.Attribute('edge-list-dd-button'), 'type': new templates.Attribute('button'), 'class': new templates.Attribute('btn dropdown-toggle'), 'data-toggle': new templates.Attribute('dropdown'), 'aria-haspopup': new templates.Attribute('true'), 'aria-expanded': new templates.Attribute('false')}, [new templates.Element('div', {'style': new templates.Attribute('height: 16px;')}, [new templates.Element('span', {'class': new templates.Attribute('caret')}, [], void 0, false), new templates.Element('span', {'class': new templates.Attribute('sr-only')}, [], void 0, false)], void 0, false)], void 0, false), new templates.Element('ul', {'id': new templates.Attribute('edge-list-menu'), 'class': new templates.Attribute('dropdown-menu')}, [new templates.Element('li', {'id': new templates.Attribute('first-sbgn-select-edge-item'), 'class': new templates.Attribute('sbgn-select-edge-item')}, [new templates.Element('a', {'href': new templates.Attribute('#')}, [new templates.Element('img', {'src': new templates.Attribute('sample-app/sampleapp-images/edges/consumption.png'), 'class': new templates.Attribute('sbgn-select-img'), 'value': new templates.Attribute('consumption')}, null, void 0, true), new templates.Text('Consumption')], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('sbgn-select-edge-item')}, [new templates.Element('a', {'href': new templates.Attribute('#')}, [new templates.Element('img', {'src': new templates.Attribute('sample-app/sampleapp-images/edges/production.png'), 'class': new templates.Attribute('sbgn-select-img'), 'value': new templates.Attribute('production')}, null, void 0, true), new templates.Text('Production')], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('sbgn-select-edge-item')}, [new templates.Element('a', {'href': new templates.Attribute('#')}, [new templates.Element('img', {'src': new templates.Attribute('sample-app/sampleapp-images/edges/modulation.png'), 'class': new templates.Attribute('sbgn-select-img'), 'value': new templates.Attribute('modulation')}, null, void 0, true), new templates.Text('Modulation')], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('sbgn-select-edge-item')}, [new templates.Element('a', {'href': new templates.Attribute('#')}, [new templates.Element('img', {'src': new templates.Attribute('sample-app/sampleapp-images/edges/stimulation.png'), 'class': new templates.Attribute('sbgn-select-img'), 'value': new templates.Attribute('stimulation')}, null, void 0, true), new templates.Text('Stimulation')], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('sbgn-select-edge-item')}, [new templates.Element('a', {'href': new templates.Attribute('#')}, [new templates.Element('img', {'src': new templates.Attribute('sample-app/sampleapp-images/edges/catalysis.png'), 'class': new templates.Attribute('sbgn-select-img'), 'value': new templates.Attribute('catalysis')}, null, void 0, true), new templates.Text('Catalysis')], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('sbgn-select-edge-item')}, [new templates.Element('a', {'href': new templates.Attribute('#')}, [new templates.Element('img', {'src': new templates.Attribute('sample-app/sampleapp-images/edges/inhibition.png'), 'class': new templates.Attribute('sbgn-select-img'), 'value': new templates.Attribute('inhibition')}, null, void 0, true), new templates.Text('Inhibition')], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('sbgn-select-edge-item')}, [new templates.Element('a', {'href': new templates.Attribute('#')}, [new templates.Element('img', {'src': new templates.Attribute('sample-app/sampleapp-images/edges/necessarystimulation.png'), 'class': new templates.Attribute('sbgn-select-img'), 'value': new templates.Attribute('necessary-stimulation')}, null, void 0, true), new templates.Text('Necessary Stimulation')], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('sbgn-select-edge-item')}, [new templates.Element('a', {'href': new templates.Attribute('#')}, [new templates.Element('img', {'src': new templates.Attribute('sample-app/sampleapp-images/edges/logicarc.png'), 'class': new templates.Attribute('sbgn-select-img'), 'value': new templates.Attribute('logic-arc')}, null, void 0, true), new templates.Text('Logic Arc')], void 0, false)], void 0, false), new templates.Element('li', {'class': new templates.Attribute('sbgn-select-edge-item')}, [new templates.Element('a', {'class': new templates.Attribute('dd-list-href'), 'href': new templates.Attribute('#')}, [new templates.Element('img', {'src': new templates.Attribute('sample-app/sampleapp-images/edges/logicarc.png'), 'class': new templates.Attribute('sbgn-select-img'), 'value': new templates.Attribute('equivalence-arc')}, null, void 0, true), new templates.Text('Equivalence Arc')], void 0, false)], void 0, false)], void 0, false)], void 0, false), new templates.Element('div', {'class': new templates.Attribute('menu-break-small sbgn-toolbar-element')}, [], void 0, false), new templates.Element('img', {'id': new templates.Attribute('delete-selected-simple-icon'), 'class': new templates.Attribute('sbgn-toolbar-element'), 'src': new templates.Attribute('sample-app/sampleapp-images/toolbar-icons/deletesimple.png'), 'title': new templates.Attribute('Delete Selected Simple')}, null, void 0, false), new templates.Element('img', {'id': new templates.Attribute('delete-selected-smart-icon'), 'class': new templates.Attribute('sbgn-toolbar-element'), 'src': new templates.Attribute('sample-app/sampleapp-images/toolbar-icons/deletesmart.png'), 'title': new templates.Attribute('Delete Selected Smart')}, null, void 0, false), new templates.Element('div', {'class': new templates.Attribute('menu-break-small sbgn-toolbar-element')}, [], void 0, false), new templates.Element('img', {'id': new templates.Attribute('undo-icon'), 'class': new templates.Attribute('sbgn-toolbar-element'), 'src': new templates.Attribute('sample-app/sampleapp-images/toolbar-icons/undo.png'), 'title': new templates.Attribute('Undo')}, null, void 0, false), new templates.Element('img', {'id': new templates.Attribute('redo-icon'), 'class': new templates.Attribute('sbgn-toolbar-element'), 'src': new templates.Attribute('sample-app/sampleapp-images/toolbar-icons/redo.png'), 'title': new templates.Attribute('Redo')}, null, void 0, false)], void 0, false), new templates.Element('div', {'class': new templates.Attribute('menu-break-large sbgn-toolbar-element')}, [], void 0, false), new templates.Element('div', {'class': new templates.Attribute('inside-menu')}, [new templates.Element('img', {'id': new templates.Attribute('hide-selected-icon'), 'class': new templates.Attribute('sbgn-toolbar-element'), 'src': new templates.Attribute('sample-app/sampleapp-images/toolbar-icons/hideselected.png'), 'title': new templates.Attribute('Hide Selected')}, null, void 0, false), new templates.Element('img', {'id': new templates.Attribute('show-selected-icon'), 'class': new templates.Attribute('sbgn-toolbar-element'), 'src': new templates.Attribute('sample-app/sampleapp-images/toolbar-icons/showselected.png'), 'title': new templates.Attribute('Show Selected')}, null, void 0, false), new templates.Element('div', {'class': new templates.Attribute('menu-break-small sbgn-toolbar-element')}, [], void 0, false), new templates.Element('img', {'id': new templates.Attribute('collapse-selected-icon'), 'class': new templates.Attribute('sbgn-toolbar-element'), 'src': new templates.Attribute('sample-app/sampleapp-images/toolbar-icons/collapseselected.png'), 'title': new templates.Attribute('Collapse Selected')}, null, void 0, false), new templates.Element('img', {'id': new templates.Attribute('expand-selected-icon'), 'class': new templates.Attribute('sbgn-toolbar-element'), 'src': new templates.Attribute('sample-app/sampleapp-images/toolbar-icons/expandselected.png'), 'title': new templates.Attribute('Expand Selected')}, null, void 0, false), new templates.Element('div', {'class': new templates.Attribute('menu-break-small sbgn-toolbar-element')}, [], void 0, false), new templates.Element('div', {'class': new templates.Attribute('btn-group sbgn-toolbar-element'), 'role': new templates.Attribute('group'), 'id': new templates.Attribute('align-list')}, [new templates.Element('button', {'id': new templates.Attribute('align-button'), 'title': new templates.Attribute('Align'), 'type': new templates.Attribute('button'), 'class': new templates.Attribute('btn'), 'aria-haspopup': new templates.Attribute('true'), 'aria-expanded': new templates.Attribute('false')}, [new templates.Element('div', {'style': new templates.Attribute('height: 16px;')}, [new templates.Element('img', {'style': new templates.Attribute('float: left; height: 16px; width: auto;'), 'id': new templates.Attribute('sbgn-align-img'), 'src': new templates.Attribute('sample-app/sampleapp-images/align/align.png')}, null, void 0, true)], void 0, false)], void 0, false), new templates.Element('button', {'id': new templates.Attribute('align-dd-button'), 'type': new templates.Attribute('button'), 'class': new templates.Attribute('btn dropdown-toggle'), 'data-toggle': new templates.Attribute('dropdown'), 'aria-haspopup': new templates.Attribute('true'), 'aria-expanded': new templates.Attribute('false')}, [new templates.Element('div', {'style': new templates.Attribute('height: 16px;')}, [new templates.Element('span', {'class': new templates.Attribute('caret')}, [], void 0, false), new templates.Element('span', {'class': new templates.Attribute('sr-only')}, [], void 0, false)], void 0, false)], void 0, false), new templates.Element('ul', {'id': new templates.Attribute('align-menu'), 'class': new templates.Attribute('dropdown-menu')}, [new templates.Element('li', void 0, [new templates.Element('a', {'class': new templates.Attribute('dd-list-href'), 'href': new templates.Attribute('#'), 'id': new templates.Attribute('align-horizontal-top-icon')}, [new templates.Element('img', {'src': new templates.Attribute('sample-app/sampleapp-images/align/align-horizontal-top.png'), 'class': new templates.Attribute('sbgn-select-img')}, null, void 0, true), new templates.Text('Align Horizontal Top')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'class': new templates.Attribute('dd-list-href'), 'href': new templates.Attribute('#'), 'id': new templates.Attribute('align-horizontal-middle-icon')}, [new templates.Element('img', {'src': new templates.Attribute('sample-app/sampleapp-images/align/align-horizontal-middle.png'), 'class': new templates.Attribute('sbgn-select-img')}, null, void 0, true), new templates.Text('Align Horizontal Middle')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'class': new templates.Attribute('dd-list-href'), 'href': new templates.Attribute('#'), 'id': new templates.Attribute('align-horizontal-bottom-icon')}, [new templates.Element('img', {'src': new templates.Attribute('sample-app/sampleapp-images/align/align-horizontal-bottom.png'), 'class': new templates.Attribute('sbgn-select-img')}, null, void 0, true), new templates.Text('Align Horizontal Bottom')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'class': new templates.Attribute('dd-list-href'), 'href': new templates.Attribute('#'), 'id': new templates.Attribute('align-vertical-left-icon')}, [new templates.Element('img', {'src': new templates.Attribute('sample-app/sampleapp-images/align/align-vertical-left.png'), 'class': new templates.Attribute('sbgn-select-img')}, null, void 0, true), new templates.Text('Align Vertical Left')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'class': new templates.Attribute('dd-list-href'), 'href': new templates.Attribute('#'), 'id': new templates.Attribute('align-vertical-center-icon')}, [new templates.Element('img', {'src': new templates.Attribute('sample-app/sampleapp-images/align/align-vertical-center.png'), 'class': new templates.Attribute('sbgn-select-img')}, null, void 0, true), new templates.Text('Align Vertical Center')], void 0, false)], void 0, false), new templates.Element('li', void 0, [new templates.Element('a', {'class': new templates.Attribute('dd-list-href'), 'href': new templates.Attribute('#'), 'id': new templates.Attribute('align-vertical-right-icon')}, [new templates.Element('img', {'src': new templates.Attribute('sample-app/sampleapp-images/align/align-vertical-right.png'), 'class': new templates.Attribute('sbgn-select-img')}, null, void 0, true), new templates.Text('Align Vertical Right')], void 0, false)], void 0, false)], void 0, false)], void 0, false)], void 0, false), new templates.Element('div', {'class': new templates.Attribute('menu-break-large sbgn-toolbar-element')}, [], void 0, false), new templates.Element('div', {'class': new templates.Attribute('inside-menu')}, [new templates.Element('img', {'id': new templates.Attribute('highlight-neighbors-of-selected-icon'), 'class': new templates.Attribute('sbgn-toolbar-element'), 'src': new templates.Attribute('sample-app/sampleapp-images/toolbar-icons/highlightneighborsofselected.png'), 'title': new templates.Attribute('Highlight Neighbors of Selected')}, null, void 0, false), new templates.Element('img', {'id': new templates.Attribute('remove-highlights-icon'), 'class': new templates.Attribute('sbgn-toolbar-element'), 'src': new templates.Attribute('sample-app/sampleapp-images/toolbar-icons/removehighlights.png'), 'title': new templates.Attribute('Remove Highlights')}, null, void 0, false)], void 0, false), new templates.Element('div', {'class': new templates.Attribute('menu-break-large sbgn-toolbar-element')}, [], void 0, false), new templates.Element('div', {'class': new templates.Attribute('inside-menu')}, [new templates.Element('img', {'id': new templates.Attribute('perform-layout-icon'), 'class': new templates.Attribute('sbgn-toolbar-element'), 'src': new templates.Attribute('sample-app/sampleapp-images/toolbar-icons/layout-cose.png'), 'title': new templates.Attribute('Perform Layout')}, null, void 0, false), new templates.Element('img', {'id': new templates.Attribute('layout-properties-icon'), 'class': new templates.Attribute('sbgn-toolbar-element'), 'src': new templates.Attribute('sample-app/sampleapp-images/toolbar-icons/layoutproperties.png'), 'title': new templates.Attribute('Layout Properties')}, null, void 0, false)], void 0, false)], void 0, false), new templates.Element('div', {'id': new templates.Attribute('sbgn-network-container')}, [], void 0, false), new templates.Element('div', {'id': new templates.Attribute('sbgn-inspector')}, [], void 0, false), new templates.Element('div', {'id': new templates.Attribute('sbgn-layout-table'), 'title': new templates.Attribute('Layout Properties')}, [], void 0, false), new templates.Element('div', {'id': new templates.Attribute('sbgn-properties-table'), 'title': new templates.Attribute('Properties'), 'style': new templates.Attribute('display: inline')}, [], void 0, false), new templates.Element('div', {'id': new templates.Attribute('biogene-container'), 'style': new templates.Attribute('display: none')}, [], void 0, false), new templates.Element('div', {'id': new templates.Attribute('box')}, [], void 0, false), new templates.Element('input', {'id': new templates.Attribute('node-label-textbox'), 'type': new templates.Attribute('text')}, null, void 0, false), new templates.Element('script', {'type': new templates.Attribute('text/template'), 'id': new templates.Attribute('node-legend-template')}, [new templates.Text('<div class="sbgn-frame"><h2 class="sbgn-text">Node Legend</h2><img src="sample-app/sampleapp-images/node_legend_sbgn.png" alt="" class="centered"></div>')], void 0, false), new templates.Element('script', {'type': new templates.Attribute('text/template'), 'id': new templates.Attribute('edge-legend-template')}, [new templates.Text('<div class="sbgn-frame"><h2 class="sbgn-text">Interaction Legend</h2><img src="sample-app/sampleapp-images/interaction_legend_sbgn.png" alt="" class="centered"></div>')], void 0, false), new templates.Element('script', {'type': new templates.Attribute('text/template'), 'id': new templates.Attribute('about-template')}, [new templates.Text('<div class="sbgn-frame"><h2 class="sbgn-text">About</h2><table width="100%" height="100%" align="center" valign="center"><tr><td><img src="sample-app/sampleapp-images/i-vis.png" alt="" class="centered"></td></tr><tr><td><img src="sample-app/sampleapp-images/cbio.png" alt="" class="centered"></td></tr><tr><td><p class="sbgn-text">SBGN<i>Viz</i>.js version 1.2</p></td></tr><tr><td><p class="address-text marg">i-Vis information Visualization Group</p><p class="address-text">Bilkent University, Ankara, Turkey</p></td></tr><tr><td><p class="address-text marg">Memorial Sloan-Kettering Cancer Center</p><p class="address-text">New York, USA</p></td></tr><tr><td><p class="address-text marg"><a href="mailto:ivis@cs.bilkent.edu.tr" target="_top">ivis@cs.bilkent.edu.tr</a></p><p class="address-text"><a href="https://github.com/PathwayCommons/sbgnviz-js" target="_blank">https://github.com/PathwayCommons/sbgnviz-js</a></p></td></tr></table></div>')], void 0, false), new templates.Element('script', {'type': new templates.Attribute('text/template'), 'id': new templates.Attribute('quick-help-template')}, [new templates.Text('<div class="sbgn-frame quick-help"><h2 class="sbgn-text">Quick Help</h2><div class="quick-help-content"><table align="center" valign="center"><tr><td><b>File | Samples | &lt;sample file&gt;</b>:Load a sample model from file in SBGN-ML</td></tr><tr><td><b>File | Load</b>:Load a model from file in SBGN-ML</td></tr><tr><td><b>Left-click</b>:Full label of the node</td></tr><tr><td><b>Right-click</b>:Detailed properties of a macro-molecule from BioGene</td></tr></table></div></div>')], void 0, false), new templates.Element('script', {'type': new templates.Attribute('text/template'), 'id': new templates.Attribute('loading-small-template')}, [new templates.Text('<p class="sbgn-text"> <%= name %> </p><img class="centered" src="sample-app/sampleapp-images/loading-small.gif" height="auto" width="auto" align="middle">')], void 0, false), new templates.Element('script', {'type': new templates.Attribute('text/template'), 'id': new templates.Attribute('layout-settings-template')}, [new templates.Text('<table class="table-condensed layout-table"><tr><td><span class="add-on layout-text"> Node Repulsion </span></td><td><input id="node-repulsion" type="text" class="input-small layout-text" value= <%= nodeRepulsion %> ></td></tr><tr><td><span class="add-on layout-text"> Node Overlap </span></td><td><input id="node-overlap" type="text" class="input-small layout-text" value= <%= nodeOverlap %> ></td></tr><tr><td><span class="add-on layout-text"> Ideal Edge Length </span></td><td><input id="ideal-edge-length" type="text" class="input-small layout-text" value= <%= idealEdgeLength %> ></td></tr><tr><td><span class="add-on layout-text"> Edge Elasticity </span></td><td><input id="edge-elasticity" type="text" class="input-small layout-text" value= <%= edgeElasticity %> ></td></tr><tr><td><span class="add-on layout-text"> Nesting Factor </span></td><td><input id="nesting-factor" type="text" class="input-small layout-text" value= <%= nestingFactor %> ></td></tr><tr><td><span class="add-on layout-text"> Gravity </span></td><td><input id="gravity" type="text" class="input-small layout-text" value= <%= gravity %> ></td></tr><tr><td><span class="add-on layout-text"> Number of Iterations </span></td><td><input id="num-iter" type="text" class="input-small layout-text" value= <%= numIter %> ></td></tr><tr><td><span class="add-on layout-text"> Tile Disconnected </span></td><td><input id="tile" type="checkbox" class="input-small layout-text" <% if (tile){ %> checked<%}%>></td></tr><tr><td><span class="add-on layout-text"> Animate </span></td><td><input id="animate" type="checkbox" class="input-small layout-text" <% if (animate){ %> checked<%}%>></td></tr><tr><td><span class="add-on layout-text"> Incremental </span></td><td><input id="incremental" type="checkbox" class="input-small layout-text" <% if (!randomize){ %> checked<%}%>></td></tr><tr><td><br></td></tr><tr id="layout-buttons"><td><button id="save-layout" class="btn btn-default" >Save</button></td><td><button id="default-layout" class="btn btn-default">Default</button></td></tr></table>')], void 0, false), new templates.Element('script', {'type': new templates.Attribute('text/template'), 'id': new templates.Attribute('sbgn-properties-template')}, [new templates.Text('<table class="table-condensed layout-table"><tr><td><span class="add-on layout-text"> Compound Padding </span></td><td><input id="compound-padding" type="text" class="input-small layout-text" value= <%= compoundPadding %> > %</td></tr><tr><td><span class="add-on layout-text"> Label Size </span></td><td><select name="dynamic-label-size"><option id="dynamic-label-size_small" value="small" <% if (dynamicLabelSize == \'small\'){ %> selected<%}%> > Small </option><option id="dynamic-label-size_regular" value="regular" <% if (dynamicLabelSize == \'regular\'){ %> selected<%}%> > Regular </option><option id="dynamic-label-size_large" value="large" <% if (dynamicLabelSize == \'large\'){ %> selected<%}%> > Large </option></select></td></tr><tr><td><span class="add-on layout-text"> Fit Labels To Nodes </span></td><td><input id="fit-labels-to-nodes" type="checkbox" class="input-small layout-text" <% if (fitLabelsToNodes){ %> checked<%}%>></td></tr><tr><td><span class="add-on layout-text"> Layout After Expand / Collapse </span></td><td><input id="incremental-layout-after-expand-collapse" type="checkbox" class="input-small layout-text" <% if (incrementalLayoutAfterExpandCollapse){ %> checked<%}%>></td></tr><tr id="sbgn-buttons"><td><button id="save-sbgn" class="btn btn-default" >Save</button></td><td><button id="default-sbgn" class="btn btn-default">Default</button></td></tr></table>')], void 0, false), new templates.Element('script', {'type': new templates.Attribute('text/template'), 'id': new templates.Attribute('biogene-template')}, [new templates.Text('<div class=\'node-details-text\'><table class="table table-condensed table-striped" cellspacing="10"><tr class="biogene-info biogene-description node-details-summary"><th valign="top">Gene Summary:</th><td colspan="2" class="expandable"><%=geneSummary %></td></tr><tr class="biogene-info biogene-aliases"><th valign="top">Aliases:</th><td><%=geneAliases %></td></tr><tr class="biogene-info biogene-description"><th>Description:</th><td class="expandable"><%=geneDescription %></td></tr><tr class="biogene-info biogene-location"><th valign="top">Chromosome Location:</th><td><%=geneLocation %></td></tr><tr class="biogene-info biogene-uniprot-links"><th valign="top">UniProt ID:</th><td><a href=\'http://www.uniprot.org/uniprot/<%= geneUniprotId %>\' target=\'blank\'><%=geneUniprotId %></a><span class=\'biogene-uniprot-links-extra\'><%= geneUniprotLinks %></span></td></tr><tr class="biogene-info biogene-id"><th valign="top">Gene ID:</th><td><a href=\'http://www.ncbi.nlm.nih.gov/gene?term=<%= geneId %>\' target=\'blank\'><%=geneId %></a></td></tr></table></div>')], void 0, false), new templates.Element('script', {'type': new templates.Attribute('text/template'), 'id': new templates.Attribute('uniprot-link-template')}, [new templates.Text('<a href="http://www.uniprot.org/uniprot/<%= id %>" target="_blank"><%=id %></a>')], void 0, false), new templates.Element('script', {'type': new templates.Attribute('text/template'), 'id': new templates.Attribute('noty-info')}, [new templates.Text('Right click to a node to see its detailed information')], void 0, false), new templates.Element('div', {'id': new templates.Attribute('chat-area')}, [new templates.Element('div', {'id': new templates.Attribute('users')}, [new templates.Element('form', {'action': new templates.Attribute(''), '"': new templates.Attribute(true)}, [new templates.EachBlock(new expressions.PathExpression(['_page', 'userIds'], new expressions.ExpressionMeta('each _page.userIds as #pUserId', 'each', void 0, '#pUserId')), [new templates.ViewInstance('chat-user', {})])], void 0, false), new templates.Element('div', {'id': new templates.Attribute('chat-history')}, [new templates.Text('Show chat history'), new templates.Element('select', {'id': new templates.Attribute('durationSelect')}, [new templates.EachBlock(new expressions.PathExpression(['_page', 'durations'], new expressions.ExpressionMeta('each _page.durations as #pDur', 'each', void 0, '#pDur')), [new templates.Element('option', {'value': new templates.DynamicAttribute(new expressions.AliasPathExpression('#pDur', ['id'], new expressions.ExpressionMeta('#pDur.id'))), 'selected': new templates.DynamicAttribute(new expressions.OperatorExpression('===', [new expressions.PathExpression(['_page', 'durationId']), new expressions.AliasPathExpression('#pDur', ['id'])], void 0, new expressions.ExpressionMeta('_page.durationId=== #pDur.id')))}, [new templates.Text(' '), new templates.DynamicText(new expressions.AliasPathExpression('#pDur', ['name'], new expressions.ExpressionMeta('#pDur.name'))), new templates.Text(' ')], void 0, false)])], [new templates.ElementOn('change', new expressions.FnExpression(['changeDuration'], []))], false)], void 0, false), new templates.Element('button', {'id': new templates.Attribute('change-user-color')}, [new templates.Text('Change user color')], [new templates.ElementOn('click', new expressions.FnExpression(['changeColorCode'], []))], false)], [new templates.AsProperty(['container']), new templates.ElementOn('change', new expressions.FnExpression(['onScroll'], []))], false), new templates.Element('div', {'id': new templates.Attribute('messages')}, [new templates.Element('ul', {'id': new templates.Attribute('messages-list')}, [new templates.EachBlock(new expressions.PathExpression(['_page', 'list'], new expressions.ExpressionMeta('each _page.list as #message', 'each', void 0, '#message')), [new templates.Element('li', void 0, [new templates.ViewInstance('chat-message', {})], void 0, false)])], [new templates.AsProperty(['list'])], false)], [new templates.AsProperty(['container'])], false), new templates.Element('div', {'id': new templates.Attribute('inputs')}, [new templates.Element('input', {'id': new templates.Attribute('inputs-name'), 'value': new templates.DynamicAttribute(new expressions.BracketsExpression(new expressions.PathExpression(['users']), new expressions.PathExpression(['_session', 'userId']), ['name'], new expressions.ExpressionMeta('users[_session.userId].name')))}, null, void 0, false), new templates.Element('form', {'id': new templates.Attribute('inputs-form')}, [new templates.Element('input', {'id': new templates.Attribute('inputs-comment'), 'value': new templates.DynamicAttribute(new expressions.PathExpression(['_page', 'newComment'], new expressions.ExpressionMeta('_page.newComment'))), 'autofocus': new templates.Attribute(true)}, null, void 0, false), new templates.Text(' '), new templates.Element('button', void 0, [new templates.Text('Send')], void 0, false)], [new templates.ElementOn('submit', new expressions.FnExpression(['add'], [])), new templates.ElementOn('submit', new expressions.FnExpression(['$preventDefault'], [new expressions.PathExpression(['$event'])]))], false)], void 0, false)], void 0, false), new templates.Element('div', {'id': new templates.Attribute('command-history-area')}, [new templates.Element('ul', {'id': new templates.Attribute('command-list')}, [new templates.EachBlock(new expressions.PathExpression(['_page', 'doc', 'history'], new expressions.ExpressionMeta('each _page.doc.history as #pCommand', 'each', void 0, '#pCommand')), [new templates.Element('li', void 0, [new templates.Text(' '), new templates.Element('b', void 0, [new templates.DynamicText(new expressions.AliasPathExpression('#pCommand', ['userName'], new expressions.ExpressionMeta('#pCommand.userName'))), new templates.Text(' '), new templates.DynamicText(new expressions.FnExpression(['formatTime'], [new expressions.AliasPathExpression('#pCommand', [])], void 0, new expressions.ExpressionMeta('formatTime(#pCommand)'))), new templates.Text(' > ')], void 0, false), new templates.DynamicText(new expressions.AliasPathExpression('#pCommand', ['name'], new expressions.ExpressionMeta('#pCommand.name'))), new templates.Text(' '), new templates.DynamicText(new expressions.AliasPathExpression('#pCommand', ['id'], new expressions.ExpressionMeta('#pCommand.id'))), new templates.Text(' '), new templates.DynamicText(new expressions.FnExpression(['formatObj'], [new expressions.AliasPathExpression('#pCommand', ['param'])], void 0, new expressions.ExpressionMeta('formatObj(#pCommand.param)')))], void 0, false)])], [new templates.AsProperty(['list'])], false)], void 0, false), new templates.Element('script', void 0, [new templates.Text('function scrollToBottom(docId){document.getElementById(docId).scrollTop = document.getElementById(docId).scrollHeight;}(window.onresize = function() {scrollToBottom(\'messages-list\');scrollToBottom(\'command-history-area\');})();$(\'#command-history-area\').bind(\'DOMSubtreeModified\', function(){scrollToBottom(\'command-history-area\');});$(\'#messages\').bind(\'DOMSubtreeModified\', function(){scrollToBottom(\'messages\');});$(\'#messages-list\').bind(\'DOMSubtreeModified\', function(){scrollToBottom(\'messages-list\');});')], void 0, false), new templates.Element('audio', {'id': new templates.Attribute('notificationAudio'), 'src': new templates.Attribute('http://www.talkingwav.com/various/beep_02.wav'), 'preload': new templates.Attribute('auto')}, [], void 0, false)]);views.register('Tail', '').template = new templates.Template([]);views.register('chat-user', '\n        <div class="user" style = background:{{users[#pUserId].colorCode}}>\n            {{if _session.userId === #pUserId}}\n            <div> {{users[#pUserId].name}}</div>\n            {{else}}\n            <input type="checkbox" id = {{#pUserId}} checked> {{users[#pUserId].name}}<br>\n            {{/if}}\n        </div>\n\n    ').template = new templates.Template([new templates.Element('div', {'class': new templates.Attribute('user'), 'style': new templates.DynamicAttribute(new templates.Template([new templates.Text('background:'), new templates.DynamicText(new expressions.BracketsExpression(new expressions.PathExpression(['users']), new expressions.AliasPathExpression('#pUserId', []), ['colorCode'], new expressions.ExpressionMeta('users[#pUserId].colorCode')))], 'background:{{users[#pUserId].colorCode}}'))}, [new templates.ConditionalBlock([new expressions.OperatorExpression('===', [new expressions.PathExpression(['_session', 'userId']), new expressions.AliasPathExpression('#pUserId', [])], void 0, new expressions.ExpressionMeta('if _session.userId === #pUserId', 'if')), new expressions.Expression(new expressions.ExpressionMeta('else', 'else'))], [[new templates.Element('div', void 0, [new templates.Text(' '), new templates.DynamicText(new expressions.BracketsExpression(new expressions.PathExpression(['users']), new expressions.AliasPathExpression('#pUserId', []), ['name'], new expressions.ExpressionMeta('users[#pUserId].name')))], void 0, false)], [new templates.Element('input', {'type': new templates.Attribute('checkbox'), 'id': new templates.DynamicAttribute(new expressions.AliasPathExpression('#pUserId', [], new expressions.ExpressionMeta('#pUserId'))), 'checked': new templates.Attribute(true)}, null, void 0, false), new templates.Text(' '), new templates.DynamicText(new expressions.BracketsExpression(new expressions.PathExpression(['users']), new expressions.AliasPathExpression('#pUserId', []), ['name'], new expressions.ExpressionMeta('users[#pUserId].name'))), new templates.Element('br', void 0, null, void 0, false)]])], void 0, false)]);views.register('chat-message', '\n      <div class="message">\n        <div class="time">{{_page.showTime && formatTime(#message)}}</div>\n        <b><div style = font-color:{{users[#message.userId].colorCode}}> {{#message.userName}}</div></b>\n        <p>{{#message.comment}}</p>\n      </div>\n\n\n\n').template = new templates.Template([new templates.Element('div', {'class': new templates.Attribute('message')}, [new templates.Element('div', {'class': new templates.Attribute('time')}, [new templates.DynamicText(new expressions.OperatorExpression('&&', [new expressions.PathExpression(['_page', 'showTime']), new expressions.FnExpression(['formatTime'], [new expressions.AliasPathExpression('#message', [])])], void 0, new expressions.ExpressionMeta('_page.showTime && formatTime(#message)')))], void 0, false), new templates.Element('b', void 0, [new templates.Element('div', {'style': new templates.DynamicAttribute(new templates.Template([new templates.Text('font-color:'), new templates.DynamicText(new expressions.BracketsExpression(new expressions.PathExpression(['users']), new expressions.AliasPathExpression('#message', ['userId']), ['colorCode'], new expressions.ExpressionMeta('users[#message.userId].colorCode')))], 'font-color:{{users[#message.userId].colorCode}}'))}, [new templates.Text(' '), new templates.DynamicText(new expressions.AliasPathExpression('#message', ['userName'], new expressions.ExpressionMeta('#message.userName')))], void 0, false)], void 0, false), new templates.Element('p', void 0, [new templates.DynamicText(new expressions.AliasPathExpression('#message', ['comment'], new expressions.ExpressionMeta('#message.comment')))], void 0, false)], void 0, false)]);};/*DERBY_SERIALIZED_VIEWS_END*/
 },{}],10:[function(require,module,exports){
 /*
  * components.js
@@ -24657,4 +24663,4 @@ function SBGNProperties(){
 },{"./EditorActionsManager.js":84,"./sample-app-cytoscape-sbgn.js":87}]},{},[82,1])
 
 
-//# sourceMappingURL=/derby/chat-ba6d50de3d28f5c0a57d98c5ed36707f.map.json
+//# sourceMappingURL=/derby/chat-e93caf3b5f9b8009da91812190162d9e.map.json

@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link href="agentTester.css" type="text/css" rel="stylesheet">
     <title></title>
 </head>
 <body>
@@ -11,36 +12,106 @@
 
 
 <form id = "serverIpForm" >
-    <div>Enter server IP </div>
-    <input type = "text" id = "serverIp" name="serverIp" value = "http://localhost:3000/b7bf4657-c751-4899-ac55-a74ca84dac55">
-    <input type="button" value="Submit" onclick=createAgent()>
+    Agent name: <input type = "text" id = "agentName" name="agentName" value = "HAL">
+    Server IP: <input type = "text" id = "serverIp" name="serverIp" >
+    <!--<input type="button" value="Submit" onclick=createAgent()>-->
+    <!--<script> createAgent()</script>-->
+    <!--<script href="javascript:createAgent();"></script>-->
+
 </form>
 
 <br>
+<br>
 <form>
-    <input type = "number" id = "posX" name="posX" value = 10>
-    <input type = "number" id = "posY" name="posY" value = 10>
-    <input type = "text" id = "sbgnclass" name="sbgnclass" value = "macromolecule">
+    Pos x : <input type = "number" id = "posX" name="posX" value = 10>
+    Pos y : <input type = "number" id = "posY" name="posY" value = 10>
+    Sbgnclass: <input type = "text" id = "sbgnclass" name="sbgnclass" value = "macromolecule">
     <input type="button" value="Add node" onclick=addNode()>
 </form>
 
-<ul id = 'operationHistory'>
 
-</ul>
+<ul id = 'operationHistory'><b>Commands<br></b></ul>
+<ul id = 'chat'><b>Chat Messages<br></b></ul>
+
 </body>
 
 
 <script>
 
+    window.onload = function (){
+        createAgent();
+    }
+
+    $('#serverIp').change(function(){
+        deleteCookie('docId'); //delete previous cookie
+        //add the new cookie
+        serverIp = $('#serverIp')[0].value;  //change cookie
+        document.cookie = 'docId=' +  serverIp;  //add cookie docId
+
+        createAgent();
+    });
+
     var agent;
-    var newId = 0;
+    var newNodeId = 0;
+    function generateHash(len) {
+        var symbols = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
+        var hash = '';
+        for (var i = 0; i < len; i++) {
+            var symIndex = Math.floor(Math.random() * symbols.length);
+            hash += symbols.charAt(symIndex);
+        }
+        return hash;
+    }
+    function getCookie(cname) {
+        var name = cname + "=";
+        var ca = document.cookie.split(';');
+        for(var i=0; i<ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0)==' ') c = c.substring(1);
+            if (c.indexOf(name) == 0) return c.substring(name.length,c.length);
+        }
+        return "";
+    }
+
+    var deleteCookie = function(cname) {
+        document.cookie = cname + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    };
     function createAgent(){
-        agent = new Agent("HAL");
-        var socket = agent.connectToServer($('#serverIp')[0].value);
+
+
+        /*
+        if (!/\buserId=/.test(document.cookie)) { //if no 'user_id' in cookies
+            document.cookie = 'userId=' + generateHash(32); + 'docId=' + $('#serverIp')[0].value;  //add cookie 'user_id'
+        }
+        if (!/\bdocId=/.test(document.cookie)) { //if no 'docId' in cookies
+            document.cookie = 'docId=' +  $('#serverIp')[0].value;  //add cookie docId
+        }
+*/
+        //don't open a new socket unless it is a new agent
+        var agentId = getCookie('userId');
+        if(agentId == null){
+            agentId = generateHash(32);
+            document.cookie = 'userId=' +  agentId;  //add cookie docId
+        }
+
+        var serverIp = getCookie('docId')
+
+        if(serverIp == null){
+            serverIp = $('#serverIp')[0].value;
+            document.cookie = 'docId=' +  serverIp;  //add cookie docId
+        }
+        else{
+            $('#serverIp')[0].value = serverIp;
+        }
+
+        agent = new Agent($('#agentName')[0].value, document.cookie);
+        var socket = agent.connectToServer(serverIp);
 
 
         socket.on('connect', function(){
             agent.getModel();
+            agent.getOperationHistory();
+            agent.getChatHistory();
 
             agent.listen();
 
@@ -51,7 +122,7 @@
         var x = $('#posX')[0].value;
         var y = $('#posY')[0].value;
         var sbgnclass = $('#sbgnclass')[0].value;
-        var id = "" + newId++;
+        var id = "" + newNodeId++;
         agent.addNode(id,x,y,sbgnclass);
     }
 
