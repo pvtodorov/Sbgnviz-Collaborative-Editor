@@ -22,8 +22,10 @@ body {
     padding-left: 5px;
     width: 100px;
 }
-#posX, #posY, #sbgnclass{
+#agentOperations{
     padding-left: 5px;
+
+    margin: 5px;
 }
 
 #operationHistory {
@@ -48,5 +50,15 @@ body {
 
 }
 
+#userList{
+    position:absolute;
+    left: 1100px;
+    width: 200px;
+    overflow: auto;
+    line-height: 150%;
+    -webkit-overflow-scrolling: touch;
+    border: 1px solid #dddddd;
 
+
+}
 

@@ -20,6 +20,7 @@
 
 </form>
 
+<div id = agentOperations>
 <br>
 <br>
 <form>
@@ -28,10 +29,17 @@
     Sbgnclass: <input type = "text" id = "sbgnclass" name="sbgnclass" value = "macromolecule">
     <input type="button" value="Add node" onclick=addNode()>
 </form>
+<br>
+<form>
+    Id : <input id = "nodeId" name="nodeId" >
+    <input type="button" value="Delete node" onclick=deleteNode()>
+</form>
 
+</div>
 
 <ul id = 'operationHistory'><b>Commands<br></b></ul>
 <ul id = 'chat'><b>Chat Messages<br></b></ul>
+<ul id = 'userList'><b>Online Users<br></b></ul>
 
 </body>
 
@@ -79,14 +87,6 @@
     function createAgent(){
 
 
-        /*
-        if (!/\buserId=/.test(document.cookie)) { //if no 'user_id' in cookies
-            document.cookie = 'userId=' + generateHash(32); + 'docId=' + $('#serverIp')[0].value;  //add cookie 'user_id'
-        }
-        if (!/\bdocId=/.test(document.cookie)) { //if no 'docId' in cookies
-            document.cookie = 'docId=' +  $('#serverIp')[0].value;  //add cookie docId
-        }
-*/
         //don't open a new socket unless it is a new agent
         var agentId = getCookie('userId');
         if(agentId == null){
@@ -110,8 +110,15 @@
 
         socket.on('connect', function(){
             agent.getModel();
+
+
             agent.getOperationHistory();
             agent.getChatHistory();
+            agent.getUserList();
+
+            setTimeout(function(){ //wait for the history to load
+                agent.updateWebPage(); }, 1000);
+
 
             agent.listen();
 
@@ -124,6 +131,10 @@
         var sbgnclass = $('#sbgnclass')[0].value;
         var id = "" + newNodeId++;
         agent.addNode(id,x,y,sbgnclass);
+    }
+
+    function deleteNode(){
+        agent.deleteNode($('#nodeId')[0].value);
     }
 
 
