@@ -1,6 +1,6 @@
 var addRemoveUtilities = {
     defaultsMap: {},
-    addNode: function (x, y, sbgnclass) {
+    addNode: function (x, y, sbgnclass, id) {
         var defaultsMap = this.defaultsMap;
         var defaults = defaultsMap[sbgnclass];
         var width = defaults ? defaults.width : 50;
@@ -17,7 +17,9 @@ var addRemoveUtilities = {
             sbgnclass += " multimer";
         }
 
-        var eles = cy.add({
+        //FUNDA added id
+
+        var el = {
             group: "nodes",
             data: {
                 width: width,
@@ -37,7 +39,11 @@ var addRemoveUtilities = {
                 x: x,
                 y: y
             }
-        });
+        };
+        if(id != null)
+            el.data.id = id;
+
+        var eles = cy.add(el);
 
         var newNode = eles[eles.length - 1];
         if (defaults && defaults['border-color']) {

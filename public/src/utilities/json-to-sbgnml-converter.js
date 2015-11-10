@@ -1,5 +1,7 @@
 var jsonToSbgnml = {
-    createSbgnml : function(){
+
+
+    createSbgnml : function(visibleNodes, visibleEdges){
         var self = this;
         var sbgnmlText = "";
 
@@ -9,6 +11,7 @@ var jsonToSbgnml = {
         sbgnmlText = sbgnmlText + "<map language='process description'>\n";
 
         //adding glyph sbgnml
+        //cy.nodes(":visible").each(function(){
         cy.nodes(":visible").each(function(){
             if(!this.isChild())
                 sbgnmlText = sbgnmlText + self.getGlyphSbgnml(this);

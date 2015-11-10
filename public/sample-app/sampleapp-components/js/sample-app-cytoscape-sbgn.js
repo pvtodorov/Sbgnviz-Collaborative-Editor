@@ -51,7 +51,7 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
 
             window.cy = this;
             refreshPaddings();
-            self.modelManager.initModel(cytoscapeJsGraph, cy.nodes(), cy.edges());
+            self.modelManager.initModel(cytoscapeJsGraph, cy.nodes(), cy.edges(), "me");
 
 
             cy.one('layoutstop', function(){
@@ -408,7 +408,6 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
 
             //        editorActions.manager._do(editorActions.ChangeNodeLabelCommand(param));
 
-                 //   self.modelManager.changeModelNodeAttribute('sbgnlabel', param);
 
                     nodeLabelChanged = false;
                 }

@@ -9,6 +9,7 @@ var sbgnLayoutProp;
 
 var editorActions;
 
+
 //var sbgnProperties;
 
 var setFileContent = function (fileName) {
@@ -122,7 +123,7 @@ module.exports.start = function(modelManager){
     $('#samples').click(function (e) {
 
         var ind = e.target.id;
-        self.modelManager.setSampleInd(ind);
+        self.modelManager.setSampleInd(ind, "me");
         module.exports.updateSample(ind);
 
     });
@@ -854,7 +855,7 @@ module.exports.start = function(modelManager){
     });
 
     $("#save-as-sbgnml").click(function (evt) {
-        var sbgnmlText = jsonToSbgnml.createSbgnml();
+        var sbgnmlText = jsonToSbgnml.createSbgnml(cy.nodes(":visible"), cy.edges(":visible"));
 
         var blob = new Blob([sbgnmlText], {
             type: "text/plain;charset=utf-8;",

@@ -25,6 +25,8 @@ var menu;
 var userCount;
 var socket;
 
+var modelManager;
+
 app.on('model', function (model) {
 
 
@@ -127,7 +129,7 @@ app.get('/:docId', function (page, model, arg, next) {
 
             // create a reference to the document
             model.ref('_page.doc', 'documents.' + arg.docId);
-
+            model.subscribe(docPath, 'history');
 
         }
 
@@ -526,32 +528,19 @@ app.proto.create = function (model) {
 
     socket.on('userList', function(userList) {
 
-        userIds =[];
+        var userIds =[];
         userList.forEach(function(user){
-            //if(userIds.indexOf(userList[i].userId) < 0)
             userIds.push(user.userId);
-            var  userPath = model.at('users.' +  user.userId);
-
-            if(userPath!=null)
-                userPath.set('name', user.userName);
-          //  console.log(userPath.get('name'));
-
-            if(userPath == null){
-                userPath.set('name', user.userName);
-
-            }
-
         });
 
         model.set('_page.userIds', userIds );
 
-
-
     });
 
 
+    modelManager = require('./public/sample-app/sampleapp-components/js/modelManager.js')(model, model.get('_page.room'), model.get('_session.userId'),name );
 
-    var modelManager = require('./public/sample-app/sampleapp-components/js/modelManager.js')(model);
+
 
 
     menu =  require('./public/sample-app/sampleapp-components/js/sample-app-menu-functions.js');
@@ -686,8 +675,7 @@ app.proto.formatObj = function(obj){
 }
 
 
-//Function declarations for model update
-
+//Model update functions
 function deleteElement(elId){
     setTimeout(function(){
         try{
@@ -697,6 +685,7 @@ function deleteElement(elId){
             //todo element is already selected? el.select(); //select this one
 
             addRemoveUtilities.removeEles(el);
+            updateServerGraph();
 
         }
         catch (err) {
@@ -716,9 +705,13 @@ function insertNode(nodeData){
                 y: nodeData.position.y,
                 sbgnclass: nodeData.sbgnclass
             };
-            param.firstTime = true;
-            var newNode = addRemoveUtilities.addNode(param.newNode.x, param.newNode.y, param.newNode.sbgnclass);
+            var newNode = addRemoveUtilities.addNode(param.newNode.x, param.newNode.y, param.newNode.sbgnclass, nodeData.id);
 
+
+
+
+
+            updateServerGraph();
 
 
         }
@@ -743,7 +736,7 @@ function insertEdge (sourceId, targetId){
 
             addRemoveUtilities.addEdge(param.newEdge.source, param.newEdge.target, param.newEdge.sbgnclass);
 
-
+            updateServerGraph();
         }
         catch (err) {
             console.log("Please reload page. " + err);
@@ -774,6 +767,9 @@ function updateElementProperty(elId, propName, propValue, propType){
              */
 
 
+            //update server graph
+            updateServerGraph();
+
             cy.forceRender();
 
         }
@@ -801,6 +797,7 @@ function updateMultimerStatus(elId, isMultimer){
                 node.data('sbgnclass', sbgnclass.replace(' multimer', ''));
             }
 
+            updateServerGraph();
         }
 
         catch (err) {
@@ -821,11 +818,17 @@ function updateCloneMarkerStatus(elId, isCloneMarker){
 
             //    node._private.data.sbgnclonemarker = isCloneMarker?true:undefined;
 
-
+            updateServerGraph();
 
         }
         catch (err) {
             console.log("Please reload page. " + err);
         }
     }, 0);
-}
+};
+
+function updateServerGraph (){
+    var sbgnmlText = jsonToSbgnml.createSbgnml();
+    var cytoscapeJsGraph = sbgnmlToJson.convert(sbgnmlText);
+    modelManager.updateServerGraph(cytoscapeJsGraph);
+};

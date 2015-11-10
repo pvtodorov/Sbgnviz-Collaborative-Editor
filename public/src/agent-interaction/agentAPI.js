@@ -34,9 +34,9 @@
         var agentId = id;
         var agentName = name;
         var pageDoc;
-        var opHistory;
-        var chatHistory;
-        var userList;
+        var opHistory  = [];
+        var chatHistory =[];
+        var userList = [];
 
         var self = this;
 
@@ -56,9 +56,20 @@
                 socket.on('pageDoc', function (data) {
                     pageDoc = data;
                 });
+
+
             };
 
+        this.getNextNodeId = function(){
+            var cnt = 0;
+            for( var key in pageDoc.cy.nodes ) {
+                if( pageDoc.cy.nodes.hasOwnProperty(key) ) {
+                    cnt++;
+                }
+            }
 
+            return "agentN" + cnt;
+        }
 
         //get operation history
         this.getOperationHistory= function () {
@@ -66,6 +77,8 @@
             socket.emit('agentOperationHistoryRequest', room);
             socket.on('operationHistory', function (data) {
                 opHistory = data;
+                if(data == null)
+                    opHistory = [];
                 return true;
             });
         };
@@ -84,25 +97,22 @@
             socket.emit('agentChatHistoryRequest', room);
             socket.on('chatHistory', function (data) {
                 chatHistory = data;
+                if(data == null)
+                    chatHistory = [];
                 return true;
 
             });
         };
 
-
-        this.addNode= function (id, x, y, sbgnclass) {
-            var param = {x:x, y:y, sbgnclass: sbgnclass};
-            socket.emit('agentAddNodeRequest', {room: room, id: id, param:param})
-        };
-
-        this.deleteNode = function (id) {
-            socket.emit('agentRemoveNodeRequest', {room: room, id: id})
+        this.sendRequest = function(reqName, param){ //model operations
+            socket.emit(reqName, room, param);
         };
 
 
         this.listen = function(){
             socket.on('operation', function(data){
                 opHistory.push(data);
+
                 self.writeCommand(data);
             });
 

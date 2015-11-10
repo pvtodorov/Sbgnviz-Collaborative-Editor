@@ -3,16 +3,7 @@
  */
 
 
-function coordinateRound(coordinate, decimals) {
 
-    var newC = {'x': preciseRound(coordinate.x, decimals),'y': preciseRound(coordinate.x, decimals)};
-    return newC;
-}
-
-function preciseRound(num, decimals) {
-    var t=Math.pow(10, decimals);
-    return (Math.round((num * t) + (decimals>0?1:0)*(Math.sign(num) * (10 / Math.pow(100, decimals)))) / t).toFixed(decimals);
-}
 
 function dynamicResize()
 {

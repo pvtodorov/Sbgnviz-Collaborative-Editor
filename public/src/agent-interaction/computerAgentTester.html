@@ -10,6 +10,9 @@
 <script src="../../lib/js/jquery-1.8.2.js"></script>
 <script src="agentAPI.js"></script>
 
+<form>
+    <input type="button" value="Delete Cookies" onclick=deleteAllCookies()>
+</form>
 
 <form id = "serverIpForm" >
     Agent name: <input type = "text" id = "agentName" name="agentName" value = "HAL">
@@ -24,27 +27,39 @@
 <br>
 <br>
 <form>
-    Pos x : <input type = "number" id = "posX" name="posX" value = 10>
-    Pos y : <input type = "number" id = "posY" name="posY" value = 10>
+    Pos x : <input type = "number" id = "posX" name="posX" value = 200>
+    Pos y : <input type = "number" id = "posY" name="posY" value = 200>
     Sbgnclass: <input type = "text" id = "sbgnclass" name="sbgnclass" value = "macromolecule">
     <input type="button" value="Add node" onclick=addNode()>
 </form>
 <br>
 <form>
-    Id : <input id = "nodeId" name="nodeId" >
+    Id : <input id = "delNodeId"  >
     <input type="button" value="Delete node" onclick=deleteNode()>
 </form>
+    <br>
+    <form>
+        Id : <input id = "moveNodeId">
+        Pos x : <input type = "number" id = "newPosX">
+        Pos y : <input type = "number" id = "newPosY">
+        <input type="button" value="Move node" onclick=moveNode()>
+    </form>
 
 </div>
 
+
+<div id = modelHistory>
 <ul id = 'operationHistory'><b>Commands<br></b></ul>
 <ul id = 'chat'><b>Chat Messages<br></b></ul>
 <ul id = 'userList'><b>Online Users<br></b></ul>
+</div>
 
 </body>
 
 
 <script>
+    var agent;
+
 
     window.onload = function (){
         createAgent();
@@ -52,6 +67,7 @@
 
     $('#serverIp').change(function(){
         deleteCookie('docId'); //delete previous cookie
+
         //add the new cookie
         serverIp = $('#serverIp')[0].value;  //change cookie
         document.cookie = 'docId=' +  serverIp;  //add cookie docId
@@ -59,8 +75,7 @@
         createAgent();
     });
 
-    var agent;
-    var newNodeId = 0;
+
     function generateHash(len) {
         var symbols = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
         var hash = '';
@@ -84,12 +99,20 @@
     var deleteCookie = function(cname) {
         document.cookie = cname + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
     };
+
+    var deleteAllCookies = function(){
+        deleteCookie('userId'); //delete previous cookie
+        deleteCookie('docId'); //delete previous cookie
+
+    };
+
     function createAgent(){
 
 
         //don't open a new socket unless it is a new agent
         var agentId = getCookie('userId');
-        if(agentId == null){
+
+        if(agentId == null || agentId == ''){
             agentId = generateHash(32);
             document.cookie = 'userId=' +  agentId;  //add cookie docId
         }
@@ -104,7 +127,7 @@
             $('#serverIp')[0].value = serverIp;
         }
 
-        agent = new Agent($('#agentName')[0].value, document.cookie);
+        agent = new Agent($('#agentName')[0].value, agentId);
         var socket = agent.connectToServer(serverIp);
 
 
@@ -129,13 +152,27 @@
         var x = $('#posX')[0].value;
         var y = $('#posY')[0].value;
         var sbgnclass = $('#sbgnclass')[0].value;
-        var id = "" + newNodeId++;
-        agent.addNode(id,x,y,sbgnclass);
+        var id = agent.getNextNodeId();//"agentN" + newNodeId++;
+        var param = {x:x, y:y, sbgnclass:sbgnclass }
+
+
+        agent.sendRequest("agentAddNodeRequest", {id: id, param:param});
     }
 
     function deleteNode(){
-        agent.deleteNode($('#nodeId')[0].value);
+        agent.sendRequest("agentDeleteNodeRequest", {id: $('#delNodeId')[0].value});
     }
+
+    function moveNode(){
+        var x = $('#newPosX')[0].value;
+        var y = $('#newPosY')[0].value;
+        var id = $('#moveNodeId')[0].value;
+        var pos = {x:x, y:y}
+        agent.sendRequest("agentMoveNodeRequest", {id: id, pos:pos});
+
+    }
+
+
 
 
 

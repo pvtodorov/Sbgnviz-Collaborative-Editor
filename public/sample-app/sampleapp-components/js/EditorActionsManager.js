@@ -9,6 +9,11 @@
 
 module.exports.modelManager;
 
+module.exports.updateServerGraph = function(){
+    var sbgnmlText = jsonToSbgnml.createSbgnml();
+    var cytoscapeJsGraph = sbgnmlToJson.convert(sbgnmlText);
+    module.exports.modelManager.updateServerGraph(cytoscapeJsGraph);
+};
 
 module.exports.selectNode = function (node) {
     module.exports.modelManager.selectModelNode(node);
@@ -45,20 +50,24 @@ module.exports.addNode = function(param) {
     }
 
     module.exports.modelManager.addModelNode(result.id(),  param.newNode, "me");
+    module.exports.updateServerGraph();
 
     return result;
 }
 
 module.exports.removeNodes = function(nodesToBeDeleted) {
-    module.exports.modelManager.deleteModelNodes(nodesToBeDeleted);
+    module.exports.modelManager.deleteModelNodes(nodesToBeDeleted, "me");
+    module.exports.updateServerGraph();
+
     return addRemoveUtilities.removeNodes(nodesToBeDeleted);
 }
 
 module.exports.removeEles =function(elesToBeRemoved) {
 
-    module.exports.modelManager.deleteModelNodes(elesToBeRemoved.nodes());
-    module.exports.modelManager.deleteModelEdges(elesToBeRemoved.edges());
+    module.exports.modelManager.deleteModelNodes(elesToBeRemoved.nodes(), "me");
+    module.exports.modelManager.deleteModelEdges(elesToBeRemoved.edges(), "me");
 
+    module.exports.updateServerGraph();
     return addRemoveUtilities.removeEles(elesToBeRemoved);
 }
 
@@ -78,6 +87,8 @@ module.exports.restoreEles = function(eles)
             module.exports.modelManager.addModelEdge(ele, param, "me");
         }
     });
+
+    module.exports.updateServerGraph();
     return addRemoveUtilities.restoreEles(eles);
 }
 
@@ -93,12 +104,14 @@ module.exports.addEdge = function(param)
     }
 
     module.exports.modelManager.addModelEdge(result, param.newEdge, "me");
+    module.exports.updateServerGraph();
     return result;
 }
 
 module.exports.removeEdges = function(edgesToBeDeleted)
 {
-    module.exports.modelManager.deleteModelEdges(edgesToBeDeleted);
+    module.exports.modelManager.deleteModelEdges(edgesToBeDeleted, "me");
+    module.exports.updateServerGraph();
     return addRemoveUtilities.removeEdges(edgesToBeDeleted);
 }
 
@@ -309,7 +322,8 @@ module.exports.moveNodesConditionally = function(param) {
 
     else{
         param.nodes.forEach(function(node){
-            module.exports.modelManager.moveModelNode(node);
+            module.exports.modelManager.moveModelNode(node.id(), node.position());
+            module.exports.updateServerGraph();
         });
 
     }
@@ -340,7 +354,12 @@ module.exports.moveNodes = function(positionDiff, nodes) {
             y: oldY + positionDiff.y
         });
 
-        module.exports.modelManager.moveModelNode(node);
+        module.exports.modelManager.moveModelNode(node.id(), node.position());
+        module.exports.updateServerGraph();
+
+
+
+
         var children = node.children();
         module.exports.moveNodes(positionDiff, children);
 
@@ -348,9 +367,10 @@ module.exports.moveNodes = function(positionDiff, nodes) {
 }
 
 module.exports.deleteSelected = function(param) {
-    module.exports.modelManager.deleteModelNodes(param.eles.nodes());
-    module.exports.modelManager.deleteModelEdges(param.eles.edges());
+    module.exports.modelManager.deleteModelNodes(param.eles.nodes(), "me");
+    module.exports.modelManager.deleteModelEdges(param.eles.edges(), "me");
 
+    module.exports.updateServerGraph();
     return addRemoveUtilities.removeElesSimply(param.eles);
 }
 
@@ -515,17 +535,20 @@ module.exports.createCompoundForSelectedNodes = function(param) {
     refreshPaddings();
 
     module.exports.modelManager.addModelNode(newCompound.id(), {x: newCompound._private.position.x, y: newCompound._private.position.y, sbgnclass: param.compoundType}, "me");
+
     var newParam = {ele: newCompound, data: newCompound.width()};
-    module.exports.modelManager.changeModelNodeAttribute('width', newParam);
+    module.exports.modelManager.changeModelNodeAttribute('width', newParam, "me");
     newParam = {ele: newCompound, data: newCompound.height()};
-    module.exports.modelManager.changeModelNodeAttribute('height', newParam);
+    module.exports.modelManager.changeModelNodeAttribute('height', newParam, "me");
+
 
     nodesToMakeCompound.forEach(function(node){
-        module.exports.modelManager.changeModelNodeAttribute('sbgnbboxW', {ele: node, data: newCompound.width()});
-        module.exports.modelManager.changeModelNodeAttribute('sbgnbboxH', {ele: node, data: newCompound.height()});
-        module.exports.modelManager.changeModelNodeAttribute('parent', {ele: node, data: node.data('parent')})
+        module.exports.modelManager.changeModelNodeAttribute('sbgnbboxW', {ele: node, data: newCompound.width()}, "me");
+        module.exports.modelManager.changeModelNodeAttribute('sbgnbboxH', {ele: node, data: newCompound.height()}, "me");
+        module.exports.modelManager.changeModelNodeAttribute('parent', {ele: node, data: node.data('parent')}, "me");
     });
 
+    module.exports.updateServerGraph();
 
     return newCompound;
 }
@@ -564,11 +587,11 @@ module.exports.resizeNode = function(param) {
 
 
     param.data = param.width;
-    module.exports.modelManager.changeModelNodeAttribute('width', param);
+    module.exports.modelManager.changeModelNodeAttribute('width', param, "me");
 
     param.data = param.height;
-    module.exports.modelManager.changeModelNodeAttribute('height', param);
-
+    module.exports.modelManager.changeModelNodeAttribute('height', param, "me");
+    module.exports.updateServerGraph();
 
     //}
     return result;
@@ -584,8 +607,8 @@ module.exports.changeNodeLabel = function(param) {
 
     node._private.data.sbgnlabel = param.data;
 
-    module.exports.modelManager.changeModelNodeAttribute('sbgnlabel', param);
-
+    module.exports.modelManager.changeModelNodeAttribute('sbgnlabel', param, "me");
+    module.exports.updateServerGraph();
     cy.forceRender();
     return result;
 }
@@ -612,8 +635,8 @@ module.exports.changeStateVariable = function(param) {
     statesAndInfos[ind] = state;
 
     param.data = statesAndInfos;
-    module.exports.modelManager.changeModelNodeAttribute('sbgnStatesAndInfos', param, param.state);
-
+    module.exports.modelManager.changeModelNodeAttribute('sbgnStatesAndInfos', param, "me", param.state );
+    module.exports.updateServerGraph();
     return result;
 }
 
@@ -637,8 +660,8 @@ module.exports.changeUnitOfInformation = function(param) {
 
     param.data = statesAndInfos;
 
-    module.exports.modelManager.changeModelNodeAttribute('sbgnStatesAndInfos', param, param.state);
-
+    module.exports.modelManager.changeModelNodeAttribute('sbgnStatesAndInfos', param, "me", param.state);
+    module.exports.updateServerGraph();
 
     return result;
 }
@@ -652,8 +675,8 @@ module.exports.addStateAndInfo = function(param) {
     relocateStateAndInfos(statesAndInfos);
 
     param.data = statesAndInfos;
-    module.exports.modelManager.changeModelNodeAttribute('sbgnStatesAndInfos', param, param.obj);
-
+    module.exports.modelManager.changeModelNodeAttribute('sbgnStatesAndInfos', param, "me", param.obj );
+    module.exports.updateServerGraph();
     param.ele.unselect(); //to refresh inspector
     param.ele.select(); //to refresh inspector
     cy.forceRender();
@@ -675,8 +698,8 @@ module.exports.removeStateAndInfo = function(param) {
     relocateStateAndInfos(statesAndInfos);
 
     param.data = statesAndInfos;
-    module.exports.modelManager.changeModelNodeAttribute('sbgnStatesAndInfos', param, param.state);
-
+    module.exports.modelManager.changeModelNodeAttribute('sbgnStatesAndInfos', param, "me", param.state);
+    module.exports.updateServerGraph();
     param.ele.unselect(); //to refresh inspector
     param.ele.select(); //to refresh inspector
     cy.forceRender();
@@ -713,7 +736,8 @@ module.exports.changeIsMultimerStatus = function(param) {
     };
 
 
-    module.exports.modelManager.changeModelNodeAttribute('isMultimer', param);
+    module.exports.modelManager.changeModelNodeAttribute('isMultimer', param, "me");
+    module.exports.updateServerGraph();
     return result;
 }
 //FUNDA: changed param.node to param.ele
@@ -733,6 +757,7 @@ module.exports.changeIsCloneMarkerStatus = function(param) {
     };
 
     module.exports.modelManager.changeModelNodeAttribute('isCloneMarker', param);
+    module.exports.updateServerGraph();
     return result;
 }
 
@@ -755,9 +780,11 @@ module.exports.changeStyleData = function( param) {
     //}
 
     if(ele.isNode())
-        module.exports.modelManager.changeModelNodeAttribute(param.modelDataName, param);
+        module.exports.modelManager.changeModelNodeAttribute(param.modelDataName, param, "me");
     else
-        module.exports.modelManager.changeModelEdgeAttribute(param.modelDataName, param);
+        module.exports.modelManager.changeModelEdgeAttribute(param.modelDataName, param, "me");
+
+    module.exports.updateServerGraph();
     return result;
 }
 
@@ -781,9 +808,11 @@ module.exports.changeStyleCss = function(param) {
     //}
 
     if(ele.isNode())
-        module.exports.modelManager.changeModelNodeAttribute(param.modelDataName, param);
+        module.exports.modelManager.changeModelNodeAttribute(param.modelDataName, param, "me");
     else
-        module.exports.modelManager.changeModelEdgeAttribute(param.modelDataName, param);
+        module.exports.modelManager.changeModelEdgeAttribute(param.modelDataName, param, "me");
+
+    module.exports.updateServerGraph();
     return result;
 }
 
