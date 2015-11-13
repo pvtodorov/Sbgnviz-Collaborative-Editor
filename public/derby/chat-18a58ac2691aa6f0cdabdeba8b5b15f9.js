@@ -322,7 +322,9 @@ app.proto.init = function (model) {
             var pos = model.get('_page.doc.cy.nodes.'+ id + '.position');
 
 
+
             insertNode({id:id, position:pos,  sbgnclass: sbgnclass});
+
 
 
         }
@@ -342,8 +344,10 @@ app.proto.init = function (model) {
     });
 
     model.on('change', '_page.doc.cy.nodes.*.position', function(id, pos, prev, passed){
-        if(docReady && passed.user == null)
+        if(docReady && passed.user == null){
+
             updateElementProperty(id, 'position', pos, 'position');
+        }
 
 
     });
@@ -709,10 +713,8 @@ function insertNode(nodeData){
             };
             var newNode = addRemoveUtilities.addNode(param.newNode.x, param.newNode.y, param.newNode.sbgnclass, nodeData.id);
 
-   
 
-
-
+            cy.forceRender();
             updateServerGraph();
 
 
@@ -760,13 +762,27 @@ function updateElementProperty(elId, propName, propValue, propType){
                 el[propType](propName, propValue);
 
 
-            /*
+
+
              //TODO: correct resizing
-             if(propName == 'width')
-             el._private.style.width.value = propValue;
-             else if(propName == 'height')
-             el._private.style.height.value = propValue;
-             */
+             if(propName == 'width'){
+
+                 el[0]._private.style.width.value = propValue;
+                 el[0]._private.style.width.pxValue = propValue;
+                 el[0]._private.data.sbgnbbox.w = propValue;
+
+
+
+
+             }
+             else if(propName == 'height'){
+
+                 el[0]._private.style.height.value = propValue;
+                 el[0]._private.style.height.pxValue = propValue;
+                 el[0]._private.data.sbgnbbox.h = propValue;
+
+
+             }
 
 
             //update server graph
@@ -866,8 +882,8 @@ function App(derby, name, filename) {
   this.derby = derby;
   this.name = name;
   this.filename = filename;
-  this.scriptHash = 'dd0f8a5390c372ee6fd6612d194d2dda';
-  this.bundledAt = 1447191679490;
+  this.scriptHash = '18a58ac2691aa6f0cdabdeba8b5b15f9';
+  this.bundledAt = 1447447747545;
   this.Page = createAppPage();
   this.proto = this.Page.prototype;
   this.views = new derbyTemplates.templates.Views();
@@ -21353,12 +21369,14 @@ module.exports.returnToPositionsAndSizes = function(nodesData) {
 }
 
 module.exports.moveNodesConditionally = function(param) {
+
     if (param.move)
         module.exports.moveNodes(param.positionDiff, param.nodes);
 
     else{
         param.nodes.forEach(function(node){
-            module.exports.modelManager.moveModelNode(node.id(), node.position());
+
+            module.exports.modelManager.moveModelNode(node.id(), node.position(), "me");
             module.exports.updateServerGraph();
         });
 
@@ -21390,7 +21408,7 @@ module.exports.moveNodes = function(positionDiff, nodes) {
             y: oldY + positionDiff.y
         });
 
-        module.exports.modelManager.moveModelNode(node.id(), node.position());
+        module.exports.modelManager.moveModelNode(node.id(), node.position(), "me");
         module.exports.updateServerGraph();
 
 
@@ -22391,11 +22409,11 @@ module.exports =  function(model, docId, userId, userName) {
             model.set('_page.doc.layoutProperties', layoutProperties); //synclayout
 
         },
-        getSampleInd: function(){
+        getSampleInd: function(user){
             var ind = model.get('_page.doc.sampleInd');
             if(ind == null)
                 ind = "0";
-            this.setSampleInd(ind);
+            this.setSampleInd(ind, user);
 
             return ind;
 
@@ -22448,12 +22466,13 @@ module.exports =  function(model, docId, userId, userName) {
             }
 
         },
-        moveModelNode: function(nodeId, pos){
+        moveModelNode: function(nodeId, pos,user){
             var nodePath = model.at('_page.doc.cy.nodes.'  +nodeId);
             if(nodePath.get('id')){
+
                 // if(!node.selected) //selected nodes will still be highlighted even if they are freed
-                nodePath.set('highlightColor' , null);
-                nodePath.set('position' , pos);
+                model.pass({user:user}).set('_page.doc.cy.nodes.' +nodeId+ 'highlightColor' , null);
+                model.pass({user:user}).set('_page.doc.cy.nodes.' +nodeId+'position' , pos);
                 //this.updateServerGraph();
             }
 
@@ -22465,12 +22484,22 @@ module.exports =  function(model, docId, userId, userName) {
           //  var pos = {x: param.x, y: param.y};
 
 
-
             model.pass({user:user}).set('_page.doc.cy.nodes.' +nodeId+'.id', nodeId);
             model.pass({user:user}).set('_page.doc.cy.nodes.' +nodeId +'.position', {x: param.x, y: param.y});
 
+
+
             //Adding the node
             model.pass({user:user}).set('_page.doc.cy.nodes.' + nodeId+'.sbgnclass', param.sbgnclass);
+
+
+            model.pass({user:user}).set('_page.doc.cy.nodes.' + nodeId+'.width', 50);
+            model.pass({user:user}).set('_page.doc.cy.nodes.' + nodeId+'.height', 50);
+
+            //model.pass({user:user}).set('_page.doc.cy.nodes.' + nodeId+'.sbgnbboxW', 50);
+            //model.pass({user:user}).set('_page.doc.cy.nodes.' + nodeId+'.sbgnbboxH', 50);
+
+
 
             //Initialization
         /*    model.pass({user:user}).set('_page.doc.cy.nodes.' + node.id() +'.highlightColor', null);
@@ -22608,6 +22637,7 @@ module.exports =  function(model, docId, userId, userName) {
         initModel: function(jsonObj, nodes, edges, user){
 
             jsonObj.nodes.forEach(function(node){
+
                 model.set('_page.doc.cy.nodes.' + node.data.id + '.id', node.data.id);
                 model.pass({user:user}).set('_page.doc.cy.nodes.' + node.data.id + '.position', {x: node.data.sbgnbbox.x, y: node.data.sbgnbbox.y}); //initialize position
 
@@ -22617,8 +22647,6 @@ module.exports =  function(model, docId, userId, userName) {
             });
 
             nodes.forEach(function (node) {
-
-
 
                 node.addClass('changeBorderColor');
 
@@ -22822,10 +22850,11 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
                 lines: 3,
                 padding: 5,
                 start: function (sourceNode) {
+
                     // fired when noderesize interaction starts (drag on handle)
                     paramResize = {
                         ele: sourceNode,
-                        initialWidth: sourceNode.width(),
+                        initialWidth: sourceNode.width(),//keep this for undo operations
                         initialHeight: sourceNode.height(),
                         width: sourceNode.width(),
                         height: sourceNode.height(),
@@ -22946,18 +22975,25 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
 
             var lastMouseDownNodeInfo = null;
             cy.on("mousedown", "node", function () {
+
                 lastMouseDownNodeInfo = {};
                 lastMouseDownNodeInfo.lastMouseDownPosition = {
                     x: this.position("x"),
                     y: this.position("y")
                 };
                 lastMouseDownNodeInfo.node = this;
+
+
             });
 
+            //cy.on("mouseup", "node", function () {
             cy.on("mouseup", "node", function () {
+
                 if (lastMouseDownNodeInfo == null) {
                     return;
                 }
+
+
                 var node = lastMouseDownNodeInfo.node;
                 var lastMouseDownPosition = lastMouseDownNodeInfo.lastMouseDownPosition;
                 var mouseUpPosition = {
@@ -22990,7 +23026,12 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
 
 
 
+
                     lastMouseDownNodeInfo = null;
+
+
+
+
                     editorActions.refreshUndoRedoButtonsStatus();
                 }
             });
@@ -23337,6 +23378,7 @@ module.exports.handleSBGNInspector = function (editorActions) {
         var type;
         if (selectedEles.nodes().length == 1) {
             type = "node";
+
 
             html += "<tr><td style='width: " + width + "px'>" + "Border Color" + "</td><td>"
                 + "<input id='inspector-border-color' type='color' style='width: " + buttonwidth + "px;' value='" + selected.data('borderColor')
@@ -23747,13 +23789,13 @@ module.exports.start = function(modelManager){
     this.sbgnProperties  = new SBGNProperties();
 
 
-    self.modelManager.setSampleInd();
+    //self.modelManager.setSampleInd(0, "me");
 
     var jsonObj = self.modelManager.getServerGraph();
 
     if(jsonObj == null){//first time loading the graph-- load from the samples
 
-        var ind = self.modelManager.getSampleInd();
+        var ind = self.modelManager.getSampleInd("me");
 
 
 
@@ -24034,6 +24076,7 @@ module.exports.start = function(modelManager){
         var reader = new FileReader();
 
         reader.onload = function (e) {
+
             (new cyMod.SBGNContainer('#sbgn-network-container', {cytoscapeJsGraph:
                     sbgnmlToJson.convert(textToXmlObject(this.result))}),  editorActions);
         }
@@ -24728,4 +24771,4 @@ function SBGNProperties(){
 },{"./EditorActionsManager.js":84,"./sample-app-cytoscape-sbgn.js":87}]},{},[82,1])
 
 
-//# sourceMappingURL=/derby/chat-dd0f8a5390c372ee6fd6612d194d2dda.map.json
+//# sourceMappingURL=/derby/chat-18a58ac2691aa6f0cdabdeba8b5b15f9.map.json

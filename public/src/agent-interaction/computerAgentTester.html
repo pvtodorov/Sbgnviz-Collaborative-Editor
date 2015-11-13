@@ -45,19 +45,31 @@
         <input type="button" value="Move node" onclick=moveNode()>
     </form>
 
+<br>
+    <button id = "updateModel" onclick = updateModel()>Update model</button>
 </div>
 
 
 <div id = modelHistory>
-<ul id = 'operationHistory'><b>Commands<br></b></ul>
-<ul id = 'chat'><b>Chat Messages<br></b></ul>
-<ul id = 'userList'><b>Online Users<br></b></ul>
+<ul id = 'operationHistory'  as="container" onchange = scrollToBottom('operationHistory')><b>Commands<br></b></ul>
+<ul id = 'chat' as="container"><b>Chat Messages<br></b></ul>
+<ul id = 'userList' as="container"><b>Online Users<br></b></ul>
 </div>
 
 </body>
 
 
 <script>
+
+    function scrollToBottom(docId){
+        console.log("here");
+        document.getElementById(docId).scrollTop = document.getElementById(docId).scrollHeight;
+    }
+    $('#operationHistory').bind('DOMSubtreeModified', function(){
+        scrollToBottom('operationHistory');
+    });
+
+
     var agent;
 
 
@@ -132,32 +144,36 @@
 
 
         socket.on('connect', function(){
-            agent.getModel();
-
-
-            agent.getOperationHistory();
-            agent.getChatHistory();
-            agent.getUserList();
-
-            setTimeout(function(){ //wait for the history to load
-                agent.updateWebPage(); }, 1000);
-
+            agent.getModel(function() {
+                agent.updateNextAgentNodeId();
+                agent.getOperationHistory(function(){
+                    agent.getChatHistory(function(){
+                        agent.getUserList(function(){
+                            agent.updateWebPage();
+                        });
+                    });
+                });
+            });
 
             agent.listen();
 
         });
     }
 
+    function updateModel(){
+        agent.getModel();
+    }
+
     function addNode(){
         var x = $('#posX')[0].value;
         var y = $('#posY')[0].value;
         var sbgnclass = $('#sbgnclass')[0].value;
-        var id = agent.getNextNodeId();//"agentN" + newNodeId++;
         var param = {x:x, y:y, sbgnclass:sbgnclass }
 
+        agent.sendRequest("agentAddNodeRequest", {id: agent.getNextNodeId(), param:param});
 
-        agent.sendRequest("agentAddNodeRequest", {id: id, param:param});
     }
+
 
     function deleteNode(){
         agent.sendRequest("agentDeleteNodeRequest", {id: $('#delNodeId')[0].value});

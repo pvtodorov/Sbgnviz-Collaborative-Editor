@@ -75,8 +75,12 @@
     $$.style.properties['incremental-layout-after-expand-collapse'] = {name: 'incremental-layout-after-expand-collapse', type: $$.style.types.trueOrFalse};
 
     function drawSelection(render, context, node) {
+
+
+
         //TODO: do it for all classes in sbgn, create a sbgn class array to check
         if (sbgnShapes[render.getNodeShape(node)]) {
+
             CanvasRenderer.nodeShapes[render.getNodeShape(node)].draw(
                 context,
                 node); //node._private.data.weight / 5.0
@@ -101,6 +105,7 @@
         //If the compound node has no expanded-collapsed style property make it expanded
         if( node.css()['expanded-collapsed'] == null ){
             node.css('expanded-collapsed', 'expanded');
+
         }
 
         var expandedOrcollapsed = node.css('expanded-collapsed');
@@ -161,11 +166,13 @@
     function drawPathSelection(render, context, node) {
         //TODO: do it for all classes in sbgn, create a sbgn class array to check
         if (sbgnShapes[render.getNodeShape(node)]) {
+
             CanvasRenderer.nodeShapes[render.getNodeShape(node)].drawPath(
                 context,
                 node); //node._private.data.weight / 5.0
         }
         else {
+
             CanvasRenderer.nodeShapes[render.getNodeShape(node)].drawPath(
                 context,
                 node._private.position.x,
@@ -960,6 +967,8 @@
 
             // Border width, draw border
             if (node._private.style["border-width"].pxValue > 0) {
+
+
                 drawPathSelection(this, context, node);
 
                 strokeSelection(this, context, node);
@@ -1993,6 +2002,41 @@
         context.lineTo(-halfWidth, -halfHeight);
 
         context.closePath();
+        context.translate(-centerX, -centerY);
+        context.fill();
+    };
+    $$.sbgn.drawMacromolecule = function (context, width, height,
+                                          centerX, centerY) {
+
+
+
+        var halfWidth = width / 2;
+        var halfHeight = height / 2;
+        var cornerRadius = $$.math.getRoundRectangleRadius(width, height);
+
+
+        context.translate(centerX, centerY);
+        if( context.beginPath ){ context.beginPath(); }
+
+
+        // Start at top middle
+        context.moveTo(0,  - halfHeight);
+
+        // Arc from middle top to right side
+        context.arcTo( halfWidth,  - halfHeight, halfWidth, 0, cornerRadius);
+
+        // Arc from right side to bottom
+        context.arcTo( halfWidth,  halfHeight, 0,  halfHeight, cornerRadius);
+        // Arc from bottom to left side
+        context.arcTo( - halfWidth,  halfHeight,  - halfWidth, 0, cornerRadius);
+        // Arc from left side to topBorder
+        context.arcTo(- halfWidth, - halfHeight, 0, - halfHeight, cornerRadius);
+        // Join line
+        context.lineTo(0, - halfHeight);
+
+
+        context.closePath();
+
         context.translate(-centerX, -centerY);
         context.fill();
     };
@@ -3038,6 +3082,8 @@
         multimerPadding: 5,
         cornerLength: 12,
         draw: function (context, node) {
+
+
             var width = node.width();
             var height = node.height();
             var centerX = node._private.position.x;
@@ -3050,6 +3096,7 @@
 
             nodeShapes["complex"].points = $$.sbgn.generateComplexShapePoints(cornerLength,
                 width, height);
+
 
             //check whether sbgn class includes multimer substring or not
             if ($$.sbgn.isMultimer(node)) {
@@ -3205,8 +3252,11 @@
             var cloneMarker = node._private.data.sbgnclonemarker;
             var padding = node._private.style["border-width"].pxValue;
 
+
+
             //check whether sbgn class includes multimer substring or not
             if ($$.sbgn.isMultimer(node)) {
+
                 //add multimer shape
                 renderer.drawRoundRectangle(context,
                     centerX + multimerPadding, centerY + multimerPadding,
@@ -3222,10 +3272,15 @@
                 //context.stroke();
             }
 
-            renderer.drawRoundRectangle(context,
+
+            //FUNDA added this instead
+            $$.sbgn.drawMacromolecule(context, width, height, centerX, centerY);
+
+            //FUNDA
+      /*      renderer.drawRoundRectangle(context,
                 centerX, centerY,
                 width, height);
-
+*/
             context.stroke();
 
             $$.sbgn.cloneMarker.macromolecule(context, centerX, centerY,

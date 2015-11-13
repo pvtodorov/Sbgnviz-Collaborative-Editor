@@ -99,13 +99,13 @@ module.exports.start = function(modelManager){
     this.sbgnProperties  = new SBGNProperties();
 
 
-    self.modelManager.setSampleInd();
+    //self.modelManager.setSampleInd(0, "me");
 
     var jsonObj = self.modelManager.getServerGraph();
 
     if(jsonObj == null){//first time loading the graph-- load from the samples
 
-        var ind = self.modelManager.getSampleInd();
+        var ind = self.modelManager.getSampleInd("me");
 
 
 
@@ -386,6 +386,7 @@ module.exports.start = function(modelManager){
         var reader = new FileReader();
 
         reader.onload = function (e) {
+
             (new cyMod.SBGNContainer('#sbgn-network-container', {cytoscapeJsGraph:
                     sbgnmlToJson.convert(textToXmlObject(this.result))}),  editorActions);
         }

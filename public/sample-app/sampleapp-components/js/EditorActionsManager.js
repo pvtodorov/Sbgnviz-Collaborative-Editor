@@ -317,12 +317,14 @@ module.exports.returnToPositionsAndSizes = function(nodesData) {
 }
 
 module.exports.moveNodesConditionally = function(param) {
+
     if (param.move)
         module.exports.moveNodes(param.positionDiff, param.nodes);
 
     else{
         param.nodes.forEach(function(node){
-            module.exports.modelManager.moveModelNode(node.id(), node.position());
+
+            module.exports.modelManager.moveModelNode(node.id(), node.position(), "me");
             module.exports.updateServerGraph();
         });
 
@@ -354,7 +356,7 @@ module.exports.moveNodes = function(positionDiff, nodes) {
             y: oldY + positionDiff.y
         });
 
-        module.exports.modelManager.moveModelNode(node.id(), node.position());
+        module.exports.modelManager.moveModelNode(node.id(), node.position(), "me");
         module.exports.updateServerGraph();
 
 

@@ -3,6 +3,7 @@ body {
     height: 100%;
 
     overflow-x: hidden;
+    overflow-y: hidden;
 
 }
 #serverIpForm {
@@ -23,19 +24,34 @@ body {
     width: 100px;
 }
 #agentOperations{
+    position: absolute;
     padding-left: 5px;
-
+    border: 1px solid #dddddd;
     margin: 5px;
+    left: 0px;
+    width: 35%;
+}
+
+#modelHistory{
+    border: 1px solid #dddddd;
+    position: absolute;
+    left: 36%;
+    width: 62%;
+    height: 800px;
+    overflow-y: hidden;
+
 }
 
 #operationHistory {
+
     position: absolute;
     width: 600px;
     line-height: 150%;
     left: 5px;
+    height: 750px;
     -webkit-overflow-scrolling: touch;
-    overflow: auto;
-    border: 1px solid #dddddd;
+    overflow-y: scroll;
+
 }
 
 
@@ -43,10 +59,11 @@ body {
     position: absolute;
     width: 400px;
     left: 650px;
-    overflow: auto;
+    height: 750px;
+    overflow-y: scroll;
     line-height: 150%;
     -webkit-overflow-scrolling: touch;
-    border: 1px solid #dddddd;
+    /*border: 1px solid #dddddd;*/
 
 }
 
@@ -54,10 +71,11 @@ body {
     position:absolute;
     left: 1100px;
     width: 200px;
-    overflow: auto;
+    height: 750px;
+    overflow-y: scroll;
     line-height: 150%;
     -webkit-overflow-scrolling: touch;
-    border: 1px solid #dddddd;
+    /*border: 1px solid #dddddd;*/
 
 
 }

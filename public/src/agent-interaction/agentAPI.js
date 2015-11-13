@@ -29,6 +29,7 @@
 
     var Agent = function (name, id) {
 
+        //private variables
         var room;
         var socket;
         var agentId = id;
@@ -37,6 +38,8 @@
         var opHistory  = [];
         var chatHistory =[];
         var userList = [];
+        var nextNodeCnt  ;
+
 
         var self = this;
 
@@ -50,56 +53,64 @@
                 return socket;
         };
 
-            //get model for the current room
-        this.getModel = function () {
-                socket.emit('agentPageDocRequest', room);
-                socket.on('pageDoc', function (data) {
-                    pageDoc = data;
-                });
 
-
-            };
-
-        this.getNextNodeId = function(){
+        this.updateNextAgentNodeId = function(cb){
             var cnt = 0;
             for( var key in pageDoc.cy.nodes ) {
                 if( pageDoc.cy.nodes.hasOwnProperty(key) ) {
                     cnt++;
                 }
             }
+            nextNodeCnt =  cnt;
+        };
 
-            return "agentN" + cnt;
+        this.getNextNodeId = function(){
+
+            return  "agentN" + nextNodeCnt++;
         }
 
-        //get operation history
-        this.getOperationHistory= function () {
+        //get model for the current room
+        this.getModel = function (cb) {
+            socket.emit('agentPageDocRequest', room);
+            socket.on('pageDoc', function (data) {
+                pageDoc = data;
 
+                if(cb!=null) cb();
+
+            });
+        };
+
+        //get operation history
+        this.getOperationHistory= function (cb) {
             socket.emit('agentOperationHistoryRequest', room);
             socket.on('operationHistory', function (data) {
                 opHistory = data;
                 if(data == null)
                     opHistory = [];
-                return true;
+                if(cb!=null) cb();
+
             });
         };
 
-        this.getUserList = function(){
+        this.getUserList = function(cb){
             socket.emit('agentUserListRequest', room)
             socket.on('userList', function (data) {
                 userList = data;
-                return true;
+
+                if(cb!=null) cb();
             });
         }
 
 
         //get operation history
-        this.getChatHistory= function () {
+        this.getChatHistory= function (cb) {
             socket.emit('agentChatHistoryRequest', room);
             socket.on('chatHistory', function (data) {
                 chatHistory = data;
                 if(data == null)
                     chatHistory = [];
-                return true;
+
+                if(cb!=null) cb();
 
             });
         };

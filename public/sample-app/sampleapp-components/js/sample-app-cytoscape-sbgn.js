@@ -77,10 +77,11 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
                 lines: 3,
                 padding: 5,
                 start: function (sourceNode) {
+
                     // fired when noderesize interaction starts (drag on handle)
                     paramResize = {
                         ele: sourceNode,
-                        initialWidth: sourceNode.width(),
+                        initialWidth: sourceNode.width(),//keep this for undo operations
                         initialHeight: sourceNode.height(),
                         width: sourceNode.width(),
                         height: sourceNode.height(),
@@ -201,18 +202,25 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
 
             var lastMouseDownNodeInfo = null;
             cy.on("mousedown", "node", function () {
+
                 lastMouseDownNodeInfo = {};
                 lastMouseDownNodeInfo.lastMouseDownPosition = {
                     x: this.position("x"),
                     y: this.position("y")
                 };
                 lastMouseDownNodeInfo.node = this;
+
+
             });
 
+            //cy.on("mouseup", "node", function () {
             cy.on("mouseup", "node", function () {
+
                 if (lastMouseDownNodeInfo == null) {
                     return;
                 }
+
+
                 var node = lastMouseDownNodeInfo.node;
                 var lastMouseDownPosition = lastMouseDownNodeInfo.lastMouseDownPosition;
                 var mouseUpPosition = {
@@ -245,7 +253,12 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
 
 
 
+
                     lastMouseDownNodeInfo = null;
+
+
+
+
                     editorActions.refreshUndoRedoButtonsStatus();
                 }
             });
@@ -592,6 +605,7 @@ module.exports.handleSBGNInspector = function (editorActions) {
         var type;
         if (selectedEles.nodes().length == 1) {
             type = "node";
+
 
             html += "<tr><td style='width: " + width + "px'>" + "Border Color" + "</td><td>"
                 + "<input id='inspector-border-color' type='color' style='width: " + buttonwidth + "px;' value='" + selected.data('borderColor')

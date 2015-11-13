@@ -320,7 +320,9 @@ app.proto.init = function (model) {
             var pos = model.get('_page.doc.cy.nodes.'+ id + '.position');
 
 
+
             insertNode({id:id, position:pos,  sbgnclass: sbgnclass});
+
 
 
         }
@@ -340,8 +342,10 @@ app.proto.init = function (model) {
     });
 
     model.on('change', '_page.doc.cy.nodes.*.position', function(id, pos, prev, passed){
-        if(docReady && passed.user == null)
+        if(docReady && passed.user == null){
+
             updateElementProperty(id, 'position', pos, 'position');
+        }
 
 
     });
@@ -708,9 +712,7 @@ function insertNode(nodeData){
             var newNode = addRemoveUtilities.addNode(param.newNode.x, param.newNode.y, param.newNode.sbgnclass, nodeData.id);
 
 
-
-
-
+            cy.forceRender();
             updateServerGraph();
 
 
@@ -758,13 +760,27 @@ function updateElementProperty(elId, propName, propValue, propType){
                 el[propType](propName, propValue);
 
 
-            /*
+
+
              //TODO: correct resizing
-             if(propName == 'width')
-             el._private.style.width.value = propValue;
-             else if(propName == 'height')
-             el._private.style.height.value = propValue;
-             */
+             if(propName == 'width'){
+
+                 el[0]._private.style.width.value = propValue;
+                 el[0]._private.style.width.pxValue = propValue;
+                 el[0]._private.data.sbgnbbox.w = propValue;
+
+
+
+
+             }
+             else if(propName == 'height'){
+
+                 el[0]._private.style.height.value = propValue;
+                 el[0]._private.style.height.pxValue = propValue;
+                 el[0]._private.data.sbgnbbox.h = propValue;
+
+
+             }
 
 
             //update server graph

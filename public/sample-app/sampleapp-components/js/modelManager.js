@@ -54,11 +54,11 @@ module.exports =  function(model, docId, userId, userName) {
             model.set('_page.doc.layoutProperties', layoutProperties); //synclayout
 
         },
-        getSampleInd: function(){
+        getSampleInd: function(user){
             var ind = model.get('_page.doc.sampleInd');
             if(ind == null)
                 ind = "0";
-            this.setSampleInd(ind);
+            this.setSampleInd(ind, user);
 
             return ind;
 
@@ -111,12 +111,13 @@ module.exports =  function(model, docId, userId, userName) {
             }
 
         },
-        moveModelNode: function(nodeId, pos){
+        moveModelNode: function(nodeId, pos,user){
             var nodePath = model.at('_page.doc.cy.nodes.'  +nodeId);
             if(nodePath.get('id')){
+
                 // if(!node.selected) //selected nodes will still be highlighted even if they are freed
-                nodePath.set('highlightColor' , null);
-                nodePath.set('position' , pos);
+                model.pass({user:user}).set('_page.doc.cy.nodes.' +nodeId+ 'highlightColor' , null);
+                model.pass({user:user}).set('_page.doc.cy.nodes.' +nodeId+'position' , pos);
                 //this.updateServerGraph();
             }
 
@@ -128,12 +129,22 @@ module.exports =  function(model, docId, userId, userName) {
           //  var pos = {x: param.x, y: param.y};
 
 
-
             model.pass({user:user}).set('_page.doc.cy.nodes.' +nodeId+'.id', nodeId);
             model.pass({user:user}).set('_page.doc.cy.nodes.' +nodeId +'.position', {x: param.x, y: param.y});
 
+
+
             //Adding the node
             model.pass({user:user}).set('_page.doc.cy.nodes.' + nodeId+'.sbgnclass', param.sbgnclass);
+
+
+            model.pass({user:user}).set('_page.doc.cy.nodes.' + nodeId+'.width', 50);
+            model.pass({user:user}).set('_page.doc.cy.nodes.' + nodeId+'.height', 50);
+
+            //model.pass({user:user}).set('_page.doc.cy.nodes.' + nodeId+'.sbgnbboxW', 50);
+            //model.pass({user:user}).set('_page.doc.cy.nodes.' + nodeId+'.sbgnbboxH', 50);
+
+
 
             //Initialization
         /*    model.pass({user:user}).set('_page.doc.cy.nodes.' + node.id() +'.highlightColor', null);
@@ -271,6 +282,7 @@ module.exports =  function(model, docId, userId, userName) {
         initModel: function(jsonObj, nodes, edges, user){
 
             jsonObj.nodes.forEach(function(node){
+
                 model.set('_page.doc.cy.nodes.' + node.data.id + '.id', node.data.id);
                 model.pass({user:user}).set('_page.doc.cy.nodes.' + node.data.id + '.position', {x: node.data.sbgnbbox.x, y: node.data.sbgnbbox.y}); //initialize position
 
@@ -280,8 +292,6 @@ module.exports =  function(model, docId, userId, userName) {
             });
 
             nodes.forEach(function (node) {
-
-
 
                 node.addClass('changeBorderColor');
 

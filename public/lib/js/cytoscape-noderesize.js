@@ -18,6 +18,7 @@
             lines: 3,
             padding: 5,
             start: function (sourceNode) {
+
                 // fired when noderesize interaction starts (drag on handle)
             },
             complete: function (sourceNode, targetNodes, addedEntities) {
@@ -548,6 +549,7 @@
 
                             node.trigger('cynoderesize.start');
 
+
                             drawHandle(node);
 
                             node.trigger('cynoderesize.showhandle');
@@ -678,6 +680,7 @@
 
                     $container.cytoscape(function (e) {
                         var cy = this;
+
 
                         cy.$('#' + id).trigger('cynoderesize.forcestart');
                     });

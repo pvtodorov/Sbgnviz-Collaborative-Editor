@@ -10,12 +10,13 @@ var addRemoveUtilities = {
 //      'border-color': defaults['border-color'],
             'background-color': defaults['background-color'],
             'font-size': defaults['font-size'],
-            'background-opacity': defaults['background-opacity']
+            'background-opacity': defaults['background-opacity'],
         } : {};
 
         if(defaults && defaults.multimer){
             sbgnclass += " multimer";
         }
+
 
         //FUNDA added id
 

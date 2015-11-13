@@ -19803,10 +19803,14 @@ this.cytoscape = cytoscape;
 
     if( context.beginPath ){ context.beginPath(); }
 
+
     // Start at top middle
     context.moveTo(x, y - halfHeight);
+
+
     // Arc from middle top to right side
     context.arcTo(x + halfWidth, y - halfHeight, x + halfWidth, y, cornerRadius);
+
     // Arc from right side to bottom
     context.arcTo(x + halfWidth, y + halfHeight, x, y + halfHeight, cornerRadius);
     // Arc from bottom to left side
@@ -20221,7 +20225,6 @@ this.cytoscape = cytoscape;
             return;
           } else {
             var ele = r.hoverData.down;
-
             if( ele ){
               ele.trigger( new $$.Event(e, {
                 type: 'taphold',
@@ -22170,6 +22173,8 @@ this.cytoscape = cytoscape;
       },
 
       drawPath: function(context, centerX, centerY, width, height) {
+
+
         renderer.drawPolygonPath(context,
           centerX, centerY,
           width, height,
