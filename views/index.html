@@ -436,6 +436,7 @@
 
 
         <div id="sbgn-network-container"></div>
+
         <div id="sbgn-inspector"></div>
 
         <div id="sbgn-layout-table" title="Layout Properties">
@@ -772,6 +773,8 @@
 
 
 
+
+
     <div id ="chat-area">
         <div id = "users" as="container"  on-change = "onScroll()">
           <!--<ul id ="user-list" as = "list">-->
@@ -799,8 +802,9 @@
 
 
 
+
         <div id="messages" as="container" >
-        <ul id="messages-list" as="list">
+        <ul id="messages-list" as="list"  >
           {{each _page.list as #message}}
           <li><view name="chat-message"></view></li>
           {{/each}}
@@ -810,11 +814,16 @@
           <input id="inputs-name" value="{{users[_session.userId].name}}">
           <form id="inputs-form" on-submit="add()">
             <input id="inputs-comment"  value="{{_page.newComment}}" autofocus> <button>Send</button>
+                  <div class="filebutton">Send Image <input type="file" id="imagefile" accept="image/*" on-change = "uploadFile($event)" value = {{_page.newFile}}></div>
 
           </form>
         </div>
 
+
+        <div id = "receivedImage" onclick ="openImage()"></div>
+
     </div>
+
 
 
     <div id ="command-history-area">
@@ -830,10 +839,54 @@
       <!-- Scroll to bottom immediately on page render and on a resize. -->
 
 
+    <script type="text/javascript">
+        // Create the tooltips only on document load
+
+        //TODO image qtip is not working
+        $(document).ready(function() {
+            // Match all link elements with href attributes within the content div
+            $('#receivedImage').qtip({
+                content: { text:  'Your registered username'
+                },
+                show: {
+                    ready: true
+                },
+                style: {
+                    width: 250,
+                    tip: 'leftMiddle',
+                    color: 'white',
+                    background:'#66CC33',
+                    name: 'green'
+                },
+                position: {
+                    corner: {   target: 'rightMiddle',
+                        tooltip: 'leftMiddle'
+                    },
+                    adjust: { x: 20, y: 0 }
+
+                }
+            });
+        });
+    </script>
+
+
     <script>
 
+        function openImage(){
+            var largeImage = $('#receivedImage')[0];
+
+
+            var url=$('#receivedImage img')[0].src;
+            window.open(url,'Image','width=largeImage.stylewidth,height=largeImage.style.height,resizable=1');
+
+        }
+
+        //TODO: scroll to bottom doe4s not work
+
         function scrollToBottom(docId){
+            console.log(docId);
             document.getElementById(docId).scrollTop = document.getElementById(docId).scrollHeight;
+
         }
 
       (window.onresize = function() {
@@ -851,11 +904,13 @@
             scrollToBottom('messages');
 
         });
-        $('#messages-list').bind('DOMSubtreeModified', function(){
 
-            scrollToBottom('messages-list');
 
-        });
+//        $('#messages-list').bind('DOMSubtreeModified', function(){
+//
+//            scrollToBottom('messages-list');
+//
+//        });
 
 
 

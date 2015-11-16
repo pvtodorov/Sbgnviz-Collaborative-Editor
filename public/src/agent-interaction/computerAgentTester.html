@@ -52,9 +52,11 @@
 
 <div id = modelHistory>
 <ul id = 'operationHistory'  as="container" onchange = scrollToBottom('operationHistory')><b>Commands<br></b></ul>
-<ul id = 'chat' as="container"><b>Chat Messages<br></b></ul>
-<ul id = 'userList' as="container"><b>Online Users<br></b></ul>
+<ul id = 'chat' as="container" onchange = scrollToBottom('chat')><b>Chat Messages<br></b></ul>
+<ul id = 'userList' as="container" onchange = scrollToBottom('userList')><b>Online Users<br></b></ul>
+    <div id = "receivedImage" ></div>
 </div>
+
 
 </body>
 
@@ -68,6 +70,9 @@
     $('#operationHistory').bind('DOMSubtreeModified', function(){
         scrollToBottom('operationHistory');
     });
+
+
+
 
 
     var agent;

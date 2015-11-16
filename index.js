@@ -266,6 +266,7 @@ app.proto.init = function (model) {
 
 
 
+
     model.on('all', '_page.doc.cy.nodes.*', function(id, op, val, prev, passed){
 
 
@@ -530,6 +531,7 @@ app.proto.create = function (model) {
     var name = model.get('users.' + id +'.name');
     socket.emit("subscribeHuman", {userName:name, pageDoc: model.get('_page.doc'), room:  model.get('_page.room'), userId: id}); //subscribe to current doc as a new room
 
+
     socket.on('userList', function(userList) {
 
         var userIds =[];
@@ -541,6 +543,11 @@ app.proto.create = function (model) {
 
     });
 
+    socket.on('imageFile', function(data){
+
+
+        $('#receivedImage').append('<img src="' + data + '"/>');
+    })
 
     modelManager = require('./public/sample-app/sampleapp-components/js/modelManager.js')(model, model.get('_page.room'), model.get('_session.userId'),name );
 
@@ -579,7 +586,9 @@ app.proto.onScroll = function () {
     containerHeight = this.container.offsetHeight;
     scrollBottom = this.container.scrollTop + containerHeight;
 
+    console.log("here");
     return this.atBottom = bottom < containerHeight || scrollBottom > bottom - 10;
+
 };
 
 
@@ -591,10 +600,13 @@ app.proto.changeColorCode = function(){
 
 };
 
-app.proto.add = function () {
 
 
-    var model = this.model;
+app.proto.add = function (model) {
+
+    if(model == null)
+
+        model = this.model;
     this.atBottom = true;
 
     socket.emit('getTime', function(){}) ;
@@ -644,7 +656,25 @@ app.proto.add = function () {
 
 
 
+app.proto.uploadFile = function(evt){
+    var room = this.model.get('_page.room');
+    var fileStr = this.model.get("_page.newFile").split('\\');
+    var filePath = fileStr[fileStr.length-1];
 
+    var file = evt.target.files[0];
+
+    var reader = new FileReader();
+    reader.onload = function(evt){
+        socket.emit('imageFile', { img: evt.target.result,room: room});
+    };
+
+    reader.readAsDataURL(file);
+
+    //Add file name as a text message
+    this.model.set('_page.newComment', "Sent image: "  + filePath);
+    this.app.proto.add(this.model);
+
+};
 app.proto.count = function (value) {
     return Object.keys(value || {}).length;
 };

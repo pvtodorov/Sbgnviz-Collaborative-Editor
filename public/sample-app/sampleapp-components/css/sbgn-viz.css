@@ -365,6 +365,8 @@ img.sbgn-toolbar-element:hover {
 .menu-break-large {
     min-width: 8px !important;
 }
+
+
 #chat-area{
     position: absolute;
     /*width is updated dynamically*/
@@ -379,6 +381,16 @@ img.sbgn-toolbar-element:hover {
     border: 1px solid #dddddd;
 
 }
+
+#receivedImage{
+    position: absolute;
+    right: 10px;
+    width: 100px;
+    bottom: 20px;
+    height: 70px;
+
+}
+
 #users{
     position: absolute;
     overflow-y: auto;

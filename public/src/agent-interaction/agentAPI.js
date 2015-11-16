@@ -136,6 +136,13 @@
                 userList = data;
                 self.writeUserList();
             });
+
+            socket.on('imageFile', function(data){
+
+                self.writeImage(data);
+
+            })
+
         };
 
 
@@ -158,6 +165,7 @@
             this.writeUserList();
         };
 
+
         this.writeCommand = function(op){
             var command = "<b>" + op.userName + " (" + formatTime(op) + "): " + "</b>"  +op.name +  " " +op.id +  " " +JSON.stringify(op.param);
             $('#operationHistory').append("<li>" + command+ "</li>");
@@ -177,6 +185,13 @@
             userList.forEach(function(usr){
                 $('#userList').append("<li>" + usr.userName+ "</li>");
             });
+        }
+
+        this.writeImage = function(data){
+
+            $('#receivedImage').append('<img src="' + data + '"/>');
+
+
         }
 
     }

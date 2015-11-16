@@ -37,7 +37,7 @@ body {
     position: absolute;
     left: 36%;
     width: 62%;
-    height: 800px;
+    height: 900px;
     overflow-y: hidden;
 
 }
@@ -52,6 +52,20 @@ body {
     -webkit-overflow-scrolling: touch;
     overflow-y: scroll;
 
+}
+#receivedImage{
+    position: absolute;
+    left: 5px;
+    top: 760px;
+    height: 100px;
+    width: 100px;
+    border: 1px solid #dddddd;
+    overlow: hidden;
+}
+
+img{
+    height: 100px;
+    width: 100px;
 }
 
 
