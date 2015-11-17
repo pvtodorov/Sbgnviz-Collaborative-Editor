@@ -170,10 +170,13 @@
             var command = "<b>" + op.userName + " (" + formatTime(op) + "): " + "</b>"  +op.name +  " " +op.id +  " " +JSON.stringify(op.param);
             $('#operationHistory').append("<li>" + command+ "</li>");
 
+            $('#operationHistory').trigger('contentchanged');
+
         };
         this.writeMessage = function(msg){
             var htmlMessage = "<b>" + msg.userName + " (" + formatTime(msg) + "): "+ "</b>"  +msg.comment ;
             $('#chat').append("<li>" + htmlMessage+ "</li>");
+            $('#chat').trigger('contentchanged');
         };
         this.writeUser = function(usr){
             $('#userList').append("<li>" + usr.userName+ "</li>");

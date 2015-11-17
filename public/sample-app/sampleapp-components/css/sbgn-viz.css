@@ -154,6 +154,13 @@ open > .dropdown-menu {
     border: 2px solid #F7CAA9;
 }
 
+.qtip-image{
+    background-color:black;
+    border: black;
+    color: white;
+    font-size: medium;
+}
+
 #sbgn-network-container {
     position: absolute;
     /*margin: auto;*/

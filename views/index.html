@@ -47,6 +47,7 @@
 
     <script src="sample-app/sampleapp-components/js/sample-app-mode-handler.js"></script>
     <script src="sample-app/sampleapp-components/js/sample-app-helper-functions.js"></script>
+    <script src="scripts/webPageEditor.js"></script>
 
 
     <!--<div id = "sbgnviz">-->
@@ -803,7 +804,7 @@
 
 
 
-        <div id="messages" as="container" >
+        <div id="messages" as  = "content">
         <ul id="messages-list" as="list"  >
           {{each _page.list as #message}}
           <li><view name="chat-message"></view></li>
@@ -839,82 +840,7 @@
       <!-- Scroll to bottom immediately on page render and on a resize. -->
 
 
-    <script type="text/javascript">
-        // Create the tooltips only on document load
 
-        //TODO image qtip is not working
-        $(document).ready(function() {
-            // Match all link elements with href attributes within the content div
-            $('#receivedImage').qtip({
-                content: { text:  'Your registered username'
-                },
-                show: {
-                    ready: true
-                },
-                style: {
-                    width: 250,
-                    tip: 'leftMiddle',
-                    color: 'white',
-                    background:'#66CC33',
-                    name: 'green'
-                },
-                position: {
-                    corner: {   target: 'rightMiddle',
-                        tooltip: 'leftMiddle'
-                    },
-                    adjust: { x: 20, y: 0 }
-
-                }
-            });
-        });
-    </script>
-
-
-    <script>
-
-        function openImage(){
-            var largeImage = $('#receivedImage')[0];
-
-
-            var url=$('#receivedImage img')[0].src;
-            window.open(url,'Image','width=largeImage.stylewidth,height=largeImage.style.height,resizable=1');
-
-        }
-
-        //TODO: scroll to bottom doe4s not work
-
-        function scrollToBottom(docId){
-            console.log(docId);
-            document.getElementById(docId).scrollTop = document.getElementById(docId).scrollHeight;
-
-        }
-
-      (window.onresize = function() {
-          scrollToBottom('messages-list');
-          scrollToBottom('command-history-area');
-      })();
-
-        $('#command-history-area').bind('DOMSubtreeModified', function(){
-            scrollToBottom('command-history-area');
-
-        });
-
-        $('#messages').bind('DOMSubtreeModified', function(){
-
-            scrollToBottom('messages');
-
-        });
-
-
-//        $('#messages-list').bind('DOMSubtreeModified', function(){
-//
-//            scrollToBottom('messages-list');
-//
-//        });
-
-
-
-    </script>
 
     <audio id="notificationAudio" src="http://www.talkingwav.com/various/beep_02.wav" preload="auto"></audio>
 

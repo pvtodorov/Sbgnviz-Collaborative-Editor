@@ -63,14 +63,19 @@
 
 <script>
 
+
+
     function scrollToBottom(docId){
-        console.log("here");
         document.getElementById(docId).scrollTop = document.getElementById(docId).scrollHeight;
     }
-    $('#operationHistory').bind('DOMSubtreeModified', function(){
+    $('#operationHistory').bind('contentchanged', function(){
         scrollToBottom('operationHistory');
     });
 
+    $('#chat').bind('contentchanged', function(){
+        scrollToBottom('chat');
+
+    });
 
 
 

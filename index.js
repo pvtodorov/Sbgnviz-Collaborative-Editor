@@ -236,6 +236,13 @@ function getNewColor(){
 
 }
 
+
+function triggerContentChange(divId){
+    //TODO: triggering here is not good
+
+    $(('#' + divId)).trigger('contentchanged');
+
+}
 function playSound() {
     try {
         document.getElementById('notificationAudio').play();
@@ -490,6 +497,11 @@ app.proto.init = function (model) {
     });
 
 
+    model.on('all', '_page.doc.history', function(){
+        if(docReady)
+            triggerContentChange('command-history-area');
+    });
+
     model.on('insert', '_page.list', function (index) {
 
 
@@ -497,6 +509,8 @@ app.proto.init = function (model) {
         var myId = model.get('_session.userId');
 
 
+        if(docReady)
+            triggerContentChange('messages');
 
         if (com[com.length - 1].userId != myId) {
 
@@ -544,7 +558,6 @@ app.proto.create = function (model) {
     });
 
     socket.on('imageFile', function(data){
-
 
         $('#receivedImage').append('<img src="' + data + '"/>');
     })
@@ -645,6 +658,7 @@ app.proto.add = function (model) {
             //  time: +(new Date)
             time: val
         });
+
 
 
 
