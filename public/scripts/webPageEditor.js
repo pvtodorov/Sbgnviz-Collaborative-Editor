@@ -1,7 +1,7 @@
 /**
  * Created by funda on 11/17/15.
  */
-        // Create the tooltips only on document load
+    // Create the tooltips only on document load
 
 //TODO image qtip is not working
 $(document).ready(function() {

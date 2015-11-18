@@ -538,16 +538,15 @@ module.exports.createCompoundForSelectedNodes = function(param) {
 
     module.exports.modelManager.addModelNode(newCompound.id(), {x: newCompound._private.position.x, y: newCompound._private.position.y, sbgnclass: param.compoundType}, "me");
 
-    var newParam = {ele: newCompound, data: newCompound.width()};
-    module.exports.modelManager.changeModelNodeAttribute('width', newParam, "me");
-    newParam = {ele: newCompound, data: newCompound.height()};
-    module.exports.modelManager.changeModelNodeAttribute('height', newParam, "me");
+
+    module.exports.modelManager.changeModelNodeAttribute('width', newCompoundId, newCompound.width(),  "me");
+    module.exports.modelManager.changeModelNodeAttribute('height', newCompoundId, newCompound.height() , "me");
 
 
     nodesToMakeCompound.forEach(function(node){
-        module.exports.modelManager.changeModelNodeAttribute('sbgnbboxW', {ele: node, data: newCompound.width()}, "me");
-        module.exports.modelManager.changeModelNodeAttribute('sbgnbboxH', {ele: node, data: newCompound.height()}, "me");
-        module.exports.modelManager.changeModelNodeAttribute('parent', {ele: node, data: node.data('parent')}, "me");
+        module.exports.modelManager.changeModelNodeAttribute('sbgnbboxW', node.id(), newCompound.width(), "me");
+        module.exports.modelManager.changeModelNodeAttribute('sbgnbboxH', node.id(), newCompound.height(), "me");
+        module.exports.modelManager.changeModelNodeAttribute('parent',node.id(), node.data('parent'), "me");
     });
 
     module.exports.updateServerGraph();
@@ -588,11 +587,11 @@ module.exports.resizeNode = function(param) {
 
 
 
-    param.data = param.width;
-    module.exports.modelManager.changeModelNodeAttribute('width', param, "me");
 
-    param.data = param.height;
-    module.exports.modelManager.changeModelNodeAttribute('height', param, "me");
+    module.exports.modelManager.changeModelNodeAttribute('width', ele.id(), param.width, "me");
+
+
+    module.exports.modelManager.changeModelNodeAttribute('height', ele.id(), param.height, "me");
     module.exports.updateServerGraph();
 
     //}
@@ -609,7 +608,7 @@ module.exports.changeNodeLabel = function(param) {
 
     node._private.data.sbgnlabel = param.data;
 
-    module.exports.modelManager.changeModelNodeAttribute('sbgnlabel', param, "me");
+    module.exports.modelManager.changeModelNodeAttribute('sbgnlabel', node.id(), param.data, "me");
     module.exports.updateServerGraph();
     cy.forceRender();
     return result;
@@ -637,7 +636,7 @@ module.exports.changeStateVariable = function(param) {
     statesAndInfos[ind] = state;
 
     param.data = statesAndInfos;
-    module.exports.modelManager.changeModelNodeAttribute('sbgnStatesAndInfos', param, "me", param.state );
+    module.exports.modelManager.changeModelNodeAttribute('sbgnStatesAndInfos', param.ele.id(), param.data, "me", param.state );
     module.exports.updateServerGraph();
     return result;
 }
@@ -662,7 +661,7 @@ module.exports.changeUnitOfInformation = function(param) {
 
     param.data = statesAndInfos;
 
-    module.exports.modelManager.changeModelNodeAttribute('sbgnStatesAndInfos', param, "me", param.state);
+    module.exports.modelManager.changeModelNodeAttribute('sbgnStatesAndInfos', param.ele.id(), param.data, "me", param.state);
     module.exports.updateServerGraph();
 
     return result;
@@ -677,7 +676,7 @@ module.exports.addStateAndInfo = function(param) {
     relocateStateAndInfos(statesAndInfos);
 
     param.data = statesAndInfos;
-    module.exports.modelManager.changeModelNodeAttribute('sbgnStatesAndInfos', param, "me", param.obj );
+    module.exports.modelManager.changeModelNodeAttribute('sbgnStatesAndInfos', param.ele.id(), param.data, "me", param.obj );
     module.exports.updateServerGraph();
     param.ele.unselect(); //to refresh inspector
     param.ele.select(); //to refresh inspector
@@ -700,7 +699,7 @@ module.exports.removeStateAndInfo = function(param) {
     relocateStateAndInfos(statesAndInfos);
 
     param.data = statesAndInfos;
-    module.exports.modelManager.changeModelNodeAttribute('sbgnStatesAndInfos', param, "me", param.state);
+    module.exports.modelManager.changeModelNodeAttribute('sbgnStatesAndInfos', param.ele.id(), param.data, "me", param.state);
     module.exports.updateServerGraph();
     param.ele.unselect(); //to refresh inspector
     param.ele.select(); //to refresh inspector
@@ -738,7 +737,7 @@ module.exports.changeIsMultimerStatus = function(param) {
     };
 
 
-    module.exports.modelManager.changeModelNodeAttribute('isMultimer', param, "me");
+    module.exports.modelManager.changeModelNodeAttribute('isMultimer', param.ele.id(), param.data, "me");
     module.exports.updateServerGraph();
     return result;
 }
@@ -758,7 +757,7 @@ module.exports.changeIsCloneMarkerStatus = function(param) {
         ele: node
     };
 
-    module.exports.modelManager.changeModelNodeAttribute('isCloneMarker', param);
+    module.exports.modelManager.changeModelNodeAttribute('isCloneMarker', param.ele.id(), param.data);
     module.exports.updateServerGraph();
     return result;
 }
@@ -782,9 +781,9 @@ module.exports.changeStyleData = function( param) {
     //}
 
     if(ele.isNode())
-        module.exports.modelManager.changeModelNodeAttribute(param.modelDataName, param, "me");
+        module.exports.modelManager.changeModelNodeAttribute(param.modelDataName, param.ele.id(), param.data, "me");
     else
-        module.exports.modelManager.changeModelEdgeAttribute(param.modelDataName, param, "me");
+        module.exports.modelManager.changeModelEdgeAttribute(param.modelDataName, param.ele.id(), param.data, "me");
 
     module.exports.updateServerGraph();
     return result;
@@ -810,9 +809,9 @@ module.exports.changeStyleCss = function(param) {
     //}
 
     if(ele.isNode())
-        module.exports.modelManager.changeModelNodeAttribute(param.modelDataName, param, "me");
+        module.exports.modelManager.changeModelNodeAttribute(param.modelDataName, param.ele.id(), param.ele.data, "me");
     else
-        module.exports.modelManager.changeModelEdgeAttribute(param.modelDataName, param, "me");
+        module.exports.modelManager.changeModelEdgeAttribute(param.modelDataName, param.ele.id(), param.ele.data, "me");
 
     module.exports.updateServerGraph();
     return result;

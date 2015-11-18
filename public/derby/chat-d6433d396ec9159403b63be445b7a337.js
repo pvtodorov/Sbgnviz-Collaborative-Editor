@@ -926,8 +926,8 @@ function App(derby, name, filename) {
   this.derby = derby;
   this.name = name;
   this.filename = filename;
-  this.scriptHash = 'a77a69ea160c8e832da6d3ad81f50613';
-  this.bundledAt = 1447782177724;
+  this.scriptHash = 'd6433d396ec9159403b63be445b7a337';
+  this.bundledAt = 1447884001711;
   this.Page = createAppPage();
   this.proto = this.Page.prototype;
   this.views = new derbyTemplates.templates.Views();
@@ -22405,7 +22405,7 @@ module.exports = function( model){
 
 function coordinateRound(coordinate, decimals) {
 
-    var newC = {'x': preciseRound(coordinate.x, decimals),'y': preciseRound(coordinate.x, decimals)};
+    var newC = {'x': preciseRound(coordinate.x, decimals),'y': preciseRound(coordinate.y, decimals)};
     return newC;
 }
 
@@ -22515,8 +22515,10 @@ module.exports =  function(model, docId, userId, userName) {
             if(nodePath.get('id')){
 
                 // if(!node.selected) //selected nodes will still be highlighted even if they are freed
-                model.pass({user:user}).set('_page.doc.cy.nodes.' +nodeId+ 'highlightColor' , null);
-                model.pass({user:user}).set('_page.doc.cy.nodes.' +nodeId+'position' , pos);
+                model.pass({user:user}).set('_page.doc.cy.nodes.' +nodeId+ '.highlightColor' , null);
+                model.pass({user:user}).set('_page.doc.cy.nodes.' +nodeId +'.position' , pos);
+
+
                 //this.updateServerGraph();
             }
 
@@ -22560,6 +22562,8 @@ module.exports =  function(model, docId, userId, userName) {
         },
 
 
+        //attStr: attribute namein the model
+        //historyData is for  sbgnStatesAndInfos only
         changeModelNodeAttribute: function(attStr, param, user, historyData){
 
             var nodePath = model.at('_page.doc.cy.nodes.'  + param.ele.id());
@@ -24815,4 +24819,4 @@ function SBGNProperties(){
 },{"./EditorActionsManager.js":84,"./sample-app-cytoscape-sbgn.js":87}]},{},[82,1])
 
 
-//# sourceMappingURL=/derby/chat-a77a69ea160c8e832da6d3ad81f50613.map.json
+//# sourceMappingURL=/derby/chat-d6433d396ec9159403b63be445b7a337.map.json

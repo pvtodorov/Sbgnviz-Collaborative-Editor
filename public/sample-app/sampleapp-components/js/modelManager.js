@@ -6,7 +6,7 @@
 
 function coordinateRound(coordinate, decimals) {
 
-    var newC = {'x': preciseRound(coordinate.x, decimals),'y': preciseRound(coordinate.x, decimals)};
+    var newC = {'x': preciseRound(coordinate.x, decimals),'y': preciseRound(coordinate.y, decimals)};
     return newC;
 }
 
@@ -116,8 +116,10 @@ module.exports =  function(model, docId, userId, userName) {
             if(nodePath.get('id')){
 
                 // if(!node.selected) //selected nodes will still be highlighted even if they are freed
-                model.pass({user:user}).set('_page.doc.cy.nodes.' +nodeId+ 'highlightColor' , null);
-                model.pass({user:user}).set('_page.doc.cy.nodes.' +nodeId+'position' , pos);
+                model.pass({user:user}).set('_page.doc.cy.nodes.' +nodeId+ '.highlightColor' , null);
+                model.pass({user:user}).set('_page.doc.cy.nodes.' +nodeId +'.position' , pos);
+
+
                 //this.updateServerGraph();
             }
 
@@ -161,18 +163,19 @@ module.exports =  function(model, docId, userId, userName) {
         },
 
 
-        changeModelNodeAttribute: function(attStr, param, user, historyData){
+        //attStr: attribute namein the model
+        //historyData is for  sbgnStatesAndInfos only
+        changeModelNodeAttribute: function(attStr, nodeId, attVal,  user, historyData){
 
-            var nodePath = model.at('_page.doc.cy.nodes.'  + param.ele.id());
+            var nodePath = model.at('_page.doc.cy.nodes.'  + nodeId);
             if(nodePath.get('id'))
-                nodePath.pass({user:user}).set(attStr, param.data);
+                nodePath.pass({user:user}).set(attStr,attVal);
 
-         //   this.updateServerGraph();
 
             if(historyData == null) //historydata is about statesAndInfos
-                this.updateHistory(attStr, param.ele.id(), param.data);
+                this.updateHistory(attStr, nodeId, attVal);
             else
-                this.updateHistory(attStr, param.ele.id(), historyData);
+                this.updateHistory(attStr, nodeId, historyData);
 
 
         },
@@ -200,12 +203,12 @@ module.exports =  function(model, docId, userId, userName) {
 
         },
 
-        changeModelEdgeAttribute: function(attStr, param, user){
-            var edgePath = model.at('_page.doc.cy.edges.'  + param.ele.id());
+        changeModelEdgeAttribute: function(attStr, edgeId, attVal,  user){
+            var edgePath = model.at('_page.doc.cy.edges.'  + edgeId);
             if(edgePath.get('id'))
-                edgePath.pass({user:user}).set(attStr, param.data);
+                edgePath.pass({user:user}).set(attStr, attVal);
 
-            this.updateHistory(attStr, param.ele.id(), param.data);
+            this.updateHistory(attStr, edgeId, attVal);
 
         },
 

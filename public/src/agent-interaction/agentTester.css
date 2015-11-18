@@ -4,6 +4,7 @@ body {
 
     overflow-x: hidden;
     overflow-y: hidden;
+    font-family: "Helvetica Neue Light", "Lucida Grande", "Calibri", "Arial", sans-serif;
 
 }
 #serverIpForm {
@@ -19,22 +20,39 @@ body {
     width: 400px;
 
 }
+
+#posX, #posY, #newPosX, #newPosY,#borderWidth {
+    width: 70px;
+}
+#sbgnclass,#nodeId {
+    width: 100px;
+    padding: 1px;
+    margin: 5px;
+}
+
 #agentName {
     padding-left: 5px;
     width: 100px;
 }
 #agentOperations{
     position: absolute;
-    padding-left: 5px;
-    border: 1px solid #dddddd;
+    /*padding-left: 5px;*/
+    padding: 5px;
+    border: 2px groove #dddddd;
+    border-radius: 25px;
     margin: 5px;
     left: 0px;
+    height: 900px;
     width: 35%;
 }
 
 #modelHistory{
-    border: 1px solid #dddddd;
     position: absolute;
+    padding: 5px;
+    margin: 5px;
+    border: 2px groove #dddddd;
+    border-radius: 25px;
+
     left: 36%;
     width: 62%;
     height: 900px;
@@ -45,7 +63,8 @@ body {
 #operationHistory {
 
     position: absolute;
-    width: 600px;
+
+    width: 500px;
     line-height: 150%;
     left: 5px;
     height: 750px;
@@ -55,11 +74,12 @@ body {
 }
 #receivedImage{
     position: absolute;
-    left: 5px;
+    left: 550px;
     top: 760px;
     height: 100px;
     width: 100px;
-    border: 1px solid #dddddd;
+    /*border: 1px groove #dddddd;*/
+
     overlow: hidden;
 }
 
@@ -71,8 +91,9 @@ img{
 
 #chat{
     position: absolute;
-    width: 400px;
-    left: 650px;
+
+    width: 250px;
+    left: 550px;
     height: 750px;
     overflow-y: scroll;
     line-height: 150%;
@@ -83,7 +104,8 @@ img{
 
 #userList{
     position:absolute;
-    left: 1100px;
+
+    left: 850px;
     width: 200px;
     height: 750px;
     overflow-y: scroll;
