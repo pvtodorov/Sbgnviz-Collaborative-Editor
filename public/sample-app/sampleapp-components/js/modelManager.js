@@ -33,6 +33,7 @@ module.exports =  function(model, docId, userId, userName) {
 
            model.fetch('users', userId, function(err){
                user.set('name', userName);
+
            });
 
         },
@@ -335,8 +336,19 @@ module.exports =  function(model, docId, userId, userName) {
                     else
                         nodePath.pass({user: user}).set('backgroundColor', node.css('background-color'));
 
+                    var sbgnlabel = nodePath.get('sbgnlabel');
+
+                    if (sbgnlabel != null)
+                        node.data('sbgnlabel', sbgnlabel );
+
+                    else
+                        nodePath.pass({user: user}).set('sbgnlabel', node.data('sbgnlabel'));
+
+
+
 
                     var isCloneMarker = nodePath.get('isCloneMarker');
+
 
                     if (isCloneMarker != null)
                         node.data('sbgnclonemarker', isCloneMarker ? true : undefined);

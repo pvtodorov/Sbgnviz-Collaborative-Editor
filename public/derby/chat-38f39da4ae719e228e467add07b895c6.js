@@ -545,10 +545,7 @@ app.proto.create = function (model) {
 
     var id = model.get('_session.userId');
     var name = model.get('users.' + id +'.name');
-    socket.emit("subscribeHuman", {userName:name, pageDoc: model.get('_page.doc'), room:  model.get('_page.room'), userId: id}); //subscribe to current doc as a new room
-
-
-    socket.on('userList', function(userList) {
+    socket.emit("subscribeHuman", {userName:name, pageDoc: model.get('_page.doc'), room:  model.get('_page.room'), userId: id}, function(userList){
 
         var userIds =[];
         userList.forEach(function(user){
@@ -556,8 +553,9 @@ app.proto.create = function (model) {
         });
 
         model.set('_page.userIds', userIds );
+    }); //subscribe to current doc as a new room
 
-    });
+
 
     socket.on('imageFile', function(data){
 
@@ -859,6 +857,7 @@ function updateMultimerStatus(elId, isMultimer){
                 node.data('sbgnclass', sbgnclass.replace(' multimer', ''));
             }
 
+            cy.forceRender();
             updateServerGraph();
         }
 
@@ -873,12 +872,16 @@ function updateCloneMarkerStatus(elId, isCloneMarker){
     setTimeout(function(){
 
         try{
-            var node = cy.$(('#' + elId));
+            var node = cy.$(('#' + elId))[0];
 
 
-            node.data('sbgnclonemarker', isCloneMarker?true:undefined);
 
-            //    node._private.data.sbgnclonemarker = isCloneMarker?true:undefined;
+
+            //node.data('sbgnclonemarker', isCloneMarker?true:undefined);
+            node._private.data.sbgnclonemarker = isCloneMarker?true:undefined;
+
+            cy.forceRender();
+
 
             updateServerGraph();
 
@@ -926,8 +929,8 @@ function App(derby, name, filename) {
   this.derby = derby;
   this.name = name;
   this.filename = filename;
-  this.scriptHash = 'd6433d396ec9159403b63be445b7a337';
-  this.bundledAt = 1447884001711;
+  this.scriptHash = '38f39da4ae719e228e467add07b895c6';
+  this.bundledAt = 1447972153371;
   this.Page = createAppPage();
   this.proto = this.Page.prototype;
   this.views = new derbyTemplates.templates.Views();
@@ -21634,16 +21637,15 @@ module.exports.createCompoundForSelectedNodes = function(param) {
 
     module.exports.modelManager.addModelNode(newCompound.id(), {x: newCompound._private.position.x, y: newCompound._private.position.y, sbgnclass: param.compoundType}, "me");
 
-    var newParam = {ele: newCompound, data: newCompound.width()};
-    module.exports.modelManager.changeModelNodeAttribute('width', newParam, "me");
-    newParam = {ele: newCompound, data: newCompound.height()};
-    module.exports.modelManager.changeModelNodeAttribute('height', newParam, "me");
+
+    module.exports.modelManager.changeModelNodeAttribute('width', newCompoundId, newCompound.width(),  "me");
+    module.exports.modelManager.changeModelNodeAttribute('height', newCompoundId, newCompound.height() , "me");
 
 
     nodesToMakeCompound.forEach(function(node){
-        module.exports.modelManager.changeModelNodeAttribute('sbgnbboxW', {ele: node, data: newCompound.width()}, "me");
-        module.exports.modelManager.changeModelNodeAttribute('sbgnbboxH', {ele: node, data: newCompound.height()}, "me");
-        module.exports.modelManager.changeModelNodeAttribute('parent', {ele: node, data: node.data('parent')}, "me");
+        module.exports.modelManager.changeModelNodeAttribute('sbgnbboxW', node.id(), newCompound.width(), "me");
+        module.exports.modelManager.changeModelNodeAttribute('sbgnbboxH', node.id(), newCompound.height(), "me");
+        module.exports.modelManager.changeModelNodeAttribute('parent',node.id(), node.data('parent'), "me");
     });
 
     module.exports.updateServerGraph();
@@ -21684,11 +21686,11 @@ module.exports.resizeNode = function(param) {
 
 
 
-    param.data = param.width;
-    module.exports.modelManager.changeModelNodeAttribute('width', param, "me");
 
-    param.data = param.height;
-    module.exports.modelManager.changeModelNodeAttribute('height', param, "me");
+    module.exports.modelManager.changeModelNodeAttribute('width', ele.id(), param.width, "me");
+
+
+    module.exports.modelManager.changeModelNodeAttribute('height', ele.id(), param.height, "me");
     module.exports.updateServerGraph();
 
     //}
@@ -21705,7 +21707,7 @@ module.exports.changeNodeLabel = function(param) {
 
     node._private.data.sbgnlabel = param.data;
 
-    module.exports.modelManager.changeModelNodeAttribute('sbgnlabel', param, "me");
+    module.exports.modelManager.changeModelNodeAttribute('sbgnlabel', node.id(), param.data, "me");
     module.exports.updateServerGraph();
     cy.forceRender();
     return result;
@@ -21733,7 +21735,7 @@ module.exports.changeStateVariable = function(param) {
     statesAndInfos[ind] = state;
 
     param.data = statesAndInfos;
-    module.exports.modelManager.changeModelNodeAttribute('sbgnStatesAndInfos', param, "me", param.state );
+    module.exports.modelManager.changeModelNodeAttribute('sbgnStatesAndInfos', param.ele.id(), param.data, "me", param.state );
     module.exports.updateServerGraph();
     return result;
 }
@@ -21758,7 +21760,7 @@ module.exports.changeUnitOfInformation = function(param) {
 
     param.data = statesAndInfos;
 
-    module.exports.modelManager.changeModelNodeAttribute('sbgnStatesAndInfos', param, "me", param.state);
+    module.exports.modelManager.changeModelNodeAttribute('sbgnStatesAndInfos', param.ele.id(), param.data, "me", param.state);
     module.exports.updateServerGraph();
 
     return result;
@@ -21773,7 +21775,7 @@ module.exports.addStateAndInfo = function(param) {
     relocateStateAndInfos(statesAndInfos);
 
     param.data = statesAndInfos;
-    module.exports.modelManager.changeModelNodeAttribute('sbgnStatesAndInfos', param, "me", param.obj );
+    module.exports.modelManager.changeModelNodeAttribute('sbgnStatesAndInfos', param.ele.id(), param.data, "me", param.obj );
     module.exports.updateServerGraph();
     param.ele.unselect(); //to refresh inspector
     param.ele.select(); //to refresh inspector
@@ -21796,7 +21798,7 @@ module.exports.removeStateAndInfo = function(param) {
     relocateStateAndInfos(statesAndInfos);
 
     param.data = statesAndInfos;
-    module.exports.modelManager.changeModelNodeAttribute('sbgnStatesAndInfos', param, "me", param.state);
+    module.exports.modelManager.changeModelNodeAttribute('sbgnStatesAndInfos', param.ele.id(), param.data, "me", param.state);
     module.exports.updateServerGraph();
     param.ele.unselect(); //to refresh inspector
     param.ele.select(); //to refresh inspector
@@ -21834,28 +21836,33 @@ module.exports.changeIsMultimerStatus = function(param) {
     };
 
 
-    module.exports.modelManager.changeModelNodeAttribute('isMultimer', param, "me");
+    module.exports.modelManager.changeModelNodeAttribute('isMultimer', param.ele.id(), param.data, "me");
     module.exports.updateServerGraph();
     return result;
 }
-//FUNDA: changed param.node to param.ele
+
 module.exports.changeIsCloneMarkerStatus = function(param) {
     var node = param.ele;
     var makeCloneMarker = param.data;
-    //node._private.data.sbgnclonemarker = makeCloneMarker?true:undefined;
+    node._private.data.sbgnclonemarker = makeCloneMarker?true:undefined;
 
-    node.data('sbgnclonemarker', makeCloneMarker?true:undefined);
+    //node.data('sbgnclonemarker', (makeCloneMarker?true:undefined)); //is not working in this case
+
     //cy.forceRender();
     if (cy.elements(":selected").length == 1 && cy.elements(":selected")[0] == param.ele) {
         $('#inspector-is-clone-marker').attr('checked', makeCloneMarker);
     }
+
+    module.exports.modelManager.changeModelNodeAttribute('isCloneMarker', param.ele.id(), param.data);
+    module.exports.updateServerGraph();
+
+    //result is for undo operation
     var result = {
         data: !makeCloneMarker,
         ele: node
     };
 
-    module.exports.modelManager.changeModelNodeAttribute('isCloneMarker', param);
-    module.exports.updateServerGraph();
+
     return result;
 }
 
@@ -21878,9 +21885,9 @@ module.exports.changeStyleData = function( param) {
     //}
 
     if(ele.isNode())
-        module.exports.modelManager.changeModelNodeAttribute(param.modelDataName, param, "me");
+        module.exports.modelManager.changeModelNodeAttribute(param.modelDataName, param.ele.id(), param.data, "me");
     else
-        module.exports.modelManager.changeModelEdgeAttribute(param.modelDataName, param, "me");
+        module.exports.modelManager.changeModelEdgeAttribute(param.modelDataName, param.ele.id(), param.data, "me");
 
     module.exports.updateServerGraph();
     return result;
@@ -21906,9 +21913,9 @@ module.exports.changeStyleCss = function(param) {
     //}
 
     if(ele.isNode())
-        module.exports.modelManager.changeModelNodeAttribute(param.modelDataName, param, "me");
+        module.exports.modelManager.changeModelNodeAttribute(param.modelDataName, param.ele.id(), param.ele.data, "me");
     else
-        module.exports.modelManager.changeModelEdgeAttribute(param.modelDataName, param, "me");
+        module.exports.modelManager.changeModelEdgeAttribute(param.modelDataName, param.ele.id(), param.ele.data, "me");
 
     module.exports.updateServerGraph();
     return result;
@@ -22432,6 +22439,7 @@ module.exports =  function(model, docId, userId, userName) {
 
            model.fetch('users', userId, function(err){
                user.set('name', userName);
+
            });
 
         },
@@ -22564,18 +22572,17 @@ module.exports =  function(model, docId, userId, userName) {
 
         //attStr: attribute namein the model
         //historyData is for  sbgnStatesAndInfos only
-        changeModelNodeAttribute: function(attStr, param, user, historyData){
+        changeModelNodeAttribute: function(attStr, nodeId, attVal,  user, historyData){
 
-            var nodePath = model.at('_page.doc.cy.nodes.'  + param.ele.id());
+            var nodePath = model.at('_page.doc.cy.nodes.'  + nodeId);
             if(nodePath.get('id'))
-                nodePath.pass({user:user}).set(attStr, param.data);
+                nodePath.pass({user:user}).set(attStr,attVal);
 
-         //   this.updateServerGraph();
 
             if(historyData == null) //historydata is about statesAndInfos
-                this.updateHistory(attStr, param.ele.id(), param.data);
+                this.updateHistory(attStr, nodeId, attVal);
             else
-                this.updateHistory(attStr, param.ele.id(), historyData);
+                this.updateHistory(attStr, nodeId, historyData);
 
 
         },
@@ -22603,12 +22610,12 @@ module.exports =  function(model, docId, userId, userName) {
 
         },
 
-        changeModelEdgeAttribute: function(attStr, param, user){
-            var edgePath = model.at('_page.doc.cy.edges.'  + param.ele.id());
+        changeModelEdgeAttribute: function(attStr, edgeId, attVal,  user){
+            var edgePath = model.at('_page.doc.cy.edges.'  + edgeId);
             if(edgePath.get('id'))
-                edgePath.pass({user:user}).set(attStr, param.data);
+                edgePath.pass({user:user}).set(attStr, attVal);
 
-            this.updateHistory(attStr, param.ele.id(), param.data);
+            this.updateHistory(attStr, edgeId, attVal);
 
         },
 
@@ -22735,8 +22742,19 @@ module.exports =  function(model, docId, userId, userName) {
                     else
                         nodePath.pass({user: user}).set('backgroundColor', node.css('background-color'));
 
+                    var sbgnlabel = nodePath.get('sbgnlabel');
+
+                    if (sbgnlabel != null)
+                        node.data('sbgnlabel', sbgnlabel );
+
+                    else
+                        nodePath.pass({user: user}).set('sbgnlabel', node.data('sbgnlabel'));
+
+
+
 
                     var isCloneMarker = nodePath.get('isCloneMarker');
+
 
                     if (isCloneMarker != null)
                         node.data('sbgnclonemarker', isCloneMarker ? true : undefined);
@@ -24819,4 +24837,4 @@ function SBGNProperties(){
 },{"./EditorActionsManager.js":84,"./sample-app-cytoscape-sbgn.js":87}]},{},[82,1])
 
 
-//# sourceMappingURL=/derby/chat-d6433d396ec9159403b63be445b7a337.map.json
+//# sourceMappingURL=/derby/chat-38f39da4ae719e228e467add07b895c6.map.json

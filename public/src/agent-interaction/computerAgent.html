@@ -37,10 +37,15 @@
 </form>
 <br>
     <!-- Node operations-->
-<form>
+<form id = "nodeOperations">
     <!--Id : <input id = "delNodeId"  >-->
-    Node Id: <select name="Id" id = "nodeId" >
+    <b>Node Id </b>: <select name="Id" id = "nodeId" >
     </select>
+
+    <br><br>
+    <input id = "sbgnlabel">
+    <input type="button" value="Update node label" onclick=changeNodeAttribute("sbgnlabel")>
+
 
     <br><br>
     <input type="button" value="Delete node" onclick=deleteNode()>
@@ -48,6 +53,15 @@
     Pos x : <input type = "number" id = "newPosX">
     Pos y : <input type = "number" id = "newPosY">
     <input type="button" value="Move node" onclick=moveNode()>
+
+    <br><br>
+
+    <input id = "width" type = "number">
+    <input type="button" value="Update node width" onclick=changeNodeAttribute("width")>
+
+
+    <input id = "height" type = "number">
+    <input type="button" value="Update node height" onclick=changeNodeAttribute("height")>
 
 
     <br><br>
@@ -63,10 +77,17 @@
     <input type="button" value="Update border width" onclick=changeNodeAttribute("borderWidth")>
 
 
-    </select>
+    <br><br>
+    Update clone marker status <input id = "isCloneMarker" type="checkbox"  onclick=changeNodeAttribute("isCloneMarker")>
+
+    <br><br>
+    Update multimer status <input id = "isMultimer" type="checkbox"  onclick=changeNodeAttribute("isMultimer")>
 
 
-    <form>
+
+
+
+    </form>
 <br><br>
 
 </div>
@@ -92,6 +113,12 @@
         createAgent();
 
 
+        $('#agentName').change(function(){
+            agent.changeName($('#agentName')[0].value);
+
+
+
+        });
 
         $('#operationHistory').bind('contentchanged', function(){
             scrollToBottom('operationHistory');
@@ -115,9 +142,24 @@
         $('#nodeId').change(function(){
             $('#newPosX')[0].value = preciseRound(agent.getNodeList()[$('#nodeId')[0].value].position.x, 3);
             $('#newPosY')[0].value = preciseRound(agent.getNodeList()[$('#nodeId')[0].value].position.y,3);
+            $('#width')[0].value = preciseRound(agent.getNodeList()[$('#nodeId')[0].value].width,3);
+            $('#height')[0].value = preciseRound(agent.getNodeList()[$('#nodeId')[0].value].height,3);
             $('#borderWidth')[0].value = agent.getNodeList()[$('#nodeId')[0].value].borderWidth;
             $('#borderColor')[0].value = agent.getNodeList()[$('#nodeId')[0].value].borderColor;
             $('#backgroundColor')[0].value = agent.getNodeList()[$('#nodeId')[0].value].backgroundColor;
+            $('#sbgnlabel')[0].value = agent.getNodeList()[$('#nodeId')[0].value].sbgnlabel;
+
+
+            if(agent.getNodeList()[$('#nodeId')[0].value].isCloneMarker)
+                $('#isCloneMarker').attr('checked', 'checked');
+            else
+                $('#isCloneMarker').attr('checked', false);
+
+
+            if(agent.getNodeList()[$('#nodeId')[0].value].isMultimer)
+                $('#isMultimer').attr('checked', 'checked');
+            else
+                $('#isMultimer').attr('checked', false);
         });
 
     }
@@ -148,13 +190,16 @@
         var socket = agent.connectToServer(serverIp);
 
 
+
         socket.on('connect', function(){
+
             agent.getModel(function() {
+
                 agent.updateNextAgentNodeId();
                 agent.getOperationHistory(function(){
 
                     agent.getChatHistory(function(){
-                        agent.getUserList(function(){
+                        //agent.getUserList(function(){
                             //Write history
                                 if(agent.opHistory != null){
                                     agent.opHistory.forEach(function(op){
@@ -169,12 +214,11 @@
                                     };
                                 }
 
-
                             fillNodeIds('nodeId');
 
                             //User list is updated in listen() method
 
-                        });
+                      //  });
                     });
                 });
             });
@@ -203,8 +247,9 @@
     }
 
 
-    //Agent requests and operations
-
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Agent requests and operations
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     function updateModel(callback){
         agent.getModel(callback);
 
@@ -244,19 +289,33 @@
         var id = $('#nodeId')[0].value;
         var val = $('#' + attDiv)[0].value;
 
+        if(attDiv == 'isCloneMarker')
+            val = ($('#isCloneMarker').attr('checked') == 'checked');
+
+        else if(attDiv == 'isMultimer')
+            val = ($('#isMultimer').attr('checked') == 'checked');
 
         agent.sendRequest("agentChangeNodeAttributeRequest", {id:id, attStr:attDiv, attVal: val});
     }
 
-
-    //Page editing
-
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///Page editing
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     function fillNodeIds(divId){
         $('#'+divId).empty();
         var nodeList = agent.getNodeList();
+
+        var nodeNameList = [];
+
+        var i = 0;
         for( var node in nodeList){
-            $('#'+divId).append("<option value =\"" + node + "\">" + node + "</option>") ;
+            nodeNameList[i++] = node;
+
         };
+        nodeNameList.sort();
+        nodeNameList.forEach(function(nodeName){
+            $('#'+divId).append("<option value =\"" + nodeName + "\">" + nodeName + "</option>") ;
+        });
     }
 
     function writeCommand(op){
@@ -349,6 +408,7 @@
     }
 
     function preciseRound(num, decimals) {
+        if(decimals == null) decimals = 3;
         var t=Math.pow(10, decimals);
         return (Math.round((num * t) + (decimals>0?1:0)*(Math.sign(num) * (10 / Math.pow(100, decimals)))) / t).toFixed(decimals);
     }
@@ -362,6 +422,27 @@
         if( $('#receivedImage img')[0] !=null) {
             var url = $('#receivedImage img')[0].src;
             window.open(url, 'Image', 'width=largeImage.stylewidth,height=largeImage.style.height,resizable=1');
+        }
+    }
+
+    function timeoutCallback(timeout,callback) {
+        var called = false;
+        if (typeof timeout === 'function') {
+            callback = timeout;
+            timeout = 30 * 1000;
+        }
+
+        var interval = setTimeout(function () {
+            if (called)return;
+            called = true;
+            callback(new Error('callback timeout'));
+        }, timeout);
+
+        return function () {
+            if (called)return;
+            called = true;
+            clearTimeout(interval);
+            callback.apply(this, arguments);
         }
     }
 

@@ -32,7 +32,9 @@
                 var serverIp = url.slice(0,sInd);
                 room = url.slice(sInd, url.length);
                 socket =  io(serverIp);
-                socket.emit("subscribeAgent", {userName: self.agentName, room: room, userId: self.agentId});
+                socket.emit("subscribeAgent", {userName: self.agentName, room: room, userId: self.agentId}, function(data){
+                    userList = data;
+                });
                 return socket;
         };
 
@@ -55,61 +57,61 @@
         //get model for the current room
         this.getModel = function (callback) {
 
-            socket.emit('agentPageDocRequest', room);
-            socket.on('pageDoc', function (data) {
+            socket.emit('agentPageDocRequest', room, function(data){
                 self.pageDoc = data;
-
-
-                if(callback!=null) callback();
-
+                if (callback != null) callback();
             });
-        };
 
+
+        };
         //get operation history
         this.getOperationHistory= function (callback) {
 
-            socket.emit('agentOperationHistoryRequest', room);
-
-
-            socket.on('operationHistory', function (data) {
+            socket.emit('agentOperationHistoryRequest', room, function(data){
                 self.opHistory = data;
-                if(data == null)
+                if (data == null)
                     self.opHistory = [];
 
 
-                if(callback!=null) callback();
+                if (callback != null) callback();
 
 
             });
+
         };
 
-        this.getUserList = function(callback){
-            socket.emit('agentUserListRequest', room)
-            socket.on('userList', function (data) {
-                self.userList = data;
-                if(data == null)
-                    self.userList = [];
+        this.getUserList = function(callback) {
+            socket.emit('agentUserListRequest', room, function(data){
 
-                if(callback!=null) callback();
-            });
+                    self.userList = data;
+                    if (data == null)
+                        self.userList = [];
+
+                    if (callback != null) callback();
+                });
         };
 
         this.getNodeList = function(){
             return self.pageDoc.cy.nodes;
         };
 
+        this.changeName = function(newName){
+            self.agentName = newName;
+            self.sendRequest("agentChangeNameRequest", {userName: newName, userId: self.agentId});
+
+        };
+
 
         //get operation history
         this.getChatHistory= function (callback) {
-            socket.emit('agentChatHistoryRequest', room);
-            socket.on('chatHistory', function (data) {
-                self.chatHistory = data;
-                if(data == null)
-                    self.chatHistory = [];
+            socket.emit('agentChatHistoryRequest', room, function(data){
+                    self.chatHistory = data;
+                    if (data == null)
+                        self.chatHistory = [];
 
-                if(callback!=null) callback();
+                    if (callback != null) callback();
 
-            });
+                });
         };
 
         this.sendRequest = function(reqName, param){ //model operations

@@ -543,10 +543,7 @@ app.proto.create = function (model) {
 
     var id = model.get('_session.userId');
     var name = model.get('users.' + id +'.name');
-    socket.emit("subscribeHuman", {userName:name, pageDoc: model.get('_page.doc'), room:  model.get('_page.room'), userId: id}); //subscribe to current doc as a new room
-
-
-    socket.on('userList', function(userList) {
+    socket.emit("subscribeHuman", {userName:name, pageDoc: model.get('_page.doc'), room:  model.get('_page.room'), userId: id}, function(userList){
 
         var userIds =[];
         userList.forEach(function(user){
@@ -554,8 +551,9 @@ app.proto.create = function (model) {
         });
 
         model.set('_page.userIds', userIds );
+    }); //subscribe to current doc as a new room
 
-    });
+
 
     socket.on('imageFile', function(data){
 
@@ -857,6 +855,7 @@ function updateMultimerStatus(elId, isMultimer){
                 node.data('sbgnclass', sbgnclass.replace(' multimer', ''));
             }
 
+            cy.forceRender();
             updateServerGraph();
         }
 
@@ -871,12 +870,16 @@ function updateCloneMarkerStatus(elId, isCloneMarker){
     setTimeout(function(){
 
         try{
-            var node = cy.$(('#' + elId));
+            var node = cy.$(('#' + elId))[0];
 
 
-            node.data('sbgnclonemarker', isCloneMarker?true:undefined);
 
-            //    node._private.data.sbgnclonemarker = isCloneMarker?true:undefined;
+
+            //node.data('sbgnclonemarker', isCloneMarker?true:undefined);
+            node._private.data.sbgnclonemarker = isCloneMarker?true:undefined;
+
+            cy.forceRender();
+
 
             updateServerGraph();
 

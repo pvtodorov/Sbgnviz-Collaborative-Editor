@@ -741,24 +741,29 @@ module.exports.changeIsMultimerStatus = function(param) {
     module.exports.updateServerGraph();
     return result;
 }
-//FUNDA: changed param.node to param.ele
+
 module.exports.changeIsCloneMarkerStatus = function(param) {
     var node = param.ele;
     var makeCloneMarker = param.data;
-    //node._private.data.sbgnclonemarker = makeCloneMarker?true:undefined;
+    node._private.data.sbgnclonemarker = makeCloneMarker?true:undefined;
 
-    node.data('sbgnclonemarker', makeCloneMarker?true:undefined);
+    //node.data('sbgnclonemarker', (makeCloneMarker?true:undefined)); //is not working in this case
+
     //cy.forceRender();
     if (cy.elements(":selected").length == 1 && cy.elements(":selected")[0] == param.ele) {
         $('#inspector-is-clone-marker').attr('checked', makeCloneMarker);
     }
+
+    module.exports.modelManager.changeModelNodeAttribute('isCloneMarker', param.ele.id(), param.data);
+    module.exports.updateServerGraph();
+
+    //result is for undo operation
     var result = {
         data: !makeCloneMarker,
         ele: node
     };
 
-    module.exports.modelManager.changeModelNodeAttribute('isCloneMarker', param.ele.id(), param.data);
-    module.exports.updateServerGraph();
+
     return result;
 }
 

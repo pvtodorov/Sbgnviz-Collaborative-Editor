@@ -377,7 +377,7 @@ var sbgnStyleSheet = cytoscape.stylesheet()
     .selector("node")
     .css({
         'border-width': 1.5,
-        'border-color': '#555',
+        'border-color': '#555555',
         'background-color': '#f6f6f6',
         'font-size': 11,
 //          'shape': 'data(sbgnclass)',
@@ -424,8 +424,8 @@ var sbgnStyleSheet = cytoscape.stylesheet()
     .selector("node:selected")
     .css({
         'border-color': '#d67614',
-        'target-arrow-color': '#000',
-        'text-outline-color': '#000'})
+        'target-arrow-color': '#000000',
+        'text-outline-color': '#000000'})
     .selector("node:active")
     .css({
         'background-opacity': 0.7, 'overlay-color': '#d67614',
@@ -433,12 +433,12 @@ var sbgnStyleSheet = cytoscape.stylesheet()
     })
     .selector("edge")
     .css({
-        'line-color': '#555',
+        'line-color': '#555555',
         'target-arrow-fill': 'hollow',
         'source-arrow-fill': 'hollow',
         'width': 1.5,
-        'target-arrow-color': '#555',
-        'source-arrow-color': '#555',
+        'target-arrow-color': '#555555',
+        'source-arrow-color': '#555555',
 //          'target-arrow-shape': 'data(sbgnclass)'
     })
     .selector("edge[sbgnclass]")
