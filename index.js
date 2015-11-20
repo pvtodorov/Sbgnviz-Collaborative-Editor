@@ -454,6 +454,7 @@ app.proto.init = function (model) {
 
     model.on('change', '_page.doc.cy.nodes.*.sbgnStatesAndInfos', function(id, sbgnStatesAndInfos,prev, passed){
 
+
         if(docReady && passed.user == null) {
             updateElementProperty(id,  'sbgnstatesandinfos', sbgnStatesAndInfos, 'data');
 
@@ -804,6 +805,8 @@ function updateElementProperty(elId, propName, propValue, propType){
 
 
 
+
+
              //TODO: correct resizing
              if(propName == 'width'){
 
@@ -823,6 +826,10 @@ function updateElementProperty(elId, propName, propValue, propType){
 
 
              }
+            else if(propName == 'sbgnstatesandinfos'){
+                 el[0]._private.data.sbgnstatesandinfos = propValue;
+             }
+
 
 
             //update server graph

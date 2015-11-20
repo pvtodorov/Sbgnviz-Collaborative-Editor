@@ -84,7 +84,7 @@ module.exports.restoreEles = function(eles)
                 target: ele.data("target"),
                 sbgnclass: ele.data('sbgnclass')
             };
-            module.exports.modelManager.addModelEdge(ele, param, "me");
+            module.exports.modelManager.addModelEdge(ele.id(), param, "me");
         }
     });
 
@@ -103,7 +103,7 @@ module.exports.addEdge = function(param)
         result = addRemoveUtilities.restoreEles(param);
     }
 
-    module.exports.modelManager.addModelEdge(result, param.newEdge, "me");
+    module.exports.modelManager.addModelEdge(result.id(), param.newEdge, "me");
     module.exports.updateServerGraph();
     return result;
 }

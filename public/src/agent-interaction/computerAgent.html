@@ -29,67 +29,98 @@
     <button id = "updateModel" onclick = updateModel()>Model update request</button>
     <br>
     <br>
-<form>
-    Pos x : <input type = "number" id = "posX" name="posX" value = 200>
-    Pos y : <input type = "number" id = "posY" name="posY" value = 200>
-    Sbgnclass: <input type = "text" id = "sbgnclass" name="sbgnclass" value = "macromolecule">
-    <input type="button" value="Add node" onclick=addNode()>
-</form>
-<br>
-    <!-- Node operations-->
-<form id = "nodeOperations">
-    <!--Id : <input id = "delNodeId"  >-->
-    <b>Node Id </b>: <select name="Id" id = "nodeId" >
-    </select>
 
-    <br><br>
-    <input id = "sbgnlabel">
-    <input type="button" value="Update node label" onclick=changeNodeAttribute("sbgnlabel")>
+    <form id = "nodeOperations">
 
+        Pos x : <input type = "number" id = "posX" name="posX" value = 200>
+        Pos y : <input type = "number" id = "posY" name="posY" value = 200>
+        Sbgnclass: <input type = "text" id = "sbgnclass" name="sbgnclass" value = "macromolecule">
+        <input type="button" value="Add node" onclick=addNode()>
 
-    <br><br>
-    <input type="button" value="Delete node" onclick=deleteNode()>
-    <br> <br>
-    Pos x : <input type = "number" id = "newPosX">
-    Pos y : <input type = "number" id = "newPosY">
-    <input type="button" value="Move node" onclick=moveNode()>
+        <br><br>
+        <b>Node Id </b>: <select name="Id" id = "nodeId" >
+        </select>
 
-    <br><br>
-
-    <input id = "width" type = "number">
-    <input type="button" value="Update node width" onclick=changeNodeAttribute("width")>
+        <br><br>
+        <input id = "sbgnlabel">
+        <input type="button" value="Update node label" onclick=changeNodeAttribute("sbgnlabel")>
 
 
-    <input id = "height" type = "number">
-    <input type="button" value="Update node height" onclick=changeNodeAttribute("height")>
+        <br><br>
+        <input type="button" value="Delete node" onclick=deleteNode()>
+        <br> <br>
+        Pos x : <input type = "number" id = "newPosX">
+        Pos y : <input type = "number" id = "newPosY">
+        <input type="button" value="Move node" onclick=moveNode()>
+
+        <br><br>
+
+        <input id = "width" type = "number">
+        <input type="button" value="Update node width" onclick=changeNodeAttribute("width")>
 
 
-    <br><br>
-    <input id = "borderColor" type = "color">
-    <input type="button" value="Update border color" onclick=changeNodeAttribute("borderColor")>
-
-    <br><br>
-    <input id = "backgroundColor" type = "color">
-    <input type="button" value="Update background color" onclick=changeNodeAttribute("backgroundColor")>
-
-    <br><br>
-    <input id = "borderWidth">
-    <input type="button" value="Update border width" onclick=changeNodeAttribute("borderWidth")>
+        <input id = "height" type = "number">
+        <input type="button" value="Update node height" onclick=changeNodeAttribute("height")>
 
 
-    <br><br>
-    Update clone marker status <input id = "isCloneMarker" type="checkbox"  onclick=changeNodeAttribute("isCloneMarker")>
+        <br><br>
+        <input id = "borderColor" type = "color">
+        <input type="button" value="Update border color" onclick=changeNodeAttribute("borderColor")>
 
-    <br><br>
-    Update multimer status <input id = "isMultimer" type="checkbox"  onclick=changeNodeAttribute("isMultimer")>
+        <br><br>
+        <input id = "backgroundColor" type = "color">
+        <input type="button" value="Update background color" onclick=changeNodeAttribute("backgroundColor")>
+
+        <br><br>
+        <input id = "borderWidth">
+        <input type="button" value="Update border width" onclick=changeNodeAttribute("borderWidth")>
 
 
+        <br><br>
+        Update clone marker status <input id = "isCloneMarker" type="checkbox"  onclick=changeNodeAttribute("isCloneMarker")>
 
+        <br><br>
+        Update multimer status <input id = "isMultimer" type="checkbox"  onclick=changeNodeAttribute("isMultimer")>
 
+        <br><br>
+            <input id = "stateVariablesValue">
+         <input type = button  value = "Update state variable value" onclick=changeNodeAttribute("stateVariablesValue")>
+            <br><br>
+            <input id = "stateVariablesVariable"> <input type = "button"  value = "Update state variable name"  onclick=changeNodeAttribute("stateVariablesVariable")>
+        <br><br>
+        <input id = "stateVariablesUnitOfInformation" >
+            <input type = "button" value = " Update unit of information" onclick=changeNodeAttribute("stateVariablesUnitOfInformation")>
 
     </form>
 <br><br>
 
+    <!-- Edge operations-->
+    <form id = "edgeOperations">
+        Source : <input  id = "source" name="source" value = "glyph2">
+        Target : <input  id = "target" name="target" value = "glyph8" >
+        Sbgnclass: <input id = "sbgnclassEdge" name = "sbgnclassEdge" value = "consumption">
+        <input type="button" value="Add edge" onclick=addEdge()>
+
+        <br><br>
+
+        <b>Edge Id </b>: <select name="Id" id = "edgeId" ></select>
+        <br><br>
+        <input type="button" value="Delete edge" onclick=deleteEdge()>
+
+        <br><br>
+        <input id = "cardinality" type = number>
+        <input type="button" value="Update edge cardinality" onclick=changeEdgeAttribute("cardinality")>
+
+        <br><br>
+        <input id = "widthEdge" type = number>
+        <input type="button" value="Update edge width" onclick=changeEdgeAttribute("widthEdge")>
+
+
+        <br><br>
+        <input id = "lineColor" type = color>
+        <input type="button " value="Update edge color" onclick=changeEdgeAttribute("lineColor")>
+
+</form>
 </div>
 
 
@@ -160,6 +191,19 @@
                 $('#isMultimer').attr('checked', 'checked');
             else
                 $('#isMultimer').attr('checked', false);
+
+
+            var sbgnStatesAndInfos = agent.getNodeList()[$('#nodeId')[0].value].sbgnStatesAndInfos;
+            for(var si in sbgnStatesAndInfos ){
+
+                if(sbgnStatesAndInfos[si].clazz == "state variable"){
+                    $('#stateVariablesVariable')[0].value = sbgnStatesAndInfos[si].state.variable;
+                    $('#stateVariablesValue')[0].value = sbgnStatesAndInfos[si].state.value;
+                }
+                else if(sbgnStatesAndInfos[si].clazz == "unit of information")
+                    $('#stateVariablesUnitOfInformation')[0].value = sbgnStatesAndInfos[si].label.text;
+            }
+
         });
 
     }
@@ -187,11 +231,14 @@
         }
 
         agent = new Agent($('#agentName')[0].value, agentId);
-        var socket = agent.connectToServer(serverIp);
+        var socket = agent.connectToServer(serverIp, function(){
+            writeUserList(agent.userList);
+        });
 
 
 
         socket.on('connect', function(){
+
 
             agent.getModel(function() {
 
@@ -199,26 +246,23 @@
                 agent.getOperationHistory(function(){
 
                     agent.getChatHistory(function(){
-                        //agent.getUserList(function(){
                             //Write history
-                                if(agent.opHistory != null){
-                                    agent.opHistory.forEach(function(op){
-                                        writeCommand(op);
-                                    });
-                                }
+                        if(agent.opHistory != null){
+                            agent.opHistory.forEach(function(op){
+                                writeCommand(op);
+                            });
+                        }
 
-                                if(agent.chatHistory != null){
-                                    for(var ind in agent.chatHistory){
-                                        writeMessage(agent.chatHistory[ind]);
+                        if(agent.chatHistory != null){
+                            for(var ind in agent.chatHistory){
+                                writeMessage(agent.chatHistory[ind]);
 
-                                    };
-                                }
+                            };
+                        }
 
-                            fillNodeIds('nodeId');
+                        fillNodeIds('nodeId');
+                        fillEdgeIds('edgeId');
 
-                            //User list is updated in listen() method
-
-                      //  });
                     });
                 });
             });
@@ -265,9 +309,21 @@
 
     }
 
+    function addEdge(){
+        var source = $('#source')[0].value;
+        var target = $('#target')[0].value;
+        var sbgnclass = $('#sbgnclassEdge')[0].value;
+        var param = {source:source, target:target, sbgnclass:sbgnclass }
+
+        agent.sendRequest("agentAddEdgeRequest", {id: (source+ "-" + target), param:param});
+
+    }
 
     function deleteNode(){
         agent.sendRequest("agentDeleteNodeRequest", {id: $('#nodeId')[0].value});
+    }
+    function deleteEdge(){
+        agent.sendRequest("agentDeleteEdgeRequest", {id: $('#edgeId')[0].value});
     }
 
     function moveNode(){
@@ -286,8 +342,9 @@
     function changeNodeAttribute(attDiv){
 
 
+        var val;
         var id = $('#nodeId')[0].value;
-        var val = $('#' + attDiv)[0].value;
+        var attStr = attDiv;
 
         if(attDiv == 'isCloneMarker')
             val = ($('#isCloneMarker').attr('checked') == 'checked');
@@ -295,9 +352,43 @@
         else if(attDiv == 'isMultimer')
             val = ($('#isMultimer').attr('checked') == 'checked');
 
-        agent.sendRequest("agentChangeNodeAttributeRequest", {id:id, attStr:attDiv, attVal: val});
+        else if(attDiv == 'stateVariablesValue' || attDiv == 'stateVariablesVariable'){
+
+            val = {clazz:'', state:{value:'', variable:''}, bbox:{w:69, h:78}};
+            attStr = 'sbgnStatesAndInfos';
+            val.clazz ='state variable';
+            val.state.value = $('#stateVariablesValue')[0].value;
+            val.state.variable = $('#stateVariablesVariable')[0].value;
+
+        }
+        else if(attDiv == 'stateVariablesUnitOfInformation'){
+
+            val = {clazz:'', label:{text:''}, bbox:{w:53, h:18}};
+            attStr = 'sbgnStatesAndInfos';
+            val.clazz ='unit of information';
+            val.label.text = $('#stateVariablesUnitOfInformation')[0].value;
+
+        }
+        else
+            val = $('#' + attDiv)[0].value;
+
+        agent.sendRequest("agentChangeNodeAttributeRequest", {id:id, attStr:attStr, attVal: val});
     }
 
+
+    function changeEdgeAttribute(attDiv){
+        var val;
+        var id = $('#edgeId')[0].value;
+        var attStr = attDiv;
+
+        val = $('#' + attDiv)[0].value;
+
+        if(attDiv == "widthEdge") //same name with node
+            attStr = "width";
+        agent.sendRequest("agentChangeEdgeAttributeRequest", {id:id, attStr:attStr, attVal: val});
+
+
+    }
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ///Page editing
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -315,6 +406,23 @@
         nodeNameList.sort();
         nodeNameList.forEach(function(nodeName){
             $('#'+divId).append("<option value =\"" + nodeName + "\">" + nodeName + "</option>") ;
+        });
+    }
+
+    function fillEdgeIds(divId){
+        $('#'+divId).empty();
+        var edgeList = agent.getEdgeList();
+
+        var edgeNameList = [];
+
+        var i = 0;
+        for( var edge in edgeList){
+            edgeNameList[i++] = edge;
+
+        };
+        edgeNameList.sort();
+        edgeNameList.forEach(function(edgeName){
+            $('#'+divId).append("<option value =\"" + edgeName + "\">" + edgeName + "</option>") ;
         });
     }
 

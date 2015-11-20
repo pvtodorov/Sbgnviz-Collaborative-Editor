@@ -456,6 +456,7 @@ app.proto.init = function (model) {
 
     model.on('change', '_page.doc.cy.nodes.*.sbgnStatesAndInfos', function(id, sbgnStatesAndInfos,prev, passed){
 
+
         if(docReady && passed.user == null) {
             updateElementProperty(id,  'sbgnstatesandinfos', sbgnStatesAndInfos, 'data');
 
@@ -806,6 +807,8 @@ function updateElementProperty(elId, propName, propValue, propType){
 
 
 
+
+
              //TODO: correct resizing
              if(propName == 'width'){
 
@@ -825,6 +828,10 @@ function updateElementProperty(elId, propName, propValue, propType){
 
 
              }
+            else if(propName == 'sbgnstatesandinfos'){
+                 el[0]._private.data.sbgnstatesandinfos = propValue;
+             }
+
 
 
             //update server graph
@@ -929,8 +936,8 @@ function App(derby, name, filename) {
   this.derby = derby;
   this.name = name;
   this.filename = filename;
-  this.scriptHash = '38f39da4ae719e228e467add07b895c6';
-  this.bundledAt = 1447972153371;
+  this.scriptHash = '9d6977b0edae14630f686aac1f9265b6';
+  this.bundledAt = 1448049313061;
   this.Page = createAppPage();
   this.proto = this.Page.prototype;
   this.views = new derbyTemplates.templates.Views();
@@ -21183,7 +21190,7 @@ module.exports.restoreEles = function(eles)
                 target: ele.data("target"),
                 sbgnclass: ele.data('sbgnclass')
             };
-            module.exports.modelManager.addModelEdge(ele, param, "me");
+            module.exports.modelManager.addModelEdge(ele.id(), param, "me");
         }
     });
 
@@ -21202,7 +21209,7 @@ module.exports.addEdge = function(param)
         result = addRemoveUtilities.restoreEles(param);
     }
 
-    module.exports.modelManager.addModelEdge(result, param.newEdge, "me");
+    module.exports.modelManager.addModelEdge(result.id(), param.newEdge, "me");
     module.exports.updateServerGraph();
     return result;
 }
@@ -22636,29 +22643,40 @@ module.exports =  function(model, docId, userId, userName) {
         },
 
 
-        addModelEdge: function(edge, param, user){
-
-            var command = {userName: user.get('name'), name: 'add', id: edge.id(), param: param, time: new Date};
-            model.push('_page.doc.history',command);
-
-            model.pass({user:user}).set('_page.doc.cy.edges.' + edge.id() +'.id', edge.id());
-            model.pass({user:user}).set('_page.doc.cy.edges.' + edge.id() +'.highlightColor', null);
-
-            model.pass({user:user}).set('_page.doc.cy.edges.' + edge.id() +'.source', param.source);
-            model.pass({user:user}).set('_page.doc.cy.edges.' + edge.id() +'.target', param.target);
-
-            //Initialization
-            model.pass({user:user}).set('_page.doc.cy.edges.' + edge.id() + '.lineColor', edge.data('lineColor'));
-            model.pass({user:user}).set('_page.doc.cy.edges.' + edge.id() + '.width', edge.css('width'));
-            model.pass({user:user}).set('_page.doc.cy.edges.' + edge.id() + '.cardinality', edge.data('sbgncardinality'));
-            model.pass({user:user}).set('_page.doc.cy.edges.' + edge.id() +'.sbgnclass', param.sbgnclass);
+        addModelEdge: function(edgeId, param, user){
 
 
-            this.updateHistory('add', edge.id(), param);
+
+            model.pass({user:user}).set('_page.doc.cy.edges.' + edgeId+'.id', edgeId);
+            model.pass({user:user}).set('_page.doc.cy.edges.' + edgeId +'.highlightColor', null);
+
+            model.pass({user:user}).set('_page.doc.cy.edges.' + edgeId +'.source', param.source);
+            model.pass({user:user}).set('_page.doc.cy.edges.' + edgeId +'.target', param.target);
+            model.pass({user:user}).set('_page.doc.cy.edges.' + edgeId +'.sbgnclass', param.sbgnclass);
+
+            ////Initialization
+            //model.pass({user:user}).set('_page.doc.cy.edges.' + edge.id() + '.lineColor', edge.data('lineColor'));
+            //model.pass({user:user}).set('_page.doc.cy.edges.' + edge.id() + '.width', edge.css('width'));
+            //model.pass({user:user}).set('_page.doc.cy.edges.' + edge.id() + '.cardinality', edge.data('sbgncardinality'));
+
+
+
+            this.updateHistory('add', edgeId, param);
 
         //    this.updateServerGraph();
 
         },
+
+
+        deleteModelEdge: function(id, user){
+
+                model.pass({user:user}).del(('_page.doc.cy.edges.'  + id));
+
+                this.updateHistory('delete', id, "");
+
+
+        },
+
 
         deleteModelEdges: function(selectedEdges, user){
             for( var i = 0; i < selectedEdges.length; i++ ) {
@@ -22669,7 +22687,6 @@ module.exports =  function(model, docId, userId, userName) {
 
             }
 
-//            this.updateServerGraph();
         },
 
         getServerGraph: function(){
@@ -22796,6 +22813,7 @@ module.exports =  function(model, docId, userId, userName) {
                     if(sbgnStatesAndInfos != null){
                         node.data('sbgnstatesandinfos',sbgnStatesAndInfos);
                     }
+
 
 
                 }
@@ -24837,4 +24855,4 @@ function SBGNProperties(){
 },{"./EditorActionsManager.js":84,"./sample-app-cytoscape-sbgn.js":87}]},{},[82,1])
 
 
-//# sourceMappingURL=/derby/chat-38f39da4ae719e228e467add07b895c6.map.json
+//# sourceMappingURL=/derby/chat-9d6977b0edae14630f686aac1f9265b6.map.json

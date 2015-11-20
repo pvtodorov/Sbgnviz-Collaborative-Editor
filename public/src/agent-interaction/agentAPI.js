@@ -2,11 +2,6 @@
     * Created by cbio on 10/28/15.
     */
 
-
-
-
-
-
     var Agent = function (name, id) {
 
 
@@ -26,14 +21,19 @@
 
         var self = this;
 
-        this.connectToServer = function (url) {
+        this.connectToServer = function (url, callback) {
                 //Parse
                 var sInd = url.search("3000/") + 5; //roomId index
                 var serverIp = url.slice(0,sInd);
                 room = url.slice(sInd, url.length);
                 socket =  io(serverIp);
                 socket.emit("subscribeAgent", {userName: self.agentName, room: room, userId: self.agentId}, function(data){
-                    userList = data;
+                    self.userList = data;
+                    if (data == null)
+                        self.userList = [];
+
+
+                    if (callback != null) callback();
                 });
                 return socket;
         };
@@ -93,6 +93,10 @@
 
         this.getNodeList = function(){
             return self.pageDoc.cy.nodes;
+        };
+
+        this.getEdgeList = function(){
+            return self.pageDoc.cy.edges;
         };
 
         this.changeName = function(newName){

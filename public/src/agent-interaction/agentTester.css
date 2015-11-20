@@ -21,20 +21,20 @@ body {
 
 }
 
-#posX, #posY, #newPosX, #newPosY,#borderWidth, #width, #height {
-    width: 70px;
+#posX, #posY, #newPosX, #newPosY,#borderWidth, #width, #height, #cardinality, #edgeWidth, #edgeColor, #source, #target, {
+    width: 50px;
 }
-#sbgnclass,#nodeId {
+#sbgnclass,#nodeId, #sbgnclassEdge, #edgeId {
     width: 100px;
     padding: 1px;
     margin: 5px;
 }
 
-#nodeId{
+#nodeId,#edgeId{
     background: #d1eaff;
 }
 
-#nodeOperations{
+#nodeOperations, #edgeOperations{
     border: 1px solid gray;
     border-radius: 10px;
     padding: 5px;
@@ -51,7 +51,7 @@ body {
     border-radius: 25px;
     margin: 5px;
     left: 0px;
-    height: 900px;
+    height: 1000px;
     width: 35%;
 }
 
@@ -64,7 +64,7 @@ body {
 
     left: 36%;
     width: 62%;
-    height: 900px;
+    height: 1000px;
     overflow-y: hidden;
 
 }

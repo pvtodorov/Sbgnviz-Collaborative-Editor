@@ -230,29 +230,40 @@ module.exports =  function(model, docId, userId, userName) {
         },
 
 
-        addModelEdge: function(edge, param, user){
-
-            var command = {userName: user.get('name'), name: 'add', id: edge.id(), param: param, time: new Date};
-            model.push('_page.doc.history',command);
-
-            model.pass({user:user}).set('_page.doc.cy.edges.' + edge.id() +'.id', edge.id());
-            model.pass({user:user}).set('_page.doc.cy.edges.' + edge.id() +'.highlightColor', null);
-
-            model.pass({user:user}).set('_page.doc.cy.edges.' + edge.id() +'.source', param.source);
-            model.pass({user:user}).set('_page.doc.cy.edges.' + edge.id() +'.target', param.target);
-
-            //Initialization
-            model.pass({user:user}).set('_page.doc.cy.edges.' + edge.id() + '.lineColor', edge.data('lineColor'));
-            model.pass({user:user}).set('_page.doc.cy.edges.' + edge.id() + '.width', edge.css('width'));
-            model.pass({user:user}).set('_page.doc.cy.edges.' + edge.id() + '.cardinality', edge.data('sbgncardinality'));
-            model.pass({user:user}).set('_page.doc.cy.edges.' + edge.id() +'.sbgnclass', param.sbgnclass);
+        addModelEdge: function(edgeId, param, user){
 
 
-            this.updateHistory('add', edge.id(), param);
+
+            model.pass({user:user}).set('_page.doc.cy.edges.' + edgeId+'.id', edgeId);
+            model.pass({user:user}).set('_page.doc.cy.edges.' + edgeId +'.highlightColor', null);
+
+            model.pass({user:user}).set('_page.doc.cy.edges.' + edgeId +'.source', param.source);
+            model.pass({user:user}).set('_page.doc.cy.edges.' + edgeId +'.target', param.target);
+            model.pass({user:user}).set('_page.doc.cy.edges.' + edgeId +'.sbgnclass', param.sbgnclass);
+
+            ////Initialization
+            //model.pass({user:user}).set('_page.doc.cy.edges.' + edge.id() + '.lineColor', edge.data('lineColor'));
+            //model.pass({user:user}).set('_page.doc.cy.edges.' + edge.id() + '.width', edge.css('width'));
+            //model.pass({user:user}).set('_page.doc.cy.edges.' + edge.id() + '.cardinality', edge.data('sbgncardinality'));
+
+
+
+            this.updateHistory('add', edgeId, param);
 
         //    this.updateServerGraph();
 
         },
+
+
+        deleteModelEdge: function(id, user){
+
+                model.pass({user:user}).del(('_page.doc.cy.edges.'  + id));
+
+                this.updateHistory('delete', id, "");
+
+
+        },
+
 
         deleteModelEdges: function(selectedEdges, user){
             for( var i = 0; i < selectedEdges.length; i++ ) {
@@ -263,7 +274,6 @@ module.exports =  function(model, docId, userId, userName) {
 
             }
 
-//            this.updateServerGraph();
         },
 
         getServerGraph: function(){
@@ -390,6 +400,7 @@ module.exports =  function(model, docId, userId, userName) {
                     if(sbgnStatesAndInfos != null){
                         node.data('sbgnstatesandinfos',sbgnStatesAndInfos);
                     }
+
 
 
                 }
