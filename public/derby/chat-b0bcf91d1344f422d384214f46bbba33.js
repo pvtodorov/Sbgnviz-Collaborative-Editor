@@ -78,16 +78,6 @@ app.on('model', function (model) {
         return item.time > startTime;
     });
 
-    model.fn('isMessageForMe', function(item){
-        var myId = model.get('_session.userId');
-
-
-        if(item.targets && item.targets.indexOf(myId) > -1)
-            return true;
-        else
-            return false;
-
-    } );
 
 });
 
@@ -163,12 +153,17 @@ app.get('/:docId', function (page, model, arg, next) {
 
 
 
+    //model.subscribe('messages');
+    var userId = model.get('_session.userId');
 
     messagesQuery = model.query('messages', {
         room: room,
         time: {
             $gt: 0
-        }
+        },
+        targets: {
+                $elemMatch:{id: userId}
+            }
     });
 
     messagesQuery.subscribe(function (err) {
@@ -525,15 +520,12 @@ app.proto.init = function (model) {
         }
     });
 
+
     timeSort = function (a, b) {
         return (a != null ? a.time : void 0) - (b != null ? b.time : void 0);
     };
 
 
-
-
-    //console.log(model.get('messages'));
-    //return model.filter('messages', 'isMessageForMe').ref('_page.list');
 
     return model.sort('messages', timeSort).ref('_page.list');
 };
@@ -581,7 +573,9 @@ app.proto.create = function (model) {
             }
         });
 
-    })
+    });
+
+
 
     modelManager = require('./public/sample-app/sampleapp-components/js/modelManager.js')(model, model.get('_page.room'), model.get('_session.userId'),name );
 
@@ -660,7 +654,7 @@ app.proto.add = function (model, filePath) {
         for(var i = 0; i < users.length; i++){
             var user = users[i];
             if(user == myId ||  document.getElementById(user).checked){
-                targets.push(user);
+                targets.push({id: user});
             }
         }
 
@@ -676,7 +670,7 @@ app.proto.add = function (model, filePath) {
             time: val
         });
 
-        model.filter('messages', 'isMessageForMe').ref('_page.list');
+        //model.filter('messages', 'isMessageForMe').ref('_page.list');
 
 
         //append image  after updating the message list on the page
@@ -971,8 +965,8 @@ function App(derby, name, filename) {
   this.derby = derby;
   this.name = name;
   this.filename = filename;
-  this.scriptHash = '1573b22e872821cf60520962ea3dbff1';
-  this.bundledAt = 1449167771177;
+  this.scriptHash = 'b0bcf91d1344f422d384214f46bbba33';
+  this.bundledAt = 1449178534318;
   this.Page = createAppPage();
   this.proto = this.Page.prototype;
   this.views = new derbyTemplates.templates.Views();
@@ -23480,7 +23474,7 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
 
 
     return this;
-}
+};
 
 
 
@@ -23713,7 +23707,7 @@ module.exports.handleSBGNInspector = function (editorActions) {
     else {
         $("#sbgn-inspector").html("");
     }
-}
+};
 module.exports.fillInspectorStateAndInfos = function (ele, width, editorActions) {
     //first empty the state variables and infos data in inspector
     $("#inspector-state-variables").html("");
@@ -23832,7 +23826,7 @@ module.exports.fillInspectorStateAndInfos = function (ele, width, editorActions)
         };
         editorActions.manager._do(editorActions.AddStateAndInfoCommand(param));
     });
-}
+};
 
 },{"./biogene-info.js":85}],88:[function(require,module,exports){
 
@@ -24927,4 +24921,4 @@ function SBGNProperties(){
 },{"./EditorActionsManager.js":84,"./sample-app-cytoscape-sbgn.js":87}]},{},[82,1])
 
 
-//# sourceMappingURL=/derby/chat-1573b22e872821cf60520962ea3dbff1.map.json
+//# sourceMappingURL=/derby/chat-b0bcf91d1344f422d384214f46bbba33.map.json

@@ -76,16 +76,6 @@ app.on('model', function (model) {
         return item.time > startTime;
     });
 
-    model.fn('isMessageForMe', function(item){
-        var myId = model.get('_session.userId');
-
-
-        if(item.targets && item.targets.indexOf(myId) > -1)
-            return true;
-        else
-            return false;
-
-    } );
 
 });
 
@@ -161,12 +151,17 @@ app.get('/:docId', function (page, model, arg, next) {
 
 
 
+    //model.subscribe('messages');
+    var userId = model.get('_session.userId');
 
     messagesQuery = model.query('messages', {
         room: room,
         time: {
             $gt: 0
-        }
+        },
+        targets: {
+                $elemMatch:{id: userId}
+            }
     });
 
     messagesQuery.subscribe(function (err) {
@@ -523,15 +518,12 @@ app.proto.init = function (model) {
         }
     });
 
+
     timeSort = function (a, b) {
         return (a != null ? a.time : void 0) - (b != null ? b.time : void 0);
     };
 
 
-
-
-    //console.log(model.get('messages'));
-    //return model.filter('messages', 'isMessageForMe').ref('_page.list');
 
     return model.sort('messages', timeSort).ref('_page.list');
 };
@@ -579,7 +571,9 @@ app.proto.create = function (model) {
             }
         });
 
-    })
+    });
+
+
 
     modelManager = require('./public/sample-app/sampleapp-components/js/modelManager.js')(model, model.get('_page.room'), model.get('_session.userId'),name );
 
@@ -658,7 +652,7 @@ app.proto.add = function (model, filePath) {
         for(var i = 0; i < users.length; i++){
             var user = users[i];
             if(user == myId ||  document.getElementById(user).checked){
-                targets.push(user);
+                targets.push({id: user});
             }
         }
 
@@ -674,7 +668,7 @@ app.proto.add = function (model, filePath) {
             time: val
         });
 
-        model.filter('messages', 'isMessageForMe').ref('_page.list');
+        //model.filter('messages', 'isMessageForMe').ref('_page.list');
 
 
         //append image  after updating the message list on the page

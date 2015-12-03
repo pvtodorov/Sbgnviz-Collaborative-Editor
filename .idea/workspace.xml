@@ -7,23 +7,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="88f2e8a3-abc2-4ba9-848d-5914e68f76f8" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/public/derby/chat-9d6977b0edae14630f686aac1f9265b6.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/public/derby/chat-9d6977b0edae14630f686aac1f9265b6.map.json" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/EditorActionsManager.js" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/EditorActionsManager.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/src/utilities/add-remove-utilities.js" afterPath="$PROJECT_DIR$/public/src/utilities/add-remove-utilities.js" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/public/derby/chat-1573b22e872821cf60520962ea3dbff1.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/public/derby/chat-1573b22e872821cf60520962ea3dbff1.map.json" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/src/agent-interaction/agentAPI.js" afterPath="$PROJECT_DIR$/public/src/agent-interaction/agentAPI.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/src/agent-interaction/agentTester.css" afterPath="$PROJECT_DIR$/public/src/agent-interaction/agentTester.css" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/src/agent-interaction/computerAgent.html" afterPath="$PROJECT_DIR$/public/src/agent-interaction/computerAgent.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/index.html" afterPath="$PROJECT_DIR$/views/index.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index.js" afterPath="$PROJECT_DIR$/index.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/index.js" afterPath="$PROJECT_DIR$/lib/index.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/src/utilities/json-to-sbgnml-converter.js" afterPath="$PROJECT_DIR$/public/src/utilities/json-to-sbgnml-converter.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/modelManager.js" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/modelManager.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-cytoscape-sbgn.js" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-cytoscape-sbgn.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-menu-functions.js" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-menu-functions.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/css/sbgn-viz.css" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-components/css/sbgn-viz.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/src/utilities/sbgnml-to-json-converter.js" afterPath="$PROJECT_DIR$/public/src/utilities/sbgnml-to-json-converter.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/scripts/webPageEditor.js" afterPath="$PROJECT_DIR$/public/scripts/webPageEditor.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="CWC.iws" />
@@ -47,11 +39,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="index.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/lib/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="278" column="55" selection-start-line="278" selection-start-column="55" selection-end-line="278" selection-end-column="55" />
+            <state vertical-scroll-proportion="0.6956107">
+              <caret line="268" column="64" selection-start-line="268" selection-start-column="64" selection-end-line="268" selection-end-column="64" />
               <folding />
             </state>
           </provider>
@@ -61,7 +53,7 @@
         <entry file="file://$PROJECT_DIR$/index.js">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="834" column="9" selection-start-line="834" selection-start-column="9" selection-end-line="834" selection-end-column="9" />
+              <caret line="525" column="0" selection-start-line="525" selection-start-column="0" selection-end-line="525" selection-end-column="0" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
               </folding>
@@ -69,21 +61,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="webPageEditor.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/public/scripts/webPageEditor.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="33" column="0" selection-start-line="33" selection-start-column="0" selection-end-line="33" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/views/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-23.291666">
-              <caret line="835" column="21" selection-start-line="835" selection-start-column="21" selection-end-line="835" selection-end-column="21" />
+            <state vertical-scroll-proportion="-27.041666">
+              <caret line="847" column="0" selection-start-line="847" selection-start-column="0" selection-end-line="847" selection-end-column="0" />
               <folding>
                 <element signature="n#style#0;n#div#0;n#chat-user:#0;n#Body:#0;n#Head:#0;n#Title:#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#div#0;n#b#0;n#div#0;n#chat-message:#0;n#chat-user:#0;n#Body:#0;n#Head:#0;n#Title:#0;n#!!top" expanded="true" />
@@ -92,11 +74,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="EditorActionsManager.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="EditorActionsManager.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/EditorActionsManager.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.58349705">
-              <caret line="638" column="27" selection-start-line="638" selection-start-column="27" selection-end-line="638" selection-end-column="27" />
+            <state vertical-scroll-proportion="-18.8">
+              <caret line="636" column="25" selection-start-line="636" selection-start-column="25" selection-end-line="636" selection-end-column="25" />
               <folding />
             </state>
           </provider>
@@ -115,8 +97,8 @@
       <file leaf-file-name="computerAgent.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/src/agent-interaction/computerAgent.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-0.0">
-              <caret line="408" column="21" selection-start-line="408" selection-start-column="21" selection-end-line="408" selection-end-column="21" />
+            <state vertical-scroll-proportion="-6.1296296">
+              <caret line="311" column="19" selection-start-line="311" selection-start-column="12" selection-end-line="311" selection-end-column="19" />
               <folding>
                 <element signature="n#style#0;n#tr#0;n#table#0;n#form#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#td#0;n#tr#0;n#table#0;n#form#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
@@ -124,52 +106,34 @@
                 <element signature="n#style#0;n#tr#1;n#table#0;n#form#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#td#0;n#tr#1;n#table#0;n#form#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#td#1;n#tr#1;n#table#0;n#form#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-                <marker date="1449005915168" expanded="true" signature="19463:19473" placeholder="..." />
-                <marker date="1449005915168" expanded="true" signature="19463:19482" placeholder="..." />
-                <marker date="1449005915168" expanded="true" signature="19532:19539" placeholder="..." />
-                <marker date="1449005915168" expanded="true" signature="19782:19805" placeholder="..." />
-                <marker date="1449005915168" expanded="true" signature="20824:20847" placeholder="..." />
-                <marker date="1449005915168" expanded="true" signature="21799:21822" placeholder="..." />
-                <marker date="1449005915168" expanded="true" signature="21958:21981" placeholder="..." />
+                <marker date="1449177603541" expanded="true" signature="19699:19709" placeholder="..." />
+                <marker date="1449177603541" expanded="true" signature="19699:19718" placeholder="..." />
+                <marker date="1449177603541" expanded="true" signature="19768:19775" placeholder="..." />
+                <marker date="1449177603541" expanded="true" signature="20018:20041" placeholder="..." />
+                <marker date="1449177603541" expanded="true" signature="21060:21083" placeholder="..." />
+                <marker date="1449177603541" expanded="true" signature="22035:22058" placeholder="..." />
+                <marker date="1449177603541" expanded="true" signature="22194:22217" placeholder="..." />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="sbgn-viz.css" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/css/sbgn-viz.css">
+      <file leaf-file-name="agentAPI.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/public/src/agent-interaction/agentAPI.js">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="169" column="17" selection-start-line="169" selection-start-column="17" selection-end-line="169" selection-end-column="17" />
+              <caret line="150" column="0" selection-start-line="150" selection-start-column="0" selection-end-line="150" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="sample-app-cytoscape-sbgn.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-cytoscape-sbgn.js">
+      <file leaf-file-name="agentTester.css" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/public/src/agent-interaction/agentTester.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-11.3">
-              <caret line="823" column="67" selection-start-line="823" selection-start-column="56" selection-end-line="823" selection-end-column="67" />
-              <folding>
-                <marker date="1448984855012" expanded="true" signature="21235:21287" placeholder="..." />
-                <marker date="1448984855012" expanded="true" signature="21449:21456" placeholder="..." />
-                <marker date="1448984855012" expanded="true" signature="21727:21734" placeholder="..." />
-                <marker date="1448984855012" expanded="true" signature="22005:22012" placeholder="..." />
-                <marker date="1448984855012" expanded="true" signature="22390:22416" placeholder="..." />
-                <marker date="1448984855012" expanded="true" signature="22429:22436" placeholder="..." />
-                <marker date="1448984855012" expanded="true" signature="22623:22649" placeholder="..." />
-                <marker date="1448984855012" expanded="true" signature="22662:22669" placeholder="..." />
-                <marker date="1448984855012" expanded="true" signature="22870:22877" placeholder="..." />
-                <marker date="1448984855012" expanded="true" signature="23080:23087" placeholder="..." />
-                <marker date="1448984855012" expanded="true" signature="23361:23368" placeholder="..." />
-                <marker date="1448984855012" expanded="true" signature="23634:23641" placeholder="..." />
-                <marker date="1448984855012" expanded="true" signature="24036:24043" placeholder="..." />
-                <marker date="1448984855012" expanded="true" signature="24413:24432" placeholder="..." />
-                <marker date="1448984855012" expanded="true" signature="24449:24463" placeholder="..." />
-                <marker date="1448984855012" expanded="true" signature="30583:30590" placeholder="..." />
-                <marker date="1448984855012" expanded="true" signature="32499:32506" placeholder="..." />
-              </folding>
+            <state vertical-scroll-proportion="0.0">
+              <caret line="24" column="12" selection-start-line="24" selection-start-column="12" selection-end-line="24" selection-end-column="12" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -221,17 +185,17 @@
         <option value="$PROJECT_DIR$/public/src/utilities/add-remove-utilities.js" />
         <option value="$PROJECT_DIR$/public/src/utilities/json-to-sbgnml-converter.js" />
         <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-menu-functions.js" />
-        <option value="$PROJECT_DIR$/public/src/agent-interaction/agentTester.css" />
         <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-cytoscape-sbgn.js" />
-        <option value="$PROJECT_DIR$/public/src/agent-interaction/agentAPI.js" />
         <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/modelManager.js" />
-        <option value="$PROJECT_DIR$/public/src/agent-interaction/computerAgent.html" />
         <option value="$PROJECT_DIR$/views/index.html" />
-        <option value="$PROJECT_DIR$/lib/index.js" />
         <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/css/sbgn-viz.css" />
         <option value="$PROJECT_DIR$/public/scripts/webPageEditor.js" />
-        <option value="$PROJECT_DIR$/index.js" />
         <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/EditorActionsManager.js" />
+        <option value="$PROJECT_DIR$/public/src/agent-interaction/agentTester.css" />
+        <option value="$PROJECT_DIR$/public/src/agent-interaction/computerAgent.html" />
+        <option value="$PROJECT_DIR$/public/src/agent-interaction/agentAPI.js" />
+        <option value="$PROJECT_DIR$/index.js" />
+        <option value="$PROJECT_DIR$/lib/index.js" />
       </list>
     </option>
   </component>
@@ -819,7 +783,7 @@
       <workItem from="1447442367294" duration="120684000" />
       <workItem from="1449004258531" duration="2386000" />
       <workItem from="1449078815557" duration="15208000" />
-      <workItem from="1449156336412" duration="8332000" />
+      <workItem from="1449156336412" duration="18961000" />
     </task>
     <task id="LOCAL-00001" summary="Idea">
       <created>1446753281602</created>
@@ -831,7 +795,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="313729000" />
+    <option name="totallyTimeSpent" value="324358000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -844,7 +808,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="119" y="14" width="2301" height="1436" extended-state="4" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32985553" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
@@ -852,9 +816,10 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.1561249" sideWeight="0.5040282" order="0" side_tool="true" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39984226" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3298639" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.15130024" sideWeight="0.4959718" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.15063092" sideWeight="0.4959718" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Gulp" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="true" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.1604828" sideWeight="0.5" order="4" side_tool="false" content_ui="combo" />
@@ -870,7 +835,6 @@
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24932003" sideWeight="0.5" order="6" side_tool="false" content_ui="combo" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -1149,6 +1113,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="312" column="8" selection-start-line="312" selection-start-column="8" selection-end-line="312" selection-end-column="8" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1166,84 +1131,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/src/agent-interaction/agentTester.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="33" column="13" selection-start-line="33" selection-start-column="11" selection-end-line="33" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-menu-functions.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="507" column="53" selection-start-line="507" selection-start-column="53" selection-end-line="507" selection-end-column="53" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/src/agent-interaction/agentAPI.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="12" column="25" selection-start-line="12" selection-start-column="25" selection-end-line="12" selection-end-column="25" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/src/agent-interaction/computerAgent.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="408" column="21" selection-start-line="408" selection-start-column="21" selection-end-line="408" selection-end-column="21" />
-          <folding>
-            <element signature="n#style#0;n#tr#0;n#table#0;n#form#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#td#0;n#tr#0;n#table#0;n#form#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#td#1;n#tr#0;n#table#0;n#form#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#tr#1;n#table#0;n#form#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#td#0;n#tr#1;n#table#0;n#form#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#td#1;n#tr#1;n#table#0;n#form#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <marker date="1449005915168" expanded="true" signature="19463:19473" placeholder="..." />
-            <marker date="1449005915168" expanded="true" signature="19463:19482" placeholder="..." />
-            <marker date="1449005915168" expanded="true" signature="19532:19539" placeholder="..." />
-            <marker date="1449005915168" expanded="true" signature="19782:19805" placeholder="..." />
-            <marker date="1449005915168" expanded="true" signature="20824:20847" placeholder="..." />
-            <marker date="1449005915168" expanded="true" signature="21799:21822" placeholder="..." />
-            <marker date="1449005915168" expanded="true" signature="21958:21981" placeholder="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/css/sbgn-viz.css">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="169" column="17" selection-start-line="169" selection-start-column="17" selection-end-line="169" selection-end-column="17" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="278" column="55" selection-start-line="278" selection-start-column="55" selection-end-line="278" selection-end-column="55" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/modelManager.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-14.3">
-          <caret line="180" column="0" selection-start-line="180" selection-start-column="0" selection-end-line="180" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-23.291666">
-          <caret line="835" column="21" selection-start-line="835" selection-start-column="21" selection-end-line="835" selection-end-column="21" />
-          <folding>
-            <element signature="n#style#0;n#div#0;n#chat-user:#0;n#Body:#0;n#Head:#0;n#Title:#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#0;n#b#0;n#div#0;n#chat-message:#0;n#chat-user:#0;n#Body:#0;n#Head:#0;n#Title:#0;n#!!top" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1255,46 +1147,119 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/EditorActionsManager.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-18.8">
+          <caret line="636" column="25" selection-start-line="636" selection-start-column="25" selection-end-line="636" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-menu-functions.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.39618644">
+          <caret line="419" column="26" selection-start-line="419" selection-start-column="26" selection-end-line="419" selection-end-column="39" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-cytoscape-sbgn.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.42372882">
+          <caret line="857" column="18" selection-start-line="857" selection-start-column="18" selection-end-line="857" selection-end-column="18" />
+          <folding>
+            <marker date="1449172252205" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1449172252205" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1449172252205" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1449172252205" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1449172252205" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1449172252205" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1449172252205" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1449172252205" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1449172252205" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1449172252205" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1449172252205" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1449172252205" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1449172252205" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1449172252205" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1449172252205" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1449172252205" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1449172252205" expanded="true" signature="-1:-1" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/src/agent-interaction/agentTester.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="24" column="12" selection-start-line="24" selection-start-column="12" selection-end-line="24" selection-end-column="12" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-27.041666">
+          <caret line="847" column="0" selection-start-line="847" selection-start-column="0" selection-end-line="847" selection-end-column="0" />
+          <folding>
+            <element signature="n#style#0;n#div#0;n#chat-user:#0;n#Body:#0;n#Head:#0;n#Title:#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#b#0;n#div#0;n#chat-message:#0;n#chat-user:#0;n#Body:#0;n#Head:#0;n#Title:#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/modelManager.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-14.3">
+          <caret line="180" column="0" selection-start-line="180" selection-start-column="0" selection-end-line="180" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/src/agent-interaction/computerAgent.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-6.1296296">
+          <caret line="311" column="19" selection-start-line="311" selection-start-column="12" selection-end-line="311" selection-end-column="19" />
+          <folding>
+            <element signature="n#style#0;n#tr#0;n#table#0;n#form#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#td#0;n#tr#0;n#table#0;n#form#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#td#1;n#tr#0;n#table#0;n#form#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#tr#1;n#table#0;n#form#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#td#0;n#tr#1;n#table#0;n#form#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#td#1;n#tr#1;n#table#0;n#form#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <marker date="1449177603541" expanded="true" signature="19699:19709" placeholder="..." />
+            <marker date="1449177603541" expanded="true" signature="19699:19718" placeholder="..." />
+            <marker date="1449177603541" expanded="true" signature="19768:19775" placeholder="..." />
+            <marker date="1449177603541" expanded="true" signature="20018:20041" placeholder="..." />
+            <marker date="1449177603541" expanded="true" signature="21060:21083" placeholder="..." />
+            <marker date="1449177603541" expanded="true" signature="22035:22058" placeholder="..." />
+            <marker date="1449177603541" expanded="true" signature="22194:22217" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/src/agent-interaction/agentAPI.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="150" column="0" selection-start-line="150" selection-start-column="0" selection-end-line="150" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/index.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="834" column="9" selection-start-line="834" selection-start-column="9" selection-end-line="834" selection-end-column="9" />
+          <caret line="525" column="0" selection-start-line="525" selection-start-column="0" selection-end-line="525" selection-end-column="0" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-cytoscape-sbgn.js">
+    <entry file="file://$PROJECT_DIR$/lib/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-11.3">
-          <caret line="823" column="67" selection-start-line="823" selection-start-column="56" selection-end-line="823" selection-end-column="67" />
-          <folding>
-            <marker date="1448984855012" expanded="true" signature="21235:21287" placeholder="..." />
-            <marker date="1448984855012" expanded="true" signature="21449:21456" placeholder="..." />
-            <marker date="1448984855012" expanded="true" signature="21727:21734" placeholder="..." />
-            <marker date="1448984855012" expanded="true" signature="22005:22012" placeholder="..." />
-            <marker date="1448984855012" expanded="true" signature="22390:22416" placeholder="..." />
-            <marker date="1448984855012" expanded="true" signature="22429:22436" placeholder="..." />
-            <marker date="1448984855012" expanded="true" signature="22623:22649" placeholder="..." />
-            <marker date="1448984855012" expanded="true" signature="22662:22669" placeholder="..." />
-            <marker date="1448984855012" expanded="true" signature="22870:22877" placeholder="..." />
-            <marker date="1448984855012" expanded="true" signature="23080:23087" placeholder="..." />
-            <marker date="1448984855012" expanded="true" signature="23361:23368" placeholder="..." />
-            <marker date="1448984855012" expanded="true" signature="23634:23641" placeholder="..." />
-            <marker date="1448984855012" expanded="true" signature="24036:24043" placeholder="..." />
-            <marker date="1448984855012" expanded="true" signature="24413:24432" placeholder="..." />
-            <marker date="1448984855012" expanded="true" signature="24449:24463" placeholder="..." />
-            <marker date="1448984855012" expanded="true" signature="30583:30590" placeholder="..." />
-            <marker date="1448984855012" expanded="true" signature="32499:32506" placeholder="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/EditorActionsManager.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.58349705">
-          <caret line="638" column="27" selection-start-line="638" selection-start-column="27" selection-end-line="638" selection-end-column="27" />
+        <state vertical-scroll-proportion="0.6956107">
+          <caret line="268" column="64" selection-start-line="268" selection-start-column="64" selection-end-line="268" selection-end-column="64" />
           <folding />
         </state>
       </provider>

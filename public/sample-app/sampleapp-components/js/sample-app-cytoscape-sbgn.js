@@ -561,7 +561,7 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
 
 
     return this;
-}
+};
 
 
 
@@ -794,7 +794,7 @@ module.exports.handleSBGNInspector = function (editorActions) {
     else {
         $("#sbgn-inspector").html("");
     }
-}
+};
 module.exports.fillInspectorStateAndInfos = function (ele, width, editorActions) {
     //first empty the state variables and infos data in inspector
     $("#inspector-state-variables").html("");
@@ -913,4 +913,4 @@ module.exports.fillInspectorStateAndInfos = function (ele, width, editorActions)
         };
         editorActions.manager._do(editorActions.AddStateAndInfoCommand(param));
     });
-}
+};

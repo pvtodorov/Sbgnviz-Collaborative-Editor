@@ -22,7 +22,7 @@ body {
 }
 
 #posX, #posY, #newPosX, #newPosY,#borderWidth, #width, #height, #cardinality, #edgeWidth, #edgeColor, #source, #target, {
-    width: 50px;
+    width: 30px;
 }
 #sbgnclass,#nodeId, #sbgnclassEdge, #edgeId {
     width: 100px;
