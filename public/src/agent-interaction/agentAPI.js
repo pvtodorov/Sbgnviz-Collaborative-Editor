@@ -9,6 +9,8 @@
         this.agentId = id;
         this.agentName = name;
         this.pageDoc;
+        this.selectedNode;
+        this.selectedEdge;
         this.opHistory  = [];
         this.chatHistory =[];
         this.userList = [];
@@ -95,6 +97,7 @@
             return self.pageDoc.cy.nodes;
         };
 
+
         this.getEdgeList = function(){
             return self.pageDoc.cy.edges;
         };
@@ -116,6 +119,22 @@
                     if (callback != null) callback();
 
                 });
+        };
+
+        this.getNodeRequest = function(id, callback){
+            socket.emit('agentGetNodeRequest', room, id, function(data){
+                self.selectedNode = data;
+                if (callback != null) callback();
+
+            })
+        };
+
+        this.getEdgeRequest = function(id, callback){
+            socket.emit('agentGetEdgeRequest', room, id, function(data){
+                self.selectedEdge = data;
+                if (callback != null) callback();
+
+            })
         };
 
         this.sendRequest = function(reqName, param){ //model operations

@@ -90,6 +90,7 @@ var addRemoveUtilities = {
             css: css
         });
 
+
         var newEdge = eles[eles.length - 1];
         if (defaults && defaults['line-color']) {
             newEdge.data('lineColor', defaults['line-color']);
@@ -116,6 +117,7 @@ var addRemoveUtilities = {
         var edges = eles.edges();
         var nodes = eles.nodes();
         var removedEles = this.removeEdges(edges);
+
         removedEles = removedEles.union(this.removeNodes(nodes));
         return removedEles;
     },

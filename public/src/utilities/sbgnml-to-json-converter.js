@@ -279,7 +279,9 @@
             var self = this;
             var edgeObj = new Object();
 
-            edgeObj.id = $(ele).attr('id');
+        //funda    edgeObj.id = $(ele).attr('id');
+            edgeObj.id = $(ele).data('id');
+
             edgeObj.sbgnclass = $(ele).attr('class');
 
             if ($(ele).find('glyph').length <= 0) {
@@ -301,7 +303,11 @@
             edgeObj.portsource = $(ele).attr("source");
             edgeObj.porttarget = $(ele).attr("target");
 
+
             var cytoscapeJsEdge = {data: edgeObj};
+
+
+
             jsonArray.push(cytoscapeJsEdge);
         },
         convert: function (xmlObject) {

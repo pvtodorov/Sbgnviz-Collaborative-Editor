@@ -571,6 +571,7 @@ module.exports.handleSBGNInspector = function (editorActions) {
 
     var selectedEles = cy.elements(":selected");
     var width = $("#sbgn-inspector").width() * 0.45;
+
     if (selectedEles.length == 1) {
         var selected = selectedEles[0];
         var title = selected.data("sbgnlabel");

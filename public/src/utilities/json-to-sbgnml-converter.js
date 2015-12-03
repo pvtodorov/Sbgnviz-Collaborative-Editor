@@ -13,6 +13,7 @@ var jsonToSbgnml = {
         //adding glyph sbgnml
         //cy.nodes(":visible").each(function(){
         cy.nodes(":visible").each(function(){
+
             if(!this.isChild())
                 sbgnmlText = sbgnmlText + self.getGlyphSbgnml(this);
         });

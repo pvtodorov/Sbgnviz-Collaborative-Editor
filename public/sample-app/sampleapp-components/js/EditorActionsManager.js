@@ -50,14 +50,12 @@ module.exports.addNode = function(param) {
     }
 
     module.exports.modelManager.addModelNode(result.id(),  param.newNode, "me");
-    module.exports.updateServerGraph();
 
     return result;
 }
 
 module.exports.removeNodes = function(nodesToBeDeleted) {
     module.exports.modelManager.deleteModelNodes(nodesToBeDeleted, "me");
-    module.exports.updateServerGraph();
 
     return addRemoveUtilities.removeNodes(nodesToBeDeleted);
 }
@@ -67,7 +65,7 @@ module.exports.removeEles =function(elesToBeRemoved) {
     module.exports.modelManager.deleteModelNodes(elesToBeRemoved.nodes(), "me");
     module.exports.modelManager.deleteModelEdges(elesToBeRemoved.edges(), "me");
 
-    module.exports.updateServerGraph();
+
     return addRemoveUtilities.removeEles(elesToBeRemoved);
 }
 
@@ -88,7 +86,6 @@ module.exports.restoreEles = function(eles)
         }
     });
 
-    module.exports.updateServerGraph();
     return addRemoveUtilities.restoreEles(eles);
 }
 
@@ -104,7 +101,6 @@ module.exports.addEdge = function(param)
     }
 
     module.exports.modelManager.addModelEdge(result.id(), param.newEdge, "me");
-    module.exports.updateServerGraph();
     return result;
 }
 
@@ -325,7 +321,6 @@ module.exports.moveNodesConditionally = function(param) {
         param.nodes.forEach(function(node){
 
             module.exports.modelManager.moveModelNode(node.id(), node.position(), "me");
-            module.exports.updateServerGraph();
         });
 
     }
@@ -357,7 +352,6 @@ module.exports.moveNodes = function(positionDiff, nodes) {
         });
 
         module.exports.modelManager.moveModelNode(node.id(), node.position(), "me");
-        module.exports.updateServerGraph();
 
 
 
@@ -372,7 +366,6 @@ module.exports.deleteSelected = function(param) {
     module.exports.modelManager.deleteModelNodes(param.eles.nodes(), "me");
     module.exports.modelManager.deleteModelEdges(param.eles.edges(), "me");
 
-    module.exports.updateServerGraph();
     return addRemoveUtilities.removeElesSimply(param.eles);
 }
 
@@ -549,7 +542,6 @@ module.exports.createCompoundForSelectedNodes = function(param) {
         module.exports.modelManager.changeModelNodeAttribute('parent',node.id(), node.data('parent'), "me");
     });
 
-    module.exports.updateServerGraph();
 
     return newCompound;
 }
@@ -592,7 +584,6 @@ module.exports.resizeNode = function(param) {
 
 
     module.exports.modelManager.changeModelNodeAttribute('height', ele.id(), param.height, "me");
-    module.exports.updateServerGraph();
 
     //}
     return result;
@@ -609,7 +600,6 @@ module.exports.changeNodeLabel = function(param) {
     node._private.data.sbgnlabel = param.data;
 
     module.exports.modelManager.changeModelNodeAttribute('sbgnlabel', node.id(), param.data, "me");
-    module.exports.updateServerGraph();
     cy.forceRender();
     return result;
 }
@@ -637,7 +627,6 @@ module.exports.changeStateVariable = function(param) {
 
     param.data = statesAndInfos;
     module.exports.modelManager.changeModelNodeAttribute('sbgnStatesAndInfos', param.ele.id(), param.data, "me", param.state );
-    module.exports.updateServerGraph();
     return result;
 }
 
@@ -662,7 +651,6 @@ module.exports.changeUnitOfInformation = function(param) {
     param.data = statesAndInfos;
 
     module.exports.modelManager.changeModelNodeAttribute('sbgnStatesAndInfos', param.ele.id(), param.data, "me", param.state);
-    module.exports.updateServerGraph();
 
     return result;
 }
@@ -700,7 +688,6 @@ module.exports.removeStateAndInfo = function(param) {
 
     param.data = statesAndInfos;
     module.exports.modelManager.changeModelNodeAttribute('sbgnStatesAndInfos', param.ele.id(), param.data, "me", param.state);
-    module.exports.updateServerGraph();
     param.ele.unselect(); //to refresh inspector
     param.ele.select(); //to refresh inspector
     cy.forceRender();
@@ -738,7 +725,6 @@ module.exports.changeIsMultimerStatus = function(param) {
 
 
     module.exports.modelManager.changeModelNodeAttribute('isMultimer', param.ele.id(), param.data, "me");
-    module.exports.updateServerGraph();
     return result;
 }
 
@@ -755,7 +741,6 @@ module.exports.changeIsCloneMarkerStatus = function(param) {
     }
 
     module.exports.modelManager.changeModelNodeAttribute('isCloneMarker', param.ele.id(), param.data);
-    module.exports.updateServerGraph();
 
     //result is for undo operation
     var result = {
@@ -790,7 +775,6 @@ module.exports.changeStyleData = function( param) {
     else
         module.exports.modelManager.changeModelEdgeAttribute(param.modelDataName, param.ele.id(), param.data, "me");
 
-    module.exports.updateServerGraph();
     return result;
 }
 
@@ -813,12 +797,12 @@ module.exports.changeStyleCss = function(param) {
     //    handleSBGNInspector();
     //}
 
-    if(ele.isNode())
-        module.exports.modelManager.changeModelNodeAttribute(param.modelDataName, param.ele.id(), param.ele.data, "me");
+    if(ele.isNode()){
+        module.exports.modelManager.changeModelNodeAttribute(param.modelDataName, param.ele.id(), param.data, "me");
+    }
     else
-        module.exports.modelManager.changeModelEdgeAttribute(param.modelDataName, param.ele.id(), param.ele.data, "me");
+        module.exports.modelManager.changeModelEdgeAttribute(param.modelDataName, param.ele.id(), param.data, "me");
 
-    module.exports.updateServerGraph();
     return result;
 }
 
@@ -828,11 +812,12 @@ module.exports.changeStyleCss = function(param) {
  * undo: reference to the action that is reverse of this action's command.
  * params: additional parameters for this command
  */
-var Command = function (_do, undo, params, name) {
+var Command = function (_do, undo, params, name, callback) {
     this.name = name;
     this._do = _do;
     this.undo = undo;
     this.params = params;
+    if(callback!=null) callback();
 };
 
 
@@ -857,11 +842,13 @@ module.exports.UnselectEdgeCommand = function (edge)
 };
 module.exports.ChangeNodeLabelCommand = function (node)
 {
-    return new Command(module.exports.changeNodeLabel, module.exports.changeNodeLabel, node, "changeLabel");
+    return new Command(module.exports.changeNodeLabel, module.exports.changeNodeLabel, node, "changeLabel",function(){
+        module.exports.updateServerGraph()});
 };
 module.exports.AddNodeCommand = function (newNode)
 {
-    return new Command(module.exports.addNode, module.exports.removeNodes, newNode, "addNode");
+    return new Command(module.exports.addNode, module.exports.removeNodes, newNode, "addNode" ,function(){
+    module.exports.updateServerGraph()});
 };
 
 //var RemoveNodesCommand = function (nodesTobeDeleted)
@@ -871,12 +858,14 @@ module.exports.AddNodeCommand = function (newNode)
 
 module.exports.RemoveElesCommand = function (elesTobeDeleted)
 {
-    return new Command(module.exports.removeEles, module.exports.restoreEles, elesTobeDeleted, "removeElements");
+    return new Command(module.exports.removeEles, module.exports.restoreEles, elesTobeDeleted, "removeElements", function(){
+        module.exports.updateServerGraph()});
 };
 
 module.exports.AddEdgeCommand = function (newEdge)
 {
-    return new Command(module.exports.addEdge, module.exports.removeEdges, newEdge, "addEdge");
+    return new Command(module.exports.addEdge, module.exports.removeEdges, newEdge, "addEdge",function(){
+        module.exports.updateServerGraph()});;
 };
 
 //var RemoveEdgesCommand = function (edgesTobeDeleted)
@@ -929,11 +918,13 @@ module.exports.PerformLayoutCommand = function (nodesData) {
 };
 
 module.exports.MoveNodeCommand = function (param) {
-    return new Command(module.exports.moveNodesConditionally, module.exports.moveNodesReversely, param, "moveNode");
+    return new Command(module.exports.moveNodesConditionally, module.exports.moveNodesReversely, param, "moveNode",function(){
+        module.exports.updateServerGraph()});
 };
 
 module.exports.DeleteSelectedCommand = function (param) {
-    return new Command(module.exports.deleteSelected, module.exports.restoreSelected, param, "deleteSelected");
+    return new Command(module.exports.deleteSelected, module.exports.restoreSelected, param, "deleteSelected",function(){
+        module.exports.updateServerGraph()});
 };
 
 module.exports.HideSelectedCommand = function (param) {
@@ -963,44 +954,54 @@ module.exports.RemoveHighlightsCommand = function () {
 };
 
 module.exports.CreateCompoundForSelectedNodesCommand = function (param) {
-    return new Command(module.exports.createCompoundForSelectedNodes, module.exports.removeCompound, param, "createCompound");
+    return new Command(module.exports.createCompoundForSelectedNodes, module.exports.removeCompound, param, "createCompound",function(){
+        module.exports.updateServerGraph()});
 };
 
 module.exports.ResizeNodeCommand = function (param) {
-    return new Command(module.exports.resizeNode, module.exports.resizeNode, param, "resizeNode");
+    return new Command(module.exports.resizeNode, module.exports.resizeNode, param, "resizeNode",function(){
+        module.exports.updateServerGraph()});
 };
 
 
 module.exports.AddStateAndInfoCommand = function (param) {
-    return new Command(module.exports.addStateAndInfo, module.exports.removeStateAndInfo, param, "addStateAndInfo");
+    return new Command(module.exports.addStateAndInfo, module.exports.removeStateAndInfo, param, "addStateAndInfo",function(){
+        module.exports.updateServerGraph()});
 };
 
 module.exports.RemoveStateAndInfoCommand = function (param) {
-    return new Command(module.exports.removeStateAndInfo, module.exports.addStateAndInfo, param, "removeStateAndInfo");
+    return new Command(module.exports.removeStateAndInfo, module.exports.addStateAndInfo, param, "removeStateAndInfo",function(){
+        module.exports.updateServerGraph()});
 };
 
 module.exports.ChangeStateVariableCommand = function (param) {
-    return new Command(module.exports.changeStateVariable, module.exports.changeStateVariable, param, "changeStateVariable");
+    return new Command(module.exports.changeStateVariable, module.exports.changeStateVariable, param, "changeStateVariable",function(){
+        module.exports.updateServerGraph()});
 };
 
 module.exports.ChangeUnitOfInformationCommand = function (param) {
-    return new Command(module.exports.changeUnitOfInformation, module.exports.changeUnitOfInformation, param, "changeUnitOfInformation");
+    return new Command(module.exports.changeUnitOfInformation, module.exports.changeUnitOfInformation, param, "changeUnitOfInformation",function(){
+        module.exports.updateServerGraph()});
 };
 
 module.exports.ChangeStyleDataCommand = function (param) {
-    return new Command(module.exports.changeStyleData, module.exports.changeStyleData, param, "changeStyleData");
+    return new Command(module.exports.changeStyleData, module.exports.changeStyleData, param, "changeStyleData",function(){
+        module.exports.updateServerGraph()});
 };
 
 module.exports.ChangeStyleCssCommand = function (param) {
-    return new Command(module.exports.changeStyleCss, module.exports.changeStyleCss, param, "changeStyleCss");
+    return new Command(module.exports.changeStyleCss, module.exports.changeStyleCss, param, "changeStyleCss",function(){
+        module.exports.updateServerGraph()});
 };
 
 module.exports.changeIsMultimerStatusCommand = function (param) {
-    return new Command(module.exports.changeIsMultimerStatus, module.exports.changeIsMultimerStatus, param, "changeMultimerStatus");
+    return new Command(module.exports.changeIsMultimerStatus, module.exports.changeIsMultimerStatus, param, "changeMultimerStatus",function(){
+        module.exports.updateServerGraph()});
 };
 
 module.exports.changeIsCloneMarkerStatusCommand = function (param) {
-    return new Command(module.exports.changeIsCloneMarkerStatus, module.exports.changeIsCloneMarkerStatus, param, "changeCloneMarkerStatus");
+    return new Command(module.exports.changeIsCloneMarkerStatus, module.exports.changeIsCloneMarkerStatus, param, "changeCloneMarkerStatus",function(){
+        module.exports.updateServerGraph()});
 }
 
 

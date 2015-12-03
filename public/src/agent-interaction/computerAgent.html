@@ -83,13 +83,20 @@
         Update multimer status <input id = "isMultimer" type="checkbox"  onclick=changeNodeAttribute("isMultimer")>
 
         <br><br>
-            <input id = "stateVariablesValue">
-         <input type = button  value = "Update state variable value" onclick=changeNodeAttribute("stateVariablesValue")>
-            <br><br>
-            <input id = "stateVariablesVariable"> <input type = "button"  value = "Update state variable name"  onclick=changeNodeAttribute("stateVariablesVariable")>
+        <table>
+        <tr style='border: 1px solid #dddddd;'><td style='width: 100px'> State Variables </td><td id='stateVariables'style='width: 10px'></td></tr>
+
         <br><br>
-        <input id = "stateVariablesUnitOfInformation" >
-            <input type = "button" value = " Update unit of information" onclick=changeNodeAttribute("stateVariablesUnitOfInformation")>
+        <tr style='border: 1px solid #dddddd;'><td style='width: 100px'> Unit Of Information</td><td id='unitsOfInformation' style='width: 10px'></td></tr>
+        </table>
+        <!--<br><br>-->
+            <!--<input id = "stateVariablesValue">-->
+         <!--<input type = button  value = "Update state variable value" onclick=changeNodeAttribute("stateVariablesValue")>-->
+            <!--<br><br>-->
+            <!--<input id = "stateVariablesVariable"> <input type = "button"  value = "Update state variable name"  onclick=changeNodeAttribute("stateVariablesVariable")>-->
+        <!--<br><br>-->
+        <!--<input id = "stateVariablesUnitOfInformation" >-->
+            <!--<input type = "button" value = "Update unit of information" onclick=changeNodeAttribute("stateVariablesUnitOfInformation")>-->
 
     </form>
 <br><br>
@@ -112,13 +119,13 @@
         <input type="button" value="Update edge cardinality" onclick=changeEdgeAttribute("cardinality")>
 
         <br><br>
-        <input id = "widthEdge" type = number>
+        <input id = "widthEdge">
         <input type="button" value="Update edge width" onclick=changeEdgeAttribute("widthEdge")>
 
 
         <br><br>
         <input id = "lineColor" type = color>
-        <input type="button " value="Update edge color" onclick=changeEdgeAttribute("lineColor")>
+        <input type="button" value="Update edge color" onclick=changeEdgeAttribute("lineColor")>
 
 </form>
 </div>
@@ -140,74 +147,76 @@
     var agent;
 
 
-    window.onload = function (){
+    window.onload = function () {
         createAgent();
 
 
-        $('#agentName').change(function(){
+        $('#agentName').change(function () {
             agent.changeName($('#agentName')[0].value);
 
 
-
         });
 
-        $('#operationHistory').bind('contentchanged', function(){
+        $('#operationHistory').bind('contentchanged', function () {
             scrollToBottom('operationHistory');
         });
 
-        $('#chat').bind('contentchanged', function(){
+        $('#chat').bind('contentchanged', function () {
             scrollToBottom('chat');
 
         });
 
-        $('#serverIp').change(function(){
+        $('#serverIp').change(function () {
             deleteCookie('docId'); //delete previous cookie
 
             //add the new cookie
             serverIp = $('#serverIp')[0].value;  //change cookie
-            document.cookie = 'docId=' +  serverIp;  //add cookie docId
+            document.cookie = 'docId=' + serverIp;  //add cookie docId
 
             createAgent();
         });
 
-        $('#nodeId').change(function(){
-            $('#newPosX')[0].value = preciseRound(agent.getNodeList()[$('#nodeId')[0].value].position.x, 3);
-            $('#newPosY')[0].value = preciseRound(agent.getNodeList()[$('#nodeId')[0].value].position.y,3);
-            $('#width')[0].value = preciseRound(agent.getNodeList()[$('#nodeId')[0].value].width,3);
-            $('#height')[0].value = preciseRound(agent.getNodeList()[$('#nodeId')[0].value].height,3);
-            $('#borderWidth')[0].value = agent.getNodeList()[$('#nodeId')[0].value].borderWidth;
-            $('#borderColor')[0].value = agent.getNodeList()[$('#nodeId')[0].value].borderColor;
-            $('#backgroundColor')[0].value = agent.getNodeList()[$('#nodeId')[0].value].backgroundColor;
-            $('#sbgnlabel')[0].value = agent.getNodeList()[$('#nodeId')[0].value].sbgnlabel;
+        $('#nodeId').change(function () {
+
+            //update node info
+            agent.getNodeRequest($('#nodeId')[0].value, function () {
+
+                $('#newPosX')[0].value = preciseRound(agent.selectedNode.position.x, 3);
+                $('#newPosY')[0].value = preciseRound(agent.selectedNode.position.y, 3);
+                $('#width')[0].value = preciseRound(agent.selectedNode.width, 3);
+                $('#height')[0].value = preciseRound(agent.selectedNode.height, 3);
+                $('#borderWidth')[0].value = agent.selectedNode.borderWidth;
+                $('#borderColor')[0].value = agent.selectedNode.borderColor;
+                $('#backgroundColor')[0].value = agent.selectedNode.backgroundColor;
+                $('#sbgnlabel')[0].value = agent.selectedNode.sbgnlabel;
 
 
-            if(agent.getNodeList()[$('#nodeId')[0].value].isCloneMarker)
-                $('#isCloneMarker').attr('checked', 'checked');
-            else
-                $('#isCloneMarker').attr('checked', false);
+                if (agent.selectedNode.isCloneMarker)
+                    $('#isCloneMarker').attr('checked', 'checked');
+                else
+                    $('#isCloneMarker').attr('checked', false);
 
 
-            if(agent.getNodeList()[$('#nodeId')[0].value].isMultimer)
-                $('#isMultimer').attr('checked', 'checked');
-            else
-                $('#isMultimer').attr('checked', false);
+                if (agent.selectedNode.isMultimer)
+                    $('#isMultimer').attr('checked', 'checked');
+                else
+                    $('#isMultimer').attr('checked', false);
 
 
-            var sbgnStatesAndInfos = agent.getNodeList()[$('#nodeId')[0].value].sbgnStatesAndInfos;
-            for(var si in sbgnStatesAndInfos ){
-
-                if(sbgnStatesAndInfos[si].clazz == "state variable"){
-                    $('#stateVariablesVariable')[0].value = sbgnStatesAndInfos[si].state.variable;
-                    $('#stateVariablesValue')[0].value = sbgnStatesAndInfos[si].state.value;
-                }
-                else if(sbgnStatesAndInfos[si].clazz == "unit of information")
-                    $('#stateVariablesUnitOfInformation')[0].value = sbgnStatesAndInfos[si].label.text;
-            }
-
+                fillInspectorStateAndInfos(agent.selectedNode);
+            });
         });
 
-    }
 
+        $('#edgeId').change(function () {
+            //update node info
+            agent.getEdgeRequest($('#edgeId')[0].value, function () {
+                $('#cardinality')[0].value = agent.selectedEdge.cardinality;
+                $('#lineColor')[0].value = agent.selectedEdge.lineColor;
+                $('#widthEdge')[0].value = agent.selectedEdge.width;
+            });
+        });
+    };
 
 
     function createAgent(){
@@ -310,6 +319,7 @@
     }
 
     function addEdge(){
+
         var source = $('#source')[0].value;
         var target = $('#target')[0].value;
         var sbgnclass = $('#sbgnclassEdge')[0].value;
@@ -345,34 +355,67 @@
         var val;
         var id = $('#nodeId')[0].value;
         var attStr = attDiv;
+        agent.getNodeRequest(id, function () {
+            if (attDiv == 'isCloneMarker')
+                val = ($('#isCloneMarker').attr('checked') == 'checked');
 
-        if(attDiv == 'isCloneMarker')
-            val = ($('#isCloneMarker').attr('checked') == 'checked');
+            else if (attDiv == 'isMultimer')
+                val = ($('#isMultimer').attr('checked') == 'checked');
 
-        else if(attDiv == 'isMultimer')
-            val = ($('#isMultimer').attr('checked') == 'checked');
+            else
+                val = $('#' + attDiv)[0].value;
 
-        else if(attDiv == 'stateVariablesValue' || attDiv == 'stateVariablesVariable'){
+            agent.sendRequest("agentChangeNodeAttributeRequest", {id: id, attStr: attStr, attVal: val});
+        });
+    }
 
-            val = {clazz:'', state:{value:'', variable:''}, bbox:{w:69, h:78}};
-            attStr = 'sbgnStatesAndInfos';
-            val.clazz ='state variable';
-            val.state.value = $('#stateVariablesValue')[0].value;
-            val.state.variable = $('#stateVariablesVariable')[0].value;
 
-        }
-        else if(attDiv == 'stateVariablesUnitOfInformation'){
 
-            val = {clazz:'', label:{text:''}, bbox:{w:53, h:18}};
-            attStr = 'sbgnStatesAndInfos';
-            val.clazz ='unit of information';
-            val.label.text = $('#stateVariablesUnitOfInformation')[0].value;
+    function changeUnitOfInformation(oldLabelText){
+        var id = $('#nodeId')[0].value;
 
-        }
-        else
-            val = $('#' + attDiv)[0].value;
+        agent.getNodeRequest(id, function () {
+            var states = agent.selectedNode.sbgnStatesAndInfos;
 
-        agent.sendRequest("agentChangeNodeAttributeRequest", {id:id, attStr:attStr, attVal: val});
+            //find which state this corresponds to
+            states.forEach(function (s) {
+                if (s.clazz == 'unit of information') {
+                    if (s.label.text == oldLabelText)
+                        s.label.text = $('.unitOfInformationLabel')[0].value;
+                }
+            });
+            agent.sendRequest("agentChangeNodeAttributeRequest", {
+                id: id,
+                attStr: "sbgnStatesAndInfos",
+                attVal: states
+            });
+        });
+
+    }
+
+    function changeStateVariable(oldStateVariable, oldStateValue){
+        var id = $('#nodeId')[0].value;
+
+        agent.getNodeRequest(id, function () {
+            var states = agent.selectedNode.sbgnStatesAndInfos;
+
+
+            //find which state this corresponds to
+            states.forEach(function (s) {
+                if (s.clazz == 'state variable') {
+                    if (s.state.value == oldStateValue && s.state.variable == oldStateVariable) {
+                        s.state.value = $('.stateVariableValue')[0].value;
+                        s.state.variable = $('.stateVariableVariable')[0].value;
+                    }
+                }
+            });
+            agent.sendRequest("agentChangeNodeAttributeRequest", {
+                id: id,
+                attStr: "sbgnStatesAndInfos",
+                attVal: states
+            });
+        });
+
     }
 
 
@@ -553,6 +596,112 @@
             callback.apply(this, arguments);
         }
     }
+
+
+    function fillInspectorStateAndInfos(ele) {
+
+
+        var width = 100;
+        //first empty the state variables and infos data in inspector
+        $("#stateVariables").html("");
+        $("#unitsOfInformation").html("");
+        var stateAndInfos = ele.sbgnStatesAndInfos;
+
+
+        for(var si in stateAndInfos){
+
+            var state = stateAndInfos[si];
+
+            if (state.clazz == "state variable") {
+
+                $("#stateVariables").append("<div><input type='text' style=\"width:40px\" class='justAddedStateVariablesInput stateVariableValue' value='"   + state.state.value + "'/>"
+
+                        + "@<input type='text' style=\"width:40px\" class='justAddedStateVariablesInput stateVariableVariable'  + value='" + state.state.variable + "'/>"
+                        + "<img style=\"width:12px;height:12px;\" class='justAddedStateVariablesInput deleteStateAndInfo' src='../../sample-app/sampleapp-images/delete.png'></div>");
+
+
+                var oldStateVariable = state.state.variable;
+                var oldStateValue = state.state.value;
+
+                //Change variable
+                $(".stateVariableVariable").unbind('change').on('change', function () {
+                    changeStateVariable(oldStateVariable, oldStateValue);
+                });
+
+
+                //Change value
+                $(".stateVariableValue").unbind('change').on('change', function () {
+                    changeStateVariable(oldStateVariable, oldStateValue);
+                });
+
+
+            }
+            else if (state.clazz == "unit of information") {
+
+                //var total = width / 5 + width / 5 + width / 2.5;
+                $("#unitsOfInformation").append("<div><input type='text' class='justAddedStateVariablesInput unitOfInformationLabel' value='" + state.label.text+ "'/>"
+                        +"<img style=\"width:12px;height:12px;\" class='justAddedStateVariablesInput deleteStateAndInfo' src='../../sample-app/sampleapp-images/delete.png'></div>");
+
+                var oldLabelText = state.label.text;
+                $(".unitOfInformationLabel").unbind('change').on('change', function () {
+                    changeUnitOfInformation(oldLabelText);
+                });
+            }
+
+            $(".deleteStateAndInfo").unbind('click').click(function (event) {
+                var param = {
+                    obj: $(this).data("state"),
+                    ele: ele,
+                    width: width
+                };
+            //todo    editorActions.manager._do(editorActions.RemoveStateAndInfoCommand(param));
+            });
+
+            $(".justAddedStateVariablesInput").data("state", state);
+            $(".justAddedStateVariablesInput").removeClass("justAddedStateVariablesInput");
+        }
+        $("#stateVariables").append("<img id='addStateVariable' style=\"width:12px;height:12px;\" src='../../sample-app/sampleapp-images/add.png'/>");
+        $("#unitsOfInformation").append("<img id='addUnitOfInformation' style=\"width:12px;height:12px;\" src='../../sample-app/sampleapp-images/add.png'/>");
+
+        $("#addStateVariable").click(function () {
+            var obj = {};
+            obj.clazz = "state variable";
+
+            obj.state = {
+                value: "",
+                variable: ""
+            };
+            obj.bbox = {
+                w: 69,
+                h: 28
+            };
+            var param = {
+                obj: obj,
+                ele: ele,
+                width: width
+            };
+          //todo  editorActions.manager._do(editorActions.AddStateAndInfoCommand(param));
+        });
+
+        $("#addUnitOfInformation").click(function () {
+            var obj = {};
+            obj.clazz = "unit of information";
+            obj.label = {
+                text: ""
+            };
+            obj.bbox = {
+                w: 53,
+                h: 18
+            };
+            var param = {
+                obj: obj,
+                ele: ele,
+                width: width
+            };
+            //todo editorActions.manager._do(editorActions.AddStateAndInfoCommand(param));
+        });
+    }
+
 
 </script>
 

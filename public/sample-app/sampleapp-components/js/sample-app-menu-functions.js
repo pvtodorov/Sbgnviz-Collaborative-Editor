@@ -500,9 +500,16 @@ module.exports.start = function(modelManager){
 
         var selectedEles = cy.$(":selected");
 
+        var param = {
+            // firstTime: false,
+            eles: selectedEles
+        };
+
+        cy.elements().unselect(); //don't forget this
 
 
-        editorActions.manager._do(editorActions.RemoveElesCommand(selectedEles));
+        editorActions.manager._do(editorActions.DeleteSelectedCommand(param));
+        //editorActions.manager._do(editorActions.RemoveElesCommand(selectedEles));
         editorActions.refreshUndoRedoButtonsStatus();
 
 
@@ -528,6 +535,8 @@ module.exports.start = function(modelManager){
            // firstTime: false,
             eles: selectedEles
         };
+
+        console.log(param);
         editorActions.manager._do(editorActions.DeleteSelectedCommand(param));
         editorActions.refreshUndoRedoButtonsStatus();
 

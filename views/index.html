@@ -1,7 +1,7 @@
 
 
 <Title:>
-    SBGNViz Collaborative Editor ({{count(messages)}}) - {{users[_session.userId].name}} - {{_page.doc.sampleInd}}
+    SBGNViz Collaborative Editor ({{count(messages)}})  - {{users[_session.userId].name}} - {{_page.doc.sampleInd}}
 
 <Head:>
     <meta name="viewport" content="width=device-width">
@@ -780,7 +780,7 @@
         <div id = "users" as="container"  on-change = "onScroll()">
           <!--<ul id ="user-list" as = "list">-->
             <form action=""">
-          {{each _page.userIds as #pUserId}}
+          {{each _page.doc.userIds as #pUserId}}
 
             <!--<li>-->
                 <view name="chat-user"></view>
@@ -815,13 +815,13 @@
           <input id="inputs-name" value="{{users[_session.userId].name}}">
           <form id="inputs-form" on-submit="add()">
             <input id="inputs-comment"  value="{{_page.newComment}}" autofocus> <button>Send</button>
-                  <div class="filebutton">Send Image <input type="file" id="imagefile" accept="image/*" on-change = "uploadFile($event)" value = {{_page.newFile}}></div>
+                  <div class="filebutton"><input type="file" id="imagefile" accept="image/*" on-change = "uploadFile($event)" value = {{_page.newFile}}></div>
 
           </form>
         </div>
 
 
-        <div id = "receivedImage" onclick ="openImage()"></div>
+        <!--<div id = "receivedImage" onclick ="openImage()"></div>-->
 
     </div>
 

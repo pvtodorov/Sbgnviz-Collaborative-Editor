@@ -28,22 +28,19 @@ $(document).ready(function() {
     });
 
 
+});
 
-    // Match all link elements with href attributes within the content div
-    $('#receivedImage').qtip({
+function showQTip(el){
+    $(el).parent().qtip({
         content: { text:  function() {
-            if ($('#receivedImage img')[0] != null) {
-                return "Click to enlarge";
-            }
-            else
-                return "";
+            return "Click image to enlarge";
         }
 
         },
 
         position: {
-            my: 'top center',
-            at: 'top center',
+            my: 'center',
+            at: 'center',
             adjust: {
                 cyViewport: true
             },
@@ -59,14 +56,15 @@ $(document).ready(function() {
             }
         }
     });
-});
+}
 
-function openImage(){
-    var largeImage = $('#receivedImage')[0];
-    if( $('#receivedImage img')[0] !=null) {
-        var url = $('#receivedImage img')[0].src;
+function openImage(el){
+    if(el.src){
+        var url = el.src;
         window.open(url, 'Image', 'width=largeImage.stylewidth,height=largeImage.style.height,resizable=1');
     }
+
+
 }
 
 

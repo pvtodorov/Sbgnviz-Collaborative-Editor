@@ -93,6 +93,12 @@ module.exports =  function(model, docId, userId, userName) {
 
         },
 
+        getModelNode: function(id){
+            var nodePath = model.at('_page.doc.cy.nodes.'  + id);
+            return nodePath.get();
+        },
+
+
         selectModelNode: function(node){
 
             var nodePath = model.at('_page.doc.cy.nodes.'  +node.id());
@@ -199,9 +205,13 @@ module.exports =  function(model, docId, userId, userName) {
 
             }
 
-       //     this.updateServerGraph();
 
 
+        },
+        getModelEdge: function(id){
+
+            var edgePath = model.at('_page.doc.cy.edges.'  + id);
+            return edgePath.get();
         },
 
         changeModelEdgeAttribute: function(attStr, edgeId, attVal,  user){
@@ -250,7 +260,6 @@ module.exports =  function(model, docId, userId, userName) {
 
             this.updateHistory('add', edgeId, param);
 
-        //    this.updateServerGraph();
 
         },
 
@@ -302,7 +311,16 @@ module.exports =  function(model, docId, userId, userName) {
 
             });
             jsonObj.edges.forEach(function(edge){
-                model.set('_page.doc.cy.edges.' + edge.data.id + '.id', edge.data.id);
+
+                //set edge id as source + "-" + target
+              //  var edgeId = edge.data.source + "-" + edge.data.target;
+
+             //   console.log(edge);
+
+                var edgeId = edge.data.id;
+
+
+                model.set('_page.doc.cy.edges.' + edgeId + '.id', edgeId);
             });
 
             nodes.forEach(function (node) {
@@ -397,8 +415,16 @@ module.exports =  function(model, docId, userId, userName) {
 
 
                     var sbgnStatesAndInfos = nodePath.get('sbgnStatesAndInfos');
+
+
+
                     if(sbgnStatesAndInfos != null){
                         node.data('sbgnstatesandinfos',sbgnStatesAndInfos);
+                    }
+                    else{
+
+                        nodePath.pass({user: user}).set('sbgnStatesAndInfos', node.data('sbgnstatesandinfos'));
+
                     }
 
 

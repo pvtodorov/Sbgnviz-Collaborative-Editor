@@ -177,10 +177,10 @@ app.get('/:docId', function (page, model, arg, next) {
 
 
         //just to initialize
-        model.set('_page.userIds',[model.get('_session.userId')]);
+        model.set('_page.doc.userIds',[model.get('_session.userId')]);
 
         model.subscribe('users');
-        var  usersQuery = model.query('users', '_page.userIds');
+        var  usersQuery = model.query('users', '_page.doc.userIds');
         usersQuery.subscribe(function (err) {
             if (err) {
                 return next(err);
@@ -273,7 +273,6 @@ app.proto.init = function (model) {
 
 
 
-
     model.on('all', '_page.doc.cy.nodes.*', function(id, op, val, prev, passed){
 
 
@@ -293,7 +292,8 @@ app.proto.init = function (model) {
 
 
         if(docReady &&  passed.user == null) {
-            var edge  = model.get('_page.doc.cy.edges.' + id);
+            var edge  = model.get('_page.doc.cy.edges.' + id); //check
+
             if(!edge|| !edge.id){ //node is deleted
                 deleteElement(id);
             }
@@ -343,6 +343,8 @@ app.proto.init = function (model) {
             //check if edge id exists in the current inspector graph
             var source = model.get('_page.doc.cy.edges.'+ id + '.source');
             var target = model.get('_page.doc.cy.edges.'+ id + '.target');
+
+
 
             insertEdge(source, target);
         }
@@ -456,6 +458,7 @@ app.proto.init = function (model) {
 
 
         if(docReady && passed.user == null) {
+            console.log(sbgnStatesAndInfos);
             updateElementProperty(id,  'sbgnstatesandinfos', sbgnStatesAndInfos, 'data');
 
         }
@@ -544,21 +547,38 @@ app.proto.create = function (model) {
 
     var id = model.get('_session.userId');
     var name = model.get('users.' + id +'.name');
-    socket.emit("subscribeHuman", {userName:name, pageDoc: model.get('_page.doc'), room:  model.get('_page.room'), userId: id}, function(userList){
+    socket.emit("subscribeHuman", {userName:name,room:  model.get('_page.room'), userId: id}, function(userList){
 
         var userIds =[];
         userList.forEach(function(user){
             userIds.push(user.userId);
         });
 
-        model.set('_page.userIds', userIds );
+        model.set('_page.doc.userIds', userIds );
     }); //subscribe to current doc as a new room
 
 
+    socket.on('userList', function(userList){
+        var userIds =[];
+        userList.forEach(function(user){
+            userIds.push(user.userId);
+        });
+
+        model.set('_page.doc.userIds', userIds );
+
+    });
 
     socket.on('imageFile', function(data){
 
-        $('#receivedImage').append('<img src="' + data + '"/>');
+
+        $("div[class='message']").each(function(index, element){
+            if ($(element).context.innerHTML.indexOf(data.filePath) > -1) {
+                $(element).append('<img src="' + data.img + '" onclick ="openImage(this)" onmouseover ="showQTip(this)" />');
+
+
+            }
+        });
+
     })
 
     modelManager = require('./public/sample-app/sampleapp-components/js/modelManager.js')(model, model.get('_page.room'), model.get('_session.userId'),name );
@@ -572,9 +592,6 @@ app.proto.create = function (model) {
     menu.start(modelManager);
 
 
-    //send model to server
-
-    //socket.emit('pageDoc',{room:model.get('_page.room'), pageDoc: model.get('_page.doc')});
 
     this.atBottom = true;
 
@@ -598,7 +615,6 @@ app.proto.onScroll = function () {
     containerHeight = this.container.offsetHeight;
     scrollBottom = this.container.scrollTop + containerHeight;
 
-    console.log("here");
     return this.atBottom = bottom < containerHeight || scrollBottom > bottom - 10;
 
 };
@@ -614,7 +630,7 @@ app.proto.changeColorCode = function(){
 
 
 
-app.proto.add = function (model) {
+app.proto.add = function (model, filePath) {
 
     if(model == null)
 
@@ -625,6 +641,7 @@ app.proto.add = function (model) {
 
 
 
+    //a separate handshake signal is necessary for other clients
     socket.on("currentTime", function (val) {
 
 
@@ -635,7 +652,7 @@ app.proto.add = function (model) {
         }
 
         var targets  = [];
-        var users = model.get('_page.userIds');
+        var users = model.get('_page.doc.userIds');
 
         var myId = model.get('_session.userId');
         for(var i = 0; i < users.length; i++){
@@ -654,40 +671,63 @@ app.proto.add = function (model) {
             userId: msgUserId,
             userName: msgUserName,
             comment: comment,
-            //  time: +(new Date)
             time: val
         });
 
-
-
-
-
         model.filter('messages', 'isMessageForMe').ref('_page.list');
+
+
+        //append image  after updating the message list on the page
+        if(filePath!=null){
+            var msgs = $("div[class='message']");
+            //append this to the current message as a thumbnail
+            $("div[class='message']").each(function(index, element){
+                if ($(element).context.innerHTML.indexOf(filePath) > -1) {
+                    $(element).append("<div class = 'receivedImage' ></div>");
+
+                }
+            });
+
+
+
+        }
     });
 
 };
 
 
 
+
 app.proto.uploadFile = function(evt){
-    var room = this.model.get('_page.room');
-    var fileStr = this.model.get("_page.newFile").split('\\');
-    var filePath = fileStr[fileStr.length-1];
 
-    var file = evt.target.files[0];
+    try{
+        var room = this.model.get('_page.room');
+        var fileStr = this.model.get("_page.newFile").split('\\');
+        var filePath = fileStr[fileStr.length-1];
 
-    var reader = new FileReader();
-    reader.onload = function(evt){
-        socket.emit('imageFile', { img: evt.target.result,room: room});
-    };
+        var file = evt.target.files[0];
 
-    reader.readAsDataURL(file);
+        var reader = new FileReader();
+        reader.onload = function(evt){
+            socket.emit('imageFile', { img: evt.target.result,room: room, filePath: filePath});
+        };
 
-    //Add file name as a text message
-    this.model.set('_page.newComment', "Sent image: "  + filePath);
-    this.app.proto.add(this.model);
+        reader.readAsDataURL(file);
 
+        //Add file name as a text message
+        this.model.set('_page.newComment', "Sent image: "  + filePath);
+
+
+        this.app.proto.add(this.model, filePath);
+
+
+    }
+    catch(error){ //clicking cancel when the same file is selected causes error
+        console.log(error);
+
+    }
 };
+
 app.proto.count = function (value) {
     return Object.keys(value || {}).length;
 };
@@ -727,11 +767,11 @@ function deleteElement(elId){
     setTimeout(function(){
         try{
             var el = cy.$(('#' + elId));
-            //         cy.elements().unselect(); //unselect others
+                     cy.elements().unselect(); //unselect others
 
             //todo element is already selected? el.select(); //select this one
 
-            addRemoveUtilities.removeEles(el);
+            addRemoveUtilities.removeElesSimply(el);
             updateServerGraph();
 
         }
@@ -804,9 +844,6 @@ function updateElementProperty(elId, propName, propValue, propType){
 
 
 
-
-
-
              //TODO: correct resizing
              if(propName == 'width'){
 
@@ -814,16 +851,12 @@ function updateElementProperty(elId, propName, propValue, propType){
                  el[0]._private.style.width.pxValue = propValue;
                  el[0]._private.data.sbgnbbox.w = propValue;
 
-
-
-
              }
              else if(propName == 'height'){
 
                  el[0]._private.style.height.value = propValue;
                  el[0]._private.style.height.pxValue = propValue;
                  el[0]._private.data.sbgnbbox.h = propValue;
-
 
              }
             else if(propName == 'sbgnstatesandinfos'){
@@ -898,7 +931,9 @@ function updateCloneMarkerStatus(elId, isCloneMarker){
 };
 
 function updateServerGraph (){
+
     var sbgnmlText = jsonToSbgnml.createSbgnml();
     var cytoscapeJsGraph = sbgnmlToJson.convert(sbgnmlText);
+
     modelManager.updateServerGraph(cytoscapeJsGraph);
 };
