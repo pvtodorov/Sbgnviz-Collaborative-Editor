@@ -288,6 +288,8 @@ module.exports.performLayoutFunction = function(nodesData) {
         delete nodesData.firstTime;
         return nodesData;
     }
+
+
     return module.exports.returnToPositionsAndSizes(nodesData);
 }
 
@@ -301,6 +303,8 @@ module.exports.returnToPositionsAndSizes = function(nodesData) {
             y: ele.position("y")
         };
         var data = nodesData[ele.id()];
+
+
         ele._private.data.width = data.width;
         ele._private.data.height = data.height;
         return {

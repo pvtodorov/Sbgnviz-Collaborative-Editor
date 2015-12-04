@@ -616,7 +616,7 @@ module.exports.start = function(modelManager){
     });
 
     $("#layout-properties").click(function (e) {
-        sbgnLayoutProp.render();
+        sbgnLayoutProp.render(modelManager);
     });
 
     $("#layout-properties-icon").click(function (e) {
@@ -730,6 +730,8 @@ module.exports.start = function(modelManager){
     });
 
     $("#perform-layout").click(function (e) {
+
+
         var nodesData = {};
         var nodes = cy.nodes();
         for (var i = 0; i < nodes.length; i++) {
@@ -751,6 +753,8 @@ module.exports.start = function(modelManager){
         cy.edges().data("porttarget", []);
 
         sbgnLayoutProp.applyLayout();
+
+
         editorActions.manager._do(editorActions.PerformLayoutCommand(nodesData));
 
         editorActions.refreshUndoRedoButtonsStatus();
@@ -943,6 +947,7 @@ function SBGNLayout(){
         applyLayout: function () {
             var options = this.currentLayoutProperties;
             options.fit = options.randomize;
+
             cy.elements().filter(':visible').layout(options);
         },
         applyIncrementalLayout: function () {
@@ -957,7 +962,7 @@ function SBGNLayout(){
             self.currentLayoutProperties = _.clone(layoutProps);
 
         },
-        render: function () {
+        render: function (modelManager) {
 
             var self = this;
 
@@ -968,7 +973,7 @@ function SBGNLayout(){
 
             $(self.el).dialog();
 
-            var lp = modelManager.updateLayout(self.defaultLayoutProperties);
+            var lp = modelManager.updateLayoutProperties(self.defaultLayoutProperties);
 
 
 

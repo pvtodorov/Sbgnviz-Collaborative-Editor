@@ -308,8 +308,10 @@ app.proto.init = function (model) {
 
     model.on('all', '_page.doc.layoutProperties', function(index){
 
+
         if(docReady && menu ){
             var layoutProps = model.get('_page.doc.layoutProperties');
+
             menu.updateLayoutProperties(layoutProps);
 
         }
@@ -559,6 +561,9 @@ app.proto.create = function (model) {
         model.set('_page.doc.userIds', userIds );
 
     });
+    socket.on('runLayout', function(){
+        $("#perform-layout").trigger('click');
+    })
 
     socket.on('imageFile', function(data){
 

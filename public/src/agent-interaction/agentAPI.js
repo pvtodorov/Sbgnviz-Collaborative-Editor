@@ -59,7 +59,7 @@
         //get model for the current room
         this.getModel = function (callback) {
 
-            socket.emit('agentPageDocRequest', room, function(data){
+            socket.emit('agentPageDocRequest', {room: room}, function(data){
                 self.pageDoc = data;
                 if (callback != null) callback();
             });
@@ -69,7 +69,7 @@
         //get operation history
         this.getOperationHistory= function (callback) {
 
-            socket.emit('agentOperationHistoryRequest', room, function(data){
+            socket.emit('agentOperationHistoryRequest', {room: room}, function(data){
                 self.opHistory = data;
                 if (data == null)
                     self.opHistory = [];
@@ -83,7 +83,7 @@
         };
 
         this.getUserList = function(callback) {
-            socket.emit('agentUserListRequest', room, function(data){
+            socket.emit('agentUserListRequest', {room: room}, function(data){
 
                     self.userList = data;
                     if (data == null)
@@ -101,6 +101,9 @@
         this.getEdgeList = function(){
             return self.pageDoc.cy.edges;
         };
+        this.getLayoutProperties = function(){
+            return self.pageDoc.layoutProperties;
+        }
 
         this.changeName = function(newName){
             self.agentName = newName;
@@ -111,7 +114,7 @@
 
         //get operation history
         this.getChatHistory= function (callback) {
-            socket.emit('agentChatHistoryRequest', room, function(data){
+            socket.emit('agentChatHistoryRequest', {room: room}, function(data){
                     self.chatHistory = data;
                     if (data == null)
                         self.chatHistory = [];
@@ -122,7 +125,7 @@
         };
 
         this.getNodeRequest = function(id, callback){
-            socket.emit('agentGetNodeRequest', room, id, function(data){
+            socket.emit('agentGetNodeRequest', {room: room, id:id}, function(data){
                 self.selectedNode = data;
                 if (callback != null) callback();
 
@@ -130,7 +133,7 @@
         };
 
         this.getEdgeRequest = function(id, callback){
-            socket.emit('agentGetEdgeRequest', room, id, function(data){
+            socket.emit('agentGetEdgeRequest', {room: room, id:id}, function(data){
                 self.selectedEdge = data;
                 if (callback != null) callback();
 
@@ -138,7 +141,9 @@
         };
 
         this.sendRequest = function(reqName, param){ //model operations
-            socket.emit(reqName, room, param);
+
+            param.room = room;
+            socket.emit(reqName, param);
         };
 
 
@@ -160,7 +165,7 @@
 
             });
 
-            callback();
+            if (callback != null) callback();
 
 
         };
@@ -172,8 +177,8 @@
 
             var message = {room: room, comment: comment, userName:self.agentName, userId: self.agentId, time: 1, targets: targets}; //set time on the server
             socket.emit('agentMessage', message, function(){
-
-                callback();
+            if(callback!=null)
+                if (callback != null) callback();
             });
         };
 

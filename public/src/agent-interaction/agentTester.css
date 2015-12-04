@@ -21,24 +21,40 @@ body {
 
 }
 
-#posX, #posY, #newPosX, #newPosY,#borderWidth, #width, #height, #cardinality, #edgeWidth, #edgeColor, #source, #target, {
-    width: 30px;
-}
+
 #sbgnclass,#nodeId, #sbgnclassEdge, #edgeId {
     width: 100px;
     padding: 1px;
     margin: 5px;
 }
 
+
 #nodeId,#edgeId{
     background: #d1eaff;
 }
 
-#nodeOperations, #edgeOperations{
+
+#nodeOperations, #edgeOperations, #layoutOperations{
     border: 1px solid gray;
     border-radius: 10px;
     padding: 5px;
 }
+
+#layoutOperations input[type = "number"]{
+    width: 50px;
+    padding: 1px;
+    margin: 5px;
+}
+
+#nodeOperations input{
+    margin: 5px;
+}
+
+#nodeOperations input[type = "number"]{
+    width: 50px;
+    padding: 1px;
+}
+
 #agentName {
     padding-left: 5px;
     width: 100px;
@@ -51,10 +67,12 @@ body {
     border-radius: 25px;
     margin: 5px;
     left: 0px;
-    height: 1100px;
+    /*height: 1100px;*/
     width: 35%;
 }
-
+#agentOperations button{
+    margin: 5px;
+}
 #modelHistory{
     position: absolute;
     padding: 5px;

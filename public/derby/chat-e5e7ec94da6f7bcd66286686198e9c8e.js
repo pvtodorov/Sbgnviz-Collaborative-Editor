@@ -310,8 +310,10 @@ app.proto.init = function (model) {
 
     model.on('all', '_page.doc.layoutProperties', function(index){
 
+
         if(docReady && menu ){
             var layoutProps = model.get('_page.doc.layoutProperties');
+
             menu.updateLayoutProperties(layoutProps);
 
         }
@@ -561,6 +563,9 @@ app.proto.create = function (model) {
         model.set('_page.doc.userIds', userIds );
 
     });
+    socket.on('runLayout', function(){
+        $("#perform-layout").trigger('click');
+    })
 
     socket.on('imageFile', function(data){
 
@@ -965,8 +970,8 @@ function App(derby, name, filename) {
   this.derby = derby;
   this.name = name;
   this.filename = filename;
-  this.scriptHash = 'b0bcf91d1344f422d384214f46bbba33';
-  this.bundledAt = 1449178534318;
+  this.scriptHash = 'e5e7ec94da6f7bcd66286686198e9c8e';
+  this.bundledAt = 1449263222185;
   this.Page = createAppPage();
   this.proto = this.Page.prototype;
   this.views = new derbyTemplates.templates.Views();
@@ -21423,6 +21428,8 @@ module.exports.performLayoutFunction = function(nodesData) {
         delete nodesData.firstTime;
         return nodesData;
     }
+
+
     return module.exports.returnToPositionsAndSizes(nodesData);
 }
 
@@ -21436,6 +21443,8 @@ module.exports.returnToPositionsAndSizes = function(nodesData) {
             y: ele.position("y")
         };
         var data = nodesData[ele.id()];
+
+
         ele._private.data.width = data.width;
         ele._private.data.height = data.height;
         return {
@@ -22480,16 +22489,18 @@ module.exports =  function(model, docId, userId, userName) {
            });
 
         },
-        updateLayoutProperties: function(defaultLayoutProperties){
+        updateLayoutProperties: function(layoutProperties){
 
             var currentLayoutProperties;
             var lp =  model.get('_page.doc.layoutProperties');
+
             if(lp == null)
                 currentLayoutProperties = _.clone(defaultLayoutProperties);
             else
                 currentLayoutProperties = _.clone(lp);
 
-            model.set('_page.doc.layoutProperties', currentLayoutProperties); //synclayout
+
+             model.set('_page.doc.layoutProperties', currentLayoutProperties); //synclayout
 
 
             return currentLayoutProperties;
@@ -24447,7 +24458,7 @@ module.exports.start = function(modelManager){
     });
 
     $("#layout-properties").click(function (e) {
-        sbgnLayoutProp.render();
+        sbgnLayoutProp.render(modelManager);
     });
 
     $("#layout-properties-icon").click(function (e) {
@@ -24561,6 +24572,8 @@ module.exports.start = function(modelManager){
     });
 
     $("#perform-layout").click(function (e) {
+
+
         var nodesData = {};
         var nodes = cy.nodes();
         for (var i = 0; i < nodes.length; i++) {
@@ -24582,6 +24595,8 @@ module.exports.start = function(modelManager){
         cy.edges().data("porttarget", []);
 
         sbgnLayoutProp.applyLayout();
+
+
         editorActions.manager._do(editorActions.PerformLayoutCommand(nodesData));
 
         editorActions.refreshUndoRedoButtonsStatus();
@@ -24774,6 +24789,7 @@ function SBGNLayout(){
         applyLayout: function () {
             var options = this.currentLayoutProperties;
             options.fit = options.randomize;
+
             cy.elements().filter(':visible').layout(options);
         },
         applyIncrementalLayout: function () {
@@ -24788,7 +24804,7 @@ function SBGNLayout(){
             self.currentLayoutProperties = _.clone(layoutProps);
 
         },
-        render: function () {
+        render: function (modelManager) {
 
             var self = this;
 
@@ -24799,7 +24815,7 @@ function SBGNLayout(){
 
             $(self.el).dialog();
 
-            var lp = modelManager.updateLayout(self.defaultLayoutProperties);
+            var lp = modelManager.updateLayoutProperties(self.defaultLayoutProperties);
 
 
 
@@ -24921,4 +24937,4 @@ function SBGNProperties(){
 },{"./EditorActionsManager.js":84,"./sample-app-cytoscape-sbgn.js":87}]},{},[82,1])
 
 
-//# sourceMappingURL=/derby/chat-b0bcf91d1344f422d384214f46bbba33.map.json
+//# sourceMappingURL=/derby/chat-e5e7ec94da6f7bcd66286686198e9c8e.map.json

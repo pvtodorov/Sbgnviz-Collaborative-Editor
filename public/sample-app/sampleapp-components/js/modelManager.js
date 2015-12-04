@@ -37,16 +37,18 @@ module.exports =  function(model, docId, userId, userName) {
            });
 
         },
-        updateLayoutProperties: function(defaultLayoutProperties){
+        updateLayoutProperties: function(layoutProperties){
 
             var currentLayoutProperties;
             var lp =  model.get('_page.doc.layoutProperties');
+
             if(lp == null)
                 currentLayoutProperties = _.clone(defaultLayoutProperties);
             else
                 currentLayoutProperties = _.clone(lp);
 
-            model.set('_page.doc.layoutProperties', currentLayoutProperties); //synclayout
+
+             model.set('_page.doc.layoutProperties', currentLayoutProperties); //synclayout
 
 
             return currentLayoutProperties;
