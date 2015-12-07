@@ -373,6 +373,9 @@ img.sbgn-toolbar-element:hover {
     min-width: 8px !important;
 }
 
+input, button {
+    font-size: 12px !important;
+}
 
 #chat-area{
     position: absolute;

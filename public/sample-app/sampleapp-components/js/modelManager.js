@@ -43,7 +43,7 @@ module.exports =  function(model, docId, userId, userName) {
             var lp =  model.get('_page.doc.layoutProperties');
 
             if(lp == null)
-                currentLayoutProperties = _.clone(defaultLayoutProperties);
+                currentLayoutProperties = _.clone(layoutProperties);
             else
                 currentLayoutProperties = _.clone(lp);
 

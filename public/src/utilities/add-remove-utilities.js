@@ -129,7 +129,7 @@ var addRemoveUtilities = {
             var parentId = removedNode._private.data.parent;
 
             //Just alter the parent id of the nodesToMakeCompound
-            if (parentId != oldParentId) {
+            if (parentId != oldParentId | removedNode._private.data.source) {
                 continue;
             }
 
