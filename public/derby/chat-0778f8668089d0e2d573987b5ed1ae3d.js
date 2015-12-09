@@ -961,8 +961,8 @@ function App(derby, name, filename) {
   this.derby = derby;
   this.name = name;
   this.filename = filename;
-  this.scriptHash = 'ef2a25fc91dfd016cde19100322bd081';
-  this.bundledAt = 1449675531478;
+  this.scriptHash = '0778f8668089d0e2d573987b5ed1ae3d';
+  this.bundledAt = 1449676029638;
   this.Page = createAppPage();
   this.proto = this.Page.prototype;
   this.views = new derbyTemplates.templates.Views();
@@ -22782,7 +22782,6 @@ module.exports =  function(model, docId, userId, userName) {
 
         getServerGraph: function(){
 
-
             return model.get('_page.doc.jsonObj');
         },
 
@@ -22945,7 +22944,7 @@ module.exports =  function(model, docId, userId, userName) {
 
             });
             jsonObj.edges.forEach(function(edge){
-                
+
                 var edgeId = edge.data.id;
 
                 model.set('_page.doc.cy.edges.' + edgeId + '.id', edgeId);
@@ -25052,4 +25051,4 @@ function SBGNProperties(){
 },{"./EditorActionsManager.js":84,"./sample-app-cytoscape-sbgn.js":87}]},{},[82,1])
 
 
-//# sourceMappingURL=/derby/chat-ef2a25fc91dfd016cde19100322bd081.map.json
+//# sourceMappingURL=/derby/chat-0778f8668089d0e2d573987b5ed1ae3d.map.json
