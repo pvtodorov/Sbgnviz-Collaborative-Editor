@@ -26,9 +26,17 @@ module.exports =  function(model, docId, userId, userName) {
 
     return{
 
+
+        //selfObj: this,
+
         getModel: function(){
             return model;
         },
+
+        setImageFile: function(data, user){
+            model.pass({user:user}).set('_page.doc.imageFile', data);
+        },
+
         setName: function(userName){
 
            model.fetch('users', userId, function(err){
@@ -57,6 +65,10 @@ module.exports =  function(model, docId, userId, userName) {
             model.set('_page.doc.layoutProperties', layoutProperties); //synclayout
 
         },
+
+        //setRunLayout : function(runLayoutVal){ //bool
+        //    model.pass({user:user}).set('_page.doc.runLayout', runLayoutVal);
+        //},
         getSampleInd: function(user){
             var ind = model.get('_page.doc.sampleInd');
             if(ind == null)
@@ -114,9 +126,9 @@ module.exports =  function(model, docId, userId, userName) {
         unselectModelNode: function(node){
             var nodePath = model.at('_page.doc.cy.nodes.'  +node.id());
 
+
             if(nodePath.get('id')){
                 nodePath.set('highlightColor' , null);
-              //  this.updateServerGraph();
             }
 
         },
@@ -124,12 +136,12 @@ module.exports =  function(model, docId, userId, userName) {
             var nodePath = model.at('_page.doc.cy.nodes.'  +nodeId);
             if(nodePath.get('id')){
 
+
                 // if(!node.selected) //selected nodes will still be highlighted even if they are freed
-                model.pass({user:user}).set('_page.doc.cy.nodes.' +nodeId+ '.highlightColor' , null);
+                model.set('_page.doc.cy.nodes.' +nodeId+ '.highlightColor' , null); //make my highlight color null as well
                 model.pass({user:user}).set('_page.doc.cy.nodes.' +nodeId +'.position' , pos);
 
 
-                //this.updateServerGraph();
             }
 
 
@@ -289,7 +301,6 @@ module.exports =  function(model, docId, userId, userName) {
 
         getServerGraph: function(){
 
-
             return model.get('_page.doc.jsonObj');
         },
 
@@ -304,6 +315,145 @@ module.exports =  function(model, docId, userId, userName) {
             model.set('_page.doc.jsonObj', cytoscapeJsGraph);
         },
 
+        initModelNode: function(node, user){
+            node.addClass('changeBorderColor');
+
+            var nodePath = model.at('_page.doc.cy.nodes.' + node.id());
+            if (nodePath.get('id')) {
+
+                var width = nodePath.get('width');
+                if (width != null)
+                    node.data('width', width);
+                else
+                    nodePath.pass({user: user}).set('width', node.width());
+
+                var height = nodePath.get('height');
+                if (height != null)
+                    node.data('height', height);
+                else
+                    nodePath.pass({user: user}).set('height', node.height());
+
+
+                var borderWidth = nodePath.get('borderWidth');
+                if (borderWidth != null)
+                    node.css('border-width', borderWidth);
+                else
+                    nodePath.pass({user: user}).set('borderWidth', node.css('border-width'));
+
+
+                var borderColor = nodePath.get('borderColor');
+                if (borderColor != null)
+                    node.data('borderColor', borderColor);
+                else
+                    nodePath.pass({user: user}).set('borderColor', node.css('border-color'));
+
+
+                var backgroundColor = nodePath.get('backgroundColor');
+
+                if (backgroundColor != null)
+                    node.css('background-color', backgroundColor);
+                else
+                    nodePath.pass({user: user}).set('backgroundColor', node.css('background-color'));
+
+                var sbgnlabel = nodePath.get('sbgnlabel');
+
+                if (sbgnlabel != null)
+                    node.data('sbgnlabel', sbgnlabel );
+
+                else
+                    nodePath.pass({user: user}).set('sbgnlabel', node.data('sbgnlabel'));
+
+
+
+
+                var isCloneMarker = nodePath.get('isCloneMarker');
+
+
+                if (isCloneMarker != null)
+                    node.data('sbgnclonemarker', isCloneMarker ? true : undefined);
+
+                else
+                    nodePath.pass({user: user}).set('isCloneMarker', false);
+
+
+                var isMultimer = nodePath.get('isMultimer');
+
+                if (isMultimer != null) {
+
+                    var sbgnclass = node.data('sbgnclass');
+                    if (isMultimer) {
+                        //if not multimer already
+                        if (sbgnclass.indexOf(' multimer') <= -1) //todo funda changed
+                            node.data('sbgnclass', sbgnclass + ' multimer');
+                    }
+                    else {
+                        node.data('sbgnclass', sbgnclass.replace(' multimer', ''));
+                    }
+
+
+                }
+
+                else
+                    nodePath.pass({user: user}).set('isMultimer', false);
+
+
+                var parent = nodePath.get('parent');
+
+                if (parent != null)
+                    node.data('parent', parent);
+                else
+                    nodePath.pass({user: user}).set('parent', node.data('parent'));
+
+
+                var sbgnStatesAndInfos = nodePath.get('sbgnStatesAndInfos');
+
+
+
+                if(sbgnStatesAndInfos != null){
+                    node.data('sbgnstatesandinfos',sbgnStatesAndInfos);
+                }
+                else{
+
+                    nodePath.pass({user: user}).set('sbgnStatesAndInfos', node.data('sbgnstatesandinfos'));
+
+                }
+
+
+
+            }
+
+        },
+        initModelEdge: function(edge, user){
+            edge.addClass('changeLineColor');
+
+            var edgePath = model.at('_page.doc.cy.edges.' + edge.id());
+            if (edgePath.get('id')) {
+                var lineColor = edgePath.get('lineColor');
+
+                if (lineColor != null)
+                    edge.data('lineColor', lineColor);
+                else{
+                    edgePath.pass({user:user}).set('lineColor', edge.css('line-color'));
+
+                }
+
+                var width = edgePath.get('width');
+                if(width != null)
+                    edge.css('width', width);
+                else
+                    edgePath.pass({user:user}).set('width', edge.css('width'));
+
+
+                var cardinality = edgePath.get('cardinality');
+                if(cardinality != null)
+                    edge.data('sbgncardinality', cardinality);
+                else
+                    edgePath.pass({user:user}).set('cardinality', edge.data('sbgncardinality'));
+
+            }
+
+        },
+
         initModel: function(jsonObj, nodes, edges, user){
 
             jsonObj.nodes.forEach(function(node){
@@ -314,157 +464,22 @@ module.exports =  function(model, docId, userId, userName) {
             });
             jsonObj.edges.forEach(function(edge){
 
-                //set edge id as source + "-" + target
-              //  var edgeId = edge.data.source + "-" + edge.data.target;
-
-             //   console.log(edge);
-
                 var edgeId = edge.data.id;
-
 
                 model.set('_page.doc.cy.edges.' + edgeId + '.id', edgeId);
             });
 
+            var self = this;
             nodes.forEach(function (node) {
-
-                node.addClass('changeBorderColor');
-
-                var nodePath = model.at('_page.doc.cy.nodes.' + node.id());
-                if (nodePath.get('id')) {
-
-                    var width = nodePath.get('width');
-                    if (width != null)
-                        node.data('width', width);
-                    else
-                        nodePath.pass({user: user}).set('width', node.width());
-
-                    var height = nodePath.get('height');
-                    if (height != null)
-                        node.data('height', height);
-                    else
-                        nodePath.pass({user: user}).set('height', node.height());
-
-
-                    var borderWidth = nodePath.get('borderWidth');
-                    if (borderWidth != null)
-                        node.css('border-width', borderWidth);
-                    else
-                        nodePath.pass({user: user}).set('borderWidth', node.css('border-width'));
-
-
-                    var borderColor = nodePath.get('borderColor');
-                    if (borderColor != null)
-                        node.data('borderColor', borderColor);
-                    else
-                        nodePath.pass({user: user}).set('borderColor', node.css('border-color'));
-
-
-                    var backgroundColor = nodePath.get('backgroundColor');
-
-                    if (backgroundColor != null)
-                        node.css('background-color', backgroundColor);
-                    else
-                        nodePath.pass({user: user}).set('backgroundColor', node.css('background-color'));
-
-                    var sbgnlabel = nodePath.get('sbgnlabel');
-
-                    if (sbgnlabel != null)
-                        node.data('sbgnlabel', sbgnlabel );
-
-                    else
-                        nodePath.pass({user: user}).set('sbgnlabel', node.data('sbgnlabel'));
-
-
-
-
-                    var isCloneMarker = nodePath.get('isCloneMarker');
-
-
-                    if (isCloneMarker != null)
-                        node.data('sbgnclonemarker', isCloneMarker ? true : undefined);
-
-                    else
-                        nodePath.pass({user: user}).set('isCloneMarker', false);
-
-
-                    var isMultimer = nodePath.get('isMultimer');
-
-                    if (isMultimer != null) {
-
-                        var sbgnclass = node.data('sbgnclass');
-                        if (isMultimer) {
-                            //if not multimer already
-                            if (sbgnclass.indexOf(' multimer') <= -1) //todo funda changed
-                                node.data('sbgnclass', sbgnclass + ' multimer');
-                        }
-                        else {
-                            node.data('sbgnclass', sbgnclass.replace(' multimer', ''));
-                        }
-
-
-                    }
-
-                    else
-                        nodePath.pass({user: user}).set('isMultimer', false);
-
-
-                    var parent = nodePath.get('parent');
-
-                    if (parent != null)
-                        node.data('parent', parent);
-                    else
-                        nodePath.pass({user: user}).set('parent', node.data('parent'));
-
-
-                    var sbgnStatesAndInfos = nodePath.get('sbgnStatesAndInfos');
-
-
-
-                    if(sbgnStatesAndInfos != null){
-                        node.data('sbgnstatesandinfos',sbgnStatesAndInfos);
-                    }
-                    else{
-
-                        nodePath.pass({user: user}).set('sbgnStatesAndInfos', node.data('sbgnstatesandinfos'));
-
-                    }
-
-
-
-                }
-
+                self.initModelNode(node, user);
             });
 
             edges.forEach(function (edge) {
-
-                edge.addClass('changeLineColor');
-
-                var edgePath = model.at('_page.doc.cy.edges.' + edge.id());
-                if (edgePath.get('id')) {
-                    var lineColor = edgePath.get('lineColor');
-
-                    if (lineColor != null)
-                        edge.data('lineColor', lineColor);
-                    else{
-                        edgePath.pass({user:user}).set('lineColor', edge.css('line-color'));
-
-                    }
-
-                    var width = edgePath.get('width');
-                    if(width != null)
-                        edge.css('width', width);
-                    else
-                        edgePath.pass({user:user}).set('width', edge.css('width'));
-
-
-                    var cardinality = edgePath.get('cardinality');
-                    if(cardinality != null)
-                        edge.data('sbgncardinality', cardinality);
-                    else
-                        edgePath.pass({user:user}).set('cardinality', edge.data('sbgncardinality'));
-
-                }
+                self.initModelEdge(edge, user);
             });
+
+
+
 
         }
     }

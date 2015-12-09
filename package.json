@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "prestart": "mongod --dbpath data --fork --logpath /dev/null",
-    "start": "node ./bin/www",
+    "start":"node server.js",
     "poststop": "mongo admin --eval 'db.shutdownServer()' > /dev/null",
     "pretest": "mongod --dbpath data --fork --logpath /dev/null",
     "test": "mocha test",

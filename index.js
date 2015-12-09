@@ -30,16 +30,6 @@ var modelManager;
 app.on('model', function (model) {
 
 
-    //Convert to array
-    //model.fn('getCommandArray', function(items){
-    //
-    //    var commands =[];
-    //    for (key in items) {
-    //        commands.push({id: key.id, name: key.name, time: key.time});
-    //    }
-    //
-    //    return commands;
-    //});
     model.fn('pluckUserIds', function (items, additional) {
         var ids, item, key;
 
@@ -265,8 +255,31 @@ app.proto.changeDuration = function () {
 app.proto.init = function (model) {
     var timeSort;
 
+    model.on('all', '_page.doc.imageFile', function(op,data, prev, passed){
+        if(docReady &&  passed.user == null) {
+
+            $("div[class='message']").each(function (index, element) {
+                if ($(element).context.innerHTML.indexOf(data.filePath) > -1) {
+                    $(element).append('<img src="' + data.img + '" onclick ="openImage(this)" onmouseover ="showQTip(this)" />');
 
 
+                }
+            });
+        }
+
+    });
+
+
+    model.on('all', '_page.doc.runLayout', function(op, val, prev,passed){
+        if(val){
+            if(docReady &&  passed.user == null) {
+                if(val == true){
+                    $("#perform-layout").trigger('click');
+                }
+            }
+
+        }
+    });
 
     model.on('all', '_page.doc.cy.nodes.*', function(id, op, val, prev, passed){
 
@@ -324,10 +337,7 @@ app.proto.init = function (model) {
 
             var pos = model.get('_page.doc.cy.nodes.'+ id + '.position');
 
-
-
             insertNode({id:id, position:pos,  sbgnclass: sbgnclass});
-
 
 
         }
@@ -341,14 +351,13 @@ app.proto.init = function (model) {
             var source = model.get('_page.doc.cy.edges.'+ id + '.source');
             var target = model.get('_page.doc.cy.edges.'+ id + '.target');
 
-
-
             insertEdge(source, target);
         }
 
     });
 
     model.on('change', '_page.doc.cy.nodes.*.position', function(id, pos, prev, passed){
+
         if(docReady && passed.user == null){
 
             updateElementProperty(id, 'position', pos, 'position');
@@ -455,7 +464,6 @@ app.proto.init = function (model) {
 
 
         if(docReady && passed.user == null) {
-            console.log(sbgnStatesAndInfos);
             updateElementProperty(id,  'sbgnstatesandinfos', sbgnStatesAndInfos, 'data');
 
         }
@@ -541,7 +549,7 @@ app.proto.create = function (model) {
 
     var id = model.get('_session.userId');
     var name = model.get('users.' + id +'.name');
-    socket.emit("subscribeHuman", {userName:name,room:  model.get('_page.room'), userId: id}, function(userList){
+   socket.emit("subscribeHuman", {userName:name,room:  model.get('_page.room'), userId: id}, function(userList){
 
         var userIds =[];
         userList.forEach(function(user){
@@ -552,6 +560,7 @@ app.proto.create = function (model) {
     }); //subscribe to current doc as a new room
 
 
+    //to capture user disconnection, this has to be through sockets-- not model
     socket.on('userList', function(userList){
         var userIds =[];
         userList.forEach(function(user){
@@ -561,22 +570,14 @@ app.proto.create = function (model) {
         model.set('_page.doc.userIds', userIds );
 
     });
+
+
+
+    //better through sockets-- model operation causes complications
     socket.on('runLayout', function(){
         $("#perform-layout").trigger('click');
-    })
-
-    socket.on('imageFile', function(data){
-
-
-        $("div[class='message']").each(function(index, element){
-            if ($(element).context.innerHTML.indexOf(data.filePath) > -1) {
-                $(element).append('<img src="' + data.img + '" onclick ="openImage(this)" onmouseover ="showQTip(this)" />');
-
-
-            }
-        });
-
     });
+
 
 
 
@@ -636,12 +637,6 @@ app.proto.add = function (model, filePath) {
         model = this.model;
     this.atBottom = true;
 
-    socket.emit('getTime', function(){}) ;
-
-
-
-    //a separate handshake signal is necessary for other clients
-    socket.on("currentTime", function (val) {
 
 
         var comment;
@@ -670,17 +665,15 @@ app.proto.add = function (model, filePath) {
             userId: msgUserId,
             userName: msgUserName,
             comment: comment,
-            time: val
+            time: -1//val //server assigns the correct time
         });
-
-        //model.filter('messages', 'isMessageForMe').ref('_page.list');
 
 
         //append image  after updating the message list on the page
-        if(filePath!=null){
+        if(filePath!=null) {
             var msgs = $("div[class='message']");
             //append this to the current message as a thumbnail
-            $("div[class='message']").each(function(index, element){
+            $("div[class='message']").each(function (index, element) {
                 if ($(element).context.innerHTML.indexOf(filePath) > -1) {
                     $(element).append("<div class = 'receivedImage' ></div>");
 
@@ -688,10 +681,7 @@ app.proto.add = function (model, filePath) {
             });
 
 
-
         }
-    });
-
 };
 
 
@@ -708,7 +698,8 @@ app.proto.uploadFile = function(evt){
 
         var reader = new FileReader();
         reader.onload = function(evt){
-            socket.emit('imageFile', { img: evt.target.result,room: room, filePath: filePath});
+            modelManager.setImageFile({ img: evt.target.result,room: room, filePath: filePath});
+
         };
 
         reader.readAsDataURL(file);

@@ -172,9 +172,6 @@
 
         this.sendMessage = function(comment, targets, callback){
 
-
-
-
             var message = {room: room, comment: comment, userName:self.agentName, userId: self.agentId, time: 1, targets: targets}; //set time on the server
             socket.emit('agentMessage', message, function(){
             if(callback!=null)

@@ -69,24 +69,53 @@ module.exports.removeEles =function(elesToBeRemoved) {
     return addRemoveUtilities.removeEles(elesToBeRemoved);
 }
 
-module.exports.restoreEles = function(eles)
-{
+module.exports.restoreEles = function(eles) {
+    //we need to restore nodes first, otherwise edges without sources or targets cause error
 
-    eles.forEach(function(ele){
+    eles.nodes().forEach(function(ele) {
+        module.exports.modelManager.addModelNode(ele.id(), {
+                x: ele.x,
+                y: ele.y,
+                sbgnclass: ele.data("sbgnclass")
+            }, "me");
+     //   module.exports.modelManager.changeModelNodeAttribute('sbgnlabel', ele.id(), ele._private.data.sbgnlabel, "me");
+      //  module.exports.modelManager.changeModelNodeAttribute('width', ele.id(), ele.width(),  "me");
+      //  module.exports.modelManager.changeModelNodeAttribute('height', ele.id(), ele.height() , "me");
 
-        if(ele.isNode())
-            module.exports.modelManager.addModelNode(ele.id(), {x: ele.x, y:ele.y, sbgnclass:ele.data("sbgnclass")}, "me");
-        else{
-            var param = {
-                source: ele.data("source"),
-                target: ele.data("target"),
-                sbgnclass: ele.data('sbgnclass')
-            };
-            module.exports.modelManager.addModelEdge(ele.id(), param, "me");
-        }
+
+        module.exports.modelManager.initModelNode(ele);
+
+    });
+
+    eles.edges().forEach(function(ele) {
+        var param = {
+            source: ele.data("source"),
+            target: ele.data("target"),
+            sbgnclass: ele.data('sbgnclass')
+        };
+        module.exports.modelManager.addModelEdge(ele.id(), param, "me");
     });
 
     return addRemoveUtilities.restoreEles(eles);
+}
+module.exports.deleteSelected = function(param) {
+
+
+    console.log(param);
+
+
+    module.exports.modelManager.deleteModelNodes(param.eles.nodes(), "me");
+    module.exports.modelManager.deleteModelEdges(param.eles.edges(), "me");
+
+    addRemoveUtilities.removeElesSimply(param.eles);
+}
+
+module.exports.restoreSelected = function(eles) {
+    var param = {};
+
+    param.eles = module.exports.restoreEles(eles); //model updated in restoreEles
+    param.firstTime = false;
+    return param;
 }
 
 module.exports.addEdge = function(param)
@@ -284,17 +313,32 @@ module.exports.simpleCollapseGivenNodes = function(nodes) {
 }
 
 module.exports.performLayoutFunction = function(nodesData) {
+
+
+
     if (nodesData.firstTime) {
+
         delete nodesData.firstTime;
         return nodesData;
     }
 
+//notify other clients
+    cy.on('layoutstop', function() {
 
+        cy.nodes().forEach(function(node) {
+            module.exports.modelManager.moveModelNode(node.id(), node.position());
+        });
+    });
+
+    //var runLayout = "1";
+    //module.exports.modelManager.setRunLayout(runLayout, "me");
     return module.exports.returnToPositionsAndSizes(nodesData);
 }
 
 module.exports.returnToPositionsAndSizes = function(nodesData) {
     var currentPositionsAndSizes = {};
+
+
     cy.nodes().positions(function (i, ele) {
         currentPositionsAndSizes[ele.id()] = {
             width: ele.width(),
@@ -311,6 +355,13 @@ module.exports.returnToPositionsAndSizes = function(nodesData) {
             x: data.x,
             y: data.y
         };
+    });
+
+
+
+
+    cy.nodes().forEach(function(node) {
+        module.exports.modelManager.moveModelNode(node.id(), node.position(), "me");
     });
 
     return currentPositionsAndSizes;
@@ -366,20 +417,6 @@ module.exports.moveNodes = function(positionDiff, nodes) {
     }
 }
 
-module.exports.deleteSelected = function(param) {
-    module.exports.modelManager.deleteModelNodes(param.eles.nodes(), "me");
-    module.exports.modelManager.deleteModelEdges(param.eles.edges(), "me");
-
-    return addRemoveUtilities.removeElesSimply(param.eles);
-}
-
-module.exports.restoreSelected = function(eles) {
-    var param = {};
-
-    param.eles = module.exports.restoreEles(eles); //model updated in restoreEles
-    param.firstTime = false;
-    return param;
-}
 
 module.exports.hideSelected = function(param) {
     var currentNodes = cy.nodes(":visible");
@@ -918,7 +955,8 @@ module.exports.ExpandAllNodesCommand = function (param) {
 };
 
 module.exports.PerformLayoutCommand = function (nodesData) {
-    return new Command(module.exports.performLayoutFunction, module.exports.returnToPositionsAndSizes, nodesData, "performLayout");
+    return new Command(module.exports.performLayoutFunction, module.exports.returnToPositionsAndSizes, nodesData, "performLayout",function(){
+        module.exports.updateServerGraph()});
 };
 
 module.exports.MoveNodeCommand = function (param) {

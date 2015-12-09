@@ -359,7 +359,7 @@
             reader.onload = function(evt){
                 var imgParam = {img: evt.target.result, filePath: filePath};
 
-                agent.sendRequest("imageFile", imgParam);
+                agent.sendRequest("agentSetImageFileRequest", imgParam);
             };
 
             reader.readAsDataURL(file);
@@ -395,7 +395,7 @@
         agent.sendRequest("agentSetLayoutProperties", {param:layoutProperties});
     }
     function runLayout(){
-        agent.sendRequest("agentRunLayout",{param:null});
+        agent.sendRequest("agentRunLayoutRequest",{param:null});
     }
     function updateModel(callback){
         agent.getModel(callback);

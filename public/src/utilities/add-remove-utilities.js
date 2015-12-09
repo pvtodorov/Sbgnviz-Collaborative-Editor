@@ -105,6 +105,7 @@ var addRemoveUtilities = {
         return edges.remove();
     },
     restoreEles: function (eles) {
+        cy.elements().unselect();
         eles.restore();
         return eles;
     },

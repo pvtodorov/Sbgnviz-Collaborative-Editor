@@ -84,6 +84,13 @@ module.exports.updateSample = function( ind){
 
     });
 }
+
+module.exports.updateNodePositionsAfterLayout = function(modelManager){
+    cy.nodes().forEach(function(node) {
+        modelManager.moveModelNode(node.id(), node.position());
+    });
+}
+
 module.exports.start = function(modelManager){
 
     var self = this;
@@ -505,11 +512,11 @@ module.exports.start = function(modelManager){
             eles: selectedEles
         };
 
-        cy.elements().unselect(); //don't forget this
 
 
-        editorActions.manager._do(editorActions.DeleteSelectedCommand(param));
-        //editorActions.manager._do(editorActions.RemoveElesCommand(selectedEles));
+
+      //  editorActions.manager._do(editorActions.DeleteSelectedCommand(param));
+        editorActions.manager._do(editorActions.RemoveElesCommand(selectedEles));
         editorActions.refreshUndoRedoButtonsStatus();
 
 
@@ -536,7 +543,6 @@ module.exports.start = function(modelManager){
             eles: selectedEles
         };
 
-        console.log(param);
         editorActions.manager._do(editorActions.DeleteSelectedCommand(param));
         editorActions.refreshUndoRedoButtonsStatus();
 
@@ -554,6 +560,46 @@ module.exports.start = function(modelManager){
         };
         editorActions.manager._do(editorActions.HighlightNeighborsofSelectedCommand(param));
         editorActions.refreshUndoRedoButtonsStatus();
+    });
+    $("#highlight-neighbors-of-selected-icon").click(function (e) {
+        $("#neighbors-of-selected").trigger('click');
+    });
+
+    $("#search-by-label-icon").click(function (e) {
+        var text = $("#search-by-label-text-box").val().toLowerCase();
+        if (text.length == 0) {
+            return;
+        }
+        cy.nodes().unselect();
+
+        var nodesToSelect = cy.nodes(":visible").filter(function (i, ele) {
+            if (ele.data("sbgnlabel") && ele.data("sbgnlabel").toLowerCase().indexOf(text) >= 0) {
+                return true;
+            }
+            return false;
+        });
+
+        if (nodesToSelect.length == 0) {
+            return;
+        }
+
+        nodesToSelect.select();
+        var param = {
+            firstTime: true
+        };
+
+        editorActions.manager._do(editorActions.HighlightProcessesOfSelectedCommand(param));
+        editorActions.refreshUndoRedoButtonsStatus();
+    });
+
+    $("#search-by-label-text-box").keydown(function (e) {
+        if (e.which === 13) {
+            $("#search-by-label-icon").trigger('click');
+        }
+    });
+
+    $("#highlight-search-menu-item").click(function (e) {
+        $("#search-by-label-text-box").focus();
     });
 
     $("#processes-of-selected").click(function (e) {
@@ -595,6 +641,7 @@ module.exports.start = function(modelManager){
             compoundType: "complex",
             nodesToMakeCompound: selected
         };
+
         editorActions.manager._do(editorActions.CreateCompoundForSelectedNodesCommand(param));
         editorActions.refreshUndoRedoButtonsStatus();
     });
@@ -611,6 +658,7 @@ module.exports.start = function(modelManager){
             compoundType: "compartment",
             nodesToMakeCompound: selected
         };
+
         editorActions.manager._do(editorActions.CreateCompoundForSelectedNodesCommand(param));
         editorActions.refreshUndoRedoButtonsStatus();
     });
@@ -752,13 +800,21 @@ module.exports.start = function(modelManager){
         cy.edges().data("portsource", []);
         cy.edges().data("porttarget", []);
 
-        sbgnLayoutProp.applyLayout();
+        sbgnLayoutProp.applyLayout(modelManager);
+
+
 
 
         editorActions.manager._do(editorActions.PerformLayoutCommand(nodesData));
 
+
+
+
         editorActions.refreshUndoRedoButtonsStatus();
+
+
     });
+
 
     $("#perform-incremental-layout").click(function (e) {
         cy.nodes().removeData("ports");
@@ -917,6 +973,7 @@ module.exports.start = function(modelManager){
 function SBGNLayout(){
 
     return{
+
         defaultLayoutProperties: {
             name: 'cose-bilkent',
             nodeRepulsion: 4500,
@@ -928,11 +985,20 @@ function SBGNLayout(){
             numIter: 2500,
             tile: true,
             animate: true,
-            randomize: true
+            randomize: true,
+            //stop: function(){
+            //    cy.nodes().forEach(function(node) {
+            //        console.log("here");
+            //        module.exports.modelManager.moveModelNode(node.id(), node.position());
+            //    });
+            //}
         },
 
         el: '#sbgn-layout-table',
         currentLayoutProperties:  null,
+
+
+
         initialize: function(modelManager) {
             var self = this;
 
@@ -944,12 +1010,14 @@ function SBGNLayout(){
 
         },
 
-        applyLayout: function () {
+        applyLayout: function (modelManager) {
             var options = this.currentLayoutProperties;
             options.fit = options.randomize;
 
             cy.elements().filter(':visible').layout(options);
+
         },
+
         applyIncrementalLayout: function () {
             var options = _.clone(this.currentLayoutProperties);
             options.randomize = false;
@@ -1000,6 +1068,7 @@ function SBGNLayout(){
                 self.currentLayoutProperties.numIter = Number($("#num-iter")[0].value);
                 self.currentLayoutProperties.tile = $("#tile")[0].checked;
                 self.currentLayoutProperties.animate = $("#animate")[0].checked;
+
 
 
                 modelManager.setLayoutProperties(self.currentLayoutProperties);
