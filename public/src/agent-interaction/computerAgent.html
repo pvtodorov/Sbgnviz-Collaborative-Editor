@@ -154,6 +154,8 @@
 <ul id = 'userList' as="container" onchange = scrollToBottom('userList')><b>Online Users<br></b></ul>
 
 
+    <br>
+    <br>
     <div id = "receivedImage"  onclick =openImage() ></div>
 </div>
 
@@ -626,7 +628,7 @@
     function writeImage(data){
 
 
-        $('#receivedImage').append('<img src="' + data.img + '"/>');
+        $('#receivedImage').append('<div><img src="' + data.img + '"/><div>');
 
     }
 
