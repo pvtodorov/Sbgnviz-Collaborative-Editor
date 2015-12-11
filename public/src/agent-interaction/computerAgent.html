@@ -6,9 +6,9 @@
     <title></title>
 </head>
 <body>
-<script src="../../lib/js/socket.io.js"></script>
-<script src="../../lib/js/jquery-1.8.2.js"></script>
-<script src="agentAPI.js"></script>
+<script src="./socket.io.js"></script>
+<script src="./jquery-1.8.2.js"></script>
+<script src="./agentAPI.js"></script>
 
 <form>
     <input type="button" value="Delete Cookies" onclick=deleteAllCookies()>
@@ -17,6 +17,7 @@
 <form id = "serverIpForm" >
     Agent name: <input type = "text" id = "agentName" name="agentName" value = "HAL">
     Server IP: <input type = "text" id = "serverIp" name="serverIp" >
+    <input type = "button" value="Create agent" onclick = getServerIp()>
 
 </form>
 
@@ -163,10 +164,13 @@
 <script>
 
     var agent;
+    var serverIp;
 
 
     window.onload = function () {
-        createAgent();
+
+
+       // createAgent();
 
 
         $('#agentName').change(function () {
@@ -184,15 +188,15 @@
 
         });
 
-        $('#serverIp').change(function () {
-            deleteCookie('docId'); //delete previous cookie
-
-            //add the new cookie
-            serverIp = $('#serverIp')[0].value;  //change cookie
-            document.cookie = 'docId=' + serverIp;  //add cookie docId
-
-            createAgent();
-        });
+//        $('#serverIp').change(function () {
+//            deleteCookie('docId'); //delete previous cookie
+//
+//            //add the new cookie
+//            serverIp = $('#serverIp')[0].value;  //change cookie
+//            document.cookie = 'docId=' + serverIp;  //add cookie docId
+//
+//            createAgent();
+//        });
 
         $('#nodeId').change(function () {
 
@@ -236,6 +240,12 @@
         });
     };
 
+    function getServerIp(){
+
+        serverIp = $('#serverIp')[0].value;  //change cookie
+        document.cookie = 'docId=' + serverIp;  //add cookie docId
+        createAgent();
+    }
 
     function createAgent(){
 
@@ -247,18 +257,20 @@
             document.cookie = 'userId=' +  agentId;  //add cookie docId
         }
 
-        var serverIp = getCookie('docId')
+        var ip = getCookie('docId');
 
-        if(serverIp == null){
-            serverIp = $('#serverIp')[0].value;
-            document.cookie = 'docId=' +  serverIp;  //add cookie docId
+
+        if(ip == null || ip == ""){
+            ip = serverIp;
+            document.cookie = 'docId=' +  ip;  //add cookie docId
         }
         else{
-            $('#serverIp')[0].value = serverIp;
+            $('#serverIp')[0].value = ip;
         }
 
         agent = new Agent($('#agentName')[0].value, agentId);
         var socket = agent.connectToServer(serverIp, function(){
+
             writeUserList(agent.userList);
         });
 
@@ -359,7 +371,7 @@
             reader.onload = function(evt){
                 var imgParam = {img: evt.target.result, filePath: filePath};
 
-                agent.sendRequest("agentSetImageFileRequest", imgParam);
+                agent.sendRequest("agentAddImageRequest", imgParam);
             };
 
             reader.readAsDataURL(file);

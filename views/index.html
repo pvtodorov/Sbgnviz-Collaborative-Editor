@@ -47,7 +47,7 @@
 
     <script src="sample-app/sampleapp-components/js/sample-app-mode-handler.js"></script>
     <script src="sample-app/sampleapp-components/js/sample-app-helper-functions.js"></script>
-    <script src="scripts/webPageEditor.js"></script>
+    <!--<script src="sample-app/sampleapp-components/js/webPageEditor.js"></script>-->
 
 
     <!--<div id = "sbgnviz">-->
@@ -803,20 +803,21 @@
           </select>
         </div>
 
-        <button id = "change-user-color" on-click ="changeColorCode()">Change user color</button>
+        <button id = "change-user-color" on-click ="changeColorCode()">New user color</button>
 
         </div>
 
 
 
 
-        <div id="messages" as  = "content">
-        <ul id="messages-list" as="list"  >
+        <!--<div id="messages" as  = "content">-->
+        <!--<ul id="messages-list" as="list"  >-->
+        <ul id="messages" as="list"  >
           {{each _page.list as #message}}
           <li><view name="chat-message"></view></li>
           {{/each}}
         </ul>
-        </div>
+        <!--</div>-->
         <div id="inputs">
           <input id="inputs-name" value="{{users[_session.userId].name}}">
           <form id="inputs-form" on-submit="add()">
@@ -827,7 +828,12 @@
         </div>
 
 
-        <!--<div id = "receivedImage" onclick ="openImage()"></div>-->
+        <div id = "receivedImages" >
+        {{ each _page.doc.images as #imageFile}}
+            {{#imageFile.filePath}}
+           <div class = image> <img src= "{{#imageFile.img}}" onclick ="openImage(this)" onmouseover ="showQTip(this)" /> </div>
+        {{/each}}
+        </div>
 
     </div>
 
@@ -837,13 +843,12 @@
 
         <ul id ="command-list" as = "list" >
         {{each _page.doc.history as #pCommand}}
-            <li> <b>{{#pCommand.userName}} {{formatTime(#pCommand)}} > </b>{{#pCommand.name}} {{#pCommand.id}} {{formatObj(#pCommand.param)}}
+            <li> <b>{{#pCommand.userName}} {{_page.showTime && formatTime(#pCommand)}} > </b>{{#pCommand.name}} {{#pCommand.id}} {{formatObj(#pCommand.param)}}
             </li>
             {{/each}}
         </ul>
 
     </div>
-      <!-- Scroll to bottom immediately on page render and on a resize. -->
 
 
 
@@ -865,8 +870,90 @@
     <chat-message:>
       <div class="message">
         <div class="time">{{_page.showTime && formatTime(#message)}}</div>
-        <b><div style = font-color:{{users[#message.userId].colorCode}}> {{#message.userName}}</div></b>
+        <b><div style = "font-color:{{users[#message.userId].colorCode}};"> {{#message.userName}}</div></b>
         <p>{{#message.comment}}</p>
       </div>
 
 
+
+
+<script>
+    window.onload = function() {
+        scrollToBottom('receivedImages');
+        scrollToBottom('messages');
+        scrollToBottom('command-history-area');
+    };
+
+    window.onresize = function() {
+        scrollToBottom('messages');
+        scrollToBottom('command-history-area');
+        scrollToBottom('receivedImages');
+    };
+
+
+    $(document).ready(function() {
+
+        $('#command-history-area').live('contentchanged', function(){
+            scrollToBottom('command-history-area');
+
+        });
+
+        $('#messages').live('contentchanged', function(){
+            scrollToBottom('messages');
+
+        });
+
+        $('#receivedImages').live('contentchanged', function(){
+            scrollToBottom('receivedImages');
+
+        });
+
+
+    });
+
+    function showQTip(el){
+        $(el).parent().qtip({
+            content: { text:  function() {
+
+                return "Click image to enlarge ";
+            }
+
+            },
+
+            position: {
+                my: 'center',
+                at: 'center',
+                adjust: {
+                    cyViewport: true
+                },
+                effect: false
+            },
+            mouseover: true,
+            style: {
+                classes: 'qtip-image',
+
+                tip: {
+                    width: 16,
+                    height: 8
+                }
+            }
+        });
+    }
+
+    function openImage(el){
+        if(el.src){
+            var url = el.src;
+            window.open(url, 'Image', 'width=largeImage.stylewidth,height=largeImage.style.height,resizable=1');
+        }
+
+
+    }
+
+
+
+    function scrollToBottom(docId){
+;
+        document.getElementById(docId).scrollTop = document.getElementById(docId).scrollHeight  - document.getElementById(docId).clientHeight;
+
+    }
+</script>

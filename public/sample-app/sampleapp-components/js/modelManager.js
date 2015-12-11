@@ -33,8 +33,8 @@ module.exports =  function(model, docId, userId, userName) {
             return model;
         },
 
-        setImageFile: function(data, user){
-            model.pass({user:user}).set('_page.doc.imageFile', data);
+        addImage: function(data, user){
+            model.pass({user:user}).push('_page.doc.images', data);
         },
 
         setName: function(userName){
@@ -150,6 +150,7 @@ module.exports =  function(model, docId, userId, userName) {
         },
         addModelNode: function(nodeId,  param, user){
           //  var pos = {x: param.x, y: param.y};
+
 
 
             model.pass({user:user}).set('_page.doc.cy.nodes.' +nodeId+'.id', nodeId);

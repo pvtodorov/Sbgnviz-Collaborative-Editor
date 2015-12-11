@@ -513,8 +513,6 @@ module.exports.start = function(modelManager){
         };
 
 
-
-
       //  editorActions.manager._do(editorActions.DeleteSelectedCommand(param));
         editorActions.manager._do(editorActions.RemoveElesCommand(selectedEles));
         editorActions.refreshUndoRedoButtonsStatus();

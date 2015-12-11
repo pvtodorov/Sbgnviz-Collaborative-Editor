@@ -111,9 +111,11 @@ app.get('/:docId', function (page, model, arg, next) {
             model.ref('_page.doc', 'documents.' + arg.docId);
             model.subscribe(docPath, 'history');
 
+
         }
 
     );
+    model.subscribe(docPath, 'images');
 
 
 
@@ -129,7 +131,6 @@ app.get('/:docId', function (page, model, arg, next) {
     model.set('_sbgnviz.samples',
         [{name: 'Activated STAT1alpha induction of the IRF1 gene', id: 0},
             {name: 'Glycolysis', id: 1},
-            {name: 'MAPK cascade', id: 2},
             {name: 'MAPK cascade', id: 2},
             {name: 'PolyQ proteins interference', id: 3},
             {name: 'Insulin-like Growth Factor (IGF) signalling', id: 4},
@@ -255,19 +256,27 @@ app.proto.changeDuration = function () {
 app.proto.init = function (model) {
     var timeSort;
 
-    model.on('all', '_page.doc.imageFile', function(op,data, prev, passed){
-        if(docReady &&  passed.user == null) {
-
-            $("div[class='message']").each(function (index, element) {
-                if ($(element).context.innerHTML.indexOf(data.filePath) > -1) {
-                    $(element).append('<img src="' + data.img + '" onclick ="openImage(this)" onmouseover ="showQTip(this)" />');
-
-
-                }
-            });
-        }
-
-    });
+    //model.on('all', '_page.doc.images', function(id, op,data, passed){
+    //    console.log(id);
+    //    console.log(op);
+    //    console.log(data);
+    //    if(docReady &&  passed.user == null) {
+    //        images = model.get('_page.doc.images');
+    //
+    //        images.each(function (index, element) {
+    //
+    //                    $('#receivedImages').append('<img src="' + data[0].img + '" onclick ="openImage(this)" onmouseover ="showQTip(this)" />');
+    //            //
+    //        //$("div[class='message']").each(function (index, element) {
+    //        //    if ($(element).context.innerHTML.indexOf(data[0].filePath) > -1) {
+    //        //        $(element).append('<img src="' + data[0].img + '" onclick ="openImage(this)" onmouseover ="showQTip(this)" />');
+    //        //
+    //        //
+    //        //    }
+    //        //});
+    //    }
+    //
+    //});
 
 
     model.on('all', '_page.doc.runLayout', function(op, val, prev,passed){
@@ -505,11 +514,16 @@ app.proto.init = function (model) {
         }
     });
 
+    model.on('all', '_page.doc.images', function() {
+        if (docReady)
+            triggerContentChange('receivedImages');
+    });
 
     model.on('all', '_page.doc.history', function(){
         if(docReady)
             triggerContentChange('command-history-area');
     });
+
 
     model.on('insert', '_page.list', function (index) {
 
@@ -518,8 +532,10 @@ app.proto.init = function (model) {
         var myId = model.get('_session.userId');
 
 
-        if(docReady)
+        if(docReady){
             triggerContentChange('messages');
+
+        }
 
         if (com[com.length - 1].userId != myId) {
 
@@ -670,18 +686,18 @@ app.proto.add = function (model, filePath) {
 
 
         //append image  after updating the message list on the page
-        if(filePath!=null) {
-            var msgs = $("div[class='message']");
-            //append this to the current message as a thumbnail
-            $("div[class='message']").each(function (index, element) {
-                if ($(element).context.innerHTML.indexOf(filePath) > -1) {
-                    $(element).append("<div class = 'receivedImage' ></div>");
+        //if(filePath!=null) {
+        //    var msgs = $("div[class='message']");
+        //    //append this to the message with the filepath as a thumbnail
+        //    $("div[class='message']").each(function (index, element) {
+        //        if ($(element).context.innerHTML.indexOf(filePath) > -1) {
+        //            $(element).append("<div class = 'receivedImage' ></div>");
+        //        //
+        //        }
+        //    });
+        //
 
-                }
-            });
-
-
-        }
+//s        }
 };
 
 
@@ -698,15 +714,14 @@ app.proto.uploadFile = function(evt){
 
         var reader = new FileReader();
         reader.onload = function(evt){
-            modelManager.setImageFile({ img: evt.target.result,room: room, filePath: filePath});
+            modelManager.addImage({ img: evt.target.result,room: room, filePath: filePath});
 
         };
 
         reader.readAsDataURL(file);
 
         //Add file name as a text message
-        this.model.set('_page.newComment', "Sent image: "  + filePath);
-
+        this.model.set('_page.newComment', "Sent image: "  + filePath );//+  ' <img src="' + evt.target.result + '" onclick ="openImage(this)" onmouseover ="showQTip(this)" /> ');
 
         this.app.proto.add(this.model, filePath);
 
@@ -717,6 +732,7 @@ app.proto.uploadFile = function(evt){
 
     }
 };
+
 
 app.proto.count = function (value) {
     return Object.keys(value || {}).length;

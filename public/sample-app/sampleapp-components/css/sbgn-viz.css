@@ -391,7 +391,7 @@ input, button {
 #chat-area{
     position: absolute;
     /*width is updated dynamically*/
-    /*padding-top: 15px;*/
+    padding-top: 15px;
     /*padding-bottom: 5px;*/
 
     right: 0px;
@@ -403,23 +403,13 @@ input, button {
 
 }
 
-#receivedImage{
-    position: absolute;
-    right: 10px;
-    width: 30px;
-    /*width: 150px;*/
-    /*bottom: 110px;*/
-    /*height: 70px;*/
-
-}
-
 #users{
     position: absolute;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     left: 0;
-    width: 150px;
-    top: 10px;
+    width: 100px;
+    top: 5px;
     bottom: 100px;
     background-color: #e7f9e7;
 
@@ -434,7 +424,7 @@ input, button {
 #user-list {
     list-style: decimal;
     position: absolute;
-    top: 10px;
+    top: 5px;
     left: 0px;
     right: 10px;
 
@@ -444,7 +434,7 @@ input, button {
 #change-user-color{
     position: absolute;
     margin-left: 2px;
-    bottom:5%;
+    bottom:5px;
 }
 #chat-history{
     position: absolute;
@@ -454,32 +444,64 @@ input, button {
     overflow: hidden;
     width: 100%;
 }
+
+
+#receivedImages{
+    position: absolute;
+    overflow-y: auto;
+    /*padding-top: 5px;*/
+    top: 5px;
+    right: 0px;
+    width: 100px;
+    bottom: 100px;
+    font-size: 12px;
+
+
+}
+.image{
+    border: ridge thin #818181;
+    margin-bottom: 5px;
+}
+
 #messages {
     position: absolute;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
-    right: 0px;
-    top: 10px;
+    /*right: 100px;*/
+    margin-left: 0px; /* to overwrite ul */
+    margin-bottom: 0px;
+    padding-top: 10px;
+    top: 5px;
     background: #ececec;
-    left: 155px;
+    /*left: 155px;*/
+    right:105px;
+    left: 105px;
     bottom: 100px;
+    font-size: small;
+
 }
 
-#messages-list {
-    list-style: none;
-
-    /*position: relative;*/
-    overflow: hidden;
-    /*right: 5px;*/
-    font-size: small
-}
+/*#messages-list {*/
+    /*list-style: none;*/
+    /*position: absolute;*/
+    /*left: 0px;*/
+    /*top:0px;*/
+    /*/!*position: relative;*!/*/
+    /*overflow: hidden;*/
+    /*/!*right: 5px;*!/*/
+    /*font-size: small*/
+/*}*/
 
 .message{
 
     background: #fefefe;
     white-space: pre-wrap;
     word-wrap: break-word;
-    margin: 5px 5px 5px 5px;
+    left: 5px;
+    margin-top: 5px;
+    margin-right: 5px;
+    margin-left: 5px;
+    margin-bottom: 5px;
     padding: 0px 5px;
 
 

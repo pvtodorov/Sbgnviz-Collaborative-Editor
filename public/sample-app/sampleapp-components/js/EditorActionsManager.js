@@ -69,23 +69,33 @@ module.exports.removeEles =function(elesToBeRemoved) {
     return addRemoveUtilities.removeEles(elesToBeRemoved);
 }
 
+module.exports.restoreNodesRecursively = function(nodes){
+
+    if(nodes == null) return;
+    nodes.forEach(function(node) {
+
+        module.exports.modelManager.addModelNode(node.id(), {
+            x: node.position("x"),
+            y: node.position("y"),
+            sbgnclass: node.data("sbgnclass")
+        }, "me");
+
+
+        module.exports.modelManager.initModelNode(node);
+
+
+        var children = node.children();
+        if(children)
+            module.exports.restoreNodesRecursively(children);
+    });
+
+}
+
 module.exports.restoreEles = function(eles) {
     //we need to restore nodes first, otherwise edges without sources or targets cause error
 
-    eles.nodes().forEach(function(ele) {
-        module.exports.modelManager.addModelNode(ele.id(), {
-                x: ele.x,
-                y: ele.y,
-                sbgnclass: ele.data("sbgnclass")
-            }, "me");
-     //   module.exports.modelManager.changeModelNodeAttribute('sbgnlabel', ele.id(), ele._private.data.sbgnlabel, "me");
-      //  module.exports.modelManager.changeModelNodeAttribute('width', ele.id(), ele.width(),  "me");
-      //  module.exports.modelManager.changeModelNodeAttribute('height', ele.id(), ele.height() , "me");
+    module.exports.restoreNodesRecursively(eles.nodes());
 
-
-        module.exports.modelManager.initModelNode(ele);
-
-    });
 
     eles.edges().forEach(function(ele) {
         var param = {
@@ -100,8 +110,6 @@ module.exports.restoreEles = function(eles) {
 }
 module.exports.deleteSelected = function(param) {
 
-
-    console.log(param);
 
 
     module.exports.modelManager.deleteModelNodes(param.eles.nodes(), "me");
@@ -369,17 +377,35 @@ module.exports.returnToPositionsAndSizes = function(nodesData) {
 
 module.exports.moveNodesConditionally = function(param) {
 
-    if (param.move)
+    if (param.move){
         module.exports.moveNodes(param.positionDiff, param.nodes);
+    }
 
     else{
+        module.exports.moveNodesRecursively(param.nodes);
+   /*Funda
         param.nodes.forEach(function(node){
 
             module.exports.modelManager.moveModelNode(node.id(), node.position(), "me");
         });
-
+*/
     }
     return param;
+}
+
+module.exports.moveNodesRecursively = function(nodes) {
+
+    if(nodes == null) return;
+    nodes.forEach(function(node){
+
+        module.exports.modelManager.moveModelNode(node.id(), node.position(), "me");
+        var children = node.children();
+        if(children)
+            module.exports.moveNodesRecursively( children);
+
+    });
+
+
 }
 
 module.exports.moveNodesReversely = function(param) {
@@ -397,6 +423,7 @@ module.exports.moveNodesReversely = function(param) {
 }
 
 module.exports.moveNodes = function(positionDiff, nodes) {
+
     for (var i = 0; i < nodes.length; i++) {
         var node = nodes[i];
         var oldX = node.position("x");
