@@ -12,6 +12,8 @@ module.exports.modelManager;
 module.exports.updateServerGraph = function(){
     var sbgnmlText = jsonToSbgnml.createSbgnml();
     var cytoscapeJsGraph = sbgnmlToJson.convert(sbgnmlText);
+
+
     module.exports.modelManager.updateServerGraph(cytoscapeJsGraph);
 };
 
@@ -66,45 +68,46 @@ module.exports.removeEles =function(elesToBeRemoved) {
     module.exports.modelManager.deleteModelEdges(elesToBeRemoved.edges(), "me");
 
 
+    //removeEles operation computes edges to be removed
     return addRemoveUtilities.removeEles(elesToBeRemoved);
+
+
+    //removeElesSimply causes edges to disappear when operation is undone
+    //return addRemoveUtilities.removeElesSimply(elesToBeRemoved);
 }
 
-module.exports.restoreNodesRecursively = function(nodes){
-
-    if(nodes == null) return;
-    nodes.forEach(function(node) {
-
-        module.exports.modelManager.addModelNode(node.id(), {
-            x: node.position("x"),
-            y: node.position("y"),
-            sbgnclass: node.data("sbgnclass")
-        }, "me");
-
-
-        module.exports.modelManager.initModelNode(node);
-
-
-        var children = node.children();
-        if(children)
-            module.exports.restoreNodesRecursively(children);
-    });
-
-}
 
 module.exports.restoreEles = function(eles) {
     //we need to restore nodes first, otherwise edges without sources or targets cause error
 
-    module.exports.restoreNodesRecursively(eles.nodes());
+    //module.exports.restoreNodesRecursively(eles.nodes());
 
 
-    eles.edges().forEach(function(ele) {
-        var param = {
-            source: ele.data("source"),
-            target: ele.data("target"),
-            sbgnclass: ele.data('sbgnclass')
-        };
-        module.exports.modelManager.addModelEdge(ele.id(), param, "me");
-    });
+    if(eles.nodes() != null){
+        eles.nodes().forEach(function(node) {
+            module.exports.modelManager.addModelNode(node.id(), {
+                x: node.position("x"),
+                y: node.position("y"),
+                sbgnclass: node.data("sbgnclass")
+            }, "me");
+        });
+
+        //to assign parents and children, update attributes after restoring nodes
+        eles.nodes().forEach(function(node) {
+            module.exports.modelManager.initModelNode(node);
+        });
+    }
+
+    if(eles.edges() != null) {
+        eles.edges().forEach(function (ele) {
+            var param = {
+                source: ele.data("source"),
+                target: ele.data("target"),
+                sbgnclass: ele.data('sbgnclass')
+            };
+            module.exports.modelManager.addModelEdge(ele.id(), param, "me");
+        });
+    }
 
     return addRemoveUtilities.restoreEles(eles);
 }
@@ -115,7 +118,7 @@ module.exports.deleteSelected = function(param) {
     module.exports.modelManager.deleteModelNodes(param.eles.nodes(), "me");
     module.exports.modelManager.deleteModelEdges(param.eles.edges(), "me");
 
-    addRemoveUtilities.removeElesSimply(param.eles);
+    return addRemoveUtilities.removeElesSimply(param.eles);
 }
 
 module.exports.restoreSelected = function(eles) {
@@ -600,14 +603,21 @@ module.exports.createCompoundForSelectedNodes = function(param) {
     module.exports.modelManager.addModelNode(newCompound.id(), {x: newCompound._private.position.x, y: newCompound._private.position.y, sbgnclass: param.compoundType}, "me");
 
 
-    module.exports.modelManager.changeModelNodeAttribute('width', newCompoundId, newCompound.width(),  "me");
-    module.exports.modelManager.changeModelNodeAttribute('height', newCompoundId, newCompound.height() , "me");
+    module.exports.modelManager.changeModelNodeAttribute('width', newCompoundId, newCompound.width());
+    module.exports.modelManager.changeModelNodeAttribute('height', newCompoundId, newCompound.height() );
+
+
+    //remove nodes and add them back
+    //module.exports.modelManager.deleteModelNodes(nodesToMakeCompound, "me");
 
 
     nodesToMakeCompound.forEach(function(node){
-        module.exports.modelManager.changeModelNodeAttribute('sbgnbboxW', node.id(), newCompound.width(), "me");
-        module.exports.modelManager.changeModelNodeAttribute('sbgnbboxH', node.id(), newCompound.height(), "me");
-        module.exports.modelManager.changeModelNodeAttribute('parent',node.id(), node.data('parent'), "me");
+
+      //  module.exports.modelManager.addModelNode(node.id(), {x: node._private.position.x, y: node._private.position.y}, "me");
+       // module.exports.modelManager.initModelNode(node, "me");
+        module.exports.modelManager.changeModelNodeAttribute('sbgnbboxW', node.id(), newCompound.width());
+        module.exports.modelManager.changeModelNodeAttribute('sbgnbboxH', node.id(), newCompound.height());
+        module.exports.modelManager.changeModelNodeAttribute('parent',node.id(), node.data('parent'));
     });
 
 
@@ -645,13 +655,19 @@ module.exports.resizeNode = function(param) {
     ele.data("width", param.width);
     ele.data("height", param.height);
 
+    //funda
+    ele._private.data.sbgnbbox.w = param.width;
+    ele._private.data.sbgnbbox.h = param.height;
 
 
+;
 
     module.exports.modelManager.changeModelNodeAttribute('width', ele.id(), param.width, "me");
-
-
     module.exports.modelManager.changeModelNodeAttribute('height', ele.id(), param.height, "me");
+
+
+    module.exports.modelManager.changeModelNodeAttribute('sbgnbboxW', ele.id(),param.width, "me"); //update sbgnbbox width as well
+    module.exports.modelManager.changeModelNodeAttribute('sbgnbboxH', ele.id(),param.height, "me"); //update sbgnbbox width as well
 
     //}
     return result;

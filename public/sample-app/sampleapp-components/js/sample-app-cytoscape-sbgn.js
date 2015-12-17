@@ -11,7 +11,8 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
 
 
     var self = this;
-    self.modelManager = editorActions.modelManager;
+
+
 
 
     //notifications
@@ -33,6 +34,7 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
     }
 
 
+
     var cyOptions = {
         elements: cytoscapeJsGraph,
         style: sbgnStyleSheet,
@@ -51,10 +53,12 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
 
             window.cy = this;
             refreshPaddings();
-            self.modelManager.initModel(cytoscapeJsGraph, cy.nodes(), cy.edges(), "me");
+            //TODO: if this is called before other client is ready, this causes problems
+            editorActions.modelManager.initModel(cytoscapeJsGraph, cy.nodes(), cy.edges(), "me");
 
 
             cy.one('layoutstop', function(){
+
 
 
                 cy.nodes().forEach(function(node){
@@ -89,7 +93,6 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
                     }
 
 
-
                 },
                 complete: function (sourceNode, targetNodes, addedEntities) {
                     // fired when noderesize is done and entities are added
@@ -101,6 +104,7 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
                     paramResize.height = sourceNode.height();
                     editorActions.manager._do(new editorActions.ResizeNodeCommand(paramResize));
                     editorActions.refreshUndoRedoButtonsStatus();
+
 
 
                 }
@@ -271,16 +275,11 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
             });
 
             cy.on('unselect', 'node', function() {
-
                 editorActions.manager._do(editorActions.UnselectNodeCommand(this));
 
             });
             cy.on('grab', 'node', function(event) {
-
                 editorActions.manager._do(editorActions.SelectNodeCommand(this));
-
-
-
             });
 
 
@@ -395,6 +394,8 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
             var cancelSelection;
             var selectAgain;
             cy.on('select', 'node', function (event) {
+
+
                 if (cancelSelection) {
                     this.unselect();
                     cancelSelection = null;
@@ -508,6 +509,7 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
                 var cyPosX = event.cyPosition.x;
                 var cyPosY = event.cyPosition.y;
 
+
                 if (modeHandler.mode == "selection-mode"
                     && cyPosX >= node._private.data.expandcollapseStartX
                     && cyPosX <= node._private.data.expandcollapseEndX
@@ -570,7 +572,6 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
 
 module.exports.handleSBGNInspector = function (editorActions) {
 
-    var modelManager = editorActions.modelManager;
 
     var selectedEles = cy.elements(":selected");
     var width = $("#sbgn-inspector").width() * 0.45;

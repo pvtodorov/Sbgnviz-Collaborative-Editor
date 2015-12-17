@@ -6,6 +6,7 @@ var expandCollapseUtilities = {
     //Some nodes are initilized as collapsed this method handles them
     initCollapsedNodes: function () {
         var nodesToCollapse = cy.nodes().filter(function (i, ele) {
+
             if (ele.css()['expanded-collapsed'] != null && ele.css('expanded-collapsed') == 'collapsed') {
                 return true;
             }

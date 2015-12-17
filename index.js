@@ -226,6 +226,7 @@ function getNewColor(){
 function triggerContentChange(divId){
     //TODO: triggering here is not good
 
+
     $(('#' + divId)).trigger('contentchanged');
 
 }
@@ -323,10 +324,13 @@ app.proto.init = function (model) {
 
 
         if(docReady && passed.user == null) {
-            menu.updateSample(ind);
+
+            menu.updateSample(ind, false); //false = do not delete, sample changing client deleted them already
         }
 
     });
+
+
 
     model.on('all', '_page.doc.layoutProperties', function(index){
 
@@ -397,21 +401,21 @@ app.proto.init = function (model) {
             updateElementProperty(id, 'sbgnlabel', label, 'data');
         }
     });
-    model.on('change', '_page.doc.cy.nodes.*.borderColor', function(id, borderColor,prev, passed){
+    model.on('all', '_page.doc.cy.nodes.*.borderColor', function(id, op, borderColor,prev, passed){
 
         if(docReady && passed.user == null) {
             updateElementProperty(id,  'borderColor', borderColor, 'data');
         }
     });
 
-    model.on('change', '_page.doc.cy.nodes.*.borderWidth', function(id, borderWidth,prev, passed){
+    model.on('all', '_page.doc.cy.nodes.*.borderWidth', function(id,  op,borderWidth,prev, passed){
 
         if(docReady && passed.user == null) {
             updateElementProperty(id,  'border-width', borderWidth, 'css');
         }
     });
 
-    model.on('change', '_page.doc.cy.nodes.*.backgroundColor', function(id, backgroundColor,prev, passed){
+    model.on('all', '_page.doc.cy.nodes.*.backgroundColor', function(id,  op, backgroundColor,prev, passed){
 
         if(docReady && passed.user == null) {
             updateElementProperty(id,  'background-color', backgroundColor, 'css');
@@ -419,7 +423,7 @@ app.proto.init = function (model) {
     });
 
 
-    model.on('change', '_page.doc.cy.nodes.*.isMultimer', function(id, isMultimer,prev, passed){
+    model.on('all', '_page.doc.cy.nodes.*.isMultimer', function(id,  op,isMultimer,prev, passed){
 
         if(docReady && passed.user == null) {
             updateMultimerStatus(id, isMultimer);
@@ -427,41 +431,44 @@ app.proto.init = function (model) {
         }
     });
 
-    model.on('change', '_page.doc.cy.nodes.*.isCloneMarker', function(id, isCloneMarker,prev, passed){
+    model.on('all', '_page.doc.cy.nodes.*.isCloneMarker', function(id,  op,isCloneMarker,prev, passed){
 
         if(docReady && passed.user == null) {
             updateCloneMarkerStatus(id, isCloneMarker);
         }
     });
 
-    model.on('change', '_page.doc.cy.nodes.*.parent', function(id, parent,prev, passed){
+    model.on('all', '_page.doc.cy.nodes.*.parent', function(id,  op,parent,prev, passed){
+
 
         if(docReady && passed.user == null) {
+
+
             updateElementProperty(id,  'parent', parent, 'data');
         }
     });
 
-    model.on('change', '_page.doc.cy.nodes.*.width', function(id, width ,prev, passed){
+    model.on('all', '_page.doc.cy.nodes.*.width', function(id,  op, width ,prev, passed){
 
         if(docReady && passed.user == null) {
             updateElementProperty(id,  'width', width, 'data');
         }
     });
 
-    model.on('change', '_page.doc.cy.nodes.*.height', function(id, height, prev, passed){
+    model.on('all', '_page.doc.cy.nodes.*.height', function(id,  op, height, prev, passed){
 
         if(docReady && passed.user == null) {
             updateElementProperty(id,  'height', height, 'data');
         }
     });
 
-    model.on('change', '_page.doc.cy.nodes.*.sbgnbboxW', function(id, width ,prev, passed){
+    model.on('all', '_page.doc.cy.nodes.*.sbgnbboxW', function(id,  op, width ,prev, passed){
 
         if(docReady && passed.user == null) {
             updateElementProperty(id,  'sbgnbbox.w', width, 'data');
         }
     });
-    model.on('change', '_page.doc.cy.nodes.*.sbgnbboxH', function(id, height, prev, passed){
+    model.on('all', '_page.doc.cy.nodes.*.sbgnbboxH', function(id,  op, height, prev, passed){
 
         if(docReady && passed.user == null) {
             updateElementProperty(id,  'sbgnbbox.h', height, 'data');
@@ -469,7 +476,7 @@ app.proto.init = function (model) {
     });
 
 
-    model.on('change', '_page.doc.cy.nodes.*.sbgnStatesAndInfos', function(id, sbgnStatesAndInfos,prev, passed){
+    model.on('all', '_page.doc.cy.nodes.*.sbgnStatesAndInfos', function(id,  op, sbgnStatesAndInfos,prev, passed){
 
 
         if(docReady && passed.user == null) {
@@ -478,14 +485,14 @@ app.proto.init = function (model) {
         }
     });
 
-    model.on('change', '_page.doc.cy.edges.*.lineColor', function(id, lineColor,prev, passed){
+    model.on('all', '_page.doc.cy.edges.*.lineColor', function(id,  op, lineColor,prev, passed){
 
 
         if(docReady && passed.user == null) {
             updateElementProperty(id,  'lineColor', lineColor, 'data');
         }
     });
-    model.on('change', '_page.doc.cy.edges.*.highlightColor', function(id, highlightColor,prev, passed){
+    model.on('all', '_page.doc.cy.edges.*.highlightColor', function(id, op, highlightColor,prev, passed){
 
         if(docReady && passed.user == null) {
             var color;
@@ -500,14 +507,14 @@ app.proto.init = function (model) {
     });
 
 
-    model.on('change', '_page.doc.cy.edges.*.width', function(id, width,prev, passed){
+    model.on('all', '_page.doc.cy.edges.*.width', function(id,  op, width,prev, passed){
 
         if(docReady && passed.user == null) {
             updateElementProperty(id,  'width', width, 'css');
         }
     });
 
-    model.on('change', '_page.doc.cy.edges.*.cardinality', function(id, cardinality,prev, passed){
+    model.on('all', '_page.doc.cy.edges.*.cardinality', function(id, op,  cardinality,prev, passed){
 
         if(docReady && passed.user == null) {
             updateElementProperty(id,  'sbgncardinality', cardinality, 'data');
@@ -520,8 +527,9 @@ app.proto.init = function (model) {
     });
 
     model.on('all', '_page.doc.history', function(){
-        if(docReady)
+        if(docReady){
             triggerContentChange('command-history-area');
+        }
     });
 
 
@@ -592,6 +600,25 @@ app.proto.create = function (model) {
     //better through sockets-- model operation causes complications
     socket.on('runLayout', function(){
         $("#perform-layout").trigger('click');
+    });
+
+    socket.on('addCompound', function(data){
+
+        //unselect all others
+        cy.nodes().unselect();
+
+        data.selectedNodes.forEach(function(nodeId){
+
+            cy.getElementById( nodeId).select()
+        });
+
+
+        if(data.type == "complex")
+            $("#make-compound-complex").trigger('click');
+        else
+            $("#make-compound-compartment").trigger('click');
+
+
     });
 
 
@@ -855,31 +882,37 @@ function updateElementProperty(elId, propName, propValue, propType){
 
                  el[0]._private.style.width.value = propValue;
                  el[0]._private.style.width.pxValue = propValue;
-                 el[0]._private.data.sbgnbbox.w = propValue;
+                 if(propType == 'data')
+                    el[0]._private.data.sbgnbbox.w = propValue;
 
              }
              else if(propName == 'height'){
 
                  el[0]._private.style.height.value = propValue;
                  el[0]._private.style.height.pxValue = propValue;
-                 el[0]._private.data.sbgnbbox.h = propValue;
+                 if(propType == 'data')
+                    el[0]._private.data.sbgnbbox.h = propValue;
 
              }
             else if(propName == 'sbgnstatesandinfos'){
                  el[0]._private.data.sbgnstatesandinfos = propValue;
              }
 
+            else if(propName == 'parent'){
+                 el[0]._private.data.parent = propValue;
+             }
 
 
             //update server graph
             updateServerGraph();
+
 
             cy.forceRender();
 
         }
 
         catch (err) {
-            console.log("Please reload page. " + err + " " + propName);
+            console.log("Please reload page. " + err + "   Prop name:" + propName + " Element: "  + elId);
         }
     },0);
 }

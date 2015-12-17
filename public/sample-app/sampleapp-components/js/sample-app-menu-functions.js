@@ -66,23 +66,40 @@ module.exports.updateLayoutProperties = function(layoutProps){
 }
 
 
-module.exports.updateSample = function( ind){
+module.exports.updateSample = function( ind, toDelete){
     var self = this;
     self.modelManager = editorActions.modelManager;
 
+    //just get a new sbgncontainer
+    if(ind < 0){
+        //if(toDelete)
+          //  self.modelManager.deleteAll(cy.nodes(), cy.edges(), "me");
 
-
-    getXMLObject(ind, function (xmlObject) {
-
-
-        jsonObj = sbgnmlToJson.convert(xmlObject);
-        self.modelManager.setServerGraph(jsonObj);
-
-
+        var jsonObj = self.modelManager.getServerGraph();
         sbgnContainer =  (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj,  editorActions));
+    }
+    else{
+
+        getXMLObject(ind, function (xmlObject) {
 
 
-    });
+            var jsonObj = sbgnmlToJson.convert(xmlObject);
+
+            if(toDelete)
+                self.modelManager.deleteAll(cy.nodes(), cy.edges(), "me");
+
+            self.modelManager.updateServerGraph(jsonObj);
+
+
+            sbgnContainer =  (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj,  editorActions));
+
+
+        });
+    }
+}
+
+module.exports.getNewSBGNContainer = function(jsonObj){
+    sbgnContainer =  new cyMod.SBGNContainer('#sbgn-network-container', jsonObj ,  editorActions);
 }
 
 module.exports.updateNodePositionsAfterLayout = function(modelManager){
@@ -114,10 +131,7 @@ module.exports.start = function(modelManager){
 
         var ind = self.modelManager.getSampleInd("me");
 
-
-
-        module.exports.updateSample(ind);
-
+        module.exports.updateSample(ind, false); //no model yet, don't delete
 
     }
     else{
@@ -131,7 +145,8 @@ module.exports.start = function(modelManager){
 
         var ind = e.target.id;
         self.modelManager.setSampleInd(ind, "me");
-        module.exports.updateSample(ind);
+
+        module.exports.updateSample(ind, true); //delete existing graphs
 
     });
 
@@ -142,7 +157,8 @@ module.exports.start = function(modelManager){
     $('#new-file').click(function (e) {
         setFileContent("new_file.sbgnml");
 
-        (new cyMod.SBGNContainer('#sbgn-network-container', {cytoscapeJsGraph: {nodes: [], edges: []}},  editorActions));
+        var jsonObj = {nodes: [], edges: []};
+        sbgnContainer  = new cyMod.SBGNContainer('#sbgn-network-container', jsonObj ,  editorActions);
 
         editorActions.manager.reset();
         cyMod.handleSBGNInspector(editorActions);
@@ -392,10 +408,19 @@ module.exports.start = function(modelManager){
 
         var reader = new FileReader();
 
+
         reader.onload = function (e) {
 
-            (new cyMod.SBGNContainer('#sbgn-network-container', {cytoscapeJsGraph:
-                    sbgnmlToJson.convert(textToXmlObject(this.result))}),  editorActions);
+
+            var jsonObj = sbgnmlToJson.convert(textToXmlObject(this.result));
+
+
+            self.modelManager.updateServerGraph(jsonObj);
+
+            self.modelManager.setSampleInd(-1); //to notify other clients
+            module.exports.updateSample( -1, true); //delete previous graphs and get a new container
+
+           // sbgnContainer =  new cyMod.SBGNContainer('#sbgn-network-container', jsonObj ,  editorActions);
         }
         reader.readAsText(file);
         setFileContent(file.name);
@@ -513,8 +538,15 @@ module.exports.start = function(modelManager){
         };
 
 
-      //  editorActions.manager._do(editorActions.DeleteSelectedCommand(param));
+
+        //Funda unselect all nodes otherwise they don't get deleted
+        cy.elements().unselect();
+
         editorActions.manager._do(editorActions.RemoveElesCommand(selectedEles));
+
+
+      //  editorActions.manager._do(editorActions.DeleteSelectedCommand(param));
+
         editorActions.refreshUndoRedoButtonsStatus();
 
 
@@ -540,6 +572,7 @@ module.exports.start = function(modelManager){
            // firstTime: false,
             eles: selectedEles
         };
+
 
         editorActions.manager._do(editorActions.DeleteSelectedCommand(param));
         editorActions.refreshUndoRedoButtonsStatus();
@@ -640,6 +673,7 @@ module.exports.start = function(modelManager){
             nodesToMakeCompound: selected
         };
 
+        //cy.elements().unselect();
         editorActions.manager._do(editorActions.CreateCompoundForSelectedNodesCommand(param));
         editorActions.refreshUndoRedoButtonsStatus();
     });
@@ -656,7 +690,7 @@ module.exports.start = function(modelManager){
             compoundType: "compartment",
             nodesToMakeCompound: selected
         };
-
+        //cy.elements().unselect();
         editorActions.manager._do(editorActions.CreateCompoundForSelectedNodesCommand(param));
         editorActions.refreshUndoRedoButtonsStatus();
     });

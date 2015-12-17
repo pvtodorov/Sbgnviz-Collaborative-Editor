@@ -2045,8 +2045,8 @@
 
         for (var i = 0; i < stateAndInfos.length && i < 4; i++) {
             var state = stateAndInfos[i];
-            var stateWidth = state.bbox.w;
-            var stateHeight = state.bbox.h;
+            var stateWidth = parseFloat(state.bbox.w);
+            var stateHeight = parseFloat(state.bbox.h);
             var stateCenterX = state.bbox.x * node.width() / 100 + centerX;
             var stateCenterY = state.bbox.y * node.height() / 100 + centerY;
 
@@ -2098,8 +2098,8 @@
 
         for (var i = 0; i < stateAndInfos.length; i++) {
             var state = stateAndInfos[i];
-            var stateWidth = state.bbox.w;
-            var stateHeight = state.bbox.h;
+            var stateWidth = parseFloat(state.bbox.w);
+            var stateHeight = parseFloat(state.bbox.h);
             //funda var stateLabel = state.state.value;
             var stateLabel="";
             if(state.state)
@@ -2633,10 +2633,10 @@
 
         for (var i = 0; i < stateAndInfos.length; i++) {
             var state = stateAndInfos[i];
-            var stateWidth = state.bbox.w + threshold;
-            var stateHeight = state.bbox.h + threshold;
-            var stateCenterX = state.bbox.x * node.width() / 100 + centerX;
-            var stateCenterY = state.bbox.y * node.height() / 100 + centerY;
+            var stateWidth = parseFloat(state.bbox.w) + threshold;
+            var stateHeight = parseFloat(state.bbox.h) + threshold;
+            var stateCenterX = parseFloat(state.bbox.x) * node.width() / 100 + centerX;
+            var stateCenterY = parseFloat(state.bbox.y) * node.height() / 100 + centerY;
 
             if (state.clazz == "state variable" && stateCount < 2) {//draw ellipse
                 var stateCheckPoint = nodeShapes["ellipse"].checkPoint(
@@ -2674,8 +2674,8 @@
 
         for (var i = 0; i < stateAndInfos.length; i++) {
             var state = stateAndInfos[i];
-            var stateWidth = state.bbox.w;
-            var stateHeight = state.bbox.h;
+            var stateWidth = parseFloat(state.bbox.w);
+            var stateHeight = parseFloat(state.bbox.h);
             var stateCenterX = state.bbox.x * node.width() / 100 + centerX;
             var stateCenterY = state.bbox.y * node.height() / 100 + centerY;
 
@@ -2718,8 +2718,8 @@
 
         for (var i = 0; i < stateAndInfos.length; i++) {
             var state = stateAndInfos[i];
-            var stateWidth = state.bbox.w;
-            var stateHeight = state.bbox.h;
+            var stateWidth = parseFloat(state.bbox.w);
+            var stateHeight = parseFloat(state.bbox.h);
             var stateCenterX = state.bbox.x * node.width() / 100 + centerX;
             var stateCenterY = state.bbox.y * node.height() / 100 + centerY;
 
@@ -3214,7 +3214,8 @@
             var centerY = node._private.position.y;
             var width = node.width() + threshold;
             var height = node.height() + threshold;
-            var padding = node._private.style["border-width"].pxValue / 2;
+            //fundavar padding = node._private.style["border-width"].pxValue / 2;
+            var padding = parseFloat(node._private.style["border-width"].pxValue) / 2;
             var multimerPadding = nodeShapes["complex"].multimerPadding;
             var cornerLength = nodeShapes["complex"].cornerLength;
 

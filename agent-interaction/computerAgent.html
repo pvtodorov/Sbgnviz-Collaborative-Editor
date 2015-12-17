@@ -17,7 +17,7 @@
 <form id = "serverIpForm" >
     Agent name: <input type = "text" id = "agentName" name="agentName" value = "HAL">
     Server IP: <input type = "text" id = "serverIp" name="serverIp" >
-    <input type = "button" value="Create agent" onclick = getServerIp()>
+    <input type = "button" id = "createAgentButton" value="Create agent" onclick = getServerIp()>
 
 </form>
 
@@ -53,8 +53,15 @@
         <input type="button" value="Add node" onclick=addNode()>
 
         <br>
-        <b>Node Id </b>: <select name="Id" id = "nodeId" >
+        <b>Node Id </b>: <select multiple name="Id" id = "nodeId" >
         </select>
+
+        <br>
+        <input type="button" value="Add complex for selected" onclick=addCompound("complex")>
+
+        <br>
+        <input type="button" value="Add compartment for selected" onclick=addCompound("compartment")>
+
 
         <br>
         <input id = "sbgnlabel">
@@ -189,6 +196,13 @@
             scrollToBottom('chat');
 
         });
+        $('#serverIp').change(function () {
+            //deleteCookie('docId'); //delete previous cookie
+            $('#createAgentButton').removeAttr('disabled');
+           // serverIp = $('#serverIp')[0].value;  //change cookie
+           // document.cookie = 'docId=' + serverIp;  //add cookie docId
+
+        });
 
 //        $('#serverIp').change(function () {
 //            deleteCookie('docId'); //delete previous cookie
@@ -240,10 +254,13 @@
                 $('#widthEdge')[0].value = agent.selectedEdge.width;
             });
         });
+
+
+        $('#serverIp')[0].value = getCookie('docId');
     };
 
     function getServerIp(){
-
+        deleteCookie('docId'); //delete previous cookie
         serverIp = $('#serverIp')[0].value;  //change cookie
         document.cookie = 'docId=' + serverIp;  //add cookie docId
         createAgent();
@@ -253,7 +270,6 @@
 
         //don't open a new socket unless it is a new agent
         var agentId = getCookie('userId');
-
         if(agentId == null || agentId == ''){
             agentId = generateHash(32);
             document.cookie = 'userId=' +  agentId;  //add cookie docId
@@ -270,6 +286,7 @@
             $('#serverIp')[0].value = ip;
         }
 
+
         agent = new Agent($('#agentName')[0].value, agentId);
         var socket = agent.connectToServer(serverIp, function(){
 
@@ -279,7 +296,7 @@
 
 
         socket.on('connect', function(){
-
+            $('#createAgentButton').attr('disabled','disabled');
 
             agent.getModel(function() {
 
@@ -454,6 +471,15 @@
         var pos = {x:x, y:y};
 
         agent.sendRequest("agentMoveNodeRequest", {id: id, pos:pos});
+
+    }
+
+    //TODO: Error checking if compound can be added
+    function addCompound(type){
+        var nodes = $('#nodeId').val();
+
+
+        agent.sendRequest("agentAddCompoundRequest", {type:type, selectedNodes: nodes});
 
     }
 
@@ -746,7 +772,7 @@
                 $("#stateVariables").append("<div><input type='text' style=\"width:40px\" class='justAddedStateVariablesInput stateVariableValue' value='"   + state.state.value + "'/>"
 
                         + "@<input type='text' style=\"width:40px\" class='justAddedStateVariablesInput stateVariableVariable'  + value='" + state.state.variable + "'/>"
-                        + "<img style=\"width:12px;height:12px;\" class='justAddedStateVariablesInput deleteStateAndInfo' src='../../sample-app/sampleapp-images/delete.png'></div>");
+                        + "<img style=\"width:12px;height:12px;\" class='justAddedStateVariablesInput deleteStateAndInfo' src='delete.png'></div>");
 
 
                 var oldStateVariable = state.state.variable;
@@ -769,7 +795,7 @@
 
                 //var total = width / 5 + width / 5 + width / 2.5;
                 $("#unitsOfInformation").append("<div><input type='text' class='justAddedStateVariablesInput unitOfInformationLabel' value='" + state.label.text+ "'/>"
-                        +"<img style=\"width:12px;height:12px;\" class='justAddedStateVariablesInput deleteStateAndInfo' src='../../sample-app/sampleapp-images/delete.png'></div>");
+                        +"<img style=\"width:12px;height:12px;\" class='justAddedStateVariablesInput deleteStateAndInfo' src='delete.png'></div>");
 
                 var oldLabelText = state.label.text;
                 $(".unitOfInformationLabel").unbind('change').on('change', function () {
@@ -789,8 +815,8 @@
             $(".justAddedStateVariablesInput").data("state", state);
             $(".justAddedStateVariablesInput").removeClass("justAddedStateVariablesInput");
         }
-        $("#stateVariables").append("<img id='addStateVariable' style=\"width:12px;height:12px;\" src='../../sample-app/sampleapp-images/add.png'/>");
-        $("#unitsOfInformation").append("<img id='addUnitOfInformation' style=\"width:12px;height:12px;\" src='../../sample-app/sampleapp-images/add.png'/>");
+        $("#stateVariables").append("<img id='addStateVariable' style=\"width:12px;height:12px;\" src='add.png'/>");
+        $("#unitsOfInformation").append("<img id='addUnitOfInformation' style=\"width:12px;height:12px;\" src='add.png'/>");
 
         $("#addStateVariable").click(function () {
             var obj = {};

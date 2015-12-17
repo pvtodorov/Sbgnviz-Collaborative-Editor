@@ -839,16 +839,16 @@
 
 
 
-    <div id ="command-history-area">
+    <ul id ="command-history-area" as = "list">
 
-        <ul id ="command-list" as = "list" >
+        <!--<ul id ="command-list" as = "list" >-->
         {{each _page.doc.history as #pCommand}}
             <li> <b>{{#pCommand.userName}} {{_page.showTime && formatTime(#pCommand)}} > </b>{{#pCommand.name}} {{#pCommand.id}} {{formatObj(#pCommand.param)}}
             </li>
             {{/each}}
-        </ul>
+        <!--</ul>-->
 
-    </div>
+    </ul>
 
 
 
@@ -876,84 +876,3 @@
 
 
 
-
-<script>
-    window.onload = function() {
-        scrollToBottom('receivedImages');
-        scrollToBottom('messages');
-        scrollToBottom('command-history-area');
-    };
-
-    window.onresize = function() {
-        scrollToBottom('messages');
-        scrollToBottom('command-history-area');
-        scrollToBottom('receivedImages');
-    };
-
-
-    $(document).ready(function() {
-
-        $('#command-history-area').live('contentchanged', function(){
-            scrollToBottom('command-history-area');
-
-        });
-
-        $('#messages').live('contentchanged', function(){
-            scrollToBottom('messages');
-
-        });
-
-        $('#receivedImages').live('contentchanged', function(){
-            scrollToBottom('receivedImages');
-
-        });
-
-
-    });
-
-    function showQTip(el){
-        $(el).parent().qtip({
-            content: { text:  function() {
-
-                return "Click image to enlarge ";
-            }
-
-            },
-
-            position: {
-                my: 'center',
-                at: 'center',
-                adjust: {
-                    cyViewport: true
-                },
-                effect: false
-            },
-            mouseover: true,
-            style: {
-                classes: 'qtip-image',
-
-                tip: {
-                    width: 16,
-                    height: 8
-                }
-            }
-        });
-    }
-
-    function openImage(el){
-        if(el.src){
-            var url = el.src;
-            window.open(url, 'Image', 'width=largeImage.stylewidth,height=largeImage.style.height,resizable=1');
-        }
-
-
-    }
-
-
-
-    function scrollToBottom(docId){
-;
-        document.getElementById(docId).scrollTop = document.getElementById(docId).scrollHeight  - document.getElementById(docId).clientHeight;
-
-    }
-</script>
