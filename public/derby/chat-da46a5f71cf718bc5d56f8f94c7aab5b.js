@@ -1011,7 +1011,7 @@ function App(derby, name, filename) {
   this.name = name;
   this.filename = filename;
   this.scriptHash = 'da46a5f71cf718bc5d56f8f94c7aab5b';
-  this.bundledAt = 1450394513543;
+  this.bundledAt = 1450450121294;
   this.Page = createAppPage();
   this.proto = this.Page.prototype;
   this.views = new derbyTemplates.templates.Views();
