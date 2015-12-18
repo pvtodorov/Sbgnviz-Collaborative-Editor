@@ -72,8 +72,8 @@ module.exports.updateSample = function( ind, toDelete){
 
     //just get a new sbgncontainer
     if(ind < 0){
-        //if(toDelete)
-          //  self.modelManager.deleteAll(cy.nodes(), cy.edges(), "me");
+        if(toDelete)
+            self.modelManager.deleteAll(cy.nodes(), cy.edges(), "me");
 
         var jsonObj = self.modelManager.getServerGraph();
         sbgnContainer =  (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj,  editorActions));
@@ -158,6 +158,7 @@ module.exports.start = function(modelManager){
         setFileContent("new_file.sbgnml");
 
         var jsonObj = {nodes: [], edges: []};
+        self.modelManager.deleteAll(cy.nodes(), cy.edges(), "me");
         sbgnContainer  = new cyMod.SBGNContainer('#sbgn-network-container', jsonObj ,  editorActions);
 
         editorActions.manager.reset();
@@ -417,9 +418,10 @@ module.exports.start = function(modelManager){
 
             self.modelManager.updateServerGraph(jsonObj);
 
-            self.modelManager.setSampleInd(-1); //to notify other clients
+
             module.exports.updateSample( -1, true); //delete previous graphs and get a new container
 
+            self.modelManager.setSampleInd(-1); //to notify other clients
            // sbgnContainer =  new cyMod.SBGNContainer('#sbgn-network-container', jsonObj ,  editorActions);
         }
         reader.readAsText(file);

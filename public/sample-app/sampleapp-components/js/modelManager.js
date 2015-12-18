@@ -454,6 +454,7 @@ module.exports =  function(model, docId, userId, userName) {
                     this.changeModelEdgeAttribute('lineColor', edge.id(),edge.css('line-color'), user);
 
                 var width = edgePath.get('width');
+
                 if(width != null)
                     edge.css('width', width);
                 else
@@ -465,6 +466,28 @@ module.exports =  function(model, docId, userId, userName) {
                     edge.data('sbgncardinality', cardinality);
                 else
                     this.changeModelEdgeAttribute('cardinality', edge.id(),edge.data('sbgncardinality'), user);
+
+
+                //var sbgnclass = edgePath.get('sbgnclass');
+                //if(sbgnclass != null)
+                //    edge.data('sbgnclass', sbgnclass);
+                //else
+                //    this.changeModelEdgeAttribute('sbgnclass', edge.id(),edge.data('sbgnclass'), user);
+
+
+                var source = edgePath.get('source');
+
+                if(source != null)
+                    edge.data('source', source);
+                else
+                    this.changeModelEdgeAttribute('source', edge.id(),edge.data('source'), user);
+
+
+                var target = edgePath.get('target');
+                if(target != null)
+                    edge.data('target', target);
+                else
+                    this.changeModelEdgeAttribute('target', edge.id(),edge.data('target'), user);
 
             }
 

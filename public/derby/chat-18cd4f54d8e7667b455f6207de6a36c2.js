@@ -1010,8 +1010,8 @@ function App(derby, name, filename) {
   this.derby = derby;
   this.name = name;
   this.filename = filename;
-  this.scriptHash = 'da46a5f71cf718bc5d56f8f94c7aab5b';
-  this.bundledAt = 1450450121294;
+  this.scriptHash = '18cd4f54d8e7667b455f6207de6a36c2';
+  this.bundledAt = 1450452982123;
   this.Page = createAppPage();
   this.proto = this.Page.prototype;
   this.views = new derbyTemplates.templates.Views();
@@ -23027,6 +23027,7 @@ module.exports =  function(model, docId, userId, userName) {
                     this.changeModelEdgeAttribute('lineColor', edge.id(),edge.css('line-color'), user);
 
                 var width = edgePath.get('width');
+
                 if(width != null)
                     edge.css('width', width);
                 else
@@ -23038,6 +23039,29 @@ module.exports =  function(model, docId, userId, userName) {
                     edge.data('sbgncardinality', cardinality);
                 else
                     this.changeModelEdgeAttribute('cardinality', edge.id(),edge.data('sbgncardinality'), user);
+
+
+                //var sbgnclass = edgePath.get('sbgnclass');
+                //if(sbgnclass != null)
+                //    edge.data('sbgnclass', sbgnclass);
+                //else
+                //    this.changeModelEdgeAttribute('sbgnclass', edge.id(),edge.data('sbgnclass'), user);
+
+
+                var source = edgePath.get('source');
+
+                console.log(source);
+                if(source != null)
+                    edge.data('source', source);
+                else
+                    this.changeModelEdgeAttribute('source', edge.id(),edge.data('source'), user);
+
+
+                var target = edgePath.get('target');
+                if(target != null)
+                    edge.data('target', target);
+                else
+                    this.changeModelEdgeAttribute('target', edge.id(),edge.data('target'), user);
 
             }
 
@@ -24070,8 +24094,8 @@ module.exports.updateSample = function( ind, toDelete){
 
     //just get a new sbgncontainer
     if(ind < 0){
-        //if(toDelete)
-          //  self.modelManager.deleteAll(cy.nodes(), cy.edges(), "me");
+        if(toDelete)
+            self.modelManager.deleteAll(cy.nodes(), cy.edges(), "me");
 
         var jsonObj = self.modelManager.getServerGraph();
         sbgnContainer =  (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj,  editorActions));
@@ -24156,6 +24180,7 @@ module.exports.start = function(modelManager){
         setFileContent("new_file.sbgnml");
 
         var jsonObj = {nodes: [], edges: []};
+        self.modelManager.deleteAll(cy.nodes(), cy.edges(), "me");
         sbgnContainer  = new cyMod.SBGNContainer('#sbgn-network-container', jsonObj ,  editorActions);
 
         editorActions.manager.reset();
@@ -24415,9 +24440,10 @@ module.exports.start = function(modelManager){
 
             self.modelManager.updateServerGraph(jsonObj);
 
-            self.modelManager.setSampleInd(-1); //to notify other clients
+
             module.exports.updateSample( -1, true); //delete previous graphs and get a new container
 
+            self.modelManager.setSampleInd(-1); //to notify other clients
            // sbgnContainer =  new cyMod.SBGNContainer('#sbgn-network-container', jsonObj ,  editorActions);
         }
         reader.readAsText(file);
@@ -25194,4 +25220,4 @@ function SBGNProperties(){
 },{"./EditorActionsManager.js":84,"./sample-app-cytoscape-sbgn.js":87}]},{},[82,1])
 
 
-//# sourceMappingURL=/derby/chat-da46a5f71cf718bc5d56f8f94c7aab5b.map.json
+//# sourceMappingURL=/derby/chat-18cd4f54d8e7667b455f6207de6a36c2.map.json
