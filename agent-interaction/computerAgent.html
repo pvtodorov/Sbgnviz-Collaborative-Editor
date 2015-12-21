@@ -450,7 +450,7 @@
         var sbgnclass = $('#sbgnclassEdge')[0].value;
         var param = {source:source, target:target, sbgnclass:sbgnclass }
 
-        agent.sendRequest("agentAddEdgeRequest", {id: (source+ "-" + target), param:param});
+        agent.sendRequest("agentAddEdgeRequest", {id: (source+ "-" + target + "-" + sbgnclass), param:param});
 
     }
 

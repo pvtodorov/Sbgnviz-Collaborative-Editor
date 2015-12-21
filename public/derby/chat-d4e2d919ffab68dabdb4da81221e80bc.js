@@ -100,6 +100,7 @@ app.get('/:docId', function (page, model, arg, next) {
     var docPath = 'documents.' + arg.docId;
 
 
+
     model.subscribe(docPath, 'cy', function(err) {
             if (err) {
                 return next(err);
@@ -259,39 +260,18 @@ app.proto.changeDuration = function () {
 app.proto.init = function (model) {
     var timeSort;
 
-    //model.on('all', '_page.doc.images', function(id, op,data, passed){
-    //    console.log(id);
-    //    console.log(op);
-    //    console.log(data);
-    //    if(docReady &&  passed.user == null) {
-    //        images = model.get('_page.doc.images');
+
     //
-    //        images.each(function (index, element) {
+    //model.on('all', '_page.doc.runLayout', function(op, val, prev,passed){
+    //    if(val){
+    //        if(docReady &&  passed.user == null) {
+    //            if(val == true){
+    //                $("#perform-layout").trigger('click');
+    //            }
+    //        }
     //
-    //                    $('#receivedImages').append('<img src="' + data[0].img + '" onclick ="openImage(this)" onmouseover ="showQTip(this)" />');
-    //            //
-    //        //$("div[class='message']").each(function (index, element) {
-    //        //    if ($(element).context.innerHTML.indexOf(data[0].filePath) > -1) {
-    //        //        $(element).append('<img src="' + data[0].img + '" onclick ="openImage(this)" onmouseover ="showQTip(this)" />');
-    //        //
-    //        //
-    //        //    }
-    //        //});
     //    }
-    //
     //});
-
-
-    model.on('all', '_page.doc.runLayout', function(op, val, prev,passed){
-        if(val){
-            if(docReady &&  passed.user == null) {
-                if(val == true){
-                    $("#perform-layout").trigger('click');
-                }
-            }
-
-        }
-    });
 
     model.on('all', '_page.doc.cy.nodes.*', function(id, op, val, prev, passed){
 
@@ -366,7 +346,7 @@ app.proto.init = function (model) {
             var source = model.get('_page.doc.cy.edges.'+ id + '.source');
             var target = model.get('_page.doc.cy.edges.'+ id + '.target');
 
-            insertEdge(source, target);
+            insertEdge(source, target, sbgnclass);
         }
 
     });
@@ -407,6 +387,7 @@ app.proto.init = function (model) {
 
         if(docReady && passed.user == null) {
             updateElementProperty(id,  'borderColor', borderColor, 'data');
+
         }
     });
 
@@ -510,7 +491,6 @@ app.proto.init = function (model) {
 
 
     model.on('all', '_page.doc.cy.edges.*.width', function(id,  op, width,prev, passed){
-
         if(docReady && passed.user == null) {
             updateElementProperty(id,  'width', width, 'css');
         }
@@ -843,14 +823,14 @@ function insertNode(nodeData){
 }
 
 
-function insertEdge (sourceId, targetId){
+function insertEdge (sourceId, targetId, sbgnClass){
     setTimeout(function(){
         try {
             var param = {};
             param.newEdge = {
                 source: sourceId,
                 target: targetId,
-                sbgnclass: modeHandler.elementsHTMLNameToName[modeHandler.selectedEdgeType]
+                sbgnclass: sbgnClass
             };
             param.firstTime = true;
 
@@ -872,6 +852,7 @@ function updateElementProperty(elId, propName, propValue, propType){
     setTimeout(function(){
         try {
             var el = cy.$(('#' + elId));
+
             if (propType == 'position')
                 el[propType](propValue);
             else
@@ -1010,8 +991,8 @@ function App(derby, name, filename) {
   this.derby = derby;
   this.name = name;
   this.filename = filename;
-  this.scriptHash = '18cd4f54d8e7667b455f6207de6a36c2';
-  this.bundledAt = 1450452982123;
+  this.scriptHash = 'd4e2d919ffab68dabdb4da81221e80bc';
+  this.bundledAt = 1450735392410;
   this.Page = createAppPage();
   this.proto = this.Page.prototype;
   this.views = new derbyTemplates.templates.Views();
@@ -22730,6 +22711,11 @@ module.exports =  function(model, docId, userId, userName) {
             model.pass({user:user}).set('_page.doc.cy.nodes.' + nodeId+'.sbgnclass', param.sbgnclass);
 
 
+            model.pass({user:user}).set('_page.doc.cy.nodes.' + nodeId+'.highlightColor', null);
+            model.pass({user:user}).set('_page.doc.cy.nodes.' + nodeId+'.backgroundColor', '#f6f6f6');
+            model.pass({user:user}).set('_page.doc.cy.nodes.' + nodeId+'.sbgnlabel', '');
+
+
 
 
             this.updateHistory('add', nodeId, param);
@@ -22771,9 +22757,11 @@ module.exports =  function(model, docId, userId, userName) {
 
         deleteModelNodes: function(selectedNodes,user){
             var self = this;
-            for( var i = 0; i < selectedNodes.length; i++ ) {
-                var node = selectedNodes[i];
-                self.deleteModelNode(node.id(),user);
+            if(selectedNodes != null){
+                for( var i = 0; i < selectedNodes.length; i++ ) {
+                    var node = selectedNodes[i];
+                    self.deleteModelNode(node.id(),user);
+                }
             }
         },
 
@@ -22815,12 +22803,14 @@ module.exports =  function(model, docId, userId, userName) {
 
             model.pass({user:user}).set('_page.doc.cy.edges.' + edgeId+'.id', edgeId);
             model.pass({user:user}).set('_page.doc.cy.edges.' + edgeId +'.highlightColor', null);
+            model.pass({user:user}).set('_page.doc.cy.edges.' + edgeId +'.lineColor', '#555555');
+
 
             model.pass({user:user}).set('_page.doc.cy.edges.' + edgeId +'.source', param.source);
             model.pass({user:user}).set('_page.doc.cy.edges.' + edgeId +'.target', param.target);
             model.pass({user:user}).set('_page.doc.cy.edges.' + edgeId +'.sbgnclass', param.sbgnclass);
 
-
+            model.pass({user:user}).set('_page.doc.cy.edges.' + edgeId +'.width', '1.5');
 
             this.updateHistory('add', edgeId, param);
 
@@ -22840,12 +22830,14 @@ module.exports =  function(model, docId, userId, userName) {
 
         deleteModelEdges: function(selectedEdges, user){
             var self = this;
-            for( var i = 0; i < selectedEdges.length; i++ ) {
-                var edge = selectedEdges[i];
-                self.deleteModelEdge(edge.id(),user);
 
+            if(selectedEdges != null) {
+                for (var i = 0; i < selectedEdges.length; i++) {
+                    var edge = selectedEdges[i];
+                    self.deleteModelEdge(edge.id(), user);
+
+                }
             }
-
         },
 
         //should be called before loading a new graph to prevent id confusion
@@ -22878,42 +22870,22 @@ module.exports =  function(model, docId, userId, userName) {
         initModelNode: function(node, user){
 
 
+
             node.addClass('changeBorderColor');
 
             var nodePath = model.at('_page.doc.cy.nodes.' + node.id());
             if (nodePath.get('id')) {
 
-                var width = nodePath.get('width');
-                if (width != null) {
 
-                    node.data('width', width);
-                    //node._private.style.width.value = width;
-                    //node._private.style.width.pxValue = width;
+                var borderColor = nodePath.get('borderColor');
 
-                    this.changeModelNodeAttribute('sbgnbboxW', node.id(),width, user); //update sbgnbbox width as well
-                    node._private.data.sbgnbbox.w = width;
-                }
+                if (borderColor != null)
+                    node.data('borderColor', borderColor);
 
-                else{
-                    this.changeModelNodeAttribute('width', node.id(), node.width(), user);
-                    this.changeModelNodeAttribute('sbgnbboxW', node.id(),node.width(), user); //update sbgnbbox width as well
-                }
-
-                var height = nodePath.get('height');
-                if (height != null) {
-                    node.data('height', height);
-                    //node._private.style.height.value = height;
-                    //node._private.style.height.pxValue = height;
-
-                    this.changeModelNodeAttribute('sbgnbboxH', node.id(),height, user); //update sbgnbbox width as well
-                    node._private.data.sbgnbbox.h = height;
-                }
-
-                 else{
-                    //nodePath.pass({user: user}).set('height', node.height());
-                    this.changeModelNodeAttribute('sbgnbboxH', node.id(),node.height(), user); //update sbgnbbox width as well
-                    this.changeModelNodeAttribute('height', node.id(),node.height(), user);
-                }
+                   // node._private.style['border-color'].strValue = borderColor;
+                else
+                    //this.changeModelNodeAttribute('borderColor', node.id(),node.css('border-color'), user);
+                    this.changeModelNodeAttribute('borderColor', node.id(),node.data('borderColor'), user);
 
                 var borderWidth = nodePath.get('borderWidth');
                 if (borderWidth != null)
@@ -22922,11 +22894,6 @@ module.exports =  function(model, docId, userId, userName) {
                     this.changeModelNodeAttribute('borderWidth', node.id(),node.css('border-width'), user);
 
 
-                var borderColor = nodePath.get('borderColor');
-                if (borderColor != null)
-                    node.data('borderColor', borderColor);
-                else
-                    this.changeModelNodeAttribute('borderColor', node.id(),node.css('border-color'), user);
 
 
                 var backgroundColor = nodePath.get('backgroundColor');
@@ -22935,81 +22902,119 @@ module.exports =  function(model, docId, userId, userName) {
                     node.css('background-color', backgroundColor);
                 else
                     this.changeModelNodeAttribute('backgroundColor', node.id(),node.css('background-color'), user);
+                //
 
-                var sbgnlabel = nodePath.get('sbgnlabel');
+                //SBGN properties are stored in the data component already
 
-                if (sbgnlabel != null)
-                    node.data('sbgnlabel', sbgnlabel );
-
-                else
-                    this.changeModelNodeAttribute('sbgnlabel', node.id(),node.data('sbgnlabel'), user);
-
-
-
-
-                var isCloneMarker = nodePath.get('isCloneMarker');
-
-
-                if (isCloneMarker != null)
-                    node.data('sbgnclonemarker', isCloneMarker ? true : undefined);
-
-                else
-                 //   nodePath.pass({user: user}).set('isCloneMarker', false);
-                this.changeModelNodeAttribute('isCloneMarker', node.id(),node.data('sbgnclonemarker'), user);
-
-
-                var isMultimer = nodePath.get('isMultimer');
-
-                if (isMultimer != null) {
-
-                    var sbgnclass = node.data('sbgnclass');
-                    if (isMultimer) {
-                        //if not multimer already
-                        if (sbgnclass.indexOf(' multimer') <= -1) //todo funda changed
-                            node.data('sbgnclass', sbgnclass + ' multimer');
-                    }
-                    else {
-                        node.data('sbgnclass', sbgnclass.replace(' multimer', ''));
-                    }
-
-
-                }
-
-                else
-                    nodePath.pass({user: user}).set('isMultimer', false);
-
-
-                var parent = nodePath.get('parent');
-
-
-                if (parent != null)
-                    node.data('parent', parent);
-                else
-                    this.changeModelNodeAttribute('parent', node.id(),node.data('parent'), user);
-
-
-                var sbgnStatesAndInfos = nodePath.get('sbgnStatesAndInfos');
+                //var sbgnlabel = nodePath.get('sbgnlabel');
+                //
+                //if (sbgnlabel != null)
+                //    node.data('sbgnlabel', sbgnlabel );
+                //
+                //else
+                //    this.changeModelNodeAttribute('sbgnlabel', node.id(),node.data('sbgnlabel'), user);
 
 
 
-                if(sbgnStatesAndInfos != null)
-                    node.data('sbgnstatesandinfos',sbgnStatesAndInfos);
+                /*  var width = nodePath.get('width');
+                  if (width != null) {
 
-                else
-                    this.changeModelNodeAttribute('sbgnStatesAndInfos', node.id(),node.data('sbgnstatesandinfos'), user);
+                      node.data('width', width);
+                      //node._private.style.width.value = width;
+                      //node._private.style.width.pxValue = width;
+
+                      this.changeModelNodeAttribute('sbgnbboxW', node.id(),width, user); //update sbgnbbox width as well
+                      node._private.data.sbgnbbox.w = width;
+                  }
+
+                  else{
+                      this.changeModelNodeAttribute('width', node.id(), node.width(), user);
+                      this.changeModelNodeAttribute('sbgnbboxW', node.id(),node.width(), user); //update sbgnbbox width as well
+                  }
+
+                  var height = nodePath.get('height');
+                  if (height != null) {
+                      node.data('height', height);
+                      //node._private.style.height.value = height;
+                      //node._private.style.height.pxValue = height;
+
+                      this.changeModelNodeAttribute('sbgnbboxH', node.id(),height, user); //update sbgnbbox width as well
+                      node._private.data.sbgnbbox.h = height;
+                  }
+
+                   else{
+                      //nodePath.pass({user: user}).set('height', node.height());
+                      this.changeModelNodeAttribute('sbgnbboxH', node.id(),node.height(), user); //update sbgnbbox width as well
+                      this.changeModelNodeAttribute('height', node.id(),node.height(), user);
+                  }
+  */
 
 
-                var sbgnbboxW = nodePath.get('sbgnbboxW');
-                if(sbgnbboxW != null)
-                    node._private.data.sbgnbbox.w = sbgnbboxW;
-                else
-                    this.changeModelNodeAttribute('sbgnbboxW', node.id(),node._private.data.sbgnbbox.w, user);
 
-                var sbgnbboxH = nodePath.get('sbgnbboxH');
-                if(sbgnbboxH != null)
-                    node._private.data.sbgnbbox.h = sbgnbboxH;
-                else
-                    this.changeModelNodeAttribute('sbgnbboxH', node.id(),node._private.data.sbgnbbox.h, user);
+                //
+                //var isCloneMarker = nodePath.get('isCloneMarker');
+                //
+                //
+                //if (isCloneMarker != null)
+                //    node.data('sbgnclonemarker', isCloneMarker ? true : undefined);
+                //
+                //else
+                // //   nodePath.pass({user: user}).set('isCloneMarker', false);
+                //this.changeModelNodeAttribute('isCloneMarker', node.id(),node.data('sbgnclonemarker'), user);
+
+
+                ////var isMultimer = nodePath.get('isMultimer');
+                ////
+                ////if (isMultimer != null) {
+                ////
+                ////    var sbgnclass = node.data('sbgnclass');
+                ////    if (isMultimer) {
+                ////        //if not multimer already
+                ////        if (sbgnclass.indexOf(' multimer') <= -1) //todo funda changed
+                ////            node.data('sbgnclass', sbgnclass + ' multimer');
+                ////    }
+                ////    else {
+                ////        node.data('sbgnclass', sbgnclass.replace(' multimer', ''));
+                ////    }
+                ////
+                ////
+                ////}
+                //
+                //else
+                //    nodePath.pass({user: user}).set('isMultimer', false);
+
+
+                //var parent = nodePath.get('parent');
+                //
+                //
+                //if (parent != null)
+                //    node.data('parent', parent);
+                //else
+                //    this.changeModelNodeAttribute('parent', node.id(),node.data('parent'), user);
+                //
+                //
+                //var sbgnStatesAndInfos = nodePath.get('sbgnStatesAndInfos');
+                //
+                //
+                //
+                //if(sbgnStatesAndInfos != null)
+                //    node.data('sbgnstatesandinfos',sbgnStatesAndInfos);
+                //
+                //else
+                //    this.changeModelNodeAttribute('sbgnStatesAndInfos', node.id(),node.data('sbgnstatesandinfos'), user);
+                //
+                //
+                //var sbgnbboxW = nodePath.get('sbgnbboxW');
+                //if(sbgnbboxW != null)
+                //    node._private.data.sbgnbbox.w = sbgnbboxW;
+                //else
+                //    this.changeModelNodeAttribute('sbgnbboxW', node.id(),node._private.data.sbgnbbox.w, user);
+                //
+                //var sbgnbboxH = nodePath.get('sbgnbboxH');
+                //if(sbgnbboxH != null)
+                //    node._private.data.sbgnbbox.h = sbgnbboxH;
+                //else
+                //    this.changeModelNodeAttribute('sbgnbboxH', node.id(),node._private.data.sbgnbbox.h, user);
 
             }
 
@@ -23026,19 +23031,21 @@ module.exports =  function(model, docId, userId, userName) {
                 else
                     this.changeModelEdgeAttribute('lineColor', edge.id(),edge.css('line-color'), user);
 
-                var width = edgePath.get('width');
 
-                if(width != null)
-                    edge.css('width', width);
-                else
-                    this.changeModelEdgeAttribute('width', edge.id(),edge.css('width'), user);
-
-
-                var cardinality = edgePath.get('cardinality');
-                if(cardinality != null)
-                    edge.data('sbgncardinality', cardinality);
-                else
-                    this.changeModelEdgeAttribute('cardinality', edge.id(),edge.data('sbgncardinality'), user);
+                //sbgn properties??????
+                //var width = edgePath.get('width');
+                //
+                //if(width != null)
+                //    edge.css('width', width);
+                //else
+                //    this.changeModelEdgeAttribute('width', edge.id(),edge.css('width'), user);
+                //
+                //
+                //var cardinality = edgePath.get('cardinality');
+                //if(cardinality != null)
+                //    edge.data('sbgncardinality', cardinality);
+                //else
+                //    this.changeModelEdgeAttribute('cardinality', edge.id(),edge.data('sbgncardinality'), user);
 
 
                 //var sbgnclass = edgePath.get('sbgnclass');
@@ -23050,7 +23057,6 @@ module.exports =  function(model, docId, userId, userName) {
 
                 var source = edgePath.get('source');
 
-                console.log(source);
                 if(source != null)
                     edge.data('source', source);
                 else
@@ -23069,10 +23075,14 @@ module.exports =  function(model, docId, userId, userName) {
 
         initModel: function(jsonObj, nodes, edges, user){
 
+
+
+
             jsonObj.nodes.forEach(function(node){
 
                 model.pass({user:user}).set('_page.doc.cy.nodes.' + node.data.id + '.id', node.data.id);
                 model.pass({user:user}).set('_page.doc.cy.nodes.' + node.data.id + '.position', {x: node.data.sbgnbbox.x, y: node.data.sbgnbbox.y}); //initialize position
+
 
             });
             jsonObj.edges.forEach(function(edge){
@@ -24094,8 +24104,8 @@ module.exports.updateSample = function( ind, toDelete){
 
     //just get a new sbgncontainer
     if(ind < 0){
-        if(toDelete)
-            self.modelManager.deleteAll(cy.nodes(), cy.edges(), "me");
+        //if(toDelete)
+          //  self.modelManager.deleteAll(cy.nodes(), cy.edges(), "me");
 
         var jsonObj = self.modelManager.getServerGraph();
         sbgnContainer =  (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj,  editorActions));
@@ -24107,8 +24117,8 @@ module.exports.updateSample = function( ind, toDelete){
 
             var jsonObj = sbgnmlToJson.convert(xmlObject);
 
-            if(toDelete)
-                self.modelManager.deleteAll(cy.nodes(), cy.edges(), "me");
+            //if(toDelete)
+                //self.modelManager.deleteAll(cy.nodes(), cy.edges(), "me");
 
             self.modelManager.updateServerGraph(jsonObj);
 
@@ -24166,9 +24176,11 @@ module.exports.start = function(modelManager){
     $('#samples').click(function (e) {
 
         var ind = e.target.id;
-        self.modelManager.setSampleInd(ind, "me");
+
 
         module.exports.updateSample(ind, true); //delete existing graphs
+
+        self.modelManager.setSampleInd(ind, "me"); //let others know
 
     });
 
@@ -25220,4 +25232,4 @@ function SBGNProperties(){
 },{"./EditorActionsManager.js":84,"./sample-app-cytoscape-sbgn.js":87}]},{},[82,1])
 
 
-//# sourceMappingURL=/derby/chat-18cd4f54d8e7667b455f6207de6a36c2.map.json
+//# sourceMappingURL=/derby/chat-d4e2d919ffab68dabdb4da81221e80bc.map.json

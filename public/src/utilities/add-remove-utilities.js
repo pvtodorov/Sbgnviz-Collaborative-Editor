@@ -82,7 +82,7 @@ var addRemoveUtilities = {
                 source: source,
                 target: target,
                 //TODO funda added
-                id: (source + "-" + target),
+                id: (source + "-" + target + "-" + sbgnclass),
                // portsource: source,
               //  porttarget: target,
                 sbgnclass: sbgnclass

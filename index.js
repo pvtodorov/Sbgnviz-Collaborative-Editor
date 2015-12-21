@@ -98,6 +98,7 @@ app.get('/:docId', function (page, model, arg, next) {
     var docPath = 'documents.' + arg.docId;
 
 
+
     model.subscribe(docPath, 'cy', function(err) {
             if (err) {
                 return next(err);
@@ -257,39 +258,18 @@ app.proto.changeDuration = function () {
 app.proto.init = function (model) {
     var timeSort;
 
-    //model.on('all', '_page.doc.images', function(id, op,data, passed){
-    //    console.log(id);
-    //    console.log(op);
-    //    console.log(data);
-    //    if(docReady &&  passed.user == null) {
-    //        images = model.get('_page.doc.images');
+
     //
-    //        images.each(function (index, element) {
+    //model.on('all', '_page.doc.runLayout', function(op, val, prev,passed){
+    //    if(val){
+    //        if(docReady &&  passed.user == null) {
+    //            if(val == true){
+    //                $("#perform-layout").trigger('click');
+    //            }
+    //        }
     //
-    //                    $('#receivedImages').append('<img src="' + data[0].img + '" onclick ="openImage(this)" onmouseover ="showQTip(this)" />');
-    //            //
-    //        //$("div[class='message']").each(function (index, element) {
-    //        //    if ($(element).context.innerHTML.indexOf(data[0].filePath) > -1) {
-    //        //        $(element).append('<img src="' + data[0].img + '" onclick ="openImage(this)" onmouseover ="showQTip(this)" />');
-    //        //
-    //        //
-    //        //    }
-    //        //});
     //    }
-    //
     //});
-
-
-    model.on('all', '_page.doc.runLayout', function(op, val, prev,passed){
-        if(val){
-            if(docReady &&  passed.user == null) {
-                if(val == true){
-                    $("#perform-layout").trigger('click');
-                }
-            }
-
-        }
-    });
 
     model.on('all', '_page.doc.cy.nodes.*', function(id, op, val, prev, passed){
 
@@ -364,7 +344,7 @@ app.proto.init = function (model) {
             var source = model.get('_page.doc.cy.edges.'+ id + '.source');
             var target = model.get('_page.doc.cy.edges.'+ id + '.target');
 
-            insertEdge(source, target);
+            insertEdge(source, target, sbgnclass);
         }
 
     });
@@ -405,6 +385,7 @@ app.proto.init = function (model) {
 
         if(docReady && passed.user == null) {
             updateElementProperty(id,  'borderColor', borderColor, 'data');
+
         }
     });
 
@@ -508,7 +489,6 @@ app.proto.init = function (model) {
 
 
     model.on('all', '_page.doc.cy.edges.*.width', function(id,  op, width,prev, passed){
-
         if(docReady && passed.user == null) {
             updateElementProperty(id,  'width', width, 'css');
         }
@@ -841,14 +821,14 @@ function insertNode(nodeData){
 }
 
 
-function insertEdge (sourceId, targetId){
+function insertEdge (sourceId, targetId, sbgnClass){
     setTimeout(function(){
         try {
             var param = {};
             param.newEdge = {
                 source: sourceId,
                 target: targetId,
-                sbgnclass: modeHandler.elementsHTMLNameToName[modeHandler.selectedEdgeType]
+                sbgnclass: sbgnClass
             };
             param.firstTime = true;
 
@@ -870,6 +850,7 @@ function updateElementProperty(elId, propName, propValue, propType){
     setTimeout(function(){
         try {
             var el = cy.$(('#' + elId));
+
             if (propType == 'position')
                 el[propType](propValue);
             else

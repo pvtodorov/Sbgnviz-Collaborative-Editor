@@ -72,8 +72,8 @@ module.exports.updateSample = function( ind, toDelete){
 
     //just get a new sbgncontainer
     if(ind < 0){
-        if(toDelete)
-            self.modelManager.deleteAll(cy.nodes(), cy.edges(), "me");
+        //if(toDelete)
+          //  self.modelManager.deleteAll(cy.nodes(), cy.edges(), "me");
 
         var jsonObj = self.modelManager.getServerGraph();
         sbgnContainer =  (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj,  editorActions));
@@ -85,8 +85,8 @@ module.exports.updateSample = function( ind, toDelete){
 
             var jsonObj = sbgnmlToJson.convert(xmlObject);
 
-            if(toDelete)
-                self.modelManager.deleteAll(cy.nodes(), cy.edges(), "me");
+            //if(toDelete)
+                //self.modelManager.deleteAll(cy.nodes(), cy.edges(), "me");
 
             self.modelManager.updateServerGraph(jsonObj);
 
@@ -144,9 +144,11 @@ module.exports.start = function(modelManager){
     $('#samples').click(function (e) {
 
         var ind = e.target.id;
-        self.modelManager.setSampleInd(ind, "me");
+
 
         module.exports.updateSample(ind, true); //delete existing graphs
+
+        self.modelManager.setSampleInd(ind, "me"); //let others know
 
     });
 
