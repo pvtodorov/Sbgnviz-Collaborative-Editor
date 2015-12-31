@@ -423,7 +423,7 @@ module.exports.start = function(modelManager){
 
             module.exports.updateSample( -1, true); //delete previous graphs and get a new container
 
-            self.modelManager.setSampleInd(-1); //to notify other clients
+            self.modelManager.setSampleInd(-1, "me"); //to notify other clients
            // sbgnContainer =  new cyMod.SBGNContainer('#sbgn-network-container', jsonObj ,  editorActions);
         }
         reader.readAsText(file);
@@ -677,7 +677,7 @@ module.exports.start = function(modelManager){
             nodesToMakeCompound: selected
         };
 
-        //cy.elements().unselect();
+        cy.elements().unselect();
         editorActions.manager._do(editorActions.CreateCompoundForSelectedNodesCommand(param));
         editorActions.refreshUndoRedoButtonsStatus();
     });
@@ -694,7 +694,7 @@ module.exports.start = function(modelManager){
             compoundType: "compartment",
             nodesToMakeCompound: selected
         };
-        //cy.elements().unselect();
+        cy.elements().unselect();
         editorActions.manager._do(editorActions.CreateCompoundForSelectedNodesCommand(param));
         editorActions.refreshUndoRedoButtonsStatus();
     });

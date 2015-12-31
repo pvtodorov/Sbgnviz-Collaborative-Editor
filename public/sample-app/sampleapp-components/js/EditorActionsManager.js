@@ -18,6 +18,7 @@ module.exports.updateServerGraph = function(){
 };
 
 module.exports.selectNode = function (node) {
+
     module.exports.modelManager.selectModelNode(node);
     return node;
 }
@@ -385,18 +386,22 @@ module.exports.moveNodesConditionally = function(param) {
     }
 
     else{
-        module.exports.moveNodesRecursively(param.nodes);
-   /*Funda
-        param.nodes.forEach(function(node){
+        //moves itself and children
+        module.exports.moveDescendentNodes(param.nodes);
 
-            module.exports.modelManager.moveModelNode(node.id(), node.position(), "me");
-        });
-*/
+        //move parents
+      //  param.nodes.forEach(function(node) {
+      //      module.exports.moveAncestorNodes(node); //moves parents
+      //  });
+
+
+
     }
     return param;
 }
 
-module.exports.moveNodesRecursively = function(nodes) {
+//Only informs the model -- does not actually move; cytoscape does
+module.exports.moveDescendentNodes = function(nodes) {
 
     if(nodes == null) return;
     nodes.forEach(function(node){
@@ -404,10 +409,22 @@ module.exports.moveNodesRecursively = function(nodes) {
         module.exports.modelManager.moveModelNode(node.id(), node.position(), "me");
         var children = node.children();
         if(children)
-            module.exports.moveNodesRecursively( children);
+            module.exports.moveDescendentNodes( children);
 
     });
+}
+module.exports.moveAncestorNodes = function(node) {
 
+    if(node == null) return;
+
+        var parentId = node._private.data.parent;
+
+        if(parentId){
+
+            var parent = cy.getElementById(parentId);
+            module.exports.modelManager.moveModelNode(parentId, parent.position(), "me");
+            module.exports.moveAncestorNodes(parent);
+        }
 
 }
 
@@ -600,26 +617,30 @@ module.exports.createCompoundForSelectedNodes = function(param) {
 
     refreshPaddings();
 
+    ////Notify other clients
     module.exports.modelManager.addModelNode(newCompound.id(), {x: newCompound._private.position.x, y: newCompound._private.position.y, sbgnclass: param.compoundType}, "me");
+    //
+    //
+    module.exports.modelManager.changeModelNodeAttribute('width', newCompoundId, newCompound.width(), "me");
+    module.exports.modelManager.changeModelNodeAttribute('height', newCompoundId, newCompound.height(), "me" );
 
+    module.exports.modelManager.changeModelNodeAttribute('sbgnbboxW', newCompoundId, newCompound.width(), "me");
+    module.exports.modelManager.changeModelNodeAttribute('sbgnbboxH', newCompoundId, newCompound.height(), "me" );
 
-    module.exports.modelManager.changeModelNodeAttribute('width', newCompoundId, newCompound.width());
-    module.exports.modelManager.changeModelNodeAttribute('height', newCompoundId, newCompound.height() );
-
-
-    //remove nodes and add them back
-    //module.exports.modelManager.deleteModelNodes(nodesToMakeCompound, "me");
-
-
+    //
+    //
+    //
+    var nodeIds =[];
     nodesToMakeCompound.forEach(function(node){
+        nodeIds.push(node.id());
 
-      //  module.exports.modelManager.addModelNode(node.id(), {x: node._private.position.x, y: node._private.position.y}, "me");
-       // module.exports.modelManager.initModelNode(node, "me");
-        module.exports.modelManager.changeModelNodeAttribute('sbgnbboxW', node.id(), newCompound.width());
-        module.exports.modelManager.changeModelNodeAttribute('sbgnbboxH', node.id(), newCompound.height());
-        module.exports.modelManager.changeModelNodeAttribute('parent',node.id(), node.data('parent'));
+        module.exports.modelManager.changeModelNodeAttribute('sbgnbboxW', node.id(), newCompound.width(), "me");
+        module.exports.modelManager.changeModelNodeAttribute('sbgnbboxH', node.id(), newCompound.height(), "me");
+        module.exports.modelManager.changeModelNodeAttribute('parent',node.id(), node.data('parent'), "me");
     });
 
+
+    module.exports.modelManager.changeModelNodeAttribute('children', newCompoundId, nodeIds, "me");
 
     return newCompound;
 }
@@ -630,7 +651,17 @@ module.exports.removeCompound = function(compoundToRemove) {
     var childrenOfCompound = compoundToRemove.children();
 
     addRemoveUtilities.changeParent(childrenOfCompound, compoundId, newParentId);
+    //change parents of children
+    childrenOfCompound.forEach(function(node){
+        module.exports.modelManager.changeModelNodeAttribute('parent',node.id(), newParentId, "me");
+    });
+
+
     var removedCompound = compoundToRemove.remove();
+    //remove children of compound node
+    module.exports.modelManager.changeModelNodeAttribute('children', removedCompound.id(), [], "me");
+
+    module.exports.modelManager.deleteModelNode(removedCompound.id(), "me");
 
     refreshPaddings();
 
@@ -668,6 +699,7 @@ module.exports.resizeNode = function(param) {
 
     module.exports.modelManager.changeModelNodeAttribute('sbgnbboxW', ele.id(),param.width, "me"); //update sbgnbbox width as well
     module.exports.modelManager.changeModelNodeAttribute('sbgnbboxH', ele.id(),param.height, "me"); //update sbgnbbox width as well
+
 
     //}
     return result;

@@ -399,6 +399,7 @@ app.proto.init = function (model) {
     model.on('all', '_page.doc.cy.nodes.*.backgroundColor', function(id,  op, backgroundColor,prev, passed){
 
         if(docReady && passed.user == null) {
+
             updateElementProperty(id,  'background-color', backgroundColor, 'css');
         }
     });
@@ -426,6 +427,20 @@ app.proto.init = function (model) {
 
 
             updateElementProperty(id,  'parent', parent, 'data');
+        }
+    });
+
+    //a new compound node is added
+    model.on('all', '_page.doc.cy.nodes.*.children', function(id, op, children,prev, passed){
+
+
+        if(docReady && passed.user == null) {
+
+
+            updateElementProperty(id,  'children', children, 'data');
+            addRemoveUtilities.changeParentForNodeIds(children,  id);
+
+
         }
     });
 
@@ -851,24 +866,24 @@ function updateElementProperty(elId, propName, propValue, propType){
         try {
             var el = cy.$(('#' + elId));
 
-            if (propType == 'position')
-                el[propType](propValue);
-            else
-                el[propType](propName, propValue);
-
 
 
              //TODO: correct resizing
              if(propName == 'width'){
-
+                 el[0]._private.autoWidth = propValue;
+                 //el[0]._private.style.width.value.strVal = propValue + "px";
                  el[0]._private.style.width.value = propValue;
                  el[0]._private.style.width.pxValue = propValue;
+
+
                  if(propType == 'data')
                     el[0]._private.data.sbgnbbox.w = propValue;
 
              }
              else if(propName == 'height'){
-
+                 el[0]._private.autoHeight = propValue ;
+                 //
+                 // el[0]._private.style.height.value.strVal = propValue + "px";
                  el[0]._private.style.height.value = propValue;
                  el[0]._private.style.height.pxValue = propValue;
                  if(propType == 'data')
@@ -881,7 +896,29 @@ function updateElementProperty(elId, propName, propValue, propType){
 
             else if(propName == 'parent'){
                  el[0]._private.data.parent = propValue;
+
+
+
              }
+             else if(propName == 'children'){
+                var elArr = [];
+
+                     propValue.forEach(function (nodeId) {
+                         elArr.push(cy.getElementById(nodeId));
+                     });
+
+
+
+                 el[0]._private.children = elArr;
+                 refreshPaddings();
+
+
+             }
+
+            else if (propType == 'position')
+                el[propType](propValue);
+            else
+                el[propType](propName, propValue);
 
 
             //update server graph
@@ -893,7 +930,7 @@ function updateElementProperty(elId, propName, propValue, propType){
         }
 
         catch (err) {
-            console.log("Please reload page. " + err + "   Prop name:" + propName + " Element: "  + elId);
+            console.log("Please reload page. " + err + "   Prop name:" + propName + " Element: "  + elId + " Prop type:" + propType + "  propValue: " + propValue);
         }
     },0);
 }

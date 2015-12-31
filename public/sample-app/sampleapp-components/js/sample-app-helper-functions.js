@@ -45,8 +45,12 @@ function dynamicResize()
 
 $(window).on('resize', dynamicResize);
 
-$(document).ready(function ()
-{
+$(document).ready(function () {
+    scrollToBottom('command-history-area');
+    scrollToBottom('messages');
+    scrollToBottom('receivedImages');
+
+
     dynamicResize();
     $('#command-history-area').live('contentchanged', function(){
         scrollToBottom('command-history-area');
@@ -162,6 +166,7 @@ cytoscape('collection', 'setHeight', function(val){
 });
 
 var refreshPaddings = function () {
+
     //If compound padding is not set yet set it by css value
     if (window.compoundPadding == null) {
         window.compoundPadding = parseInt(sbgnStyleRules['compound-padding'], 10);

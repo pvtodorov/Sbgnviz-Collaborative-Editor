@@ -255,7 +255,9 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
 
 
 
+
                     editorActions.manager._do(editorActions.MoveNodeCommand(param));
+
 
 
 
@@ -510,11 +512,14 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
                 var cyPosY = event.cyPosition.y;
 
 
+
                 if (modeHandler.mode == "selection-mode"
                     && cyPosX >= node._private.data.expandcollapseStartX
                     && cyPosX <= node._private.data.expandcollapseEndX
                     && cyPosY >= node._private.data.expandcollapseStartY
                     && cyPosY <= node._private.data.expandcollapseEndY) {
+
+
                     selectAgain = cy.filter(":selected");
                     cancelSelection = true;
                     var expandedOrcollapsed = this.css('expanded-collapsed');

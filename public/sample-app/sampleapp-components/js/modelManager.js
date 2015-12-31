@@ -315,10 +315,6 @@ module.exports =  function(model, docId, userId, userName) {
 
         initModelNode: function(node, user){
 
-
-
-            node.addClass('changeBorderColor');
-
             var nodePath = model.at('_page.doc.cy.nodes.' + node.id());
             if (nodePath.get('id')) {
 
@@ -327,11 +323,8 @@ module.exports =  function(model, docId, userId, userName) {
 
                 if (borderColor != null)
                     node.data('borderColor', borderColor);
-
-                   // node._private.style['border-color'].strValue = borderColor;
                 else
-                    //this.changeModelNodeAttribute('borderColor', node.id(),node.css('border-color'), user);
-                    this.changeModelNodeAttribute('borderColor', node.id(),node.data('borderColor'), user);
+                    this.changeModelNodeAttribute('borderColor', node.id(),node.css('border-color'), user); //initially css is active, it is then loaded to data('borderColor')
 
                 var borderWidth = nodePath.get('borderWidth');
                 if (borderWidth != null)
@@ -348,19 +341,54 @@ module.exports =  function(model, docId, userId, userName) {
                     node.css('background-color', backgroundColor);
                 else
                     this.changeModelNodeAttribute('backgroundColor', node.id(),node.css('background-color'), user);
-                //
-
-                //SBGN properties are stored in the data component already
-
-                //var sbgnlabel = nodePath.get('sbgnlabel');
-                //
-                //if (sbgnlabel != null)
-                //    node.data('sbgnlabel', sbgnlabel );
-                //
-                //else
-                //    this.changeModelNodeAttribute('sbgnlabel', node.id(),node.data('sbgnlabel'), user);
 
 
+                //SBGN properties are stored in the data component
+                var sbgnlabel = nodePath.get('sbgnlabel');
+
+                if (sbgnlabel != null)
+                    node.data('sbgnlabel', sbgnlabel );
+
+                else
+                    this.changeModelNodeAttribute('sbgnlabel', node.id(),node.data('sbgnlabel'), user);
+
+
+                var isCloneMarker = nodePath.get('isCloneMarker');
+
+
+                if (isCloneMarker != null)
+                    node.data('sbgnclonemarker', isCloneMarker ? true : undefined);
+
+                else
+                    this.changeModelNodeAttribute('isCloneMarker', node.id(),node.data('sbgnclonemarker'), user);
+
+
+                var isMultimer = nodePath.get('isMultimer');
+
+                if (isMultimer != null) {
+                    var sbgnclass = node.data('sbgnclass');
+                    if (isMultimer) {
+                        //if not multimer already
+                        if (sbgnclass.indexOf(' multimer') <= -1) //todo funda changed
+                            node.data('sbgnclass', sbgnclass + ' multimer');
+                    }
+                    else {
+                        node.data('sbgnclass', sbgnclass.replace(' multimer', ''));
+                    }
+                }
+
+                else
+                    nodePath.pass({user: user}).set('isMultimer', false);
+
+                var sbgnStatesAndInfos = nodePath.get('sbgnStatesAndInfos');
+
+
+
+                if(sbgnStatesAndInfos != null)
+                    node.data('sbgnstatesandinfos',sbgnStatesAndInfos);
+
+                else
+                    this.changeModelNodeAttribute('sbgnStatesAndInfos', node.id(),node.data('sbgnstatesandinfos'), user);
 
                 /*  var width = nodePath.get('width');
                   if (width != null) {
@@ -397,37 +425,7 @@ module.exports =  function(model, docId, userId, userName) {
 
 
 
-                //
-                //var isCloneMarker = nodePath.get('isCloneMarker');
-                //
-                //
-                //if (isCloneMarker != null)
-                //    node.data('sbgnclonemarker', isCloneMarker ? true : undefined);
-                //
-                //else
-                // //   nodePath.pass({user: user}).set('isCloneMarker', false);
-                //this.changeModelNodeAttribute('isCloneMarker', node.id(),node.data('sbgnclonemarker'), user);
 
-
-                ////var isMultimer = nodePath.get('isMultimer');
-                ////
-                ////if (isMultimer != null) {
-                ////
-                ////    var sbgnclass = node.data('sbgnclass');
-                ////    if (isMultimer) {
-                ////        //if not multimer already
-                ////        if (sbgnclass.indexOf(' multimer') <= -1) //todo funda changed
-                ////            node.data('sbgnclass', sbgnclass + ' multimer');
-                ////    }
-                ////    else {
-                ////        node.data('sbgnclass', sbgnclass.replace(' multimer', ''));
-                ////    }
-                ////
-                ////
-                ////}
-                //
-                //else
-                //    nodePath.pass({user: user}).set('isMultimer', false);
 
 
                 //var parent = nodePath.get('parent');
@@ -439,15 +437,7 @@ module.exports =  function(model, docId, userId, userName) {
                 //    this.changeModelNodeAttribute('parent', node.id(),node.data('parent'), user);
                 //
                 //
-                //var sbgnStatesAndInfos = nodePath.get('sbgnStatesAndInfos');
-                //
-                //
-                //
-                //if(sbgnStatesAndInfos != null)
-                //    node.data('sbgnstatesandinfos',sbgnStatesAndInfos);
-                //
-                //else
-                //    this.changeModelNodeAttribute('sbgnStatesAndInfos', node.id(),node.data('sbgnstatesandinfos'), user);
+
                 //
                 //
                 //var sbgnbboxW = nodePath.get('sbgnbboxW');

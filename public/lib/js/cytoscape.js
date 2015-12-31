@@ -4752,7 +4752,7 @@ this.cytoscape = cytoscape;
     };
 
     if (! confirmRelations(query.parent, function(){
-      return element.parent();
+      return element.pareparent();
     }) ){ return false; }
 
     if (! confirmRelations(query.ancestor, function(){
@@ -12751,6 +12751,7 @@ this.cytoscape = cytoscape;
     },
 
     updateCompoundBounds: function(){
+
       var cy = this.cy();
 
       if( !cy.styleEnabled() || !cy.hasCompoundNodes() ){ return cy.collection(); } // save cycles for non compound graphs or when style disabled
@@ -12922,6 +12923,7 @@ this.cytoscape = cytoscape;
       var ele = this[0];
       var cy = ele._private.cy;
       var styleEnabled = cy._private.styleEnabled;
+
 
       if( ele ){
         if( styleEnabled ){

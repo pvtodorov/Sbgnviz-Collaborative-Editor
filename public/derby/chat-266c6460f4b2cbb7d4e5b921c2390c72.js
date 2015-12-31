@@ -401,6 +401,7 @@ app.proto.init = function (model) {
     model.on('all', '_page.doc.cy.nodes.*.backgroundColor', function(id,  op, backgroundColor,prev, passed){
 
         if(docReady && passed.user == null) {
+
             updateElementProperty(id,  'background-color', backgroundColor, 'css');
         }
     });
@@ -428,6 +429,20 @@ app.proto.init = function (model) {
 
 
             updateElementProperty(id,  'parent', parent, 'data');
+        }
+    });
+
+    //a new compound node is added
+    model.on('all', '_page.doc.cy.nodes.*.children', function(id, op, children,prev, passed){
+
+
+        if(docReady && passed.user == null) {
+
+
+            updateElementProperty(id,  'children', children, 'data');
+            addRemoveUtilities.changeParentForNodeIds(children,  id);
+
+
         }
     });
 
@@ -853,24 +868,24 @@ function updateElementProperty(elId, propName, propValue, propType){
         try {
             var el = cy.$(('#' + elId));
 
-            if (propType == 'position')
-                el[propType](propValue);
-            else
-                el[propType](propName, propValue);
-
 
 
              //TODO: correct resizing
              if(propName == 'width'){
-
+                 el[0]._private.autoWidth = propValue;
+                 //el[0]._private.style.width.value.strVal = propValue + "px";
                  el[0]._private.style.width.value = propValue;
                  el[0]._private.style.width.pxValue = propValue;
+
+
                  if(propType == 'data')
                     el[0]._private.data.sbgnbbox.w = propValue;
 
              }
              else if(propName == 'height'){
-
+                 el[0]._private.autoHeight = propValue ;
+                 //
+                 // el[0]._private.style.height.value.strVal = propValue + "px";
                  el[0]._private.style.height.value = propValue;
                  el[0]._private.style.height.pxValue = propValue;
                  if(propType == 'data')
@@ -883,7 +898,29 @@ function updateElementProperty(elId, propName, propValue, propType){
 
             else if(propName == 'parent'){
                  el[0]._private.data.parent = propValue;
+
+
+
              }
+             else if(propName == 'children'){
+                var elArr = [];
+
+                     propValue.forEach(function (nodeId) {
+                         elArr.push(cy.getElementById(nodeId));
+                     });
+
+
+
+                 el[0]._private.children = elArr;
+                 refreshPaddings();
+
+
+             }
+
+            else if (propType == 'position')
+                el[propType](propValue);
+            else
+                el[propType](propName, propValue);
 
 
             //update server graph
@@ -895,7 +932,7 @@ function updateElementProperty(elId, propName, propValue, propType){
         }
 
         catch (err) {
-            console.log("Please reload page. " + err + "   Prop name:" + propName + " Element: "  + elId);
+            console.log("Please reload page. " + err + "   Prop name:" + propName + " Element: "  + elId + " Prop type:" + propType + "  propValue: " + propValue);
         }
     },0);
 }
@@ -991,8 +1028,8 @@ function App(derby, name, filename) {
   this.derby = derby;
   this.name = name;
   this.filename = filename;
-  this.scriptHash = 'd4e2d919ffab68dabdb4da81221e80bc';
-  this.bundledAt = 1450735392410;
+  this.scriptHash = '266c6460f4b2cbb7d4e5b921c2390c72';
+  this.bundledAt = 1451499649111;
   this.Page = createAppPage();
   this.proto = this.Page.prototype;
   this.views = new derbyTemplates.templates.Views();
@@ -21179,6 +21216,7 @@ module.exports.updateServerGraph = function(){
 };
 
 module.exports.selectNode = function (node) {
+
     module.exports.modelManager.selectModelNode(node);
     return node;
 }
@@ -21546,18 +21584,22 @@ module.exports.moveNodesConditionally = function(param) {
     }
 
     else{
-        module.exports.moveNodesRecursively(param.nodes);
-   /*Funda
-        param.nodes.forEach(function(node){
+        //moves itself and children
+        module.exports.moveDescendentNodes(param.nodes);
 
-            module.exports.modelManager.moveModelNode(node.id(), node.position(), "me");
-        });
-*/
+        //move parents
+      //  param.nodes.forEach(function(node) {
+      //      module.exports.moveAncestorNodes(node); //moves parents
+      //  });
+
+
+
     }
     return param;
 }
 
-module.exports.moveNodesRecursively = function(nodes) {
+//Only informs the model -- does not actually move; cytoscape does
+module.exports.moveDescendentNodes = function(nodes) {
 
     if(nodes == null) return;
     nodes.forEach(function(node){
@@ -21565,10 +21607,22 @@ module.exports.moveNodesRecursively = function(nodes) {
         module.exports.modelManager.moveModelNode(node.id(), node.position(), "me");
         var children = node.children();
         if(children)
-            module.exports.moveNodesRecursively( children);
+            module.exports.moveDescendentNodes( children);
 
     });
+}
+module.exports.moveAncestorNodes = function(node) {
 
+    if(node == null) return;
+
+        var parentId = node._private.data.parent;
+
+        if(parentId){
+
+            var parent = cy.getElementById(parentId);
+            module.exports.modelManager.moveModelNode(parentId, parent.position(), "me");
+            module.exports.moveAncestorNodes(parent);
+        }
 
 }
 
@@ -21761,26 +21815,30 @@ module.exports.createCompoundForSelectedNodes = function(param) {
 
     refreshPaddings();
 
+    ////Notify other clients
     module.exports.modelManager.addModelNode(newCompound.id(), {x: newCompound._private.position.x, y: newCompound._private.position.y, sbgnclass: param.compoundType}, "me");
+    //
+    //
+    module.exports.modelManager.changeModelNodeAttribute('width', newCompoundId, newCompound.width(), "me");
+    module.exports.modelManager.changeModelNodeAttribute('height', newCompoundId, newCompound.height(), "me" );
 
+    module.exports.modelManager.changeModelNodeAttribute('sbgnbboxW', newCompoundId, newCompound.width(), "me");
+    module.exports.modelManager.changeModelNodeAttribute('sbgnbboxH', newCompoundId, newCompound.height(), "me" );
 
-    module.exports.modelManager.changeModelNodeAttribute('width', newCompoundId, newCompound.width());
-    module.exports.modelManager.changeModelNodeAttribute('height', newCompoundId, newCompound.height() );
-
-
-    //remove nodes and add them back
-    //module.exports.modelManager.deleteModelNodes(nodesToMakeCompound, "me");
-
-
+    //
+    //
+    //
+    var nodeIds =[];
     nodesToMakeCompound.forEach(function(node){
+        nodeIds.push(node.id());
 
-      //  module.exports.modelManager.addModelNode(node.id(), {x: node._private.position.x, y: node._private.position.y}, "me");
-       // module.exports.modelManager.initModelNode(node, "me");
-        module.exports.modelManager.changeModelNodeAttribute('sbgnbboxW', node.id(), newCompound.width());
-        module.exports.modelManager.changeModelNodeAttribute('sbgnbboxH', node.id(), newCompound.height());
-        module.exports.modelManager.changeModelNodeAttribute('parent',node.id(), node.data('parent'));
+        module.exports.modelManager.changeModelNodeAttribute('sbgnbboxW', node.id(), newCompound.width(), "me");
+        module.exports.modelManager.changeModelNodeAttribute('sbgnbboxH', node.id(), newCompound.height(), "me");
+        module.exports.modelManager.changeModelNodeAttribute('parent',node.id(), node.data('parent'), "me");
     });
 
+
+    module.exports.modelManager.changeModelNodeAttribute('children', newCompoundId, nodeIds, "me");
 
     return newCompound;
 }
@@ -21791,7 +21849,17 @@ module.exports.removeCompound = function(compoundToRemove) {
     var childrenOfCompound = compoundToRemove.children();
 
     addRemoveUtilities.changeParent(childrenOfCompound, compoundId, newParentId);
+    //change parents of children
+    childrenOfCompound.forEach(function(node){
+        module.exports.modelManager.changeModelNodeAttribute('parent',node.id(), newParentId, "me");
+    });
+
+
     var removedCompound = compoundToRemove.remove();
+    //remove children of compound node
+    module.exports.modelManager.changeModelNodeAttribute('children', removedCompound.id(), [], "me");
+
+    module.exports.modelManager.deleteModelNode(removedCompound.id(), "me");
 
     refreshPaddings();
 
@@ -21829,6 +21897,7 @@ module.exports.resizeNode = function(param) {
 
     module.exports.modelManager.changeModelNodeAttribute('sbgnbboxW', ele.id(),param.width, "me"); //update sbgnbbox width as well
     module.exports.modelManager.changeModelNodeAttribute('sbgnbboxH', ele.id(),param.height, "me"); //update sbgnbbox width as well
+
 
     //}
     return result;
@@ -22869,10 +22938,6 @@ module.exports =  function(model, docId, userId, userName) {
 
         initModelNode: function(node, user){
 
-
-
-            node.addClass('changeBorderColor');
-
             var nodePath = model.at('_page.doc.cy.nodes.' + node.id());
             if (nodePath.get('id')) {
 
@@ -22881,11 +22946,8 @@ module.exports =  function(model, docId, userId, userName) {
 
                 if (borderColor != null)
                     node.data('borderColor', borderColor);
-
-                   // node._private.style['border-color'].strValue = borderColor;
                 else
-                    //this.changeModelNodeAttribute('borderColor', node.id(),node.css('border-color'), user);
-                    this.changeModelNodeAttribute('borderColor', node.id(),node.data('borderColor'), user);
+                    this.changeModelNodeAttribute('borderColor', node.id(),node.css('border-color'), user); //initially css is active, it is then loaded to data('borderColor')
 
                 var borderWidth = nodePath.get('borderWidth');
                 if (borderWidth != null)
@@ -22902,19 +22964,54 @@ module.exports =  function(model, docId, userId, userName) {
                     node.css('background-color', backgroundColor);
                 else
                     this.changeModelNodeAttribute('backgroundColor', node.id(),node.css('background-color'), user);
-                //
-
-                //SBGN properties are stored in the data component already
-
-                //var sbgnlabel = nodePath.get('sbgnlabel');
-                //
-                //if (sbgnlabel != null)
-                //    node.data('sbgnlabel', sbgnlabel );
-                //
-                //else
-                //    this.changeModelNodeAttribute('sbgnlabel', node.id(),node.data('sbgnlabel'), user);
 
 
+                //SBGN properties are stored in the data component
+                var sbgnlabel = nodePath.get('sbgnlabel');
+
+                if (sbgnlabel != null)
+                    node.data('sbgnlabel', sbgnlabel );
+
+                else
+                    this.changeModelNodeAttribute('sbgnlabel', node.id(),node.data('sbgnlabel'), user);
+
+
+                var isCloneMarker = nodePath.get('isCloneMarker');
+
+
+                if (isCloneMarker != null)
+                    node.data('sbgnclonemarker', isCloneMarker ? true : undefined);
+
+                else
+                    this.changeModelNodeAttribute('isCloneMarker', node.id(),node.data('sbgnclonemarker'), user);
+
+
+                var isMultimer = nodePath.get('isMultimer');
+
+                if (isMultimer != null) {
+                    var sbgnclass = node.data('sbgnclass');
+                    if (isMultimer) {
+                        //if not multimer already
+                        if (sbgnclass.indexOf(' multimer') <= -1) //todo funda changed
+                            node.data('sbgnclass', sbgnclass + ' multimer');
+                    }
+                    else {
+                        node.data('sbgnclass', sbgnclass.replace(' multimer', ''));
+                    }
+                }
+
+                else
+                    nodePath.pass({user: user}).set('isMultimer', false);
+
+                var sbgnStatesAndInfos = nodePath.get('sbgnStatesAndInfos');
+
+
+
+                if(sbgnStatesAndInfos != null)
+                    node.data('sbgnstatesandinfos',sbgnStatesAndInfos);
+
+                else
+                    this.changeModelNodeAttribute('sbgnStatesAndInfos', node.id(),node.data('sbgnstatesandinfos'), user);
 
                 /*  var width = nodePath.get('width');
                   if (width != null) {
@@ -22951,37 +23048,7 @@ module.exports =  function(model, docId, userId, userName) {
 
 
 
-                //
-                //var isCloneMarker = nodePath.get('isCloneMarker');
-                //
-                //
-                //if (isCloneMarker != null)
-                //    node.data('sbgnclonemarker', isCloneMarker ? true : undefined);
-                //
-                //else
-                // //   nodePath.pass({user: user}).set('isCloneMarker', false);
-                //this.changeModelNodeAttribute('isCloneMarker', node.id(),node.data('sbgnclonemarker'), user);
 
-
-                ////var isMultimer = nodePath.get('isMultimer');
-                ////
-                ////if (isMultimer != null) {
-                ////
-                ////    var sbgnclass = node.data('sbgnclass');
-                ////    if (isMultimer) {
-                ////        //if not multimer already
-                ////        if (sbgnclass.indexOf(' multimer') <= -1) //todo funda changed
-                ////            node.data('sbgnclass', sbgnclass + ' multimer');
-                ////    }
-                ////    else {
-                ////        node.data('sbgnclass', sbgnclass.replace(' multimer', ''));
-                ////    }
-                ////
-                ////
-                ////}
-                //
-                //else
-                //    nodePath.pass({user: user}).set('isMultimer', false);
 
 
                 //var parent = nodePath.get('parent');
@@ -22993,15 +23060,7 @@ module.exports =  function(model, docId, userId, userName) {
                 //    this.changeModelNodeAttribute('parent', node.id(),node.data('parent'), user);
                 //
                 //
-                //var sbgnStatesAndInfos = nodePath.get('sbgnStatesAndInfos');
-                //
-                //
-                //
-                //if(sbgnStatesAndInfos != null)
-                //    node.data('sbgnstatesandinfos',sbgnStatesAndInfos);
-                //
-                //else
-                //    this.changeModelNodeAttribute('sbgnStatesAndInfos', node.id(),node.data('sbgnstatesandinfos'), user);
+
                 //
                 //
                 //var sbgnbboxW = nodePath.get('sbgnbboxW');
@@ -23365,7 +23424,9 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
 
 
 
+
                     editorActions.manager._do(editorActions.MoveNodeCommand(param));
+
 
 
 
@@ -23620,11 +23681,14 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
                 var cyPosY = event.cyPosition.y;
 
 
+
                 if (modeHandler.mode == "selection-mode"
                     && cyPosX >= node._private.data.expandcollapseStartX
                     && cyPosX <= node._private.data.expandcollapseEndX
                     && cyPosY >= node._private.data.expandcollapseStartY
                     && cyPosY <= node._private.data.expandcollapseEndY) {
+
+
                     selectAgain = cy.filter(":selected");
                     cancelSelection = true;
                     var expandedOrcollapsed = this.css('expanded-collapsed');
@@ -24455,7 +24519,7 @@ module.exports.start = function(modelManager){
 
             module.exports.updateSample( -1, true); //delete previous graphs and get a new container
 
-            self.modelManager.setSampleInd(-1); //to notify other clients
+            self.modelManager.setSampleInd(-1, "me"); //to notify other clients
            // sbgnContainer =  new cyMod.SBGNContainer('#sbgn-network-container', jsonObj ,  editorActions);
         }
         reader.readAsText(file);
@@ -24709,7 +24773,7 @@ module.exports.start = function(modelManager){
             nodesToMakeCompound: selected
         };
 
-        //cy.elements().unselect();
+        cy.elements().unselect();
         editorActions.manager._do(editorActions.CreateCompoundForSelectedNodesCommand(param));
         editorActions.refreshUndoRedoButtonsStatus();
     });
@@ -24726,7 +24790,7 @@ module.exports.start = function(modelManager){
             compoundType: "compartment",
             nodesToMakeCompound: selected
         };
-        //cy.elements().unselect();
+        cy.elements().unselect();
         editorActions.manager._do(editorActions.CreateCompoundForSelectedNodesCommand(param));
         editorActions.refreshUndoRedoButtonsStatus();
     });
@@ -25232,4 +25296,4 @@ function SBGNProperties(){
 },{"./EditorActionsManager.js":84,"./sample-app-cytoscape-sbgn.js":87}]},{},[82,1])
 
 
-//# sourceMappingURL=/derby/chat-d4e2d919ffab68dabdb4da81221e80bc.map.json
+//# sourceMappingURL=/derby/chat-266c6460f4b2cbb7d4e5b921c2390c72.map.json

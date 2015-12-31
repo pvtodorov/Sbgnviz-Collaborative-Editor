@@ -70,6 +70,7 @@ var addRemoveUtilities = {
         cy.nodes().updateCompoundBounds();
         return removedEles;
     },
+
     addEdge: function (source, target, sbgnclass) {
         var defaultsMap = this.defaultsMap;
         var defaults = defaultsMap[sbgnclass];
@@ -138,5 +139,20 @@ var addRemoveUtilities = {
         }
 
         cy.add(removedNodes);
-    }
+    },
+
+    //funda
+    changeParentForNodeIds:function (nodeIds,   newParentId) {
+        if(nodeIds == null)
+            return;
+        var self = this;
+        nodeIds.forEach(function(nodeId) {
+            var node = cy.getElementById(nodeId);
+            var oldParentId = node.data("parent");
+            self.changeParent(node, oldParentId, newParentId);
+        });
+
+        cy.nodes().updateCompoundBounds();
+    },
+
 };

@@ -47,6 +47,8 @@
     <br>
     <form id = "nodeOperations">
 
+
+
         Pos x : <input type = "number" id = "posX" name="posX" value = 200>
         Pos y : <input type = "number" id = "posY" name="posY" value = 200>
         Sbgnclass: <input type = "text" id = "sbgnclass" name="sbgnclass" value = "macromolecule">
@@ -55,6 +57,8 @@
         <br>
         <b>Node Id </b>: <select multiple name="Id" id = "nodeId" >
         </select>
+        <input type="button" value="Highlight node(s)" onclick=highlightNodes()>
+        <input type="button" value="Remove highlights" onclick=unhighlightNodes()>
 
         <br>
         <input type="button" value="Add complex for selected" onclick=addCompound("complex")>
@@ -460,6 +464,18 @@
     function deleteEdge(){
         agent.sendRequest("agentDeleteEdgeRequest", {id: $('#edgeId')[0].value});
     }
+    function highlightNodes(){
+        var nodeIdList = $('#nodeId').val();
+        nodeIdList.forEach(function(nodeId){
+            agent.sendRequest("agentChangeNodeAttributeRequest", {id: nodeId, attStr: "highlightColor", attVal: agent.colorCode});
+        });
+    }
+    function unhighlightNodes(){
+        var nodeIdList = $('#nodeId').val();
+        nodeIdList.forEach(function(nodeId){
+            agent.sendRequest("agentChangeNodeAttributeRequest", {id: nodeId, attStr: "highlightColor", attVal: null});
+        });
+    }
 
     function moveNode(){
         var id = $('#nodeId')[0].value;
@@ -591,6 +607,7 @@
         $('#'+divId).empty();
         var nodeList = agent.getNodeList();
 
+        console.log(nodeList);
         var nodeNameList = [];
 
         var i = 0;
