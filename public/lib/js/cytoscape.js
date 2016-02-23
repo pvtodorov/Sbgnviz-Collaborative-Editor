@@ -23996,6 +23996,23 @@
 
       return ret;
     },
+    tuple2hex: function( tuple ){  //funda
+      var r = tuple[0];
+      var g = tuple[1];
+      var b = tuple[2];
+
+      function ch2hex( ch ){
+        var hex = ch.toString(16);
+
+        if( hex.length === 1 ){
+          hex = '0' + hex;
+        }
+
+        return hex;
+      }
+
+      return '#' + ch2hex(r) + ch2hex(g) + ch2hex(b);
+    },
 
     // get [r, g, b, a] from rgb(0, 0, 0) or rgba(0, 0, 0, 0)
     rgb2tuple: function( rgb ){
