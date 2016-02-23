@@ -14,9 +14,7 @@
     <bookmark url="file://$PROJECT_DIR$/public/lib/js/cytoscape.js" line="12930" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="88f2e8a3-abc2-4ba9-848d-5914e68f76f8" name="Default" comment="Cytoscape 2.5 changes integrated. Color coding problems." />
-    <list id="c2a27097-8397-4641-b254-565bb431de03" name="New changelist" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/encodings.xml" />
+    <list default="true" id="88f2e8a3-abc2-4ba9-848d-5914e68f76f8" name="Default" comment="Cytoscape 2.5 changes integrated. Color coding problems.">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="CWC.iws" />
@@ -24,7 +22,6 @@
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path=".idea/dataSources.local.xml" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
-    <file path="$PROJECT_DIR$/.idea/workspace.xml" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -77,10 +74,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="sbgn-bend-point-utilities.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="sbgn-bend-point-utilities.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/public/src/utilities/sbgn-bend-point-utilities.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
+            <state vertical-scroll-proportion="0.012057878">
               <caret line="174" column="12" selection-start-line="174" selection-start-column="12" selection-end-line="174" selection-end-column="12" />
               <folding />
             </state>
@@ -99,11 +96,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="sample-app-menu-functions.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="sample-app-menu-functions.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-menu-functions.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.97588426">
-              <caret line="895" column="4" selection-start-line="895" selection-start-column="4" selection-end-line="895" selection-end-column="4" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="840" column="31" selection-start-line="840" selection-start-column="31" selection-end-line="840" selection-end-column="31" />
               <folding />
             </state>
           </provider>
@@ -1054,7 +1051,7 @@
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="88f2e8a3-abc2-4ba9-848d-5914e68f76f8" name="Default" comment="" />
-      <changelist id="c2a27097-8397-4641-b254-565bb431de03" name="New changelist" comment="" />
+      <changelist id="" name="New changelist" comment="" />
       <created>1446571740148</created>
       <option name="number" value="Default" />
       <updated>1446571740148</updated>
@@ -1103,7 +1100,7 @@
       <workItem from="1451323526278" duration="24989000" />
       <workItem from="1451493874374" duration="9094000" />
       <workItem from="1456176539152" duration="10438000" />
-      <workItem from="1456253392046" duration="1340000" />
+      <workItem from="1456253392046" duration="1456000" />
     </task>
     <task id="LOCAL-00001" summary="Idea">
       <created>1446753281602</created>
@@ -1117,11 +1114,17 @@
       <option name="project" value="LOCAL" />
       <updated>1456254018140</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="New changelist">
+      <created>1456254752125</created>
+      <option name="number" value="00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1456254752125</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="596414000" />
+    <option name="totallyTimeSpent" value="596530000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1205,7 +1208,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Idea" />
-    <option name="LAST_COMMIT_MESSAGE" value="Idea" />
+    <MESSAGE value="New changelist" />
+    <option name="LAST_COMMIT_MESSAGE" value="New changelist" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1453,6 +1457,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="7" column="0" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1640,18 +1645,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/src/utilities/sbgn-bend-point-utilities.js">
+    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-menu-functions.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="174" column="12" selection-start-line="174" selection-start-column="12" selection-end-line="174" selection-end-column="12" />
+          <caret line="840" column="31" selection-start-line="840" selection-start-column="31" selection-end-line="840" selection-end-column="31" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-menu-functions.js">
+    <entry file="file://$PROJECT_DIR$/public/src/utilities/sbgn-bend-point-utilities.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.97588426">
-          <caret line="895" column="4" selection-start-line="895" selection-start-column="4" selection-end-line="895" selection-end-column="4" />
+        <state vertical-scroll-proportion="0.012057878">
+          <caret line="174" column="12" selection-start-line="174" selection-start-column="12" selection-end-line="174" selection-end-column="12" />
           <folding />
         </state>
       </provider>
