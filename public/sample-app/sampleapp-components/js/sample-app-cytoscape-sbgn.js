@@ -52,6 +52,20 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
         ready: function () {
 
             window.cy = this;
+
+            var edges = cy.edges();
+
+
+            for (var i = 0; i < edges.length; i++) {
+                var edge = edges[i];
+                var result = sbgnBendPointUtilities.convertToRelativeBendPositions(edge);
+
+                if(result.distances.length > 0){
+                    edge.data('weights', result.weights);
+                    edge.data('distances', result.distances);
+                }
+            }
+
             refreshPaddings();
             //TODO: if this is called before other client is ready, this causes problems
             editorActions.modelManager.initModel(cytoscapeJsGraph, cy.nodes(), cy.edges(), "me");
@@ -70,6 +84,8 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
                 });
 
             });
+
+            cy.nodes('[sbgnclass="complex"],[sbgnclass="compartment"],[sbgnclass="submap"]').data('expanded-collapsed', 'expanded');
 
             var paramResize;
             cy.noderesize({
@@ -417,7 +433,7 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
 
             cy.on('tap', function (event) {
                 $("#node-label-textbox").blur();
-
+                $('.ctx-bend-operation').css('display', 'none');
 
                 if(nodeLabelChanged){
                     var param ={
@@ -564,6 +580,105 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
                 nodeQtipFunction(node);
 
             });
+
+
+            cy.on('cxttap', 'edge', function (event) {
+                var edge = this;
+                var containerPos = $(cy.container()).position();
+
+                var left = containerPos.left + event.cyRenderedPosition.x;
+                left = left.toString() + 'px';
+
+                var top = containerPos.top +  event.cyRenderedPosition.y;
+                top = top.toString() + 'px';
+
+//          var ctxMenu = document.getElementById("edge-ctx-menu");
+//          ctxMenu.style.display = "block";
+//          ctxMenu.style.left = left;
+//          ctxMenu.style.top = top;
+
+                $('.ctx-bend-operation').css('display', 'none');
+
+                var selectedBendIndex = cytoscape.sbgn.getContainingBendCircleIndex(event.cyPosition.x, event.cyPosition.y, edge);
+                if(selectedBendIndex == -1){
+                    $('#ctx-add-bend-point').css('display', 'block');
+                    sbgnBendPointUtilities.currentCtxPos = event.cyPosition;
+                    ctxMenu = document.getElementById("ctx-add-bend-point");
+                }
+                else {
+                    $('#ctx-remove-bend-point').css('display', 'block');
+                    sbgnBendPointUtilities.currentBendIndex = selectedBendIndex;
+                    ctxMenu = document.getElementById("ctx-remove-bend-point");
+                }
+
+                ctxMenu.style.display = "block";
+                ctxMenu.style.left = left;
+                ctxMenu.style.top = top;
+
+                sbgnBendPointUtilities.currentCtxEdge = edge;
+            });
+            var movedBendIndex;
+            var movedBendEdge;
+            var moveBendParam;
+
+            cy.on('tapstart', 'edge', function (event) {
+                var edge = this;
+                movedBendEdge = edge;
+
+                moveBendParam = {
+                    edge: edge,
+                    weights: edge.data('weights')?[].concat(edge.data('weights')):edge.data('weights'),
+                    distances: edge.data('distances')?[].concat(edge.data('distances')):edge.data('distances')
+                };
+
+                var cyPosX = event.cyPosition.x;
+                var cyPosY = event.cyPosition.y;
+
+                if(edge._private.selected){
+                    var index = cytoscape.sbgn.getContainingBendCircleIndex(cyPosX, cyPosY, edge);
+                    if(index != -1){
+                        movedBendIndex = index;
+                        cy.panningEnabled(false);
+                        cy.boxSelectionEnabled(false);
+                    }
+                }
+            });
+
+            cy.on('tapdrag', function (event) {
+                var edge = movedBendEdge;
+
+                if(movedBendEdge === undefined || movedBendIndex === undefined){
+                    return;
+                }
+
+                var weights = edge.data('weights');
+                var distances = edge.data('distances');
+
+                var relativeBendPosition = sbgnBendPointUtilities.convertToRelativeBendPosition(edge, event.cyPosition);
+                weights[movedBendIndex] = relativeBendPosition.weight;
+                distances[movedBendIndex] = relativeBendPosition.distance;
+
+                edge.data('weights', weights);
+                edge.data('distances', distances);
+            });
+
+            cy.on('tapend', 'edge', function (event) {
+                var edge = movedBendEdge;
+
+                if(moveBendParam !== undefined && edge.data('weights')
+                    && edge.data('weights').toString() != moveBendParam.weights.toString()){
+                    module.exports.editorActionsManager._do(new changeBendPointsCommand(moveBendParam));
+                    refreshUndoRedoButtonsStatus();
+                }
+
+                movedBendIndex = undefined;
+                movedBendEdge = undefined;
+                moveBendParam = undefined;
+
+                cy.panningEnabled(true);
+                cy.boxSelectionEnabled(true);
+            });
+
         }
     };
     container.html("");

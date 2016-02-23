@@ -429,20 +429,165 @@ function getStyleRules(selector) {
     }
 };
 
+
+var truncateText = function (textProp, font) {
+    var context = document.createElement('canvas').getContext("2d");
+    context.font = font;
+
+    var fitLabelsToNodes = (sbgnStyleRules['fit-labels-to-nodes'] == 'true');
+
+    var text = (typeof textProp.label === 'undefined') ? "" : textProp.label;
+    //If fit labels to nodes is false do not truncate
+    if (fitLabelsToNodes == false) {
+        return text;
+    }
+    var width;
+    var len = text.length;
+    var ellipsis = "..";
+
+    //if(context.measureText(text).width < textProp.width)
+    //	return text;
+    var textWidth = (textProp.width > 30) ? textProp.width - 10 : textProp.width;
+
+    while ((width = context.measureText(text).width) > textWidth) {
+        --len;
+        text = text.substring(0, len) + ellipsis;
+    }
+    return text;
+};
+
+var getElementContent = function (ele) {
+    var sbgnclass = ele.data('sbgnclass');
+    if (sbgnclass.endsWith(' multimer')) {
+        sbgnclass = sbgnclass.replace(' multimer', '');
+    }
+
+    var content = "";
+    if (sbgnclass == 'macromolecule' || sbgnclass == 'simple chemical'
+        || sbgnclass == 'phenotype' || sbgnclass == 'compartment'
+        || sbgnclass == 'unspecified entity' || sbgnclass == 'nucleic acid feature'
+        || sbgnclass == 'perturbing agent' || sbgnclass == 'tag') {
+        content = ele.data('sbgnlabel') ? ele.data('sbgnlabel') : "";
+    }
+    else if (sbgnclass == 'and') {
+        content = 'AND';
+    }
+    else if (sbgnclass == 'or') {
+        content = 'OR';
+    }
+    else if (sbgnclass == 'not') {
+        content = 'NOT';
+    }
+    else if (sbgnclass == 'omitted process') {
+        content = '\\\\';
+    }
+    else if (sbgnclass == 'uncertain process') {
+        content = '?';
+    }
+    else if (sbgnclass == 'dissociation') {
+        content = 'O';
+    }
+
+    var textProp = {
+        label: content,
+        width: ele.data('width') ? ele.data('width') : ele.data('sbgnbbox').w
+    };
+
+    var font = getLabelTextSize(ele) + "px Arial";
+    return truncateText(textProp, font);
+};
+
+var getLabelTextSize = function (ele) {
+    var sbgnclass = ele.data('sbgnclass');
+    if (sbgnclass.endsWith('process')) {
+        return 18;
+    }
+    return getDynamicLabelTextSize(ele);
+};
+
+var getCyShape = function (ele) {
+    var shape = ele.data('sbgnclass');
+    if (shape.endsWith(' multimer')) {
+        shape = shape.replace(' multimer', '');
+    }
+
+    if (shape == 'compartment') {
+        return 'roundrectangle';
+    }
+    if (shape == 'phenotype') {
+        return 'hexagon';
+    }
+    if (shape == 'perturbing agent' || shape == 'tag') {
+        return 'polygon';
+    }
+    if (shape == 'source and sink' || shape == 'nucleic acid feature' || shape == 'dissociation'
+        || shape == 'macromolecule' || shape == 'simple chemical' || shape == 'complex'
+        || shape == 'unspecified entity' || shape == 'process' || shape == 'omitted process'
+        || shape == 'uncertain process' || shape == 'association') {
+        return shape;
+    }
+    return 'ellipse';
+};
+var getCyArrowShape = function (ele) {
+    var sbgnclass = ele.data('sbgnclass');
+    if (sbgnclass == 'necessary stimulation') {
+        return 'necessary stimulation';
+//    return 'triangle-tee';
+    }
+    if (sbgnclass == 'inhibition') {
+        return 'tee';
+    }
+    if (sbgnclass == 'catalysis') {
+        return 'circle';
+    }
+    if (sbgnclass == 'stimulation' || sbgnclass == 'production') {
+        return 'triangle';
+    }
+    if (sbgnclass == 'modulation') {
+        return 'diamond';
+    }
+    return 'none';
+};
+
+/*
+ * calculates the dynamic label size for the given node
+ */
+var getDynamicLabelTextSize = function (ele) {
+    var dynamicLabelSize = sbgnStyleRules['dynamic-label-size'];
+    var dynamicLabelSizeCoefficient;
+
+    if (dynamicLabelSize == 'small') {
+        dynamicLabelSizeCoefficient = 0.75;
+    }
+    else if (dynamicLabelSize == 'regular') {
+        dynamicLabelSizeCoefficient = 1;
+    }
+    else if (dynamicLabelSize == 'large') {
+        dynamicLabelSizeCoefficient = 1.25;
+    }
+
+    //This line will be useless and is to be removed later
+//  dynamicLabelSizeCoefficient = dynamicLabelSizeCoefficient ? dynamicLabelSizeCoefficient : 1;
+
+    var h = ele.data('height') ? ele.data('height') : ele.data('sbgnbbox').h;
+    var textHeight = parseInt(h / 2.45) * dynamicLabelSizeCoefficient;
+
+    return textHeight;
+};
 /*
  * get the style rules for .sbgn selector and fill them into sbgnStyleRules map
  */
-function getSBGNStyleRules(){
-    if (window.sbgnStyleRules == null) {
-        var styleRulesList = getStyleRules(".sbgn");
-        window.sbgnStyleRules = {};
-        for (var i = 0; i < styleRulesList.length; i++) {
-            var rule = styleRulesList[i];
-            window.sbgnStyleRules[rule.name] = rule.value;
-        }
-    }
-    return sbgnStyleRules;
-};
+//function getSBGNStyleRules(){
+//    if (window.sbgnStyleRules == null) {
+//        var styleRulesList = getStyleRules(".sbgn");
+//        window.sbgnStyleRules = {};
+//        for (var i = 0; i < styleRulesList.length; i++) {
+//            var rule = styleRulesList[i];
+//            window.sbgnStyleRules[rule.name] = rule.value;
+//        }
+//    }
+//    return sbgnStyleRules;
+//};
 
 
 
@@ -450,26 +595,57 @@ var sbgnStyleSheet = cytoscape.stylesheet()
     .selector("node")
     .css({
         'border-width': 1.5,
-        'border-color': '#555555',
+        'border-color': '#555',
         'background-color': '#f6f6f6',
         'font-size': 11,
 //          'shape': 'data(sbgnclass)',
         'background-opacity': 0.5,
     })
+    .selector("node[?sbgnclonemarker][sbgnclass='perturbing agent']")
+    .css({
+        'background-image': 'sampleapp-images/clone_bg.png',
+        'background-position-x': '50%',
+        'background-position-y': '100%',
+        'background-width': '100%',
+        'background-height': '25%',
+        'background-fit': 'none',
+        'background-image-opacity': function (ele) {
+            return ele._private.style['background-opacity'].value;
+        }
+    })
+    .selector("node[sbgnclass][sbgnclass!='complex'][sbgnclass!='process'][sbgnclass!='association'][sbgnclass!='dissociation'][sbgnclass!='compartment'][sbgnclass!='source and sink']")
+    .css({
+//          'content': 'data(sbgnlabel)',
+        'content': function (ele) {
+            return getElementContent(ele);
+        },
+        'text-valign': 'center',
+        'text-halign': 'center',
+        'font-size': function (ele) {
+            return getLabelTextSize(ele);
+        }
+    })
     .selector("node[sbgnclass]")
     .css({
-      'shape': 'data(sbgnclass)' //gives error
-        //'shape': '[sbgnclass]'
+        'shape': function (ele) {
+            return getCyShape(ele);
+        }
     })
-//        .selector("node[!sbgnclass][width][height]")
-//        .css({
-//          'width': 'data(width)',
-//          'height': 'data(height)'
-//        })
+    .selector("node[sbgnclass='perturbing agent']")
+    .css({
+        'shape-polygon-points': '-1, -1,   -0.5, 0,  -1, 1,   1, 1,   0.5, 0, 1, -1'
+    })
+    .selector("node[sbgnclass='association']")
+    .css({
+        'background-color': '#6B6B6B'
+    })
+    .selector("node[sbgnclass='tag']")
+    .css({
+        'shape-polygon-points': '-1, -1,   0.25, -1,   1, 0,    0.25, 1,    -1, 1'
+    })
     .selector("node[sbgnclass='complex']")
     .css({
         'background-color': '#F4F3EE',
-        'expanded-collapsed': 'expanded',
         'text-valign': 'bottom',
         'text-halign': 'center',
         'font-size': '16'
@@ -482,12 +658,7 @@ var sbgnStyleSheet = cytoscape.stylesheet()
         'content': 'data(sbgnlabel)',
         'text-valign': 'bottom',
         'text-halign': 'center',
-        'font-size': '16',
-        'expanded-collapsed': 'expanded'
-    })
-    .selector("node[sbgnclass='submap']")
-    .css({
-        'expanded-collapsed': 'expanded'
+        'font-size': '16'
     })
     .selector("node[sbgnclass][sbgnclass!='complex'][sbgnclass!='compartment'][sbgnclass!='submap']")
     .css({
@@ -497,8 +668,8 @@ var sbgnStyleSheet = cytoscape.stylesheet()
     .selector("node:selected")
     .css({
         'border-color': '#d67614',
-        'target-arrow-color': '#000000',
-        'text-outline-color': '#000000'})
+        'target-arrow-color': '#000',
+        'text-outline-color': '#000'})
     .selector("node:active")
     .css({
         'background-opacity': 0.7, 'overlay-color': '#d67614',
@@ -506,18 +677,30 @@ var sbgnStyleSheet = cytoscape.stylesheet()
     })
     .selector("edge")
     .css({
-        'line-color': '#555555',
+        'curve-style': 'bezier',
+        'line-color': '#555',
         'target-arrow-fill': 'hollow',
         'source-arrow-fill': 'hollow',
         'width': 1.5,
-        'target-arrow-color': '#555555',
-        'source-arrow-color': '#555555',
+        'target-arrow-color': '#555',
+        'source-arrow-color': '#555',
 //          'target-arrow-shape': 'data(sbgnclass)'
+    })
+    .selector("edge[distances][weights]")
+    .css({
+        'curve-style': 'segments',
+        'segment-distances': function(ele){
+            return sbgnBendPointUtilities.getSegmentDistancesString(ele);
+        },
+        'segment-weights': function(ele){
+            return sbgnBendPointUtilities.getSegmentWeightsString(ele);
+        }
     })
     .selector("edge[sbgnclass]")
     .css({
-        'target-arrow-shape': 'data(sbgnclass)' //funda
-        //'target-arrow-shape': '[sbgnclass]'
+        'target-arrow-shape': function (ele) {
+            return getCyArrowShape(ele);
+        }
     })
     .selector("edge[sbgnclass='inhibition']")
     .css({
@@ -525,9 +708,16 @@ var sbgnStyleSheet = cytoscape.stylesheet()
     })
     .selector("edge[sbgnclass='consumption']")
     .css({
-        'target-arrow-shape': 'none',
-        'source-arrow-shape': 'data(sbgnclass)',
-        //'source-arrow-shape': '[sbgnclass]',
+//      'text-background-opacity': 1,
+//      'text-background-color': 'white',
+//      'text-background-shape': 'roundrectangle',
+//      'text-border-color': '#000',
+//      'text-border-width': 1,
+//      'text-border-opacity': 1,
+//      'label': function (ele) {
+//        var cardinality = ele.data('sbgncardinality');
+//        return cardinality == null || cardinality == 0 ? '' : cardinality;
+//      }
         'line-style': 'consumption'
     })
     .selector("edge[sbgnclass='production']")
@@ -603,6 +793,18 @@ var sbgnStyleSheet = cytoscape.stylesheet()
     .css({
         'background-opacity': 'data(backgroundOpacity)'
     })
+    .selector("node.changeLabelTextSize")
+    .css({
+        'font-size': function (ele) {
+            return getLabelTextSize(ele);
+        }
+    })
+    .selector("node.changeContent")
+    .css({
+        'content': function (ele) {
+            return getElementContent(ele);
+        }
+    })
     .selector("node.changeBorderColor")
     .css({
         'border-color': 'data(borderColor)'
@@ -634,17 +836,11 @@ var sbgnStyleSheet = cytoscape.stylesheet()
         'line-color': '#d67614',
         'source-arrow-color': '#d67614',
         'target-arrow-color': '#d67614'
-    })
-    .selector(".sbgn")
-    .css({
-        'compound-padding': 20,
-        'dynamic-label-size': 'regular',
-        'fit-labels-to-nodes': 'true',
-        'incremental-layout-after-expand-collapse': 'true'
-    }); // end of sbgnStyleSheet
+    });
+// end of sbgnStyleSheet
 
 //get the sbgn style rules
-getSBGNStyleRules();
+//funda getSBGNStyleRules();
 
 
 

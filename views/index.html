@@ -16,6 +16,10 @@
 
 
 <Body:>
+
+    <!--global variables-->
+    <script src="sample-app/sampleapp-components/js/sample-app-global-variables.js"></script>
+
     <!-- External Libraries -->
     <script src="lib/js/jquery-1.8.2.js"></script>
     <script src="lib/js/jquery.fancybox-1.3.4.pack.js"></script>
@@ -44,10 +48,12 @@
     <script src="src/utilities/expand-collapse-utilities.js"></script>
     <script src="src/utilities/add-remove-utilities.js"></script>
     <script src="src/utilities/sbgn-element-utilities.js"></script>
-
+    <script src="src/utilities/sbgn-bend-point-utilities.js"></script>
+    <script src="src/utilities/sbgn-style-rules.js"></script>
     <script src="sample-app/sampleapp-components/js/sample-app-mode-handler.js"></script>
     <script src="sample-app/sampleapp-components/js/sample-app-helper-functions.js"></script>
     <!--<script src="sample-app/sampleapp-components/js/webPageEditor.js"></script>-->
+
 
 
     <!--<div id = "sbgnviz">-->
@@ -461,6 +467,9 @@
          </div>
 
          <input id="node-label-textbox" type="text">
+
+        <menu title="Add Bend Point" id="ctx-add-bend-point" class="ctx-bend-operation"></menu>
+        <menu title="Remove Bend Point" id="ctx-remove-bend-point" class="ctx-bend-operation"></menu>
 
          <!-- templates -->
          <script type="text/template" id="node-legend-template">

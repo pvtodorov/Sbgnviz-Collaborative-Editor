@@ -271,6 +271,24 @@
 
             return {'source': sourceNodeId, 'target': targetNodeId};
         },
+        getArcBendPointPositions: function (ele) {
+            var bendPointPositions = [];
+
+//    $(ele).children('start, next, end').each(function () {
+            $(ele).children('next').each(function () {
+                var posX = $(this).attr('x');
+                var posY = $(this).attr('y');
+
+                var pos = {
+                    x: posX,
+                    y: posY
+                };
+
+                bendPointPositions.push(pos);
+            });
+
+            return bendPointPositions;
+        },
         addCytoscapeJsEdge: function (ele, jsonArray, xmlObject) {
             if (!sbgnElementUtilities.handledElements[$(ele).attr('class')]) {
                 return;
@@ -279,10 +297,12 @@
             var self = this;
             var edgeObj = new Object();
 
+            var bendPointPositions = self.getArcBendPointPositions(ele);
         //funda    edgeObj.id = $(ele).attr('id');
             edgeObj.id = $(ele).data('id');
 
             edgeObj.sbgnclass = $(ele).attr('class');
+            edgeObj.bendPointPositions = bendPointPositions;
 
             if ($(ele).find('glyph').length <= 0) {
                 edgeObj.sbgncardinality = 0;

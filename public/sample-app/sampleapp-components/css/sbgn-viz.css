@@ -68,6 +68,13 @@ open > .dropdown-menu {
 
 }
 
+.ctx-bend-operation{
+    display:none;
+    z-index:1000;
+    width:110px;
+    padding: 3px 20px;
+}
+
 .nav-menu {
     position:absolute;
     background: #e7f8e7;
@@ -527,7 +534,8 @@ input, button {
 
 .time {
 
-    float: right color : #888;
+    float: right ;
+    color : #888;
 
 }
 

@@ -20,33 +20,55 @@ var setFileContent = function (fileName) {
     span.appendChild(document.createTextNode(fileName));
 };
 
+var beforePerformLayout = function(){
+    cy.nodes().removeData("ports");
+    cy.edges().removeData("portsource");
+    cy.edges().removeData("porttarget");
+
+    cy.nodes().data("ports", []);
+    cy.edges().data("portsource", []);
+    cy.edges().data("porttarget", []);
+
+    cy.edges().removeData('weights');
+    cy.edges().removeData('distances');
+
+    cy.edges().css('curve-style', 'bezier');
+};
+
 
 function getXMLObject(itemId, loadXMLDoc) {
     switch (itemId) {
         case "0":
             $.ajax({
+                url: './sample-app/samples/CaM-CaMK_dependent_signaling_to_the_nucleus.xml',
+                success: loadXMLDoc
+            });
+            break;
+
+        case "1":
+            $.ajax({
                 url: './sample-app/samples/activated_stat1alpha_induction_of_the_irf1_gene.xml',
                 success: loadXMLDoc
             });
             break;
-        case "1":
+        case "2":
             $.ajax({url: './sample-app/samples/glycolysis.xml', success: loadXMLDoc});
             break;
-        case "2":
+        case "3":
             $.ajax({url: './sample-app/samples/mapk_cascade.xml', success: loadXMLDoc});
             break;
-        case "3":
+        case "4":
             $.ajax({url: './sample-app/samples/polyq_proteins_interference.xml', success: loadXMLDoc});
             break;
-        case "4":
+        case "5":
             $.ajax({url: './sample-app/samples/insulin-like_growth_factor_signaling.xml', success: loadXMLDoc});
             break;
-        case "5":
+        case "6":
             $.ajax({
                 url: './sample-app/samples/atm_mediated_phosphorylation_of_repair_proteins.xml', success: loadXMLDoc
             });
             break;
-        case "6":
+        case "7":
             $.ajax({
                 url: './sample-app/samples/vitamins_b6_activation_to_pyridoxal_phosphate.xml', success: loadXMLDoc
             });
@@ -139,7 +161,43 @@ module.exports.start = function(modelManager){
         sbgnContainer = (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, editorActions));
     }
 
+    document.getElementById("ctx-add-bend-point").addEventListener("contextmenu",function(event){
+        event.preventDefault();
+    },false);
 
+    document.getElementById("ctx-remove-bend-point").addEventListener("contextmenu",function(event){
+        event.preventDefault();
+    },false);
+
+    $('.ctx-bend-operation').click(function (e) {
+        $('.ctx-bend-operation').css('display', 'none');
+    });
+
+    $('#ctx-add-bend-point').click(function (e) {
+        var edge = sbgnBendPointUtilities.currentCtxEdge;
+        var param = {
+            edge: edge,
+            weights: edge.data('weights')?[].concat(edge.data('weights')):edge.data('weights'),
+            distances: edge.data('distances')?[].concat(edge.data('distances')):edge.data('distances')
+        };
+
+        sbgnBendPointUtilities.addBendPoint();
+        editorActionsManager._do(new changeBendPointsCommand(param));
+        refreshUndoRedoButtonsStatus();
+    });
+
+    $('#ctx-remove-bend-point').click(function (e) {
+        var edge = sbgnBendPointUtilities.currentCtxEdge;
+        var param = {
+            edge: edge,
+            weights: [].concat(edge.data('weights')),
+            distances: [].concat(edge.data('distances'))
+        };
+
+        sbgnBendPointUtilities.removeBendPoint();
+        editorActionsManager._do(new changeBendPointsCommand(param));
+        refreshUndoRedoButtonsStatus();
+    });
 
     $('#samples').click(function (e) {
 
@@ -816,25 +874,19 @@ module.exports.start = function(modelManager){
     $("#perform-layout").click(function (e) {
 
 
-        var nodesData = {};
-        var nodes = cy.nodes();
-        for (var i = 0; i < nodes.length; i++) {
-            var node = nodes[i];
-            nodesData[node.id()] = {
-                width: node.width(),
-                height: node.height(),
-                x: node.position("x"),
-                y: node.position("y")
-            };
-        }
+        //var nodesData = {};
+        //var nodes = cy.nodes();
+        //for (var i = 0; i < nodes.length; i++) {
+        //    var node = nodes[i];
+        //    nodesData[node.id()] = {
+        //        width: node.width(),
+        //        height: node.height(),
+        //        x: node.position("x"),
+        //        y: node.position("y")
+        //    };
+        //}
 
-        cy.nodes().removeData("ports");
-        cy.edges().removeData("portsource");
-        cy.edges().removeData("porttarget");
-
-        cy.nodes().data("ports", []);
-        cy.edges().data("portsource", []);
-        cy.edges().data("porttarget", []);
+       beforePerformLayout();
 
         sbgnLayoutProp.applyLayout(modelManager);
 
@@ -843,7 +895,7 @@ module.exports.start = function(modelManager){
 
         editorActions.manager._do(editorActions.PerformLayoutCommand(nodesData));
 
-
+ //       editorActions.manager._do(editorActions.ReturnToPositionsAndSizesCommand(nodesData));
 
 
         editorActions.refreshUndoRedoButtonsStatus();
@@ -853,13 +905,7 @@ module.exports.start = function(modelManager){
 
 
     $("#perform-incremental-layout").click(function (e) {
-        cy.nodes().removeData("ports");
-        cy.edges().removeData("portsource");
-        cy.edges().removeData("porttarget");
-
-        cy.nodes().data("ports", []);
-        cy.edges().data("portsource", []);
-        cy.edges().data("porttarget", []);
+        beforePerformLayout();
 
         sbgnLayoutProp.applyIncrementalLayout();
     });
