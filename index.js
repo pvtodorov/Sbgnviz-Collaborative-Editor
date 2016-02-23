@@ -130,8 +130,8 @@ app.get('/:docId', function (page, model, arg, next) {
 
 
     model.set('_sbgnviz.samples',
-        [{name: 'CaM-CaMK dependent signaling to the nucleus', id: 0},
-            {name: 'Activated STAT1alpha induction of the IRF1 gene', id: 1},
+        [{name: 'Activated STAT1alpha induction of the IRF1 gene', id: 0},
+            {name: 'CaM-CaMK dependent signaling to the nucleus', id: 1},
             {name: 'Glycolysis', id: 2},
             {name: 'MAPK cascade', id: 3},
             {name: 'PolyQ proteins interference', id: 4},
@@ -220,7 +220,8 @@ function getNewColor(){
     var h = Math.floor((Math.random() * gR * 360));//Math.floor((cInd * gR - Math.floor(cInd * gR))*360);
     var cHsl = [h, 70 + Math.random() * 30, 60 + Math.random() * 10];
 
-    return ('hsla('+cHsl[0]  +', '+ cHsl[1] + '%, ' + cHsl[2] +'%, 1)');
+  //  return ('hsla('+cHsl[0]  +', '+ cHsl[1] + '%, ' + cHsl[2] +'%, 1)');
+    return ('hsl('+cHsl[0]  +', '+ cHsl[1] + '%, ' + cHsl[2] +'%)');
 
 }
 
@@ -366,8 +367,9 @@ app.proto.init = function (model) {
         if(docReady && passed.user == null) {
 
             var color;
+
             if (highlightColor != null)
-                color = cytoscape.util.tuple2hex(cytoscape.util.hsl2tuple(highlightColor));
+                color = tinycolor(highlightColor).toHexString();
             else
                 color = model.get('_page.doc.cy.nodes.' + id + '.backgroundColor');
 
@@ -494,7 +496,7 @@ app.proto.init = function (model) {
         if(docReady && passed.user == null) {
             var color;
             if (highlightColor != null)
-                color = cytoscape.util.tuple2hex(cytoscape.util.hsl2tuple(highlightColor));
+                color = tinycolor(highlightColor).toHexString();//util.tuple2hex(util.hsl2tuple(highlightColor));
             else
                 color = model.get('_page.doc.cy.edges.' + id + '.lineColor');
 

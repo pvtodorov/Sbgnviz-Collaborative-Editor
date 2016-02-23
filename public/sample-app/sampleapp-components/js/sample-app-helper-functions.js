@@ -3,8 +3,6 @@
  */
 
 
-
-
 function dynamicResize()
 {
 
@@ -13,11 +11,9 @@ function dynamicResize()
     var windowWidth = win.width() - 80; //80px padding on the left
     var windowHeight = win.height()  - 10; //10px padding at the bottom
 
-    var canvasWidth = 1000;
-    var canvasHeight = 680;
 
     //if (windowWidth > canvasWidth) {
-    $("#sbgn-network-container").width(windowWidth * 0.7 );
+    //$("#sbgn-network-container").width(windowWidth * 0.7 );
     $("#sbgn-inspector").width(windowWidth * 0.28);
     $(".nav-menu").width(windowWidth * 0.7);
     $(".navbar").width(windowWidth * 0.7);
@@ -313,7 +309,7 @@ function getInfoLabel(node) {
 
     //return info label
     return infoLabel;
-};
+}
 
 /*
  * This function create qtip for the given node
@@ -375,7 +371,7 @@ function nodeQtipFunction(node) {
             }
         }
     });
-};
+}
 
 var isEPNClass = function (sbgnclass) {
     return (sbgnclass == 'unspecified entity'

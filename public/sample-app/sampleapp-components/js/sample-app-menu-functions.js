@@ -38,14 +38,14 @@ var beforePerformLayout = function(){
 
 function getXMLObject(itemId, loadXMLDoc) {
     switch (itemId) {
-        case "0":
+        case "1":
             $.ajax({
                 url: './sample-app/samples/CaM-CaMK_dependent_signaling_to_the_nucleus.xml',
                 success: loadXMLDoc
             });
             break;
 
-        case "1":
+        case "0":
             $.ajax({
                 url: './sample-app/samples/activated_stat1alpha_induction_of_the_irf1_gene.xml',
                 success: loadXMLDoc

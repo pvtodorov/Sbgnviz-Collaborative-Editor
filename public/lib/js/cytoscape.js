@@ -23996,6 +23996,7 @@
 
       return ret;
     },
+
     tuple2hex: function( tuple ){  //funda
       var r = tuple[0];
       var g = tuple[1];
@@ -24679,4 +24680,3 @@
 });
 
 
-//# sourceMappingURL=cytoscape.js.map

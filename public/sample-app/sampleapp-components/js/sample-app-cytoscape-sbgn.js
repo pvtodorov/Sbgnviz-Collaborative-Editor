@@ -615,6 +615,8 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
                 ctxMenu.style.left = left;
                 ctxMenu.style.top = top;
 
+
+
                 sbgnBendPointUtilities.currentCtxEdge = edge;
             });
             var movedBendIndex;
@@ -933,7 +935,7 @@ module.exports.fillInspectorStateAndInfos = function (ele, width, editorActions)
                 + "<span width='" + width / 5 + "'px>@</span>"
                 + "<input type='text' class='just-added-inspector-input inspector-state-variable-variable' style='width: "
                 + width / 2.5 + "px' value='" + state.state.variable
-                + "'/><img width='12px' height='12px' class='just-added-inspector-input inspector-delete-state-and-info' src='sample-app/sampleapp-images/delete.png'></img></div>");
+                + "'/><img width='12px' height='12px' class='just-added-inspector-input inspector-delete-state-and-info' src='sample-app/sampleapp-images/delete.png'/></div>");
 
             //Change variable
             $(".inspector-state-variable-variable").unbind('change').on('change', function () {
@@ -971,7 +973,7 @@ module.exports.fillInspectorStateAndInfos = function (ele, width, editorActions)
             var total = width / 5 + width / 5 + width / 2.5;
             $("#inspector-unit-of-informations").append("<div><input type='text' class='just-added-inspector-input inspector-unit-of-information-label' style='width: "
                 + total + "px' value='" + state.label.text
-                + "'/><img width='12px' height='12px' class='just-added-inspector-input inspector-delete-state-and-info' src='sample-app/sampleapp-images/delete.png'></img></div>");
+                + "'/><img width='12px' height='12px' class='just-added-inspector-input inspector-delete-state-and-info' src='sample-app/sampleapp-images/delete.png'/></div>");
 
             $(".inspector-unit-of-information-label").unbind('change').on('change', function () {
                 var param = {
