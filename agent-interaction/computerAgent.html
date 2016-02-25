@@ -302,13 +302,13 @@
         socket.on('connect', function(){
             $('#createAgentButton').attr('disabled','disabled');
 
-            agent.getModel(function() {
+            agent.loadModel(function() {
 
                 fillLayoutProperties();
                 agent.updateNextAgentNodeId();
-                agent.getOperationHistory(function(){
+                agent.loadOperationHistory(function(){
 
-                    agent.getChatHistory(function(){
+                    agent.loadChatHistory(function(){
                             //Write history
                         if(agent.opHistory != null){
                             agent.opHistory.forEach(function(op){

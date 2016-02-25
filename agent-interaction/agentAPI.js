@@ -77,7 +77,7 @@
         }
 
         //get model for the current room
-        this.getModel = function (callback) {
+        this.loadModel = function (callback) {
 
             socket.emit('agentPageDocRequest', {room: room}, function(data){
                 self.pageDoc = data;
@@ -90,7 +90,7 @@
          * Gets list of operations from the node.js server
          * @param callback Function to call after getting operation history
          */
-        this.getOperationHistory = function (callback) {
+        this.loadOperationHistory = function (callback) {
 
             socket.emit('agentOperationHistoryRequest', {room: room}, function(data){
                 self.opHistory = data;
@@ -110,7 +110,7 @@
          * @param callback Function to call after getting user list
          */
 
-        this.getUserList = function(callback) {
+        this.loadUserList = function(callback) {
             socket.emit('agentUserListRequest', {room: room}, function(data){
 
                     self.userList = data;
@@ -121,7 +121,21 @@
                 });
         };
 
+        /**
+         * Gets chat messages from the node.js server
+         * @param callback Function to call after getting chat history
+         */
+            //get operation history
+        this.loadChatHistory= function (callback) {
+            socket.emit('agentChatHistoryRequest', {room: room}, function(data){
+                self.chatHistory = data;
+                if (data == null)
+                    self.chatHistory = [];
 
+                if (callback != null) callback();
+
+            });
+        };
         /**
          *
          * @returns {Object} Node list in the shared model
@@ -156,21 +170,7 @@
 
         };
 
-        /**
-         * Gets chat messages from the node.js server
-         * @param callback Function to call after getting chat history
-         */
-        //get operation history
-        this.getChatHistory= function (callback) {
-            socket.emit('agentChatHistoryRequest', {room: room}, function(data){
-                    self.chatHistory = data;
-                    if (data == null)
-                        self.chatHistory = [];
 
-                    if (callback != null) callback();
-
-                });
-        };
 
 
         /**

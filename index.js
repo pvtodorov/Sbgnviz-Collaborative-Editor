@@ -627,7 +627,7 @@ app.proto.create = function (model) {
 
 
 
-    menu =  require('./public/sample-app/sampleapp-components/js/sample-app-menu-functions.js');
+    menu =  require('./public/sample-app/sampleapp-components/js/sample-app-menu-functions.js')();
 
     //send modelManager to web client
     menu.start(modelManager);
