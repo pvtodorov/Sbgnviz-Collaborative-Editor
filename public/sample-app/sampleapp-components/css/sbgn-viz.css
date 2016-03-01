@@ -65,49 +65,7 @@ open > .dropdown-menu {
     top: 50px;
     left: 80px;
     height: 25px;
-
 }
-
-menu {
-    position:absolute;
-    display:block;
-    left:0px;
-    top:0px;
-    height:20px;
-    width:20px;
-    padding:0;
-    margin:0;
-    border:1px solid;
-    background-color:white;
-    font-weight:normal;
-    font-size: 12px;
-    white-space:nowrap;
-}
-
-menu:hover{
-    color: #ffffff;
-    text-decoration: none;
-    background-color: #0B9BCD;
-    background-image: none;
-    cursor: pointer;
-}
-
-menu[title]:before{
-    content:attr(title);
-}
-
-menu:not([title]):before{
-    content:"\2630";
-}
-
-.ctx-bend-operation{
-    display:none;
-    z-index:1000;
-    width:110px;
-    padding: 3px 20px;
-
-}
-
 .nav-menu {
     position:absolute;
     background: #e7f8e7;
@@ -120,9 +78,8 @@ menu:not([title]):before{
 
 }
 
-
 .dropdown .dropdown-menu{
-    z-index:3000;
+    z-index: 3000;
 }
 
 .navbar .nav li.dropdown.open > .dropdown-toggle,
@@ -142,6 +99,7 @@ menu:not([title]):before{
     background-image: none;
     background-repeat: repeat-x;
     filter: none;
+
 }
 
 .dropdown-menu .active > a,
@@ -162,6 +120,10 @@ menu:not([title]):before{
     opacity:0.3;
     vertical-align: middle;
     width: 0;
+}
+/*funda: overwrite this in cytoscape.js-panzoom.js*/
+.cy-panzoom {
+    z-index: 1000;
 }
 
 .ui-cytoscape-panzoom {
@@ -200,6 +162,53 @@ menu:not([title]):before{
     color: black;
     font-size: medium;
 }
+
+menu {
+    position:absolute;
+    display:block;
+    left:0px;
+    top:0px;
+    height:20px;
+    width:20px;
+    padding:0;
+    margin:0;
+    border:1px solid;
+    background-color:white;
+    font-weight:normal;
+    font-size: 12px;
+    white-space:nowrap;
+
+}
+
+menu:hover{
+    color: #ffffff;
+    text-decoration: none;
+    background-color: #0B9BCD;
+    background-image: none;
+    cursor: pointer;
+}
+
+menu[title]:before{
+    content:attr(title);
+}
+
+menu:not([title]):before{
+    content:"\2630";
+}
+
+.ctx-bend-operation{
+    display:none;
+    z-index:1000;
+    width:110px;
+    padding: 3px 20px;
+
+}
+
+
+
+
+
+
 
 #sbgn-network-container {
     position: absolute;

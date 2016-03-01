@@ -508,21 +508,27 @@ module.exports.showJustGivenNodes = function(nodesToShow) {
     return param;
 }
 
+
+//funda changed this to include selected nodes explicitly
 module.exports.highlightSelected = function(param) {
     var elementsToHighlight;
     var result = {};
     //If this is the first call of the function then call the original method
     if (param.firstTime) {
+        //find selected elements
         if (sbgnFiltering.isAllElementsAreNotHighlighted()) {
             //mark that there was no highlighted element
             result.allElementsWasNotHighlighted = true;
         }
         var alreadyHighlighted = cy.elements("[highlighted='true']").filter(":visible");
         if (param.highlightNeighboursofSelected) {
-            elementsToHighlight = sbgnFiltering.highlightNeighborsofSelected();
+
+
+            elementsToHighlight = sbgnFiltering.highlightNeighborsofSelected(param.selectedEles);
         }
         else if (param.highlightProcessesOfSelected) {
-            elementsToHighlight = sbgnFiltering.highlightProcessesOfSelected();
+
+            elementsToHighlight = sbgnFiltering.highlightProcessesOfSelected(param.selectedEles);
         }
         elementsToHighlight = elementsToHighlight.not(alreadyHighlighted);
     }
@@ -544,6 +550,7 @@ module.exports.highlightSelected = function(param) {
         }
     }
     result.elesToNotHighlight = elementsToHighlight;
+
     return result;
 }
 
@@ -1174,9 +1181,9 @@ module.exports.HighlightProcessesOfSelectedCommand = function (param) {
     param.highlightProcessesOfSelected = true;
     return new Command(module.exports.highlightSelected, module.exports.notHighlightEles, param, "highlightProcessesOfSelected");
 };
-
+//Funda included param = null
 module.exports.RemoveHighlightsCommand = function () {
-    return new Command(module.exports.removeHighlights, module.exports.highlightSelected, "removeHighlights");
+    return new Command(module.exports.removeHighlights, module.exports.highlightSelected, null, "removeHighlights");
 };
 
 module.exports.CreateCompoundForSelectedNodesCommand = function (param) {

@@ -36,8 +36,8 @@ var sbgnFiltering = {
         this.removeFilter();
     },
 
-    highlightNeighborsofSelected: function(){
-        var selectedEles = cy.elements(":selected");
+    //fundaL changed this
+    highlightNeighborsofSelected: function(selectedEles){
         selectedEles = selectedEles.add(selectedEles.parents("node[sbgnclass='complex']"));
         selectedEles = selectedEles.add(selectedEles.descendants());
         var neighborhoodEles = selectedEles.neighborhood();

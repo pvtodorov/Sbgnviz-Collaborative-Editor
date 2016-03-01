@@ -34,7 +34,7 @@ var modeHandler = {
     "logic-arc": "logic arc",
     "equivalence-arc": "equivalence arc"
   },
-  initilize: function () {
+  initialize: function () {
     $('#select-icon').addClass('selectedType');
     $("#first-sbgn-select-node-item").addClass("selectedDDItem");
     $("#first-sbgn-select-edge-item").addClass("selectedDDItem");

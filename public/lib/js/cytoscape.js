@@ -16119,7 +16119,7 @@
     }
 
     if (rs.edgeType == 'segments'){
-      cytoscape.sbgn.fillBendCircles(edge, context);
+      cytoscape.sbgn.fillBendShapes(edge, context);
     }
   };
 

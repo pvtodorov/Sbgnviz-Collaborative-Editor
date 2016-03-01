@@ -599,7 +599,7 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
 
                 $('.ctx-bend-operation').css('display', 'none');
 
-                var selectedBendIndex = cytoscape.sbgn.getContainingBendCircleIndex(event.cyPosition.x, event.cyPosition.y, edge);
+                var selectedBendIndex = cytoscape.sbgn.getContainingBendShapeIndex(event.cyPosition.x, event.cyPosition.y, edge);
                 if(selectedBendIndex == -1){
                     $('#ctx-add-bend-point').css('display', 'block');
                     sbgnBendPointUtilities.currentCtxPos = event.cyPosition;
@@ -637,7 +637,7 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
                 var cyPosY = event.cyPosition.y;
 
                 if(edge._private.selected){
-                    var index = cytoscape.sbgn.getContainingBendCircleIndex(cyPosX, cyPosY, edge);
+                    var index = cytoscape.sbgn.getContainingBendShapeIndex(cyPosX, cyPosY, edge);
                     if(index != -1){
                         movedBendIndex = index;
                         cy.panningEnabled(false);

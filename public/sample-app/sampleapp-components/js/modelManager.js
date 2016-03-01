@@ -14,12 +14,22 @@ function preciseRound(num, decimals) {
     var t=Math.pow(10, decimals);
     return (Math.round((num * t) + (decimals>0?1:0)*(Math.sign(num) * (10 / Math.pow(100, decimals)))) / t).toFixed(decimals);
 }
-
+Array.prototype.contains = function(obj) {
+    var i = this.length;
+    while (i--) {
+        if (this[i] == obj) {
+            return true;
+        }
+    }
+    return false;
+}
 module.exports =  function(model, docId, userId, userName) {
+
 
 
     var user = model.at('users.' + userId);
 
+    var selectedNodes = [];
 
 
     model.ref('_page.doc', 'documents.' + docId);
@@ -105,6 +115,33 @@ module.exports =  function(model, docId, userId, userName) {
         getModelNode: function(id){
             var nodePath = model.at('_page.doc.cy.nodes.'  + id);
             return nodePath.get();
+        },
+
+        //Selected by the given user
+        getSelectedModelElementIds: function(requesterId){
+
+            var requester;
+            if(requesterId == null) //current user
+                requester = user;
+            else
+                requester = model.at('users.' + requesterId);
+
+
+            var userColor = requester.get('colorCode');
+            var selectedNodes = [];
+            var nodes = model.get('_page.doc.cy.nodes');
+
+
+            for (id in nodes) {
+                if (nodes.hasOwnProperty(id)) {
+                    if (model.get('_page.doc.cy.nodes.' + id + '.highlightColor') == userColor)
+                        selectedNodes.push(id);
+                }
+
+            }
+
+
+            return selectedNodes;
         },
 
 
@@ -209,6 +246,21 @@ module.exports =  function(model, docId, userId, userName) {
                     self.deleteModelNode(node.id(),user);
                 }
             }
+        },
+
+        highlight: function(val, user){
+
+            model.pass({user: user}).set('_page.doc.cy.highlight.requesterId', userId);
+            model.pass({user: user}).set('_page.doc.cy.highlight.mode', val);
+
+
+            if(val == 0)
+                this.updateHistory('Remove highlights');
+            else if(val == 1)
+                this.updateHistory('Highlight neighbors of '+ selectedNodes);
+            else if(val == 2)
+                this.updateHistory('Highlight processes of '+ selectedNodes);
+
         },
 
         getModelEdge: function(id){

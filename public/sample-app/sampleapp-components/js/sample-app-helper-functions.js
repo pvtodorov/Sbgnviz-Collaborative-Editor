@@ -144,31 +144,12 @@ cytoscape('collection', 'setWidth', function(val){
     }
 });
 
-
-cytoscape('collection', 'setHeight', function(val){
-    var ele = this[0];
-    var cy = ele._private.cy;
-    var styleEnabled = cy._private.styleEnabled;
-
-    if( ele ){
-        if( styleEnabled ){
-            ele._private.style.height.pxValue = val;
-            ele._private.style.height.value = val ;
-            ele._private.style.height.strValue = ""+ Math.floor(val) + "px";
-            ele._private.autoHeight  = val;
-        } else {
-
-            ele._private.data.height  = val;
-        }
+var calculatePaddings = function(paddingPercent) {
+    //As default use the compound padding value
+    if(!paddingPercent){
+        paddingPercent = parseInt(sbgnStyleRules['compound-padding'], 10);
     }
-});
 
-var refreshPaddings = function () {
-
-    //If compound padding is not set yet set it by css value
-    if (window.compoundPadding == null) {
-        window.compoundPadding = parseInt(sbgnStyleRules['compound-padding'], 10);
-    }
     var nodes = cy.nodes();
     var total = 0;
     var numOfSimples = 0;
@@ -190,27 +171,63 @@ var refreshPaddings = function () {
         }
     }
 
-    var calc_padding = (compoundPadding / 100) * Math.floor(total / (2 * numOfSimples));
+    var calc_padding = (paddingPercent / 100) * Math.floor(total / (2 * numOfSimples));
 
-    if (calc_padding < 10) {
-        calc_padding = 10;
+    if (calc_padding < 15) {
+        calc_padding = 15;
     }
 
-    var complexesAndCompartments = cy.$("node[sbgnclass='complex'], node[sbgnclass='compartment']");
-    complexesAndCompartments.css('padding-left', calc_padding + 8);
-    complexesAndCompartments.css('padding-right', calc_padding + 8);
-    complexesAndCompartments.css('padding-top', calc_padding + 8);
-    complexesAndCompartments.css('padding-bottom', calc_padding + 8);
+    return calc_padding;
+};
+
+var calculateTilingPaddings = calculatePaddings;
+var calculateCompoundPaddings = calculatePaddings;
+cytoscape('collection', 'setHeight', function(val){
+    var ele = this[0];
+    var cy = ele._private.cy;
+    var styleEnabled = cy._private.styleEnabled;
+
+    if( ele ){
+        if( styleEnabled ){
+            ele._private.style.height.pxValue = val;
+            ele._private.style.height.value = val ;
+            ele._private.style.height.strValue = ""+ Math.floor(val) + "px";
+            ele._private.autoHeight  = val;
+        } else {
+
+            ele._private.data.height  = val;
+        }
+    }
+});
+
+var refreshPaddings = function () {
+
+    var calc_padding = calculateCompoundPaddings();
+
+    var nodes = cy.nodes();
+    nodes.css('padding-left', 0);
+    nodes.css('padding-right', 0);
+    nodes.css('padding-top', 0);
+    nodes.css('padding-bottom', 0);
+
+    var compounds = nodes.filter('$node > node');
+
+    compounds.css('padding-left', calc_padding);
+    compounds.css('padding-right', calc_padding);
+    compounds.css('padding-top', calc_padding);
+    compounds.css('padding-bottom', calc_padding);
     //To refresh the nodes on the screen apply the preset layout
-    cy.layout({
-        name: "preset"
-    });
+    makePresetLayout();
 
 
 };
 
 
-
+var makePresetLayout = function () {
+    cy.layout({
+        name: "preset"
+    });
+};
 
 //Returns true for unspecified entity,
 //simple chemical, macromolecule, nucleic acid feature, and complexes

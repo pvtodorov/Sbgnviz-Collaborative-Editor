@@ -85,7 +85,47 @@ module.exports = function(){
 
     return {
 
-       updateLayoutProperties: function(lp){
+        getSelectedModelElements: function(requesterId){
+            var elementIds = editorActions.modelManager.getSelectedModelElementIds(requesterId);
+            var selectedElements = [];
+            elementIds.forEach(function(elId){
+                selectedElements.push(cy.$(('#' + elId))[0]);
+            });
+
+
+            return cy.collection( selectedElements);
+
+        },
+        removeHighlights: function(){
+            editorActions.manager._do(editorActions.RemoveHighlightsCommand());
+            editorActions.refreshUndoRedoButtonsStatus();
+
+
+        },
+        highlightNeighbors: function(requesterId){
+
+            var param = {
+                firstTime: true,
+                selectedEles : this.getSelectedModelElements(requesterId)
+            };
+
+
+            editorActions.manager._do(editorActions.HighlightNeighborsofSelectedCommand(param));
+            editorActions.refreshUndoRedoButtonsStatus();
+
+        },
+        highlightProcesses: function(requesterId){
+            var param = {
+                firstTime: true,
+                selectedEles : this.getSelectedModelElements(requesterId)
+            };
+
+            editorActions.manager._do(editorActions.HighlightProcessesOfSelectedCommand(param));
+            editorActions.refreshUndoRedoButtonsStatus();
+
+
+        },
+        updateLayoutProperties: function(lp){
 
         if(sbgnLayoutProp)
             sbgnLayoutProp.updateLayoutProperties(lp);
@@ -94,14 +134,13 @@ module.exports = function(){
 
 
         updateSample: function(ind){
-            var self = this;
-            self.modelManager = editorActions.modelManager;
+
 
             //just get a new sbgncontainer
             if(ind < 0){
 
 
-                var jsonObj = self.modelManager.getServerGraph();
+                var jsonObj = editorActions.modelManager.getServerGraph();
                 sbgnContainer =  (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj,  editorActions));
             }
             else{
@@ -112,7 +151,7 @@ module.exports = function(){
                     var jsonObj = sbgnmlToJson.convert(xmlObject);
 
 
-                    self.modelManager.updateServerGraph(jsonObj);
+                    editorActions.modelManager.updateServerGraph(jsonObj);
 
 
                     sbgnContainer =  (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj,  editorActions));
@@ -125,7 +164,7 @@ module.exports = function(){
         start: function (modelManager) {
 
             var self = this;
-            self.modelManager = modelManager;
+
 
             editorActions.modelManager = modelManager;
 
@@ -202,7 +241,7 @@ module.exports = function(){
 
                 self.updateSample(ind);
 
-                self.modelManager.setSampleInd(ind, "me"); //let others know
+                editorActions.modelManager.setSampleInd(ind, "me"); //let others know
 
             });
 
@@ -214,7 +253,7 @@ module.exports = function(){
                 setFileContent("new_file.sbgnml");
 
                 var jsonObj = {nodes: [], edges: []};
-                self.modelManager.deleteAll(cy.nodes(), cy.edges(), "me");
+                editorActions.modelManager.deleteAll(cy.nodes(), cy.edges(), "me");
                 sbgnContainer = new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, editorActions);
 
                 editorActions.manager.reset();
@@ -242,7 +281,7 @@ module.exports = function(){
                 modeHandler.setSelectedMenuItem("add-edge-mode", value);
             });
 
-            modeHandler.initilize();
+            modeHandler.initialize();
 
             $('.sbgn-select-node-item').click(function (e) {
                 //if (!modeHandler.mode != "add-node-mode") { //funda?
@@ -473,12 +512,12 @@ module.exports = function(){
                     var jsonObj = sbgnmlToJson.convert(textToXmlObject(this.result));
 
 
-                    modelManager.updateServerGraph(jsonObj);
+                    editorActions.modelManager.updateServerGraph(jsonObj);
 
 
                     self.updateSample(-1);
 
-                    modelManager.setSampleInd(-1, "me"); //to notify other clients
+                    editorActions.modelManager.setSampleInd(-1, "me"); //to notify other clients
                     // sbgnContainer =  new cyMod.SBGNContainer('#sbgn-network-container', jsonObj ,  editorActions);
                 }
                 reader.readAsText(file);
@@ -642,9 +681,14 @@ module.exports = function(){
             $("#neighbors-of-selected").click(function (e) {
                 var param = {
                     firstTime: true,
+                    selectedEles: cy.elements(":selected")
                 };
+
+
                 editorActions.manager._do(editorActions.HighlightNeighborsofSelectedCommand(param));
                 editorActions.refreshUndoRedoButtonsStatus();
+
+                editorActions.modelManager.highlight(1, "me");
             });
             $("#highlight-neighbors-of-selected-icon").click(function (e) {
                 $("#neighbors-of-selected").trigger('click');
@@ -689,15 +733,21 @@ module.exports = function(){
 
             $("#processes-of-selected").click(function (e) {
                 var param = {
-                    firstTime: true
+                    firstTime: true,
+                    selectedEles: cy.elements(":selected")
                 };
+
                 editorActions.manager._do(editorActions.HighlightProcessesOfSelectedCommand(param));
                 editorActions.refreshUndoRedoButtonsStatus();
+
+                editorActions.modelManager.highlight(2, "me");
             });
 
             $("#remove-highlights").click(function (e) {
                 editorActions.manager._do(editorActions.RemoveHighlightsCommand());
                 editorActions.refreshUndoRedoButtonsStatus();
+
+                editorActions.modelManager.highlight(0, "me");
             });
             $('#remove-highlights-icon').click(function (e) {
                 $('#remove-highlights').trigger("click");
@@ -748,7 +798,7 @@ module.exports = function(){
             });
 
             $("#layout-properties").click(function (e) {
-                var lp = modelManager.updateLayoutProperties(sbgnLayoutProp.defaultLayoutProperties);
+                var lp = editorActions.modelManager.updateLayoutProperties(sbgnLayoutProp.defaultLayoutProperties);
                 sbgnLayoutProp.render(lp);
             });
 
@@ -879,7 +929,7 @@ module.exports = function(){
 
                 beforePerformLayout();
 
-                sbgnLayoutProp.applyLayout(modelManager);
+                sbgnLayoutProp.applyLayout(editorActions.modelManager);
 
 
                 editorActions.manager._do(editorActions.PerformLayoutCommand(nodesData));
@@ -1010,7 +1060,7 @@ module.exports = function(){
             });
 
             $("#save-command-history").click(function (evt) {
-                var cmdTxt = JSON.stringify(modelManager.getHistory());
+                var cmdTxt = JSON.stringify(editorActions.modelManager.getHistory());
 
                 var blob = new Blob([cmdTxt], {
                     type: "text/plain;charset=utf-8;",
@@ -1058,6 +1108,12 @@ function SBGNLayout(){
             tile: true,
             animate: true,
             randomize: true,
+            tilingPaddingVertical: 20,//function() {
+               //funda return calculateTilingPaddings(parseInt(sbgnStyleRules['tiling-padding-vertical'], 10));
+           // },
+            tilingPaddingHorizontal: 20 // funda function() {
+                //funda return calculateTilingPaddings(parseInt(sbgnStyleRules['tiling-padding-horizontal'], 10));
+            //}
         },
 
         el: '#sbgn-layout-table',
@@ -1068,6 +1124,9 @@ function SBGNLayout(){
 
             self.currentLayoutProperties = lp;
 
+            var templateProperties = _.clone(self.currentLayoutProperties);
+            templateProperties.tilingPaddingVertical = sbgnStyleRules['tiling-padding-vertical'];
+            templateProperties.tilingPaddingHorizontal = sbgnStyleRules['tiling-padding-horizontal'];
 
             self.template = _.template($("#layout-settings-template").html(), self.currentLayoutProperties);
 
@@ -1098,6 +1157,10 @@ function SBGNLayout(){
 
             var self = this;
 
+            var templateProperties = _.clone(self.currentLayoutProperties);
+            templateProperties.tilingPaddingVertical = sbgnStyleRules['tiling-padding-vertical'];
+            templateProperties.tilingPaddingHorizontal = sbgnStyleRules['tiling-padding-horizontal'];
+
             self.template = _.template($("#layout-settings-template").html(), self.currentLayoutProperties);
 
             $(self.el).html(self.template);
@@ -1120,17 +1183,19 @@ function SBGNLayout(){
             $("#save-layout").die("click").live("click", function (evt) {
 
 
-                self.currentLayoutProperties.nodeRepulsion = Number($("#node-repulsion")[0].value);
-                self.currentLayoutProperties.nodeOverlap = Number($("#node-overlap")[0].value);
-                self.currentLayoutProperties.idealEdgeLength = Number($("#ideal-edge-length")[0].value);
-                self.currentLayoutProperties.edgeElasticity = Number($("#edge-elasticity")[0].value);
-                self.currentLayoutProperties.nestingFactor = Number($("#nesting-factor")[0].value);
-                self.currentLayoutProperties.gravity = Number($("#gravity")[0].value);
-                self.currentLayoutProperties.numIter = Number($("#num-iter")[0].value);
-                self.currentLayoutProperties.tile = $("#tile")[0].checked;
-                self.currentLayoutProperties.animate = $("#animate")[0].checked;
+                self.currentLayoutProperties.nodeRepulsion = Number(document.getElementById("node-repulsion").value);
+                self.currentLayoutProperties.nodeOverlap = Number(document.getElementById("node-overlap").value);
+                self.currentLayoutProperties.idealEdgeLength = Number(document.getElementById("ideal-edge-length").value);
+                self.currentLayoutProperties.edgeElasticity = Number(document.getElementById("edge-elasticity").value);
+                self.currentLayoutProperties.nestingFactor = Number(document.getElementById("nesting-factor").value);
+                self.currentLayoutProperties.gravity = Number(document.getElementById("gravity").value);
+                self.currentLayoutProperties.numIter = Number(document.getElementById("num-iter").value);
+                self.currentLayoutProperties.tile = document.getElementById("tile").checked;
+                self.currentLayoutProperties.animate = document.getElementById("animate").checked;
+                self.currentLayoutProperties.randomize = !document.getElementById("incremental").checked;
 
-
+                sbgnStyleRules['tiling-padding-vertical'] = Number(document.getElementById("tiling-padding-vertical").value);
+                sbgnStyleRules['tiling-padding-horizontal'] = Number(document.getElementById("tiling-padding-horizontal").value);
 
                 modelManager.setLayoutProperties(self.currentLayoutProperties);
 
@@ -1142,7 +1207,15 @@ function SBGNLayout(){
 
             $("#default-layout").die("click").live("click", function (evt) {
                 self.copyProperties();
-                self.template = _.template($("#layout-settings-template").html(), self.currentLayoutProperties);
+
+                sbgnStyleRules['tiling-padding-vertical'] = defaultSbgnStyleRules['tiling-padding-vertical'];
+                sbgnStyleRules['tiling-padding-horizontal'] = defaultSbgnStyleRules['tiling-padding-horizontal'];
+
+                var templateProperties = _.clone(self.currentLayoutProperties);
+                templateProperties.tilingPaddingVertical = sbgnStyleRules['tiling-padding-vertical'];
+                templateProperties.tilingPaddingHorizontal = sbgnStyleRules['tiling-padding-horizontal'];
+
+                self.template = _.template($("#layout-settings-template").html(), templateProperties);
                 $(self.el).html(self.template);
             });
 

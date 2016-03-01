@@ -313,6 +313,21 @@ app.proto.init = function (model) {
     });
 
 
+    //trigger variable to check whether parts of the graph should be highlighted
+    model.on('change', '_page.doc.cy.highlight.mode', function(val, ind , passed) {
+
+        if(docReady && menu && passed.user == null){
+            var requesterId = model.get('_page.doc.cy.highlight.requesterId');
+            if(val == 0)
+                menu.removeHighlights(requesterId);
+            else if(val == 1)
+                menu.highlightNeighbors(requesterId);
+            else if(val == 2)
+                menu.highlightProcesses(requesterId);
+        }
+
+
+    });
 
     model.on('all', '_page.doc.layoutProperties', function(index){
 
@@ -607,7 +622,7 @@ app.proto.create = function (model) {
 
         data.selectedNodes.forEach(function(nodeId){
 
-            cy.getElementById( nodeId).select()
+            cy.getElementById( nodeId).select();
         });
 
 

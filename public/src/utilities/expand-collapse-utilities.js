@@ -3,7 +3,7 @@ var expandCollapseUtilities = {
     collapsedMetaEdgesInfo: {},
     //This map keeps track of the meta levels of edges by their id's
     edgesMetaLevels: {},
-    //Some nodes are initilized as collapsed this method handles them
+    //Some nodes are initialized as collapsed this method handles them
     initCollapsedNodes: function () {
         var nodesToCollapse = cy.nodes().filter(function (i, ele) {
 
@@ -287,7 +287,7 @@ var expandCollapseUtilities = {
             var targetNode = edge.target();
             var newEdge = jQuery.extend(true, {}, edge.jsons()[0]);
 
-            //Initilize the meta level of this edge if it is not initilized yet
+            //Initialize the meta level of this edge if it is not initialized yet
             if (this.edgesMetaLevels[edge.id()] == null){
                 this.edgesMetaLevels[edge.id()] = 0;
             }
