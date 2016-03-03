@@ -256,7 +256,7 @@ pageDoc: The document that the shared model is stored.
 |                    | method.            |                    |                    |
 +--------------------+--------------------+--------------------+--------------------+
 
-##### sendRequest: {#h.nhfdym5d0wpf .c16 .c20}
+##### sendRequest:
 
 +--------------------------------------+--------------------------------------+
 | reqName                              | param                                |
