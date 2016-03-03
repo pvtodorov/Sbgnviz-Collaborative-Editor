@@ -1,4 +1,4 @@
-SBGNViz Collaborative Editor User Guide {#h.1wgjhs3i3ced .c16 .c20}
+SBGNViz Collaborative Editor User Guide
 =======================================
 
 The editor allows human curators and computer agents to work on the same
