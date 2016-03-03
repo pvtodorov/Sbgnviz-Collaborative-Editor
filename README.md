@@ -1,21 +1,6 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
-<head>
-	<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
-	<title></title>
-	<meta name="generator" content="LibreOffice 5.0.5.2 (Linux)"/>
-	<meta name="created" content="00:00:00"/>
-	<meta name="changed" content="2016-03-03T14:11:21.964434705"/>
-	<style type="text/css">
-		h2.cjk { font-family: "Droid Sans Fallback" }
-		h2.ctl { font-family: "FreeSans" }
-		h3.cjk { font-family: "Droid Sans Fallback" }
-		h3.ctl { font-family: "FreeSans" }
-		h4.cjk { font-family: "Droid Sans Fallback" }
-		h4.ctl { font-family: "FreeSans" }
-		h5.cjk { font-family: "Droid Sans Fallback" }
-		h5.ctl { font-family: "FreeSans" }
-	</style>
+
 </head>
 <body lang="en-US" dir="ltr">
 <h1><a name="h.1wgjhs3i3ced"></a>SBGNViz Collaborative Editor User
