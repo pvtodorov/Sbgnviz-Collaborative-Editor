@@ -54,10 +54,10 @@ multiverse&quot; | sudo tee
 browser. 
 </p>
 <h2 class="western"><a name="h.lzkutpoc5320"></a>System Framework</h2>
-<p style="margin-bottom: 0in"><span style="display: inline-block; border: 1px solid #000000; padding: 0.02in"><img src= "images/image00.png" name="Image1" align="bottom" width="455" height="359" border="0"/>
+<p style="margin-bottom: 0in"><span style="display: inline-block; border: 1px solid #000000; padding: 0.02in"><img src= "images/image01.png" name="Image1" align="bottom" width="455" height="359" border="0"/>
 </span></p>
 <h2 class="western"><a name="h.55d0en95yatx"></a>Framework Details</h2>
-<p style="margin-bottom: 0in"><span style="display: inline-block; border: 1px solid #000000; padding: 0.02in"><img src="images/image01.png" name="Image2" align="bottom" width="624" height="405" border="0"/>
+<p style="margin-bottom: 0in"><span style="display: inline-block; border: 1px solid #000000; padding: 0.02in"><img src="images/image00.png" name="Image2" align="bottom" width="624" height="405" border="0"/>
 </span>&nbsp;</p>
 <h3 class="western"><a name="h.ttz39lsxwuvx"></a>Computer Agent API</h3>
 <p>Computer agents are connected to the node.js http server via
