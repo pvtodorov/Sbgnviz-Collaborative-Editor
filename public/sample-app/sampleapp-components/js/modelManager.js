@@ -64,9 +64,13 @@ module.exports =  function(model, docId, userId, userName) {
                 currentLayoutProperties = _.clone(lp);
 
 
-             model.set('_page.doc.layoutProperties', currentLayoutProperties); //synclayout
-
-            this.updateHistory('layout', currentLayoutProperties.toString());
+            model.set('_page.doc.layoutProperties', currentLayoutProperties); //synclayout
+            var layoutStr = currentLayoutProperties.name + " nodeRepulsion: " + currentLayoutProperties.nodeRepulsion + " nodeOverlap: " + currentLayoutProperties.nodeOverlap +
+                    " idealEdgeLength: " + currentLayoutProperties.idealEdgeLength + " edgeElasticity: " + currentLayoutProperties.edgeElasticity + " nestingFactor: " + currentLayoutProperties.nestingFactor + " nestingFactor: " + currentLayoutProperties.nestingFactor +
+                    " gravity: " + currentLayoutProperties.gravity + " numIter: " + currentLayoutProperties.numIter + " tile: " + currentLayoutProperties.tile + " animate: " + currentLayoutProperties.animate +
+                    " randomize: " + currentLayoutProperties.randomize + " tilingPaddingVertical: " + currentLayoutProperties.tilingPaddingVertical + " tilingPaddingHorizontal: " + currentLayoutProperties.tilingPaddingHorizontal ;
+            
+            this.updateHistory('layout', layoutStr);
             return currentLayoutProperties;
         },
         setLayoutProperties: function(layoutProperties){

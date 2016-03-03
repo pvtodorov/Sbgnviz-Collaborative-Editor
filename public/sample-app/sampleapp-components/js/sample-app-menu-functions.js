@@ -79,7 +79,7 @@ module.exports = function(){
     var editorActions = require('./EditorActionsManager.js');
     var sbgnContainer;
 
-    var sbgnLayoutProp;
+    var sbgnLayout;
     var sbgnProp;
 
 
@@ -143,8 +143,8 @@ module.exports = function(){
         },
         updateLayoutProperties: function(lp){
 
-        if(sbgnLayoutProp)
-            sbgnLayoutProp.updateLayoutProperties(lp);
+        if(sbgnLayout)
+            sbgnLayout.updateLayoutProperties(lp);
 
         },
 
@@ -185,9 +185,9 @@ module.exports = function(){
             editorActions.modelManager = modelManager;
 
 
-            sbgnLayoutProp = new SBGNLayout(modelManager);
-            var layoutProperties = modelManager.updateLayoutProperties(sbgnLayoutProp.defaultLayoutProperties);
-            sbgnLayoutProp.initialize(layoutProperties);
+            sbgnLayout = new SBGNLayout(modelManager);
+            var layoutProperties = modelManager.updateLayoutProperties(sbgnLayout.defaultLayoutProperties);
+            sbgnLayout.initialize(layoutProperties);
 
 
             sbgnProp = new SBGNProperties();
@@ -814,8 +814,8 @@ module.exports = function(){
             });
 
             $("#layout-properties").click(function (e) {
-                var lp = editorActions.modelManager.updateLayoutProperties(sbgnLayoutProp.defaultLayoutProperties);
-                sbgnLayoutProp.render(lp);
+                var lp = editorActions.modelManager.updateLayoutProperties(sbgnLayout.defaultLayoutProperties);
+                sbgnLayout.render(lp);
             });
 
             $("#layout-properties-icon").click(function (e) {
@@ -945,7 +945,7 @@ module.exports = function(){
 
                 beforePerformLayout();
 
-                sbgnLayoutProp.applyLayout(editorActions.modelManager);
+                sbgnLayout.applyLayout(editorActions.modelManager);
 
 
                 editorActions.manager._do(editorActions.PerformLayoutCommand(nodesData));
@@ -962,7 +962,7 @@ module.exports = function(){
             $("#perform-incremental-layout").click(function (e) {
                 beforePerformLayout();
 
-                sbgnLayoutProp.applyIncrementalLayout();
+                sbgnLayout.applyIncrementalLayout();
             });
 
             $("#undo-last-action").click(function (e) {
@@ -1110,6 +1110,7 @@ module.exports = function(){
 
 function SBGNLayout(modelManager){
 
+
     return{
 
         defaultLayoutProperties: {
@@ -1127,16 +1128,11 @@ function SBGNLayout(modelManager){
             tilingPaddingVertical: 20,//function() {
                //funda return calculateTilingPaddings(parseInt(sbgnStyleRules['tiling-padding-vertical'], 10));
            // },
-            tilingPaddingHorizontal: 20, // funda function() {
+            tilingPaddingHorizontal: 20 // funda function() {
                 //funda return calculateTilingPaddings(parseInt(sbgnStyleRules['tiling-padding-horizontal'], 10));
             //}
 
-            toString: function(){
-                return "name: " + this.name + " nodeRepulsion: " + this.nodeRepulsion + " nodeOverlap: " + this.nodeOverlap +
-                    " idealEdgeLength: " + this.idealEdgeLength + " edgeElasticity: " + this.edgeElasticity + " nestingFactor: " + this.nestingFactor + " nestingFactor: " + this.nestingFactor +
-                    " gravity: " + this.gravity + " numIter: " + this.numIter + " tile: " + this.tile + " animate: " + this.animate +
-                    " randomize: " + this.randomize + " tilingPaddingVertical: " + this.tilingPaddingVertical + " tilingPaddingHorizontal: " + this.tilingPaddingHorizontal ;
-            }
+
 
         },
 
@@ -1156,7 +1152,6 @@ function SBGNLayout(modelManager){
             var self = this;
 
             self.currentLayoutProperties = lp;
-            console.log(lp.toString());
 
             var templateProperties = _.clone(self.currentLayoutProperties);
             templateProperties.tilingPaddingVertical = sbgnStyleRules['tiling-padding-vertical'];
