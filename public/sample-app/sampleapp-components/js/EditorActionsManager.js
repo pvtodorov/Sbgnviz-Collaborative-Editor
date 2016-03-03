@@ -525,10 +525,14 @@ module.exports.highlightSelected = function(param) {
 
 
             elementsToHighlight = sbgnFiltering.highlightNeighborsofSelected(param.selectedEles);
+            if(!param.notSync && param.selectedEles.length > 0) //tell other users to highlight neighbors
+                module.exports.modelManager.highlight(1, "me");
+
         }
         else if (param.highlightProcessesOfSelected) {
-
             elementsToHighlight = sbgnFiltering.highlightProcessesOfSelected(param.selectedEles);
+            if(!param.notSync &&  param.selectedEles.length > 0) //tell other users to highlight processes
+                module.exports.modelManager.highlight(2, "me");
         }
         elementsToHighlight = elementsToHighlight.not(alreadyHighlighted);
     }
@@ -537,6 +541,9 @@ module.exports.highlightSelected = function(param) {
         elementsToHighlight.data("highlighted", 'true');
         sbgnFiltering.highlightNodes(elementsToHighlight.nodes());
         sbgnFiltering.highlightEdges(elementsToHighlight.edges());
+
+        if(!param.notSync && param.selectedEles.length > 0) //tell other users to highlight neighbors
+            module.exports.modelManager.highlight(1, "me");
 
         //If there are some elements to not highlight handle them
         if (param.elesToNotHighlight != null) {
@@ -549,6 +556,9 @@ module.exports.highlightSelected = function(param) {
             result.allElementsWasNotHighlighted = true;
         }
     }
+
+
+
     result.elesToNotHighlight = elementsToHighlight;
 
     return result;
@@ -561,7 +571,7 @@ module.exports.notHighlightEles = function(param) {
     var result = {};
 
     if (param.allElementsWasNotHighlighted) {
-        sbgnFiltering.removeHighlights();
+        sbgnFiltering.removeHighlights(true);
         result.elesToHighlight = elesToNotHighlight;
         result.elesToNotHighlight = cy.elements(":visible").not(elesToNotHighlight);
     }
@@ -569,7 +579,6 @@ module.exports.notHighlightEles = function(param) {
         sbgnFiltering.notHighlightNodes(elesToNotHighlight.nodes());
         sbgnFiltering.notHighlightEdges(elesToNotHighlight.edges());
         elesToNotHighlight.removeData("highlighted");
-
         result.elesToHighlight = elesToNotHighlight;
     }
 
@@ -577,7 +586,7 @@ module.exports.notHighlightEles = function(param) {
     return result;
 }
 
-module.exports.removeHighlights = function() {
+module.exports.removeHighlights = function(param) {
     var result = {};
     if (sbgnFiltering.isAllElementsAreNotHighlighted()) {
         result.elesToHighlight = cy.elements(":visible");
@@ -587,6 +596,9 @@ module.exports.removeHighlights = function() {
     }
 
     sbgnFiltering.removeHighlights();
+
+    if(param && !param.notSync)
+        module.exports.modelManager.highlight(0, "me");
 
     result.elesToNotHighlight = cy.elements(":visible").not(result.elesToHighlight);
     result.firstTime = false;

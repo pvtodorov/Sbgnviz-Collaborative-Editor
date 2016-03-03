@@ -305,7 +305,7 @@
             agent.loadModel(function() {
 
                 fillLayoutProperties();
-                agent.updateNextAgentNodeId();
+                //agent.updateNextAgentNodeId();
                 agent.loadOperationHistory(function(){
 
                     agent.loadChatHistory(function(){
@@ -607,7 +607,7 @@
         $('#'+divId).empty();
         var nodeList = agent.getNodeList();
 
-        console.log(nodeList);
+
         var nodeNameList = [];
 
         var i = 0;
@@ -767,6 +767,7 @@
             clearTimeout(interval);
             callback.apply(this, arguments);
         }
+
     }
 
 

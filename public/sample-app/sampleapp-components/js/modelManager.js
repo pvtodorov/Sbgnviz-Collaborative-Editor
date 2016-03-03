@@ -257,9 +257,9 @@ module.exports =  function(model, docId, userId, userName) {
             if(val == 0)
                 this.updateHistory('Remove highlights');
             else if(val == 1)
-                this.updateHistory('Highlight neighbors of '+ selectedNodes);
+                this.updateHistory('Highlight neighbors');
             else if(val == 2)
-                this.updateHistory('Highlight processes of '+ selectedNodes);
+                this.updateHistory('Highlight processes');
 
         },
 

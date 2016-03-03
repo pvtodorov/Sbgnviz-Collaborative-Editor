@@ -15,7 +15,7 @@
         this.agentId = id;
         this.agentName = name;
         this.colorCode = getNewColor();
-        this.pageDoc;
+
         this.selectedNode;
         this.selectedEdge;
         this.opHistory  = [];
@@ -26,6 +26,7 @@
         var nextNodeCnt  ;
         var room;
         var socket;
+        var pageDoc;
 
 
         var self = this;
@@ -59,8 +60,8 @@
         //TODO: what if an in-between node is deleted before? We should get a unique id
         this.updateNextAgentNodeId = function(){
             var cnt = 0;
-            for( var key in self.pageDoc.cy.nodes ) {
-                if( self.pageDoc.cy.nodes.hasOwnProperty(key) ) {
+            for( var key in pageDoc.cy.nodes ) {
+                if( pageDoc.cy.nodes.hasOwnProperty(key) ) {
                     cnt++;
                 }
             }
@@ -80,7 +81,8 @@
         this.loadModel = function (callback) {
 
             socket.emit('agentPageDocRequest', {room: room}, function(data){
-                self.pageDoc = data;
+                pageDoc = data;
+                self.updateNextAgentNodeId();
                 if (callback != null) callback();
             });
 
@@ -141,7 +143,7 @@
          * @returns {Object} Node list in the shared model
          */
         this.getNodeList = function(){
-            return self.pageDoc.cy.nodes;
+            return pageDoc.cy.nodes;
         };
 
         /**
@@ -149,7 +151,7 @@
          * @returns {Object} Edge list in the shared model
          */
         this.getEdgeList = function(){
-            return self.pageDoc.cy.edges;
+            return pageDoc.cy.edges;
         };
 
         /**
@@ -157,7 +159,7 @@
          * @returns {*} Layout properties in the shared model
          */
         this.getLayoutProperties = function(){
-            return self.pageDoc.layoutProperties;
+            return pageDoc.layoutProperties;
         }
 
         /**
@@ -205,7 +207,7 @@
          * @param reqName Operation name
          * @param param Depends on the operation type
          * <ul>
-         *     <li>reqName: "agentAddImageRequest", param: {img,fileName} </li>
+         *     <li>reqName: "agentAddImageRequest", param: {img,filePath} </li>
          *     <li>reqName: "agentSetLayoutProperties", param: {name, nodeRepulsion, nodeOverlap, idealEdgeLength, edgeElasticity, nestingFactor, gravity, numIter, tile, animate, randomize} </li>
          *     <li>reqName: "agentRunLayoutRequest", param:null </li>
          *     <li>reqName: "agentAddNodeRequest", param:{x y, sbgnclass} </li>

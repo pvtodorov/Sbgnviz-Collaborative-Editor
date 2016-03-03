@@ -48,8 +48,7 @@ var sbgnFiltering = {
         return nodesToHighlight;
     },
 
-    highlightProcessesOfSelected: function(){
-        var selectedEles = cy.elements(":selected");
+    highlightProcessesOfSelected: function(selectedEles){
         selectedEles = this.expandNodes(selectedEles);
         selectedEles.data("highlighted", 'true');
         this.highlightGraph(selectedEles.nodes(), selectedEles.edges());

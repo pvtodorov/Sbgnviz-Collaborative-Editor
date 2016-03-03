@@ -97,7 +97,11 @@ module.exports = function(){
 
         },
         removeHighlights: function(){
-            editorActions.manager._do(editorActions.RemoveHighlightsCommand());
+
+            var param ={
+                notSync: true
+            }
+            editorActions.manager._do(editorActions.RemoveHighlightsCommand(param));
             editorActions.refreshUndoRedoButtonsStatus();
 
 
@@ -105,17 +109,18 @@ module.exports = function(){
         highlightNeighbors: function(requesterId){
 
             var param = {
+                notSync: true, //do not synchronize again
                 firstTime: true,
                 selectedEles : this.getSelectedModelElements(requesterId)
+
             };
-
-
             editorActions.manager._do(editorActions.HighlightNeighborsofSelectedCommand(param));
             editorActions.refreshUndoRedoButtonsStatus();
 
         },
         highlightProcesses: function(requesterId){
             var param = {
+                notSync: true, //do not synchronize again
                 firstTime: true,
                 selectedEles : this.getSelectedModelElements(requesterId)
             };
@@ -688,7 +693,7 @@ module.exports = function(){
                 editorActions.manager._do(editorActions.HighlightNeighborsofSelectedCommand(param));
                 editorActions.refreshUndoRedoButtonsStatus();
 
-                editorActions.modelManager.highlight(1, "me");
+
             });
             $("#highlight-neighbors-of-selected-icon").click(function (e) {
                 $("#neighbors-of-selected").trigger('click');
@@ -740,14 +745,13 @@ module.exports = function(){
                 editorActions.manager._do(editorActions.HighlightProcessesOfSelectedCommand(param));
                 editorActions.refreshUndoRedoButtonsStatus();
 
-                editorActions.modelManager.highlight(2, "me");
             });
 
             $("#remove-highlights").click(function (e) {
                 editorActions.manager._do(editorActions.RemoveHighlightsCommand());
                 editorActions.refreshUndoRedoButtonsStatus();
 
-                editorActions.modelManager.highlight(0, "me");
+
             });
             $('#remove-highlights-icon').click(function (e) {
                 $('#remove-highlights').trigger("click");

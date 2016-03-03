@@ -1,134 +1,404 @@
-# SBGNViz.js: Cytoscape.js based visualization tool for process description diagrams in SBGN-ML
+SBGNViz Collaborative Editor User Guide {#h.1wgjhs3i3ced .c16 .c20}
+=======================================
 
-SBGNViz.js is a web application based on [cytoscape.js](http://cytoscape.github.io/cytoscape.js/) to visualize the pathway models represented by [SBGN Process Description Notation](http://www.sbgn.org/Image:Refcard-PD.png). SBGNViz.js accepts the pathway models represented in [SBGN-ML](http://sourceforge.net/apps/mediawiki/libsbgn/index.php?title=Exchange_Format) format.
+The editor allows human curators and computer agents to work on the same
+pathway model, and communicate through text and images. On the server
+side, we have an application server that keeps the model, handles
+communication across clients, and performs operational transformation.
+Model visualization and editing are handled on the client side. The
+editor visualizes information about cellular processes and pathways in
+SBGN (Systems Biology Graphical Notation) format. It allows for
+automatic graph layout, editing and highlighting facilities.
 
-SBGNViz.js is built by extending an open-source javascript graph theory library for analysis and visualisation, [cytoscape.js](http://cytoscape.github.io/cytoscape.js/), to support the [SBGN Process Description Notation](http://www.sbgn.org/Image:Refcard-PD.png). 
-<br/>
+Installation {#h.2up5xl2gx913 .c16 .c20}
+------------
 
-## Software
+Install node.js, mongodb and redis servers first.
 
-<font color="#B3A31D"><b>A sample application using SBGNViz.js can be found [here](http://www.cs.bilkent.edu.tr/~ivis/SBGNViz.js/).</b></font>
+Node:
 
-SBGNViz.js is distributed under [GNU Lesser General Public License](http://www.gnu.org/licenses/lgpl.html). Instructions for obtaining a working copy of the project can be found [here](https://github.com/PathwayCommons/sbgnviz-js/wiki/Obtaining-A-Working-Copy). SBGNViz.js works on every platform that have javascript support including mobile devices.
-<br/>
+\>curl -sL
+[https://deb.nodesource.com/setup\_0.12](https://www.google.com/url?q=https://deb.nodesource.com/setup_0.12&sa=D&ust=1456966704465000&usg=AFQjCNGGRmt27os-aQCnnpnjDmM-dK8UTA) |
+sudo -E bash -
 
-## Highlights
+\>sudo apt-get install -y nodejs
 
-Below are some sample screenshots from SBGNViz.js, illustrating some of its capabilities. Please click on a figure to see it in full size. A User's Guide can be found [here](http://www.cs.bilkent.edu.tr/~ivis/sbgnviz-js/SBGNViz.js-1.0.UG.pdf), documenting all features of the tool.
+Redis:
 
-<table  border="1" width="800px" align="left">
-	<tr>
-		<td>
-			<a href="http://cs.bilkent.edu.tr/~ivis/sbgnviz-js/samples/mapk-cascade.png">
-				<img src="http://cs.bilkent.edu.tr/~ivis/sbgnviz-js/samples/mapk-cascade-s.png"/>
-			</a>
-                        <p align="center"> <b> Mapk cascade pathway visualized in SBGNViz.js </b> </p>
-		</td>
+\>sudo apt-get update
 
-		<td>     	
-			<a href="http://cs.bilkent.edu.tr/~ivis/sbgnviz-js/samples/highlight-processes.png">
-				<img src="http://cs.bilkent.edu.tr/~ivis/sbgnviz-js/samples/highlight-processes-s.png"/>
-			</a>
-                        <p align="center"> <b> Highlighting processes of selected node group </b> </p>
-		</td>
-	</tr>
+\>sudo apt-get install build-essential
 
-	<tr>
-		<td>
-			<a href="http://cs.bilkent.edu.tr/~ivis/sbgnviz-js/samples/hide-selected.png">
-				<img src="http://cs.bilkent.edu.tr/~ivis/sbgnviz-js/samples/hide-selected-s.png"/>
-			</a>
-                        <p align="center"> <b> Hiding selected node group </b> </p>
-		</td>
+\>sudo apt-get install tcl8.5
 
-		<td>     	
-			<a href="http://cs.bilkent.edu.tr/~ivis/sbgnviz-js/samples/after-hide-selected.png">
-				<img src="http://cs.bilkent.edu.tr/~ivis/sbgnviz-js/samples/after-hide-selected-s.png"/>
-			</a>
-                        <p align="center"> <b> Same graph after applying hiding on selected node group </b> </p>
-		</td>
-	</tr>
+\>wget
+[http://download.redis.io/releases/redis-stable.tar.gz](https://www.google.com/url?q=http://download.redis.io/releases/redis-stable.tar.gz&sa=D&ust=1456966704468000&usg=AFQjCNGwsqVTEvOoDXFJXUPfOp5HAjVP5w)
 
-	<tr>
-		<td>
-			<a href="http://cs.bilkent.edu.tr/~ivis/sbgnviz-js/samples/show-selected.png">
-				<img src="http://cs.bilkent.edu.tr/~ivis/sbgnviz-js/samples/show-selected-s.png"/>
-			</a>
-                        <p align="center"> <b> Showing only selected node group </b> </p>
-		</td>
+\>tar xzf redis-stable.tar.gz
 
-		<td>     	
-			<a href="http://cs.bilkent.edu.tr/~ivis/sbgnviz-js/samples/after-show-selected.png">
-				<img src="http://cs.bilkent.edu.tr/~ivis/sbgnviz-js/samples/after-show-selected-s.png"/>
-			</a>
-                        <p align="center"> <b> Same graph after showing only selected node group </b> </p>
-		</td>
-	</tr>
+\>cd redis-stable
 
-	<tr>
-		<td>			
-                       <a href="http://cs.bilkent.edu.tr/~ivis/sbgnviz-js/samples/highlight-neighbors.png">
-				<img src="http://cs.bilkent.edu.tr/~ivis/sbgnviz-js/samples/highlight-neighbors-s.png"/>
-			</a>
-			<p align="center"><b> Highlighting neighbors of selected node group </b></p>		
-		</td>
+\>make
 
-		<td>			
-			<a href="http://cs.bilkent.edu.tr/~ivis/sbgnviz-js/samples/before-load.png">
-				<img src="http://cs.bilkent.edu.tr/~ivis/sbgnviz-js/samples/before-load-s.png"/>
-			</a>
-			<p align="center"><b> Load SBGN-PD diagram from an sbgn-ml file </b></p>	
-		</td>
+Mongo:
 
-	</tr>
+\>sudo apt-key adv --keyserver
+hkp://[keyserver.ubuntu.com:80](https://www.google.com/url?q=http://keyserver.ubuntu.com/&sa=D&ust=1456966704470000&usg=AFQjCNGvhIICtXNVxHKClfjeGof6XYMC4A) --recv
+EA312927
 
-	<tr>
-		<td>			
-                      <a href="http://cs.bilkent.edu.tr/~ivis/sbgnviz-js/samples/load.png">
-				<img src="http://cs.bilkent.edu.tr/~ivis/sbgnviz-js/samples/load-s.png"/>
-		      </a>
-                      <p align="center"> <b> Loading an sbgnml file from file explorer </b>  </p>
-		</td>
+\>echo "deb
+[http://repo.mongodb.org/apt/ubuntu](https://www.google.com/url?q=http://repo.mongodb.org/apt/ubuntu&sa=D&ust=1456966704471000&usg=AFQjCNEKWJoH8yIBAFiMQ-MCWVrWwM09GA) trusty/mongodb-org/3.2
+multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.2.list
 
-		<td>
-			<a href="http://cs.bilkent.edu.tr/~ivis/sbgnviz-js/samples/after-load.png">
-				<img src="http://cs.bilkent.edu.tr/~ivis/sbgnviz-js/samples/after-load-s.png"/>
-			</a>
-                        <p align="center"> <b> SBGN diagram visualization of Glycolysis after loading its sbgnml file </b>  </p>
-		</td>
-	</tr>
+\>sudo apt-get update
 
-	<tr>
-		<td>			
-                       <a href="http://cs.bilkent.edu.tr/~ivis/sbgnviz-js/samples/save.png">
-				<img src="http://cs.bilkent.edu.tr/~ivis/sbgnviz-js/samples/save-s.png"/>
-			</a>
-                        <p align="center"> <b> Saving current SBGN process description diagram as an sbgnml file </b>  </p>
-		</td>
+\>sudo apt-get install -y mongodb-org
 
-		<td>
-			<a href="http://cs.bilkent.edu.tr/~ivis/sbgnviz-js/samples/save-png.png">
-				<img src="http://cs.bilkent.edu.tr/~ivis/sbgnviz-js/samples/save-png-s.png"/>
-			</a>
-                        <p align="center"> <b> Saving current SBGN process description diagram as a png file  </b>  </p>
-		</td>
-	</tr>
+If mongo does not work:
 
-</table>
+\>sudo apt-get install upstart-sysv
 
-<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+Get project from github:
 
-## Credits
+\>git clone
+[https://github.com/fdurupinar/Sbgnviz-Collaborative-Editor.git](https://www.google.com/url?q=https://github.com/fdurupinar/Sbgnviz-Collaborative-Editor.git&sa=D&ust=1456966704473000&usg=AFQjCNEHA0UHM1vmyy5RgBaDtjAfIfIBDg)
 
-Please cite the following when you use SBGNViz.js:
+\>cd Sbgnviz-Collaborative-Editor
 
-M. Sari, I. Bahceci, U. Dogrusoz, S.O. Sumer, B.A. Aksoy, O. Babur, E. Demir, "[SBGNViz: a tool for visualization and complexity management of SBGN process description maps](http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0128985)", PLoS ONE, 10(6), e0128985, 2015.
+\>sudo rm -rf node\_modules
 
-## Team
+\>npm install
 
-  * Mecit Sari, Ugur Dogrusoz, Istemi Bahceci, Ayhun Tekat, Metin Can Siper, M.Furkan Sahin, [i-Vis at Bilkent University](http://www.cs.bilkent.edu.tr/~ivis)
-  * Selcuk Onur Sumer, Bulent Arman Aksoy, Ozgun Babur, Emek Demir, [cBio at MSKCC](http://cbio.mskcc.org)
-# sbgnvizOT
-# sbgnvizOT
-# SBGNVizS
-# Sbgnviz-Collaborative-Editor
+Run server:
+
+\>node server
+
+In order to open a client:
+
+Enter “http://localhost:3000” to the address bar of your browser.
+
+System Framework {#h.lzkutpoc5320 .c16 .c20}
+----------------
+
+![](images/image01.png)
+
+Framework Details {#h.55d0en95yatx .c16 .c20}
+-----------------
+
+![](images/image00.png) 
+
+### Computer Agent API {#h.ttz39lsxwuvx .c16 .c20}
+
+Computer agents are connected to the node.js http server via websockets
+(socket.io.js). An agent is initialized with a name (string)  and a
+unique ID (string).
+
+Constructor: Agent (string name, string id)
+
+#### Public Attributes: {#h.1eu245k1egzd .c16 .c20}
+
+agentId: (string) A unique id
+
+agentName: (string) Agent name
+
+colorCode: A specific color to identify the agent operations. It should
+be a string in hsla format as: “hsla(H, S, L%, 1)”, where H (integer), S
+(float) and L (float) are hue, saturation and lightness values.
+
+selectedNode: The node object on which the agent is performing
+operations. It has attributes such as position ={x:\<posX\>,y:\<posY\>},
+width, height, borderWidth, borderHeight, backgroundColor, sbgnLabel,
+sbgnStatesAndInfos = {clazz:\<className\>, state =
+{value:\<stateValue\>,variable:\<stateVariable\>}}.
+
+ 
+
+selectedEdge: The edge object on which the agent is performing
+operations. It has attributes such as cardinality, lineColor and width.
+
+opHistory: History of operations as an array of strings in the format:
+“UserName (date): Command”.
+
+chatHistory: Chat history as an array of messages.
+
+userList: List of connected user ids.
+
+#### Private Attributes: {#h.nt4u4u3mhl90 .c16 .c20}
+
+room: The document id that identifies the shared model. It is the string
+after http:\<ip\>:3000/ in the server address.
+
+socket: The web socket between the server and agent
+
+pageDoc: The document that the shared model is stored.
+
+#### Methods: {#h.l0c8z5l51rt3 .c16 .c20}
+
++--------------------+--------------------+--------------------+--------------------+
+| Name               | Function           | Parameters         | Returns            |
++--------------------+--------------------+--------------------+--------------------+
+| connectToServer    | Connects the       | url, callback      | socket             |
+|                    | server and returns |                    |                    |
+|                    | socket.io socket   |                    |                    |
++--------------------+--------------------+--------------------+--------------------+
+| loadModel          | Gets the model for | callback           |                    |
+|                    | the current room   |                    |                    |
++--------------------+--------------------+--------------------+--------------------+
+| loadOperationHisto | Gets history of    | callback           |                    |
+| ry                 | operations from    |                    |                    |
+|                    | the node.js server |                    |                    |
+|                    | and assigns them   |                    |                    |
+|                    | to opHistory       |                    |                    |
++--------------------+--------------------+--------------------+--------------------+
+| loadUserList       | Gets user list     | callback           |                    |
+|                    | from the node.js   |                    |                    |
+|                    | server and assigns |                    |                    |
+|                    | them to userList   |                    |                    |
++--------------------+--------------------+--------------------+--------------------+
+| loadChatHistory    | Gets history of    | callback           |                    |
+|                    | chat messages from |                    |                    |
+|                    | the node.js server |                    |                    |
+|                    | and assigns them   |                    |                    |
+|                    | to chatHistory     |                    |                    |
++--------------------+--------------------+--------------------+--------------------+
+| getNodeList        |                    | callback           | The node list in   |
+|                    |                    |                    | the shared model   |
+|                    |                    |                    | as an object of    |
+|                    |                    |                    | node ids           |
++--------------------+--------------------+--------------------+--------------------+
+| getLayoutPropertie |                    | callback           | Layout properties  |
+| s                  |                    |                    | of the shared      |
+|                    |                    |                    | model as an object |
+|                    |                    |                    | with attributes    |
+|                    |                    |                    | as:                |
+|                    |                    |                    |                    |
+|                    |                    |                    | {name: \<layout    |
+|                    |                    |                    | name\>,            |
+|                    |                    |                    |                    |
+|                    |                    |                    |  nodeRepulsion:    |
+|                    |                    |                    | \<node repulsion   |
+|                    |                    |                    | value\> ,          |
+|                    |                    |                    |                    |
+|                    |                    |                    |  nodeOverlap:\<nod |
+|                    |                    |                    | e                  |
+|                    |                    |                    | overlap            |
+|                    |                    |                    | percentage\>,      |
+|                    |                    |                    |                    |
+|                    |                    |                    | idealEdgeLength:\< |
+|                    |                    |                    | ideal              |
+|                    |                    |                    | edge length        |
+|                    |                    |                    | value\>,           |
+|                    |                    |                    |                    |
+|                    |                    |                    | edgeElasticity:\<e |
+|                    |                    |                    | dge                |
+|                    |                    |                    | elasticity         |
+|                    |                    |                    | value\>,           |
+|                    |                    |                    |                    |
+|                    |                    |                    | nestingFactor:\<ne |
+|                    |                    |                    | sting              |
+|                    |                    |                    | factor value\>,    |
+|                    |                    |                    |                    |
+|                    |                    |                    | gravity:\<gravity  |
+|                    |                    |                    | value\>,           |
+|                    |                    |                    |                    |
+|                    |                    |                    | numIter:\<number   |
+|                    |                    |                    | of iterations\>,   |
+|                    |                    |                    |                    |
+|                    |                    |                    | tile:\<boolean     |
+|                    |                    |                    | value to tile      |
+|                    |                    |                    | disconnected\>,    |
+|                    |                    |                    |                    |
+|                    |                    |                    | animate:\<boolean  |
+|                    |                    |                    | value\>,           |
+|                    |                    |                    |                    |
+|                    |                    |                    | randomize:\<boolea |
+|                    |                    |                    | n                  |
+|                    |                    |                    | value\>}           |
++--------------------+--------------------+--------------------+--------------------+
+| changeName         | Sends request to   | newName            |                    |
+|                    | the server to      |                    |                    |
+|                    | change agent's     |                    |                    |
+|                    | name               |                    |                    |
++--------------------+--------------------+--------------------+--------------------+
+| getNodeRequest     | Requests the node  | id, callback       | Node with id       |
+|                    | with \<id\> from   |                    |                    |
+|                    | the server         |                    |                    |
++--------------------+--------------------+--------------------+--------------------+
+| getEdgeRequest     | Requests the edge  | id, callback       | Edge with id       |
+|                    | with \<id\> from   |                    |                    |
+|                    | the server         |                    |                    |
++--------------------+--------------------+--------------------+--------------------+
+| sendMessage        | Sends chat message | comment,           |                    |
+|                    | \<comments\> as a  | targetArr,         |                    |
+|                    | string to          | callback           |                    |
+|                    | \<targetArr\> as   |                    |                    |
+|                    | an array of        |                    |                    |
+|                    | targeted user ids  |                    |                    |
+|                    | [{id:              |                    |                    |
+|                    | \<id1\>},..., {id: |                    |                    |
+|                    | \<idn\>}]          |                    |                    |
++--------------------+--------------------+--------------------+--------------------+
+| listen             | Socket listener    | callback           |                    |
+|                    | for server         |                    |                    |
+|                    | requests. Can get  |                    |                    |
+|                    | “operation”,       |                    |                    |
+|                    | “message”,         |                    |                    |
+|                    | “userList” or      |                    |                    |
+|                    | “imageFile” from   |                    |                    |
+|                    | the server.        |                    |                    |
++--------------------+--------------------+--------------------+--------------------+
+| sendRequest        | Sends an operation | [reqName,          |                    |
+|                    | request to the     | param](#h.nhfdym5d |                    |
+|                    | node.js server.    | 0wpf)              |                    |
+|                    |  Model update      |                    |                    |
+|                    | operations are     |                    |                    |
+|                    | done using this    |                    |                    |
+|                    | method.            |                    |                    |
++--------------------+--------------------+--------------------+--------------------+
+
+##### sendRequest: {#h.nhfdym5d0wpf .c16 .c20}
+
++--------------------------------------+--------------------------------------+
+| reqName                              | param                                |
++--------------------------------------+--------------------------------------+
+| “agentAddImageRequest”               | {img: \<image file\>,                |
+|                                      |                                      |
+|                                      | filePath: \<path of image file\> }   |
++--------------------------------------+--------------------------------------+
+| "agentSetLayoutProperties"           | {name: \<layout name\>,              |
+|                                      |                                      |
+|                                      |  nodeRepulsion: \<node repulsion     |
+|                                      | value\> ,                            |
+|                                      |                                      |
+|                                      |  nodeOverlap:\<node overlap          |
+|                                      | percentage\>,                        |
+|                                      |                                      |
+|                                      | idealEdgeLength:\<ideal edge length  |
+|                                      | value\>,                             |
+|                                      |                                      |
+|                                      | edgeElasticity:\<edge elasticity     |
+|                                      | value\>,                             |
+|                                      |                                      |
+|                                      | nestingFactor:\<nesting factor       |
+|                                      | value\>,                             |
+|                                      |                                      |
+|                                      | gravity:\<gravity value\>,           |
+|                                      |                                      |
+|                                      | numIter:\<number of iterations\>,    |
+|                                      |                                      |
+|                                      | tile:\<boolean value to tile         |
+|                                      | disconnected\>,                      |
+|                                      |                                      |
+|                                      | animate:\<boolean value\>,           |
+|                                      |                                      |
+|                                      | randomize:\<boolean value\>}         |
++--------------------------------------+--------------------------------------+
+| “agentRunLayoutRequest”              | -                                    |
++--------------------------------------+--------------------------------------+
+| “agentAddNodeRequest”                | {x: \<position x\>,                  |
+|                                      |                                      |
+|                                      | y: \<position y\>,                   |
+|                                      |                                      |
+|                                      | sbgnclass: \<sbgn class\>}           |
++--------------------------------------+--------------------------------------+
+| “agentAddEdgeRequest”                | {source: \<source node id\>,         |
+|                                      |                                      |
+|                                      | target: \<target node id\>,          |
+|                                      |                                      |
+|                                      | sbgnclass: \<sbgn class\>}           |
++--------------------------------------+--------------------------------------+
+| “agentChangeNodeAttributeRequest”    | {id: \<node id\>,                    |
+|                                      |                                      |
+|                                      | attStr: \<node attribute name in the |
+|                                      | model\>                              |
+|                                      |                                      |
+|                                      | attVal:\<node attribute value\>}     |
+|                                      |                                      |
+|                                      | attStr takes the following values:   |
+|                                      | “sbgnclass”, “highlightColor”,       |
+|                                      | “backgroundColor”, “sbgnlabel”,      |
+|                                      | “borderColor”, “borderWidth”,        |
+|                                      | “isMultimer”, “isCloneMarker”,       |
+|                                      | “parent”, “children”, “width”,       |
+|                                      | “height”, “sbgnbboxW”, “sbgnbboxH”,  |
+|                                      | “sbgnStatesAndInfos”                 |
++--------------------------------------+--------------------------------------+
+| “agentChangeEdgeAttributeRequest”    | {id: \<node id\>,                    |
+|                                      |                                      |
+|                                      | attStr: \<edge attribute name in the |
+|                                      | model\>                              |
+|                                      |                                      |
+|                                      | attVal:\<edge attribute value\>}     |
+|                                      |                                      |
+|                                      | attStr takes the following values:   |
+|                                      | “lineColor”, “highlightColor”,       |
+|                                      | “width”, “cardinality”               |
++--------------------------------------+--------------------------------------+
+| “agentMoveNodeRequest”               | {id: \<node id\>,                    |
+|                                      |                                      |
+|                                      | pos: {x:\<new position x\>, y: \<    |
+|                                      | new position y\>}}                   |
++--------------------------------------+--------------------------------------+
+| “agentAddCompoundRequest”            | {type: \<compound type as “complex”  |
+|                                      | or “compartment”\>,                  |
+|                                      |                                      |
+|                                      | selectedNodeArr: \<array of node     |
+|                                      | ids\>}                               |
++--------------------------------------+--------------------------------------+
+
+In order to set up and run an agent:
+
+agent = new Agent(agentName, agentId);
+
+var socket = agent.connectToServer(serverIp, function(){
+
+//callback operations
+
+});
+
+socket.on('connect', function(){
+
+   agent.loadModel(function() {
+
+       agent.loadOperationHistory(function(){
+
+           agent.loadChatHistory(function(){                  
+
+//callback operations             
+
+});
+
+           });
+
+       });
+
+   agent.listen(function(){
+
+       socket.on('operation', function(data){
+
+          //callback operations
+
+       });
+
+       socket.on('message', function(data){
+
+           //callback operations
+
+       });
+
+       socket.on('userList', function(data){
+
+           //callback operations
+
+       });
+
+       socket.on('imageFile', function(data){
+
+           //callback operations
+
+       });
+
+   });
+
+});
+

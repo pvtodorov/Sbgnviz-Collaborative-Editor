@@ -615,6 +615,7 @@ app.proto.create = function (model) {
         $("#perform-layout").trigger('click');
     });
 
+    //TODO: make this a function in menu-functions
     socket.on('addCompound', function(data){
 
         //unselect all others
