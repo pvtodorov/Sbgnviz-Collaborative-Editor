@@ -85,6 +85,17 @@ module.exports = function(){
 
     return {
 
+        loadFile: function(txtFile){
+            var jsonObj = sbgnmlToJson.convert(textToXmlObject(txtFile));
+
+            editorActions.modelManager.updateServerGraph(jsonObj);
+
+
+            this.updateSample(-1);
+
+            editorActions.modelManager.setSampleInd(-1, "me"); //to notify other clients
+
+        },
         getSelectedModelElements: function(requesterId){
             var elementIds = editorActions.modelManager.getSelectedModelElementIds(requesterId);
             var selectedElements = [];
@@ -174,7 +185,7 @@ module.exports = function(){
             editorActions.modelManager = modelManager;
 
 
-            sbgnLayoutProp = new SBGNLayout();
+            sbgnLayoutProp = new SBGNLayout(modelManager);
             var layoutProperties = modelManager.updateLayoutProperties(sbgnLayoutProp.defaultLayoutProperties);
             sbgnLayoutProp.initialize(layoutProperties);
 
@@ -509,6 +520,7 @@ module.exports = function(){
                 var textType = /text.*/;
 
                 var reader = new FileReader();
+                var self = this;
 
 
                 reader.onload = function (e) {
@@ -1096,7 +1108,7 @@ module.exports = function(){
 }
 
 
-function SBGNLayout(){
+function SBGNLayout(modelManager){
 
     return{
 
@@ -1115,18 +1127,36 @@ function SBGNLayout(){
             tilingPaddingVertical: 20,//function() {
                //funda return calculateTilingPaddings(parseInt(sbgnStyleRules['tiling-padding-vertical'], 10));
            // },
-            tilingPaddingHorizontal: 20 // funda function() {
+            tilingPaddingHorizontal: 20, // funda function() {
                 //funda return calculateTilingPaddings(parseInt(sbgnStyleRules['tiling-padding-horizontal'], 10));
             //}
+
+            toString: function(){
+                return "name: " + this.name + " nodeRepulsion: " + this.nodeRepulsion + " nodeOverlap: " + this.nodeOverlap +
+                    " idealEdgeLength: " + this.idealEdgeLength + " edgeElasticity: " + this.edgeElasticity + " nestingFactor: " + this.nestingFactor + " nestingFactor: " + this.nestingFactor +
+                    " gravity: " + this.gravity + " numIter: " + this.numIter + " tile: " + this.tile + " animate: " + this.animate +
+                    " randomize: " + this.randomize + " tilingPaddingVertical: " + this.tilingPaddingVertical + " tilingPaddingHorizontal: " + this.tilingPaddingHorizontal ;
+            }
+
         },
 
         el: '#sbgn-layout-table',
-        currentLayoutProperties:  null,
+        currentLayoutProperties: null,
+        //{
+        //    //toString: function(){
+        //    //    return "name: " + this.name + " nodeRepulsion: " + this.nodeRepulsion + " nodeOverlap: " + this.nodeOverlap +
+        //    //        " idealEdgeLength: " + this.idealEdgeLength + " edgeElasticity: " + this.edgeElasticity + " nestingFactor: " + this.nestingFactor + " nestingFactor: " + this.nestingFactor +
+        //    //        " gravity: " + this.gravity + " numIter: " + this.numIter + " tile: " + this.tile + " animate: " + this.animate +
+        //    //        " randomize: " + this.randomize + " tilingPaddingVertical: " + this.tilingPaddingVertical + " tilingPaddingHorizontal: " + this.tilingPaddingHorizontal ;
+        //    //}
+        //},
+
 
         initialize: function(lp) {
             var self = this;
 
             self.currentLayoutProperties = lp;
+            console.log(lp.toString());
 
             var templateProperties = _.clone(self.currentLayoutProperties);
             templateProperties.tilingPaddingVertical = sbgnStyleRules['tiling-padding-vertical'];
@@ -1154,7 +1184,7 @@ function SBGNLayout(){
         },
         updateLayoutProperties: function(layoutProps){
 
-            self.currentLayoutProperties = _.clone(layoutProps);
+            this.currentLayoutProperties = _.clone(layoutProps);
 
         },
         render: function (lp) {

@@ -23,9 +23,13 @@
 
 
 <div id = agentOperations>
-   <b> Agent Operations</b> <br>
-    <button id = "updateModel" onclick = updateModel()>Update model</button>
+<br>   <b> Agent Operations</b> <br>
 
+    <br>
+    <button id = "newFile" onclick = newFile()>New model</button>
+    <input id="fileInput" type="file" onchange = loadFile() />
+    <button id = "updateModel" onclick = updateModel()>Request updated model</button>
+<br>
     <br>
     <form id = "layoutOperations">
         Name: <input type = "text" id = "layoutName" value = "cose-bilkent"><br>
@@ -46,8 +50,6 @@
     </form>
     <br>
     <form id = "nodeOperations">
-
-
 
         Pos x : <input type = "number" id = "posX" name="posX" value = 200>
         Pos y : <input type = "number" id = "posY" name="posY" value = 200>
@@ -436,7 +438,38 @@
         agent.getModel(callback);
 
     };
+    function newFile(){
+        agent.sendRequest("agentNewFileRequest",{param:null});
+    };
+    function loadFile(){
+        if ($("#fileInput").val() == "") {
+            return;
+        }
 
+        var fileInput = $("#fileInput")[0];
+
+        var file = fileInput.files[0];
+        if(file){
+            var textType = /text.*/;
+            var txtFile;
+
+            var reader = new FileReader();
+
+
+            reader.onload = function (e) {
+
+                var txtContent = this.result;
+
+                agent.sendRequest("agentLoadFileRequest",{param:txtContent});
+            }
+        }
+
+       reader.readAsText(file);
+//        setFileContent(file.name);
+        $("#fileInput").val("");
+
+      //  agent.sendRequest("agentLoadFileRequest",{param:txtFile});
+    };
     function addNode(){
         var x = $('#posX')[0].value;
         var y = $('#posY')[0].value;
@@ -639,7 +672,10 @@
     }
 
     function writeCommand(op){
-        var command = "<b>" + op.userName + " (" + formatTime(op) + "): " + "</b>"  +op.name +  " " +op.id +  " " +JSON.stringify(op.param);
+        var id = op.id !=null? op.id:'';
+        var param = op.param !=null? JSON.stringify(op.param):'';
+
+        var command = "<b>" + op.userName + " (" + formatTime(op) + "): " + "</b>"  +op.name +  " " + id+  " " +param;
         $('#operationHistory').append("<li>" + command+ "</li>");
 
         $('#operationHistory').trigger('contentchanged');

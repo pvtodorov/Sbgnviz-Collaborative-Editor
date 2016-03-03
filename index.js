@@ -608,7 +608,13 @@ app.proto.create = function (model) {
 
     });
 
+    socket.on('loadFile', function(txtFile){
+        menu.loadFile(txtFile);
+    });
 
+    socket.on('newFile', function(){
+        $('#new-file').trigger("click");
+    });
 
     //better through sockets-- model operation causes complications
     socket.on('runLayout', function(){

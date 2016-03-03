@@ -42,6 +42,7 @@ module.exports =  function(model, docId, userId, userName) {
 
         addImage: function(data, user){
             model.pass({user:user}).push('_page.doc.images', data);
+            this.updateHistory('image', data.filePath);
         },
 
         setName: function(userName){
@@ -65,7 +66,7 @@ module.exports =  function(model, docId, userId, userName) {
 
              model.set('_page.doc.layoutProperties', currentLayoutProperties); //synclayout
 
-
+            this.updateHistory('layout', currentLayoutProperties.toString());
             return currentLayoutProperties;
         },
         setLayoutProperties: function(layoutProperties){
@@ -80,11 +81,21 @@ module.exports =  function(model, docId, userId, userName) {
                 ind = "0";
             this.setSampleInd(ind, user);
 
+            if(ind == -1)
+                this.updateHistory('load model');
+            else
+                this.updateHistory('open sample ', ind);
+
             return ind;
 
         },
         setSampleInd: function(ind, user){
             model.pass({user:user}).set('_page.doc.sampleInd', ind);
+
+            if(ind == -1)
+                this.updateHistory('load model');
+            else
+                this.updateHistory('open sample ', ind);
         },
 
         updateHistory: function(opName, elId, param){
@@ -153,6 +164,7 @@ module.exports =  function(model, docId, userId, userName) {
 
             }
 
+            this.updateHistory('select', node.id());
         },
 
         unselectModelNode: function(node){
@@ -162,6 +174,8 @@ module.exports =  function(model, docId, userId, userName) {
             if(nodePath.get('id')){
                 nodePath.set('highlightColor' , null);
             }
+
+            this.updateHistory('unselect', node.id());
 
         },
         moveModelNode: function(nodeId, pos,user){
@@ -224,17 +238,17 @@ module.exports =  function(model, docId, userId, userName) {
 
         },
 
-        deleteModelNode: function(id, user){
+        deleteModelNode: function(nodeId, user){
 
             //"unselect" node so that it doesn't get highlighted after undo
             //TODO: does not work!!!!!!!
-            this.changeModelNodeAttribute('highlightColor', id, null, user);
-            this.changeModelNodeAttribute('backgroundColor', id, null, user);
+            this.changeModelNodeAttribute('highlightColor', nodeId, null, user);
+            this.changeModelNodeAttribute('backgroundColor', nodeId, null, user);
 
-            model.pass({user: user}).del(('_page.doc.cy.nodes.' + id));
+            model.pass({user: user}).del(('_page.doc.cy.nodes.' + nodeId));
 
 
-            this.updateHistory('delete', id, "");
+            this.updateHistory('delete', nodeId);
 
         },
 
@@ -261,6 +275,9 @@ module.exports =  function(model, docId, userId, userName) {
             else if(val == 2)
                 this.updateHistory('Highlight processes');
 
+
+            this.updateHistory('highlight', val + " of selected by " + userId);
+
         },
 
         getModelEdge: function(id){
@@ -284,7 +301,7 @@ module.exports =  function(model, docId, userId, userName) {
             if(edgePath.get('id') && user)
                 edgePath.set('highlightColor' ,user.get('colorCode'));
 
-
+            this.updateHistory('select', edge.id());
         },
 
         unselectModelEdge: function(edge){
@@ -292,6 +309,7 @@ module.exports =  function(model, docId, userId, userName) {
             if(edgePath.get('id'))
                 edgePath.set('highlightColor' , null);
 
+            this.updateHistory('unselect', edge.id());
         },
 
 
@@ -320,7 +338,7 @@ module.exports =  function(model, docId, userId, userName) {
 
                 model.pass({user:user}).del(('_page.doc.cy.edges.'  + id));
 
-                this.updateHistory('delete', id, "");
+                this.updateHistory('delete', id);
 
 
         },
@@ -344,6 +362,8 @@ module.exports =  function(model, docId, userId, userName) {
             this.deleteModelNodes(nodes,user);
             this.deleteModelEdges(edges,user);
 
+            this.updateHistory('new model');
+
         },
 
         getServerGraph: function(){
@@ -361,6 +381,8 @@ module.exports =  function(model, docId, userId, userName) {
         updateServerGraph: function(cytoscapeJsGraph){
             //TODO: could be simplified to a single node/edge update
             model.set('_page.doc.jsonObj', cytoscapeJsGraph);
+
+            this.updateHistory('load graph');
         },
 
 
