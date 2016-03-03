@@ -10,7 +10,7 @@ editor visualizes information about cellular processes and pathways in
 SBGN (Systems Biology Graphical Notation) format. It allows for
 automatic graph layout, editing and highlighting facilities.
 
-Installation {#h.2up5xl2gx913 .c16 .c20}
+Installation
 ------------
 
 Install node.js, mongodb and redis servers first.
@@ -77,17 +77,17 @@ In order to open a client:
 
 Enter “http://localhost:3000” to the address bar of your browser.
 
-System Framework {#h.lzkutpoc5320 .c16 .c20}
+System Framework
 ----------------
 
 ![](images/image01.png)
 
-Framework Details {#h.55d0en95yatx .c16 .c20}
+Framework Details
 -----------------
 
 ![](images/image00.png) 
 
-### Computer Agent API {#h.ttz39lsxwuvx .c16 .c20}
+### Computer Agent API
 
 Computer agents are connected to the node.js http server via websockets
 (socket.io.js). An agent is initialized with a name (string)  and a
@@ -95,7 +95,7 @@ unique ID (string).
 
 Constructor: Agent (string name, string id)
 
-#### Public Attributes: {#h.1eu245k1egzd .c16 .c20}
+#### Public Attributes:
 
 agentId: (string) A unique id
 
@@ -123,7 +123,7 @@ chatHistory: Chat history as an array of messages.
 
 userList: List of connected user ids.
 
-#### Private Attributes: {#h.nt4u4u3mhl90 .c16 .c20}
+#### Private Attributes:
 
 room: The document id that identifies the shared model. It is the string
 after http:\<ip\>:3000/ in the server address.
@@ -132,7 +132,7 @@ socket: The web socket between the server and agent
 
 pageDoc: The document that the shared model is stored.
 
-#### Methods: {#h.l0c8z5l51rt3 .c16 .c20}
+#### Methods:
 
 +--------------------+--------------------+--------------------+--------------------+
 | Name               | Function           | Parameters         | Returns            |
