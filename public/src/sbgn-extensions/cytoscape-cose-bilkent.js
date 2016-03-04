@@ -4487,6 +4487,8 @@
 
     this.root = gm.addRoot();
 
+
+
     if (!this.options.tile) {
       this.processChildrenList(this.root, nodes.orphans());
     }

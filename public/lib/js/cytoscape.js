@@ -4707,6 +4707,7 @@
     layout: function( options ){
       var cy = this.cy();
 
+
       cy.layout( util.extend({}, options, {
         eles: this
       }) );

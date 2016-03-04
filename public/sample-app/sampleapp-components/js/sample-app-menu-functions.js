@@ -29,6 +29,20 @@ var beforePerformLayout = function(){
     cy.edges().css('curve-style', 'bezier');
 };
 
+var getNodesData = function () {
+    var nodesData = {};
+    var nodes = cy.nodes();
+    for (var i = 0; i < nodes.length; i++) {
+        var node = nodes[i];
+        nodesData[node.id()] = {
+            width: node.width(),
+            height: node.height(),
+            x: node.position("x"),
+            y: node.position("y")
+        };
+    }
+    return nodesData;
+};
 
 function getXMLObject(itemId, loadXMLDoc) {
     switch (itemId) {
@@ -79,8 +93,8 @@ module.exports = function(){
     var editorActions = require('./EditorActionsManager.js');
     var sbgnContainer;
 
-    var sbgnLayout;
-    var sbgnProp;
+    var sbgnLayoutProperties;
+    var sbgnProperties;
 
 
     return {
@@ -143,8 +157,8 @@ module.exports = function(){
         },
         updateLayoutProperties: function(lp){
 
-        if(sbgnLayout)
-            sbgnLayout.updateLayoutProperties(lp);
+        if(sbgnLayoutProperties)
+            sbgnLayoutProperties.updateLayoutProperties(lp);
 
         },
 
@@ -185,13 +199,13 @@ module.exports = function(){
             editorActions.modelManager = modelManager;
 
 
-            sbgnLayout = new SBGNLayout(modelManager);
-            var layoutProperties = modelManager.updateLayoutProperties(sbgnLayout.defaultLayoutProperties);
-            sbgnLayout.initialize(layoutProperties);
+            sbgnLayoutProperties = new SBGNLayoutProperties(modelManager);
+            var layoutProperties = modelManager.updateLayoutProperties(sbgnLayoutProperties.defaultLayoutProperties);
+            sbgnLayoutProperties.initialize(layoutProperties);
 
 
-            sbgnProp = new SBGNProperties();
-            sbgnProp.initialize();
+            sbgnProperties = new SBGNProperties();
+            sbgnProperties.initialize();
 
 
 
@@ -814,8 +828,8 @@ module.exports = function(){
             });
 
             $("#layout-properties").click(function (e) {
-                var lp = editorActions.modelManager.updateLayoutProperties(sbgnLayout.defaultLayoutProperties);
-                sbgnLayout.render(lp);
+                var lp = editorActions.modelManager.updateLayoutProperties(sbgnLayoutProperties.defaultLayoutProperties);
+                sbgnLayoutProperties.render(lp);
             });
 
             $("#layout-properties-icon").click(function (e) {
@@ -823,7 +837,7 @@ module.exports = function(){
             });
 
             $("#sbgn-properties").click(function (e) {
-                sbgnProp.render();
+                sbgnProperties.render();
             });
             $("#properties-icon").click(function (e) {
                 $("#sbgn-properties").trigger('click');
@@ -931,26 +945,19 @@ module.exports = function(){
             $("#perform-layout").click(function (e) {
 
 
-                //var nodesData = {};
-                //var nodes = cy.nodes();
-                //for (var i = 0; i < nodes.length; i++) {
-                //    var node = nodes[i];
-                //    nodesData[node.id()] = {
-                //        width: node.width(),
-                //        height: node.height(),
-                //        x: node.position("x"),
-                //        y: node.position("y")
-                //    };
-                //}
 
+                var nodesData = getNodesData();
                 beforePerformLayout();
 
-                sbgnLayout.applyLayout(editorActions.modelManager);
+                sbgnLayoutProperties.applyLayout();
 
 
                 editorActions.manager._do(editorActions.PerformLayoutCommand(nodesData));
 
-                //       editorActions.manager._do(editorActions.ReturnToPositionsAndSizesCommand(nodesData));
+
+                nodesData.firstTime = true;
+                editorActions.manager._do(editorActions.ReturnToPositionsAndSizesCommand(nodesData));
+
 
 
                 editorActions.refreshUndoRedoButtonsStatus();
@@ -962,7 +969,7 @@ module.exports = function(){
             $("#perform-incremental-layout").click(function (e) {
                 beforePerformLayout();
 
-                sbgnLayout.applyIncrementalLayout();
+                sbgnLayoutProperties.applyIncrementalLayout();
             });
 
             $("#undo-last-action").click(function (e) {
@@ -1107,8 +1114,8 @@ module.exports = function(){
     }
 }
 
-
-function SBGNLayout(modelManager){
+//funda: no more backbone
+function SBGNLayoutProperties(modelManager){
 
 
     return{
@@ -1138,14 +1145,7 @@ function SBGNLayout(modelManager){
 
         el: '#sbgn-layout-table',
         currentLayoutProperties: null,
-        //{
-        //    //toString: function(){
-        //    //    return "name: " + this.name + " nodeRepulsion: " + this.nodeRepulsion + " nodeOverlap: " + this.nodeOverlap +
-        //    //        " idealEdgeLength: " + this.idealEdgeLength + " edgeElasticity: " + this.edgeElasticity + " nestingFactor: " + this.nestingFactor + " nestingFactor: " + this.nestingFactor +
-        //    //        " gravity: " + this.gravity + " numIter: " + this.numIter + " tile: " + this.tile + " animate: " + this.animate +
-        //    //        " randomize: " + this.randomize + " tilingPaddingVertical: " + this.tilingPaddingVertical + " tilingPaddingHorizontal: " + this.tilingPaddingHorizontal ;
-        //    //}
-        //},
+
 
 
         initialize: function(lp) {
@@ -1160,6 +1160,9 @@ function SBGNLayout(modelManager){
             self.template = _.template($("#layout-settings-template").html(), self.currentLayoutProperties);
 
 
+        },
+        copyProperties: function () {
+            this.currentLayoutProperties = _.clone(this.defaultLayoutProperties);
         },
 
         applyLayout: function () {
@@ -1254,6 +1257,7 @@ function SBGNLayout(modelManager){
 
     }};
 
+//funda: no more backbone
 function SBGNProperties(){
 
     return {
