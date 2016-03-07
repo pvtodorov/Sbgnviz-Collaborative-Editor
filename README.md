@@ -479,27 +479,27 @@ string after http:&lt;ip&gt;:3000/ in the server address.</p>
 <p>&nbsp; &nbsp;});</p>
 <p>});</p>
 
-Command History:
-JSON array as:
-[
-&nbsp;{
-&nbsp; &nbsp;userName: //name of the user who gave the command
-&nbsp; &nbsp;name: //name of the command
-&nbsp; &nbsp;id: //id of the affected element
-&nbsp; &nbsp;param: //operation parameters
-&nbsp; &nbsp;[
-&nbsp; &nbsp; &nbsp;{
-&nbsp; &nbsp; &nbsp; &nbsp;x: //node position x
-&nbsp; &nbsp; &nbsp; &nbsp;y: //node position y
-&nbsp; &nbsp; &nbsp; &nbsp;sbgnclass: //node sbgnclass
-&nbsp; &nbsp; &nbsp; &nbsp;source:  //edge source
-&nbsp; &nbsp; &nbsp; &nbsp;target:  //edge target
-&nbsp; &nbsp; &nbsp; &nbsp;sbgnclass: //edge sbgnclass
-&nbsp; &nbsp; &nbsp;}
-&nbsp; &nbsp;]
-&nbsp; &nbsp;date: //date of the command
-&nbsp;}
-]
+<p>Command History:</p>
+<p>JSON array as:</p>
+<p>[</p>
+<p>&nbsp;{</p>
+<p>&nbsp; &nbsp;userName: //name of the user who gave the command</p>
+<p>&nbsp; &nbsp;name: //name of the command</p>
+<p>&nbsp; &nbsp;id: //id of the affected element</p>
+<p>&nbsp; &nbsp;param: //operation parameters</p>
+<p>&nbsp; &nbsp;[</p>
+<p>&nbsp; &nbsp; &nbsp;{</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp;x: //node position x</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp;y: //node position y</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp;sbgnclass: //node sbgnclass</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp;source:  //edge source</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp;target:  //edge target</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp;sbgnclass: //edge sbgnclass</p>
+<p>&nbsp; &nbsp; &nbsp;}</p>
+<p>&nbsp; &nbsp;]</p>
+<p>&nbsp; &nbsp;date: //date of the command</p>
+<p>&nbsp;}</p>
+<p>]</p>
 
 </body>
 </html>
