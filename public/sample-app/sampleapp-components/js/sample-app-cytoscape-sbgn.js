@@ -393,7 +393,7 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
                     },
                     position: {
                         my: 'top center',
-                        at: 'bottom center',
+                        at: 'bottom right',
                         adjust: {
                             cyViewport: true
                         },

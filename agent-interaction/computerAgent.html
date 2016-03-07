@@ -40,9 +40,11 @@
         Nesting factor: <input type = "number" id = "nestingFactor" value = 0.1>
         Gravity: <input type = "number" id = "gravity" value = 0.4><br>
         Number of iterations: <input type = "number" id = "numIter" value = 2500><br>
-        Tile: <input type = "checkbox" id = "tile" checked>
+        Tile: <input type = "checkbox" id = "tile" unchecked>
         Animate: <input type = "checkbox" id = "animate" checked>
         Randomize: <input type = "checkbox" id = "randomize" checked><br>
+        Tiling Vertical Padding: <input type = "number" id = "tilingPaddingVertical" value = 20><br>
+        Tiling Horizontal Padding: <input type = "number" id = "tilingPaddingHorizontal" value = 20><br>
         <br>
         <input type="button" value="Set layout properties" onclick=setLayoutProperties()>
 
@@ -61,6 +63,8 @@
         </select>
         <input type="button" value="Highlight node(s)" onclick=highlightNodes()>
         <input type="button" value="Remove highlights" onclick=unhighlightNodes()>
+        <input type="button" value="Highlight neighbors of node(s)" onclick=highlightNeighborsOfSelected()>
+        <input type="button" value="Highlight processes of node(s)" onclick=highlightProcessesOfSelected()>
 
         <br>
         <input type="button" value="Add complex for selected" onclick=addCompound("complex")>
@@ -427,6 +431,8 @@
             tile: $('#tile')[0].checked,
             animate: $('#animate')[0].checked,
             randomize: $('#randomize')[0].checked,
+            tilingPaddingVertical: $('#tilingPaddingVertical')[0].value,
+            tilingPaddingHorizontal: $('#tilingPaddingHorizontal')[0].value,
         };
 
         agent.sendRequest("agentSetLayoutProperties", {param:layoutProperties});
@@ -502,6 +508,14 @@
         nodeIdList.forEach(function(nodeId){
             agent.sendRequest("agentChangeNodeAttributeRequest", {id: nodeId, attStr: "highlightColor", attVal: agent.colorCode});
         });
+    }
+    function highlightNeighborsOfSelected(){
+        highlightNodes(); //first select nodes, then highlight neighbors
+        agent.sendRequest("agentHighlightRequest", {val:1});
+    }
+    function highlightProcessesOfSelected(){
+        highlightNodes(); //first select nodes, then highlight neighbors
+        agent.sendRequest("agentHighlightRequest", {val:2});
     }
     function unhighlightNodes(){
         var nodeIdList = $('#nodeId').val();
@@ -633,6 +647,8 @@
         $('#tile')[0].checked = layoutProperties.tile;
         $('#animate')[0].checked= layoutProperties.animate;
         $('#randomize')[0].checked= layoutProperties.randomize;
+        $('#tilingPaddingVertical')[0].value= layoutProperties.tilingPaddingVertical;
+        $('#tilingPaddingHorizontal')[0].value= layoutProperties.tilingPaddingHorizontal;
 
 
     }
@@ -672,12 +688,14 @@
     }
 
     function writeCommand(op){
-        var id = op.id !=null? op.id:'';
+        var id = op.elId !=null? op.elId:'';
         var param = op.param !=null? JSON.stringify(op.param):'';
 
-        var command = "<b>" + op.userName + " (" + formatTime(op) + "): " + "</b>"  +op.name +  " " + id+  " " +param;
-        $('#operationHistory').append("<li>" + command+ "</li>");
+        var command = "<b>" + op.userName + " (" + formatTime(op) + "): " + "</b>"  + id + " " + op.opName + " " +param;
+        //can also be called as:
+        // var command = JSON.stringify(op);
 
+        $('#operationHistory').append("<li>" + command+ "</li>");
         $('#operationHistory').trigger('contentchanged');
 
     }

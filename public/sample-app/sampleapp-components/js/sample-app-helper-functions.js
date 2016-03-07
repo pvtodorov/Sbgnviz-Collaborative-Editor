@@ -3,6 +3,44 @@
  */
 
 
+function loadXMLDoc(filename) {
+
+    //funda  xhttp.open("GET", filename, false);
+
+
+    //Funda: added to make asynchronous
+    var handleStateChange = function () {
+        switch (xhttp.readyState) {
+            case 0 : // UNINITIALIZED
+            case 1 : // LOADING
+            case 2 : // LOADED
+            case 3 : // INTERACTIVE
+                break;
+            case 4 : // COMPLETED
+                return xhttp.responseXML;
+                break;
+            default: alert("error");
+
+        }
+    };
+
+    var xhttp;
+    if (window.XMLHttpRequest) {
+        xhttp = new XMLHttpRequest();
+    }
+    else {
+        xhttp = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    xhttp.onreadystatechange=handleStateChange;
+
+    xhttp.open("GET",filename,true);
+
+
+    xhttp.send();
+
+
+};
+
 function dynamicResize()
 {
 
@@ -377,7 +415,7 @@ function nodeQtipFunction(node) {
         },
         position: {
             my: 'top center',
-            at: 'bottom center',
+            at: 'bottom right',
             adjust: {
                 cyViewport: true
             }

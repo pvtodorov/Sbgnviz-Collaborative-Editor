@@ -42,7 +42,7 @@ module.exports =  function(model, docId, userId, userName) {
 
         addImage: function(data, user){
             model.pass({user:user}).push('_page.doc.images', data);
-            this.updateHistory('image', data.filePath);
+            this.updateHistory('image', null, data.filePath);
         },
 
         setName: function(userName){
@@ -65,17 +65,12 @@ module.exports =  function(model, docId, userId, userName) {
 
 
             model.set('_page.doc.layoutProperties', currentLayoutProperties); //synclayout
-            var layoutStr = currentLayoutProperties.name + " nodeRepulsion: " + currentLayoutProperties.nodeRepulsion + " nodeOverlap: " + currentLayoutProperties.nodeOverlap +
-                    " idealEdgeLength: " + currentLayoutProperties.idealEdgeLength + " edgeElasticity: " + currentLayoutProperties.edgeElasticity + " nestingFactor: " + currentLayoutProperties.nestingFactor + " nestingFactor: " + currentLayoutProperties.nestingFactor +
-                    " gravity: " + currentLayoutProperties.gravity + " numIter: " + currentLayoutProperties.numIter + " tile: " + currentLayoutProperties.tile + " animate: " + currentLayoutProperties.animate +
-                    " randomize: " + currentLayoutProperties.randomize + " tilingPaddingVertical: " + currentLayoutProperties.tilingPaddingVertical + " tilingPaddingHorizontal: " + currentLayoutProperties.tilingPaddingHorizontal ;
-            
-            this.updateHistory('layout', layoutStr);
+            this.updateHistory('layout', null, JSON.stringify(currentLayoutProperties));
             return currentLayoutProperties;
         },
         setLayoutProperties: function(layoutProperties){
             model.set('_page.doc.layoutProperties', layoutProperties); //synclayout
-
+            this.updateHistory('layout', null, JSON.stringify(layoutProperties));
         },
 
 
@@ -88,7 +83,7 @@ module.exports =  function(model, docId, userId, userName) {
             if(ind == -1)
                 this.updateHistory('load model');
             else
-                this.updateHistory('open sample ', ind);
+                this.updateHistory('open sample ', null, ind);
 
             return ind;
 
@@ -99,11 +94,11 @@ module.exports =  function(model, docId, userId, userName) {
             if(ind == -1)
                 this.updateHistory('load model');
             else
-                this.updateHistory('open sample ', ind);
+                this.updateHistory('open sample ', null, ind);
         },
 
         updateHistory: function(opName, elId, param){
-            var command = {userName: userName,name: opName, id: elId, param: param, time: new Date};
+            var command = {userName: userName, date: new Date, opName: opName, elId: elId, param: param};
             if(param != "") {
 
                 if (param == Number(param)) {
@@ -273,14 +268,13 @@ module.exports =  function(model, docId, userId, userName) {
 
 
             if(val == 0)
-                this.updateHistory('Remove highlights');
+                this.updateHistory('Remove highlights of selected elements by ' + userName);
             else if(val == 1)
-                this.updateHistory('Highlight neighbors');
+                this.updateHistory('Highlight neighbors of selected elements by ' + userName);
             else if(val == 2)
-                this.updateHistory('Highlight processes');
+                this.updateHistory('Highlight processes of selected elements by ' + userName);
 
 
-            this.updateHistory('highlight', val + " of selected by " + userId);
 
         },
 
@@ -386,7 +380,7 @@ module.exports =  function(model, docId, userId, userName) {
             //TODO: could be simplified to a single node/edge update
             model.set('_page.doc.jsonObj', cytoscapeJsGraph);
 
-            this.updateHistory('load graph');
+            //this.updateHistory('load graph');
         },
 
 

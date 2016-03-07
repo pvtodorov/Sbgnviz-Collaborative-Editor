@@ -29,20 +29,6 @@ var beforePerformLayout = function(){
     cy.edges().css('curve-style', 'bezier');
 };
 
-var getNodesData = function () {
-    var nodesData = {};
-    var nodes = cy.nodes();
-    for (var i = 0; i < nodes.length; i++) {
-        var node = nodes[i];
-        nodesData[node.id()] = {
-            width: node.width(),
-            height: node.height(),
-            x: node.position("x"),
-            y: node.position("y")
-        };
-    }
-    return nodesData;
-};
 
 function getXMLObject(itemId, loadXMLDoc) {
     switch (itemId) {
@@ -93,8 +79,8 @@ module.exports = function(){
     var editorActions = require('./EditorActionsManager.js');
     var sbgnContainer;
 
-    var sbgnLayoutProperties;
-    var sbgnProperties;
+    var sbgnLayout;
+    var sbgnProp;
 
 
     return {
@@ -157,8 +143,8 @@ module.exports = function(){
         },
         updateLayoutProperties: function(lp){
 
-        if(sbgnLayoutProperties)
-            sbgnLayoutProperties.updateLayoutProperties(lp);
+            if(sbgnLayout)
+                sbgnLayout.updateLayoutProperties(lp);
 
         },
 
@@ -176,6 +162,7 @@ module.exports = function(){
             else{
 
                 getXMLObject(ind, function (xmlObject) {
+
 
 
                     var jsonObj = sbgnmlToJson.convert(xmlObject);
@@ -199,13 +186,13 @@ module.exports = function(){
             editorActions.modelManager = modelManager;
 
 
-            sbgnLayoutProperties = new SBGNLayoutProperties(modelManager);
-            var layoutProperties = modelManager.updateLayoutProperties(sbgnLayoutProperties.defaultLayoutProperties);
-            sbgnLayoutProperties.initialize(layoutProperties);
+            sbgnLayout = new SBGNLayout(modelManager);
+            var layoutProperties = modelManager.updateLayoutProperties(sbgnLayout.defaultLayoutProperties);
+            sbgnLayout.initialize(layoutProperties);
 
 
-            sbgnProperties = new SBGNProperties();
-            sbgnProperties.initialize();
+            sbgnProp = new SBGNProperties();
+            sbgnProp.initialize();
 
 
 
@@ -269,6 +256,8 @@ module.exports = function(){
                 var ind = e.target.id;
 
 
+
+
                 self.updateSample(ind);
 
                 editorActions.modelManager.setSampleInd(ind, "me"); //let others know
@@ -288,7 +277,7 @@ module.exports = function(){
 
                 editorActions.manager.reset();
                 //TODO: why is this here?
-             //funda?????   cyMod.handleSBGNInspector(editorActions);
+                //funda?????   cyMod.handleSBGNInspector(editorActions);
             });
 
             $('.add-node-menu-item').click(function (e) {
@@ -828,8 +817,8 @@ module.exports = function(){
             });
 
             $("#layout-properties").click(function (e) {
-                var lp = editorActions.modelManager.updateLayoutProperties(sbgnLayoutProperties.defaultLayoutProperties);
-                sbgnLayoutProperties.render(lp);
+                var lp = editorActions.modelManager.updateLayoutProperties(sbgnLayout.defaultLayoutProperties);
+                sbgnLayout.render(lp);
             });
 
             $("#layout-properties-icon").click(function (e) {
@@ -837,7 +826,7 @@ module.exports = function(){
             });
 
             $("#sbgn-properties").click(function (e) {
-                sbgnProperties.render();
+                sbgnProp.render();
             });
             $("#properties-icon").click(function (e) {
                 $("#sbgn-properties").trigger('click');
@@ -945,19 +934,26 @@ module.exports = function(){
             $("#perform-layout").click(function (e) {
 
 
+                //var nodesData = {};
+                //var nodes = cy.nodes();
+                //for (var i = 0; i < nodes.length; i++) {
+                //    var node = nodes[i];
+                //    nodesData[node.id()] = {
+                //        width: node.width(),
+                //        height: node.height(),
+                //        x: node.position("x"),
+                //        y: node.position("y")
+                //    };
+                //}
 
-                var nodesData = getNodesData();
                 beforePerformLayout();
 
-                sbgnLayoutProperties.applyLayout();
+                sbgnLayout.applyLayout(editorActions.modelManager);
 
 
                 editorActions.manager._do(editorActions.PerformLayoutCommand(nodesData));
 
-
-                nodesData.firstTime = true;
-                editorActions.manager._do(editorActions.ReturnToPositionsAndSizesCommand(nodesData));
-
+                //       editorActions.manager._do(editorActions.ReturnToPositionsAndSizesCommand(nodesData));
 
 
                 editorActions.refreshUndoRedoButtonsStatus();
@@ -969,7 +965,7 @@ module.exports = function(){
             $("#perform-incremental-layout").click(function (e) {
                 beforePerformLayout();
 
-                sbgnLayoutProperties.applyIncrementalLayout();
+                sbgnLayout.applyIncrementalLayout();
             });
 
             $("#undo-last-action").click(function (e) {
@@ -1114,8 +1110,8 @@ module.exports = function(){
     }
 }
 
-//funda: no more backbone
-function SBGNLayoutProperties(modelManager){
+
+function SBGNLayout(modelManager){
 
 
     return{
@@ -1129,14 +1125,14 @@ function SBGNLayoutProperties(modelManager){
             nestingFactor: 0.1,
             gravity: 0.4,
             numIter: 2500,
-            tile: true,
+            tile: false,//funda: true gives error
             animate: true,
             randomize: true,
             tilingPaddingVertical: 20,//function() {
-               //funda return calculateTilingPaddings(parseInt(sbgnStyleRules['tiling-padding-vertical'], 10));
-           // },
+            //funda return calculateTilingPaddings(parseInt(sbgnStyleRules['tiling-padding-vertical'], 10));
+            // },
             tilingPaddingHorizontal: 20 // funda function() {
-                //funda return calculateTilingPaddings(parseInt(sbgnStyleRules['tiling-padding-horizontal'], 10));
+            //funda return calculateTilingPaddings(parseInt(sbgnStyleRules['tiling-padding-horizontal'], 10));
             //}
 
 
@@ -1145,7 +1141,6 @@ function SBGNLayoutProperties(modelManager){
 
         el: '#sbgn-layout-table',
         currentLayoutProperties: null,
-
 
 
         initialize: function(lp) {
@@ -1160,9 +1155,6 @@ function SBGNLayoutProperties(modelManager){
             self.template = _.template($("#layout-settings-template").html(), self.currentLayoutProperties);
 
 
-        },
-        copyProperties: function () {
-            this.currentLayoutProperties = _.clone(this.defaultLayoutProperties);
         },
 
         applyLayout: function () {
@@ -1257,7 +1249,6 @@ function SBGNLayoutProperties(modelManager){
 
     }};
 
-//funda: no more backbone
 function SBGNProperties(){
 
     return {

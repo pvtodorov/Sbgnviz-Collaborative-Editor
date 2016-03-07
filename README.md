@@ -484,8 +484,9 @@ string after http:&lt;ip&gt;:3000/ in the server address.</p>
 <p>[</p>
 <p>&nbsp;{</p>
 <p>&nbsp; &nbsp;userName: //name of the user who gave the command</p>
-<p>&nbsp; &nbsp;name: //name of the command</p>
-<p>&nbsp; &nbsp;id: //id of the affected element</p>
+<p>&nbsp; &nbsp;date: //date and time of the command</p>
+<p>&nbsp; &nbsp;opName: //name of the operation</p>
+<p>&nbsp; &nbsp;elId: //id of the affected element</p>
 <p>&nbsp; &nbsp;param: //operation parameters</p>
 <p>&nbsp; &nbsp;[</p>
 <p>&nbsp; &nbsp; &nbsp;{</p>
@@ -497,7 +498,6 @@ string after http:&lt;ip&gt;:3000/ in the server address.</p>
 <p>&nbsp; &nbsp; &nbsp; &nbsp;sbgnclass: //edge sbgnclass</p>
 <p>&nbsp; &nbsp; &nbsp;}</p>
 <p>&nbsp; &nbsp;]</p>
-<p>&nbsp; &nbsp;date: //date of the command</p>
 <p>&nbsp;}</p>
 <p>]</p>
 
