@@ -14,6 +14,7 @@ var trimLeft = /^\s+/,
 
 function tinycolor (color, opts) {
 
+
     color = (color) ? color : '';
     opts = opts || { };
 

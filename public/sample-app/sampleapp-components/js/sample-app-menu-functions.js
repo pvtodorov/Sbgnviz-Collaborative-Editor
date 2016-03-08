@@ -97,6 +97,7 @@ module.exports = function(){
 
         },
         getSelectedModelElements: function(requesterId){
+
             var elementIds = editorActions.modelManager.getSelectedModelElementIds(requesterId);
             var selectedElements = [];
             elementIds.forEach(function(elId){
@@ -110,7 +111,7 @@ module.exports = function(){
         removeHighlights: function(){
 
             var param ={
-                notSync: true
+                sync: false
             }
             editorActions.manager._do(editorActions.RemoveHighlightsCommand(param));
             editorActions.refreshUndoRedoButtonsStatus();
@@ -120,7 +121,7 @@ module.exports = function(){
         highlightNeighbors: function(requesterId){
 
             var param = {
-                notSync: true, //do not synchronize again
+                sync: false, //do not synchronize again
                 firstTime: true,
                 selectedEles : this.getSelectedModelElements(requesterId)
 
@@ -131,7 +132,7 @@ module.exports = function(){
         },
         highlightProcesses: function(requesterId){
             var param = {
-                notSync: true, //do not synchronize again
+                sync: false, //do not synchronize again
                 firstTime: true,
                 selectedEles : this.getSelectedModelElements(requesterId)
             };
@@ -701,7 +702,8 @@ module.exports = function(){
             $("#neighbors-of-selected").click(function (e) {
                 var param = {
                     firstTime: true,
-                    selectedEles: cy.elements(":selected")
+                    selectedEles: self.getSelectedModelElements(),
+                    sync: true
                 };
 
 
@@ -754,7 +756,8 @@ module.exports = function(){
             $("#processes-of-selected").click(function (e) {
                 var param = {
                     firstTime: true,
-                    selectedEles: cy.elements(":selected")
+                    selectedEles: self.getSelectedModelElements(),
+                   // selectedEles: cy.elements(":selected"),
                 };
 
                 editorActions.manager._do(editorActions.HighlightProcessesOfSelectedCommand(param));

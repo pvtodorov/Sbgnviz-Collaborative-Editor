@@ -26,7 +26,7 @@ var userCount;
 var socket;
 
 var modelManager;
-
+var oneColor = require('onecolor');
 app.on('model', function (model) {
 
 
@@ -221,7 +221,10 @@ function getNewColor(){
     var cHsl = [h, 70 + Math.random() * 30, 60 + Math.random() * 10];
 
   //  return ('hsla('+cHsl[0]  +', '+ cHsl[1] + '%, ' + cHsl[2] +'%, 1)');
-    return ('hsl('+cHsl[0]  +', '+ cHsl[1] + '%, ' + cHsl[2] +'%)');
+    var strHsl = 'hsl('+cHsl[0]  +', '+ cHsl[1] + '%, ' + cHsl[2] +'%)';
+
+  return oneColor(strHsl).hex();
+
 
 }
 
@@ -314,9 +317,10 @@ app.proto.init = function (model) {
 
 
     //trigger variable to check whether parts of the graph should be highlighted
-    model.on('change', '_page.doc.cy.highlight.mode', function(val, ind , passed) {
+    model.on('change', '_page.doc.cy.highlight.mode', function(val, ind ,passed) {
 
-        if(docReady && menu && passed.user == null){
+
+        if(docReady  && passed.user == null){
             var requesterId = model.get('_page.doc.cy.highlight.requesterId');
             if(val == 0)
                 menu.removeHighlights(requesterId);
@@ -384,10 +388,11 @@ app.proto.init = function (model) {
             var color;
 
             if (highlightColor != null)
-                color = tinycolor(highlightColor).toHexString();
+                color =  highlightColor;//tinycolor(highlightColor).toHexString();
             else
                 color = model.get('_page.doc.cy.nodes.' + id + '.backgroundColor');
 
+            //console.log(tinycolor(highlightColor).toHexString() +  " " +  model.get('_page.doc.cy.nodes.' + id + '.backgroundColor'));
 
             updateElementProperty(id, 'background-color', color, 'css');
         }
@@ -511,7 +516,8 @@ app.proto.init = function (model) {
         if(docReady && passed.user == null) {
             var color;
             if (highlightColor != null)
-                color = tinycolor(highlightColor).toHexString();//util.tuple2hex(util.hsl2tuple(highlightColor));
+                color = highlightColor;
+               // color = tinycolor(highlightColor).toHexString();//util.tuple2hex(util.hsl2tuple(highlightColor));
             else
                 color = model.get('_page.doc.cy.edges.' + id + '.lineColor');
 

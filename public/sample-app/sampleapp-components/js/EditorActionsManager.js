@@ -525,13 +525,13 @@ module.exports.highlightSelected = function(param) {
 
 
             elementsToHighlight = sbgnFiltering.highlightNeighborsofSelected(param.selectedEles);
-            if(!param.notSync && param.selectedEles.length > 0) //tell other users to highlight neighbors
+            if( param.sync) //tell other users to highlight neighbors
                 module.exports.modelManager.highlight(1, "me");
 
         }
         else if (param.highlightProcessesOfSelected) {
             elementsToHighlight = sbgnFiltering.highlightProcessesOfSelected(param.selectedEles);
-            if(!param.notSync &&  param.selectedEles.length > 0) //tell other users to highlight processes
+            if( param.sync) //tell other users to highlight processes
                 module.exports.modelManager.highlight(2, "me");
         }
         elementsToHighlight = elementsToHighlight.not(alreadyHighlighted);
@@ -542,8 +542,8 @@ module.exports.highlightSelected = function(param) {
         sbgnFiltering.highlightNodes(elementsToHighlight.nodes());
         sbgnFiltering.highlightEdges(elementsToHighlight.edges());
 
-        if(!param.notSync && param.selectedEles.length > 0) //tell other users to highlight neighbors
-            module.exports.modelManager.highlight(1, "me");
+        if(param.sync ) //tell other users to highlight neighbors
+             module.exports.modelManager.highlight(1, "me");
 
         //If there are some elements to not highlight handle them
         if (param.elesToNotHighlight != null) {
@@ -597,11 +597,13 @@ module.exports.removeHighlights = function(param) {
 
     sbgnFiltering.removeHighlights();
 
-    if(param && !param.notSync)
-        module.exports.modelManager.highlight(0, "me");
+    if(param && param.sync)
+      module.exports.modelManager.highlight(0, "me");
 
     result.elesToNotHighlight = cy.elements(":visible").not(result.elesToHighlight);
     result.firstTime = false;
+
+
     return result;
 }
 

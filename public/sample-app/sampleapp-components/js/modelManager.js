@@ -127,24 +127,25 @@ module.exports =  function(model, docId, userId, userName) {
             return nodePath.get();
         },
 
+
         //Selected by the given user
         getSelectedModelElementIds: function(requesterId){
 
-            var requester;
-            if(requesterId == null) //current user
-                requester = user;
-            else
-                requester = model.at('users.' + requesterId);
 
+            var userColor;
+            if(requesterId != null) {
+                var requester = model.at('users.' + requesterId)
+                userColor = requester.get('colorCode');
+            }
 
-            var userColor = requester.get('colorCode');
             var selectedNodes = [];
             var nodes = model.get('_page.doc.cy.nodes');
 
 
             for (id in nodes) {
                 if (nodes.hasOwnProperty(id)) {
-                    if (model.get('_page.doc.cy.nodes.' + id + '.highlightColor') == userColor)
+
+                    if (requesterId && model.get('_page.doc.cy.nodes.' + id + '.highlightColor') == userColor || !requesterId && model.get('_page.doc.cy.nodes.' + id + '.highlightColor') != null )
                         selectedNodes.push(id);
                 }
 
@@ -263,17 +264,16 @@ module.exports =  function(model, docId, userId, userName) {
 
         highlight: function(val, user){
 
-            model.pass({user: user}).set('_page.doc.cy.highlight.requesterId', userId);
+         //   model.pass({user: user}).set('_page.doc.cy.highlight.requesterId', userId);
             model.pass({user: user}).set('_page.doc.cy.highlight.mode', val);
 
 
             if(val == 0)
-                this.updateHistory('Remove highlights of selected elements by ' + userName);
+                this.updateHistory('Remove highlights of selected elements');
             else if(val == 1)
-                this.updateHistory('Highlight neighbors of selected elements by ' + userName);
+                this.updateHistory('Highlight neighbors of selected elements');
             else if(val == 2)
-                this.updateHistory('Highlight processes of selected elements by ' + userName);
-
+                this.updateHistory('Highlight processes of selected elements');
 
 
         },
