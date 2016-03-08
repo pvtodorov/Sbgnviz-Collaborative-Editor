@@ -13,10 +13,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="88f2e8a3-abc2-4ba9-848d-5914e68f76f8" name="Default" comment="">
-      <change type="MOVED" beforePath="$PROJECT_DIR$/public/src/utilities/tinycolor.js" afterPath="$PROJECT_DIR$/agent-interaction/tinycolor.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/agent-interaction/agentAPI.js" afterPath="$PROJECT_DIR$/agent-interaction/agentAPI.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/agent-interaction/computerAgent.html" afterPath="$PROJECT_DIR$/agent-interaction/computerAgent.html" />
     </list>
     <ignored path="CWC.iws" />
@@ -40,6 +37,16 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/lib/index.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-11.551724">
+              <caret line="277" column="24" selection-start-line="277" selection-start-column="16" selection-end-line="277" selection-end-column="24" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="EditorActionsManager.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/EditorActionsManager.js">
           <provider selected="true" editor-type-id="text-editor">
@@ -54,7 +61,7 @@
         <entry file="file://$PROJECT_DIR$/index.js">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="225" column="8" selection-start-line="225" selection-start-column="8" selection-end-line="225" selection-end-column="8" />
+              <caret line="185" column="42" selection-start-line="185" selection-start-column="33" selection-end-line="185" selection-end-column="42" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
               </folding>
@@ -145,30 +152,30 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="computerAgent.html" pinned="false" current-in-tab="false">
+      <file leaf-file-name="computerAgent.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/agent-interaction/computerAgent.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-12.45283">
-              <caret line="44" column="50" selection-start-line="44" selection-start-column="50" selection-end-line="44" selection-end-column="50" />
+            <state vertical-scroll-proportion="0.36300692">
+              <caret line="767" column="38" selection-start-line="767" selection-start-column="38" selection-end-line="767" selection-end-column="38" />
               <folding>
-                <marker date="1457461294364" expanded="true" signature="27411:27862" placeholder="..." />
-                <marker date="1457461294364" expanded="true" signature="27439:27449" placeholder="..." />
-                <marker date="1457461294364" expanded="false" signature="27603:27613" placeholder="..." />
-                <marker date="1457461294364" expanded="false" signature="27758:27781" placeholder="..." />
-                <marker date="1457461294364" expanded="true" signature="28612:28870" placeholder="..." />
-                <marker date="1457461294364" expanded="false" signature="28766:28789" placeholder="..." />
-                <marker date="1457461294364" expanded="true" signature="29707:29730" placeholder="..." />
-                <marker date="1457461294364" expanded="true" signature="29832:29855" placeholder="..." />
+                <marker date="1457461936432" expanded="true" signature="27411:27862" placeholder="..." />
+                <marker date="1457461936432" expanded="true" signature="27439:27449" placeholder="..." />
+                <marker date="1457461936432" expanded="false" signature="27603:27613" placeholder="..." />
+                <marker date="1457461936432" expanded="false" signature="27758:27781" placeholder="..." />
+                <marker date="1457461936432" expanded="true" signature="28612:28870" placeholder="..." />
+                <marker date="1457461936432" expanded="false" signature="28766:28789" placeholder="..." />
+                <marker date="1457461936432" expanded="true" signature="29707:29730" placeholder="..." />
+                <marker date="1457461936432" expanded="true" signature="29832:29855" placeholder="..." />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="agentAPI.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="agentAPI.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/agent-interaction/agentAPI.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.20974155">
-              <caret line="242" column="49" selection-start-line="242" selection-start-column="49" selection-end-line="242" selection-end-column="49" />
+            <state vertical-scroll-proportion="-9.827586">
+              <caret line="19" column="26" selection-start-line="19" selection-start-column="26" selection-end-line="19" selection-end-column="26" />
               <folding />
             </state>
           </provider>
@@ -268,9 +275,9 @@
         <option value="$PROJECT_DIR$/package.json" />
         <option value="$PROJECT_DIR$/views/index.html" />
         <option value="$PROJECT_DIR$/README.md" />
-        <option value="$PROJECT_DIR$/agent-interaction/computerAgent.html" />
         <option value="$PROJECT_DIR$/index.js" />
         <option value="$PROJECT_DIR$/agent-interaction/agentAPI.js" />
+        <option value="$PROJECT_DIR$/agent-interaction/computerAgent.html" />
       </list>
     </option>
   </component>
@@ -517,20 +524,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="lib" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="CWC" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Sbgnviz-Collaborative-Editor" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="images" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -1079,7 +1072,7 @@
       <workItem from="1456880252129" duration="5000" />
       <workItem from="1456943118974" duration="8430000" />
       <workItem from="1456958718536" duration="34399000" />
-      <workItem from="1457124208574" duration="25956000" />
+      <workItem from="1457124208574" duration="26481000" />
     </task>
     <task id="LOCAL-00001" summary="Idea">
       <created>1446753281602</created>
@@ -1243,11 +1236,17 @@
       <option name="project" value="LOCAL" />
       <updated>1457461021600</updated>
     </task>
-    <option name="localTasksCounter" value="28" />
+    <task id="LOCAL-00028" summary="Some updates in command history formatting. &#10; Agent highlighting neighbors/processes included but highlighting is still problematic.&#10; -Fixes in getting new user color">
+      <created>1457461441720</created>
+      <option name="number" value="00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1457461441720</updated>
+    </task>
+    <option name="localTasksCounter" value="29" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="734934000" />
+    <option name="totallyTimeSpent" value="735459000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1527,14 +1526,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/server.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.49304175">
-          <caret line="113" column="0" selection-start-line="113" selection-start-column="0" selection-end-line="113" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/biogene-info.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1567,14 +1558,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="89" column="4" selection-start-line="89" selection-start-column="4" selection-end-line="89" selection-end-column="4" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.333002">
-          <caret line="185" column="37" selection-start-line="185" selection-start-column="28" selection-end-line="185" selection-end-column="37" />
           <folding />
         </state>
       </provider>
@@ -1704,58 +1687,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/views/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-13.125">
-          <caret line="21" column="0" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
-          <folding>
-            <element signature="n#style#0;n#div#6;n#Body:#0;n#Head:#0;n#Title:#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/package.json">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.6379822">
           <caret line="43" column="25" selection-start-line="43" selection-start-column="25" selection-end-line="43" selection-end-column="25" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/README.md">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-10.698113">
-          <caret line="86" column="58" selection-start-line="86" selection-start-column="58" selection-end-line="86" selection-end-column="58" />
-          <folding>
-            <element signature="n#style#0;n#td#1;n#tr#13;n#table#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/agent-interaction/computerAgent.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-12.45283">
-          <caret line="44" column="50" selection-start-line="44" selection-start-column="50" selection-end-line="44" selection-end-column="50" />
-          <folding>
-            <marker date="1457461294364" expanded="true" signature="27411:27862" placeholder="..." />
-            <marker date="1457461294364" expanded="true" signature="27439:27449" placeholder="..." />
-            <marker date="1457461294364" expanded="false" signature="27603:27613" placeholder="..." />
-            <marker date="1457461294364" expanded="false" signature="27758:27781" placeholder="..." />
-            <marker date="1457461294364" expanded="true" signature="28612:28870" placeholder="..." />
-            <marker date="1457461294364" expanded="false" signature="28766:28789" placeholder="..." />
-            <marker date="1457461294364" expanded="true" signature="29707:29730" placeholder="..." />
-            <marker date="1457461294364" expanded="true" signature="29832:29855" placeholder="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="225" column="8" selection-start-line="225" selection-start-column="8" selection-end-line="225" selection-end-column="8" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1769,11 +1705,74 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/lib/server.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.36328503">
+          <caret line="104" column="11" selection-start-line="104" selection-start-column="11" selection-end-line="104" selection-end-column="11" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-11.551724">
+          <caret line="277" column="24" selection-start-line="277" selection-start-column="16" selection-end-line="277" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="185" column="42" selection-start-line="185" selection-start-column="33" selection-end-line="185" selection-end-column="42" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-10.698113">
+          <caret line="86" column="58" selection-start-line="86" selection-start-column="58" selection-end-line="86" selection-end-column="58" />
+          <folding>
+            <element signature="n#style#0;n#td#1;n#tr#13;n#table#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-13.125">
+          <caret line="21" column="0" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
+          <folding>
+            <element signature="n#style#0;n#div#6;n#Body:#0;n#Head:#0;n#Title:#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/agent-interaction/agentAPI.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.20974155">
-          <caret line="242" column="49" selection-start-line="242" selection-start-column="49" selection-end-line="242" selection-end-column="49" />
+        <state vertical-scroll-proportion="-9.827586">
+          <caret line="19" column="26" selection-start-line="19" selection-start-column="26" selection-end-line="19" selection-end-column="26" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/agent-interaction/computerAgent.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.36300692">
+          <caret line="767" column="38" selection-start-line="767" selection-start-column="38" selection-end-line="767" selection-end-column="38" />
+          <folding>
+            <marker date="1457461936432" expanded="true" signature="27411:27862" placeholder="..." />
+            <marker date="1457461936432" expanded="true" signature="27439:27449" placeholder="..." />
+            <marker date="1457461936432" expanded="false" signature="27603:27613" placeholder="..." />
+            <marker date="1457461936432" expanded="false" signature="27758:27781" placeholder="..." />
+            <marker date="1457461936432" expanded="true" signature="28612:28870" placeholder="..." />
+            <marker date="1457461936432" expanded="false" signature="28766:28789" placeholder="..." />
+            <marker date="1457461936432" expanded="true" signature="29707:29730" placeholder="..." />
+            <marker date="1457461936432" expanded="true" signature="29832:29855" placeholder="..." />
+          </folding>
         </state>
       </provider>
     </entry>
