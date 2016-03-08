@@ -145,6 +145,28 @@ module.exports = function(){
 
 
         },
+
+        hideSelected: function(syncVal){
+            var param = {
+                sync: syncVal,
+                firstTime: true,
+                selectedEles : this.getSelectedModelElements()
+            };
+
+            editorActions.manager._do(editorActions.HideSelectedCommand(param));
+            editorActions.refreshUndoRedoButtonsStatus();
+        },
+
+        showSelected: function(syncVal){
+            var param = {
+                sync: syncVal,
+                firstTime: true,
+                selectedEles : this.getSelectedModelElements()
+            };
+            editorActions.manager._do(editorActions.ShowSelectedCommand(param));
+            editorActions.refreshUndoRedoButtonsStatus();
+        },
+
         updateLayoutProperties: function(lp){
 
             if(sbgnLayout)
@@ -622,10 +644,11 @@ module.exports = function(){
                     });
             });
             $("#hide-selected").click(function (e) {
-                var param = {};
-                param.firstTime = true;
-                editorActions.manager._do(editorActions.HideSelectedCommand(param));
-                editorActions.refreshUndoRedoButtonsStatus();
+                self.hideSelected(true);
+                //var param = {};
+                //param.firstTime = true;
+                //editorActions.manager._do(editorActions.HideSelectedCommand(param));
+                //editorActions.refreshUndoRedoButtonsStatus();
             });
             $("#hide-selected-icon").click(function (e) {
                 $("#hide-selected").trigger('click');
@@ -633,10 +656,11 @@ module.exports = function(){
 
 
             $("#show-selected").click(function (e) {
-                var param = {};
-                param.firstTime = true;
-                editorActions.manager._do(editorActions.ShowSelectedCommand(param));
-                editorActions.refreshUndoRedoButtonsStatus();
+                self.showSelected(true);
+                //var param = {};
+                //param.firstTime = true;
+                //editorActions.manager._do(editorActions.ShowSelectedCommand(param));
+                //editorActions.refreshUndoRedoButtonsStatus();
             });
             $("#show-selected-icon").click(function (e) {
                 $("#show-selected").trigger('click');

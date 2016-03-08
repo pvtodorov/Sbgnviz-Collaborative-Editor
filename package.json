@@ -31,8 +31,6 @@
     "express": "^3.4.8",
     "hiredis": "^0.2.0",
     "install": "^0.5.4",
-    "jquery": "^2.2.1",
-    "jsdom": "^8.1.0",
     "livedb": "^0.5.9",
     "livedb-mongo": "~0.3.0",
     "onecolor": "^2.5.0",

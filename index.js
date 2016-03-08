@@ -323,13 +323,27 @@ app.proto.init = function (model) {
         if(docReady  && passed.user == null){
 
             if(val == 0)
-                menu.removeHighlights( false);
+                menu.removeHighlights( false); //do not synchronize afterwards
             else if(val == 1)
-                menu.highlightNeighbors( false);
+                menu.highlightNeighbors( false);//do not synchronize afterwards
             else if(val == 2)
-                menu.highlightProcesses( false);
+                menu.highlightProcesses( false);//do not synchronize afterwards
         }
 
+    });
+
+    //trigger variable to check whether parts of the graph should be hidden/shown
+    model.on('change', '_page.doc.cy.hideShow.mode', function(val, ind ,passed) {
+
+
+        if(docReady  && passed.user == null){
+
+            if(val == 0)
+                menu.hideSelected(false);//do not synchronize afterwards
+            else if(val == 1)
+                menu.showSelected(false);//do not synchronize afterwards
+
+        }
 
     });
 

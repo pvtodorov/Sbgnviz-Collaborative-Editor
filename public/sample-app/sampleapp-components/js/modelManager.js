@@ -29,7 +29,6 @@ module.exports =  function(model, docId, userId, userName) {
 
     var user = model.at('users.' + userId);
 
-    var selectedNodes = [];
 
 
     model.ref('_page.doc', 'documents.' + docId);
@@ -253,7 +252,7 @@ module.exports =  function(model, docId, userId, userName) {
 
         highlight: function(val, user){
 
-         //   model.pass({user: user}).set('_page.doc.cy.highlight.requesterId', userId);
+
             model.pass({user: user}).set('_page.doc.cy.highlight.mode', val);
 
 
@@ -263,6 +262,18 @@ module.exports =  function(model, docId, userId, userName) {
                 this.updateHistory('Highlight neighbors of selected elements');
             else if(val == 2)
                 this.updateHistory('Highlight processes of selected elements');
+
+
+        },
+
+        hideShow: function(val, user){
+            model.pass({user: user}).set('_page.doc.cy.hideShow.mode', val);
+
+
+            if(val == 0)
+                this.updateHistory('Hide selected elements');
+            else if(val == 1)
+                this.updateHistory('Show selected elements');
 
 
         },
@@ -451,6 +462,8 @@ module.exports =  function(model, docId, userId, userName) {
                 else
                     this.changeModelNodeAttribute('sbgnStatesAndInfos', node.id(),node.data('sbgnstatesandinfos'), user);
 
+
+
                 /*  var width = nodePath.get('width');
                   if (width != null) {
 
@@ -600,6 +613,7 @@ module.exports =  function(model, docId, userId, userName) {
 
 
 
+            model.set('_page.doc.cy.hideShow.mode', -1); //neither hide nor show
 
         }
     }

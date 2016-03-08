@@ -13,19 +13,19 @@ var sbgnFiltering = {
         removedEles = removedEles.union(nodesNotToShow.remove());
         return removedEles;
     },
-
-    hideSelected: function(){
+//funda changed this: selectedEles given as parameter
+    hideSelected: function(selectedEles){
         var allNodes = cy.nodes(":visible");
-        var selectedNodes = cy.nodes(":selected");
+        var selectedNodes = selectedEles;//cy.nodes(":selected");
         var nodesToShow = this.expandRemainingNodes(selectedNodes, allNodes);
         this.applyFilter(allNodes.not(nodesToShow));
 
         cy.elements(":selected").unselect();
     },
-
-    showSelected: function(){
+//funda changed this: selectedEles given as parameter
+    showSelected: function(selectedEles){
         var allNodes = cy.nodes();
-        var selectedNodes = cy.nodes(":selected");
+        var selectedNodes = selectedEles;//cy.nodes(":selected");
         var nodesToShow = this.expandNodes(selectedNodes);
         this.applyFilter(allNodes.not(nodesToShow));
 
@@ -36,7 +36,7 @@ var sbgnFiltering = {
         this.removeFilter();
     },
 
-    //fundaL changed this
+    //funda changed this: selectedEles given as parameter
     highlightNeighborsofSelected: function(selectedEles){
         selectedEles = selectedEles.add(selectedEles.parents("node[sbgnclass='complex']"));
         selectedEles = selectedEles.add(selectedEles.descendants());

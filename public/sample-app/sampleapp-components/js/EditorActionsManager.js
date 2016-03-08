@@ -462,9 +462,6 @@ module.exports.moveNodes = function(positionDiff, nodes) {
 
         module.exports.modelManager.moveModelNode(node.id(), node.position(), "me");
 
-
-
-
         var children = node.children();
         module.exports.moveNodes(positionDiff, children);
 
@@ -475,21 +472,37 @@ module.exports.moveNodes = function(positionDiff, nodes) {
 module.exports.hideSelected = function(param) {
     var currentNodes = cy.nodes(":visible");
     if (param.firstTime) {
-        sbgnFiltering.hideSelected();
+        if(param.sync) //first hide on the other side to make sure elements don't get unselected
+            module.exports.modelManager.hideShow(0, "me");
+
+        sbgnFiltering.hideSelected(param.selectedEles); //funda changed
+
+
     }
     else {
+        if(param.sync)
+            module.exports.modelManager.hideShow(1, "me");
         sbgnFiltering.showJustGivenNodes(param.nodesToShow);
+
     }
+
+
     return currentNodes;
 }
 
 module.exports.showSelected = function(param) {
     var currentNodes = cy.nodes(":visible");
     if (param.firstTime) {
-        sbgnFiltering.showSelected();
+        if(param.sync)
+            module.exports.modelManager.hideShow(1, "me");
+        sbgnFiltering.showSelected(param.selectedEles); //funda changed
+
     }
     else {
+        if(param.sync)
+            module.exports.modelManager.hideShow(1, "me");
         sbgnFiltering.showJustGivenNodes(param.nodesToShow);
+
     }
     return currentNodes;
 }
@@ -497,6 +510,8 @@ module.exports.showSelected = function(param) {
 module.exports.showAll = function() {
     var currentNodes = cy.nodes(":visible");
     sbgnFiltering.showAll();
+    if(param.sync)
+        module.exports.modelManager.hideShow(1, "me");
     return currentNodes;
 }
 
@@ -505,6 +520,8 @@ module.exports.showJustGivenNodes = function(nodesToShow) {
     param.nodesToShow = cy.nodes(":visible");
     param.firstTime = false;
     sbgnFiltering.showJustGivenNodes(nodesToShow);
+    if(param.sync)
+        module.exports.modelManager.hideShow(1, "me");
     return param;
 }
 
@@ -559,6 +576,7 @@ module.exports.highlightSelected = function(param) {
 
 
 
+    result.sync = true;
     result.elesToNotHighlight = elementsToHighlight;
 
     return result;
@@ -571,9 +589,13 @@ module.exports.notHighlightEles = function(param) {
     var result = {};
 
     if (param.allElementsWasNotHighlighted) {
+
         sbgnFiltering.removeHighlights(true);
         result.elesToHighlight = elesToNotHighlight;
         result.elesToNotHighlight = cy.elements(":visible").not(elesToNotHighlight);
+
+        if(param.sync)
+            module.exports.modelManager.highlight(0, "me");
     }
     else {
         sbgnFiltering.notHighlightNodes(elesToNotHighlight.nodes());
@@ -584,6 +606,7 @@ module.exports.notHighlightEles = function(param) {
         if(param.sync)
             module.exports.modelManager.highlight(0, "me");
     }
+
 
     result.firstTime = false;
     return result;
