@@ -580,6 +580,9 @@ module.exports.notHighlightEles = function(param) {
         sbgnFiltering.notHighlightEdges(elesToNotHighlight.edges());
         elesToNotHighlight.removeData("highlighted");
         result.elesToHighlight = elesToNotHighlight;
+
+        if(param.sync)
+            module.exports.modelManager.highlight(0, "me");
     }
 
     result.firstTime = false;
@@ -597,7 +600,7 @@ module.exports.removeHighlights = function(param) {
 
     sbgnFiltering.removeHighlights();
 
-    if(param && param.sync)
+    if(param.sync)
       module.exports.modelManager.highlight(0, "me");
 
     result.elesToNotHighlight = cy.elements(":visible").not(result.elesToHighlight);
@@ -1195,9 +1198,9 @@ module.exports.HighlightProcessesOfSelectedCommand = function (param) {
     param.highlightProcessesOfSelected = true;
     return new Command(module.exports.highlightSelected, module.exports.notHighlightEles, param, "highlightProcessesOfSelected");
 };
-//Funda included param = null
-module.exports.RemoveHighlightsCommand = function () {
-    return new Command(module.exports.removeHighlights, module.exports.highlightSelected, null, "removeHighlights");
+
+module.exports.RemoveHighlightsCommand = function (param) {
+    return new Command(module.exports.removeHighlights, module.exports.highlightSelected, param, "removeHighlights");
 };
 
 module.exports.CreateCompoundForSelectedNodesCommand = function (param) {

@@ -860,7 +860,7 @@ var sbgnStyleSheet = cytoscape.stylesheet()
     })
     .selector("node.changeBorderColor")
     .css({
-        'border-color': 'data(borderColor)'
+        'border-color':'data(borderColor)'
     })
     .selector("node.changeBorderColor:selected")
     .css({

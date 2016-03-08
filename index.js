@@ -321,13 +321,13 @@ app.proto.init = function (model) {
 
 
         if(docReady  && passed.user == null){
-            var requesterId = model.get('_page.doc.cy.highlight.requesterId');
+
             if(val == 0)
-                menu.removeHighlights(requesterId);
+                menu.removeHighlights( false);
             else if(val == 1)
-                menu.highlightNeighbors(requesterId);
+                menu.highlightNeighbors( false);
             else if(val == 2)
-                menu.highlightProcesses(requesterId);
+                menu.highlightProcesses( false);
         }
 
 
@@ -382,17 +382,15 @@ app.proto.init = function (model) {
 
     model.on('change', '_page.doc.cy.nodes.*.highlightColor', function(id, highlightColor, prev,passed){
 
-
         if(docReady && passed.user == null) {
 
             var color;
 
             if (highlightColor != null)
-                color =  highlightColor;//tinycolor(highlightColor).toHexString();
+                color =  highlightColor;
             else
                 color = model.get('_page.doc.cy.nodes.' + id + '.backgroundColor');
 
-            //console.log(tinycolor(highlightColor).toHexString() +  " " +  model.get('_page.doc.cy.nodes.' + id + '.backgroundColor'));
 
             updateElementProperty(id, 'background-color', color, 'css');
         }
@@ -517,7 +515,6 @@ app.proto.init = function (model) {
             var color;
             if (highlightColor != null)
                 color = highlightColor;
-               // color = tinycolor(highlightColor).toHexString();//util.tuple2hex(util.hsl2tuple(highlightColor));
             else
                 color = model.get('_page.doc.cy.edges.' + id + '.lineColor');
 
@@ -774,7 +771,7 @@ app.proto.uploadFile = function(evt){
         reader.readAsDataURL(file);
 
         //Add file name as a text message
-        this.model.set('_page.newComment', "Sent image: "  + filePath );//+  ' <img src="' + evt.target.result + '" onclick ="openImage(this)" onmouseover ="showQTip(this)" /> ');
+        this.model.set('_page.newComment', "Sent image: "  + filePath );
 
         this.app.proto.add(this.model, filePath);
 

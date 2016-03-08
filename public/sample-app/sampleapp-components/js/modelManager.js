@@ -128,29 +128,18 @@ module.exports =  function(model, docId, userId, userName) {
         },
 
 
-        //Selected by the given user
-        getSelectedModelElementIds: function(requesterId){
 
-
-            var userColor;
-            if(requesterId != null) {
-                var requester = model.at('users.' + requesterId)
-                userColor = requester.get('colorCode');
-            }
+        getSelectedModelElementIds: function(){
 
             var selectedNodes = [];
             var nodes = model.get('_page.doc.cy.nodes');
 
-
             for (id in nodes) {
                 if (nodes.hasOwnProperty(id)) {
-
-                    if (requesterId && model.get('_page.doc.cy.nodes.' + id + '.highlightColor') == userColor || !requesterId && model.get('_page.doc.cy.nodes.' + id + '.highlightColor') != null )
+                    if (model.get('_page.doc.cy.nodes.' + id + '.highlightColor') != null )
                         selectedNodes.push(id);
                 }
-
             }
-
 
             return selectedNodes;
         },

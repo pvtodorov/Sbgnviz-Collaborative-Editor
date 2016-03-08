@@ -54,6 +54,7 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
             window.cy = this;
 
             var edges = cy.edges();
+            var nodes = cy.nodes();
 
 
             for (var i = 0; i < edges.length; i++) {
@@ -67,6 +68,22 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
             }
 
             refreshPaddings();
+
+            for (var i = 0; i < nodes.length; i++) {
+                var node = nodes[i];
+                node.data("borderColor", node.css('border-color'));
+                node.addClass('changeBorderColor');
+
+                node.data("backgroundOpacity", node.css('background-opacity'));
+                node.addClass('changeBackgroundOpacity');
+            }
+
+            for (var i = 0; i < edges.length; i++) {
+                var edge = edges[i];
+                edge.data("lineColor", edge.css('line-color'));
+                edge.addClass('changeLineColor');
+            }
+
             //TODO: if this is called before other client is ready, this causes problems
             editorActions.modelManager.initModel(cytoscapeJsGraph, cy.nodes(), cy.edges(), "me");
 
