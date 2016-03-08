@@ -67,10 +67,7 @@ websockets (socket.io.js). An agent is initialized with a name
 <h4 class="western"><a name="h.1eu245k1egzd"></a>Public Attributes:</h4>
 <p>agentId: (string) A unique id</p>
 <p>agentName: (string) Agent name</p>
-<p>colorCode: A specific color to identify the agent operations. It
-should be a string in hsla format as: “hsla(H, S, L%, 1)”, where
-H (integer), S (float)&nbsp;and L (float)&nbsp;are hue, saturation
-and lightness values.</p>
+<p>colorCode: A specific color in hex format to identify the agent operations.</p>
 <p>selectedNode: The node object on which the agent is performing
 operations. It has attributes such as position ={x:&lt;posX&gt;,y:&lt;posY&gt;},
 width, height, borderWidth, borderHeight, backgroundColor, sbgnLabel,
