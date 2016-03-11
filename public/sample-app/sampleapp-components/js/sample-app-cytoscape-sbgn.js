@@ -123,6 +123,7 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
                         initialHeight: sourceNode.height(),
                         width: sourceNode.width(),
                         height: sourceNode.height(),
+                        sync: true //synchronize with other users
                     }
 
 
@@ -135,6 +136,7 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
                 stop: function (sourceNode) {
                     paramResize.width = sourceNode.width();
                     paramResize.height = sourceNode.height();
+
                     editorActions.manager._do(new editorActions.ResizeNodeCommand(paramResize));
                     editorActions.refreshUndoRedoButtonsStatus();
 
@@ -202,12 +204,13 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
                         }
                     }
 
-                    param.newEdge = {
+                    param = {
                         source: source,
                         target: target,
-                        sbgnclass: sbgnclass
+                        sbgnclass: sbgnclass,
+                        firstTime: true,
+                        sync:true
                     };
-                    param.firstTime = true;
                     editorActions.manager._do(new editorActions.AddEdgeCommand(param));
                     modeHandler.setSelectionMode();
                     var edge = cy.edges()[cy.edges().length -1].select();
@@ -305,15 +308,12 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
             });
 
 
-            cy.on('select', 'node', function(event) {
-                editorActions.manager._do(editorActions.SelectNodeCommand(this));
-            });
 
             cy.on('unselect', 'node', function() {
                 editorActions.manager._do(editorActions.UnselectNodeCommand(this));
 
             });
-            cy.on('grab', 'node', function(event) {
+            cy.on('grab', 'node', function(event) { //Also works as 'select'
                 editorActions.manager._do(editorActions.SelectNodeCommand(this));
             });
 
@@ -358,7 +358,7 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
                 cy.forceRender();
             });
 
-            cy.on('cxttap', 'node', function (event) {
+            cy.on('cxttap', 'node', function (event) { //funda not working on Chrome!!!!!
                 var node = this;
                 $(".qtip").remove();
 
@@ -452,14 +452,8 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
                 $("#node-label-textbox").blur();
                 $('.ctx-bend-operation').css('display', 'none');
 
+                //label change synchronization is done in menu-functions
                 if(nodeLabelChanged){
-                    var param ={
-                        ele: prevNode,
-                        data: $("#node-label-textbox").val(),
-                    };
-
-            //        editorActions.manager._do(editorActions.ChangeNodeLabelCommand(param));
-
 
                     nodeLabelChanged = false;
                 }
@@ -468,14 +462,15 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
                 if (modeHandler.mode == "add-node-mode") {
                     var cyPosX = event.cyPosition.x;
                     var cyPosY = event.cyPosition.y;
-                    var param = {};
                     var sbgnclass = modeHandler.elementsHTMLNameToName[modeHandler.selectedNodeType];
-                    param.newNode = {
+                    var param = {
+                        firstTime: true,
+                        sync: true,
                         x: cyPosX,
                         y: cyPosY,
                         sbgnclass: sbgnclass
                     };
-                    param.firstTime = true;
+
 
                     editorActions.manager._do( editorActions.AddNodeCommand(param));
                     modeHandler.setSelectionMode();
@@ -594,7 +589,7 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
                     node.qtipTimeOutFcn = null;
                 }
 
-                nodeQtipFunction(node);
+           //funda???      nodeQtipFunction(node);
 
             });
 
@@ -831,10 +826,11 @@ module.exports.handleSBGNInspector = function (editorActions) {
             $('#inspector-is-multimer').on('click', function () {
                 var param = {
                     data: $('#inspector-is-multimer').attr('checked') == 'checked',
-                    ele: selected
+                    ele: selected,
+                    sync: true
                 };
 
-                editorActions.manager._do(editorActions.changeIsMultimerStatusCommand(param));
+                editorActions.manager._do(editorActions.ChangeIsMultimerStatusCommand(param));
 
 
             });
@@ -842,10 +838,11 @@ module.exports.handleSBGNInspector = function (editorActions) {
             $('#inspector-is-clone-marker').on('click', function () {
                 var param = {
                     data: $('#inspector-is-clone-marker').attr('checked') == 'checked',
-                    ele: selected
+                    ele: selected,
+                    sync: true
                 };
-                editorActions.manager._do(editorActions.changeIsCloneMarkerStatusCommand(param));
-
+                editorActions.manager._do(editorActions.ChangeIsCloneMarkerStatusCommand(param));
+                editorActions.refreshUndoRedoButtonsStatus();
 
 
             });
@@ -855,10 +852,11 @@ module.exports.handleSBGNInspector = function (editorActions) {
                     ele: selected,
                     data: $("#inspector-border-color").attr("value"),
                     dataType: "borderColor",
-                    modelDataName: 'borderColor'
+                    modelDataName: 'borderColor',
+                    sync: true
                 };
                 editorActions.manager._do(editorActions.ChangeStyleDataCommand(param));
-
+                editorActions.refreshUndoRedoButtonsStatus();
 
             });
 
@@ -868,10 +866,12 @@ module.exports.handleSBGNInspector = function (editorActions) {
                     ele: selected,
                     data: $("#inspector-fill-color").attr("value"),
                     dataType: "background-color",
-                    modelDataName: 'backgroundColor'
+                    modelDataName: 'backgroundColor',
+                    sync: true
                 };
-                editorActions.manager._do(editorActions.ChangeStyleCssCommand(param));
 
+                editorActions.manager._do(editorActions.ChangeStyleCssCommand(param));
+                editorActions.refreshUndoRedoButtonsStatus();
 
             });
 
@@ -880,10 +880,11 @@ module.exports.handleSBGNInspector = function (editorActions) {
                     ele: selected,
                     data: $("#inspector-border-width").attr("value"),
                     dataType: "border-width",
-                    modelDataName: 'borderWidth'
+                    modelDataName: 'borderWidth',
+                    sync: true
                 };
                 editorActions.manager._do(editorActions.ChangeStyleCssCommand(param));
-
+                editorActions.refreshUndoRedoButtonsStatus();
             });
         }
         else {
@@ -901,9 +902,11 @@ module.exports.handleSBGNInspector = function (editorActions) {
                     ele: selected,
                     data: $("#inspector-line-color").attr("value"),
                     dataType: "lineColor",
-                    modelDataName: 'lineColor'
+                    modelDataName: 'lineColor',
+                    sync: true
                 };
                 editorActions.manager._do(editorActions.ChangeStyleDataCommand(param));
+                editorActions.refreshUndoRedoButtonsStatus();
 
 
 
@@ -913,9 +916,11 @@ module.exports.handleSBGNInspector = function (editorActions) {
                     ele: selected,
                     data: $("#inspector-cardinality").attr("value"),
                     dataType: "sbgncardinality",
-                    modelDataName: 'cardinality'
+                    modelDataName: 'cardinality',
+                    sync: true
                 };
                 editorActions.manager._do(editorActions.ChangeStyleDataCommand(param));
+                editorActions.refreshUndoRedoButtonsStatus();
 
 
             });
@@ -926,9 +931,11 @@ module.exports.handleSBGNInspector = function (editorActions) {
                     ele: selected,
                     data: $("#inspector-width").attr("value"),
                     dataType: "width",
-                    modelDataName: 'width'
+                    modelDataName: 'width',
+                    sync: true
                 };
                 editorActions.manager._do(editorActions.ChangeStyleCssCommand(param));
+                editorActions.refreshUndoRedoButtonsStatus();
 
 
             });
@@ -961,7 +968,8 @@ module.exports.fillInspectorStateAndInfos = function (ele, width, editorActions)
                     valueOrVariable: $(this).attr('value'),
                     type: 'variable',
                     ele: ele,
-                    width: width
+                    width: width,
+                    sync: true
                 };
 
                 editorActions.manager._do(editorActions.ChangeStateVariableCommand(param));
@@ -976,7 +984,8 @@ module.exports.fillInspectorStateAndInfos = function (ele, width, editorActions)
                     valueOrVariable: $(this).attr('value'),
                     type: 'value',
                     ele: ele,
-                    width: width
+                    width: width,
+                    sync: true
                 };
 
                 editorActions.manager._do(editorActions.ChangeStateVariableCommand(param));
@@ -997,7 +1006,8 @@ module.exports.fillInspectorStateAndInfos = function (ele, width, editorActions)
                     state: $(this).data("state"),
                     text: $(this).attr('value'),
                     ele: ele,
-                    width: width
+                    width: width,
+                    sync: true
                 };
                 editorActions.manager._do(editorActions.ChangeUnitOfInformationCommand(param));
                 editorActions.refreshUndoRedoButtonsStatus();
@@ -1008,7 +1018,8 @@ module.exports.fillInspectorStateAndInfos = function (ele, width, editorActions)
             var param = {
                 obj: $(this).data("state"),
                 ele: ele,
-                width: width
+                width: width,
+                sync: true
             };
             editorActions.manager._do(editorActions.RemoveStateAndInfoCommand(param));
         });
@@ -1034,7 +1045,8 @@ module.exports.fillInspectorStateAndInfos = function (ele, width, editorActions)
         var param = {
             obj: obj,
             ele: ele,
-            width: width
+            width: width,
+            sync: true
         };
         editorActions.manager._do(editorActions.AddStateAndInfoCommand(param));
     });
@@ -1052,7 +1064,8 @@ module.exports.fillInspectorStateAndInfos = function (ele, width, editorActions)
         var param = {
             obj: obj,
             ele: ele,
-            width: width
+            width: width,
+            sync: true
         };
         editorActions.manager._do(editorActions.AddStateAndInfoCommand(param));
     });

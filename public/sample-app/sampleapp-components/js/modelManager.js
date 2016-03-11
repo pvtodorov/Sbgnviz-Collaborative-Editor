@@ -183,27 +183,36 @@ module.exports =  function(model, docId, userId, userName) {
 
         },
         addModelNode: function(nodeId,  param, user){
-          //  var pos = {x: param.x, y: param.y};
-
-
 
             model.pass({user:user}).set('_page.doc.cy.nodes.' +nodeId+'.id', nodeId);
             model.pass({user:user}).set('_page.doc.cy.nodes.' +nodeId +'.position', {x: param.x, y: param.y});
 
-
-
-            //Adding the node
+            //Adding the node. Other operations should be called afterwards
             model.pass({user:user}).set('_page.doc.cy.nodes.' + nodeId+'.sbgnclass', param.sbgnclass);
 
 
+
+
+            //TODO: undo remove should set the previous width, height and color properties
             model.pass({user:user}).set('_page.doc.cy.nodes.' + nodeId+'.highlightColor', null);
             model.pass({user:user}).set('_page.doc.cy.nodes.' + nodeId+'.backgroundColor', '#f6f6f6');
-            model.pass({user:user}).set('_page.doc.cy.nodes.' + nodeId+'.sbgnlabel', '');
+            model.pass({user:user}).set('_page.doc.cy.nodes.' + nodeId+'.sbgnlabel', param.sbgnlabel);
+            if(param.width)
+                model.pass({user:user}).set('_page.doc.cy.nodes.' + nodeId+'.width', param.width);
+            if(param.height)
+                model.pass({user:user}).set('_page.doc.cy.nodes.' + nodeId+'.height', param.height);
+            if(param.backgroundColor)
+                model.pass({user:user}).set('_page.doc.cy.nodes.' + nodeId+'.backgroundColor', param.backgroundColor);
+            if(param.borderColor)
+                model.pass({user:user}).set('_page.doc.cy.nodes.' + nodeId+'.borderColor', param.borderColor);
+            if(param.borderWidth)
+                model.pass({user:user}).set('_page.doc.cy.nodes.' + nodeId+'.borderWidth', param.borderWidth);
 
 
 
 
-            this.updateHistory('add', nodeId, param);
+            //We don't want all the attributes of the param to be printed
+            this.updateHistory('add', nodeId, {x:param.x, y: param.y, sbgnclass: param.sbgnclass});
 
         },
 
@@ -326,7 +335,9 @@ module.exports =  function(model, docId, userId, userName) {
 
             model.pass({user:user}).set('_page.doc.cy.edges.' + edgeId +'.width', '1.5');
 
-            this.updateHistory('add', edgeId, param);
+
+            //We don't want all the attributes of the param to be printed
+            this.updateHistory('add', edgeId, {source: param.source, target: param.target, sbgnclass: param.sbgnclass});
 
 
         },
@@ -384,6 +395,9 @@ module.exports =  function(model, docId, userId, userName) {
         },
 
 
+        convertToCyNode: function(nodeId){
+
+        },
 
         initModelNode: function(node, user){
 
@@ -418,12 +432,12 @@ module.exports =  function(model, docId, userId, userName) {
                 //SBGN properties are stored in the data component
                 var sbgnlabel = nodePath.get('sbgnlabel');
 
+
                 if (sbgnlabel != null)
                     node.data('sbgnlabel', sbgnlabel );
 
                 else
                     this.changeModelNodeAttribute('sbgnlabel', node.id(),node.data('sbgnlabel'), user);
-
 
                 var isCloneMarker = nodePath.get('isCloneMarker');
 

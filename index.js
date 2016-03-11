@@ -284,7 +284,7 @@ app.proto.init = function (model) {
 
             if(!node || !node.id){ //node is deleted
 
-                deleteElement(id);
+                menu.deleteElement(id, false);
             }
             //else insertion
         }
@@ -298,7 +298,7 @@ app.proto.init = function (model) {
             var edge  = model.get('_page.doc.cy.edges.' + id); //check
 
             if(!edge|| !edge.id){ //node is deleted
-                deleteElement(id);
+                menu.deleteElement(id, false);
             }
             //else insertion
         }
@@ -364,8 +364,9 @@ app.proto.init = function (model) {
         if(docReady && passed.user == null) {
 
             var pos = model.get('_page.doc.cy.nodes.'+ id + '.position');
+            var sbgnlabel = model.get('_page.doc.cy.nodes.'+ id + '.sbgnlabel');
 
-            insertNode({id:id, position:pos,  sbgnclass: sbgnclass});
+            menu.addNode(id, pos.x, pos.y, sbgnclass, sbgnlabel,false);
 
 
         }
@@ -379,7 +380,7 @@ app.proto.init = function (model) {
             var source = model.get('_page.doc.cy.edges.'+ id + '.source');
             var target = model.get('_page.doc.cy.edges.'+ id + '.target');
 
-            insertEdge(source, target, sbgnclass);
+            menu.addEdge(id, source, target, sbgnclass);
         }
 
     });
@@ -387,8 +388,7 @@ app.proto.init = function (model) {
     model.on('change', '_page.doc.cy.nodes.*.position', function(id, pos, prev, passed){
 
         if(docReady && passed.user == null){
-
-            updateElementProperty(id, 'position', pos, 'position');
+            menu.changePosition(id,  pos, false);
         }
 
 
@@ -405,37 +405,34 @@ app.proto.init = function (model) {
             else
                 color = model.get('_page.doc.cy.nodes.' + id + '.backgroundColor');
 
-
-            updateElementProperty(id, 'background-color', color, 'css');
+            menu.changeHighlightColor(id, color);
         }
 
     });
     model.on('all', '_page.doc.cy.nodes.*.sbgnlabel', function(id, op, label,prev, passed){
 
         if(docReady && passed.user == null) {
-            updateElementProperty(id, 'sbgnlabel', label, 'data');
+            menu.changeElementProperty(id, 'sbgnlabel', 'sbgnlabel', label, 'data', false);
         }
     });
     model.on('all', '_page.doc.cy.nodes.*.borderColor', function(id, op, borderColor,prev, passed){
 
         if(docReady && passed.user == null) {
-            updateElementProperty(id,  'borderColor', borderColor, 'data');
-
+            menu.changeElementProperty(id, 'borderColor', 'borderColor', borderColor, 'data', false);
         }
     });
 
     model.on('all', '_page.doc.cy.nodes.*.borderWidth', function(id,  op,borderWidth,prev, passed){
 
         if(docReady && passed.user == null) {
-            updateElementProperty(id,  'border-width', borderWidth, 'css');
+            menu.changeElementProperty(id, 'border-width', 'borderWidth', borderWidth, 'css', false);
         }
     });
 
     model.on('all', '_page.doc.cy.nodes.*.backgroundColor', function(id,  op, backgroundColor,prev, passed){
 
         if(docReady && passed.user == null) {
-
-            updateElementProperty(id,  'background-color', backgroundColor, 'css');
+            menu.changeElementProperty(id, 'background-color', 'backgroundColor', backgroundColor, 'css', false);
         }
     });
 
@@ -443,7 +440,8 @@ app.proto.init = function (model) {
     model.on('all', '_page.doc.cy.nodes.*.isMultimer', function(id,  op,isMultimer,prev, passed){
 
         if(docReady && passed.user == null) {
-            updateMultimerStatus(id, isMultimer);
+            menu.changeMultimerStatus(id, isMultimer);
+
 
         }
     });
@@ -451,7 +449,7 @@ app.proto.init = function (model) {
     model.on('all', '_page.doc.cy.nodes.*.isCloneMarker', function(id,  op,isCloneMarker,prev, passed){
 
         if(docReady && passed.user == null) {
-            updateCloneMarkerStatus(id, isCloneMarker);
+            menu.changeCloneMarkerStatus(id, isCloneMarker);
         }
     });
 
@@ -460,8 +458,7 @@ app.proto.init = function (model) {
 
         if(docReady && passed.user == null) {
 
-
-            updateElementProperty(id,  'parent', parent, 'data');
+            menu.changeElementProperty(id, 'parent', 'parent', parent, 'data', false);
         }
     });
 
@@ -471,9 +468,8 @@ app.proto.init = function (model) {
 
         if(docReady && passed.user == null) {
 
-
-            updateElementProperty(id,  'children', children, 'data');
-            addRemoveUtilities.changeParentForNodeIds(children,  id);
+            menu.changeElementProperty(id, 'children', 'children', children, 'data', false);
+         //TODO   addRemoveUtilities.changeParentForNodeIds(children,  id);
 
 
         }
@@ -482,36 +478,40 @@ app.proto.init = function (model) {
     model.on('all', '_page.doc.cy.nodes.*.width', function(id,  op, width ,prev, passed){
 
         if(docReady && passed.user == null) {
-            updateElementProperty(id,  'width', width, 'data');
+            menu.changeElementProperty(id, 'width', 'width', width, 'data', false);
+
         }
     });
 
     model.on('all', '_page.doc.cy.nodes.*.height', function(id,  op, height, prev, passed){
 
         if(docReady && passed.user == null) {
-            updateElementProperty(id,  'height', height, 'data');
+            menu.changeElementProperty(id, 'height', 'height', height, 'data', false);
         }
     });
 
-    model.on('all', '_page.doc.cy.nodes.*.sbgnbboxW', function(id,  op, width ,prev, passed){
 
-        if(docReady && passed.user == null) {
-            updateElementProperty(id,  'sbgnbbox.w', width, 'data');
-        }
-    });
-    model.on('all', '_page.doc.cy.nodes.*.sbgnbboxH', function(id,  op, height, prev, passed){
-
-        if(docReady && passed.user == null) {
-            updateElementProperty(id,  'sbgnbbox.h', height, 'data');
-        }
-    });
+    //TODO: is this necessary?
+    //model.on('all', '_page.doc.cy.nodes.*.sbgnbboxW', function(id,  op, width ,prev, passed){
+    //
+    //    if(docReady && passed.user == null) {
+    //        menu.changeElementProperty(id, 'sbgnbbox.w', 'height', width, 'data', false);
+    //        //updateElementProperty(id,  'sbgnbbox.w', width, 'data');
+    //    }
+    //});
+    //model.on('all', '_page.doc.cy.nodes.*.sbgnbboxH', function(id,  op, height, prev, passed){
+    //
+    //    if(docReady && passed.user == null) {
+    //        updateElementProperty(id,  'sbgnbbox.h', height, 'data');
+    //    }
+    //});
 
 
     model.on('all', '_page.doc.cy.nodes.*.sbgnStatesAndInfos', function(id,  op, sbgnStatesAndInfos,prev, passed){
 
 
         if(docReady && passed.user == null) {
-            updateElementProperty(id,  'sbgnstatesandinfos', sbgnStatesAndInfos, 'data');
+            menu.changeElementProperty(id, 'sbgnstatesandinfos', 'sbgnStatesAndInfos', sbgnStatesAndInfos, 'data', false);
 
         }
     });
@@ -520,7 +520,7 @@ app.proto.init = function (model) {
 
 
         if(docReady && passed.user == null) {
-            updateElementProperty(id,  'lineColor', lineColor, 'data');
+            menu.changeElementProperty(id, 'lineColor', 'lineColor', lineColor, 'data', false);
         }
     });
     model.on('all', '_page.doc.cy.edges.*.highlightColor', function(id, op, highlightColor,prev, passed){
@@ -532,7 +532,7 @@ app.proto.init = function (model) {
             else
                 color = model.get('_page.doc.cy.edges.' + id + '.lineColor');
 
-            updateElementProperty(id, 'lineColor', color, 'data');
+            menu.changeElementProperty(id, 'lineColor', 'lineColor', color, 'data', false);
         }
 
     });
@@ -540,14 +540,14 @@ app.proto.init = function (model) {
 
     model.on('all', '_page.doc.cy.edges.*.width', function(id,  op, width,prev, passed){
         if(docReady && passed.user == null) {
-            updateElementProperty(id,  'width', width, 'css');
+            menu.changeElementProperty(id, 'width', 'width', width, 'css', false);
         }
     });
 
     model.on('all', '_page.doc.cy.edges.*.cardinality', function(id, op,  cardinality,prev, passed){
 
         if(docReady && passed.user == null) {
-            updateElementProperty(id,  'sbgncardinality', cardinality, 'data');
+            menu.changeElementProperty(id, 'sbgncardinality', 'cardinality', cardinality, 'data', false);
         }
     });
 
@@ -832,207 +832,3 @@ app.proto.formatObj = function(obj){
 }
 
 
-//Model update functions
-function deleteElement(elId){
-    setTimeout(function(){
-        try{
-            var el = cy.$(('#' + elId));
-                     cy.elements().unselect(); //unselect others
-
-            //todo element is already selected? el.select(); //select this one
-
-            addRemoveUtilities.removeElesSimply(el);
-            updateServerGraph();
-
-        }
-        catch (err) {
-            console.log("Please reload page. " + err);
-        }
-    }, 0);
-
-}
-
-function insertNode(nodeData){
-    setTimeout(function(){
-        try{
-
-            var param = {};
-            param.newNode = {
-                x: nodeData.position.x,
-                y: nodeData.position.y,
-                sbgnclass: nodeData.sbgnclass
-            };
-            var newNode = addRemoveUtilities.addNode(param.newNode.x, param.newNode.y, param.newNode.sbgnclass, nodeData.id);
-
-
-            cy.forceRender();
-            updateServerGraph();
-
-
-        }
-        catch (err) {
-            console.log("Please reload page. " + err);
-        }
-    }, 0);
-
-}
-
-
-function insertEdge (sourceId, targetId, sbgnClass){
-    setTimeout(function(){
-        try {
-            var param = {};
-            param.newEdge = {
-                source: sourceId,
-                target: targetId,
-                sbgnclass: sbgnClass
-            };
-            param.firstTime = true;
-
-            addRemoveUtilities.addEdge(param.newEdge.source, param.newEdge.target, param.newEdge.sbgnclass);
-
-            updateServerGraph();
-        }
-        catch (err) {
-            console.log("Please reload page. " + err);
-        }
-    }, 0);
-}
-
-
-
-
-function updateElementProperty(elId, propName, propValue, propType){
-
-    setTimeout(function(){
-        try {
-            var el = cy.$(('#' + elId));
-
-
-
-             //TODO: correct resizing
-             if(propName == 'width'){
-                 el[0]._private.autoWidth = propValue;
-                 //el[0]._private.style.width.value.strVal = propValue + "px";
-                 el[0]._private.style.width.value = propValue;
-                 el[0]._private.style.width.pxValue = propValue;
-
-
-                 if(propType == 'data')
-                    el[0]._private.data.sbgnbbox.w = propValue;
-
-             }
-             else if(propName == 'height'){
-                 el[0]._private.autoHeight = propValue ;
-                 //
-                 // el[0]._private.style.height.value.strVal = propValue + "px";
-                 el[0]._private.style.height.value = propValue;
-                 el[0]._private.style.height.pxValue = propValue;
-                 if(propType == 'data')
-                    el[0]._private.data.sbgnbbox.h = propValue;
-
-             }
-            else if(propName == 'sbgnstatesandinfos'){
-                 el[0]._private.data.sbgnstatesandinfos = propValue;
-             }
-
-            else if(propName == 'parent'){
-                 el[0]._private.data.parent = propValue;
-
-
-
-             }
-             else if(propName == 'children'){
-                var elArr = [];
-
-                     propValue.forEach(function (nodeId) {
-                         elArr.push(cy.getElementById(nodeId));
-                     });
-
-
-
-                 el[0]._private.children = elArr;
-                 refreshPaddings();
-
-
-             }
-
-            else if (propType == 'position')
-                el[propType](propValue);
-            else
-                el[propType](propName, propValue);
-
-
-            //update server graph
-            updateServerGraph();
-
-
-            cy.forceRender();
-
-        }
-
-        catch (err) {
-            console.log("Please reload page. " + err + "   Prop name:" + propName + " Element: "  + elId + " Prop type:" + propType + "  propValue: " + propValue);
-        }
-    },0);
-}
-
-//Update the inspector as well
-function updateMultimerStatus(elId, isMultimer){
-    setTimeout(function(){
-        try {
-            var node = cy.$(('#' + elId));
-
-
-            var sbgnclass = node.data('sbgnclass');
-            if (isMultimer) {
-                //if not multimer already
-                if(sbgnclass.indexOf(' multimer') <= -1) //todo funda changed
-                    node.data('sbgnclass', sbgnclass + ' multimer');
-            }
-            else {
-                node.data('sbgnclass', sbgnclass.replace(' multimer', ''));
-            }
-
-            cy.forceRender();
-            updateServerGraph();
-        }
-
-        catch (err) {
-            console.log("Please reload page. " + err);
-        }
-    },0);
-}
-
-function updateCloneMarkerStatus(elId, isCloneMarker){
-
-    setTimeout(function(){
-
-        try{
-            var node = cy.$(('#' + elId))[0];
-
-
-
-
-            //node.data('sbgnclonemarker', isCloneMarker?true:undefined);
-            node._private.data.sbgnclonemarker = isCloneMarker?true:undefined;
-
-            cy.forceRender();
-
-
-            updateServerGraph();
-
-        }
-        catch (err) {
-            console.log("Please reload page. " + err);
-        }
-    }, 0);
-};
-
-function updateServerGraph (){
-
-    var sbgnmlText = jsonToSbgnml.createSbgnml();
-    var cytoscapeJsGraph = sbgnmlToJson.convert(sbgnmlText);
-
-    modelManager.updateServerGraph(cytoscapeJsGraph);
-};

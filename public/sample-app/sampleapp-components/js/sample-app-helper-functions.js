@@ -163,24 +163,25 @@ $(document).keydown(function (e) {
 });
 
 //Cytoscape extensions
-cytoscape('collection', 'setWidth', function(val){
-    var ele = this[0];
-    var cy = ele._private.cy;
-    var styleEnabled = cy._private.styleEnabled;
-
-    if( ele ){
-        if( styleEnabled ){
-            ele._private.style.width.pxValue = val ;
-            ele._private.style.width.value = val ;
-            ele._private.style.width.strValue = ""+ Math.floor(val) + "px";
-            ele._private.autoWidth  = val;
-
-        } else {
-
-            ele._private.data.width  = val;
-        }
-    }
-});
+//FUNDA
+//cytoscape('collection', 'setWidth', function(val){
+//    var ele = this[0];
+//    var cy = ele._private.cy;
+//    var styleEnabled = cy._private.styleEnabled;
+//
+//    if( ele ){
+//        if( styleEnabled ){
+//            ele._private.style.width.pfValue = val ; //this is no more pxValue
+//            ele._private.style.width.value = val ;
+//            ele._private.style.width.strValue = ""+ Math.floor(val) + "px";
+//            ele._private.autoWidth  = val;
+//
+//        } else {
+//
+//            ele._private.data.width  = val;
+//        }
+//    }
+//});
 
 var calculatePaddings = function(paddingPercent) {
     //As default use the compound padding value
@@ -220,23 +221,25 @@ var calculatePaddings = function(paddingPercent) {
 
 var calculateTilingPaddings = calculatePaddings;
 var calculateCompoundPaddings = calculatePaddings;
-cytoscape('collection', 'setHeight', function(val){
-    var ele = this[0];
-    var cy = ele._private.cy;
-    var styleEnabled = cy._private.styleEnabled;
 
-    if( ele ){
-        if( styleEnabled ){
-            ele._private.style.height.pxValue = val;
-            ele._private.style.height.value = val ;
-            ele._private.style.height.strValue = ""+ Math.floor(val) + "px";
-            ele._private.autoHeight  = val;
-        } else {
-
-            ele._private.data.height  = val;
-        }
-    }
-});
+//FUNDA???
+//cytoscape('collection', 'setHeight', function(val){
+//    var ele = this[0];
+//    var cy = ele._private.cy;
+//    var styleEnabled = cy._private.styleEnabled;
+//
+//    if( ele ){
+//        if( styleEnabled ){
+//            ele._private.style.height.pfValue = val; //this is no more pxvalue
+//            ele._private.style.height.value = val ;
+//            ele._private.style.height.strValue = ""+ Math.floor(val) + "px";
+//            ele._private.autoHeight  = val;
+//        } else {
+//
+//            ele._private.data.height  = val;
+//        }
+//    }
+//});
 
 var refreshPaddings = function () {
 
@@ -282,6 +285,21 @@ var isSpecialSBGNNodeClass = function (sbgnclass) {
     return false;
 };
 
+
+var getNodesData = function () {
+    var nodesData = {};
+    var nodes = cy.nodes();
+    for (var i = 0; i < nodes.length; i++) {
+        var node = nodes[i];
+        nodesData[node.id()] = {
+            width: node.width(),
+            height: node.height(),
+            x: node.position("x"),
+            y: node.position("y")
+        };
+    }
+    return nodesData;
+};
 
 
 

@@ -1,4 +1,4 @@
-/**
+    /**
  * Menu class
  * Initializes sbgnContainer, editorActions modelManager, SBGNLayout properties and SBGN Properties,
  * Listens to menu actions
@@ -85,6 +85,135 @@ module.exports = function(){
 
     return {
 
+        addEdge:function(elId, source, target, sbgnclass, syncVal){
+            var param ={
+                firstTime: true,
+                sync: syncVal,
+                id:elId,
+                source: source,
+                target: target,
+                sbgnclass: sbgnclass
+
+            };
+
+            editorActions.manager._do( editorActions.AddEdgeCommand(param));
+
+        },
+
+        addNode:function(elId, x, y, sbgnclass, sbgnlabel, syncVal){
+            var param ={
+                firstTime: true,
+                sync: syncVal,
+                id:elId,
+                x: x,
+                y: y,
+                sbgnclass: sbgnclass,
+                sbgnlabel: sbgnlabel
+
+            };
+            editorActions.manager._do( editorActions.AddNodeCommand(param));
+
+        },
+
+        deleteElement: function(elId, syncVal){
+            var el = cy.$(('#' + elId))[0];
+            if(el){
+
+                var param ={
+                    eles:el,
+                    sync: syncVal
+                }
+                editorActions.manager._do(editorActions.DeleteSelectedCommand(param));
+            }
+        },
+
+        changePosition: function(elId, pos, syncVal){
+            var el = cy.$(('#' + elId));
+            var param = {
+                ele: el,
+                id: elId,
+                data: pos,
+                sync: syncVal
+            };
+
+
+            if(el)
+                editorActions.manager._do(editorActions.ChangePositionCommand(param));
+        },
+
+
+       changeMultimerStatus: function(elId, isMultimer){
+
+            var el = cy.$(('#' + elId))[0];
+            var param = {
+                ele: el,
+                id: elId,
+                data: isMultimer,
+                sync: false
+            };
+
+            if(el)
+                editorActions.manager._do(editorActions.ChangeIsMultimerStatusCommand(param));
+
+        },
+
+        changeCloneMarkerStatus: function(elId, isCloneMarker){
+
+            var el = cy.$(('#' + elId))[0];
+            var param = {
+                ele: el,
+                id: elId,
+                data: isCloneMarker,
+                sync: false
+            };
+
+            if(el)
+                editorActions.manager._do(editorActions.ChangeIsCloneMarkerStatusCommand(param));
+
+        },
+
+        //Changes background-color
+        //A separate command for highlighting nodes as we don't want the do/undo stack to be affected
+        changeHighlightColor: function(elId, color){
+            var el = cy.$(('#' + elId))[0];
+            if(el)
+                el.css('background-color', color);
+
+        },
+        //propName and modelDataName can be different: propName: name in cytoscape, modelDataName: name in nodejs model
+        //proptype is either data or css
+        changeElementProperty: function(elId, propName, modelDataName,propValue, propType, syncVal){
+            var el = cy.$(('#' + elId))[0];
+            var param = {
+                ele: el,
+                id: elId,
+                dataType: propName,
+                data: propValue,
+                modelDataName: modelDataName,
+                sync: syncVal
+            };
+
+            if(el) {
+
+                if (propName == 'parent')//TODO
+                    editorActions.manager._do(editorActions.ChangeParentCommand(param));
+
+                else if (propName == 'children') {
+                    editorActions.manager._do(editorActions.ChangeChildrenCommand(param));
+                }
+
+                else {
+                    if (propType == 'data')
+                        editorActions.manager._do(editorActions.ChangeStyleDataCommand(param));
+                    else if (propType == 'css')
+                        editorActions.manager._do(editorActions.ChangeStyleCssCommand(param));
+                }
+
+
+              //  editorActions.refreshUndoRedoButtonsStatus();
+            }
+
+        },
         loadFile: function(txtFile){
             var jsonObj = sbgnmlToJson.convert(textToXmlObject(txtFile));
 
@@ -590,13 +719,8 @@ module.exports = function(){
             });
 
             $("#node-label-textbox").on('change', function () {
-                var node = $(this).data('node');
-                var param = {
-                    ele: node,
-                    data: $(this).attr('value')
-                };
-                editorActions.manager._do(editorActions.ChangeNodeLabelCommand(param));
-                editorActions.refreshUndoRedoButtonsStatus();
+                self.changeElementProperty( $(this).data('node').id(), 'sbgnlabel', 'sbgnlabel', $(this).attr('value'), 'data', true);
+                $("#node-label-textbox").blur(); //funda added
             });
 
             $("#edge-legend").click(function (e) {
@@ -712,7 +836,8 @@ module.exports = function(){
 
                 var param = {
                     // firstTime: false,
-                    eles: selectedEles
+                    eles: selectedEles,
+                    sync: true
                 };
 
 
@@ -968,18 +1093,7 @@ module.exports = function(){
 
             $("#perform-layout").click(function (e) {
 
-
-                //var nodesData = {};
-                //var nodes = cy.nodes();
-                //for (var i = 0; i < nodes.length; i++) {
-                //    var node = nodes[i];
-                //    nodesData[node.id()] = {
-                //        width: node.width(),
-                //        height: node.height(),
-                //        x: node.position("x"),
-                //        y: node.position("y")
-                //    };
-                //}
+                var nodesData = getNodesData();
 
                 beforePerformLayout();
 
@@ -1004,13 +1118,17 @@ module.exports = function(){
             });
 
             $("#undo-last-action").click(function (e) {
-                editorActions.manager.undo();
-                editorActions.refreshUndoRedoButtonsStatus();
+                if(!editorActions.manager.isUndoStackEmpty()){ //funda added this check
+                    editorActions.manager.undo();
+                    editorActions.refreshUndoRedoButtonsStatus();
+                }
             });
 
             $("#redo-last-action").click(function (e) {
+                if(!editorActions.manager.isRedoStackEmpty()) { //funda added this check
                 editorActions.manager.redo();
                 editorActions.refreshUndoRedoButtonsStatus();
+            }
             });
 
             $("#undo-icon").click(function (e) {
@@ -1141,6 +1259,9 @@ module.exports = function(){
                 expanderOpts.slicePoint = 2;
                 expanderOpts.widow = 0;
             });
+
+
+
         }
     }
 }
