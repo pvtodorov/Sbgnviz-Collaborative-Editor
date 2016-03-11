@@ -106,8 +106,10 @@ module.exports.restoreEles = function(eles) {
                 y: node.position("y"),
                 sbgnclass: node.data("sbgnclass"),
                 sbgnlabel: node.data("sbgnlabel"),
-                width: node.data("width"),
-                height: node.data("height"),
+                width: node.width(),
+                height: node.height(),
+                //children: node.children(),
+                parent: node._private.data.parent,
                 backgroundColor: node.css("background-color"),
                 borderWidth: node.css("border-width"),
                 borderColor: node.data("border-color")
@@ -192,7 +194,7 @@ module.exports.expandNode = function(param) {
     }
     else {
         expandCollapseUtilities.simpleExpandNode(node);
-        module.exports.returnToPositionsAndSizes(param.nodesData);
+        module.exports.returnToPositionsAndSizes(param);
     }
     return result;
 }
@@ -209,7 +211,7 @@ module.exports.collapseNode = function(param) {
     }
     else {
         expandCollapseUtilities.simpleCollapseNode(node);
-        module.exports.returnToPositionsAndSizes(param.nodesData);
+        module.exports.returnToPositionsAndSizes(param);
     }
     return result;
 }
@@ -226,7 +228,7 @@ module.exports.expandGivenNodes = function(param) {
     }
     else {
         expandCollapseUtilities.simpleExpandGivenNodes(nodes);
-        module.exports.returnToPositionsAndSizes(param.nodesData);
+        module.exports.returnToPositionsAndSizes(param);
     }
     return result;
 }
@@ -241,7 +243,7 @@ module.exports.collapseGivenNodes = function(param) {
     }
     else {
         expandCollapseUtilities.simpleCollapseGivenNodes(nodes);
-        module.exports.returnToPositionsAndSizes(param.nodesData);
+        module.exports.returnToPositionsAndSizes(param);
     }
     return result;
 }
@@ -256,7 +258,7 @@ module.exports.expandAllNodes = function(param) {
     }
     else {
         result.expandStack = expandCollapseUtilities.simpleExpandAllNodes();
-        module.exports.returnToPositionsAndSizes(param.nodesData);
+        module.exports.returnToPositionsAndSizes(param);
     }
     return result;
 }
@@ -275,7 +277,7 @@ module.exports.undoExpandAllNodes = function(param) {
     };
     result.nodesData = module.exports.getNodePositionsAndSizes();
     expandCollapseUtilities.collapseExpandedStack(param.expandStack);
-    module.exports.returnToPositionsAndSizes(param.nodesData);
+    module.exports.returnToPositionsAndSizes(param);
     return result;
 }
 
@@ -302,7 +304,7 @@ module.exports.undoExpandNode = function(param) {
     };
     result.nodesData = module.exports.getNodePositionsAndSizes();
     result.node = expandCollapseUtilities.simpleCollapseNode(param.node);
-    module.exports.returnToPositionsAndSizes(param.nodesData);
+    module.exports.returnToPositionsAndSizes(param);
     return result;
 }
 
@@ -312,7 +314,7 @@ module.exports.undoCollapseNode = function(param) {
     };
     result.nodesData = module.exports.getNodePositionsAndSizes();
     result.node = expandCollapseUtilities.simpleExpandNode(param.node);
-    module.exports.returnToPositionsAndSizes(param.nodesData);
+    module.exports.returnToPositionsAndSizes(param);
     return result;
 }
 
@@ -322,7 +324,7 @@ module.exports.undoExpandGivenNodes = function(param) {
     };
     result.nodesData = module.exports.getNodePositionsAndSizes();
     result.nodes = expandCollapseUtilities.simpleCollapseGivenNodes(param.nodes);
-    module.exports.returnToPositionsAndSizes(param.nodesData);
+    module.exports.returnToPositionsAndSizes(param);
     return result;
 }
 
@@ -332,7 +334,7 @@ module.exports.undoCollapseGivenNodes = function(param) {
     };
     result.nodesData = module.exports.getNodePositionsAndSizes();
     result.nodes = expandCollapseUtilities.simpleExpandGivenNodes(param.nodes);
-    module.exports.returnToPositionsAndSizes(param.nodesData);
+    module.exports.returnToPositionsAndSizes(param);
     return result;
 }
 
@@ -352,14 +354,14 @@ module.exports.simpleCollapseGivenNodes = function(nodes) {
     return expandCollapseUtilities.simpleCollapseGivenNodes(nodes);
 }
 
-module.exports.performLayoutFunction = function(nodesData) {
+module.exports.performLayoutFunction = function(param) {
 
 
 
-    if (nodesData.firstTime) {
+    if (param.firstTime) {
 
-        delete nodesData.firstTime;
-        return nodesData;
+        delete param.firstTime;
+        return param;
     }
 
 //notify other clients
@@ -372,19 +374,20 @@ module.exports.performLayoutFunction = function(nodesData) {
 
     //var runLayout = "1";
     //module.exports.modelManager.setRunLayout(runLayout, "me");
-    return module.exports.returnToPositionsAndSizes(nodesData);
+    return module.exports.returnToPositionsAndSizes(param);
 }
 
-module.exports.returnToPositionsAndSizesConditionally = function(nodesData) {
-    if (nodesData.firstTime) {
-        delete nodesData.firstTime;
-        return nodesData;
+module.exports.returnToPositionsAndSizesConditionally = function(param) {
+
+    if (param.firstTime) {
+        delete param.firstTime;
+        return param;
     }
-    return module.exports.returnToPositionsAndSizes(nodesData);
+    return module.exports.returnToPositionsAndSizes(param);
 }
-module.exports.returnToPositionsAndSizes = function(nodesData) {
+module.exports.returnToPositionsAndSizes = function(param) {
     var currentPositionsAndSizes = {};
-
+    var nodesData = param.nodesData;
 
     cy.nodes().positions(function (i, ele) {
         currentPositionsAndSizes[ele.id()] = {
@@ -407,10 +410,13 @@ module.exports.returnToPositionsAndSizes = function(nodesData) {
 
 
 
-    cy.nodes().forEach(function(node) {
-        module.exports.modelManager.moveModelNode(node.id(), node.position(), "me");
-    });
+    if(param.sync){
+        cy.nodes().forEach(function(node) {
+            module.exports.modelManager.moveModelNode(node.id(), node.position(), "me");
 
+        });
+        module.exports.updateServerGraph();
+    }
     return currentPositionsAndSizes;
 }
 
@@ -671,17 +677,23 @@ module.exports.changeParent = function(param) {
         changeParent(param.innerParam);
     }
 
-    var node = param.node;
+    var node = param.ele;
     var oldParentId = node._private.data.parent;
     var oldParent = node.parent()[0];
-    var newParent = param.newParent;
-    var nodesData = param.nodesData;
+    var newParentId = param.data;
+    var newParent = cy.$(('#' + newParentId))[0];//param.newParent;
+    var nodesData = getNodesData();//param.nodesData;
     var result = {
-        node: node,
-        newParent: oldParent
+        ele: node,
+        //newParent: oldParent,
+        id: node.id(),
+        dataType: param.dataType,
+        data: oldParentId,
+        modelDataName: param.modelDataName,
+        sync: true
     };
 
-    result.nodesData = getNodesData();
+   //funda result.nodesData = getNodesData();
 
     //If new parent is not null some checks should be performed
     if (newParent) {
@@ -703,11 +715,11 @@ module.exports.changeParent = function(param) {
             //We have an internal change parent operation to redo this operation
             //we need an inner param to call the function with it at the beginning
             result.innerParam = {
-                node: newParent,
+                ele: newParent,
                 newParent: parentOfNewParent,
-                nodesData: {
-                    firstTime: true
-                }
+           //     nodesData: {
+             //       firstTime: true
+              //  }
             };
         }
     }
@@ -723,7 +735,12 @@ module.exports.changeParent = function(param) {
     }
 
     cy.nodes().updateCompoundBounds();
-    module.exports.returnToPositionsAndSizesConditionally(nodesData);
+    module.exports.returnToPositionsAndSizesConditionally({nodesData:nodesData, sync: param.sync});
+
+    if(param.sync){
+        module.exports.modelManager.changeModelNodeAttribute('parent', param.node.id(), newParent.id(), "me");
+        module.exports.updateServerGraph();
+    }
 
     return result;
 }
@@ -1197,10 +1214,10 @@ var Command = function (_do, undo, params, name, callback) {
 module.exports.ReturnToPositionsAndSizesCommand = function (nodesData) {
     return new Command(module.exports.returnToPositionsAndSizesConditionally, module.exports.returnToPositionsAndSizes, nodesData, "returnToPositionsAndSizes");
 };
-module.exports.changeParentCommand = function (param) {
+module.exports.ChangeParentCommand = function (param) {
     return new Command(module.exports.changeParent, module.exports.changeParent, param, "changeParent");
 };
-module.exports.changeChildrenCommand = function (param) {
+module.exports.ChangeChildrenCommand = function (param) {
     return new Command(module.exports.changeChildren, module.exports.changeChildren, param, "changeChildren");
 };
 

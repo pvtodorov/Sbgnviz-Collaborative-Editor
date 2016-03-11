@@ -520,7 +520,7 @@ module.exports = function(){
                 }
 
                 nodesData.firstTime = true;
-                editorActionsManager._do(new ReturnToPositionsAndSizesCommand(nodesData));
+                editorActionsManager._do(new ReturnToPositionsAndSizesCommand({nodesData: nodesData}));
             });
 
             $("#align-horizontal-top-icon").click(function (e) {
@@ -548,7 +548,7 @@ module.exports = function(){
                 }
 
                 nodesData.firstTime = true;
-                editorActionsManager._do(new ReturnToPositionsAndSizesCommand(nodesData));
+                editorActionsManager._do(new ReturnToPositionsAndSizesCommand({nodesData: nodesData}));
             });
 
             $("#align-horizontal-middle-icon").click(function (e) {
@@ -576,7 +576,7 @@ module.exports = function(){
                 }
 
                 nodesData.firstTime = true;
-                editorActionsManager._do(new ReturnToPositionsAndSizesCommand(nodesData));
+                editorActionsManager._do(new ReturnToPositionsAndSizesCommand({nodesData: nodesData}));
             });
 
             $("#align-horizontal-bottom-icon").click(function (e) {
@@ -604,7 +604,7 @@ module.exports = function(){
                 }
 
                 nodesData.firstTime = true;
-                editorActionsManager._do(new ReturnToPositionsAndSizesCommand(nodesData));
+                editorActionsManager._do(new ReturnToPositionsAndSizesCommand({nodesData: nodesData}));
             });
 
             $("#align-vertical-left-icon").click(function (e) {
@@ -632,7 +632,7 @@ module.exports = function(){
                 }
 
                 nodesData.firstTime = true;
-                editorActionsManager._do(new ReturnToPositionsAndSizesCommand(nodesData));
+                editorActionsManager._do(new ReturnToPositionsAndSizesCommand({nodesData: nodesData}));
             });
 
             $("#align-vertical-center-icon").click(function (e) {
@@ -660,7 +660,7 @@ module.exports = function(){
                 }
 
                 nodesData.firstTime = true;
-                editorActionsManager._do(new ReturnToPositionsAndSizesCommand(nodesData));
+                editorActionsManager._do(new ReturnToPositionsAndSizesCommand({nodesData: nodesData}));
             });
 
             $("#align-vertical-right-icon").click(function (e) {
@@ -1102,7 +1102,7 @@ module.exports = function(){
 
                 editorActions.manager._do(editorActions.PerformLayoutCommand(nodesData));
 
-                //       editorActions.manager._do(editorActions.ReturnToPositionsAndSizesCommand(nodesData));
+                //       editorActions.manager._do(editorActions.ReturnToPositionsAndSizesCommand({nodesData: nodesData}));
 
 
                 editorActions.refreshUndoRedoButtonsStatus();
@@ -1476,3 +1476,4 @@ function SBGNProperties(){
             return this;
         }
     }};
+

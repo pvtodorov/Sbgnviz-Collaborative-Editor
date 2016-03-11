@@ -307,14 +307,16 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
                 }
             });
 
+            cy.on('grab', 'node', function(event) { //Also works as 'select'
+                editorActions.manager._do(editorActions.SelectNodeCommand(this));
+            });
+            cy.on('select', 'node', function(event) { //Necessary for multiple selections
+                editorActions.manager._do(editorActions.SelectNodeCommand(this));
 
-
+            });
             cy.on('unselect', 'node', function() {
                 editorActions.manager._do(editorActions.UnselectNodeCommand(this));
 
-            });
-            cy.on('grab', 'node', function(event) { //Also works as 'select'
-                editorActions.manager._do(editorActions.SelectNodeCommand(this));
             });
 
 

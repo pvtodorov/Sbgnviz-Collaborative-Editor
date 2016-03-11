@@ -207,6 +207,10 @@ module.exports =  function(model, docId, userId, userName) {
                 model.pass({user:user}).set('_page.doc.cy.nodes.' + nodeId+'.borderColor', param.borderColor);
             if(param.borderWidth)
                 model.pass({user:user}).set('_page.doc.cy.nodes.' + nodeId+'.borderWidth', param.borderWidth);
+            if(param.parent)
+                model.pass({user:user}).set('_page.doc.cy.nodes.' + nodeId+'.parent', param.parent);
+         //   if(param.children)
+           //     model.pass({user:user}).set('_page.doc.cy.nodes.' + nodeId+'.children', param.children);
 
 
 
