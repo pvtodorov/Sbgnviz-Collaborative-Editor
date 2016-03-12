@@ -50,32 +50,38 @@ module.exports.addNode = function(param) {
         else
             result = addRemoveUtilities.addNode(param.x, param.y, param.sbgnclass);
 
+        if(param.sync){
+            module.exports.modelManager.addModelNode(result.id(),  param, "me");
+            module.exports.updateServerGraph();
+        }
     }
     else {
-        result = addRemoveUtilities.restoreEles(param);
+
+        //result = addRemoveUtilities.restoreEles(param);
+
+        module.exports.restoreEles(param);
     }
 
 
-    if(param.sync){
-        module.exports.modelManager.addModelNode(result.id(),  param, "me");
-        module.exports.updateServerGraph();
-    }
+
 
     return result;
 }
 //TODO
-module.exports.removeNodes = function(nodesToBeDeleted) {
-
-
-    module.exports.modelManager.deleteModelNodes(nodesToBeDeleted, "me");
-
-    module.exports.updateServerGraph();
-
-
-    return addRemoveUtilities.removeNodes(nodesToBeDeleted);
-}
+//module.exports.removeNodes = function(nodesToBeDeleted) {
+//
+//
+//    module.exports.modelManager.deleteModelNodes(nodesToBeDeleted, "me");
+//
+//    module.exports.updateServerGraph();
+//
+//
+//    return addRemoveUtilities.removeNodes(nodesToBeDeleted);
+//}
 
 module.exports.removeEles =function(elesToBeRemoved) {
+
+
 
 
     module.exports.modelManager.deleteModelNodes(elesToBeRemoved.nodes(), "me");
@@ -85,6 +91,7 @@ module.exports.removeEles =function(elesToBeRemoved) {
 
 
     //removeEles operation computes edges to be removed
+
     return addRemoveUtilities.removeEles(elesToBeRemoved);
 
 
@@ -96,31 +103,21 @@ module.exports.removeEles =function(elesToBeRemoved) {
 module.exports.restoreEles = function(eles) {
     //we need to restore nodes first, otherwise edges without sources or targets cause error
 
-    //module.exports.restoreNodesRecursively(eles.nodes());
-
-
     if(eles.nodes() != null){
+
         eles.nodes().forEach(function(node) {
+            //node addition on the client side should include node attribute information
             module.exports.modelManager.addModelNode(node.id(), {
                 x: node.position("x"),
                 y: node.position("y"),
                 sbgnclass: node.data("sbgnclass"),
-                sbgnlabel: node.data("sbgnlabel"),
-                width: node.width(),
-                height: node.height(),
-                //children: node.children(),
-                parent: node._private.data.parent,
-                backgroundColor: node.css("background-color"),
-                borderWidth: node.css("border-width"),
-                borderColor: node.data("border-color")
-                //TODO: add multimer and clonemarker
             }, "me");
         });
 
-        //to assign parents and children, update attributes after restoring nodes
-        eles.nodes().forEach(function(node) {
-            module.exports.modelManager.initModelNode(node);
-        });
+        ////to assign parents and children, update attributes after restoring nodes
+        //eles.nodes().forEach(function(node) {
+        //    module.exports.modelManager.initModelNode(node);
+        //});
     }
 
     if(eles.edges() != null) {
@@ -134,7 +131,27 @@ module.exports.restoreEles = function(eles) {
         });
     }
 
-    return addRemoveUtilities.restoreEles(eles);
+    var result = addRemoveUtilities.restoreEles(eles);
+
+    //Notify other clients about the model change
+    if(result.nodes()){
+        result.nodes().forEach(function(node){
+            module.exports.modelManager.changeModelNodeAttribute('sbgnlabel', node.id(),node.data("sbgnlabel"),"me" );
+            module.exports.modelManager.changeModelNodeAttribute('width', node.id(),node._private.data.sbgnbbox.w,"me" );
+            module.exports.modelManager.changeModelNodeAttribute('height', node.id(),node._private.data.sbgnbbox.h,"me" );
+            module.exports.modelManager.changeModelNodeAttribute('backgroundColor', node.id(),node.css("background-color"),"me" );
+            module.exports.modelManager.changeModelNodeAttribute('borderColor', node.id(),node.data("border-color"),"me" );
+            module.exports.modelManager.changeModelNodeAttribute('borderWidth', node.id(),node.css("border-width"),"me" );
+            module.exports.modelManager.changeModelNodeAttribute('sbgnStatesAndInfos', node.id(),node.data("sbgnstatesandinfos"),"me" );
+            module.exports.modelManager.changeModelNodeAttribute('parent', node.id(),node._private.data.parent,"me" );
+            module.exports.modelManager.changeModelNodeAttribute('isCloneMarker', node.id(),node.data("sbgnclonemarker"),"me" );
+            module.exports.modelManager.changeModelNodeAttribute('isMultimer', node.id(),(node.data("sbgnclass").indexOf(' multimer') > 0),"me" );
+        }
+    )};
+
+    //update children and parents
+
+    return result;
 }
 module.exports.deleteSelected = function(param) {
 
@@ -742,6 +759,8 @@ module.exports.changeParent = function(param) {
         module.exports.updateServerGraph();
     }
 
+
+    refreshPaddings();
     return result;
 }
 
@@ -791,28 +810,30 @@ module.exports.createCompoundForSelectedNodes = function(param) {
     module.exports.modelManager.changeModelNodeAttribute('width', newCompoundId, newCompound.width(), "me");
     module.exports.modelManager.changeModelNodeAttribute('height', newCompoundId, newCompound.height(), "me" );
 
-    module.exports.modelManager.changeModelNodeAttribute('sbgnbboxW', newCompoundId, newCompound.width(), "me");
-    module.exports.modelManager.changeModelNodeAttribute('sbgnbboxH', newCompoundId, newCompound.height(), "me" );
-
-    //
-    //
-    //
     var nodeIds =[];
     nodesToMakeCompound.forEach(function(node){
         nodeIds.push(node.id());
 
-        module.exports.modelManager.changeModelNodeAttribute('sbgnbboxW', node.id(), newCompound.width(), "me");
-        module.exports.modelManager.changeModelNodeAttribute('sbgnbboxH', node.id(), newCompound.height(), "me");
         module.exports.modelManager.changeModelNodeAttribute('parent',node.id(), node.data('parent'), "me");
     });
 
 
     module.exports.modelManager.changeModelNodeAttribute('children', newCompoundId, nodeIds, "me");
 
-    return newCompound;
+    module.exports.updateServerGraph();
+    var result = {
+        nodesToMakeCompound:nodesToMakeCompound,
+        compoundToRemove: newCompound,
+        compoundType: param.compoundType,
+        firstTime: false
+
+    };
+    return result;
 }
 
-module.exports.removeCompound = function(compoundToRemove) {
+module.exports.removeCompound = function(param) {
+
+    var compoundToRemove = param.compoundToRemove;
     var compoundId = compoundToRemove.id();
     var newParentId = compoundToRemove.data("parent");
     var childrenOfCompound = compoundToRemove.children();
@@ -832,12 +853,14 @@ module.exports.removeCompound = function(compoundToRemove) {
 
     refreshPaddings();
 
-    var param = {
+    var result = {
         nodesToMakeCompound: childrenOfCompound,
-        removedCompound: removedCompound
+        removedCompound: compoundToRemove,
+        firstTime: false
     };
 
-    return param;
+
+    return result;
 }
 
 module.exports.resizeNode = function(param) {
@@ -877,8 +900,6 @@ module.exports.resizeNode = function(param) {
         module.exports.modelManager.changeModelNodeAttribute('height', ele.id(), param.height, "me");
 
 
-        module.exports.modelManager.changeModelNodeAttribute('sbgnbboxW', ele.id(),param.width, "me"); //update sbgnbbox width as well
-        module.exports.modelManager.changeModelNodeAttribute('sbgnbboxH', ele.id(),param.height, "me"); //update sbgnbbox width as well
         module.exports.updateServerGraph();
 
     }
@@ -1244,14 +1265,10 @@ module.exports.UnselectEdgeCommand = function (edge)
 {
     return new Command(module.exports.unselectEdge, module.exports.selectEdge, edge, "unselectEdge");
 };
-// funda: no need
-//module.exports.ChangeNodeLabelCommand = function (node)
-//{
-//    return new Command(module.exports.changeNodeLabel, module.exports.changeNodeLabel, node, "changeLabel");
-//};
+
 module.exports.AddNodeCommand = function (newNode)
 {
-    return new Command(module.exports.addNode, module.exports.removeNodes, newNode, "addNode");
+    return new Command(module.exports.addNode, module.exports.removeEles, newNode, "addNode");
 };
 
 //var RemoveNodesCommand = function (nodesTobeDeleted)

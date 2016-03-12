@@ -491,21 +491,6 @@ app.proto.init = function (model) {
     });
 
 
-    //TODO: is this necessary?
-    //model.on('all', '_page.doc.cy.nodes.*.sbgnbboxW', function(id,  op, width ,prev, passed){
-    //
-    //    if(docReady && passed.user == null) {
-    //        menu.changeElementProperty(id, 'sbgnbbox.w', 'height', width, 'data', false);
-    //        //updateElementProperty(id,  'sbgnbbox.w', width, 'data');
-    //    }
-    //});
-    //model.on('all', '_page.doc.cy.nodes.*.sbgnbboxH', function(id,  op, height, prev, passed){
-    //
-    //    if(docReady && passed.user == null) {
-    //        updateElementProperty(id,  'sbgnbbox.h', height, 'data');
-    //    }
-    //});
-
 
     model.on('all', '_page.doc.cy.nodes.*.sbgnStatesAndInfos', function(id,  op, sbgnStatesAndInfos,prev, passed){
 

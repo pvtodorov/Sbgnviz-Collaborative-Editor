@@ -388,7 +388,7 @@ string after http:&lt;ip&gt;:3000/ in the server address.</p>
 			“highlightColor”, “backgroundColor”, “sbgnlabel”,
 			“borderColor”, “borderWidth”, “isMultimer”,
 			“isCloneMarker”, “parent”, “children”, “width”,
-			“height”, “sbgnbboxW”, “sbgnbboxH”,
+			“height”,
 			“sbgnStatesAndInfos” 
 			</p>
 		</td>

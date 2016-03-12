@@ -193,24 +193,26 @@ module.exports =  function(model, docId, userId, userName) {
 
 
 
-            //TODO: undo remove should set the previous width, height and color properties
-            model.pass({user:user}).set('_page.doc.cy.nodes.' + nodeId+'.highlightColor', null);
-            model.pass({user:user}).set('_page.doc.cy.nodes.' + nodeId+'.backgroundColor', '#f6f6f6');
-            model.pass({user:user}).set('_page.doc.cy.nodes.' + nodeId+'.sbgnlabel', param.sbgnlabel);
-            if(param.width)
-                model.pass({user:user}).set('_page.doc.cy.nodes.' + nodeId+'.width', param.width);
-            if(param.height)
-                model.pass({user:user}).set('_page.doc.cy.nodes.' + nodeId+'.height', param.height);
-            if(param.backgroundColor)
-                model.pass({user:user}).set('_page.doc.cy.nodes.' + nodeId+'.backgroundColor', param.backgroundColor);
-            if(param.borderColor)
-                model.pass({user:user}).set('_page.doc.cy.nodes.' + nodeId+'.borderColor', param.borderColor);
-            if(param.borderWidth)
-                model.pass({user:user}).set('_page.doc.cy.nodes.' + nodeId+'.borderWidth', param.borderWidth);
-            if(param.parent)
-                model.pass({user:user}).set('_page.doc.cy.nodes.' + nodeId+'.parent', param.parent);
-         //   if(param.children)
-           //     model.pass({user:user}).set('_page.doc.cy.nodes.' + nodeId+'.children', param.children);
+            ////TODO: undo remove should set the previous width, height and color properties
+            //model.pass({user:user}).set('_page.doc.cy.nodes.' + nodeId+'.highlightColor', null);
+            //model.pass({user:user}).set('_page.doc.cy.nodes.' + nodeId+'.backgroundColor', '#f6f6f6');
+            //model.pass({user:user}).set('_page.doc.cy.nodes.' + nodeId+'.sbgnlabel', param.sbgnlabel);
+            //if(param.width)
+            //    model.pass({user:user}).set('_page.doc.cy.nodes.' + nodeId+'.width', param.width);
+            //if(param.height)
+            //    model.pass({user:user}).set('_page.doc.cy.nodes.' + nodeId+'.height', param.height);
+            //if(param.backgroundColor)
+            //    model.pass({user:user}).set('_page.doc.cy.nodes.' + nodeId+'.backgroundColor', param.backgroundColor);
+            //if(param.borderColor)
+            //    model.pass({user:user}).set('_page.doc.cy.nodes.' + nodeId+'.borderColor', param.borderColor);
+            //if(param.borderWidth)
+            //    model.pass({user:user}).set('_page.doc.cy.nodes.' + nodeId+'.borderWidth', param.borderWidth);
+            //if(param.parent)
+            //    model.pass({user:user}).set('_page.doc.cy.nodes.' + nodeId+'.parent', param.parent);
+            //if(param.children)
+            //    model.pass({user:user}).set('_page.doc.cy.nodes.' + nodeId+'.children', param.children);
+            //if(param.sbgnStatesAndInfos)
+            //    model.pass({user:user}).set('_page.doc.cy.nodes.' + nodeId+'.sbgnStatesAndInfos', param.sbgnStatesAndInfos);
 
 
 
@@ -405,9 +407,10 @@ module.exports =  function(model, docId, userId, userName) {
 
         initModelNode: function(node, user){
 
-            var nodePath = model.at('_page.doc.cy.nodes.' + node.id());
-            if (nodePath.get('id')) {
 
+            var nodePath = model.at('_page.doc.cy.nodes.' + node.id());
+
+            if (nodePath.get('id')) {
 
                 var borderColor = nodePath.get('borderColor');
 
@@ -437,11 +440,14 @@ module.exports =  function(model, docId, userId, userName) {
                 var sbgnlabel = nodePath.get('sbgnlabel');
 
 
+
                 if (sbgnlabel != null)
                     node.data('sbgnlabel', sbgnlabel );
 
                 else
                     this.changeModelNodeAttribute('sbgnlabel', node.id(),node.data('sbgnlabel'), user);
+
+
 
                 var isCloneMarker = nodePath.get('isCloneMarker');
 
@@ -452,6 +458,7 @@ module.exports =  function(model, docId, userId, userName) {
                 else
                     this.changeModelNodeAttribute('isCloneMarker', node.id(),node.data('sbgnclonemarker'), user);
 
+                //todo: restore doesn't get correct
 
                 var isMultimer = nodePath.get('isMultimer');
 
@@ -481,68 +488,33 @@ module.exports =  function(model, docId, userId, userName) {
                     this.changeModelNodeAttribute('sbgnStatesAndInfos', node.id(),node.data('sbgnstatesandinfos'), user);
 
 
+                var parent = nodePath.get('parent');
 
-                /*  var width = nodePath.get('width');
-                  if (width != null) {
+                if (parent != null)
+                    node.data('parent', parent);
+                else
+                    this.changeModelNodeAttribute('parent', node.id(),node.data('parent'), user);
 
-                      node.data('width', width);
-                      //node._private.style.width.value = width;
-                      //node._private.style.width.pxValue = width;
+                var width = nodePath.get('width');
 
-                      this.changeModelNodeAttribute('sbgnbboxW', node.id(),width, user); //update sbgnbbox width as well
-                      node._private.data.sbgnbbox.w = width;
-                  }
+                if (width != null){
+                    node._private.style.width.value = width;
+                    node._private.style.width.pfValue = width;
+                    node._private.data.sbgnbbox.w = width;
+                }
+                else
+                    this.changeModelNodeAttribute('width', node.id(),node.width(), user);
 
-                  else{
-                      this.changeModelNodeAttribute('width', node.id(), node.width(), user);
-                      this.changeModelNodeAttribute('sbgnbboxW', node.id(),node.width(), user); //update sbgnbbox width as well
-                  }
+                var height = nodePath.get('height');
 
-                  var height = nodePath.get('height');
-                  if (height != null) {
-                      node.data('height', height);
-                      //node._private.style.height.value = height;
-                      //node._private.style.height.pxValue = height;
+                if (height != null){
+                    node._private.style.height.value = height;
+                    node._private.style.height.pfValue = height;
+                    node._private.data.sbgnbbox.h = height;
+                }
+                else
+                    this.changeModelNodeAttribute('height', node.id(),node.height(), user);
 
-                      this.changeModelNodeAttribute('sbgnbboxH', node.id(),height, user); //update sbgnbbox width as well
-                      node._private.data.sbgnbbox.h = height;
-                  }
-
-                   else{
-                      //nodePath.pass({user: user}).set('height', node.height());
-                      this.changeModelNodeAttribute('sbgnbboxH', node.id(),node.height(), user); //update sbgnbbox width as well
-                      this.changeModelNodeAttribute('height', node.id(),node.height(), user);
-                  }
-  */
-
-
-
-
-
-
-                //var parent = nodePath.get('parent');
-                //
-                //
-                //if (parent != null)
-                //    node.data('parent', parent);
-                //else
-                //    this.changeModelNodeAttribute('parent', node.id(),node.data('parent'), user);
-                //
-                //
-
-                //
-                //
-                //var sbgnbboxW = nodePath.get('sbgnbboxW');
-                //if(sbgnbboxW != null)
-                //    node._private.data.sbgnbbox.w = sbgnbboxW;
-                //else
-                //    this.changeModelNodeAttribute('sbgnbboxW', node.id(),node._private.data.sbgnbbox.w, user);
-                //
-                //var sbgnbboxH = nodePath.get('sbgnbboxH');
-                //if(sbgnbboxH != null)
-                //    node._private.data.sbgnbbox.h = sbgnbboxH;
-                //else
-                //    this.changeModelNodeAttribute('sbgnbboxH', node.id(),node._private.data.sbgnbbox.h, user);
 
             }
 
