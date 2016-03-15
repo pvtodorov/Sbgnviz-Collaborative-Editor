@@ -202,6 +202,8 @@ module.exports = function(){
                     editorActions.manager._do(editorActions.ChangeChildrenCommand(param));
                 }
 
+
+
                 else {
                     if (propType == 'data')
                         editorActions.manager._do(editorActions.ChangeStyleDataCommand(param));
@@ -225,6 +227,8 @@ module.exports = function(){
             editorActions.modelManager.setSampleInd(-1, "me"); //to notify other clients
 
         },
+
+
         getSelectedModelElements: function(){
 
             var elementIds = editorActions.modelManager.getSelectedModelElementIds();
@@ -256,7 +260,6 @@ module.exports = function(){
 
             };
 
-            console.log(param.selectedEles);
             editorActions.manager._do(editorActions.HighlightNeighborsofSelectedCommand(param));
             editorActions.refreshUndoRedoButtonsStatus();
 

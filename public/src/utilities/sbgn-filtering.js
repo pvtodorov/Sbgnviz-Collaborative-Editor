@@ -56,36 +56,43 @@ var sbgnFiltering = {
     },
 
     removeHighlights: function(){
-        this.highlightNodes(cy.nodes(":visible").nodes("[highlighted!='true']"));
-        this.highlightEdges(cy.edges(":visible").edges("[highlighted!='true']"));
+        this.highlightElements(cy.nodes(":visible").nodes("[highlighted!='true']"));
+        this.highlightElements(cy.edges(":visible").edges("[highlighted!='true']"));
         cy.nodes(":visible").nodes().removeData("highlighted");
         cy.edges(":visible").edges().removeData("highlighted");
     },
 
     highlightGraph: function(nodes, edges){
-        this.notHighlightNodes(cy.nodes(":visible").nodes("[highlighted!='true']"));
-        this.notHighlightEdges(cy.edges(":visible").edges("[highlighted!='true']"));
-        this.highlightNodes(cy.nodes(":visible").nodes("[highlighted='true']"));
-        this.highlightEdges(cy.edges(":visible").edges("[highlighted='true']"));
+        this.notHighlightElements(cy.nodes(":visible").nodes("[highlighted!='true']"));
+        this.notHighlightElements(cy.edges(":visible").edges("[highlighted!='true']"));
+        this.highlightElements(cy.nodes(":visible").nodes("[highlighted='true']"));
+        this.highlightElements(cy.edges(":visible").edges("[highlighted='true']"));
         // cy.nodes("[highlighted=true]").not(nodes).css(this.notHighlightNode);
         // cy.edges().not(edges).css(this.notHighlightEdge);
     },
 
-    highlightNodes: function(nodes){
-        nodes.removeClass("not-highlighted");
+    highlightElements: function(elements){
+        elements.removeClass("not-highlighted");
     },
 
-    notHighlightNodes: function(nodes){
-        nodes.addClass("not-highlighted");
+    notHighlightElements: function(elements) {
+        elements.addClass("not-highlighted");
     },
-
-    highlightEdges: function(edges){
-        edges.removeClass("not-highlighted");
-    },
-
-    notHighlightEdges: function(edges){
-        edges.addClass("not-highlighted");
-    },
+    //highlightNodes: function(nodes){
+    //    nodes.removeClass("not-highlighted");
+    //},
+    //
+    //notHighlightNodes: function(nodes){
+    //    nodes.addClass("not-highlighted");
+    //},
+    //
+    //highlightEdges: function(edges){
+    //    edges.removeClass("not-highlighted");
+    //},
+    //
+    //notHighlightEdges: function(edges){
+    //    edges.addClass("not-highlighted");
+    //},
 
     isAllElementsAreNotHighlighted: function(){
         var highlightedNodes = cy.nodes(":visible").nodes("[highlighted='true']");

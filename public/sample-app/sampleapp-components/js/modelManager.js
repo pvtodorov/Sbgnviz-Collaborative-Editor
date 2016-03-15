@@ -265,33 +265,34 @@ module.exports =  function(model, docId, userId, userName) {
             }
         },
 
-        highlight: function(val, user){
+        //Not used currently
+        //highlight: function(val, user){
+        //
+        //
+        //    model.pass({user: user}).set('_page.doc.cy.highlight.mode', val);
+        //
+        //
+        //    if(val == 0)
+        //        this.updateHistory('Remove highlights of selected elements');
+        //    else if(val == 1)
+        //        this.updateHistory('Highlight neighbors of selected elements');
+        //    else if(val == 2)
+        //        this.updateHistory('Highlight processes of selected elements');
+        //
+        //
+        //},
 
-
-            model.pass({user: user}).set('_page.doc.cy.highlight.mode', val);
-
-
-            if(val == 0)
-                this.updateHistory('Remove highlights of selected elements');
-            else if(val == 1)
-                this.updateHistory('Highlight neighbors of selected elements');
-            else if(val == 2)
-                this.updateHistory('Highlight processes of selected elements');
-
-
-        },
-
-        hideShow: function(val, user){
-            model.pass({user: user}).set('_page.doc.cy.hideShow.mode', val);
-
-
-            if(val == 0)
-                this.updateHistory('Hide selected elements');
-            else if(val == 1)
-                this.updateHistory('Show selected elements');
-
-
-        },
+        //hideShow: function(val, user){
+        //    model.pass({user: user}).set('_page.doc.cy.hideShow.mode', val);
+        //
+        //
+        //    if(val == 0)
+        //        this.updateHistory('Hide selected elements');
+        //    else if(val == 1)
+        //        this.updateHistory('Show selected elements');
+        //
+        //
+        //},
 
         getModelEdge: function(id){
 
@@ -603,7 +604,7 @@ module.exports =  function(model, docId, userId, userName) {
 
 
 
-            model.set('_page.doc.cy.hideShow.mode', -1); //neither hide nor show
+          //  model.set('_page.doc.cy.hideShow.mode', -1); //neither hide nor show
 
         }
     }

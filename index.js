@@ -316,36 +316,37 @@ app.proto.init = function (model) {
     });
 
 
-    //trigger variable to check whether parts of the graph should be highlighted
-    model.on('change', '_page.doc.cy.highlight.mode', function(val, ind ,passed) {
-
-
-        if(docReady  && passed.user == null){
-
-            if(val == 0)
-                menu.removeHighlights( false); //do not synchronize afterwards
-            else if(val == 1)
-                menu.highlightNeighbors( false);//do not synchronize afterwards
-            else if(val == 2)
-                menu.highlightProcesses( false);//do not synchronize afterwards
-        }
-
-    });
+    //Not used
+    ////trigger variable to check whether parts of the graph should be highlighted
+    //model.on('change', '_page.doc.cy.highlight.mode', function(val, ind ,passed) {
+    //
+    //
+    //    if(docReady  && passed.user == null){
+    //
+    //        if(val == 0)
+    //            menu.removeHighlights( false); //do not synchronize afterwards
+    //        else if(val == 1)
+    //            menu.highlightNeighbors( false);//do not synchronize afterwards
+    //        else if(val == 2)
+    //            menu.highlightProcesses( false);//do not synchronize afterwards
+    //    }
+    //
+    //});
 
     //trigger variable to check whether parts of the graph should be hidden/shown
-    model.on('change', '_page.doc.cy.hideShow.mode', function(val, ind ,passed) {
-
-
-        if(docReady  && passed.user == null){
-
-            if(val == 0)
-                menu.hideSelected(false);//do not synchronize afterwards
-            else if(val == 1)
-                menu.showSelected(false);//do not synchronize afterwards
-
-        }
-
-    });
+    //model.on('change', '_page.doc.cy.hideShow.mode', function(val, ind ,passed) {
+    //
+    //
+    //    if(docReady  && passed.user == null){
+    //
+    //        if(val == 0)
+    //            menu.hideSelected(false);//do not synchronize afterwards
+    //        else if(val == 1)
+    //            menu.showSelected(false);//do not synchronize afterwards
+    //
+    //    }
+    //
+    //});
 
     model.on('all', '_page.doc.layoutProperties', function(index){
 
@@ -506,6 +507,33 @@ app.proto.init = function (model) {
 
         if(docReady && passed.user == null) {
             menu.changeElementProperty(id, 'lineColor', 'lineColor', lineColor, 'data', false);
+        }
+    });
+
+    model.on('all', '_page.doc.cy.nodes.*.highlightStatus', function(id,  op, highlightStatus, prev, passed){
+
+        if(docReady && passed.user == null) {
+            menu.changeElementProperty(id, 'highlightStatus', 'highlightStatus', highlightStatus, 'data', false);
+        }
+    });
+
+    model.on('all', '_page.doc.cy.edges.*.highlightStatus', function(id,  op, highlightStatus, prev, passed){
+
+        if(docReady && passed.user == null) {
+            menu.changeElementProperty(id, 'highlightStatus', 'highlightStatus', highlightStatus, 'data', false);
+        }
+    });
+    model.on('all', '_page.doc.cy.nodes.*.visibilityStatus', function(id,  op, visibilityStatus, prev, passed){
+
+        if(docReady && passed.user == null) {
+            menu.changeElementProperty(id, 'visibilityStatus', 'visibilityStatus', visibilityStatus, 'data', false);
+        }
+    });
+
+    model.on('all', '_page.doc.cy.edges.*.visibilityStatus', function(id,  op, visibilityStatus, prev, passed){
+
+        if(docReady && passed.user == null) {
+            menu.changeElementProperty(id, 'visibilityStatus', 'visibilityStatus', visibilityStatus, 'data', false);
         }
     });
     model.on('all', '_page.doc.cy.edges.*.highlightColor', function(id, op, highlightColor,prev, passed){

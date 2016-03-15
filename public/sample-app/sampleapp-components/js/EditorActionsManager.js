@@ -523,40 +523,77 @@ module.exports.moveNodes = function(positionDiff, nodes) {
 
 module.exports.hideSelected = function(param) {
     var currentNodes = cy.nodes(":visible");
+    var result = {
+        sync: true,
+        firstTime: false
+    };
     if (param.firstTime) {
-        if(param.sync) //first hide on the other side to make sure elements don't get unselected
-            module.exports.modelManager.hideShow(0, "me");
+
 
         sbgnFiltering.hideSelected(param.selectedEles); //funda changed
+        if(param.sync) {//first hide on the other side to make sure elements don't get unselected
+            param.selectedEles.forEach(function(el){
+                module.exports.modelManager.changeModelNodeAttribute('visibilityStatus', el.id(), "invisible", "me");
+            });
+            module.exports.updateServerGraph();
+        }
 
 
     }
     else {
-        if(param.sync)
-            module.exports.modelManager.hideShow(1, "me");
+
+
         sbgnFiltering.showJustGivenNodes(param.nodesToShow);
+        if(param.sync){
+            param.nodesToShow.forEach(function(el){
+                module.exports.modelManager.changeModelNodeAttribute('visibilityStatus', el.id(), "invisible", "me");
+            });
+            module.exports.updateServerGraph();
+        }
 
     }
 
 
-    return currentNodes;
+    result.nodesToShow = currentNodes;
+    result.selectedEles = param.selectedEles;
+    return result;
 }
 
 module.exports.showSelected = function(param) {
     var currentNodes = cy.nodes(":visible");
+    var result = {
+        sync: true,
+        firstTime: false
+    };
+
     if (param.firstTime) {
-        if(param.sync)
-            module.exports.modelManager.hideShow(1, "me");
+
         sbgnFiltering.showSelected(param.selectedEles); //funda changed
+
+        if(param.sync){
+            param.selectedEles.forEach(function(el){
+                module.exports.modelManager.changeModelNodeAttribute('visibilityStatus', el.id(), "visible", "me");
+            });
+            module.exports.updateServerGraph();
+        }
 
     }
     else {
-        if(param.sync)
-            module.exports.modelManager.hideShow(1, "me");
+
         sbgnFiltering.showJustGivenNodes(param.nodesToShow);
 
+        if(param.sync){
+            param.nodesToShow.forEach(function(el){
+                module.exports.modelManager.changeModelNodeAttribute('visibilityStatus', el.id(), "visible", "me");
+            });
+            module.exports.updateServerGraph();
+        }
+
     }
-    return currentNodes;
+
+    result.nodesToShow = currentNodes;
+    result.selectedEles = param.selectedEles;
+    return result;
 }
 
 module.exports.showAll = function() {
@@ -580,7 +617,7 @@ module.exports.showJustGivenNodes = function(nodesToShow) {
 
 //funda changed this to include selected nodes explicitly
 module.exports.highlightSelected = function(param) {
-    var elementsToHighlight;
+    var elesToHighlight, elesToNotHighlight;
     var result = {};
     //If this is the first call of the function then call the original method
     if (param.firstTime) {
@@ -592,34 +629,36 @@ module.exports.highlightSelected = function(param) {
         var alreadyHighlighted = cy.elements("[highlighted='true']").filter(":visible");
         if (param.highlightNeighboursofSelected) {
 
-
-            elementsToHighlight = sbgnFiltering.highlightNeighborsofSelected(param.selectedEles);
-            if( param.sync) //tell other users to highlight neighbors
-                module.exports.modelManager.highlight(1, "me");
+            elesToHighlight = sbgnFiltering.highlightNeighborsofSelected(param.selectedEles);
+            //if( param.sync) //tell other users to highlight neighbors
+             //   module.exports.modelManager.highlight(1, "me");
 
         }
         else if (param.highlightProcessesOfSelected) {
-            elementsToHighlight = sbgnFiltering.highlightProcessesOfSelected(param.selectedEles);
-            if( param.sync) //tell other users to highlight processes
-                module.exports.modelManager.highlight(2, "me");
+            elesToHighlight = sbgnFiltering.highlightProcessesOfSelected(param.selectedEles);
+//            if( param.sync) //tell other users to highlight processes
+  //              module.exports.modelManager.highlight(2, "me");
         }
-        elementsToHighlight = elementsToHighlight.not(alreadyHighlighted);
+        elesToHighlight = elesToHighlight.not(alreadyHighlighted);
+        elesToNotHighlight = cy.elements().not(elesToHighlight);
+
+
     }
     else {
-        elementsToHighlight = param.elesToHighlight.not(cy.elements("[highlighted='true']").filter(":visible"));
-        elementsToHighlight.data("highlighted", 'true');
-        sbgnFiltering.highlightNodes(elementsToHighlight.nodes());
-        sbgnFiltering.highlightEdges(elementsToHighlight.edges());
+        elesToHighlight = param.elesToHighlight.not(cy.elements("[highlighted='true']").filter(":visible"));
+        elesToHighlight.data("highlighted", 'true');
+        sbgnFiltering.highlightElements(elesToHighlight.nodes());
+        sbgnFiltering.highlightElements(elesToHighlight.edges());
 
-        if(param.sync ) //tell other users to highlight neighbors
-             module.exports.modelManager.highlight(1, "me");
+     //   if(param.sync ) //tell other users to highlight neighbors
+       //      module.exports.modelManager.highlight(1, "me");
 
         //If there are some elements to not highlight handle them
         if (param.elesToNotHighlight != null) {
-            var elesToNotHighlight = param.elesToNotHighlight;
+            elesToNotHighlight = param.elesToNotHighlight;
             elesToNotHighlight.removeData("highlighted");
-            sbgnFiltering.notHighlightNodes(elesToNotHighlight.nodes());
-            sbgnFiltering.notHighlightEdges(elesToNotHighlight.edges());
+            sbgnFiltering.notHighlightElements(elesToNotHighlight.nodes());
+            sbgnFiltering.notHighlightElements(elesToNotHighlight.edges());
 
             //If there are some elements to not highlight then allElementsWasNotHighlighted should be true
             result.allElementsWasNotHighlighted = true;
@@ -627,15 +666,39 @@ module.exports.highlightSelected = function(param) {
     }
 
 
+    if(param.sync){
+        if(elesToHighlight != null) {
+            elesToHighlight.forEach(function (el) {
+                if (el.isNode())
+                    module.exports.modelManager.changeModelNodeAttribute('highlightStatus', el.id(), "highlighted", "me");
+                else
+                    module.exports.modelManager.changeModelEdgeAttribute('highlightStatus', el.id(), "highlighted", "me");
+            });
+
+        }
+
+        if(elesToNotHighlight != null){
+            elesToNotHighlight.forEach(function(el){
+                if(el.isNode())
+                    module.exports.modelManager.changeModelNodeAttribute('highlightStatus', el.id(), "notHighlighted", "me" );
+                else
+                    module.exports.modelManager.changeModelEdgeAttribute('highlightStatus', el.id(), "notHighlighted", "me" );
+            });
+        }
+
+        module.exports.updateServerGraph();
+    }
 
     result.sync = true;
-    result.elesToNotHighlight = elementsToHighlight;
+    result.elesToNotHighlight = elesToHighlight;
+    result.elesToHighlight = elesToNotHighlight;
 
     return result;
 }
 
 module.exports.notHighlightEles = function(param) {
     var elesToNotHighlight = param.elesToNotHighlight;
+    var elesToHighlight = param.elesToHighlight;
     var allElementsWasNotHighlighted = param.allElementsWasNotHighlighted;
 
     var result = {};
@@ -646,24 +709,66 @@ module.exports.notHighlightEles = function(param) {
         result.elesToHighlight = elesToNotHighlight;
         result.elesToNotHighlight = cy.elements(":visible").not(elesToNotHighlight);
 
-        if(param.sync)
-            module.exports.modelManager.highlight(0, "me");
+        if(param.sync){
+            if(elesToNotHighlight != null) {
+                elesToNotHighlight.forEach(function (el) {
+                    if (el.isNode())
+                        module.exports.modelManager.changeModelNodeAttribute('highlightStatus', el.id(), "neutral", "me");
+                    else
+                        module.exports.modelManager.changeModelEdgeAttribute('highlightStatus', el.id(), "neutral", "me");
+                });
+            }
+            if(elesToHighlight != null) {
+                elesToHighlight.forEach(function (el) {
+                    if (el.isNode())
+                        module.exports.modelManager.changeModelNodeAttribute('highlightStatus', el.id(), "highlighted", "me");
+                    else
+                        module.exports.modelManager.changeModelEdgeAttribute('highlightStatus', el.id(), "highlighted", "me");
+                });
+            }
+
+            module.exports.updateServerGraph();
+        }
     }
     else {
-        sbgnFiltering.notHighlightNodes(elesToNotHighlight.nodes());
-        sbgnFiltering.notHighlightEdges(elesToNotHighlight.edges());
+        sbgnFiltering.notHighlightElements(elesToNotHighlight.nodes());
+        sbgnFiltering.notHighlightElements(elesToNotHighlight.edges());
         elesToNotHighlight.removeData("highlighted");
         result.elesToHighlight = elesToNotHighlight;
 
-        if(param.sync)
-            module.exports.modelManager.highlight(0, "me");
+
+        if(elesToNotHighlight != null) {
+            elesToNotHighlight.forEach(function (el) {
+                if (el.isNode())
+                    module.exports.modelManager.changeModelNodeAttribute('highlightStatus', el.id(), "notHighlighted", "me");
+                else
+                    module.exports.modelManager.changeModelEdgeAttribute('highlightStatus', el.id(), "notHighlighted", "me");
+            });
+        }
+        if(elesToHighlight != null) {
+            elesToHighlight.forEach(function (el) {
+                if (el.isNode())
+                    module.exports.modelManager.changeModelNodeAttribute('highlightStatus', el.id(), "highlighted", "me");
+                else
+                    module.exports.modelManager.changeModelEdgeAttribute('highlightStatus', el.id(), "highlighted", "me");
+            });
+        }
+
+     //   if(param.sync)
+       //     module.exports.modelManager.highlight(0, "me");
     }
 
 
+
+
+    result.sync = true;
     result.firstTime = false;
+    result.elesToHighlight = elesToNotHighlight;
+    result.elesToNotHighlight = elesToHighlight;
     return result;
 }
 
+//Remove highlights actually means remove fadeouts
 module.exports.removeHighlights = function(param) {
     var result = {};
     if (sbgnFiltering.isAllElementsAreNotHighlighted()) {
@@ -675,11 +780,20 @@ module.exports.removeHighlights = function(param) {
 
     sbgnFiltering.removeHighlights();
 
-    if(param.sync)
-      module.exports.modelManager.highlight(0, "me");
+    if(param.sync){
+        cy.elements().forEach(function(el){
+            module.exports.modelManager.changeModelNodeAttribute('highlighted', el.id(), "highlighted", "me");
+        });
 
+        module.exports.updateServerGraph();
+     // module.exports.modelManager.highlight(0, "me");
+    }
+
+
+    result.sync = true;
     result.elesToNotHighlight = cy.elements(":visible").not(result.elesToHighlight);
     result.firstTime = false;
+
 
 
     return result;
@@ -1143,9 +1257,39 @@ module.exports.changeStyleData = function( param) {
         ele._private.data.sbgnbbox.h = param.data;
 
     }
+    else if(param.dataType == "highlightStatus"){
+        if(param.data == "highlighted"){
+         //   sbgnFiltering.highlightElements(ele);
+            ele.addClass("highlighted");
+            ele.removeClass("not-highlighted");
+            ele.data("highlighted", 'true');
+
+        }
+        else if(param.data == "notHighlighted"){
+          //      sbgnFiltering.notHighlightElements(ele);
+            ele.addClass("not-highlighted");
+            ele.removeClass("highlighted");
+            ele.data("highlighted", 'false');
+        }
+        else { //"neutral"
+            //sbgnFiltering.removeHighlights(ele);
+            ele.removeData("highlighted");
+            ele.removeClass("highlighted");
+            ele.removeClass("not-highlighted");
+        }
+    }
+    else if(param.dataType == "visibilityStatus") {
+        if (param.data == "visible") {
+            sbgnFiltering.applyFilter(ele);
+
+        }
+        else if (param.data == "invisible") {
+            sbgnFiltering.removeFilter(ele);
+        }
+    }
 
 
-    if(param.sync){
+        if(param.sync){
 
         if(ele.isNode())
             module.exports.modelManager.changeModelNodeAttribute(param.modelDataName, param.ele.id(), param.data, "me");
