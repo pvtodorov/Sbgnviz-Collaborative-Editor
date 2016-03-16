@@ -71,6 +71,8 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
 
             for (var i = 0; i < nodes.length; i++) {
                 var node = nodes[i];
+
+
                 node.data("borderColor", node.css('border-color'));
                 node.addClass('changeBorderColor');
 
@@ -222,6 +224,7 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
                 }
             });
 
+
             //
             //try { //Todo FUNDA : gives error????
             //    cy.edgehandles('drawoff');
@@ -252,7 +255,10 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
                 lastMouseDownNodeInfo.node = this;
 
 
+
+
             });
+
 
             //cy.on("mouseup", "node", function () {
             cy.on("mouseup", "node", function () {
@@ -286,10 +292,9 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
 
                     var param = {
                         positionDiff: positionDiff,
-                        nodes: nodes, move: false
+                        nodes: nodes, move: false,
+                        sync: true
                     };
-
-
 
 
                     editorActions.manager._do(editorActions.MoveNodeCommand(param));
@@ -307,14 +312,24 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
                 }
             });
 
-            cy.on('grab', 'node', function(event) { //Also works as 'select'
-                editorActions.manager._do(editorActions.SelectNodeCommand(this));
-            });
+
+
             cy.on('select', 'node', function(event) { //Necessary for multiple selections
                 editorActions.manager._do(editorActions.SelectNodeCommand(this));
 
             });
             cy.on('unselect', 'node', function() {
+
+                editorActions.manager._do(editorActions.UnselectNodeCommand(this));
+
+            });
+            cy.on('grab', 'node', function(event) { //Also works as 'select'
+
+
+                editorActions.manager._do(editorActions.SelectNodeCommand(this));
+            });
+            cy.on('free', 'node', function() {
+
                 editorActions.manager._do(editorActions.UnselectNodeCommand(this));
 
             });
@@ -352,6 +367,7 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
             });
 
             cy.on('mouseout', 'node', function (event) {
+
                 if (this.qtipTimeOutFcn != null) {
                     clearTimeout(this.qtipTimeOutFcn);
                     this.qtipTimeOutFcn = null;
@@ -525,6 +541,8 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
             cy.on('tap', 'node', function (event) {
 
                 var node = this;
+
+
 
                 var tappedNow = event.cyTarget;
                 setTimeout(function () {

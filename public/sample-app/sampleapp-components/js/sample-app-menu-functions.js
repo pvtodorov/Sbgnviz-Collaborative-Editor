@@ -96,7 +96,8 @@ module.exports = function(){
 
             };
 
-            editorActions.manager._do( editorActions.AddEdgeCommand(param));
+            editorActions.addEdge(param);
+           // editorActions.manager._do( editorActions.AddEdgeCommand(param));
 
         },
 
@@ -111,7 +112,9 @@ module.exports = function(){
                 sbgnlabel: sbgnlabel
 
             };
-            editorActions.manager._do( editorActions.AddNodeCommand(param));
+
+            editorActions.addNode(param);
+            //editorActions.manager._do( editorActions.AddNodeCommand(param));
 
         },
 
@@ -123,7 +126,8 @@ module.exports = function(){
                     eles:el,
                     sync: syncVal
                 }
-                editorActions.manager._do(editorActions.DeleteSelectedCommand(param));
+                editorActions.deleteSelected(param);
+                //editorActions.manager._do(editorActions.DeleteSelectedCommand(param));
             }
         },
 
@@ -138,7 +142,11 @@ module.exports = function(){
 
 
             if(el)
-                editorActions.manager._do(editorActions.ChangePositionCommand(param));
+                //editorActions.manager._do(editorActions.ChangePositionCommand(param));
+                editorActions.changePosition(param); //do/undo not performed here
+
+
+
         },
 
 
@@ -153,7 +161,8 @@ module.exports = function(){
             };
 
             if(el)
-                editorActions.manager._do(editorActions.ChangeIsMultimerStatusCommand(param));
+                editorActions.changeIsMultimerStatus(param);
+                //editorActions.manager._do(editorActions.ChangeIsMultimerStatusCommand(param));
 
         },
 
@@ -168,7 +177,8 @@ module.exports = function(){
             };
 
             if(el)
-                editorActions.manager._do(editorActions.ChangeIsCloneMarkerStatusCommand(param));
+                editorActions.changeIsCloneMarkerStatus(param);
+                //editorActions.manager._do(editorActions.ChangeIsCloneMarkerStatusCommand(param));
 
         },
 
@@ -196,10 +206,12 @@ module.exports = function(){
             if(el) {
 
                 if (propName == 'parent')//TODO
-                    editorActions.manager._do(editorActions.ChangeParentCommand(param));
+                    editorActions.changeParent(param);
+                    //editorActions.manager._do(editorActions.ChangeParentCommand(param));
 
                 else if (propName == 'children') {
-                    editorActions.manager._do(editorActions.ChangeChildrenCommand(param));
+                    editorActions.changeChildren(param);
+                    //editorActions.manager._do(editorActions.ChangeChildrenCommand(param));
                 }
 
                 //else if(propName == 'highlighted'){
@@ -214,9 +226,11 @@ module.exports = function(){
 
                 else {
                     if (propType == 'data')
-                        editorActions.manager._do(editorActions.ChangeStyleDataCommand(param));
+                        editorActions.changeStyleData(param);
+                        //editorActions.manager._do(editorActions.ChangeStyleDataCommand(param));
                     else if (propType == 'css')
-                        editorActions.manager._do(editorActions.ChangeStyleCssCommand(param));
+                        editorActions.changeStyleCss(param);
+                        //editorActions.manager._do(editorActions.ChangeStyleCssCommand(param));
                 }
 
 
@@ -335,7 +349,7 @@ module.exports = function(){
                 };
 
                 sbgnBendPointUtilities.addBendPoint();
-                editorActionsManager._do(new changeBendPointsCommand(param));
+                editorActions.manager._do(editorActions.changeBendPointsCommand(param));
                 refreshUndoRedoButtonsStatus();
             });
 
@@ -348,7 +362,7 @@ module.exports = function(){
                 };
 
                 sbgnBendPointUtilities.removeBendPoint();
-                editorActionsManager._do(new changeBendPointsCommand(param));
+                editorActions.manager._do(editorActions.changeBendPointsCommand(param));
                 refreshUndoRedoButtonsStatus();
             });
 
@@ -466,7 +480,7 @@ module.exports = function(){
                 }
 
                 nodesData.firstTime = true;
-                editorActionsManager._do(new ReturnToPositionsAndSizesCommand({nodesData: nodesData}));
+                editorActions.manager._do(editorActions.ReturnToPositionsAndSizesCommand({sync: true,  nodesData: nodesData}));
             });
 
             $("#align-horizontal-top-icon").click(function (e) {
@@ -494,7 +508,7 @@ module.exports = function(){
                 }
 
                 nodesData.firstTime = true;
-                editorActionsManager._do(new ReturnToPositionsAndSizesCommand({nodesData: nodesData}));
+                editorActions.manager._do(editorActions.ReturnToPositionsAndSizesCommand({nodesData: nodesData}));
             });
 
             $("#align-horizontal-middle-icon").click(function (e) {
@@ -522,7 +536,7 @@ module.exports = function(){
                 }
 
                 nodesData.firstTime = true;
-                editorActionsManager._do(new ReturnToPositionsAndSizesCommand({nodesData: nodesData}));
+                editorActions.manager._do(editorActions.ReturnToPositionsAndSizesCommand({nodesData: nodesData}));
             });
 
             $("#align-horizontal-bottom-icon").click(function (e) {
@@ -550,7 +564,7 @@ module.exports = function(){
                 }
 
                 nodesData.firstTime = true;
-                editorActionsManager._do(new ReturnToPositionsAndSizesCommand({nodesData: nodesData}));
+                editorActions.manager._do(editorActions.ReturnToPositionsAndSizesCommand({nodesData: nodesData}));
             });
 
             $("#align-vertical-left-icon").click(function (e) {
@@ -578,7 +592,7 @@ module.exports = function(){
                 }
 
                 nodesData.firstTime = true;
-                editorActionsManager._do(new ReturnToPositionsAndSizesCommand({nodesData: nodesData}));
+                editorActions.manager._do(editorActions.ReturnToPositionsAndSizesCommand({nodesData: nodesData}));
             });
 
             $("#align-vertical-center-icon").click(function (e) {
@@ -606,7 +620,7 @@ module.exports = function(){
                 }
 
                 nodesData.firstTime = true;
-                editorActionsManager._do(new ReturnToPositionsAndSizesCommand({nodesData: nodesData}));
+                editorActions.manager._do(editorActions.ReturnToPositionsAndSizesCommand({nodesData: nodesData}));
             });
 
             $("#align-vertical-right-icon").click(function (e) {
@@ -1051,7 +1065,7 @@ module.exports = function(){
                 sbgnLayout.applyLayout(editorActions.modelManager);
 
 
-                editorActions.manager._do(editorActions.PerformLayoutCommand(nodesData));
+                editorActions.manager._do(editorActions.PerformLayoutCommand({nodesData:nodesData}));
 
                 //       editorActions.manager._do(editorActions.ReturnToPositionsAndSizesCommand({nodesData: nodesData}));
 

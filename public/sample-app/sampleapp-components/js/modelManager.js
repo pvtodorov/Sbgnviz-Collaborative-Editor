@@ -497,25 +497,28 @@ module.exports =  function(model, docId, userId, userName) {
                 else
                     this.changeModelNodeAttribute('parent', node.id(),node.data('parent'), user);
 
-                var width = nodePath.get('width');
 
-                if (width != null){
-                    node._private.style.width.value = width;
-                    node._private.style.width.pfValue = width;
-                    node._private.data.sbgnbbox.w = width;
-                }
-                else
-                    this.changeModelNodeAttribute('width', node.id(),node.width(), user);
-
-                var height = nodePath.get('height');
-
-                if (height != null){
-                    node._private.style.height.value = height;
-                    node._private.style.height.pfValue = height;
-                    node._private.data.sbgnbbox.h = height;
-                }
-                else
-                    this.changeModelNodeAttribute('height', node.id(),node.height(), user);
+                //IMPORTANT!!!!! Calling this causes node moving errors
+                //var width = nodePath.get('width');
+                //
+                //
+                //if (width != null){
+                //    node._private.style.width.value = width;
+                //    node._private.style.width.pfValue = width;
+                ////    node._private.data.sbgnbbox.w = width;
+                //}
+                //else
+                //    this.changeModelNodeAttribute('width', node.id(),node.width(), user);
+                //
+                //var height = nodePath.get('height');
+                //
+                //if (height != null){
+                //    node._private.style.height.value = height;
+                //    node._private.style.height.pfValue = height;
+                // //   node._private.data.sbgnbbox.h = height;
+                //}
+                //else
+                //    this.changeModelNodeAttribute('height', node.id(),node.height(), user);
 
 
             }

@@ -67,18 +67,6 @@ module.exports.addNode = function(param) {
 
     return result;
 }
-//TODO
-//module.exports.removeNodes = function(nodesToBeDeleted) {
-//
-//
-//    module.exports.modelManager.deleteModelNodes(nodesToBeDeleted, "me");
-//
-//    module.exports.updateServerGraph();
-//
-//
-//    return addRemoveUtilities.removeNodes(nodesToBeDeleted);
-//}
-
 module.exports.removeEles =function(elesToBeRemoved) {
 
 
@@ -375,11 +363,12 @@ module.exports.performLayoutFunction = function(param) {
 
 
 
-    if (param.firstTime) {
-
-        delete param.firstTime;
-        return param;
-    }
+    //funda: why is this necessary?
+    //if (param.firstTime) {
+    //
+    //    delete param.firstTime;
+    //    return param;
+    //}
 
 //notify other clients
     cy.on('layoutstop', function() {
@@ -431,30 +420,40 @@ module.exports.returnToPositionsAndSizes = function(param) {
         });
         module.exports.updateServerGraph();
     }
-    return currentPositionsAndSizes;
+
+
+    return {sync: true, nodesData: currentPositionsAndSizes};
 }
 
+//This is used only to inform the model and perform undo. cytoscape moves the node
 module.exports.moveNodesConditionally = function(param) {
 
-    if (param.move){
+    if (param.move) {
         module.exports.moveNodes(param.positionDiff, param.nodes);
     }
+    else {
+        if(param.sync) {
 
-    else{
-        //moves itself and children
-        module.exports.moveDescendentNodes(param.nodes);
+            //
+            //param.nodes.forEach(function (node) {
+            //
+            //    module.exports.moveAncestorNodes(node);
+            ////    console.log(node.parent());
+            //  //  module.exports.modelManager.moveModelNode(node.id(), node.position(), "me");
+            //});
 
-        //move parents
-      //  param.nodes.forEach(function(node) {
-      //      module.exports.moveAncestorNodes(node); //moves parents
-      //  });
+            //also move ancestors and descendents
 
 
+            module.exports.moveDescendentNodes((param.nodes));
+        }
 
     }
+
+
+
     return param;
 }
-
 //Only informs the model -- does not actually move; cytoscape does
 module.exports.moveDescendentNodes = function(nodes) {
 
@@ -472,16 +471,18 @@ module.exports.moveAncestorNodes = function(node) {
 
     if(node == null) return;
 
-        var parentId = node._private.data.parent;
+    var parentId = node._private.data.parent;
 
-        if(parentId){
+    if(parentId){
 
-            var parent = cy.getElementById(parentId);
-            module.exports.modelManager.moveModelNode(parentId, parent.position(), "me");
-            module.exports.moveAncestorNodes(parent);
-        }
+        var parent = cy.getElementById(parentId);
+        module.exports.modelManager.moveModelNode(parentId, parent.position(), "me");
+        module.exports.moveAncestorNodes(parent);
+    }
 
 }
+
+
 
 module.exports.moveNodesReversely = function(param) {
     var diff = {
@@ -491,7 +492,8 @@ module.exports.moveNodesReversely = function(param) {
     var result = {
         positionDiff: param.positionDiff,
         nodes: param.nodes,
-        move: true
+        move: true,
+        sync: true
     };
     module.exports.moveNodes(diff, param.nodes);
     return result;
@@ -509,10 +511,12 @@ module.exports.moveNodes = function(positionDiff, nodes) {
         });
 
 
-        module.exports.modelManager.moveModelNode(node.id(), node.position(), "me");
 
+        module.exports.modelManager.moveModelNode(node.id(), node.position(), "me");
         var children = node.children();
         module.exports.moveNodes(positionDiff, children);
+
+
 
     }
 }
@@ -1246,11 +1250,14 @@ module.exports.changePosition = function(param){
     ele.data(param.data);
     ele.position(param.data);
 
-
+    ele['position'](param.data);
     if(param.sync){
-        module.exports.modelManager.changeModelNodeAttribute(param.modelDataName, param.ele.id(), param.data, "me");
+        //module.exports.modelManager.changeModelNodeAttribute(param.modelDataName, param.ele.id(), param.data, "me");
+        module.exports.modelManager.moveModelNode(param.ele.id(), param.data, "me");
+
         module.exports.updateServerGraph();
     }
+
     return result;
 
 }
@@ -1458,10 +1465,6 @@ module.exports.AddNodeCommand = function (newNode)
     return new Command(module.exports.addNode, module.exports.removeEles, newNode, "addNode");
 };
 
-//var RemoveNodesCommand = function (nodesTobeDeleted)
-//{
-//  return new Command(removeNodes, restoreEles, nodesTobeDeleted);
-//};
 
 module.exports.RemoveElesCommand = function (elesTobeDeleted)
 {
@@ -1514,8 +1517,8 @@ module.exports.ExpandAllNodesCommand = function (param) {
     return new Command(module.exports.expandAllNodes, module.exports.undoExpandAllNodes, param, "expandAllNodes");
 };
 
-module.exports.PerformLayoutCommand = function (nodesData) {
-    return new Command(module.exports.performLayoutFunction, module.exports.returnToPositionsAndSizes, nodesData, "performLayout");
+module.exports.PerformLayoutCommand = function (param) {
+    return new Command(module.exports.performLayoutFunction, module.exports.returnToPositionsAndSizes, param, "performLayout");
 };
 
 module.exports.MoveNodeCommand = function (param) {
@@ -1575,10 +1578,6 @@ module.exports.ChangeStateVariableCommand = function (param) {
 
 module.exports.ChangeUnitOfInformationCommand = function (param) {
     return new Command(module.exports.changeUnitOfInformation, module.exports.changeUnitOfInformation, param, "changeUnitOfInformation");
-};
-
-module.exports.ChangePositionCommand = function (param) {
-    return new Command(module.exports.changePosition, module.exports.changePosition, param, "changePosition");
 };
 
 module.exports.ChangeStyleDataCommand = function (param) {
