@@ -479,8 +479,12 @@ module.exports = function(){
                     sbgnElementUtilities.propogateReplacementToChildren(node, 0, newPosY - oldPosY);
                 }
 
-                nodesData.firstTime = true;
-                editorActions.manager._do(editorActions.ReturnToPositionsAndSizesCommand({sync: true,  nodesData: nodesData}));
+                cy.nodes().forEach(function(node){
+                    self.changePosition(node.id(), node.position(), "true");
+                })
+
+                editorActions.manager._do(editorActions.ReturnToPositionsAndSizesCommand({firstTime: true, sync: true,  nodesData: nodesData}));
+                editorActions.refreshUndoRedoButtonsStatus();
             });
 
             $("#align-horizontal-top-icon").click(function (e) {
@@ -507,8 +511,12 @@ module.exports = function(){
                     sbgnElementUtilities.propogateReplacementToChildren(node, 0, newPosY - oldPosY);
                 }
 
-                nodesData.firstTime = true;
-                editorActions.manager._do(editorActions.ReturnToPositionsAndSizesCommand({nodesData: nodesData}));
+                cy.nodes().forEach(function(node){
+                    self.changePosition(node.id(), node.position(), "true");
+                })
+
+                editorActions.manager._do(editorActions.ReturnToPositionsAndSizesCommand({firstTime: true, sync: true,  nodesData: nodesData}));
+                editorActions.refreshUndoRedoButtonsStatus();
             });
 
             $("#align-horizontal-middle-icon").click(function (e) {
@@ -535,8 +543,12 @@ module.exports = function(){
                     sbgnElementUtilities.propogateReplacementToChildren(node, 0, newPosY - oldPosY);
                 }
 
-                nodesData.firstTime = true;
-                editorActions.manager._do(editorActions.ReturnToPositionsAndSizesCommand({nodesData: nodesData}));
+                cy.nodes().forEach(function(node){
+                    self.changePosition(node.id(), node.position(), "true");
+                })
+
+                editorActions.manager._do(editorActions.ReturnToPositionsAndSizesCommand({firstTime: true, sync: true, nodesData: nodesData}));
+                editorActions.refreshUndoRedoButtonsStatus();
             });
 
             $("#align-horizontal-bottom-icon").click(function (e) {
@@ -563,8 +575,12 @@ module.exports = function(){
                     sbgnElementUtilities.propogateReplacementToChildren(node, newPosX - oldPosX, 0);
                 }
 
-                nodesData.firstTime = true;
-                editorActions.manager._do(editorActions.ReturnToPositionsAndSizesCommand({nodesData: nodesData}));
+                cy.nodes().forEach(function(node){
+                    self.changePosition(node.id(), node.position(), "true");
+                })
+
+                editorActions.manager._do(editorActions.ReturnToPositionsAndSizesCommand({firstTime: true, sync: true, nodesData: nodesData}));
+                editorActions.refreshUndoRedoButtonsStatus();
             });
 
             $("#align-vertical-left-icon").click(function (e) {
@@ -590,9 +606,13 @@ module.exports = function(){
                     });
                     sbgnElementUtilities.propogateReplacementToChildren(node, newPosX - oldPosX, 0);
                 }
+                cy.nodes().forEach(function(node){
+                    self.changePosition(node.id(), node.position(), "true");
+                })
 
-                nodesData.firstTime = true;
-                editorActions.manager._do(editorActions.ReturnToPositionsAndSizesCommand({nodesData: nodesData}));
+
+                editorActions.manager._do(editorActions.ReturnToPositionsAndSizesCommand({firstTime: true, sync: true, nodesData: nodesData}));
+                editorActions.refreshUndoRedoButtonsStatus();
             });
 
             $("#align-vertical-center-icon").click(function (e) {
@@ -618,9 +638,13 @@ module.exports = function(){
                     });
                     sbgnElementUtilities.propogateReplacementToChildren(node, newPosX - oldPosX, 0);
                 }
+                cy.nodes().forEach(function(node){
+                    self.changePosition(node.id(), node.position(), "true");
+                })
 
-                nodesData.firstTime = true;
-                editorActions.manager._do(editorActions.ReturnToPositionsAndSizesCommand({nodesData: nodesData}));
+
+                editorActions.manager._do(editorActions.ReturnToPositionsAndSizesCommand({firstTime: true, sync: true, nodesData: nodesData}));
+                editorActions.refreshUndoRedoButtonsStatus();
             });
 
             $("#align-vertical-right-icon").click(function (e) {

@@ -9,11 +9,36 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="88f2e8a3-abc2-4ba9-848d-5914e68f76f8" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/install/docs/public/fonts/aller-bold.eot" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/install/docs/public/fonts/aller-bold.ttf" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/install/docs/public/fonts/aller-bold.woff" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/install/docs/public/fonts/aller-light.eot" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/install/docs/public/fonts/aller-light.ttf" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/install/docs/public/fonts/aller-light.woff" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/install/docs/public/fonts/roboto-black.eot" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/install/docs/public/fonts/roboto-black.ttf" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/install/docs/public/fonts/roboto-black.woff" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/install/.npmignore" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/install/.travis.yml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/install/LICENSE" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/install/README.md" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/install/docs/docco.css" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/install/docs/install.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/install/docs/public/stylesheets/normalize.css" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/install/ensure.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/install/install.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/install/install.min.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/install/package.json" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/install/scripts/docs.sh" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/install/scripts/prepublish.sh" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/onecolor/README.md" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/onecolor/one-color-all-debug.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/onecolor/one-color-all.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/onecolor/one-color-debug.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/onecolor/one-color-ieshim.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/onecolor/one-color.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/onecolor/package.json" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/lib/js/cytoscape.js" afterPath="$PROJECT_DIR$/public/lib/js/cytoscape.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/EditorActionsManager.js" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/EditorActionsManager.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/modelManager.js" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/modelManager.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-cytoscape-sbgn.js" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-cytoscape-sbgn.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-menu-functions.js" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-menu-functions.js" />
     </list>
     <ignored path="CWC.iws" />
@@ -40,7 +65,7 @@
       <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-5.6896553">
+            <state vertical-scroll-proportion="0.0">
               <caret line="389" column="0" selection-start-line="389" selection-start-column="0" selection-end-line="389" selection-end-column="0" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
@@ -52,18 +77,18 @@
       <file leaf-file-name="sample-app-menu-functions.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-menu-functions.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="85" column="12" selection-start-line="85" selection-start-column="12" selection-end-line="85" selection-end-column="12" />
+            <state vertical-scroll-proportion="-20.0">
+              <caret line="1000" column="79" selection-start-line="1000" selection-start-column="79" selection-end-line="1000" selection-end-column="79" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="EditorActionsManager.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="EditorActionsManager.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/EditorActionsManager.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-0.51724136">
-              <caret line="40" column="1" selection-start-line="0" selection-start-column="0" selection-end-line="1723" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.33265096">
+              <caret line="249" column="56" selection-start-line="249" selection-start-column="32" selection-end-line="249" selection-end-column="56" />
               <folding />
             </state>
           </provider>
@@ -79,11 +104,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="modelManager.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="modelManager.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/modelManager.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.13367347">
-              <caret line="477" column="0" selection-start-line="477" selection-start-column="0" selection-end-line="477" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="510" column="34" selection-start-line="510" selection-start-column="34" selection-end-line="510" selection-end-column="34" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
               </folding>
@@ -108,7 +133,7 @@
       <file leaf-file-name="sample-app-cytoscape-sbgn.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-cytoscape-sbgn.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-32.068966">
+            <state vertical-scroll-proportion="0.0">
               <caret line="329" column="15" selection-start-line="329" selection-start-column="15" selection-end-line="329" selection-end-column="15" />
               <folding>
                 <marker date="1458163976457" expanded="true" signature="26647:26699" placeholder="..." />
@@ -261,12 +286,12 @@
         <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/agent-interaction/computerAgent.html" />
         <option value="$PROJECT_DIR$/public/src/utilities/sbgn-filtering.js" />
-        <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-menu-functions.js" />
         <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-cytoscape-sbgn.js" />
         <option value="$PROJECT_DIR$/public/lib/js/cytoscape.js" />
         <option value="$PROJECT_DIR$/index.js" />
         <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/EditorActionsManager.js" />
         <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/modelManager.js" />
+        <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-menu-functions.js" />
       </list>
     </option>
   </component>
@@ -291,9 +316,9 @@
   </component>
   <component name="ProjectFrameBounds">
     <option name="x" value="171" />
-    <option name="y" value="21" />
-    <option name="width" value="1654" />
-    <option name="height" value="1419" />
+    <option name="y" value="46" />
+    <option name="width" value="1644" />
+    <option name="height" value="1394" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -336,7 +361,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
+      <pane id="PackagesPane" />
       <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
@@ -558,20 +583,6 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="node_modules" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="CWC" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Sbgnviz-Collaborative-Editor" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
               <option name="myItemId" value="lib" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -592,7 +603,7 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -1127,7 +1138,8 @@
       <workItem from="1457653252955" duration="932000" />
       <workItem from="1457654199406" duration="3860000" />
       <workItem from="1457720822798" duration="55448000" />
-      <workItem from="1458157638603" duration="8155000" />
+      <workItem from="1458157638603" duration="8387000" />
+      <workItem from="1458166057564" duration="702000" />
     </task>
     <task id="LOCAL-00001" summary="Idea">
       <created>1446753281602</created>
@@ -1345,11 +1357,17 @@
       <option name="project" value="LOCAL" />
       <updated>1458088606000</updated>
     </task>
-    <option name="localTasksCounter" value="37" />
+    <task id="LOCAL-00037" summary="Fixed an important bug about moving nodes that have parents.">
+      <created>1458165849920</created>
+      <option name="number" value="00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1458165849920</updated>
+    </task>
+    <option name="localTasksCounter" value="38" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="853903000" />
+    <option name="totallyTimeSpent" value="854837000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1361,31 +1379,31 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="171" y="21" width="1654" height="1419" extended-state="4" />
+    <frame x="171" y="46" width="1644" height="1394" extended-state="4" />
     <editor active="false" />
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18602826" sideWeight="0.4844779" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18965517" sideWeight="0.4844779" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" show_stripe_button="true" weight="0.2488226" sideWeight="0.484375" order="8" side_tool="false" content_ui="tabs" x="48" y="623" width="1873" height="342" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.26004922" sideWeight="0.4929348" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.22383253" sideWeight="0.515625" order="0" side_tool="true" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21401985" sideWeight="0.2970106" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21660425" sideWeight="0.30270794" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.23742138" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Gulp" active="false" anchor="left" auto_hide="true" internal_type="SLIDING" type="SLIDING" visible="false" show_stripe_button="true" weight="0.18331668" sideWeight="0.5040816" order="0" side_tool="true" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="true" internal_type="SLIDING" type="SLIDING" visible="false" show_stripe_button="false" weight="0.3278302" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21401985" sideWeight="0.7029894" order="5" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21660425" sideWeight="0.6972921" order="5" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32939324" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24909374" sideWeight="0.5" order="6" side_tool="false" content_ui="combo" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" show_stripe_button="true" weight="0.2488226" sideWeight="0.484375" order="8" side_tool="false" content_ui="tabs" x="48" y="623" width="1873" height="342" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3288854" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -1423,7 +1441,8 @@
     <MESSAGE value="Delete and compound node redo/undo ops bug fixes" />
     <MESSAGE value="Highlight neighbors/processes corrected. Remove highlights is not working yet." />
     <MESSAGE value="Highlight and hide/show are working now." />
-    <option name="LAST_COMMIT_MESSAGE" value="Highlight and hide/show are working now." />
+    <MESSAGE value="Fixed an important bug about moving nodes that have parents." />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed an important bug about moving nodes that have parents." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1708,7 +1727,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="62" column="4" selection-start-line="62" selection-start-column="4" selection-end-line="62" selection-end-column="4" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1769,27 +1787,12 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.16749257">
           <caret line="24611" column="0" selection-start-line="24611" selection-start-column="0" selection-end-line="24611" selection-end-column="0" />
-          <folding>
-            <marker date="1458164038617" expanded="false" signature="0:4" placeholder="/*...*/" />
-            <marker date="1458164038617" expanded="true" signature="358111:358122" placeholder="{...}" />
-            <marker date="1458164038617" expanded="true" signature="358111:358134" placeholder="{...}" />
-            <marker date="1458164038617" expanded="true" signature="358111:697155" placeholder="{...}" />
-            <marker date="1458164038617" expanded="true" signature="358111:697170" placeholder="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-menu-functions.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="85" column="12" selection-start-line="85" selection-start-column="12" selection-end-line="85" selection-end-column="12" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-5.6896553">
+        <state vertical-scroll-proportion="0.0">
           <caret line="389" column="0" selection-start-line="389" selection-start-column="0" selection-end-line="389" selection-end-column="0" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
@@ -1799,7 +1802,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-cytoscape-sbgn.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-32.068966">
+        <state vertical-scroll-proportion="0.0">
           <caret line="329" column="15" selection-start-line="329" selection-start-column="15" selection-end-line="329" selection-end-column="15" />
           <folding>
             <marker date="1458163976457" expanded="true" signature="26647:26699" placeholder="..." />
@@ -1854,21 +1857,37 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/EditorActionsManager.js">
+    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/modelManager.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.51724136">
-          <caret line="40" column="1" selection-start-line="0" selection-start-column="0" selection-end-line="1723" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="510" column="34" selection-start-line="510" selection-start-column="34" selection-end-line="510" selection-end-column="34" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/src/utilities/sbgn-element-utilities.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.70079523">
+          <caret line="47" column="4" selection-start-line="47" selection-start-column="4" selection-end-line="47" selection-end-column="4" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/modelManager.js">
+    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-menu-functions.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.13367347">
-          <caret line="477" column="0" selection-start-line="477" selection-start-column="0" selection-end-line="477" selection-end-column="0" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
+        <state vertical-scroll-proportion="-20.0">
+          <caret line="1000" column="79" selection-start-line="1000" selection-start-column="79" selection-end-line="1000" selection-end-column="79" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/EditorActionsManager.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.33265096">
+          <caret line="249" column="56" selection-start-line="249" selection-start-column="32" selection-end-line="249" selection-end-column="56" />
+          <folding />
         </state>
       </provider>
     </entry>
