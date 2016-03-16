@@ -202,7 +202,15 @@ module.exports = function(){
                     editorActions.manager._do(editorActions.ChangeChildrenCommand(param));
                 }
 
-
+                //else if(propName == 'highlighted'){
+                //
+                //    if(data == true)
+                //        editorActions.manager._do(editorActions.ShowSelectedCommand(param));
+                //    else
+                //        editorActions.manager._do(editorActions.HideSelectedCommand(param));
+                //}
+                else if (propName == "highlightStatus" || propName == "visibilityStatus")
+                    editorActions.changeVisibilityOrHighlightStatus(param); //no do/undo here
 
                 else {
                     if (propType == 'data')
@@ -229,75 +237,10 @@ module.exports = function(){
         },
 
 
-        getSelectedModelElements: function(){
-
-            var elementIds = editorActions.modelManager.getSelectedModelElementIds();
-            var selectedElements = [];
-            elementIds.forEach(function(elId){
-                selectedElements.push(cy.$(('#' + elId))[0]);
-            });
 
 
-            return cy.collection( selectedElements);
-
-        },
-        removeHighlights: function(syncVal){
-
-            var param ={
-                sync: syncVal
-            }
-            editorActions.manager._do(editorActions.RemoveHighlightsCommand(param));
-            editorActions.refreshUndoRedoButtonsStatus();
 
 
-        },
-        highlightNeighbors: function( syncVal){
-
-            var param = {
-                sync: syncVal,
-                firstTime: true,
-                selectedEles : this.getSelectedModelElements()
-
-            };
-
-            editorActions.manager._do(editorActions.HighlightNeighborsofSelectedCommand(param));
-            editorActions.refreshUndoRedoButtonsStatus();
-
-        },
-
-        highlightProcesses: function( syncVal){
-            var param = {
-                sync: syncVal,
-                firstTime: true,
-                selectedEles : this.getSelectedModelElements()
-            };
-
-            editorActions.manager._do(editorActions.HighlightProcessesOfSelectedCommand(param));
-            editorActions.refreshUndoRedoButtonsStatus();
-
-
-        },
-
-        hideSelected: function(syncVal){
-            var param = {
-                sync: syncVal,
-                firstTime: true,
-                selectedEles : this.getSelectedModelElements()
-            };
-
-            editorActions.manager._do(editorActions.HideSelectedCommand(param));
-            editorActions.refreshUndoRedoButtonsStatus();
-        },
-
-        showSelected: function(syncVal){
-            var param = {
-                sync: syncVal,
-                firstTime: true,
-                selectedEles : this.getSelectedModelElements()
-            };
-            editorActions.manager._do(editorActions.ShowSelectedCommand(param));
-            editorActions.refreshUndoRedoButtonsStatus();
-        },
 
         updateLayoutProperties: function(lp){
 
@@ -771,11 +714,14 @@ module.exports = function(){
                     });
             });
             $("#hide-selected").click(function (e) {
-                self.hideSelected(true);
-                //var param = {};
-                //param.firstTime = true;
-                //editorActions.manager._do(editorActions.HideSelectedCommand(param));
-                //editorActions.refreshUndoRedoButtonsStatus();
+                var param = {
+                    sync: true,
+                    firstTime: true,
+                    selectedEles : cy.$(":selected")
+                };
+
+                editorActions.manager._do(editorActions.HideSelectedCommand(param));
+                editorActions.refreshUndoRedoButtonsStatus();
             });
             $("#hide-selected-icon").click(function (e) {
                 $("#hide-selected").trigger('click');
@@ -783,18 +729,20 @@ module.exports = function(){
 
 
             $("#show-selected").click(function (e) {
-                self.showSelected(true);
-                //var param = {};
-                //param.firstTime = true;
-                //editorActions.manager._do(editorActions.ShowSelectedCommand(param));
-                //editorActions.refreshUndoRedoButtonsStatus();
+                var param = {
+                    sync: true,
+                    firstTime: true,
+                    selectedEles : cy.$(":selected")
+                };
+                editorActions.manager._do(editorActions.ShowSelectedCommand(param));
+                editorActions.refreshUndoRedoButtonsStatus();
             });
             $("#show-selected-icon").click(function (e) {
                 $("#show-selected").trigger('click');
             });
 
             $("#show-all").click(function (e) {
-                editorActions.manager._do(editorActions.ShowAllCommand());
+                editorActions.manager._do(editorActions.ShowAllCommand({sync:true}));
                 editorActions.refreshUndoRedoButtonsStatus();
             });
 
@@ -855,17 +803,15 @@ module.exports = function(){
             });
 
             $("#neighbors-of-selected").click(function (e) {
+                var param = {
+                    sync: true,
+                    firstTime: true,
+                    selectedEles : cy.$(":selected")
 
-                self.highlightNeighbors(true);
-                //var param = {
-                //    firstTime: true,
-                //    selectedEles: self.getSelectedModelElements(),
-                //    sync: true
-                //};
-                //
-                //
-                //editorActions.manager._do(editorActions.HighlightNeighborsofSelectedCommand(param));
-                //editorActions.refreshUndoRedoButtonsStatus();
+                };
+
+                editorActions.manager._do(editorActions.HighlightNeighborsofSelectedCommand(param));
+                editorActions.refreshUndoRedoButtonsStatus();
 
 
             });
@@ -893,7 +839,9 @@ module.exports = function(){
 
                 nodesToSelect.select();
                 var param = {
-                    firstTime: true
+                    firstTime: true,
+                    sync: true,
+                    selectedEles : cy.$(":selected")
                 };
 
                 editorActions.manager._do(editorActions.HighlightProcessesOfSelectedCommand(param));
@@ -911,23 +859,23 @@ module.exports = function(){
             });
 
             $("#processes-of-selected").click(function (e) {
-                self.highlightProcesses(true);
-                //var param = {
-                //    firstTime: true,
-                //    selectedEles: self.getSelectedModelElements(),
-                //   // selectedEles: cy.elements(":selected"),
-                //};
-                //
-                //editorActions.manager._do(editorActions.HighlightProcessesOfSelectedCommand(param));
-                //editorActions.refreshUndoRedoButtonsStatus();
+                var param = {
+                    sync: true,
+                    firstTime: true,
+                    selectedEles : cy.$(":selected")
+                };
+
+                editorActions.manager._do(editorActions.HighlightProcessesOfSelectedCommand(param));
+                editorActions.refreshUndoRedoButtonsStatus();
+
 
             });
 
             $("#remove-highlights").click(function (e) {
 
-                self.removeHighlights(true);
-                //editorActions.manager._do(editorActions.RemoveHighlightsCommand());
-                //editorActions.refreshUndoRedoButtonsStatus();
+                editorActions.manager._do(editorActions.RemoveHighlightsCommand({sync:true}));
+                editorActions.refreshUndoRedoButtonsStatus();
+
 
 
             });

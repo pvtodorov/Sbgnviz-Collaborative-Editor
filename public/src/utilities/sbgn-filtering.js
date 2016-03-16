@@ -18,22 +18,27 @@ var sbgnFiltering = {
         var allNodes = cy.nodes(":visible");
         var selectedNodes = selectedEles;//cy.nodes(":selected");
         var nodesToShow = this.expandRemainingNodes(selectedNodes, allNodes);
-        this.applyFilter(allNodes.not(nodesToShow));
-
+        var nodesToHide = allNodes.not(nodesToShow);
+        this.applyFilter(nodesToHide);
         cy.elements(":selected").unselect();
+        return nodesToHide;
+
     },
 //funda changed this: selectedEles given as parameter
     showSelected: function(selectedEles){
         var allNodes = cy.nodes();
         var selectedNodes = selectedEles;//cy.nodes(":selected");
         var nodesToShow = this.expandNodes(selectedNodes);
-        this.applyFilter(allNodes.not(nodesToShow));
+        var nodesToHide = allNodes.not(nodesToShow);
+        this.applyFilter(nodesToHide);
 
         cy.elements(":selected").unselect();
+
+        return nodesToShow;
     },
 
     showAll: function(){
-        this.removeFilter();
+        this.removeFilter(cy.nodes());
     },
 
     //funda changed this: selectedEles given as parameter
@@ -149,17 +154,18 @@ var sbgnFiltering = {
         //nodesToFilterOut.data(filterType, true);
     },
 
-    removeFilter: function(){
-        cy.elements().css('visibility', 'visible');
-    },
-
-    removeFilterOfGivenNodes: function(nodes){
+    removeFilter: function(nodes){
         nodes.css('visibility', 'visible');
     },
+
+   // removeFilterOfGivenNodes: function(nodes){
+    //    nodes.css('visibility', 'visible');
+    //},
 
     showJustGivenNodes:  function(nodes){
         var visibleNodes = cy.nodes(":visible");
         this.applyFilter(visibleNodes);
-        this.removeFilterOfGivenNodes(nodes);
+        this.removeFilter(nodes);
+
     }
 };

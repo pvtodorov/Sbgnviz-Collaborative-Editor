@@ -128,20 +128,21 @@ module.exports =  function(model, docId, userId, userName) {
 
 
 
-        getSelectedModelElementIds: function(){
-
-            var selectedNodes = [];
-            var nodes = model.get('_page.doc.cy.nodes');
-
-            for (id in nodes) {
-                if (nodes.hasOwnProperty(id)) {
-                    if (model.get('_page.doc.cy.nodes.' + id + '.highlightColor') != null )
-                        selectedNodes.push(id);
-                }
-            }
-
-            return selectedNodes;
-        },
+        //Not used currently
+        //getSelectedModelElementIds: function(){
+        //
+        //    var selectedNodes = [];
+        //    var nodes = model.get('_page.doc.cy.nodes');
+        //
+        //    for (id in nodes) {
+        //        if (nodes.hasOwnProperty(id)) {
+        //            if (model.get('_page.doc.cy.nodes.' + id + '.highlightColor') != null )
+        //                selectedNodes.push(id);
+        //        }
+        //    }
+        //
+        //    return selectedNodes;
+        //},
 
 
         selectModelNode: function(node){

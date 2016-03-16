@@ -381,7 +381,7 @@ app.proto.init = function (model) {
             var source = model.get('_page.doc.cy.edges.'+ id + '.source');
             var target = model.get('_page.doc.cy.edges.'+ id + '.target');
 
-            menu.addEdge(id, source, target, sbgnclass);
+            menu.addEdge(id, source, target, sbgnclass, false);
         }
 
     });

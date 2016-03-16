@@ -424,9 +424,6 @@ module.exports.returnToPositionsAndSizes = function(param) {
         };
     });
 
-
-
-
     if(param.sync){
         cy.nodes().forEach(function(node) {
             module.exports.modelManager.moveModelNode(node.id(), node.position(), "me");
@@ -528,11 +525,9 @@ module.exports.hideSelected = function(param) {
         firstTime: false
     };
     if (param.firstTime) {
-
-
-        sbgnFiltering.hideSelected(param.selectedEles); //funda changed
+        var nodesToHide = sbgnFiltering.hideSelected(param.selectedEles); //funda changed
         if(param.sync) {//first hide on the other side to make sure elements don't get unselected
-            param.selectedEles.forEach(function(el){
+            nodesToHide.forEach(function(el){
                 module.exports.modelManager.changeModelNodeAttribute('visibilityStatus', el.id(), "invisible", "me");
             });
             module.exports.updateServerGraph();
@@ -542,11 +537,14 @@ module.exports.hideSelected = function(param) {
     }
     else {
 
-
         sbgnFiltering.showJustGivenNodes(param.nodesToShow);
         if(param.sync){
-            param.nodesToShow.forEach(function(el){
+            param.selectedEles.forEach(function(el){
                 module.exports.modelManager.changeModelNodeAttribute('visibilityStatus', el.id(), "invisible", "me");
+            });
+
+            param.nodesToShow.forEach(function(el){
+                module.exports.modelManager.changeModelNodeAttribute('visibilityStatus', el.id(), "visible", "me");
             });
             module.exports.updateServerGraph();
         }
@@ -555,9 +553,11 @@ module.exports.hideSelected = function(param) {
 
 
     result.nodesToShow = currentNodes;
-    result.selectedEles = param.selectedEles;
+    result.selectedEles = nodesToHide;
     return result;
 }
+
+
 
 module.exports.showSelected = function(param) {
     var currentNodes = cy.nodes(":visible");
@@ -568,11 +568,16 @@ module.exports.showSelected = function(param) {
 
     if (param.firstTime) {
 
-        sbgnFiltering.showSelected(param.selectedEles); //funda changed
+        var nodesToShow = sbgnFiltering.showSelected(param.selectedEles); //funda changed
 
         if(param.sync){
-            param.selectedEles.forEach(function(el){
+            nodesToShow.forEach(function(el){
                 module.exports.modelManager.changeModelNodeAttribute('visibilityStatus', el.id(), "visible", "me");
+            });
+
+            var nodesToHide = cy.nodes().not(nodesToShow);
+            nodesToHide.forEach(function(el){
+                module.exports.modelManager.changeModelNodeAttribute('visibilityStatus', el.id(), "invisible", "me");
             });
             module.exports.updateServerGraph();
         }
@@ -586,32 +591,62 @@ module.exports.showSelected = function(param) {
             param.nodesToShow.forEach(function(el){
                 module.exports.modelManager.changeModelNodeAttribute('visibilityStatus', el.id(), "visible", "me");
             });
+
+            var nodesToHide = cy.nodes().not(param.nodesToShow);
+            nodesToHide.forEach(function(el){
+                module.exports.modelManager.changeModelNodeAttribute('visibilityStatus', el.id(), "invisible", "me");
+            });
+
             module.exports.updateServerGraph();
         }
 
     }
 
     result.nodesToShow = currentNodes;
-    result.selectedEles = param.selectedEles;
+    result.selectedEles = nodesToShow;
     return result;
 }
 
-module.exports.showAll = function() {
+module.exports.showAll = function(param) {
     var currentNodes = cy.nodes(":visible");
     sbgnFiltering.showAll();
-    if(param.sync)
-        module.exports.modelManager.hideShow(1, "me");
-    return currentNodes;
+    if(param.sync){
+        cy.nodes().forEach(function(el){
+            module.exports.modelManager.changeModelNodeAttribute('visibilityStatus', el.id(), "visible", "me");
+        });
+
+    }
+
+    var result ={
+        sync: true,
+        nodesToShow: currentNodes
+    };
+    return result;
 }
 
-module.exports.showJustGivenNodes = function(nodesToShow) {
-    var param = {};
-    param.nodesToShow = cy.nodes(":visible");
-    param.firstTime = false;
-    sbgnFiltering.showJustGivenNodes(nodesToShow);
-    if(param.sync)
-        module.exports.modelManager.hideShow(1, "me");
-    return param;
+//This is the undo operation for hideSelected, showSelected and showAll
+module.exports.showJustGivenNodes = function(param) {
+    var result = {};
+    result.nodesToShow = cy.nodes(":visible");
+    result.firstTime = false;
+    result.sync = true;
+    result.selectedEles = param.selectedEles; //nodes to hide
+    sbgnFiltering.showJustGivenNodes(param.nodesToShow);
+    if(param.sync){
+
+        param.nodesToShow.forEach(function(el){
+            module.exports.modelManager.changeModelNodeAttribute('visibilityStatus', el.id(), "visible", "me");
+        });
+
+
+        var nodesToHide = cy.nodes().not(param.nodesToShow);
+        nodesToHide.forEach(function(el){
+            module.exports.modelManager.changeModelNodeAttribute('visibilityStatus', el.id(), "invisible", "me");
+        });
+
+    }
+
+    return result;
 }
 
 
@@ -782,7 +817,7 @@ module.exports.removeHighlights = function(param) {
 
     if(param.sync){
         cy.elements().forEach(function(el){
-            module.exports.modelManager.changeModelNodeAttribute('highlighted', el.id(), "highlighted", "me");
+            module.exports.modelManager.changeModelNodeAttribute('highlightStatus', el.id(), "highlighted", "me");
         });
 
         module.exports.updateServerGraph();
@@ -791,7 +826,7 @@ module.exports.removeHighlights = function(param) {
 
 
     result.sync = true;
-    result.elesToNotHighlight = cy.elements(":visible").not(result.elesToHighlight);
+    result.elesToNotHighlight = cy.elements().not(result.elesToHighlight);
     result.firstTime = false;
 
 
@@ -1219,6 +1254,28 @@ module.exports.changePosition = function(param){
     return result;
 
 }
+module.exports.changeVisibilityOrHighlightStatus = function(param){
+
+    var ele = param.ele;
+
+    if (param.data == "visible") {
+        sbgnFiltering.removeFilter(ele);
+
+    }
+    else if (param.data == "invisible") {
+        sbgnFiltering.applyFilter(ele);
+    }
+    else if(param.data == "highlighted"){
+        sbgnFiltering.highlightElements(ele);
+
+    }
+    else if(param.data == "notHighlighted"){
+        sbgnFiltering.notHighlightElements(ele);
+    }
+
+}
+
+
 
 module.exports.changeStyleData = function( param) {
     var result = {
@@ -1245,7 +1302,6 @@ module.exports.changeStyleData = function( param) {
         ele._private.autoWidth = param.data;
         ele._private.style.width.value = param.data;
         ele._private.style.width.pfValue = param.data;
-        //ele._private.style.width.value.strVal = propValue + "px";
         ele._private.data.sbgnbbox.w = param.data;
 
     }
@@ -1253,38 +1309,25 @@ module.exports.changeStyleData = function( param) {
         ele._private.autoHeight = param.data ;
         ele._private.style.height.value = param.data;
         ele._private.style.height.pfValue = param.data;
-        // ele._private.style.height.value.strVal = propValue + "px";
         ele._private.data.sbgnbbox.h = param.data;
 
     }
     else if(param.dataType == "highlightStatus"){
         if(param.data == "highlighted"){
-         //   sbgnFiltering.highlightElements(ele);
-            ele.addClass("highlighted");
-            ele.removeClass("not-highlighted");
-            ele.data("highlighted", 'true');
+            sbgnFiltering.highlightElements(ele);
 
         }
         else if(param.data == "notHighlighted"){
-          //      sbgnFiltering.notHighlightElements(ele);
-            ele.addClass("not-highlighted");
-            ele.removeClass("highlighted");
-            ele.data("highlighted", 'false');
-        }
-        else { //"neutral"
-            //sbgnFiltering.removeHighlights(ele);
-            ele.removeData("highlighted");
-            ele.removeClass("highlighted");
-            ele.removeClass("not-highlighted");
+                sbgnFiltering.notHighlightElements(ele);
         }
     }
     else if(param.dataType == "visibilityStatus") {
         if (param.data == "visible") {
-            sbgnFiltering.applyFilter(ele);
+            sbgnFiltering.removeFilter(ele);
 
         }
         else if (param.data == "invisible") {
-            sbgnFiltering.removeFilter(ele);
+            sbgnFiltering.applyFilter(ele);
         }
     }
 
@@ -1430,10 +1473,6 @@ module.exports.AddEdgeCommand = function (newEdge)
     return new Command(module.exports.addEdge, module.exports.removeEdges, newEdge, "addEdge");
 };
 
-//var RemoveEdgesCommand = function (edgesTobeDeleted)
-//{
-//  return new Command(removeEdges, restoreEles, edgesTobeDeleted);
-//};
 
 module.exports.ExpandNodeCommand = function (param) {
     return new Command(module.exports.expandNode, module.exports.undoExpandNode, param, "expandNode");
@@ -1495,8 +1534,8 @@ module.exports.ShowSelectedCommand = function (param) {
     return new Command(module.exports.showSelected, module.exports.showJustGivenNodes, param, "showSelected");
 };
 
-module.exports.ShowAllCommand = function () {
-    return new Command(module.exports.showAll, module.exports.showJustGivenNodes, "showAll");
+module.exports.ShowAllCommand = function (param) {
+    return new Command(module.exports.showAll, module.exports.showJustGivenNodes, param, "showAll");
 };
 
 module.exports.HighlightNeighborsofSelectedCommand = function (param) {
