@@ -34,18 +34,18 @@
     <br>
     <form id = "layoutOperations">
         Name: <input type = "text" id = "layoutName" value = "cose-bilkent"><br>
-        Node repulsion: <input type = "number" id = "nodeRepulsion" value = 4500>
-        Node overlap: <input type = "number" id = "nodeOverlap" value = 10><br>
-        Ideal edge length: <input type = "number" id = "idealEdgeLength" value = 50>
-        Edge elasticity: <input type = "number" id = "edgeElasticity" value = 0.45><br>
-        Nesting factor: <input type = "number" id = "nestingFactor" value = 0.1>
-        Gravity: <input type = "number" id = "gravity" value = 0.4><br>
-        Number of iterations: <input type = "number" id = "numIter" value = 2500><br>
+        Node repulsion: <input type = number id = "nodeRepulsion" value = 4500>
+        Node overlap: <input type = number id = "nodeOverlap" value = 10><br>
+        Ideal edge length: <input type = number id = "idealEdgeLength" value = 50>
+        Edge elasticity: <input type = number id = "edgeElasticity" value = 0.45><br>
+        Nesting factor: <input type = number id = "nestingFactor" value = 0.1>
+        Gravity: <input type = number id = "gravity" value = 0.4><br>
+        Number of iterations: <input type = number id = "numIter" value = 2500><br>
         Tile: <input type = "checkbox" id = "tile" unchecked>
         Animate: <input type = "checkbox" id = "animate" checked>
         Randomize: <input type = "checkbox" id = "randomize" checked><br>
-        Tiling Vertical Padding: <input type = "number" id = "tilingPaddingVertical" value = 20><br>
-        Tiling Horizontal Padding: <input type = "number" id = "tilingPaddingHorizontal" value = 20><br>
+        Tiling Vertical Padding: <input type = number id = "tilingPaddingVertical" value = 20><br>
+        Tiling Horizontal Padding: <input type = number id = "tilingPaddingHorizontal" value = 20><br>
         <br>
         <input type="button" value="Set layout properties" onclick=setLayoutProperties()>
 
@@ -54,9 +54,12 @@
     <br>
     <form id = "nodeOperations">
 
-        Pos x : <input type = "number" id = "posX" name="posX" value = 200>
-        Pos y : <input type = "number" id = "posY" name="posY" value = 200>
+        Pos x : <input type = number id = "posX" name="posX" value = 200>
+        Pos y : <input type = number id = "posY" name="posY" value = 200>
         Sbgnclass: <input type = "text" id = "sbgnclass" name="sbgnclass" value = "macromolecule">
+        Sbgnlabel: <input type = "text" id = "sbgnlabel" name="sbgnlabel" value = "">
+
+
         <input type="button" value="Add node" onclick=addNode()>
 
         <br>
@@ -82,24 +85,26 @@
 
 
         <br>
-        <input id = "sbgnlabel">
-        <input type="button" value="Update node label" onclick=changeNodeAttribute("sbgnlabel")>
 
 
         <br>
         <input type="button" value="Delete node" onclick=deleteNode()>
         <br> <br>
-        Pos x : <input type = "number" id = "newPosX">
-        Pos y : <input type = "number" id = "newPosY">
+        Pos x : <input type = number id = "newPosX">
+        Pos y : <input type = number id = "newPosY">
         <input type="button" value="Move node" onclick=moveNode()>
 
         <br>
 
-        <input id = "width" type = "number">
+        <input id = "sbgnlabelUpdate">
+        <input type="button" value="Update node label" onclick=changeNodeAttribute("sbgnlabel")>
+
+
+        <input id = "width" type = number>
         <input type="button" value="Update node width" onclick=changeNodeAttribute("width")>
 
 
-        <input id = "height" type = "number">
+        <input id = "height" type = number>
         <input type="button" value="Update node height" onclick=changeNodeAttribute("height")>
 
 
@@ -112,7 +117,7 @@
         <input type="button" value="Update background color" onclick=changeNodeAttribute("backgroundColor")>
 
         <br>
-        <input id = "borderWidth" type = "number">
+        <input id = "borderWidth" type = number>
         <input type="button" value="Update border width" onclick=changeNodeAttribute("borderWidth")>
 
 
@@ -244,6 +249,7 @@
                 $('#borderWidth')[0].value = agent.selectedNode.borderWidth;
                 $('#borderColor')[0].value = agent.selectedNode.borderColor;
                 $('#backgroundColor')[0].value = agent.selectedNode.backgroundColor;
+                $('#sbgnlabelUpdate')[0].value = agent.selectedNode.sbgnlabel;
                 $('#sbgnlabel')[0].value = agent.selectedNode.sbgnlabel;
 
 
@@ -449,8 +455,34 @@
         agent.sendRequest("agentRunLayoutRequest",{param:null});
     }
     function updateModel(callback){
-        agent.getModel(callback);
+        agent.loadModel(function() {
 
+            fillLayoutProperties();
+            //agent.updateNextAgentNodeId();
+            agent.loadOperationHistory(function () {
+
+                agent.loadChatHistory(function () {
+                    //Write history
+                    if (agent.opHistory != null) {
+                        agent.opHistory.forEach(function (op) {
+                            writeCommand(op);
+                        });
+                    }
+
+                    if (agent.chatHistory != null) {
+                        for (var ind in agent.chatHistory) {
+                            writeMessage(agent.chatHistory[ind]);
+
+                        }
+                        ;
+                    }
+
+                    fillNodeIds('nodeId');
+                    fillEdgeIds('edgeId');
+
+                });
+            });
+        });
     };
     function newFile(){
         agent.sendRequest("agentNewFileRequest",{param:null});
@@ -488,9 +520,10 @@
         var x = $('#posX')[0].value;
         var y = $('#posY')[0].value;
         var sbgnclass = $('#sbgnclass')[0].value;
-        var param = {x:x, y:y, sbgnclass:sbgnclass }
+        var sbgnlabel = $('#sbgnlabel')[0].value;
+        var param = {x:x, y:y, sbgnclass:sbgnclass, sbgnlabel: sbgnlabel }
 
-        agent.sendRequest("agentAddNodeRequest", {id: agent.getNextNodeId(), param:param});
+        agent.sendRequest("agentAddNodeRequest", {param:param});
 
     }
 

@@ -50,9 +50,12 @@ module.exports.addNode = function(param) {
         else
             result = addRemoveUtilities.addNode(param.x, param.y, param.sbgnclass);
 
+        console.log(result);
         if(param.sync){
             module.exports.modelManager.addModelNode(result.id(),  param, "me");
+
             module.exports.updateServerGraph();
+
         }
     }
     else {
@@ -117,6 +120,8 @@ module.exports.restoreEles = function(eles) {
             };
             module.exports.modelManager.addModelEdge(ele.id(), param, "me");
         });
+
+        module.exports.updateServerGraph();
     }
 
     var result = addRemoveUtilities.restoreEles(eles);
@@ -134,8 +139,9 @@ module.exports.restoreEles = function(eles) {
             module.exports.modelManager.changeModelNodeAttribute('parent', node.id(),node._private.data.parent,"me" );
             module.exports.modelManager.changeModelNodeAttribute('isCloneMarker', node.id(),node.data("sbgnclonemarker"),"me" );
             module.exports.modelManager.changeModelNodeAttribute('isMultimer', node.id(),(node.data("sbgnclass").indexOf(' multimer') > 0),"me" );
-        }
-    )};
+        });
+        module.exports.updateServerGraph();
+    };
 
     //update children and parents
 
@@ -378,6 +384,7 @@ module.exports.performLayoutFunction = function(param) {
         });
     });
 
+    module.exports.updateServerGraph();
     //var runLayout = "1";
     //module.exports.modelManager.setRunLayout(runLayout, "me");
     return module.exports.returnToPositionsAndSizes(param);
@@ -465,6 +472,7 @@ module.exports.moveDescendentNodes = function(nodes) {
         if(children)
             module.exports.moveDescendentNodes( children);
 
+        module.exports.updateServerGraph();
     });
 }
 module.exports.moveAncestorNodes = function(node) {
@@ -478,6 +486,9 @@ module.exports.moveAncestorNodes = function(node) {
         var parent = cy.getElementById(parentId);
         module.exports.modelManager.moveModelNode(parentId, parent.position(), "me");
         module.exports.moveAncestorNodes(parent);
+        module.exports.updateServerGraph();
+
+
     }
 
 }
@@ -516,7 +527,7 @@ module.exports.moveNodes = function(positionDiff, nodes) {
         var children = node.children();
         module.exports.moveNodes(positionDiff, children);
 
-
+        module.exports.updateServerGraph();
 
     }
 }
@@ -618,7 +629,7 @@ module.exports.showAll = function(param) {
         cy.nodes().forEach(function(el){
             module.exports.modelManager.changeModelNodeAttribute('visibilityStatus', el.id(), "visible", "me");
         });
-
+        module.exports.updateServerGraph();
     }
 
     var result ={
@@ -647,6 +658,8 @@ module.exports.showJustGivenNodes = function(param) {
         nodesToHide.forEach(function(el){
             module.exports.modelManager.changeModelNodeAttribute('visibilityStatus', el.id(), "invisible", "me");
         });
+
+        module.exports.updateServerGraph();
 
     }
 
@@ -793,6 +806,7 @@ module.exports.notHighlightEles = function(param) {
             });
         }
 
+        module.exports.updateServerGraph();
      //   if(param.sync)
        //     module.exports.modelManager.highlight(0, "me");
     }
@@ -1004,6 +1018,8 @@ module.exports.removeCompound = function(param) {
 
     module.exports.modelManager.deleteModelNode(removedCompound.id(), "me");
 
+
+    module.exports.updateServerGraph();
     refreshPaddings();
 
     var result = {
@@ -1084,6 +1100,8 @@ module.exports.changeStateVariable = function(param) {
 
     param.data = statesAndInfos;
     module.exports.modelManager.changeModelNodeAttribute('sbgnStatesAndInfos', param.ele.id(), param.data, "me", param.state );
+
+    module.exports.updateServerGraph();
     return result;
 }
 
@@ -1108,6 +1126,8 @@ module.exports.changeUnitOfInformation = function(param) {
     param.data = statesAndInfos;
 
     module.exports.modelManager.changeModelNodeAttribute('sbgnStatesAndInfos', param.ele.id(), param.data, "me", param.state);
+
+    module.exports.updateServerGraph();
 
     return result;
 }
@@ -1145,6 +1165,7 @@ module.exports.removeStateAndInfo = function(param) {
 
     param.data = statesAndInfos;
     module.exports.modelManager.changeModelNodeAttribute('sbgnStatesAndInfos', param.ele.id(), param.data, "me", param.state);
+    module.exports.updateServerGraph();
     param.ele.unselect(); //to refresh inspector
     param.ele.select(); //to refresh inspector
     cy.forceRender();

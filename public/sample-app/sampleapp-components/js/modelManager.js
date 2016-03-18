@@ -48,9 +48,7 @@ module.exports =  function(model, docId, userId, userName) {
 
            model.fetch('users', userId, function(err){
                user.set('name', userName);
-
            });
-
         },
         updateLayoutProperties: function(layoutProperties){
 

@@ -703,6 +703,12 @@ app.proto.create = function (model) {
     });
 
 
+    socket.on('addNode', function(data){
+        menu.addNode(null, Number(data.x), Number(data.y), data.sbgnclass, data.sbgnlabel, true);
+
+    });
+
+
     //TODO: make this a function in menu-functions
     socket.on('addCompound', function(data){
 

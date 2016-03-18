@@ -119,6 +119,8 @@ module.exports = function(){
             };
 
             editorActions.addNode(param);
+
+
             //editorActions.manager._do( editorActions.AddNodeCommand(param));
 
         },

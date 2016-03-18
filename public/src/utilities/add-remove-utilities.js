@@ -29,16 +29,16 @@ var addRemoveUtilities = {
                 sbgnbbox: {
                     h: height,
                     w: width,
-                    x: x,
-                    y: y
+                    x: Number(x),
+                    y: Number(y)
                 },
                 sbgnstatesandinfos: [],
                 ports: []
             },
             css: css,
             position: {
-                x: x,
-                y: y
+                x: Number(x),
+                y: Number(y)
             }
         };
         if(id != null)
