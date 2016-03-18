@@ -57,9 +57,6 @@
         Pos x : <input type = number id = "posX" name="posX" value = 200>
         Pos y : <input type = number id = "posY" name="posY" value = 200>
         Sbgnclass: <input type = "text" id = "sbgnclass" name="sbgnclass" value = "macromolecule">
-        Sbgnlabel: <input type = "text" id = "sbgnlabel" name="sbgnlabel" value = "">
-
-
         <input type="button" value="Add node" onclick=addNode()>
 
         <br>
@@ -96,10 +93,10 @@
 
         <br>
 
-        <input id = "sbgnlabelUpdate">
+        <input id = "sbgnlabel">
         <input type="button" value="Update node label" onclick=changeNodeAttribute("sbgnlabel")>
 
-
+        <br>
         <input id = "width" type = number>
         <input type="button" value="Update node width" onclick=changeNodeAttribute("width")>
 
@@ -249,7 +246,6 @@
                 $('#borderWidth')[0].value = agent.selectedNode.borderWidth;
                 $('#borderColor')[0].value = agent.selectedNode.borderColor;
                 $('#backgroundColor')[0].value = agent.selectedNode.backgroundColor;
-                $('#sbgnlabelUpdate')[0].value = agent.selectedNode.sbgnlabel;
                 $('#sbgnlabel')[0].value = agent.selectedNode.sbgnlabel;
 
 
@@ -520,8 +516,8 @@
         var x = $('#posX')[0].value;
         var y = $('#posY')[0].value;
         var sbgnclass = $('#sbgnclass')[0].value;
-        var sbgnlabel = $('#sbgnlabel')[0].value;
-        var param = {x:x, y:y, sbgnclass:sbgnclass, sbgnlabel: sbgnlabel }
+
+        var param = {x:x, y:y, sbgnclass:sbgnclass }
 
         agent.sendRequest("agentAddNodeRequest", {param:param});
 
