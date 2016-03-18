@@ -62,15 +62,22 @@
         <br>
         <b>Node Id </b>: <select multiple name="Id" id = "nodeId" >
         </select>
-        <input type="button" value="Highlight node(s)" onclick=highlightNodes()>
-        <input type="button" value="Remove highlights" onclick=unhighlightNodes()>
+        <br>
+        <input type="button" value="Color selected node(s)" onclick=highlightNodes()>
+        <input type="button" value="Remove coloring" onclick=unhighlightNodes()>
+        <br>
+
         <input type="button" value="Highlight neighbors of node(s)" onclick=highlightNeighborsOfSelected()>
         <input type="button" value="Highlight processes of node(s)" onclick=highlightProcessesOfSelected()>
+        <input type="button" value="Remove highlights" onclick=removeHighlights()>
 
+        <br>
+        <input type="button" value="Show selected" onclick=showNodes()>
+        <input type="button" value="Hide selected" onclick=hideNodes()>
+        <input type="button" value="Show all" onclick=showAll()>
         <br>
         <input type="button" value="Add complex for selected" onclick=addCompound("complex")>
 
-        <br>
         <input type="button" value="Add compartment for selected" onclick=addCompound("compartment")>
 
 
@@ -504,25 +511,49 @@
     function deleteEdge(){
         agent.sendRequest("agentDeleteEdgeRequest", {id: $('#edgeId')[0].value});
     }
-    function highlightNodes(){
+
+    function highlightNodes(callback){
         var nodeIdList = $('#nodeId').val();
         nodeIdList.forEach(function(nodeId){
             agent.sendRequest("agentChangeNodeAttributeRequest", {id: nodeId, attStr: "highlightColor", attVal: agent.colorCode});
         });
+
+
+    }
+
+    function removeHighlights(){
+        agent.sendRequest("agentHighlightStatusRequest", {val:0});
     }
     function highlightNeighborsOfSelected(){
-        highlightNodes(); //first select nodes, then highlight neighbors
-        agent.sendRequest("agentHighlightRequest", {val:1});
+        var nodeIdList = $('#nodeId').val();
+        agent.sendRequest("agentHighlightStatusRequest", {val:1, selectedNodeIds:nodeIdList});
     }
     function highlightProcessesOfSelected(){
-        highlightNodes(); //first select nodes, then highlight neighbors
-        agent.sendRequest("agentHighlightRequest", {val:2});
+        var nodeIdList = $('#nodeId').val();
+        agent.sendRequest("agentHighlightStatusRequest", {val:2, selectedNodeIds:nodeIdList});
     }
     function unhighlightNodes(){
         var nodeIdList = $('#nodeId').val();
         nodeIdList.forEach(function(nodeId){
             agent.sendRequest("agentChangeNodeAttributeRequest", {id: nodeId, attStr: "highlightColor", attVal: null});
         });
+    }
+
+    function showNodes(){
+        var nodeIdList = $('#nodeId').val();
+        agent.sendRequest("agentVisibilityStatusRequest", {val:0, selectedNodeIds:nodeIdList});
+    }
+
+
+    function hideNodes(){
+        var nodeIdList = $('#nodeId').val();
+        agent.sendRequest("agentVisibilityStatusRequest", {val:1, selectedNodeIds:nodeIdList});
+    }
+
+
+    function showAll(){
+        highlightNodes();
+        agent.sendRequest("agentVisibilityStatusRequest", {val:3});
     }
 
     function moveNode(){
@@ -543,7 +574,7 @@
         var nodes = $('#nodeId').val();
 
 
-        agent.sendRequest("agentAddCompoundRequest", {type:type, selectedNodes: nodes});
+        agent.sendRequest("agentAddCompoundRequest", {type:type, selectedNodeIds: nodes});
 
     }
 

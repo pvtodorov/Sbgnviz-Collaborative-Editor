@@ -67,6 +67,11 @@ function getXMLObject(itemId, loadXMLDoc) {
                 url: './sample-app/samples/vitamins_b6_activation_to_pyridoxal_phosphate.xml', success: loadXMLDoc
             });
             break;
+        case "8":
+            $.ajax({
+                url: './sample-app/samples/MTORSmall.sbgn', success: loadXMLDoc
+            });
+            break;
 
     }
 
@@ -662,7 +667,7 @@ module.exports = function(){
                 var textType = /text.*/;
 
                 var reader = new FileReader();
-                var self = this;
+
 
 
                 reader.onload = function (e) {

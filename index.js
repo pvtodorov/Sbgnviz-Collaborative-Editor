@@ -137,7 +137,8 @@ app.get('/:docId', function (page, model, arg, next) {
             {name: 'PolyQ proteins interference', id: 4},
             {name: 'Insulin-like Growth Factor (IGF) signalling', id: 5},
             {name: 'ATM mediated phosphorylation of repair proteins', id: 6},
-            {name: 'Vitamins B6 activation to pyridoxal phosphate', id: 7}
+            {name: 'Vitamins B6 activation to pyridoxal phosphate', id: 7},
+            {name: 'MTOR', id: 8}
 
         ]);
 
@@ -651,13 +652,64 @@ app.proto.create = function (model) {
         $("#perform-layout").trigger('click');
     });
 
+    //better through sockets-- model operation causes complications
+    socket.on('highlightNeighbors', function(selectedNodeIds){
+        //unselect all others
+        cy.nodes().unselect();
+
+        selectedNodeIds.forEach(function(nodeId){
+            cy.getElementById( nodeId).select();
+        });
+        $("#neighbors-of-selected").trigger('click');
+    });
+
+    socket.on('highlightProcesses', function(selectedNodeIds){
+        //unselect all others
+        cy.nodes().unselect();
+
+        selectedNodeIds.forEach(function(nodeId){
+            cy.getElementById( nodeId).select();
+        });
+        $("#processes-of-selected").trigger('click');
+    });
+
+    socket.on('removeHighlights', function(){
+
+        $("#remove-highlights").trigger('click');
+    });
+
+    socket.on('showNodes', function(selectedNodeIds){
+        //unselect all others
+        cy.nodes().unselect();
+
+        selectedNodeIds.forEach(function(nodeId){
+            cy.getElementById( nodeId).select();
+        });
+        $("#show-selected").trigger('click');
+    });
+
+    socket.on('hideNodes', function(selectedNodeIds){
+        //unselect all others
+        cy.nodes().unselect();
+
+        selectedNodeIds.forEach(function(nodeId){
+            cy.getElementById( nodeId).select();
+        });
+        $("#hide-selected").trigger('click');
+    });
+
+    socket.on('showAll', function(){
+        $("#show-all").trigger('click');
+    });
+
+
     //TODO: make this a function in menu-functions
     socket.on('addCompound', function(data){
 
         //unselect all others
         cy.nodes().unselect();
 
-        data.selectedNodes.forEach(function(nodeId){
+        data.selectedNodeIds.forEach(function(nodeId){
 
             cy.getElementById( nodeId).select();
         });

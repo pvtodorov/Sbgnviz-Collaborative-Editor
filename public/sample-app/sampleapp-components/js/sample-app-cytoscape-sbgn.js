@@ -328,11 +328,6 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
 
                 editorActions.manager._do(editorActions.SelectNodeCommand(this));
             });
-            cy.on('free', 'node', function() {
-
-                editorActions.manager._do(editorActions.UnselectNodeCommand(this));
-
-            });
 
 
             cy.on('select', 'edge', function(event) {
