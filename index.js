@@ -63,7 +63,7 @@ app.on('model', function (model) {
         else
             startTime = new Date - duration;
 
-        return item.time > startTime;
+        return item.date > startTime;
     });
 
 
@@ -150,7 +150,7 @@ app.get('/:docId', function (page, model, arg, next) {
 
     messagesQuery = model.query('messages', {
         room: room,
-        time: {
+        date: {
             $gt: 0
         },
         targets: {
@@ -298,7 +298,7 @@ app.proto.init = function (model) {
         if(docReady &&  passed.user == null) {
             var edge  = model.get('_page.doc.cy.edges.' + id); //check
 
-            if(!edge|| !edge.id){ //node is deleted
+            if(!edge|| !edge.id){ //edge is deleted
                 menu.deleteElement(id, false);
             }
             //else insertion
@@ -598,7 +598,8 @@ app.proto.init = function (model) {
 
 
     timeSort = function (a, b) {
-        return (a != null ? a.time : void 0) - (b != null ? b.time : void 0);
+
+        return (a != null ? a.date : void 0) - (b != null ? b.date : void 0);
     };
 
 
@@ -816,7 +817,7 @@ app.proto.add = function (model, filePath) {
             userId: msgUserId,
             userName: msgUserName,
             comment: comment,
-            time: -1//val //server assigns the correct time
+            date: -1//val //server assigns the correct time
         });
 
 
@@ -877,7 +878,7 @@ app.proto.count = function (value) {
 
 app.proto.formatTime = function (message) {
     var hours, minutes, seconds, period, time;
-    time = message && message.time;
+    time = message && message.date;
     if (!time) {
         return;
     }

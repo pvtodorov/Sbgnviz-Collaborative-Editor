@@ -749,6 +749,7 @@
     }
 
     function writeCommand(op){
+
         var id = op.elId !=null? op.elId:'';
         var param = op.param !=null? JSON.stringify(op.param):'';
 
@@ -762,6 +763,7 @@
     }
 
     function writeMessage(msg){
+
         var htmlMessage = "<b>" + msg.userName + " (" + formatTime(msg) + "): "+ "</b>"  +msg.comment ;
         $('#chat').append("<li>" + htmlMessage+ "</li>");
         $('#chat').trigger('contentchanged');

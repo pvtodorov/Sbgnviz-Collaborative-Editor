@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-menu-functions.js" />
-    <bookmark url="file://$PROJECT_DIR$/public/lib/js/cytoscape.js" />
-    <bookmark url="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/EditorActionsManager.js" line="857" />
-    <bookmark url="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/EditorActionsManager.js" line="1345" mnemonic="1" />
-    <bookmark url="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-menu-functions.js" line="683" mnemonic="2" />
-  </component>
   <component name="ChangeListManager">
-    <list default="true" id="88f2e8a3-abc2-4ba9-848d-5914e68f76f8" name="Default" comment="Agent node addition problem fixed.">
+    <list default="true" id="20ab80f0-2cb1-44ff-a133-bd87799f716d" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/agent-interaction/computerAgent.html" afterPath="$PROJECT_DIR$/agent-interaction/computerAgent.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index.js" afterPath="$PROJECT_DIR$/index.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/index.js" afterPath="$PROJECT_DIR$/lib/index.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/EditorActionsManager.js" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/EditorActionsManager.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/modelManager.js" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/modelManager.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-helper-functions.js" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-helper-functions.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-menu-functions.js" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-menu-functions.js" />
     </list>
     <ignored path="CWC.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -33,25 +32,15 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/lib/index.js">
+      <file leaf-file-name="sample-app-helper-functions.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-helper-functions.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-25.172413">
-              <caret line="320" column="0" selection-start-line="320" selection-start-column="0" selection-end-line="320" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="README.md" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/README.md">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-5.981132">
-              <caret line="446" column="15" selection-start-line="446" selection-start-column="11" selection-end-line="446" selection-end-column="15" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="99" column="27" selection-start-line="99" selection-start-column="27" selection-end-line="99" selection-end-column="27" />
               <folding>
-                <element signature="n#style#0;n#td#0;n#tr#9;n#table#1;n#body#0;n#html#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#td#0;n#tr#10;n#table#1;n#body#0;n#html#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#td#1;n#tr#10;n#table#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <marker date="1458932485419" expanded="true" signature="11147:11180" placeholder="..." />
+                <marker date="1458932485419" expanded="true" signature="11912:11945" placeholder="..." />
+                <marker date="1458932485419" expanded="true" signature="12291:12324" placeholder="..." />
               </folding>
             </state>
           </provider>
@@ -60,8 +49,8 @@
       <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-24.137932">
-              <caret line="706" column="57" selection-start-line="706" selection-start-column="57" selection-end-line="706" selection-end-column="57" />
+            <state vertical-scroll-proportion="-17.51724">
+              <caret line="880" column="34" selection-start-line="880" selection-start-column="30" selection-end-line="880" selection-end-column="34" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
               </folding>
@@ -69,21 +58,31 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="sample-app-menu-functions.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-menu-functions.js">
+      <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/views/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-17.413794">
-              <caret line="120" column="30" selection-start-line="120" selection-start-column="30" selection-end-line="120" selection-end-column="30" />
+            <state vertical-scroll-proportion="-6.056604">
+              <caret line="847" column="38" selection-start-line="847" selection-start-column="26" selection-end-line="847" selection-end-column="38" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="sample-app-mode-handler.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-mode-handler.js">
+      <file leaf-file-name="index.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/lib/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="42" column="2" selection-start-line="42" selection-start-column="2" selection-end-line="42" selection-end-column="2" />
+            <state vertical-scroll-proportion="0.36336032">
+              <caret line="56" column="0" selection-start-line="56" selection-start-column="0" selection-end-line="56" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="sample-app-menu-functions.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-menu-functions.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-9.137931">
+              <caret line="215" column="46" selection-start-line="215" selection-start-column="34" selection-end-line="215" selection-end-column="46" />
               <folding />
             </state>
           </provider>
@@ -93,125 +92,27 @@
         <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/EditorActionsManager.js">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="50" column="44" selection-start-line="50" selection-start-column="44" selection-end-line="50" selection-end-column="44" />
+              <caret line="966" column="54" selection-start-line="966" selection-start-column="54" selection-end-line="966" selection-end-column="54" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="add-remove-utilities.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/public/src/utilities/add-remove-utilities.js">
+      <file leaf-file-name="modelManager.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/modelManager.js">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="15" column="42" selection-start-line="15" selection-start-column="42" selection-end-line="16" selection-end-column="37" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="sample-app-cytoscape-sbgn.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-cytoscape-sbgn.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-10.689655">
-              <caret line="488" column="19" selection-start-line="488" selection-start-column="19" selection-end-line="488" selection-end-column="51" />
+              <caret line="251" column="0" selection-start-line="251" selection-start-column="0" selection-end-line="251" selection-end-column="0" />
               <folding>
-                <marker date="1458234909176" expanded="true" signature="26498:26550" placeholder="..." />
-                <marker date="1458234909176" expanded="true" signature="26700:26950" placeholder="..." />
-                <marker date="1458234909176" expanded="true" signature="26712:26734" placeholder="..." />
-                <marker date="1458234909176" expanded="true" signature="26766:26945" placeholder="..." />
-                <marker date="1458234909176" expanded="false" signature="26843:26872" placeholder="..." />
-                <marker date="1458234909176" expanded="true" signature="26978:27228" placeholder="..." />
-                <marker date="1458234909176" expanded="true" signature="26990:27012" placeholder="..." />
-                <marker date="1458234909176" expanded="true" signature="27042:27223" placeholder="..." />
-                <marker date="1458234909176" expanded="false" signature="27117:27146" placeholder="..." />
-                <marker date="1458234909176" expanded="true" signature="27256:27539" placeholder="..." />
-                <marker date="1458234909176" expanded="true" signature="27268:27290" placeholder="..." />
-                <marker date="1458234909176" expanded="true" signature="27322:27534" placeholder="..." />
-                <marker date="1458234909176" expanded="false" signature="27420:27449" placeholder="..." />
-                <marker date="1458234909176" expanded="true" signature="27653:27679" placeholder="..." />
-                <marker date="1458234909176" expanded="true" signature="27680:27845" placeholder="..." />
-                <marker date="1458234909176" expanded="true" signature="27692:27714" placeholder="..." />
-                <marker date="1458234909176" expanded="false" signature="27813:27820" placeholder="..." />
-                <marker date="1458234909176" expanded="true" signature="27886:27912" placeholder="..." />
-                <marker date="1458234909176" expanded="true" signature="27913:28088" placeholder="..." />
-                <marker date="1458234909176" expanded="true" signature="27925:27947" placeholder="..." />
-                <marker date="1458234909176" expanded="false" signature="28056:28063" placeholder="..." />
-                <marker date="1458234909176" expanded="true" signature="28121:28298" placeholder="..." />
-                <marker date="1458234909176" expanded="true" signature="28133:28155" placeholder="..." />
-                <marker date="1458234909176" expanded="false" signature="28216:28223" placeholder="..." />
-                <marker date="1458234909176" expanded="true" signature="28331:28516" placeholder="..." />
-                <marker date="1458234909176" expanded="true" signature="28343:28365" placeholder="..." />
-                <marker date="1458234909176" expanded="false" signature="28430:28437" placeholder="..." />
-                <marker date="1458234909176" expanded="true" signature="28612:28856" placeholder="..." />
-                <marker date="1458234909176" expanded="true" signature="28624:28646" placeholder="..." />
-                <marker date="1458234909176" expanded="true" signature="28676:28851" placeholder="..." />
-                <marker date="1458234909176" expanded="false" signature="28751:28780" placeholder="..." />
-                <marker date="1458234909176" expanded="true" signature="28885:29147" placeholder="..." />
-                <marker date="1458234909176" expanded="true" signature="28897:28919" placeholder="..." />
-                <marker date="1458234909176" expanded="true" signature="28944:29142" placeholder="..." />
-                <marker date="1458234909176" expanded="false" signature="29035:29064" placeholder="..." />
-                <marker date="1458234909176" expanded="true" signature="29287:29590" placeholder="..." />
-                <marker date="1458234909176" expanded="true" signature="29299:29321" placeholder="..." />
-                <marker date="1458234909176" expanded="true" signature="29374:29585" placeholder="..." />
-                <marker date="1458234909176" expanded="false" signature="29463:29492" placeholder="..." />
-                <marker date="1458234909176" expanded="true" signature="29676:29695" placeholder="..." />
-                <marker date="1458234909176" expanded="true" signature="29696:29810" placeholder="..." />
-                <marker date="1458234909176" expanded="true" signature="29712:29726" placeholder="..." />
-                <marker date="1458234909176" expanded="true" signature="29780:29804" placeholder="..." />
-                <marker date="1458234909176" expanded="true" signature="36441:37042" placeholder="..." />
-                <marker date="1458234909176" expanded="true" signature="36534:36576" placeholder="..." />
-                <marker date="1458234909176" expanded="false" signature="36792:36836" placeholder="..." />
-                <marker date="1458234909176" expanded="true" signature="38411:38749" placeholder="..." />
-                <marker date="1458234909176" expanded="true" signature="38509:38547" placeholder="..." />
+                <element signature="n#!!doc" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="computerAgent.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/agent-interaction/computerAgent.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-5.981132">
-              <caret line="615" column="18" selection-start-line="615" selection-start-column="14" selection-end-line="615" selection-end-column="18" />
-              <folding>
-                <marker date="1458330119540" expanded="true" signature="29125:29576" placeholder="..." />
-                <marker date="1458330119540" expanded="true" signature="29153:29163" placeholder="..." />
-                <marker date="1458330119540" expanded="true" signature="29317:29327" placeholder="..." />
-                <marker date="1458330119540" expanded="true" signature="29472:29495" placeholder="..." />
-                <marker date="1458330119540" expanded="true" signature="30326:30584" placeholder="..." />
-                <marker date="1458330119540" expanded="true" signature="30480:30503" placeholder="..." />
-                <marker date="1458330119540" expanded="true" signature="31421:31444" placeholder="..." />
-                <marker date="1458330119540" expanded="true" signature="31546:31569" placeholder="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="agentAPI.js" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/agent-interaction/agentAPI.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.33333334">
-              <caret line="84" column="42" selection-start-line="84" selection-start-column="21" selection-end-line="84" selection-end-column="42" />
-              <folding />
             </state>
           </provider>
         </entry>
       </file>
     </leaf>
   </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="JavaScript File" />
-      </list>
-    </option>
-  </component>
   <component name="Git.Settings">
-    <option name="PREVIOUS_COMMIT_AUTHORS">
-      <list>
-        <option value="fdurupinar" />
-      </list>
-    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GradleLocalSettings">
@@ -222,55 +123,13 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/public/lib/js/cytoscape-edgehandles.js" />
-        <option value="$PROJECT_DIR$/public/src/agent-interaction/sbgn-viz.css" />
-        <option value="$PROJECT_DIR$/public/lib/js/cytoscape-noderesize.js" />
-        <option value="$PROJECT_DIR$/public/derby/chat-c718b8cfc45a221e6e0f25a879a6dfe9.js" />
-        <option value="localhost:3000/src/utilities/add-remove-utilities.js" />
-        <option value="localhost:3000/derby/chat-64c33e0db4dbbdb063f52bfde402287d.js" />
-        <option value="localhost:3000/src/sbgn-extensions/cytoscape.renderer.canvas.sbgn-renderer.js" />
-        <option value="localhost:3000/lib/js/cytoscape.js" />
-        <option value="localhost:3000/derby/chat-22b7556a83aa705c13858ef7a57f3fbd.js" />
-        <option value="$PROJECT_DIR$/public/src/agent-interaction/computerAgentTester.html" />
-        <option value="$PROJECT_DIR$/public/lib/css/jquery.qtip.min.css" />
-        <option value="$PROJECT_DIR$/public/lib/css/jquery-ui-1.10.3.custom.css" />
-        <option value="$PROJECT_DIR$/public/src/agent-interaction/agentAPI.js" />
-        <option value="$PROJECT_DIR$/lib/server.js" />
-        <option value="$PROJECT_DIR$/public/scripts/webPageEditor.js" />
-        <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/webPageEditor.js" />
-        <option value="$PROJECT_DIR$/public/sample-app/samples/polyq_proteins_interference.xml" />
-        <option value="$PROJECT_DIR$/public/sample-app/samples/insulin-like_growth_factor_signaling.xml" />
-        <option value="$PROJECT_DIR$/public/src/agent-interaction/agentTester.css" />
-        <option value="$PROJECT_DIR$/public/src/agent-interaction/computerAgent.html" />
-        <option value="localhost:3000/derby/chat-82f0455f9ff69f85fe7ed126156f9569.js" />
-        <option value="$PROJECT_DIR$/node_modules/coffeeify/node_modules/convert-source-map/test/fixtures/map-file-comment-double-slash.css" />
-        <option value="vm:146" />
-        <option value="$PROJECT_DIR$/public/src/sbgn-extensions/cytoscape.renderer.canvas.sbgn-renderer.js" />
-        <option value="$PROJECT_DIR$/public/src/utilities/sbgn-style-rules.js" />
-        <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-mode-handler.js" />
-        <option value="$PROJECT_DIR$/public/src/utilities/expand-collapse-utilities.js" />
-        <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/css/sbgn-viz.css" />
-        <option value="$PROJECT_DIR$/public/src/sbgn-extensions/cytoscape-cose-bilkent.js" />
-        <option value="$PROJECT_DIR$/public/src/utilities/sbgnml-to-json-converter.js" />
-        <option value="$PROJECT_DIR$/public/src/utilities/tinycolor.js" />
-        <option value="$PROJECT_DIR$/views/index.html" />
-        <option value="$PROJECT_DIR$/agent-interaction/agentAPI.js" />
-        <option value="$PROJECT_DIR$/package.json" />
-        <option value="$PROJECT_DIR$/public/src/utilities/json-to-sbgnml-converter.js" />
-        <option value="$PROJECT_DIR$/../Bilkent Sbgnviz/sample-app/sampleapp-components/js/sample-app-menu-functions.js" />
-        <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-helper-functions.js" />
-        <option value="$PROJECT_DIR$/README.md" />
-        <option value="$PROJECT_DIR$/public/src/utilities/sbgn-filtering.js" />
-        <option value="$PROJECT_DIR$/public/lib/js/cytoscape.js" />
-        <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-cytoscape-sbgn.js" />
-        <option value="localhost:3000/lib/js/jquery-1.8.2.js" />
-        <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/modelManager.js" />
-        <option value="$PROJECT_DIR$/lib/index.js" />
-        <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-menu-functions.js" />
-        <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/EditorActionsManager.js" />
-        <option value="$PROJECT_DIR$/public/src/utilities/add-remove-utilities.js" />
-        <option value="$PROJECT_DIR$/index.js" />
         <option value="$PROJECT_DIR$/agent-interaction/computerAgent.html" />
+        <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-menu-functions.js" />
+        <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/modelManager.js" />
+        <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/EditorActionsManager.js" />
+        <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-helper-functions.js" />
+        <option value="$PROJECT_DIR$/index.js" />
+        <option value="$PROJECT_DIR$/lib/index.js" />
       </list>
     </option>
   </component>
@@ -286,36 +145,13 @@
       </GulpfileState>
     </gulpfiles>
   </component>
-  <component name="MavenImportPreferences">
-    <option name="generalSettings">
-      <MavenGeneralSettings>
-        <option name="mavenHome" value="Bundled (Maven 3)" />
-      </MavenGeneralSettings>
-    </option>
-  </component>
   <component name="ProjectFrameBounds">
     <option name="x" value="171" />
     <option name="y" value="46" />
-    <option name="width" value="1771" />
+    <option name="width" value="1961" />
     <option name="height" value="1394" />
   </component>
-  <component name="ProjectInspectionProfilesVisibleTreeState">
-    <entry key="Project Default">
-      <profile-state>
-        <expanded-state>
-          <State>
-            <id />
-          </State>
-        </expanded-state>
-        <selected-state>
-          <State>
-            <id>Android</id>
-          </State>
-        </selected-state>
-      </profile-state>
-    </entry>
-  </component>
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+  <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
     <OptionsSetting value="true" id="Remove" />
     <OptionsSetting value="true" id="Checkout" />
@@ -341,7 +177,6 @@
     </navigator>
     <panes>
       <pane id="PackagesPane" />
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -384,51 +219,11 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="styles" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="CWC" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Sbgnviz-Collaborative-Editor" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
               <option name="myItemId" value="public" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="utilities" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="CWC" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Sbgnviz-Collaborative-Editor" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="public" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="sbgn-extensions" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -543,47 +338,15 @@
         </subPane>
       </pane>
       <pane id="Scratches" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="settings.editor.selected.configurable" value="editor.preferences.tabs" />
-    <property name="settings.editor.splitter.proportion" value="0.2" />
-    <property name="recentsLimit" value="5" />
-    <property name="restartRequiresConfirmation" value="false" />
     <property name="js-jscs-nodeInterpreter" value="/usr/bin/node" />
-    <property name="ToolWindowVersion Control.ShowToolbar" value="false" />
-    <property name="ToolWindowTODO.ShowToolbar" value="false" />
   </component>
-  <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/agent-interaction" />
-      <recent name="$PROJECT_DIR$" />
-      <recent name="$PROJECT_DIR$/public/sample-app/sampleapp-components/js" />
-    </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/images" />
-      <recent name="$PROJECT_DIR$/public/lib/css/images" />
-      <recent name="$PROJECT_DIR$/public/lib/css/images/fancybox" />
-      <recent name="$PROJECT_DIR$/public/src/utilities" />
-      <recent name="$PROJECT_DIR$/agent-interaction" />
-    </key>
-  </component>
-  <component name="RunManager" selected="JavaScript Debug.localhost:3000">
-    <configuration default="false" name="computerAgent.html" type="JavascriptDebugType" factoryName="JavaScript Debug" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/CWC/agent-interaction/computerAgent.html">
-      <method />
-    </configuration>
-    <configuration default="false" name="index.html" type="JavascriptDebugType" factoryName="JavaScript Debug" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/CWC/views/index.html">
-      <method />
-    </configuration>
-    <configuration default="false" name="computerAgent.html (1)" type="JavascriptDebugType" factoryName="JavaScript Debug" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/CWC/agent-interaction/computerAgent.html">
-      <method />
-    </configuration>
-    <configuration default="false" name="server.js" type="NodeJSConfigurationType" factoryName="Node.js" temporary="true" path-to-node="/usr/bin/node" path-to-js-file="server.js" working-dir="$PROJECT_DIR$">
-      <method />
-    </configuration>
+  <component name="RunManager">
     <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
       <module name="" />
       <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m -ea" />
@@ -650,6 +413,7 @@
       <method />
     </configuration>
     <configuration default="true" type="Applet" factoryName="Applet">
+      <option name="HTML_USED" value="false" />
       <option name="WIDTH" value="400" />
       <option name="HEIGHT" value="300" />
       <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
@@ -859,10 +623,6 @@
     <configuration default="true" type="NodeJSConfigurationType" factoryName="Node.js" working-dir="">
       <method />
     </configuration>
-    <configuration default="true" type="NodeJSRemoteDebug" factoryName="Node.js Remote Debug">
-      <node-js-remote-debug />
-      <method />
-    </configuration>
     <configuration default="true" type="Remote" factoryName="Remote">
       <option name="USE_SOCKET_TRANSPORT" value="true" />
       <option name="SERVER_MODE" value="false" />
@@ -890,7 +650,7 @@
       <option name="TEST_OBJECT" value="CLASS" />
       <option name="VM_PARAMETERS" value="-ea" />
       <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
       <option name="OUTPUT_DIRECTORY" />
       <option name="ANNOTATION_TYPE" />
       <option name="ENV_VARIABLES" />
@@ -947,12 +707,6 @@
       <method />
     </configuration>
     <configuration default="true" type="js.build_tools.gulp" factoryName="Gulp.js">
-      <node-options />
-      <gulpfile />
-      <tasks />
-      <arguments />
-      <pass-parent-envs>true</pass-parent-envs>
-      <envs />
       <method />
     </configuration>
     <configuration default="true" type="js.build_tools.npm" factoryName="npm">
@@ -979,24 +733,6 @@
     <configuration default="true" type="osgi.bnd.run" factoryName="Test Launcher (JUnit)">
       <method />
     </configuration>
-    <configuration default="false" name="localhost:3000" type="JavascriptDebugType" factoryName="JavaScript Debug" uri="http://localhost:3000/">
-      <method />
-    </configuration>
-    <list size="5">
-      <item index="0" class="java.lang.String" itemvalue="JavaScript Debug.localhost:3000" />
-      <item index="1" class="java.lang.String" itemvalue="JavaScript Debug.computerAgent.html" />
-      <item index="2" class="java.lang.String" itemvalue="JavaScript Debug.index.html" />
-      <item index="3" class="java.lang.String" itemvalue="JavaScript Debug.computerAgent.html (1)" />
-      <item index="4" class="java.lang.String" itemvalue="Node.js.server.js" />
-    </list>
-    <recent_temporary>
-      <list size="4">
-        <item index="0" class="java.lang.String" itemvalue="JavaScript Debug.computerAgent.html" />
-        <item index="1" class="java.lang.String" itemvalue="Node.js.server.js" />
-        <item index="2" class="java.lang.String" itemvalue="JavaScript Debug.index.html" />
-        <item index="3" class="java.lang.String" itemvalue="JavaScript Debug.computerAgent.html (1)" />
-      </list>
-    </recent_temporary>
   </component>
   <component name="ShelveChangesManager" show_recycled="false" />
   <component name="SvnConfiguration">
@@ -1004,367 +740,47 @@
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="88f2e8a3-abc2-4ba9-848d-5914e68f76f8" name="Default" comment="" />
-      <created>1446571740148</created>
+      <changelist id="20ab80f0-2cb1-44ff-a133-bd87799f716d" name="Default" comment="" />
+      <created>1458759927936</created>
       <option name="number" value="Default" />
-      <updated>1446571740148</updated>
-      <workItem from="1446571745253" duration="7829000" />
-      <workItem from="1446582885751" duration="6744000" />
-      <workItem from="1446648838475" duration="3099000" />
-      <workItem from="1446651948083" duration="590000" />
-      <workItem from="1446652545702" duration="76000" />
-      <workItem from="1446652629776" duration="779000" />
-      <workItem from="1446659640649" duration="1485000" />
-      <workItem from="1446661320665" duration="129000" />
-      <workItem from="1446661458217" duration="49000" />
-      <workItem from="1446661515015" duration="89000" />
-      <workItem from="1446661612229" duration="38000" />
-      <workItem from="1446661659032" duration="1998000" />
-      <workItem from="1446663665802" duration="46000" />
-      <workItem from="1446663719030" duration="59000" />
-      <workItem from="1446663785270" duration="965000" />
-      <workItem from="1446664758827" duration="41000" />
-      <workItem from="1446664808256" duration="69000" />
-      <workItem from="1446664885318" duration="23000" />
-      <workItem from="1446664916809" duration="897000" />
-      <workItem from="1446665822528" duration="832000" />
-      <workItem from="1446666663268" duration="12092000" />
-      <workItem from="1446739432074" duration="16000" />
-      <workItem from="1446739459771" duration="7572000" />
-      <workItem from="1446751535802" duration="3990000" />
-      <workItem from="1446755535195" duration="525000" />
-      <workItem from="1446756068904" duration="28378000" />
-      <workItem from="1447082267261" duration="43798000" />
-      <workItem from="1447258520900" duration="17472000" />
-      <workItem from="1447343822335" duration="27439000" />
-      <workItem from="1447442367294" duration="120684000" />
-      <workItem from="1449004258531" duration="2386000" />
-      <workItem from="1449078815557" duration="15208000" />
-      <workItem from="1449156336412" duration="92072000" />
-      <workItem from="1449775095425" duration="71000" />
-      <workItem from="1449775202562" duration="5160000" />
-      <workItem from="1449781924595" duration="261000" />
-      <workItem from="1449782263879" duration="5641000" />
-      <workItem from="1449849536806" duration="36796000" />
-      <workItem from="1450205171877" duration="22851000" />
-      <workItem from="1450290429221" duration="19938000" />
-      <workItem from="1450380602585" duration="53008000" />
-      <workItem from="1450903035103" duration="9358000" />
-      <workItem from="1451323526278" duration="24989000" />
-      <workItem from="1451493874374" duration="9094000" />
-      <workItem from="1456176539152" duration="10438000" />
-      <workItem from="1456253392046" duration="5263000" />
-      <workItem from="1456261444816" duration="8527000" />
-      <workItem from="1456337374057" duration="2419000" />
-      <workItem from="1456340539931" duration="83000" />
-      <workItem from="1456340886660" duration="3000" />
-      <workItem from="1456341028076" duration="18447000" />
-      <workItem from="1456507898455" duration="3471000" />
-      <workItem from="1456771754437" duration="1272000" />
-      <workItem from="1456773292934" duration="2340000" />
-      <workItem from="1456779318702" duration="5395000" />
-      <workItem from="1456784826291" duration="17861000" />
-      <workItem from="1456869358599" duration="2776000" />
-      <workItem from="1456872154084" duration="3213000" />
-      <workItem from="1456880252129" duration="5000" />
-      <workItem from="1456943118974" duration="8430000" />
-      <workItem from="1456958718536" duration="34399000" />
-      <workItem from="1457124208574" duration="39452000" />
-      <workItem from="1457481955072" duration="931000" />
-      <workItem from="1457484019587" duration="6619000" />
-      <workItem from="1457553322421" duration="10744000" />
-      <workItem from="1457567082290" duration="18784000" />
-      <workItem from="1457653252955" duration="932000" />
-      <workItem from="1457654199406" duration="3860000" />
-      <workItem from="1457720822798" duration="55448000" />
-      <workItem from="1458157638603" duration="8387000" />
-      <workItem from="1458166057564" duration="21478000" />
+      <updated>1458759927936</updated>
+      <workItem from="1458759931551" duration="7000" />
+      <workItem from="1458759949295" duration="5205000" />
+      <workItem from="1458768286038" duration="1854000" />
+      <workItem from="1458928763387" duration="4217000" />
     </task>
-    <task id="LOCAL-00001" summary="Idea">
-      <created>1446753281602</created>
-      <option name="number" value="00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1446753281602</updated>
-    </task>
-    <task id="LOCAL-00002" summary="Idea">
-      <created>1456254018140</created>
-      <option name="number" value="00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1456254018140</updated>
-    </task>
-    <task id="LOCAL-00003" summary="New changelist">
-      <created>1456254752125</created>
-      <option name="number" value="00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1456254752125</updated>
-    </task>
-    <task id="LOCAL-00004" summary="Cytoscape 2.5 changes integrated. Color coding problems.">
-      <created>1456254862217</created>
-      <option name="number" value="00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1456254862217</updated>
-    </task>
-    <task id="LOCAL-00005" summary="Cytoscape 2.5 changes integrated. Color coding problems.">
-      <created>1456254935589</created>
-      <option name="number" value="00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1456254935589</updated>
-    </task>
-    <task id="LOCAL-00006" summary="Cytoscape 2.5. &#10;&#10;tuple2hex added">
-      <created>1456256299498</created>
-      <option name="number" value="00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1456256299498</updated>
-    </task>
-    <task id="LOCAL-00007" summary="Cytoscape 2.5.  changes integrated. Bend points working.">
-      <created>1456269949969</created>
-      <option name="number" value="00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1456269949969</updated>
-    </task>
-    <task id="LOCAL-00008" summary="Some refactoring in menu-functions and agentAPI">
-      <created>1456363442706</created>
-      <option name="number" value="00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1456363442706</updated>
-    </task>
-    <task id="LOCAL-00009" summary="Add/remove highlights neighbors/processes synchronized">
-      <created>1456863029627</created>
-      <option name="number" value="00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1456863029627</updated>
-    </task>
-    <task id="LOCAL-00010" summary="New readme file and minor corrections in agent operations.">
-      <created>1456963781554</created>
-      <option name="number" value="00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1456963781554</updated>
-    </task>
-    <task id="LOCAL-00011" summary="New readme file and minor corrections in agent operations.">
-      <created>1456963930788</created>
-      <option name="number" value="00011" />
-      <option name="project" value="LOCAL" />
-      <updated>1456963930788</updated>
-    </task>
-    <task id="LOCAL-00012" summary="New readme file and minor corrections in agent operations.">
-      <created>1456963977058</created>
-      <option name="number" value="00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1456963977058</updated>
-    </task>
-    <task id="LOCAL-00013" summary="New readme file and minor corrections in agent operations.">
-      <created>1456964025028</created>
-      <option name="number" value="00013" />
-      <option name="project" value="LOCAL" />
-      <updated>1456964025028</updated>
-    </task>
-    <task id="LOCAL-00014" summary="New readme file and minor corrections in agent operations.">
-      <created>1456964177239</created>
-      <option name="number" value="00014" />
-      <option name="project" value="LOCAL" />
-      <updated>1456964177239</updated>
-    </task>
-    <task id="LOCAL-00015" summary="New readme file and minor corrections in agent operations.">
-      <created>1456964509863</created>
-      <option name="number" value="00015" />
-      <option name="project" value="LOCAL" />
-      <updated>1456964509863</updated>
-    </task>
-    <task id="LOCAL-00016" summary="New readme file and minor corrections in agent operations.">
-      <created>1456964599906</created>
-      <option name="number" value="00016" />
-      <option name="project" value="LOCAL" />
-      <updated>1456964599906</updated>
-    </task>
-    <task id="LOCAL-00017" summary="Agent can request an empty model or load a new file.&#10;Corrections in operation history.">
-      <created>1457043178978</created>
-      <option name="number" value="00017" />
-      <option name="project" value="LOCAL" />
-      <updated>1457043178978</updated>
-    </task>
-    <task id="LOCAL-00018" summary="Agent can request an empty model or load a new file.&#10;Corrections in operation history.">
-      <created>1457043272879</created>
-      <option name="number" value="00018" />
-      <option name="project" value="LOCAL" />
-      <updated>1457043272879</updated>
-    </task>
-    <task id="LOCAL-00019" summary="Agent can request an empty model or load a new file.&#10;Corrections in operation history.">
-      <created>1457043324446</created>
-      <option name="number" value="00019" />
-      <option name="project" value="LOCAL" />
-      <updated>1457043324446</updated>
-    </task>
-    <task id="LOCAL-00020" summary="Agent can request an empty model or load a new file.&#10;Corrections in operation history.">
-      <created>1457043414042</created>
-      <option name="number" value="00020" />
-      <option name="project" value="LOCAL" />
-      <updated>1457043414042</updated>
-    </task>
-    <task id="LOCAL-00021" summary="Agent can request an empty model or load a new file.&#10;Corrections in operation history.">
-      <created>1457043447782</created>
-      <option name="number" value="00021" />
-      <option name="project" value="LOCAL" />
-      <updated>1457043447782</updated>
-    </task>
-    <task id="LOCAL-00022" summary="Layout properties are shown in  command history">
-      <created>1457045832459</created>
-      <option name="number" value="00022" />
-      <option name="project" value="LOCAL" />
-      <updated>1457045832459</updated>
-    </task>
-    <task id="LOCAL-00023" summary="Layout properties are shown in  command history">
-      <created>1457055468090</created>
-      <option name="number" value="00023" />
-      <option name="project" value="LOCAL" />
-      <updated>1457055468090</updated>
-    </task>
-    <task id="LOCAL-00024" summary="Layout properties are shown in  command history">
-      <created>1457390459606</created>
-      <option name="number" value="00024" />
-      <option name="project" value="LOCAL" />
-      <updated>1457390459606</updated>
-    </task>
-    <task id="LOCAL-00025" summary="Layout properties are shown in  command history">
-      <created>1457391363160</created>
-      <option name="number" value="00025" />
-      <option name="project" value="LOCAL" />
-      <updated>1457391363160</updated>
-    </task>
-    <task id="LOCAL-00026" summary="Some updates in command history formatting. &#10; Agent highlighting neighbors/processes included but highlighting is still problematic.">
-      <created>1457394234082</created>
-      <option name="number" value="00026" />
-      <option name="project" value="LOCAL" />
-      <updated>1457394234082</updated>
-    </task>
-    <task id="LOCAL-00027" summary="Some updates in command history formatting. &#10; Agent highlighting neighbors/processes included but highlighting is still problematic.&#10; -Fixes in getting new user color">
-      <created>1457461021600</created>
-      <option name="number" value="00027" />
-      <option name="project" value="LOCAL" />
-      <updated>1457461021600</updated>
-    </task>
-    <task id="LOCAL-00028" summary="Some updates in command history formatting. &#10; Agent highlighting neighbors/processes included but highlighting is still problematic.&#10; -Fixes in getting new user color">
-      <created>1457461441720</created>
-      <option name="number" value="00028" />
-      <option name="project" value="LOCAL" />
-      <updated>1457461441720</updated>
-    </task>
-    <task id="LOCAL-00029" summary="Some updates in command history formatting. &#10; Agent highlighting neighbors/processes included but highlighting is still problematic.&#10; -Fixes in getting new user color">
-      <created>1457461965736</created>
-      <option name="number" value="00029" />
-      <option name="project" value="LOCAL" />
-      <updated>1457461965736</updated>
-    </task>
-    <task id="LOCAL-00030" summary="-Border and fill color fixes. &#10;-Remove highlights corrected.">
-      <created>1457466023817</created>
-      <option name="number" value="00030" />
-      <option name="project" value="LOCAL" />
-      <updated>1457466023817</updated>
-    </task>
-    <task id="LOCAL-00031" summary="-Hide/show included">
-      <created>1457479168307</created>
-      <option name="number" value="00031" />
-      <option name="project" value="LOCAL" />
-      <updated>1457479168307</updated>
-    </task>
-    <task id="LOCAL-00032" summary="All the synchronized operations are performed through menu-functions">
-      <created>1457658049795</created>
-      <option name="number" value="00032" />
-      <option name="project" value="LOCAL" />
-      <updated>1457658049795</updated>
-    </task>
-    <task id="LOCAL-00033" summary="Delete and compound node redo/undo ops are working">
-      <created>1457726917336</created>
-      <option name="number" value="00033" />
-      <option name="project" value="LOCAL" />
-      <updated>1457726917336</updated>
-    </task>
-    <task id="LOCAL-00034" summary="Delete and compound node redo/undo ops bug fixes">
-      <created>1457741315232</created>
-      <option name="number" value="00034" />
-      <option name="project" value="LOCAL" />
-      <updated>1457741315232</updated>
-    </task>
-    <task id="LOCAL-00035" summary="Highlight neighbors/processes corrected. Remove highlights is not working yet.">
-      <created>1458000598971</created>
-      <option name="number" value="00035" />
-      <option name="project" value="LOCAL" />
-      <updated>1458000598971</updated>
-    </task>
-    <task id="LOCAL-00036" summary="Highlight and hide/show are working now.">
-      <created>1458088606000</created>
-      <option name="number" value="00036" />
-      <option name="project" value="LOCAL" />
-      <updated>1458088606000</updated>
-    </task>
-    <task id="LOCAL-00037" summary="Fixed an important bug about moving nodes that have parents.">
-      <created>1458165849920</created>
-      <option name="number" value="00037" />
-      <option name="project" value="LOCAL" />
-      <updated>1458165849920</updated>
-    </task>
-    <task id="LOCAL-00038" summary="Alignment is working">
-      <created>1458166780148</created>
-      <option name="number" value="00038" />
-      <option name="project" value="LOCAL" />
-      <updated>1458166780148</updated>
-    </task>
-    <task id="LOCAL-00039" summary="Agent can request highlight and show/hide operations.">
-      <created>1458260448460</created>
-      <option name="number" value="00039" />
-      <option name="project" value="LOCAL" />
-      <updated>1458260448460</updated>
-    </task>
-    <task id="LOCAL-00040" summary="Agent node addition problem fixed.">
-      <created>1458329339433</created>
-      <option name="number" value="00040" />
-      <option name="project" value="LOCAL" />
-      <updated>1458329339433</updated>
-    </task>
-    <option name="localTasksCounter" value="41" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="875613000" />
-  </component>
-  <component name="TodoView">
-    <todo-panel id="selected-file">
-      <is-autoscroll-to-source value="true" />
-    </todo-panel>
-    <todo-panel id="all">
-      <are-packages-shown value="true" />
-      <is-autoscroll-to-source value="true" />
-    </todo-panel>
+    <option name="totallyTimeSpent" value="11283000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="171" y="46" width="1771" height="1394" extended-state="4" />
+    <frame x="171" y="46" width="1961" height="1394" extended-state="4" />
     <editor active="false" />
     <layout>
-      <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18995291" sideWeight="0.4844779" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17974882" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" show_stripe_button="true" weight="0.2488226" sideWeight="0.484375" order="8" side_tool="false" content_ui="tabs" x="48" y="623" width="1873" height="342" />
-      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2598116" sideWeight="0.4929348" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="true" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.22383253" sideWeight="0.515625" order="0" side_tool="true" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.21660425" sideWeight="0.20466596" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.23742138" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3288854" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Gulp" active="false" anchor="left" auto_hide="true" internal_type="SLIDING" type="SLIDING" visible="false" show_stripe_button="true" weight="0.18331668" sideWeight="0.5040816" order="0" side_tool="true" content_ui="tabs" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="true" internal_type="SLIDING" type="SLIDING" visible="false" show_stripe_button="false" weight="0.3278302" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20069404" sideWeight="0.79533404" order="5" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32939324" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24909374" sideWeight="0.5" order="6" side_tool="false" content_ui="combo" />
-      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39984226" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33045527" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Gulp" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20687859" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
     </layout>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -1378,412 +794,54 @@
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
   </component>
-  <component name="VcsManagerConfiguration">
-    <MESSAGE value="Idea" />
-    <MESSAGE value="New changelist" />
-    <MESSAGE value="Cytoscape 2.5 changes integrated. Color coding problems." />
-    <MESSAGE value="Cytoscape 2.5. &#10;&#10;tuple2hex added" />
-    <MESSAGE value="Cytoscape 2.5.  changes integrated. Bend points working." />
-    <MESSAGE value="Some refactoring in menu-functions and agentAPI" />
-    <MESSAGE value="Add/remove highlights neighbors/processes synchronized" />
-    <MESSAGE value="New readme file and minor corrections in agent operations." />
-    <MESSAGE value="Agent can request an empty model or load a new file.&#10;Corrections in operation history." />
-    <MESSAGE value="Layout properties are shown in  command history" />
-    <MESSAGE value="Some updates in command history formatting. &#10; Agent highlighting neighbors/processes included but highlighting is still problematic." />
-    <MESSAGE value="Some updates in command history formatting. &#10; Agent highlighting neighbors/processes included but highlighting is still problematic.&#10; -Fixes in getting new user color" />
-    <MESSAGE value="-Border and fill color fixes. &#10;-Remove highlights corrected." />
-    <MESSAGE value="-Hide/show included" />
-    <MESSAGE value="All the synchronized operations are performed through menu-functions" />
-    <MESSAGE value="Delete and compound node redo/undo ops are working" />
-    <MESSAGE value="Delete and compound node redo/undo ops bug fixes" />
-    <MESSAGE value="Highlight neighbors/processes corrected. Remove highlights is not working yet." />
-    <MESSAGE value="Highlight and hide/show are working now." />
-    <MESSAGE value="Fixed an important bug about moving nodes that have parents." />
-    <MESSAGE value="Alignment is working" />
-    <MESSAGE value="Agent can request highlight and show/hide operations." />
-    <MESSAGE value="Agent node addition problem fixed." />
-    <option name="LAST_COMMIT_MESSAGE" value="Agent node addition problem fixed." />
-  </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-menu-functions.js</url>
-          <line>680</line>
-          <option name="timeStamp" value="165" />
-        </line-breakpoint>
-      </breakpoints>
-      <breakpoints-dialog>
-        <breakpoints-dialog />
-      </breakpoints-dialog>
-      <option name="time" value="171" />
-    </breakpoint-manager>
-    <watches-manager>
-      <configuration name="JavascriptDebugType">
-        <watch expression="positionMap" language="JavaScript" />
-      </configuration>
-    </watches-manager>
-  </component>
-  <component name="antWorkspaceConfiguration">
-    <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />
-    <option name="FILTER_TARGETS" value="false" />
+    <breakpoint-manager />
+    <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/node_modules/coffeeify/node_modules/convert-source-map/README.md">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.3325359">
-          <caret line="43" column="86" selection-start-line="43" selection-start-column="86" selection-end-line="43" selection-end-column="86" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/node_modules/coffeeify/node_modules/convert-source-map/test/fixtures/map-file-comment-double-slash.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.21875">
-          <caret line="14" column="0" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/lib/css/jquery-ui-1.10.3.custom.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.35474005">
-          <caret line="805" column="19" selection-start-line="805" selection-start-column="19" selection-end-line="805" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/src/utilities/sbgn-style-rules.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.13446215">
-          <caret line="9" column="4" selection-start-line="9" selection-start-column="4" selection-end-line="9" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/lib/js/underscore.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.8741044">
-          <caret line="0" column="12749" selection-start-line="0" selection-start-column="12749" selection-end-line="0" selection-end-column="12749" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/lib/js/cytoscape.js-panzoom.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="7" column="21" selection-start-line="7" selection-start-column="21" selection-end-line="7" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/lib/css/cytoscape.js-panzoom.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33333334">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/css/sbgn-viz.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.3207547">
-          <caret line="159" column="24" selection-start-line="159" selection-start-column="22" selection-end-line="159" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/node_modules/derby/node_modules/racer/lib/Model/collections.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.3938731">
-          <caret line="24" column="0" selection-start-line="24" selection-start-column="0" selection-end-line="24" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Downloads/CWCDocumentation/CWCDocumentation.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.3491903">
-          <caret line="0" column="3668" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="35103" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/lib/JavaScriptLanguage.jar!/com/intellij/lang/javascript/index/predefined/DOMCore.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33301252">
-          <caret line="208" column="0" selection-start-line="208" selection-start-column="0" selection-end-line="208" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="http://localhost:3000/src/sbgn-extensions/src/Layout/index.js">
-      <provider selected="true" editor-type-id="httpFileEditor">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/src/sbgn-extensions/cytoscape-cose-bilkent.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-13.655172">
-          <caret line="4874" column="63" selection-start-line="4874" selection-start-column="63" selection-end-line="4874" selection-end-column="63" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/lib/JavaScriptLanguage.jar!/com/intellij/lang/javascript/index/predefined/HTML5.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33301252">
-          <caret line="128" column="0" selection-start-line="128" selection-start-column="0" selection-end-line="128" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-global-variables.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="7" column="0" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/lib/JavaScriptLanguage.jar!/com/intellij/lang/javascript/index/predefined/DHTML.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33301252">
-          <caret line="243" column="0" selection-start-line="243" selection-start-column="0" selection-end-line="243" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/server.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="57" selection-start-line="0" selection-start-column="57" selection-end-line="0" selection-end-column="57" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/biogene-info.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="41" column="75" selection-start-line="41" selection-start-column="75" selection-end-line="41" selection-end-column="75" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/node_modules/onecolor/one-color.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.014492754">
-          <caret line="1" column="0" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/agent-interaction/tinycolor.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/server.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.36328503">
-          <caret line="104" column="11" selection-start-line="104" selection-start-column="11" selection-end-line="104" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-13.125">
-          <caret line="21" column="0" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/package.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.47477746">
-          <caret line="32" column="24" selection-start-line="32" selection-start-column="24" selection-end-line="32" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/node_modules/derby/node_modules/racer/lib/Model/events.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.016429354">
-          <caret line="230" column="0" selection-start-line="230" selection-start-column="0" selection-end-line="230" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/node_modules/livedb/test/ot.coffee">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33298537">
-          <caret line="90" column="78" selection-start-line="90" selection-start-column="78" selection-end-line="90" selection-end-column="78" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/src/utilities/expand-collapse-utilities.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="214" column="49" selection-start-line="214" selection-start-column="49" selection-end-line="214" selection-end-column="49" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/lib/js/cytoscape-noderesize.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.3330078">
-          <caret line="653" column="63" selection-start-line="653" selection-start-column="63" selection-end-line="653" selection-end-column="63" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/node_modules/derby/node_modules/racer/node_modules/share/lib/client/connection.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7557503">
-          <caret line="125" column="0" selection-start-line="125" selection-start-column="0" selection-end-line="125" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../Bilkent Sbgnviz/sample-app/sampleapp-components/js/sample-app-menu-functions.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.36326942">
-          <caret line="189" column="84" selection-start-line="189" selection-start-column="84" selection-end-line="189" selection-end-column="84" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/src/sbgn-extensions/cytoscape.renderer.canvas.sbgn-renderer.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33298647">
-          <caret line="843" column="47" selection-start-line="843" selection-start-column="47" selection-end-line="843" selection-end-column="47" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/src/utilities/sbgn-filtering.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="62" column="4" selection-start-line="62" selection-start-column="4" selection-end-line="62" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-helper-functions.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="260" column="8" selection-start-line="260" selection-start-column="8" selection-end-line="260" selection-end-column="8" />
+          <caret line="99" column="6" selection-start-line="99" selection-start-column="6" selection-end-line="99" selection-end-column="6" />
           <folding>
-            <marker date="1457639895218" expanded="true" signature="10757:10790" placeholder="..." />
-            <marker date="1457639895218" expanded="true" signature="11522:11555" placeholder="..." />
-            <marker date="1457639895218" expanded="true" signature="11901:11934" placeholder="..." />
+            <marker date="1458932485419" expanded="true" signature="11147:11180" placeholder="..." />
+            <marker date="1458932485419" expanded="true" signature="11912:11945" placeholder="..." />
+            <marker date="1458932485419" expanded="true" signature="12291:12324" placeholder="..." />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/src/utilities/sbgn-element-utilities.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.70079523">
-          <caret line="47" column="4" selection-start-line="47" selection-start-column="4" selection-end-line="47" selection-end-column="4" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/lib/js/jquery-ui-1.10.3.custom.min.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33266932">
-          <caret line="6" column="76538" selection-start-line="6" selection-start-column="76538" selection-end-line="6" selection-end-column="76538" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="http://localhost:3000/lib/js/jquery-1.8.2.js">
-      <provider selected="true" editor-type-id="httpFileEditor">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/lib/js/cytoscape.js">
+    <entry file="file://$PROJECT_DIR$/agent-interaction/computerAgent.html">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="19193" column="4" selection-start-line="19193" selection-start-column="4" selection-end-line="19193" selection-end-column="4" />
+          <caret line="816" column="14" selection-start-line="816" selection-start-column="8" selection-end-line="816" selection-end-column="14" />
           <folding>
-            <marker date="1458164038617" expanded="false" signature="0:4" placeholder="/*...*/" />
-            <marker date="1458164038617" expanded="true" signature="358111:358122" placeholder="{...}" />
+            <marker date="1458765867277" expanded="true" signature="29127:29578" placeholder="..." />
+            <marker date="1458765867277" expanded="true" signature="29155:29165" placeholder="..." />
+            <marker date="1458765867277" expanded="false" signature="29319:29329" placeholder="..." />
+            <marker date="1458765867277" expanded="false" signature="29474:29497" placeholder="..." />
+            <marker date="1458765867277" expanded="true" signature="30328:30586" placeholder="..." />
+            <marker date="1458765867277" expanded="false" signature="30482:30505" placeholder="..." />
+            <marker date="1458765867277" expanded="true" signature="31423:31446" placeholder="..." />
+            <marker date="1458765867277" expanded="true" signature="31548:31571" placeholder="..." />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/src/utilities/json-to-sbgnml-converter.js">
+    <entry file="file://$PROJECT_DIR$/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-10.172414">
-          <caret line="165" column="46" selection-start-line="165" selection-start-column="38" selection-end-line="165" selection-end-column="46" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/src/utilities/sbgnml-to-json-converter.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.42737722">
-          <caret line="89" column="51" selection-start-line="89" selection-start-column="51" selection-end-line="89" selection-end-column="51" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/modelManager.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-11.206897">
-          <caret line="183" column="8" selection-start-line="183" selection-start-column="8" selection-end-line="183" selection-end-column="8" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="294" column="80" selection-start-line="294" selection-start-column="80" selection-end-line="294" selection-end-column="80" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-cytoscape-sbgn.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-10.689655">
-          <caret line="488" column="19" selection-start-line="488" selection-start-column="19" selection-end-line="488" selection-end-column="51" />
-          <folding>
-            <marker date="1458234909176" expanded="true" signature="26498:26550" placeholder="..." />
-            <marker date="1458234909176" expanded="true" signature="26700:26950" placeholder="..." />
-            <marker date="1458234909176" expanded="true" signature="26712:26734" placeholder="..." />
-            <marker date="1458234909176" expanded="true" signature="26766:26945" placeholder="..." />
-            <marker date="1458234909176" expanded="false" signature="26843:26872" placeholder="..." />
-            <marker date="1458234909176" expanded="true" signature="26978:27228" placeholder="..." />
-            <marker date="1458234909176" expanded="true" signature="26990:27012" placeholder="..." />
-            <marker date="1458234909176" expanded="true" signature="27042:27223" placeholder="..." />
-            <marker date="1458234909176" expanded="false" signature="27117:27146" placeholder="..." />
-            <marker date="1458234909176" expanded="true" signature="27256:27539" placeholder="..." />
-            <marker date="1458234909176" expanded="true" signature="27268:27290" placeholder="..." />
-            <marker date="1458234909176" expanded="true" signature="27322:27534" placeholder="..." />
-            <marker date="1458234909176" expanded="false" signature="27420:27449" placeholder="..." />
-            <marker date="1458234909176" expanded="true" signature="27653:27679" placeholder="..." />
-            <marker date="1458234909176" expanded="true" signature="27680:27845" placeholder="..." />
-            <marker date="1458234909176" expanded="true" signature="27692:27714" placeholder="..." />
-            <marker date="1458234909176" expanded="false" signature="27813:27820" placeholder="..." />
-            <marker date="1458234909176" expanded="true" signature="27886:27912" placeholder="..." />
-            <marker date="1458234909176" expanded="true" signature="27913:28088" placeholder="..." />
-            <marker date="1458234909176" expanded="true" signature="27925:27947" placeholder="..." />
-            <marker date="1458234909176" expanded="false" signature="28056:28063" placeholder="..." />
-            <marker date="1458234909176" expanded="true" signature="28121:28298" placeholder="..." />
-            <marker date="1458234909176" expanded="true" signature="28133:28155" placeholder="..." />
-            <marker date="1458234909176" expanded="false" signature="28216:28223" placeholder="..." />
-            <marker date="1458234909176" expanded="true" signature="28331:28516" placeholder="..." />
-            <marker date="1458234909176" expanded="true" signature="28343:28365" placeholder="..." />
-            <marker date="1458234909176" expanded="false" signature="28430:28437" placeholder="..." />
-            <marker date="1458234909176" expanded="true" signature="28612:28856" placeholder="..." />
-            <marker date="1458234909176" expanded="true" signature="28624:28646" placeholder="..." />
-            <marker date="1458234909176" expanded="true" signature="28676:28851" placeholder="..." />
-            <marker date="1458234909176" expanded="false" signature="28751:28780" placeholder="..." />
-            <marker date="1458234909176" expanded="true" signature="28885:29147" placeholder="..." />
-            <marker date="1458234909176" expanded="true" signature="28897:28919" placeholder="..." />
-            <marker date="1458234909176" expanded="true" signature="28944:29142" placeholder="..." />
-            <marker date="1458234909176" expanded="false" signature="29035:29064" placeholder="..." />
-            <marker date="1458234909176" expanded="true" signature="29287:29590" placeholder="..." />
-            <marker date="1458234909176" expanded="true" signature="29299:29321" placeholder="..." />
-            <marker date="1458234909176" expanded="true" signature="29374:29585" placeholder="..." />
-            <marker date="1458234909176" expanded="false" signature="29463:29492" placeholder="..." />
-            <marker date="1458234909176" expanded="true" signature="29676:29695" placeholder="..." />
-            <marker date="1458234909176" expanded="true" signature="29696:29810" placeholder="..." />
-            <marker date="1458234909176" expanded="true" signature="29712:29726" placeholder="..." />
-            <marker date="1458234909176" expanded="true" signature="29780:29804" placeholder="..." />
-            <marker date="1458234909176" expanded="true" signature="36441:37042" placeholder="..." />
-            <marker date="1458234909176" expanded="true" signature="36534:36576" placeholder="..." />
-            <marker date="1458234909176" expanded="false" signature="36792:36836" placeholder="..." />
-            <marker date="1458234909176" expanded="true" signature="38411:38749" placeholder="..." />
-            <marker date="1458234909176" expanded="true" signature="38509:38547" placeholder="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-mode-handler.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="42" column="2" selection-start-line="42" selection-start-column="2" selection-end-line="42" selection-end-column="2" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-menu-functions.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-17.413794">
-          <caret line="120" column="30" selection-start-line="120" selection-start-column="30" selection-end-line="120" selection-end-column="30" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="807" column="0" selection-start-line="807" selection-start-column="0" selection-end-line="807" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -1791,31 +849,153 @@
     <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/EditorActionsManager.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="50" column="44" selection-start-line="50" selection-start-column="44" selection-end-line="50" selection-end-column="44" />
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="jar://$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/lib/JavaScriptLanguage.jar!/com/intellij/lang/javascript/index/predefined/EcmaScript.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33266932">
-          <caret line="628" column="9" selection-start-line="628" selection-start-column="9" selection-end-line="628" selection-end-column="9" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/src/utilities/add-remove-utilities.js">
+    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/modelManager.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="15" column="42" selection-start-line="15" selection-start-column="42" selection-end-line="16" selection-end-column="37" />
+          <caret line="251" column="0" selection-start-line="251" selection-start-column="0" selection-end-line="251" selection-end-column="0" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-helper-functions.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="99" column="6" selection-start-line="99" selection-start-column="6" selection-end-line="99" selection-end-column="6" />
+          <folding>
+            <marker date="1458932485419" expanded="true" signature="11147:11180" placeholder="..." />
+            <marker date="1458932485419" expanded="true" signature="11912:11945" placeholder="..." />
+            <marker date="1458932485419" expanded="true" signature="12291:12324" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/agent-interaction/computerAgent.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="816" column="14" selection-start-line="816" selection-start-column="8" selection-end-line="816" selection-end-column="14" />
+          <folding>
+            <marker date="1458765867277" expanded="true" signature="29127:29578" placeholder="..." />
+            <marker date="1458765867277" expanded="true" signature="29155:29165" placeholder="..." />
+            <marker date="1458765867277" expanded="false" signature="29319:29329" placeholder="..." />
+            <marker date="1458765867277" expanded="false" signature="29474:29497" placeholder="..." />
+            <marker date="1458765867277" expanded="true" signature="30328:30586" placeholder="..." />
+            <marker date="1458765867277" expanded="false" signature="30482:30505" placeholder="..." />
+            <marker date="1458765867277" expanded="true" signature="31423:31446" placeholder="..." />
+            <marker date="1458765867277" expanded="true" signature="31548:31571" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="294" column="80" selection-start-line="294" selection-start-column="80" selection-end-line="294" selection-end-column="80" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-menu-functions.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="807" column="0" selection-start-line="807" selection-start-column="0" selection-end-line="807" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/EditorActionsManager.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/modelManager.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="251" column="0" selection-start-line="251" selection-start-column="0" selection-end-line="251" selection-end-column="0" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/modelManager.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="251" column="0" selection-start-line="251" selection-start-column="0" selection-end-line="251" selection-end-column="0" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-menu-functions.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-9.137931">
+          <caret line="215" column="46" selection-start-line="215" selection-start-column="34" selection-end-line="215" selection-end-column="46" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/EditorActionsManager.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="966" column="54" selection-start-line="966" selection-start-column="54" selection-end-line="966" selection-end-column="54" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/agent-interaction/computerAgent.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.01510574">
+          <caret line="816" column="14" selection-start-line="816" selection-start-column="8" selection-end-line="816" selection-end-column="14" />
+          <folding>
+            <marker date="1458765867277" expanded="true" signature="29127:29578" placeholder="..." />
+            <marker date="1458765867277" expanded="true" signature="29155:29165" placeholder="..." />
+            <marker date="1458765867277" expanded="false" signature="29319:29329" placeholder="..." />
+            <marker date="1458765867277" expanded="false" signature="29474:29497" placeholder="..." />
+            <marker date="1458765867277" expanded="true" signature="30328:30586" placeholder="..." />
+            <marker date="1458765867277" expanded="false" signature="30482:30505" placeholder="..." />
+            <marker date="1458765867277" expanded="true" signature="31423:31446" placeholder="..." />
+            <marker date="1458765867277" expanded="true" signature="31548:31571" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-helper-functions.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="99" column="27" selection-start-line="99" selection-start-column="27" selection-end-line="99" selection-end-column="27" />
+          <folding>
+            <marker date="1458932485419" expanded="true" signature="11147:11180" placeholder="..." />
+            <marker date="1458932485419" expanded="true" signature="11912:11945" placeholder="..." />
+            <marker date="1458932485419" expanded="true" signature="12291:12324" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-6.056604">
+          <caret line="847" column="38" selection-start-line="847" selection-start-column="26" selection-end-line="847" selection-end-column="38" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-24.137932">
-          <caret line="706" column="57" selection-start-line="706" selection-start-column="57" selection-end-line="706" selection-end-column="57" />
+        <state vertical-scroll-proportion="-17.51724">
+          <caret line="880" column="34" selection-start-line="880" selection-start-column="30" selection-end-line="880" selection-end-column="34" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
           </folding>
@@ -1824,45 +1004,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/lib/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-25.172413">
-          <caret line="320" column="0" selection-start-line="320" selection-start-column="0" selection-end-line="320" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/README.md">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-5.981132">
-          <caret line="446" column="15" selection-start-line="446" selection-start-column="11" selection-end-line="446" selection-end-column="15" />
-          <folding>
-            <element signature="n#style#0;n#td#0;n#tr#9;n#table#1;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#td#0;n#tr#10;n#table#1;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#td#1;n#tr#10;n#table#1;n#body#0;n#html#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/agent-interaction/computerAgent.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-5.981132">
-          <caret line="615" column="18" selection-start-line="615" selection-start-column="14" selection-end-line="615" selection-end-column="18" />
-          <folding>
-            <marker date="1458330119540" expanded="true" signature="29125:29576" placeholder="..." />
-            <marker date="1458330119540" expanded="true" signature="29153:29163" placeholder="..." />
-            <marker date="1458330119540" expanded="true" signature="29317:29327" placeholder="..." />
-            <marker date="1458330119540" expanded="true" signature="29472:29495" placeholder="..." />
-            <marker date="1458330119540" expanded="true" signature="30326:30584" placeholder="..." />
-            <marker date="1458330119540" expanded="true" signature="30480:30503" placeholder="..." />
-            <marker date="1458330119540" expanded="true" signature="31421:31444" placeholder="..." />
-            <marker date="1458330119540" expanded="true" signature="31546:31569" placeholder="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/agent-interaction/agentAPI.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33333334">
-          <caret line="84" column="42" selection-start-line="84" selection-start-column="21" selection-end-line="84" selection-end-column="42" />
+        <state vertical-scroll-proportion="0.36336032">
+          <caret line="56" column="0" selection-start-line="56" selection-start-column="0" selection-end-line="56" selection-end-column="0" />
           <folding />
         </state>
       </provider>

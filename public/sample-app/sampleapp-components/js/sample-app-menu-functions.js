@@ -797,14 +797,16 @@ module.exports = function(){
 
                 var param = {
                     // firstTime: false,
-                    eles: selectedEles
+                    eles: selectedEles,
+                    sync:true
                 };
 
 
                 //Funda unselect all nodes otherwise they don't get deleted
                 cy.elements().unselect();
 
-                editorActions.manager._do(editorActions.RemoveElesCommand(selectedEles));
+
+    editorActions.manager._do(editorActions.RemoveElesCommand(selectedEles));
 
 
                 //  editorActions.manager._do(editorActions.DeleteSelectedCommand(param));

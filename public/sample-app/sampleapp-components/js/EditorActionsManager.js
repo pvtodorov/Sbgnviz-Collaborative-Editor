@@ -13,7 +13,6 @@ module.exports.updateServerGraph = function(){
     var sbgnmlText = jsonToSbgnml.createSbgnml();
     var cytoscapeJsGraph = sbgnmlToJson.convert(sbgnmlText);
 
-
     module.exports.modelManager.updateServerGraph(cytoscapeJsGraph);
 };
 
@@ -50,7 +49,7 @@ module.exports.addNode = function(param) {
         else
             result = addRemoveUtilities.addNode(param.x, param.y, param.sbgnclass);
 
-        console.log(result);
+
         if(param.sync){
             module.exports.modelManager.addModelNode(result.id(),  param, "me");
 
@@ -78,14 +77,15 @@ module.exports.removeEles =function(elesToBeRemoved) {
     module.exports.modelManager.deleteModelNodes(elesToBeRemoved.nodes(), "me");
     module.exports.modelManager.deleteModelEdges(elesToBeRemoved.edges(), "me");
 
-    module.exports.updateServerGraph();
+
 
 
     //removeEles operation computes edges to be removed
 
-    return addRemoveUtilities.removeEles(elesToBeRemoved);
+    var undoEles = addRemoveUtilities.removeEles(elesToBeRemoved);
 
-
+    module.exports.updateServerGraph();
+    return undoEles;
     //removeElesSimply causes edges to disappear when operation is undone
     //return addRemoveUtilities.removeElesSimply(elesToBeRemoved);
 }
@@ -154,9 +154,13 @@ module.exports.deleteSelected = function(param) {
 
         module.exports.modelManager.deleteModelNodes(param.eles.nodes(), "me");
         module.exports.modelManager.deleteModelEdges(param.eles.edges(), "me");
-        module.exports.updateServerGraph();
+
     }
-    return addRemoveUtilities.removeElesSimply(param.eles);
+    var undoEles = addRemoveUtilities.removeElesSimply(param.eles);
+
+    if(param.sync)
+        module.exports.updateServerGraph();
+    return undoEles;
 }
 
 module.exports.restoreSelected = function(eles) {
@@ -924,10 +928,13 @@ module.exports.changeParent = function(param) {
     if(param.sync){
         module.exports.modelManager.changeModelNodeAttribute('parent', param.node.id(), newParent.id(), "me");
         module.exports.updateServerGraph();
+
+//FIXME should not be here
+        refreshPaddings();
     }
 
 
-    refreshPaddings();
+
     return result;
 }
 

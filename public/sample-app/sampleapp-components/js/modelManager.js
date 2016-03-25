@@ -250,6 +250,7 @@ module.exports =  function(model, docId, userId, userName) {
             model.pass({user: user}).del(('_page.doc.cy.nodes.' + nodeId));
 
 
+
             this.updateHistory('delete', nodeId);
 
         },
@@ -259,6 +260,7 @@ module.exports =  function(model, docId, userId, userName) {
             if(selectedNodes != null){
                 for( var i = 0; i < selectedNodes.length; i++ ) {
                     var node = selectedNodes[i];
+
                     self.deleteModelNode(node.id(),user);
                 }
             }
