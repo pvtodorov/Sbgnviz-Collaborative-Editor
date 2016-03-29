@@ -53,7 +53,7 @@ module.exports.addNode = function(param) {
         if(param.sync){
             module.exports.modelManager.addModelNode(result.id(),  param, "me");
 
-            module.exports.updateServerGraph();
+            //module.exports.updateServerGraph();
 
         }
     }
@@ -84,7 +84,7 @@ module.exports.removeEles =function(elesToBeRemoved) {
 
     var undoEles = addRemoveUtilities.removeEles(elesToBeRemoved);
 
-    module.exports.updateServerGraph();
+    //module.exports.updateServerGraph();
     return undoEles;
     //removeElesSimply causes edges to disappear when operation is undone
     //return addRemoveUtilities.removeElesSimply(elesToBeRemoved);
@@ -121,7 +121,7 @@ module.exports.restoreEles = function(eles) {
             module.exports.modelManager.addModelEdge(ele.id(), param, "me");
         });
 
-        module.exports.updateServerGraph();
+        //module.exports.updateServerGraph();
     }
 
     var result = addRemoveUtilities.restoreEles(eles);
@@ -140,7 +140,7 @@ module.exports.restoreEles = function(eles) {
             module.exports.modelManager.changeModelNodeAttribute('isCloneMarker', node.id(),node.data("sbgnclonemarker"),"me" );
             module.exports.modelManager.changeModelNodeAttribute('isMultimer', node.id(),(node.data("sbgnclass").indexOf(' multimer') > 0),"me" );
         });
-        module.exports.updateServerGraph();
+        //module.exports.updateServerGraph();
     };
 
     //update children and parents
@@ -158,8 +158,9 @@ module.exports.deleteSelected = function(param) {
     }
     var undoEles = addRemoveUtilities.removeElesSimply(param.eles);
 
-    if(param.sync)
-        module.exports.updateServerGraph();
+
+    //if(param.sync)
+      //  //module.exports.updateServerGraph();
     return undoEles;
 }
 
@@ -184,7 +185,7 @@ module.exports.addEdge = function(param)
 
     if(param.sync){
         module.exports.modelManager.addModelEdge(result.id(), param, "me");
-        module.exports.updateServerGraph();
+        //module.exports.updateServerGraph();
 
     }
     return result;
@@ -193,7 +194,7 @@ module.exports.addEdge = function(param)
 module.exports.removeEdges = function(edgesToBeDeleted)
 {
     module.exports.modelManager.deleteModelEdges(edgesToBeDeleted, "me");
-    module.exports.updateServerGraph();
+    //module.exports.updateServerGraph();
     return addRemoveUtilities.removeEdges(edgesToBeDeleted);
 }
 
@@ -388,7 +389,7 @@ module.exports.performLayoutFunction = function(param) {
         });
     });
 
-    module.exports.updateServerGraph();
+    //module.exports.updateServerGraph();
     //var runLayout = "1";
     //module.exports.modelManager.setRunLayout(runLayout, "me");
     return module.exports.returnToPositionsAndSizes(param);
@@ -429,7 +430,7 @@ module.exports.returnToPositionsAndSizes = function(param) {
             module.exports.modelManager.moveModelNode(node.id(), node.position(), "me");
 
         });
-        module.exports.updateServerGraph();
+        //module.exports.updateServerGraph();
     }
 
 
@@ -476,7 +477,7 @@ module.exports.moveDescendentNodes = function(nodes) {
         if(children)
             module.exports.moveDescendentNodes( children);
 
-        module.exports.updateServerGraph();
+        //module.exports.updateServerGraph();
     });
 }
 module.exports.moveAncestorNodes = function(node) {
@@ -490,7 +491,7 @@ module.exports.moveAncestorNodes = function(node) {
         var parent = cy.getElementById(parentId);
         module.exports.modelManager.moveModelNode(parentId, parent.position(), "me");
         module.exports.moveAncestorNodes(parent);
-        module.exports.updateServerGraph();
+        //module.exports.updateServerGraph();
 
 
     }
@@ -531,7 +532,7 @@ module.exports.moveNodes = function(positionDiff, nodes) {
         var children = node.children();
         module.exports.moveNodes(positionDiff, children);
 
-        module.exports.updateServerGraph();
+        //module.exports.updateServerGraph();
 
     }
 }
@@ -549,7 +550,7 @@ module.exports.hideSelected = function(param) {
             nodesToHide.forEach(function(el){
                 module.exports.modelManager.changeModelNodeAttribute('visibilityStatus', el.id(), "invisible", "me");
             });
-            module.exports.updateServerGraph();
+            //module.exports.updateServerGraph();
         }
 
 
@@ -565,7 +566,7 @@ module.exports.hideSelected = function(param) {
             param.nodesToShow.forEach(function(el){
                 module.exports.modelManager.changeModelNodeAttribute('visibilityStatus', el.id(), "visible", "me");
             });
-            module.exports.updateServerGraph();
+            //module.exports.updateServerGraph();
         }
 
     }
@@ -598,7 +599,7 @@ module.exports.showSelected = function(param) {
             nodesToHide.forEach(function(el){
                 module.exports.modelManager.changeModelNodeAttribute('visibilityStatus', el.id(), "invisible", "me");
             });
-            module.exports.updateServerGraph();
+            //module.exports.updateServerGraph();
         }
 
     }
@@ -616,7 +617,7 @@ module.exports.showSelected = function(param) {
                 module.exports.modelManager.changeModelNodeAttribute('visibilityStatus', el.id(), "invisible", "me");
             });
 
-            module.exports.updateServerGraph();
+            //module.exports.updateServerGraph();
         }
 
     }
@@ -633,7 +634,7 @@ module.exports.showAll = function(param) {
         cy.nodes().forEach(function(el){
             module.exports.modelManager.changeModelNodeAttribute('visibilityStatus', el.id(), "visible", "me");
         });
-        module.exports.updateServerGraph();
+        //module.exports.updateServerGraph();
     }
 
     var result ={
@@ -663,7 +664,7 @@ module.exports.showJustGivenNodes = function(param) {
             module.exports.modelManager.changeModelNodeAttribute('visibilityStatus', el.id(), "invisible", "me");
         });
 
-        module.exports.updateServerGraph();
+        //module.exports.updateServerGraph();
 
     }
 
@@ -742,7 +743,7 @@ module.exports.highlightSelected = function(param) {
             });
         }
 
-        module.exports.updateServerGraph();
+        //module.exports.updateServerGraph();
     }
 
     result.sync = true;
@@ -783,7 +784,7 @@ module.exports.notHighlightEles = function(param) {
                 });
             }
 
-            module.exports.updateServerGraph();
+            //module.exports.updateServerGraph();
         }
     }
     else {
@@ -810,7 +811,7 @@ module.exports.notHighlightEles = function(param) {
             });
         }
 
-        module.exports.updateServerGraph();
+        //module.exports.updateServerGraph();
      //   if(param.sync)
        //     module.exports.modelManager.highlight(0, "me");
     }
@@ -842,7 +843,7 @@ module.exports.removeHighlights = function(param) {
             module.exports.modelManager.changeModelNodeAttribute('highlightStatus', el.id(), "highlighted", "me");
         });
 
-        module.exports.updateServerGraph();
+        //module.exports.updateServerGraph();
      // module.exports.modelManager.highlight(0, "me");
     }
 
@@ -927,7 +928,7 @@ module.exports.changeParent = function(param) {
 
     if(param.sync){
         module.exports.modelManager.changeModelNodeAttribute('parent', param.node.id(), newParent.id(), "me");
-        module.exports.updateServerGraph();
+        //module.exports.updateServerGraph();
 
 //FIXME should not be here
         refreshPaddings();
@@ -994,7 +995,7 @@ module.exports.createCompoundForSelectedNodes = function(param) {
 
     module.exports.modelManager.changeModelNodeAttribute('children', newCompoundId, nodeIds, "me");
 
-    module.exports.updateServerGraph();
+    //module.exports.updateServerGraph();
     var result = {
         nodesToMakeCompound:nodesToMakeCompound,
         compoundToRemove: newCompound,
@@ -1026,7 +1027,7 @@ module.exports.removeCompound = function(param) {
     module.exports.modelManager.deleteModelNode(removedCompound.id(), "me");
 
 
-    module.exports.updateServerGraph();
+    //module.exports.updateServerGraph();
     refreshPaddings();
 
     var result = {
@@ -1076,7 +1077,7 @@ module.exports.resizeNode = function(param) {
         module.exports.modelManager.changeModelNodeAttribute('height', ele.id(), param.height, "me");
 
 
-        module.exports.updateServerGraph();
+        //module.exports.updateServerGraph();
 
     }
 
@@ -1108,7 +1109,7 @@ module.exports.changeStateVariable = function(param) {
     param.data = statesAndInfos;
     module.exports.modelManager.changeModelNodeAttribute('sbgnStatesAndInfos', param.ele.id(), param.data, "me", param.state );
 
-    module.exports.updateServerGraph();
+    //module.exports.updateServerGraph();
     return result;
 }
 
@@ -1134,7 +1135,7 @@ module.exports.changeUnitOfInformation = function(param) {
 
     module.exports.modelManager.changeModelNodeAttribute('sbgnStatesAndInfos', param.ele.id(), param.data, "me", param.state);
 
-    module.exports.updateServerGraph();
+    //module.exports.updateServerGraph();
 
     return result;
 }
@@ -1149,7 +1150,7 @@ module.exports.addStateAndInfo = function(param) {
 
     param.data = statesAndInfos;
     module.exports.modelManager.changeModelNodeAttribute('sbgnStatesAndInfos', param.ele.id(), param.data, "me", param.obj );
-    module.exports.updateServerGraph();
+    //module.exports.updateServerGraph();
     param.ele.unselect(); //to refresh inspector
     param.ele.select(); //to refresh inspector
     cy.forceRender();
@@ -1172,7 +1173,7 @@ module.exports.removeStateAndInfo = function(param) {
 
     param.data = statesAndInfos;
     module.exports.modelManager.changeModelNodeAttribute('sbgnStatesAndInfos', param.ele.id(), param.data, "me", param.state);
-    module.exports.updateServerGraph();
+    //module.exports.updateServerGraph();
     param.ele.unselect(); //to refresh inspector
     param.ele.select(); //to refresh inspector
     cy.forceRender();
@@ -1213,7 +1214,7 @@ module.exports.changeIsMultimerStatus = function(param) {
 
     if(param.sync){
         module.exports.modelManager.changeModelNodeAttribute('isMultimer', param.ele.id(), param.data, "me");
-        module.exports.updateServerGraph();
+        //module.exports.updateServerGraph();
     }
     return result;
 }
@@ -1238,7 +1239,7 @@ module.exports.changeIsCloneMarkerStatus = function(param) {
 
     if(param.sync){
         module.exports.modelManager.changeModelNodeAttribute('isCloneMarker', param.ele.id(), param.data);
-        module.exports.updateServerGraph();
+        //module.exports.updateServerGraph();
     }
 
     return result;
@@ -1263,7 +1264,7 @@ module.exports.changeChildren = function(param){
 
     if(param.sync){
         module.exports.modelManager.changeModelNodeAttribute(param.modelDataName, param.ele.id(), elArr, "me");
-        module.exports.updateServerGraph();
+        //module.exports.updateServerGraph();
     }
 
     return result;
@@ -1275,7 +1276,7 @@ module.exports.changePosition = function(param){
     var ele = param.ele;
 
 
-    ele.data(param.data);
+   // ele.data(param.dataType, param.data);
     ele.position(param.data);
 
     ele['position'](param.data);
@@ -1283,7 +1284,7 @@ module.exports.changePosition = function(param){
         //module.exports.modelManager.changeModelNodeAttribute(param.modelDataName, param.ele.id(), param.data, "me");
         module.exports.modelManager.moveModelNode(param.ele.id(), param.data, "me");
 
-        module.exports.updateServerGraph();
+        //module.exports.updateServerGraph();
     }
 
     return result;
@@ -1310,6 +1311,27 @@ module.exports.changeVisibilityOrHighlightStatus = function(param){
 
 }
 
+//module.exports.changeNodeLabel = function(param){
+//    var result = {
+//    };
+//    var ele = param.ele;
+//    result.ele = ele;
+//    result.sbgnlabel = ele._private.data.sbgnlabel;
+//
+//    ele._private.data.sbgnlabel = param.sbgnlabel;
+//
+//    ele.removeClass('changeContent');
+//    ele.addClass('changeContent');
+//
+//    if (cy.elements(":selected").length == 1 && cy.elements(":selected")[0] == param.ele) {
+//        require('./sample-app-cytoscape-sbgn.js').handleSBGNInspector();
+//    }
+//    if(param.sync) {
+//
+//        module.exports.modelManager.changeModelNodeAttribute(param.modelDataName, param.ele.id(), param.data, "me");
+//    }
+//    return result;
+//}
 
 
 module.exports.changeStyleData = function( param) {
@@ -1365,6 +1387,11 @@ module.exports.changeStyleData = function( param) {
             sbgnFiltering.applyFilter(ele);
         }
     }
+    else if(param.dataType == "sbgnlabel"){
+        ele.removeClass('changeContent');
+        ele.addClass('changeContent');
+
+    }
 
 
         if(param.sync){
@@ -1375,7 +1402,7 @@ module.exports.changeStyleData = function( param) {
             module.exports.modelManager.changeModelEdgeAttribute(param.modelDataName, param.ele.id(), param.data, "me");
 
 
-        module.exports.updateServerGraph();
+        //module.exports.updateServerGraph();
     }
 
     return result;
@@ -1409,7 +1436,7 @@ module.exports.changeStyleCss = function(param) {
         else
             module.exports.modelManager.changeModelEdgeAttribute(param.modelDataName, param.ele.id(), param.data, "me");
 
-        module.exports.updateServerGraph();
+        //module.exports.updateServerGraph();
     }
 
     return result;
@@ -1617,6 +1644,7 @@ module.exports.ChangeStyleCssCommand = function (param) {
     var name = "change " + param.dataType;
     return new Command(module.exports.changeStyleCss, module.exports.changeStyleCss, param, name);
 };
+
 
 module.exports.ChangeIsMultimerStatusCommand = function (param) {
     return new Command(module.exports.changeIsMultimerStatus, module.exports.changeIsMultimerStatus, param, "changeMultimerStatus");

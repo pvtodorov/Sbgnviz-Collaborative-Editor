@@ -54,35 +54,14 @@
                 return socket;
         };
 
-        /**
-         * Generates a new node id
-         */
-        //TODO: what if an in-between node is deleted before? We should get a unique id
-        this.updateNextAgentNodeId = function(){
-            var cnt = 0;
-            for( var key in pageDoc.cy.nodes ) {
-                if( pageDoc.cy.nodes.hasOwnProperty(key) ) {
-                    cnt++;
-                }
-            }
-            nextNodeCnt =  cnt;
-        };
+        ;
 
-        /**
-         *
-         * @returns {string} New node id
-         */
-        this.getNextNodeId = function(){
-
-            return  "agentN" + nextNodeCnt++;
-        }
 
         //get model for the current room
         this.loadModel = function (callback) {
 
             socket.emit('agentPageDocRequest', {room: room}, function(data){
                 pageDoc = data;
-                self.updateNextAgentNodeId();
                 if (callback != null) callback();
             });
 
@@ -220,10 +199,17 @@
          * </ul>
          *
          */
-        this.sendRequest = function(reqName, param){ //model operations
+        this.sendRequest = function(reqName, param, callback){ //model operations
 
             param.room = room;
-            socket.emit(reqName, param);
+
+            socket.emit(reqName, param, function(data){
+                if(callback)
+                    callback(data);
+                else
+                    console.log(data);
+            });
+
         };
 
 

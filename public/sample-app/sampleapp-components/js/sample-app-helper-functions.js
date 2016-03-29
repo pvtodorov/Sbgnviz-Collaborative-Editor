@@ -102,14 +102,7 @@ $(document).ready(function () {
             scrollToBottom('messages');
         }, 100);
 
-               /*
-                   FIXME This is triggered before the DOM is actually updated. Hack
-                   around it by delaying for 100ms. This is of course not reliable but
-                   will be good enough for demos.
-                */
-                   setTimeout(function () {
-                           scrollToBottom('messages');
-                       }, 100);
+
 
     });
 
@@ -169,35 +162,16 @@ function scrollToBottom(docId){
 //Handle keyboard events
 $(document).keydown(function (e) {
     if (e.which === 90 && e.ctrlKey) {
-        editorActionsManager.undo();
-        refreshUndoRedoButtonsStatus();
+        editorActions.manager.undo();
+        editorActions.refreshUndoRedoButtonsStatus();
     }
     else if (e.which === 89 && e.ctrlKey) {
-        editorActionsManager.redo();
-        refreshUndoRedoButtonsStatus();
+        editorActions.manager.redo();
+        editorActions.refreshUndoRedoButtonsStatus();
     }
 });
 
-//Cytoscape extensions
-//FUNDA
-//cytoscape('collection', 'setWidth', function(val){
-//    var ele = this[0];
-//    var cy = ele._private.cy;
-//    var styleEnabled = cy._private.styleEnabled;
-//
-//    if( ele ){
-//        if( styleEnabled ){
-//            ele._private.style.width.pfValue = val ; //this is no more pxValue
-//            ele._private.style.width.value = val ;
-//            ele._private.style.width.strValue = ""+ Math.floor(val) + "px";
-//            ele._private.autoWidth  = val;
-//
-//        } else {
-//
-//            ele._private.data.width  = val;
-//        }
-//    }
-//});
+
 
 var calculatePaddings = function(paddingPercent) {
     //As default use the compound padding value
@@ -238,24 +212,6 @@ var calculatePaddings = function(paddingPercent) {
 var calculateTilingPaddings = calculatePaddings;
 var calculateCompoundPaddings = calculatePaddings;
 
-//FUNDA???
-//cytoscape('collection', 'setHeight', function(val){
-//    var ele = this[0];
-//    var cy = ele._private.cy;
-//    var styleEnabled = cy._private.styleEnabled;
-//
-//    if( ele ){
-//        if( styleEnabled ){
-//            ele._private.style.height.pfValue = val; //this is no more pxvalue
-//            ele._private.style.height.value = val ;
-//            ele._private.style.height.strValue = ""+ Math.floor(val) + "px";
-//            ele._private.autoHeight  = val;
-//        } else {
-//
-//            ele._private.data.height  = val;
-//        }
-//    }
-//});
 
 var refreshPaddings = function () {
 
@@ -285,21 +241,83 @@ var makePresetLayout = function () {
         name: "preset"
     });
 };
+var enableDragAndDropMode = function () {
+    window.dragAndDropModeEnabled = true;
+    $("#sbgn-network-container").addClass("target-cursor");
+    cy.autolock(true);
+    cy.autounselectify(true);
+};
 
-//Returns true for unspecified entity,
-//simple chemical, macromolecule, nucleic acid feature, and complexes
-//As they may have some specific node properties(state variables, units of information etc.)
-var isSpecialSBGNNodeClass = function (sbgnclass) {
-    if (sbgnclass == 'unspecified entity' || sbgnclass == 'simple chemical'
+var disableDragAndDropMode = function () {
+    window.dragAndDropModeEnabled = null;
+    window.nodeToDragAndDrop = null;
+    $("#sbgn-network-container").removeClass("target-cursor");
+    cy.autolock(false);
+    cy.autounselectify(false);
+};
+
+var canHaveCloneMarker = function(sbgnclass) {
+    if (sbgnclass == 'simple chemical'
         || sbgnclass == 'macromolecule' || sbgnclass == 'nucleic acid feature'
-        || sbgnclass == 'complex'
-        || sbgnclass == 'unspecified entity multimer' || sbgnclass == 'simple chemical multimer'
+        || sbgnclass == 'complex' || sbgnclass == 'simple chemical multimer'
         || sbgnclass == 'macromolecule multimer' || sbgnclass == 'nucleic acid feature multimer'
         || sbgnclass == 'complex multimer') {
         return true;
     }
     return false;
 };
+
+var canHaveStateVariable = function(sbgnclass) {
+    if (sbgnclass == 'macromolecule' || sbgnclass == 'nucleic acid feature'
+        || sbgnclass == 'complex'
+        || sbgnclass == 'macromolecule multimer' || sbgnclass == 'nucleic acid feature multimer'
+        || sbgnclass == 'complex multimer') {
+        return true;
+    }
+    return false;
+};
+
+//checks if a node with the given sbgnclass can be cloned
+var canBeCloned = function (sbgnclass) {
+    sbgnclass = sbgnclass.replace(" multimer", "");
+    var list = {
+        'unspecified entity': true,
+        'macromolecule': true,
+        'complex': true,
+        'nucleic acid feature': true,
+        'simple chemical': true,
+        'perturbing agent': true
+    };
+
+    return list[sbgnclass] ? true : false;
+};
+
+//checks if a node with the given sbgnclass can become a multimer
+var canBeMultimer = function (sbgnclass) {
+    sbgnclass = sbgnclass.replace(" multimer", "");
+    var list = {
+        'macromolecule': true,
+        'complex': true,
+        'nucleic acid feature': true,
+        'simple chemical': true
+    };
+
+    return list[sbgnclass] ? true : false;
+};
+////Returns true for unspecified entity,
+////simple chemical, macromolecule, nucleic acid feature, and complexes
+////As they may have some specific node properties(state variables, units of information etc.)
+//var isSpecialSBGNNodeClass = function (sbgnclass) {
+//    if (sbgnclass == 'unspecified entity' || sbgnclass == 'simple chemical'
+//        || sbgnclass == 'macromolecule' || sbgnclass == 'nucleic acid feature'
+//        || sbgnclass == 'complex'
+//        || sbgnclass == 'unspecified entity multimer' || sbgnclass == 'simple chemical multimer'
+//        || sbgnclass == 'macromolecule multimer' || sbgnclass == 'nucleic acid feature multimer'
+//        || sbgnclass == 'complex multimer') {
+//        return true;
+//    }
+//    return false;
+//};
 
 
 var getNodesData = function () {
@@ -677,12 +695,12 @@ var getDynamicLabelTextSize = function (ele) {
 //};
 
 
-
+//funda: changed #555 to #555555
 var sbgnStyleSheet = cytoscape.stylesheet()
     .selector("node")
     .css({
         'border-width': 1.5,
-        'border-color': '#555',
+        'border-color': '#555555',
         'background-color': '#f6f6f6',
         'font-size': 11,
 //          'shape': 'data(sbgnclass)',
@@ -755,8 +773,8 @@ var sbgnStyleSheet = cytoscape.stylesheet()
     .selector("node:selected")
     .css({
         'border-color': '#d67614',
-        'target-arrow-color': '#000',
-        'text-outline-color': '#000'})
+        'target-arrow-color': '#000000',
+        'text-outline-color': '#000000'})
     .selector("node:active")
     .css({
         'background-opacity': 0.7, 'overlay-color': '#d67614',
@@ -765,12 +783,12 @@ var sbgnStyleSheet = cytoscape.stylesheet()
     .selector("edge")
     .css({
         'curve-style': 'bezier',
-        'line-color': '#555',
+        'line-color': '#555555',
         'target-arrow-fill': 'hollow',
         'source-arrow-fill': 'hollow',
         'width': 1.5,
-        'target-arrow-color': '#555',
-        'source-arrow-color': '#555',
+        'target-arrow-color': '#555555',
+        'source-arrow-color': '#555555',
 //          'target-arrow-shape': 'data(sbgnclass)'
     })
     .selector("edge[distances][weights]")
@@ -931,3 +949,6 @@ var sbgnStyleSheet = cytoscape.stylesheet()
 
 
 
+var stringAfterValueCheck = function (value) {
+    return value ? value : '';
+};

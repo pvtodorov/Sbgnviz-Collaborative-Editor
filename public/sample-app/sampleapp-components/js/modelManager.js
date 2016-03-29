@@ -14,15 +14,7 @@ function preciseRound(num, decimals) {
     var t=Math.pow(10, decimals);
     return (Math.round((num * t) + (decimals>0?1:0)*(Math.sign(num) * (10 / Math.pow(100, decimals)))) / t).toFixed(decimals);
 }
-Array.prototype.contains = function(obj) {
-    var i = this.length;
-    while (i--) {
-        if (this[i] == obj) {
-            return true;
-        }
-    }
-    return false;
-}
+
 module.exports =  function(model, docId, userId, userName) {
 
 
@@ -126,46 +118,40 @@ module.exports =  function(model, docId, userId, userName) {
 
 
 
-        //Not used currently
-        //getSelectedModelElementIds: function(){
-        //
-        //    var selectedNodes = [];
-        //    var nodes = model.get('_page.doc.cy.nodes');
-        //
-        //    for (id in nodes) {
-        //        if (nodes.hasOwnProperty(id)) {
-        //            if (model.get('_page.doc.cy.nodes.' + id + '.highlightColor') != null )
-        //                selectedNodes.push(id);
-        //        }
-        //    }
-        //
-        //    return selectedNodes;
-        //},
-
-
         selectModelNode: function(node){
 
+            var status = "Node id not found";
             var nodePath = model.at('_page.doc.cy.nodes.'  +node.id());
             if(nodePath.get('id') && user){
                 nodePath.set('highlightColor' , user.get('colorCode'));
 
+                status = "success";
             }
 
+
             this.updateHistory('select', node.id());
+            return status;
+
         },
 
         unselectModelNode: function(node){
+            var status = "Node id not found";
             var nodePath = model.at('_page.doc.cy.nodes.'  +node.id());
 
 
             if(nodePath.get('id')){
                 nodePath.set('highlightColor' , null);
+                status = "success";
             }
+
 
             this.updateHistory('unselect', node.id());
 
+            return status;
+
         },
         moveModelNode: function(nodeId, pos,user){
+            var status = "Node id not found";
             var nodePath = model.at('_page.doc.cy.nodes.'  +nodeId);
             if(nodePath.get('id')){
 
@@ -173,12 +159,13 @@ module.exports =  function(model, docId, userId, userName) {
                 // if(!node.selected) //selected nodes will still be highlighted even if they are freed
                 model.set('_page.doc.cy.nodes.' +nodeId+ '.highlightColor' , null); //make my highlight color null as well
                 model.pass({user:user}).set('_page.doc.cy.nodes.' +nodeId +'.position' , pos);
-
+                status = "success"
 
             }
 
 
             this.updateHistory('move', nodeId, coordinateRound(pos, 3));
+            return status;
 
         },
         addModelNode: function(nodeId,  param, user){
@@ -219,6 +206,8 @@ module.exports =  function(model, docId, userId, userName) {
             //We don't want all the attributes of the param to be printed
             this.updateHistory('add', nodeId, {x:param.x, y: param.y, sbgnclass: param.sbgnclass});
 
+            return "success";
+
         },
 
 
@@ -226,32 +215,39 @@ module.exports =  function(model, docId, userId, userName) {
         //historyData is for  sbgnStatesAndInfos only
         changeModelNodeAttribute: function(attStr, nodeId, attVal,  user, historyData){
 
-
+            var status = "Node id not found";
             var nodePath = model.at('_page.doc.cy.nodes.'  + nodeId);
-            if(nodePath.get('id'))
+            if(nodePath.get('id')){
                 nodePath.pass({user:user}).set(attStr,attVal);
-
+                status = "success";
+            }
 
             if(historyData == null) //historydata is about statesAndInfos
                 this.updateHistory(attStr, nodeId, attVal);
             else
                 this.updateHistory(attStr, nodeId, historyData);
 
+            return status;
 
         },
 
         deleteModelNode: function(nodeId, user){
-
+            var status = "Node id not found";
             //"unselect" node so that it doesn't get highlighted after undo
             //TODO: does not work!!!!!!!
-            this.changeModelNodeAttribute('highlightColor', nodeId, null, user);
-            this.changeModelNodeAttribute('backgroundColor', nodeId, null, user);
+            var nodePath = model.at('_page.doc.cy.nodes.'  + nodeId);
+            if(nodePath.get('id')) {
+                this.changeModelNodeAttribute('highlightColor', nodeId, null, user);
+                this.changeModelNodeAttribute('backgroundColor', nodeId, null, user);
 
-            model.pass({user: user}).del(('_page.doc.cy.nodes.' + nodeId));
+                model.pass({user: user}).del(('_page.doc.cy.nodes.' + nodeId));
+                status = "success";
+            }
 
 
 
             this.updateHistory('delete', nodeId);
+            return status;
 
         },
 
@@ -302,50 +298,30 @@ module.exports =  function(model, docId, userId, userName) {
         },
 
         changeModelEdgeAttribute: function(attStr, edgeId, attVal,  user){
+            var status = "Edge id not found";
             var edgePath = model.at('_page.doc.cy.edges.'  + edgeId);
-            if(edgePath.get('id'))
+            if(edgePath.get('id')){
                 edgePath.pass({user:user}).set(attStr, attVal);
-
+                status = "success";
+            }
             this.updateHistory(attStr, edgeId, attVal);
 
+            return status;
         },
 
         selectModelEdge: function(edge){
+            var status = "Edge id not found";
             var user = model.at('users.' + userId);
             var edgePath = model.at('_page.doc.cy.edges.'  +edge.id());
-            if(edgePath.get('id') && user)
-                edgePath.set('highlightColor' ,user.get('colorCode'));
+            if(edgePath.get('id') && user) {
+                edgePath.set('highlightColor', user.get('colorCode'));
+                status = "success";
+                //We don't want all the attributes of the param to be printed
+                this.updateHistory('add', edgeId, {source: param.source, target: param.target, sbgnclass: param.sbgnclass});
 
-            this.updateHistory('select', edge.id());
-        },
+            }
 
-        unselectModelEdge: function(edge){
-            var edgePath = model.at('_page.doc.cy.edges.'  + edge.id());
-            if(edgePath.get('id'))
-                edgePath.set('highlightColor' , null);
-
-            this.updateHistory('unselect', edge.id());
-        },
-
-
-        addModelEdge: function(edgeId, param, user){
-
-
-
-            model.pass({user:user}).set('_page.doc.cy.edges.' + edgeId+'.id', edgeId);
-            model.pass({user:user}).set('_page.doc.cy.edges.' + edgeId +'.highlightColor', null);
-            model.pass({user:user}).set('_page.doc.cy.edges.' + edgeId +'.lineColor', '#555555');
-
-
-            model.pass({user:user}).set('_page.doc.cy.edges.' + edgeId +'.source', param.source);
-            model.pass({user:user}).set('_page.doc.cy.edges.' + edgeId +'.target', param.target);
-            model.pass({user:user}).set('_page.doc.cy.edges.' + edgeId +'.sbgnclass', param.sbgnclass);
-
-            model.pass({user:user}).set('_page.doc.cy.edges.' + edgeId +'.width', '1.5');
-
-
-            //We don't want all the attributes of the param to be printed
-            this.updateHistory('add', edgeId, {source: param.source, target: param.target, sbgnclass: param.sbgnclass});
+            return status;
 
 
         },
@@ -399,13 +375,12 @@ module.exports =  function(model, docId, userId, userName) {
             //TODO: could be simplified to a single node/edge update
             model.set('_page.doc.jsonObj', cytoscapeJsGraph);
 
+
+
             //this.updateHistory('load graph');
         },
 
 
-        convertToCyNode: function(nodeId){
-
-        },
 
         initModelNode: function(node, user){
 
@@ -578,6 +553,7 @@ module.exports =  function(model, docId, userId, userName) {
 
         },
 
+        //nodes and edges are cytoscape objects. they have css and data properties
         initModel: function(jsonObj, nodes, edges, user){
 
 
@@ -598,8 +574,11 @@ module.exports =  function(model, docId, userId, userName) {
             });
 
             var self = this;
+
+
             nodes.forEach(function (node) {
                 self.initModelNode(node, user);
+
             });
 
             edges.forEach(function (edge) {

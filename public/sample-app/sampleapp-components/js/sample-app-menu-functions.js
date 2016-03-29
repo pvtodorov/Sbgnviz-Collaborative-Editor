@@ -90,6 +90,10 @@ module.exports = function(){
 
     return {
 
+        updateServerGraph:function (){
+
+                editorActions.updateServerGraph();
+        },
         addEdge:function(elId, source, target, sbgnclass, syncVal){
             var param ={
                 firstTime: true,
@@ -101,8 +105,9 @@ module.exports = function(){
 
             };
 
-            editorActions.addEdge(param);
-           // editorActions.manager._do( editorActions.AddEdgeCommand(param));
+            var result = editorActions.addEdge(param);
+
+            return result.id();
 
         },
 
@@ -118,11 +123,10 @@ module.exports = function(){
 
             };
 
-            editorActions.addNode(param);
+            var result = editorActions.addNode(param);
 
 
-            //editorActions.manager._do( editorActions.AddNodeCommand(param));
-
+            return result.id();
         },
 
         deleteElement: function(elId, syncVal){
@@ -134,12 +138,13 @@ module.exports = function(){
                     sync: syncVal
                 }
                 editorActions.deleteSelected(param);
+
                 //editorActions.manager._do(editorActions.DeleteSelectedCommand(param));
             }
         },
 
         changePosition: function(elId, pos, syncVal){
-            var el = cy.$(('#' + elId));
+            var el = cy.$(('#' + elId))[0];
             var param = {
                 ele: el,
                 id: elId,
@@ -151,7 +156,6 @@ module.exports = function(){
             if(el)
                 //editorActions.manager._do(editorActions.ChangePositionCommand(param));
                 editorActions.changePosition(param); //do/undo not performed here
-
 
 
         },
@@ -251,7 +255,7 @@ module.exports = function(){
             editorActions.modelManager.updateServerGraph(jsonObj);
 
 
-            this.updateSample(-1);
+            this.updateSample(-1, true);
 
             editorActions.modelManager.setSampleInd(-1, "me"); //to notify other clients
 
@@ -271,7 +275,7 @@ module.exports = function(){
         },
 
 
-        updateSample: function(ind){
+        updateSample: function(ind, syncVal){
 
 
             //just get a new sbgncontainer
@@ -280,6 +284,9 @@ module.exports = function(){
 
                 var jsonObj = editorActions.modelManager.getServerGraph();
                 sbgnContainer =  (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj,  editorActions));
+                if(syncVal)
+                    editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me");
+
             }
             else{
 
@@ -295,9 +302,14 @@ module.exports = function(){
 
                     sbgnContainer =  (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj,  editorActions));
 
+                    if(syncVal)
+                        editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me");
+
 
                 });
             }
+
+
         },
 
         start: function (modelManager) {
@@ -324,12 +336,13 @@ module.exports = function(){
 
                 var ind = modelManager.getSampleInd("me");
 
-                this.updateSample(ind);
+                this.updateSample(ind, true);
 
             }
             else {
 
                 sbgnContainer = (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, editorActions));
+                    editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me");
             }
 
             document.getElementById("ctx-add-bend-point").addEventListener("contextmenu", function (event) {
@@ -380,7 +393,7 @@ module.exports = function(){
 
 
 
-                self.updateSample(ind);
+                self.updateSample(ind, true);
 
                 editorActions.modelManager.setSampleInd(ind, "me"); //let others know
 
@@ -396,6 +409,7 @@ module.exports = function(){
                 var jsonObj = {nodes: [], edges: []};
                 editorActions.modelManager.deleteAll(cy.nodes(), cy.edges(), "me");
                 sbgnContainer = new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, editorActions);
+                editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me");
 
                 editorActions.manager.reset();
                 //TODO: why is this here?
@@ -681,7 +695,7 @@ module.exports = function(){
                     editorActions.modelManager.updateServerGraph(jsonObj);
 
 
-                    self.updateSample(-1);
+                    self.updateSample(-1, true);
 
                     editorActions.modelManager.setSampleInd(-1, "me"); //to notify other clients
                     // sbgnContainer =  new cyMod.SBGNContainer('#sbgn-network-container', jsonObj ,  editorActions);
@@ -1279,15 +1293,17 @@ function SBGNLayout(modelManager){
             nestingFactor: 0.1,
             gravity: 0.4,
             numIter: 2500,
-            tile: false,//funda: true gives error
+            tile: true,//funda: true gives error
             animate: true,
             randomize: true,
-            tilingPaddingVertical: 20,//function() {
-            //funda return calculateTilingPaddings(parseInt(sbgnStyleRules['tiling-padding-vertical'], 10));
-            // },
-            tilingPaddingHorizontal: 20 // funda function() {
-            //funda return calculateTilingPaddings(parseInt(sbgnStyleRules['tiling-padding-horizontal'], 10));
-            //}
+            tilingPaddingVertical: function () {
+                return calculateTilingPaddings(parseInt(sbgnStyleRules['tiling-padding-vertical'], 10));
+            },
+            tilingPaddingHorizontal: function () {
+                return calculateTilingPaddings(parseInt(sbgnStyleRules['tiling-padding-horizontal'], 10));
+            }
+           // tilingPaddingVertical: 20,
+           // tilingPaddingHorizontal: 20
 
 
 
@@ -1302,19 +1318,32 @@ function SBGNLayout(modelManager){
 
             self.currentLayoutProperties = lp;
 
+            //self.currentLayoutProperties.tilingPaddingVertical =   setTimeout(function() {
+            //
+            //    calculateTilingPaddings(parseInt(sbgnStyleRules['tiling-padding-vertical'], 10));
+            //},0);
+            //self.currentLayoutProperties.tilingPaddingHorizontal = setTimeout(function() {
+            //    calculateTilingPaddings(parseInt(sbgnStyleRules['tiling-padding-horizontal'], 10));
+            //},0);
+
+            self.copyProperties();
+
             var templateProperties = _.clone(self.currentLayoutProperties);
             templateProperties.tilingPaddingVertical = sbgnStyleRules['tiling-padding-vertical'];
             templateProperties.tilingPaddingHorizontal = sbgnStyleRules['tiling-padding-horizontal'];
 
-            self.template = _.template($("#layout-settings-template").html(), self.currentLayoutProperties);
+            self.template = _.template($("#layout-settings-template").html(), templateProperties);
 
 
         },
-
+        copyProperties: function () {
+            this.currentLayoutProperties = _.clone(this.defaultLayoutProperties);
+        },
         applyLayout: function () {
             var options = this.currentLayoutProperties;
             options.fit = options.randomize;
 
+            console.log(options);
             cy.elements().filter(':visible').layout(options);
 
         },

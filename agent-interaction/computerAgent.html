@@ -87,8 +87,8 @@
         <br>
         <input type="button" value="Delete node" onclick=deleteNode()>
         <br> <br>
-        Pos x : <input type = number id = "newPosX">
-        Pos y : <input type = number id = "newPosY">
+        Pos x : <input  id = "newPosX" type = number>
+        Pos y : <input  id = "newPosY" type = number>
         <input type="button" value="Move node" onclick=moveNode()>
 
         <br>
@@ -114,7 +114,7 @@
         <input type="button" value="Update background color" onclick=changeNodeAttribute("backgroundColor")>
 
         <br>
-        <input id = "borderWidth" type = number>
+        <input id = "borderWidth">
         <input type="button" value="Update border width" onclick=changeNodeAttribute("borderWidth")>
 
 
@@ -241,7 +241,9 @@
 
                 $('#newPosX')[0].value = preciseRound(agent.selectedNode.position.x, 3);
                 $('#newPosY')[0].value = preciseRound(agent.selectedNode.position.y, 3);
+                if(agent.selectedNode.width == null) agent.selectedNode.width = 0;
                 $('#width')[0].value = preciseRound(agent.selectedNode.width, 3);
+                if(agent.selectedNode.height == null) agent.selectedNode.height = 0;
                 $('#height')[0].value = preciseRound(agent.selectedNode.height, 3);
                 $('#borderWidth')[0].value = agent.selectedNode.borderWidth;
                 $('#borderColor')[0].value = agent.selectedNode.borderColor;
@@ -321,7 +323,6 @@
             agent.loadModel(function() {
 
                 fillLayoutProperties();
-                //agent.updateNextAgentNodeId();
                 agent.loadOperationHistory(function(){
 
                     agent.loadChatHistory(function(){
@@ -363,6 +364,8 @@
                 socket.on('imageFile', function(data){
                     writeImage(data);
                 });
+
+
 
             });
 
@@ -517,9 +520,11 @@
         var y = $('#posY')[0].value;
         var sbgnclass = $('#sbgnclass')[0].value;
 
-        var param = {x:x, y:y, sbgnclass:sbgnclass }
+        var param = {x:Number(x), y:Number(y), sbgnclass:sbgnclass }
 
-        agent.sendRequest("agentAddNodeRequest", {param:param});
+        agent.sendRequest("agentAddNodeRequest", {param:param}, function(nodeId){
+            console.log(nodeId);
+        });
 
     }
 
@@ -592,7 +597,8 @@
 
 
 
-        var pos = {x:x, y:y};
+        var pos = {x:Number(x), y:Number(y)};
+
 
         agent.sendRequest("agentMoveNodeRequest", {id: id, pos:pos});
 
@@ -623,6 +629,8 @@
             else
                 val = $('#' + attDiv)[0].value;
 
+            if(attDiv == "width" || attDiv == "height")
+                    val = Number(val);
             agent.sendRequest("agentChangeNodeAttributeRequest", {id: id, attStr: attStr, attVal: val});
         });
     }
@@ -686,7 +694,7 @@
 
         if(attDiv == "widthEdge") //same name with node
             attStr = "width";
-        agent.sendRequest("agentChangeEdgeAttributeRequest", {id:id, attStr:attStr, attVal: val});
+        agent.sendRequest("agentChangeEdgeAttributeRequest", {id:id, attStr:attStr, attVal: Number(val)});
 
 
     }
@@ -865,27 +873,6 @@
         }
     }
 
-    function timeoutCallback(timeout,callback) {
-        var called = false;
-        if (typeof timeout === 'function') {
-            callback = timeout;
-            timeout = 30 * 1000;
-        }
-
-        var interval = setTimeout(function () {
-            if (called)return;
-            called = true;
-            callback(new Error('callback timeout'));
-        }, timeout);
-
-        return function () {
-            if (called)return;
-            called = true;
-            clearTimeout(interval);
-            callback.apply(this, arguments);
-        }
-
-    }
 
 
     function fillInspectorStateAndInfos(ele) {
