@@ -129,6 +129,16 @@ module.exports = function(){
             return result.id();
         },
 
+        addCompound: function(dataType){
+
+            if(dataType == "complex")
+                $("#make-compound-complex").trigger('click');
+            else
+                $("#make-compound-compartment").trigger('click');
+
+
+        },
+
         deleteElement: function(elId, syncVal){
             var el = cy.$(('#' + elId))[0];
             if(el){
@@ -321,6 +331,7 @@ module.exports = function(){
 
 
             sbgnLayout = new SBGNLayout(modelManager);
+
             var layoutProperties = modelManager.updateLayoutProperties(sbgnLayout.defaultLayoutProperties);
             sbgnLayout.initialize(layoutProperties);
 
@@ -986,6 +997,7 @@ module.exports = function(){
                 cy.elements().unselect();
                 editorActions.manager._do(editorActions.CreateCompoundForSelectedNodesCommand(param));
                 editorActions.refreshUndoRedoButtonsStatus();
+
             });
 
             $("#layout-properties").click(function (e) {
@@ -1318,19 +1330,13 @@ function SBGNLayout(modelManager){
 
             self.currentLayoutProperties = lp;
 
-            //self.currentLayoutProperties.tilingPaddingVertical =   setTimeout(function() {
-            //
-            //    calculateTilingPaddings(parseInt(sbgnStyleRules['tiling-padding-vertical'], 10));
-            //},0);
-            //self.currentLayoutProperties.tilingPaddingHorizontal = setTimeout(function() {
-            //    calculateTilingPaddings(parseInt(sbgnStyleRules['tiling-padding-horizontal'], 10));
-            //},0);
 
             self.copyProperties();
 
             var templateProperties = _.clone(self.currentLayoutProperties);
             templateProperties.tilingPaddingVertical = sbgnStyleRules['tiling-padding-vertical'];
             templateProperties.tilingPaddingHorizontal = sbgnStyleRules['tiling-padding-horizontal'];
+
 
             self.template = _.template($("#layout-settings-template").html(), templateProperties);
 
@@ -1343,7 +1349,6 @@ function SBGNLayout(modelManager){
             var options = this.currentLayoutProperties;
             options.fit = options.randomize;
 
-            console.log(options);
             cy.elements().filter(':visible').layout(options);
 
         },
@@ -1368,7 +1373,8 @@ function SBGNLayout(modelManager){
             templateProperties.tilingPaddingVertical = sbgnStyleRules['tiling-padding-vertical'];
             templateProperties.tilingPaddingHorizontal = sbgnStyleRules['tiling-padding-horizontal'];
 
-            self.template = _.template($("#layout-settings-template").html(), self.currentLayoutProperties);
+
+            self.template = _.template($("#layout-settings-template").html(), templateProperties);
 
             $(self.el).html(self.template);
 

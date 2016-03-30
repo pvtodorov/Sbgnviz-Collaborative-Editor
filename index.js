@@ -708,7 +708,7 @@ app.proto.create = function (model) {
 
 
     //TODO: make this a function in menu-functions
-    socket.on('addCompound', function(data, callback){
+    socket.on('addCompound', function(data){
 
         //unselect all others
         cy.nodes().unselect();
@@ -720,13 +720,8 @@ app.proto.create = function (model) {
 
 
 
-        if(data.type == "complex")
-            $("#make-compound-complex").trigger('click');
-        else
-            $("#make-compound-compartment").trigger('click');
+        menu.addCompound(data.type);
 
-
-        if(callback) callback();
     });
 
 
