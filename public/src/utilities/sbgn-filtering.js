@@ -1,4 +1,6 @@
-var sbgnFiltering = {
+module.exports = function() {
+
+    return{
     processTypes : ['process', 'omitted process', 'uncertain process',
         'association', 'dissociation', 'phenotype'],
 
@@ -42,7 +44,7 @@ var sbgnFiltering = {
     },
 
     //funda changed this: selectedEles given as parameter
-    highlightNeighborsofSelected: function(selectedEles){
+    highlightNeighborsOfSelected: function(selectedEles){
         selectedEles = selectedEles.add(selectedEles.parents("node[sbgnclass='complex']"));
         selectedEles = selectedEles.add(selectedEles.descendants());
         var neighborhoodEles = selectedEles.neighborhood();
@@ -119,13 +121,16 @@ var sbgnFiltering = {
         // var neighborProcesses = nonProcesses.neighborhood("node[sbgnclass='process']");
 
         var processes = nodesToShow.filter(function(){
-            return $.inArray(this._private.data.sbgnclass, self.processTypes) >= 0;
+            return self.processTypes.indexOf(this._private.data.sbgnclass)>=0;
+            //funda return $.inArray(this._private.data.sbgnclass, self.processTypes) >= 0;
         });
         var nonProcesses = nodesToShow.filter(function(){
-            return $.inArray(this._private.data.sbgnclass, self.processTypes) === -1;
+            return self.processTypes.indexOf(this._private.data.sbgnclass)=== -1;
+            //funda return $.inArray(this._private.data.sbgnclass, self.processTypes) === -1;
         });
         var neighborProcesses = nonProcesses.neighborhood().filter(function(){
-            return $.inArray(this._private.data.sbgnclass, self.processTypes) >= 0;
+            return self.processTypes.indexOf(this._private.data.sbgnclass)>=0;
+            //funda return $.inArray(this._private.data.sbgnclass, self.processTypes) >= 0;
         });
 
         nodesToShow = nodesToShow.add(processes.neighborhood());
@@ -167,5 +172,6 @@ var sbgnFiltering = {
         this.applyFilter(visibleNodes);
         this.removeFilter(nodes);
 
+    }
     }
 };

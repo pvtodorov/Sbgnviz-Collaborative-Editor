@@ -160,7 +160,7 @@
          * @param callback Function to call after getting node
          */
         this.getNodeRequest = function(id, callback){
-            socket.emit('agentGetNodeRequest', {room: room, id:id}, function(data){
+            socket.emit('agentGetNodeRequest', {room: room,  userId: self.agentId, id:id}, function(data){
                 self.selectedNode = data;
                 if (callback != null) callback();
 
@@ -173,7 +173,7 @@
          * @param callback Function to call after getting edge
          */
         this.getEdgeRequest = function(id, callback){
-            socket.emit('agentGetEdgeRequest', {room: room, id:id}, function(data){
+            socket.emit('agentGetEdgeRequest', {room: room, userId: self.agentId, id:id}, function(data){
                 self.selectedEdge = data;
                 if (callback != null) callback();
 
@@ -202,6 +202,7 @@
         this.sendRequest = function(reqName, param, callback){ //model operations
 
             param.room = room;
+            param.userId = self.agentId;
 
             socket.emit(reqName, param, function(data){
                 if(callback)

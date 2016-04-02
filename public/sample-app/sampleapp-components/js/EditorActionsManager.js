@@ -8,10 +8,20 @@
 
 
 module.exports.modelManager;
+var addRemoveUtilities = require('../../../src/utilities/add-remove-utilities.js')();
+var expandCollapseUtilities = require('../../../src/utilities/expand-collapse-utilities.js')();
+var sbgnFiltering = require('../../../src/utilities/sbgn-filtering.js')();
+
+var sbgnmlToJson = require('../../../src/utilities/sbgnml-to-json-converter.js')();
 
 module.exports.updateServerGraph = function(){
     var sbgnmlText = jsonToSbgnml.createSbgnml();
-    var cytoscapeJsGraph = sbgnmlToJson.convert(sbgnmlText);
+
+    var DOMParser = require('xmldom').DOMParser;
+    var parser = new DOMParser();
+    var doc = parser.parseFromString(sbgnmlText, 'text/xml');
+
+    var cytoscapeJsGraph = sbgnmlToJson.convert(doc);
 
     module.exports.modelManager.updateServerGraph(cytoscapeJsGraph);
 };
@@ -686,7 +696,7 @@ module.exports.highlightSelected = function(param) {
         var alreadyHighlighted = cy.elements("[highlighted='true']").filter(":visible");
         if (param.highlightNeighboursofSelected) {
 
-            elesToHighlight = sbgnFiltering.highlightNeighborsofSelected(param.selectedEles);
+            elesToHighlight = sbgnFiltering.highlightNeighborsOfSelected(param.selectedEles);
             //if( param.sync) //tell other users to highlight neighbors
              //   module.exports.modelManager.highlight(1, "me");
 
@@ -1596,7 +1606,7 @@ module.exports.ShowAllCommand = function (param) {
     return new Command(module.exports.showAll, module.exports.showJustGivenNodes, param, "showAll");
 };
 
-module.exports.HighlightNeighborsofSelectedCommand = function (param) {
+module.exports.HighlightNeighborsOfSelectedCommand = function (param) {
     param.highlightNeighboursofSelected = true;
     return new Command(module.exports.highlightSelected, module.exports.notHighlightEles, param, "highlightNeighborsOfSelected");
 };

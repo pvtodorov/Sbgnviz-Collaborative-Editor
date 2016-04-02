@@ -635,9 +635,9 @@ app.proto.create = function (model) {
 
     });
 
-    socket.on('loadFile', function(txtFile){
-        menu.loadFile(txtFile);
-    });
+    // socket.on('loadFile', function(txtFile){
+    //     menu.loadFile(txtFile);
+    // });
 
     socket.on('newFile', function(){
         $('#new-file').trigger("click");
@@ -646,56 +646,6 @@ app.proto.create = function (model) {
     //better through sockets-- model operation causes complications
     socket.on('runLayout', function(){
         $("#perform-layout").trigger('click');
-    });
-
-    //better through sockets-- model operation causes complications
-    socket.on('highlightNeighbors', function(selectedNodeIds){
-        //unselect all others
-        cy.nodes().unselect();
-
-        selectedNodeIds.forEach(function(nodeId){
-            cy.getElementById( nodeId).select();
-        });
-        $("#neighbors-of-selected").trigger('click');
-    });
-
-    socket.on('highlightProcesses', function(selectedNodeIds){
-        //unselect all others
-        cy.nodes().unselect();
-
-        selectedNodeIds.forEach(function(nodeId){
-            cy.getElementById( nodeId).select();
-        });
-        $("#processes-of-selected").trigger('click');
-    });
-
-    socket.on('removeHighlights', function(){
-
-        $("#remove-highlights").trigger('click');
-    });
-
-    socket.on('showNodes', function(selectedNodeIds){
-        //unselect all others
-        cy.nodes().unselect();
-
-        selectedNodeIds.forEach(function(nodeId){
-            cy.getElementById( nodeId).select();
-        });
-        $("#show-selected").trigger('click');
-    });
-
-    socket.on('hideNodes', function(selectedNodeIds){
-        //unselect all others
-        cy.nodes().unselect();
-
-        selectedNodeIds.forEach(function(nodeId){
-            cy.getElementById( nodeId).select();
-        });
-        $("#hide-selected").trigger('click');
-    });
-
-    socket.on('showAll', function(){
-        $("#show-all").trigger('click');
     });
 
 

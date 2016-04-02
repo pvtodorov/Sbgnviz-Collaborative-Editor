@@ -5,6 +5,35 @@
  *
  * **/
 
+
+var sbgnFiltering = require('../../../src/utilities/sbgn-filtering.js')();
+var sbgnElementUtilities = require('../../../src/utilities/sbgn-element-utilities.js')();
+var expandCollapseUtilities = require('../../../src/utilities/expand-collapse-utilities.js')();
+var sbgnmlToJson =require('../../../src/utilities/sbgnml-to-json-converter.js')();
+var cytoscape = require('cytoscape');
+
+
+var textToXmlObject = function(text) {
+
+    try {
+        if (window.ActiveXObject) {
+            var doc = new ActiveXObject('Microsoft.XMLDOM');
+            doc.async = 'false';
+            doc.loadXML(text);
+
+        } }
+    catch(e){
+        var DOMParser = require('xmldom').DOMParser;
+        var parser = new DOMParser();
+        var doc = parser.parseFromString(text, 'text/xml');
+
+    }
+
+    return doc;
+};
+
+
+
 //Local functions
 var setFileContent = function (fileName) {
     var span = document.getElementById('file-name');
@@ -28,6 +57,7 @@ var beforePerformLayout = function(){
 
     cy.edges().css('curve-style', 'bezier');
 };
+
 
 
 function getXMLObject(itemId, loadXMLDoc) {
@@ -94,6 +124,120 @@ module.exports = function(){
 
                 editorActions.updateServerGraph();
         },
+
+
+        loadFile: function(txtFile){
+
+
+         //   var jsonObj = sbgnmlToJson.convert(textToXmlObject(txtFile));
+            var jsonObj = sbgnmlToJson.convert(txtFile);
+
+            editorActions.modelManager.updateServerGraph(jsonObj);
+
+
+
+            //sbgnContainer =  (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj,  editorActions));
+
+            editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me");
+            //this.updateSample(-1, true);
+
+            editorActions.modelManager.setSampleInd(-1, "me"); //to notify other clients
+
+        },
+        //Methods for agents to interact with cytoscape
+        showNodes: function(selectedNodeIds){
+            //unselect all others
+            cy.nodes().unselect();
+
+
+            selectedNodeIds.forEach(function(nodeId){
+                cy.getElementById( nodeId).select();
+            });
+
+
+            var param = {
+                sync: true,
+                firstTime: true,
+                selectedEles :  cy.$(":selected")
+            };
+
+
+            editorActions.manager._do(editorActions.ShowSelectedCommand(param));
+
+        },
+
+        hideNodes: function(selectedNodeIds){
+            //unselect all others
+            cy.nodes().unselect();
+
+
+            selectedNodeIds.forEach(function(nodeId){
+                cy.getElementById( nodeId).select();
+            });
+
+
+            var param = {
+                sync: true,
+                firstTime: true,
+                selectedEles : cy.$(":selected")
+            };
+
+            editorActions.manager._do(editorActions.HideSelectedCommand(param));
+
+        },
+
+        showAll: function(){
+            editorActions.manager._do(editorActions.ShowAllCommand({sync:true}));
+        },
+
+        highlightNeighbors: function(selectedNodeIds){
+            //unselect all others
+            cy.nodes().unselect();
+
+
+            selectedNodeIds.forEach(function(nodeId){
+                cy.getElementById( nodeId).select();
+            });
+
+
+            var param = {
+                sync: true,
+                firstTime: true,
+                selectedEles : cy.$(":selected")
+            };
+
+
+
+            editorActions.manager._do(editorActions.HighlightNeighborsOfSelectedCommand(param));
+
+        },
+        
+        highlightProcesses: function(selectedNodeIds){
+            //unselect all others
+            cy.nodes().unselect();
+
+
+            selectedNodeIds.forEach(function(nodeId){
+                cy.getElementById( nodeId).select();
+            });
+
+
+            var param = {
+                sync: true,
+                firstTime: true,
+                selectedEles : cy.$(":selected")
+            };
+
+
+
+            editorActions.manager._do(editorActions.HighlightProcessesOfSelectedCommand(param));
+
+        },
+        
+        removeHighlights: function(){
+            editorActions.manager._do(editorActions.RemoveHighlightsCommand({sync:true}));
+        },
+
         addEdge:function(elId, source, target, sbgnclass, syncVal){
             var param ={
                 firstTime: true,
@@ -259,17 +403,10 @@ module.exports = function(){
             }
 
         },
-        loadFile: function(txtFile){
-            var jsonObj = sbgnmlToJson.convert(textToXmlObject(txtFile));
-
-            editorActions.modelManager.updateServerGraph(jsonObj);
 
 
-            this.updateSample(-1, true);
 
-            editorActions.modelManager.setSampleInd(-1, "me"); //to notify other clients
 
-        },
 
 
 
@@ -283,6 +420,8 @@ module.exports = function(){
                 sbgnLayout.updateLayoutProperties(lp);
 
         },
+
+
 
 
         updateSample: function(ind, syncVal){
@@ -302,9 +441,9 @@ module.exports = function(){
 
                 getXMLObject(ind, function (xmlObject) {
 
-
-
-                    var jsonObj = sbgnmlToJson.convert(xmlObject);
+                    var xmlText = new XMLSerializer().serializeToString(xmlObject);
+                   
+                    var jsonObj = sbgnmlToJson.convert(xmlText);
 
 
                     editorActions.modelManager.updateServerGraph(jsonObj);
@@ -319,6 +458,83 @@ module.exports = function(){
                 });
             }
 
+
+        },
+
+        startInNode: function(modelManager){
+            var self = this;
+
+
+            editorActions.modelManager = modelManager;
+
+            var jsonObj = modelManager.getServerGraph();
+
+            if (jsonObj == null) {//first time loading the graph-- load from the samples
+
+                var ind = modelManager.getSampleInd("me");
+
+                if(ind < 0){ //load a new non-sample graph
+
+
+                    var jsonObj = editorActions.modelManager.getServerGraph();
+                    cytoscape({
+                        elements: cytoscapeJsGraph,
+                        headless: true,
+                        styleEnabled: false,
+
+                        ready: function () {
+                            cy = this;
+                        }
+                    });
+
+                        editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me");
+
+                }
+                else{ //load a sample
+
+                    getXMLObject(ind, function (xmlObject) {
+
+                        var xmlText = new XMLSerializer().serializeToString(xmlObject);
+                        //console.log("here????");
+                       // var $ = require('jquery');
+                        var jsonObj = sbgnmlToJson.convert(xmlText);
+
+
+                        editorActions.modelManager.updateServerGraph(jsonObj);
+
+
+                        cytoscape({
+                            elements: jsonObj,
+                            headless: true,
+                            styleEnabled: false,
+
+                            ready: function () {
+                                cy = this;
+                            }
+                        });
+
+                            editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me");
+
+
+                    });
+                }
+
+
+            }
+            else { //load a previously loaded graph
+                cytoscape({
+                    elements: jsonObj,
+                    headless: true,
+                    styleEnabled: false,
+
+                    ready: function () {
+                        cy = this;
+                    }
+                });
+
+
+                editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me");
+            }
 
         },
 
@@ -350,7 +566,7 @@ module.exports = function(){
                 this.updateSample(ind, true);
 
             }
-            else {
+            else {//load from a previously loaded graph
 
                 sbgnContainer = (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, editorActions));
                     editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me");
@@ -691,16 +907,15 @@ module.exports = function(){
 
                 var fileInput = document.getElementById('file-input');
                 var file = fileInput.files[0];
-                var textType = /text.*/;
+
 
                 var reader = new FileReader();
-
-
 
                 reader.onload = function (e) {
 
 
-                    var jsonObj = sbgnmlToJson.convert(textToXmlObject(this.result));
+             //funda       var jsonObj = sbgnmlToJson.convert(textToXmlObject(this.result));
+                    var jsonObj = sbgnmlToJson.convert(this.result);
 
 
                     editorActions.modelManager.updateServerGraph(jsonObj);
@@ -882,7 +1097,7 @@ module.exports = function(){
 
                 };
 
-                editorActions.manager._do(editorActions.HighlightNeighborsofSelectedCommand(param));
+                editorActions.manager._do(editorActions.HighlightNeighborsOfSelectedCommand(param));
                 editorActions.refreshUndoRedoButtonsStatus();
 
 

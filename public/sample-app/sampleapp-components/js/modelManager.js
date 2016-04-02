@@ -556,9 +556,6 @@ module.exports =  function(model, docId, userId, userName) {
         //nodes and edges are cytoscape objects. they have css and data properties
         initModel: function(jsonObj, nodes, edges, user){
 
-
-
-
             jsonObj.nodes.forEach(function(node){
 
                 model.pass({user:user}).set('_page.doc.cy.nodes.' + node.data.id + '.id', node.data.id);
