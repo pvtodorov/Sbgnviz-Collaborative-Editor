@@ -179,7 +179,6 @@
 
             })
         };
-
         /**
          * Sends an operation request to the node.js server
          * Model update operations are done in this method

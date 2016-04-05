@@ -290,6 +290,7 @@
 
     function createAgent(){
 
+
         //don't open a new socket unless it is a new agent
         var agentId = getCookie('userId');
         if(agentId == null || agentId == ''){
@@ -316,6 +317,10 @@
         });
 
 
+        agent.sendRequest("agentActiveRoomsRequest", {param:null}, function(rooms){
+
+            console.log(rooms);
+        });
 
         socket.on('connect', function(){
             $('#createAgentButton').attr('disabled','disabled');

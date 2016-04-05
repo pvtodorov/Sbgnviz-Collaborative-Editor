@@ -363,7 +363,6 @@ app.proto.init = function (model) {
             menu.changePosition(id,  pos, false);
             updateServerGraph();
 
-
         }
 
 
