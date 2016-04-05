@@ -285,6 +285,7 @@ app.proto.init = function (model) {
             //else insertion
         }
 
+
     });
 
     model.on('all', '_page.doc.cy.edges.*', function(id, op, val, prev, passed){
@@ -351,7 +352,7 @@ app.proto.init = function (model) {
             var target = model.get('_page.doc.cy.edges.'+ id + '.target');
 
             menu.addEdge(id, source, target, sbgnclass, false);
-            updateServerGraph();
+             updateServerGraph();
         }
 
     });
@@ -420,7 +421,7 @@ app.proto.init = function (model) {
 
         if(docReady && passed.user == null) {
             menu.changeMultimerStatus(id, isMultimer);
-            updateServerGraph();
+           updateServerGraph();
 
 
         }
@@ -440,7 +441,7 @@ app.proto.init = function (model) {
         if(docReady && passed.user == null) {
 
             menu.changeElementProperty(id, 'parent', 'parent', parent, 'data', false);
-            updateServerGraph();
+           updateServerGraph();
         }
     });
 
@@ -451,7 +452,7 @@ app.proto.init = function (model) {
         if(docReady && passed.user == null) {
 
             menu.changeElementProperty(id, 'children', 'children', children, 'data', false);
-            updateServerGraph();
+           updateServerGraph();
          //TODO   addRemoveUtilities.changeParentForNodeIds(children,  id);
 
 
@@ -471,7 +472,7 @@ app.proto.init = function (model) {
 
         if(docReady && passed.user == null) {
             menu.changeElementProperty(id, 'height', 'height', height, 'data', false);
-            updateServerGraph();
+           updateServerGraph();
         }
     });
 
@@ -492,7 +493,7 @@ app.proto.init = function (model) {
 
         if(docReady && passed.user == null) {
             menu.changeElementProperty(id, 'lineColor', 'lineColor', lineColor, 'data', false);
-            updateServerGraph();
+          updateServerGraph();
         }
     });
 
@@ -508,7 +509,7 @@ app.proto.init = function (model) {
 
         if(docReady && passed.user == null) {
             menu.changeElementProperty(id, 'highlightStatus', 'highlightStatus', highlightStatus, 'data', false);
-            updateServerGraph();
+         updateServerGraph();
         }
     });
     model.on('all', '_page.doc.cy.nodes.*.visibilityStatus', function(id,  op, visibilityStatus, prev, passed){
@@ -536,7 +537,7 @@ app.proto.init = function (model) {
                 color = model.get('_page.doc.cy.edges.' + id + '.lineColor');
 
             menu.changeElementProperty(id, 'lineColor', 'lineColor', color, 'data', false);
-            updateServerGraph();
+           updateServerGraph();
         }
 
     });

@@ -12,7 +12,10 @@ var jsonToSbgnml = {
 
         //adding glyph sbgnml
 
-        cy.nodes(":visible").each(function(){
+ 
+        
+        //funda cy.nodes(":visible").each(function(){
+        visibleNodes.each(function(){
 
 
             if(!this.isChild())
@@ -20,7 +23,8 @@ var jsonToSbgnml = {
         });
 
         //adding arc sbgnml
-        cy.edges(":visible").each(function(){
+       //funda  cy.edges(":visible").each(function(){
+       visibleEdges.each(function(){
             sbgnmlText = sbgnmlText + self.getArcSbgnml(this);
         });
 

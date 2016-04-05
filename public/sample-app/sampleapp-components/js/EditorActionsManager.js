@@ -14,14 +14,14 @@ var sbgnFiltering = require('../../../src/utilities/sbgn-filtering.js')();
 
 var sbgnmlToJson = require('../../../src/utilities/sbgnml-to-json-converter.js')();
 
-module.exports.updateServerGraph = function(){
-    var sbgnmlText = jsonToSbgnml.createSbgnml();
+module.exports.updateServerGraph = function(visibleNodes, visibleEdges){
+    var sbgnmlText = jsonToSbgnml.createSbgnml(visibleNodes, visibleEdges);
 
-    var DOMParser = require('xmldom').DOMParser;
-    var parser = new DOMParser();
-    var doc = parser.parseFromString(sbgnmlText, 'text/xml');
+   // var DOMParser = require('xmldom').DOMParser;
+   // var parser = new DOMParser();
+   // var doc = parser.parseFromString(sbgnmlText, 'text/xml');
 
-    var cytoscapeJsGraph = sbgnmlToJson.convert(doc);
+    var cytoscapeJsGraph = sbgnmlToJson.convert(sbgnmlText);
 
     module.exports.modelManager.updateServerGraph(cytoscapeJsGraph);
 };
@@ -1404,12 +1404,12 @@ module.exports.changeStyleData = function( param) {
     }
 
 
-        if(param.sync){
+    if(param.sync){
 
-        if(ele.isNode())
-            module.exports.modelManager.changeModelNodeAttribute(param.modelDataName, param.ele.id(), param.data, "me");
-        else
-            module.exports.modelManager.changeModelEdgeAttribute(param.modelDataName, param.ele.id(), param.data, "me");
+    if(ele.isNode())
+        module.exports.modelManager.changeModelNodeAttribute(param.modelDataName, param.ele.id(), param.data, "me");
+    else
+        module.exports.modelManager.changeModelEdgeAttribute(param.modelDataName, param.ele.id(), param.data, "me");
 
 
         //module.exports.updateServerGraph();

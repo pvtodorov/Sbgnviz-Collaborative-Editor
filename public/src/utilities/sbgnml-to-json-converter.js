@@ -1,40 +1,40 @@
-function loadXMLDoc(filename) {
-
-    //funda  xhttp.open("GET", filename, false);
-
-
-    //Funda: added to make asynchronous
-    var handleStateChange = function () {
-        switch (xhttp.readyState) {
-            case 0 : // UNINITIALIZED
-            case 1 : // LOADING
-            case 2 : // LOADED
-            case 3 : // INTERACTIVE
-                break;
-            case 4 : // COMPLETED
-                return xhttp.responseXML;
-                break;
-            default: alert("error");
-
-        }
-    };
-
-    var xhttp;
-    if (window.XMLHttpRequest) {
-        xhttp = new XMLHttpRequest();
-    }
-    else {
-        xhttp = new ActiveXObject("Microsoft.XMLHTTP");
-    }
-    xhttp.onreadystatechange=handleStateChange;
-
-    xhttp.open("GET",filename,true);
-
-
-    xhttp.send();
-
-
-};
+// function loadXMLDoc(filename) {
+//
+//     //funda  xhttp.open("GET", filename, false);
+//
+//
+//     //Funda: added to make asynchronous
+//     var handleStateChange = function () {
+//         switch (xhttp.readyState) {
+//             case 0 : // UNINITIALIZED
+//             case 1 : // LOADING
+//             case 2 : // LOADED
+//             case 3 : // INTERACTIVE
+//                 break;
+//             case 4 : // COMPLETED
+//                 return xhttp.responseXML;
+//                 break;
+//             default: alert("error");
+//
+//         }
+//     };
+//
+//     var xhttp;
+//     if (window.XMLHttpRequest) {
+//         xhttp = new XMLHttpRequest();
+//     }
+//     else {
+//         xhttp = new ActiveXObject("Microsoft.XMLHTTP");
+//     }
+//     xhttp.onreadystatechange=handleStateChange;
+//
+//     xhttp.open("GET",filename,true);
+//
+//
+//     xhttp.send();
+//
+//
+// };
 
 var sbgnElementUtilities = require('./sbgn-element-utilities.js')();
 
@@ -348,8 +348,6 @@ module.exports = function () {
 
 
             var compartments = self.getAllCompartments(xmlObject);
-
-
 
 
            // $(xmlObject).find("map").children('glyph').each(function (i, elem) {

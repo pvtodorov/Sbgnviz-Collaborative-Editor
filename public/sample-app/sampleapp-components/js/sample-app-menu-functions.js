@@ -13,24 +13,24 @@ var sbgnmlToJson =require('../../../src/utilities/sbgnml-to-json-converter.js')(
 var cytoscape = require('cytoscape');
 
 
-var textToXmlObject = function(text) {
-
-    try {
-        if (window.ActiveXObject) {
-            var doc = new ActiveXObject('Microsoft.XMLDOM');
-            doc.async = 'false';
-            doc.loadXML(text);
-
-        } }
-    catch(e){
-        var DOMParser = require('xmldom').DOMParser;
-        var parser = new DOMParser();
-        var doc = parser.parseFromString(text, 'text/xml');
-
-    }
-
-    return doc;
-};
+// var textToXmlObject = function(text) {
+//
+//     try {
+//         if (window.ActiveXObject) {
+//             var doc = new ActiveXObject('Microsoft.XMLDOM');
+//             doc.async = 'false';
+//             doc.loadXML(text);
+//
+//         } }
+//     catch(e){
+//         var DOMParser = require('xmldom').DOMParser;
+//         var parser = new DOMParser();
+//         var doc = parser.parseFromString(text, 'text/xml');
+//
+//     }
+//
+//     return doc;
+// };
 
 
 
@@ -122,7 +122,7 @@ module.exports = function(){
 
         updateServerGraph:function (){
 
-                editorActions.updateServerGraph();
+                editorActions.updateServerGraph(cy.nodes(":visible"), cy.edges(":visible"));
         },
 
 
@@ -446,6 +446,7 @@ module.exports = function(){
                     var jsonObj = sbgnmlToJson.convert(xmlText);
 
 
+
                     editorActions.modelManager.updateServerGraph(jsonObj);
 
 
@@ -495,7 +496,6 @@ module.exports = function(){
                     getXMLObject(ind, function (xmlObject) {
 
                         var xmlText = new XMLSerializer().serializeToString(xmlObject);
-                        //console.log("here????");
                        // var $ = require('jquery');
                         var jsonObj = sbgnmlToJson.convert(xmlText);
 
