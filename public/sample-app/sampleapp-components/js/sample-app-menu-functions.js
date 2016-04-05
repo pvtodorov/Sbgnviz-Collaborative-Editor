@@ -476,12 +476,12 @@ module.exports = function(){
 
                 if(ind < 0){ //load a new non-sample graph
 
-
                     var jsonObj = editorActions.modelManager.getServerGraph();
                     cytoscape({
                         elements: cytoscapeJsGraph,
                         headless: true,
-                        styleEnabled: false,
+                        styleEnabled: true,
+
 
                         ready: function () {
                             cy = this;
@@ -506,7 +506,8 @@ module.exports = function(){
                         cytoscape({
                             elements: jsonObj,
                             headless: true,
-                            styleEnabled: false,
+                            styleEnabled: true,
+
 
                             ready: function () {
                                 cy = this;
@@ -522,10 +523,12 @@ module.exports = function(){
 
             }
             else { //load a previously loaded graph
+
                 cytoscape({
                     elements: jsonObj,
                     headless: true,
-                    styleEnabled: false,
+                    styleEnabled: true,
+
 
                     ready: function () {
                         cy = this;
