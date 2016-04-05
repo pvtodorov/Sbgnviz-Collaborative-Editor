@@ -22,10 +22,12 @@
   },
   "homepage": "https://github.com/zag2art/derby-example-hello",
   "dependencies": {
+    "cheerio": "^0.20.0",
     "coffee-script": "~1.7.1",
     "coffeeify": "~0.6.0",
     "connect-mongo": "^0.8.2",
     "connect-redis": "~1.4.7",
+    "cytoscape": "^2.6.7",
     "derby": "0.6.0-alpha47",
     "derby-stylus": "^0.1.0",
     "express": "^3.4.8",
