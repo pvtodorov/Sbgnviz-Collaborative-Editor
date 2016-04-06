@@ -210,6 +210,26 @@ module.exports =  function(model, docId, userId, userName) {
 
         },
 
+        addModelEdge: function(edgeId, param, user){
+
+
+
+            model.pass({user:user}).set('_page.doc.cy.edges.' + edgeId+'.id', edgeId);
+            model.pass({user:user}).set('_page.doc.cy.edges.' + edgeId +'.highlightColor', null);
+            model.pass({user:user}).set('_page.doc.cy.edges.' + edgeId +'.lineColor', '#555555');
+
+
+            model.pass({user:user}).set('_page.doc.cy.edges.' + edgeId +'.source', param.source);
+            model.pass({user:user}).set('_page.doc.cy.edges.' + edgeId +'.target', param.target);
+            model.pass({user:user}).set('_page.doc.cy.edges.' + edgeId +'.sbgnclass', param.sbgnclass);
+
+            model.pass({user:user}).set('_page.doc.cy.edges.' + edgeId +'.width', '1.5');
+
+            this.updateHistory('add', edgeId, param);
+
+            return "success";
+
+        },
 
         //attStr: attribute namein the model
         //historyData is for  sbgnStatesAndInfos only
@@ -316,8 +336,8 @@ module.exports =  function(model, docId, userId, userName) {
             if(edgePath.get('id') && user) {
                 edgePath.set('highlightColor', user.get('colorCode'));
                 status = "success";
-                //We don't want all the attributes of the param to be printed
-                this.updateHistory('add', edgeId, {source: param.source, target: param.target, sbgnclass: param.sbgnclass});
+
+                this.updateHistory('select', edge.id());
 
             }
 
@@ -325,6 +345,23 @@ module.exports =  function(model, docId, userId, userName) {
 
 
         },
+
+        unselectModelEdge: function(edge){
+            var status = "Edge id not found";
+            var edgePath = model.at('_page.doc.cy.edges.'  +edge.id());
+            if(edgePath.get('id')) {
+                edgePath.set('highlightColor', null);
+                status = "success";
+
+                this.updateHistory('unselect', edge.id());
+
+            }
+
+            return status;
+
+
+        },
+
 
 
         deleteModelEdge: function(id, user){

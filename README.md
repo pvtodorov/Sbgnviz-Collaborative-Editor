@@ -343,7 +343,7 @@ string after http:&lt;ip&gt;:3000/ in the server address.</p>
 	</tr>
 	<tr>
 		<td width="212" style="border: none; padding: 0in">
-			<p>“agentRunLayoutRequest”{param:null}</p>
+			<p>“agentRunLayoutRequest”</p>
 		</td>
 		<td width="1454" style="border: none; padding: 0in">
 			<p>{param:null}</p>
@@ -354,7 +354,6 @@ string after http:&lt;ip&gt;:3000/ in the server address.</p>
 			<p>“agentAddNodeRequest”</p>
 		</td>
 		<td width="1454" style="border: none; padding: 0in">
-			<p>{id: &lt;unique node id&gt;,</p>
 			<p>param: {x: &lt;position x&gt;, 
 			</p>
 			<p>y: &lt;position y&gt;, 
@@ -442,6 +441,14 @@ string after http:&lt;ip&gt;:3000/ in the server address.</p>
 			<p>{param:null}</p>
 		</td>
 	</tr>
+	<tr>
+        <td width="212" style="border: none; padding: 0in">
+            <p>“agentActiveRoomsRequest”</p>
+        </td>
+        <td width="1454" style="border: none; padding: 0in">
+            <p>{param:null}</p>
+        </td>
+    </tr>
 </table>
 <p>In order to set up and run an agent:</p>
 <p>agent = new Agent(agentName, agentId);</p>

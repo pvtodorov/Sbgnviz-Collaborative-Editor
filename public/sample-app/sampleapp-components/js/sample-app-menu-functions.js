@@ -62,12 +62,6 @@ var beforePerformLayout = function(){
 
 function getXMLObject(itemId, loadXMLDoc) {
     switch (itemId) {
-        case "1":
-            $.ajax({
-                url: './sample-app/samples/CaM-CaMK_dependent_signaling_to_the_nucleus.xml',
-                success: loadXMLDoc
-            });
-            break;
 
         case "0":
             $.ajax({
@@ -75,29 +69,29 @@ function getXMLObject(itemId, loadXMLDoc) {
                 success: loadXMLDoc
             });
             break;
-        case "2":
+        case "1":
             $.ajax({url: './sample-app/samples/glycolysis.xml', success: loadXMLDoc});
             break;
-        case "3":
+        case "2":
             $.ajax({url: './sample-app/samples/mapk_cascade.xml', success: loadXMLDoc});
             break;
-        case "4":
+        case "3":
             $.ajax({url: './sample-app/samples/polyq_proteins_interference.xml', success: loadXMLDoc});
             break;
-        case "5":
+        case "4":
             $.ajax({url: './sample-app/samples/insulin-like_growth_factor_signaling.xml', success: loadXMLDoc});
             break;
-        case "6":
+        case "5":
             $.ajax({
                 url: './sample-app/samples/atm_mediated_phosphorylation_of_repair_proteins.xml', success: loadXMLDoc
             });
             break;
-        case "7":
+        case "6":
             $.ajax({
                 url: './sample-app/samples/vitamins_b6_activation_to_pyridoxal_phosphate.xml', success: loadXMLDoc
             });
             break;
-        case "8":
+        case "7":
             $.ajax({
                 url: './sample-app/samples/MTORSmall.sbgn', success: loadXMLDoc
             });

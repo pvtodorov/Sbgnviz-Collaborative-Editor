@@ -131,14 +131,13 @@ app.get('/:docId', function (page, model, arg, next) {
 
     model.set('_sbgnviz.samples',
         [{name: 'Activated STAT1alpha induction of the IRF1 gene', id: 0},
-            {name: 'CaM-CaMK dependent signaling to the nucleus', id: 1},
-            {name: 'Glycolysis', id: 2},
-            {name: 'MAPK cascade', id: 3},
-            {name: 'PolyQ proteins interference', id: 4},
-            {name: 'Insulin-like Growth Factor (IGF) signalling', id: 5},
-            {name: 'ATM mediated phosphorylation of repair proteins', id: 6},
-            {name: 'Vitamins B6 activation to pyridoxal phosphate', id: 7},
-            {name: 'MTOR', id: 8}
+            {name: 'Glycolysis', id: 1},
+            {name: 'MAPK cascade', id: 2},
+            {name: 'PolyQ proteins interference', id: 3},
+            {name: 'Insulin-like Growth Factor (IGF) signalling', id: 4},
+            {name: 'ATM mediated phosphorylation of repair proteins', id: 5},
+            {name: 'Vitamins B6 activation to pyridoxal phosphate', id: 6},
+            {name: 'MTOR', id: 7}
 
         ]);
 
