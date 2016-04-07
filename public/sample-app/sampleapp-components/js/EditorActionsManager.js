@@ -102,56 +102,60 @@ module.exports.removeEles =function(elesToBeRemoved) {
 
 
 module.exports.restoreEles = function(eles) {
-    //we need to restore nodes first, otherwise edges without sources or targets cause error
-
-    if(eles.nodes() != null){
-
-        eles.nodes().forEach(function(node) {
-            //node addition on the client side should include node attribute information
-            module.exports.modelManager.addModelNode(node.id(), {
-                x: node.position("x"),
-                y: node.position("y"),
-                sbgnclass: node.data("sbgnclass"),
-            }, "me");
-        });
-
-        ////to assign parents and children, update attributes after restoring nodes
-        //eles.nodes().forEach(function(node) {
-        //    module.exports.modelManager.initModelNode(node);
-        //});
-    }
-
-    if(eles.edges() != null) {
-        eles.edges().forEach(function (ele) {
-            var param = {
-                source: ele.data("source"),
-                target: ele.data("target"),
-                sbgnclass: ele.data('sbgnclass')
-            };
-            module.exports.modelManager.addModelEdge(ele.id(), param, "me");
-        });
-
-        //module.exports.updateServerGraph();
-    }
 
     var result = addRemoveUtilities.restoreEles(eles);
 
-    //Notify other clients about the model change
-    if(result.nodes()){
-        result.nodes().forEach(function(node){
-            module.exports.modelManager.changeModelNodeAttribute('sbgnlabel', node.id(),node.data("sbgnlabel"),"me" );
-            module.exports.modelManager.changeModelNodeAttribute('width', node.id(),node._private.data.sbgnbbox.w,"me" );
-            module.exports.modelManager.changeModelNodeAttribute('height', node.id(),node._private.data.sbgnbbox.h,"me" );
-            module.exports.modelManager.changeModelNodeAttribute('backgroundColor', node.id(),node.css("background-color"),"me" );
-            module.exports.modelManager.changeModelNodeAttribute('borderColor', node.id(),node.data("border-color"),"me" );
-            module.exports.modelManager.changeModelNodeAttribute('borderWidth', node.id(),node.css("border-width"),"me" );
-            module.exports.modelManager.changeModelNodeAttribute('sbgnStatesAndInfos', node.id(),node.data("sbgnstatesandinfos"),"me" );
-            module.exports.modelManager.changeModelNodeAttribute('parent', node.id(),node._private.data.parent,"me" );
-            module.exports.modelManager.changeModelNodeAttribute('isCloneMarker', node.id(),node.data("sbgnclonemarker"),"me" );
-            module.exports.modelManager.changeModelNodeAttribute('isMultimer', node.id(),(node.data("sbgnclass").indexOf(' multimer') > 0),"me" );
-        });
-        //module.exports.updateServerGraph();
-    };
+    //we need to restore nodes first, otherwise edges without sources or targets cause error
+
+    module.exports.modelManager.restoreModelNodes(eles.nodes(), "me");
+    module.exports.modelManager.restoreModelEdges(eles.edges(), "me");
+
+    // if(result.nodes() != null){
+    //
+    //     result.nodes().forEach(function(node) {
+    //         //node addition on the client side should include node attribute information
+    //         module.exports.modelManager.addModelNode(node.id(), {
+    //             x: node.position("x"),
+    //             y: node.position("y"),
+    //             sbgnclass: node.data("sbgnclass"),
+    //         }, "me");
+    //     });
+    //
+    //     ////to assign parents and children, update attributes after restoring nodes
+    //     //eles.nodes().forEach(function(node) {
+    //     //    module.exports.modelManager.initModelNode(node);
+    //     //});
+    // }
+    //
+    // if(result.edges() != null) {
+    //     result.edges().forEach(function (ele) {
+    //         var param = {
+    //             source: ele.data("source"),
+    //             target: ele.data("target"),
+    //             sbgnclass: ele.data('sbgnclass')
+    //         };
+    //         module.exports.modelManager.addModelEdge(ele.id(), param, "me");
+    //     });
+    //
+    //     //module.exports.updateServerGraph();
+    // }
+    //
+    // //Notify other clients about the model change
+    // if(result.nodes()){
+    //     result.nodes().forEach(function(node){
+    //         module.exports.modelManager.changeModelNodeAttribute('sbgnlabel', node.id(),node.data("sbgnlabel"),"me" );
+    //         module.exports.modelManager.changeModelNodeAttribute('width', node.id(),node._private.data.sbgnbbox.w,"me" );
+    //         module.exports.modelManager.changeModelNodeAttribute('height', node.id(),node._private.data.sbgnbbox.h,"me" );
+    //         module.exports.modelManager.changeModelNodeAttribute('backgroundColor', node.id(),node.css("background-color"),"me" );
+    //         module.exports.modelManager.changeModelNodeAttribute('borderColor', node.id(),node.data("border-color"),"me" );
+    //         module.exports.modelManager.changeModelNodeAttribute('borderWidth', node.id(),node.css("border-width"),"me" );
+    //         module.exports.modelManager.changeModelNodeAttribute('sbgnStatesAndInfos', node.id(),node.data("sbgnstatesandinfos"),"me" );
+    //         module.exports.modelManager.changeModelNodeAttribute('parent', node.id(),node._private.data.parent,"me" );
+    //         module.exports.modelManager.changeModelNodeAttribute('isCloneMarker', node.id(),node.data("sbgnclonemarker"),"me" );
+    //         module.exports.modelManager.changeModelNodeAttribute('isMultimer', node.id(),(node.data("sbgnclass").indexOf(' multimer') > 0),"me" );
+    //     });
+    //     //module.exports.updateServerGraph();
+    // };
 
     //update children and parents
 
@@ -164,6 +168,8 @@ module.exports.deleteSelected = function(param) {
 
         module.exports.modelManager.deleteModelNodes(param.eles.nodes(), "me");
         module.exports.modelManager.deleteModelEdges(param.eles.edges(), "me");
+
+
 
     }
     var undoEles = addRemoveUtilities.removeElesSimply(param.eles);
@@ -390,6 +396,8 @@ module.exports.performLayoutFunction = function(param) {
     //    delete param.firstTime;
     //    return param;
     //}
+
+    module.exports.modelManager.updateHistory("run layout");
 
 //notify other clients
     cy.on('layoutstop', function() {
@@ -1034,7 +1042,7 @@ module.exports.removeCompound = function(param) {
     //remove children of compound node
     module.exports.modelManager.changeModelNodeAttribute('children', removedCompound.id(), [], "me");
 
-    module.exports.modelManager.deleteModelNode(removedCompound.id(), "me");
+    module.exports.modelManager.deleteModelNode(removedCompound.id(), "me", true);
 
 
     //module.exports.updateServerGraph();

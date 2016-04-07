@@ -874,7 +874,7 @@
 
         <!--<ul id ="command-list" as = "list" >-->
         {{each _page.doc.history as #pCommand}}
-            <li> <b>{{#pCommand.userName}} {{_page.showTime && formatTime(#pCommand)}} > </b>{{#pCommand.elId}} {{#pCommand.opName}} {{formatObj(#pCommand.param)}}
+            <li> <b>{{#pCommand.userName}} {{_page.showTime && formatTime(#pCommand)}} > </b>{{#pCommand.opName}} {{#pCommand.elId}} {{formatObj(#pCommand.param)}}
             </li>
             {{/each}}
         <!--</ul>-->

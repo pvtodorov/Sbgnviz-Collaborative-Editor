@@ -566,7 +566,8 @@ module.exports = function(){
             else {//load from a previously loaded graph
 
                 sbgnContainer = (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, editorActions));
-                    editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me");
+
+                editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me");
             }
 
             document.getElementById("ctx-add-bend-point").addEventListener("contextmenu", function (event) {
