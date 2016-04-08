@@ -114,6 +114,10 @@ module.exports = function(){
 
     return {
 
+        refreshGlobalUndoRedoButtonsStatus: function(){
+          editorActions.refreshGlobalUndoRedoButtonsStatus();
+        },
+
         updateServerGraph:function (){
 
                 editorActions.updateServerGraph(cy.nodes(":visible"), cy.edges(":visible"));
@@ -457,7 +461,7 @@ module.exports = function(){
         },
 
         startInNode: function(modelManager){
-            var self = this;
+
 
 
             editorActions.modelManager = modelManager;
@@ -470,7 +474,7 @@ module.exports = function(){
 
                 if(ind < 0){ //load a new non-sample graph
 
-                    var jsonObj = editorActions.modelManager.getServerGraph();
+                    jsonObj = editorActions.modelManager.getServerGraph();
                     cytoscape({
                         elements: cytoscapeJsGraph,
                         headless: true,
@@ -624,11 +628,11 @@ module.exports = function(){
 
             });
 
-            $('#new-file-icon').click(function (e) {
+            $('#new-file-icon').click(function () {
                 $('#new-file').trigger("click");
             });
 
-            $('#new-file').click(function (e) {
+            $('#new-file').click(function () {
                 setFileContent("new_file.sbgnml");
 
                 var jsonObj = {nodes: [], edges: []};
@@ -1368,6 +1372,20 @@ module.exports = function(){
             }
             });
 
+            $("#undo-last-action-global").click(function (e) {
+                if(editorActions.modelManager.isUndoPossible()){
+                    editorActions.modelManager.undoCommand();
+                    editorActions.refreshUndoRedoButtonsStatus();
+                }
+            });
+
+            $("#redo-last-action-global").click(function (e) {
+                if(editorActions.modelManager.isRedoPossible()) {
+                    editorActions.modelManager.redoCommand();
+                    editorActions.refreshUndoRedoButtonsStatus();
+                }
+            });
+
             $("#undo-icon").click(function (e) {
                 $("#undo-last-action").trigger('click');
             });
@@ -1647,7 +1665,7 @@ function SBGNLayout(modelManager){
 
 
             return this;
-        },
+        }
 
     }};
 
@@ -1721,5 +1739,5 @@ function SBGNProperties(){
 
             return this;
         }
-    }};
+    }}
 

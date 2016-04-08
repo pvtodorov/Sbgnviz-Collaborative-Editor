@@ -403,7 +403,8 @@ module.exports.performLayoutFunction = function(param) {
     cy.on('layoutstop', function() {
 
         cy.nodes().forEach(function(node) {
-            module.exports.modelManager.moveModelNode(node.id(), node.position());
+            module.exports.modelManager.changeModelNodeAttribute("position", node.id(), node.position());
+            //module.exports.modelManager.moveModelNode(node.id(), node.position());
         });
     });
 
@@ -445,7 +446,8 @@ module.exports.returnToPositionsAndSizes = function(param) {
 
     if(param.sync){
         cy.nodes().forEach(function(node) {
-            module.exports.modelManager.moveModelNode(node.id(), node.position(), "me");
+            module.exports.modelManager.changeModelNodeAttribute("position", node.id(), node.position(), "me");
+           // module.exports.modelManager.moveModelNode(node.id(), node.position(), "me");
 
         });
         //module.exports.updateServerGraph();
@@ -490,7 +492,8 @@ module.exports.moveDescendentNodes = function(nodes) {
     if(nodes == null) return;
     nodes.forEach(function(node){
 
-        module.exports.modelManager.moveModelNode(node.id(), node.position(), "me");
+        module.exports.modelManager.changeModelNodeAttribute("position", node.id(), node.position(), "me");
+      //  module.exports.modelManager.moveModelNode(node.id(), node.position(), "me");
         var children = node.children();
         if(children)
             module.exports.moveDescendentNodes( children);
@@ -507,7 +510,8 @@ module.exports.moveAncestorNodes = function(node) {
     if(parentId){
 
         var parent = cy.getElementById(parentId);
-        module.exports.modelManager.moveModelNode(parentId, parent.position(), "me");
+        module.exports.modelManager.changeModelNodeAttribute("position", node.id(), node.position(), "me");
+       // module.exports.modelManager.moveModelNode(parentId, parent.position(), "me");
         module.exports.moveAncestorNodes(parent);
         //module.exports.updateServerGraph();
 
@@ -540,13 +544,14 @@ module.exports.moveNodes = function(positionDiff, nodes) {
         var oldX = node.position("x");
         var oldY = node.position("y");
         node.position({
-            x: oldX + positionDiff.x,
-            y: oldY + positionDiff.y
+            x: Number(oldX + positionDiff.x),
+            y: Number(oldY + positionDiff.y)
         });
 
 
 
-        module.exports.modelManager.moveModelNode(node.id(), node.position(), "me");
+        module.exports.modelManager.changeModelNodeAttribute("position", node.id(), node.position(), "me");
+       // module.exports.modelManager.moveModelNode(node.id(), node.position(), "me");
         var children = node.children();
         module.exports.moveNodes(positionDiff, children);
 
@@ -923,7 +928,7 @@ module.exports.changeParent = function(param) {
             //we need an inner param to call the function with it at the beginning
             result.innerParam = {
                 ele: newParent,
-                newParent: parentOfNewParent,
+                newParent: parentOfNewParent
            //     nodesData: {
              //       firstTime: true
               //  }
@@ -1014,14 +1019,13 @@ module.exports.createCompoundForSelectedNodes = function(param) {
     module.exports.modelManager.changeModelNodeAttribute('children', newCompoundId, nodeIds, "me");
 
     //module.exports.updateServerGraph();
-    var result = {
-        nodesToMakeCompound:nodesToMakeCompound,
+    return {
+        nodesToMakeCompound: nodesToMakeCompound,
         compoundToRemove: newCompound,
         compoundType: param.compoundType,
         firstTime: false
 
     };
-    return result;
 }
 
 module.exports.removeCompound = function(param) {
@@ -1048,14 +1052,11 @@ module.exports.removeCompound = function(param) {
     //module.exports.updateServerGraph();
     refreshPaddings();
 
-    var result = {
+    return {
         nodesToMakeCompound: childrenOfCompound,
         removedCompound: compoundToRemove,
         firstTime: false
     };
-
-
-    return result;
 }
 
 module.exports.resizeNode = function(param) {
@@ -1172,12 +1173,11 @@ module.exports.addStateAndInfo = function(param) {
     param.ele.unselect(); //to refresh inspector
     param.ele.select(); //to refresh inspector
     cy.forceRender();
-    var result = {
+    return {
         ele: ele,
         width: param.width,
         obj: obj
     };
-    return result;
 }
 
 module.exports.removeStateAndInfo = function(param) {
@@ -1196,12 +1196,11 @@ module.exports.removeStateAndInfo = function(param) {
     param.ele.select(); //to refresh inspector
     cy.forceRender();
 
-    var result = {
+    return {
         ele: ele,
         width: param.width,
         obj: obj
     };
-    return result;
 }
 
 
@@ -1300,7 +1299,8 @@ module.exports.changePosition = function(param){
     ele['position'](param.data);
     if(param.sync){
         //module.exports.modelManager.changeModelNodeAttribute(param.modelDataName, param.ele.id(), param.data, "me");
-        module.exports.modelManager.moveModelNode(param.ele.id(), param.data, "me");
+        //module.exports.modelManager.moveModelNode(param.ele.id(), param.data, "me");
+        module.exports.modelManager.changeModelNodeAttribute("position", node.id(), node.position(), "me");
 
         //module.exports.updateServerGraph();
     }
@@ -1793,5 +1793,26 @@ module.exports.refreshUndoRedoButtonsStatus = function () {
         $("#redo-last-action").html("Redo " + module.exports.manager.getRedoAction());
         $("#redo-last-action").parent("li").removeClass("disabled");
     }
+
+}
+
+module.exports.refreshGlobalUndoRedoButtonsStatus = function(){
+
+    if (!module.exports.modelManager.isUndoPossible()) {
+        $("#undo-last-action-global").parent("li").addClass("disabled");
+    }
+    else {
+        $("#undo-last-action-global").html("Undo " +  module.exports.modelManager.getUndoActionStr());
+        $("#undo-last-action-global").parent("li").removeClass("disabled");
+    }
+
+    if (!module.exports.modelManager.isRedoPossible()) {
+        $("#redo-last-action-global").parent("li").addClass("disabled");
+    }
+    else {
+        $("#redo-last-action-global").html("Redo " +  module.exports.modelManager.getRedoActionStr());
+        $("#redo-last-action-global").parent("li").removeClass("disabled");
+    }
+
 }
 

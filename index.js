@@ -111,6 +111,7 @@ app.get('/:docId', function (page, model, arg, next) {
             // create a reference to the document
             model.ref('_page.doc', 'documents.' + arg.docId);
             model.subscribe(docPath, 'history');
+            model.subscribe(docPath, 'undoIndex');
 
 
         }
@@ -142,7 +143,7 @@ app.get('/:docId', function (page, model, arg, next) {
         ]);
 
 
-
+    
 
     //model.subscribe('messages');
     var userId = model.get('_session.userId');
@@ -570,11 +571,14 @@ app.proto.init = function (model) {
     model.on('all', '_page.doc.history', function(){
         if(docReady){
             triggerContentChange('command-history-area');
-
         }
     });
 
 
+    model.on('all', '_page.doc.undoIndex', function(){
+        menu.refreshGlobalUndoRedoButtonsStatus();
+
+    });
     model.on('insert', '_page.list', function (index) {
 
 

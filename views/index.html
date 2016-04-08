@@ -1,7 +1,7 @@
 
 
 <Title:>
-    SBGNViz Collaborative Editor ({{count(messages)}})  - {{users[_session.userId].name}} - {{_page.doc.sampleInd}}
+    SBGNViz Collaborative Editor  ({{count(messages)}})  - {{users[_session.userId].name}} - {{_page.doc.sampleInd}}
 
 <Head:>
     <meta name="viewport" content="width=device-width">
@@ -182,10 +182,18 @@
                                  <li><a href="#" id="delete-selected-smart">Delete Selected Smart</a></li>
 
                                  <li class="divider"></li>
+                                 <b><center>Local</center></b>
                                  <li class="disabled"><a href="#" id="undo-last-action" >Undo</a></li>
                                  <li class="disabled"><a href="#" id="redo-last-action" >Redo</a></li>
 
+                                 <li class="divider"></li>
+                                 <b><center>Global</center></b>
+                                 <li class="disabled"><a href="#" id="undo-last-action-global" >Undo</a></li>
+                                 <li class="disabled"><a href="#" id="redo-last-action-global" >Redo</a></li>
+
                              </ul>
+
+
                          </li>
 
                          <li class="dropdown">
@@ -874,7 +882,7 @@
 
         <!--<ul id ="command-list" as = "list" >-->
         {{each _page.doc.history as #pCommand}}
-            <li> <b>{{#pCommand.userName}} {{_page.showTime && formatTime(#pCommand)}} > </b>{{#pCommand.opName}} {{#pCommand.elId}} {{formatObj(#pCommand.param)}}
+            <li> <b>{{#pCommand.userName}} {{_page.showTime && formatTime(#pCommand)}} > </b>{{#pCommand.opName}} {{#pCommand.opTarget}} {{#pCommand.elId}} {{#pCommand.opAttr}} {{formatObj(#pCommand.param)}}
             </li>
             {{/each}}
         <!--</ul>-->
