@@ -176,7 +176,6 @@ module.exports =  function(model, docId, userId, userName) {
             var undoInd = model.get('_page.doc.undoIndex');
             var cmd = model.get('_page.doc.history.' + undoInd); // cmd: opName, opTarget, opAttr, elId, param
 
-//    model.set('_page.doc.cy.' + cmd.opTarget + 's.' +  cmd.elId +  '.' + cmd.opAttr, cmd.prevParam);
             if(cmd.opName == "set"){
                 if(cmd.opTarget == "node")
                     this.changeModelNodeAttribute(cmd.opAttr,cmd.elId, cmd.prevParam, null, true); //user is null to enable updating in the editor
@@ -191,9 +190,18 @@ module.exports =  function(model, docId, userId, userName) {
             }
             else if(cmd.opName == "delete"){
                 if(cmd.opTarget == "node")
-                    this.addModelNode(cmd.elId, cmd.prevParam, null, true);
+                    this.restoreModelNodeGlobal(cmd.elId, cmd.prevParam, null, true);
                 else if(cmd.opTarget == "edge")
-                    this.addModelEdge(cmd.elId, cmd.prevParam, null, true);
+                    this.restoreModelEdgeGlobal(cmd.elId, cmd.prevParam, null, true);
+                else if(cmd.opTarget == "node group"){
+                    for(var i = 0; i < cmd.elId.length; i++)
+                        this.restoreModelNodeGlobal(cmd.elId[i], cmd.prevParam[i], null, true);
+                }
+                else if(cmd.opTarget == "edge group"){
+                    for(var i = 0; i < cmd.elId.length; i++)
+                        this.restoreModelEdgeGlobal(cmd.elId[i], cmd.prevParam[i], null, true);
+
+                }
             }
 
 
@@ -284,31 +292,6 @@ module.exports =  function(model, docId, userId, userName) {
 
         },
 
-        //
-        // moveModelNode: function(nodeId, pos,user, noHistUpdate){
-        //     var status = "Node id not found";
-        //     var nodePath = model.at('_page.doc.cy.nodes.'  +nodeId);
-        //
-        //     if(nodePath.get('id')){
-        //
-        //         var currPos = nodePath.get('position');
-        //         // if(!node.selected) //selected nodes will still be highlighted even if they are freed
-        //         model.set('_page.doc.cy.nodes.' +nodeId+ '.highlightColor' , null); //make my highlight color null as well
-        //         model.pass({user:user}).set('_page.doc.cy.nodes.' +nodeId +'.position' , pos);
-        //
-        //
-        //         if(!noHistUpdate)
-        //             this.updateHistory('set', 'node',  nodeId, 'position', pos, currPos);
-        //
-        //
-        //         status = "success";
-        //     }
-        //
-        //
-        //
-        //     return status;
-        //
-        // },
         addModelNode: function(nodeId,  param, user, noHistUpdate){
 
             model.pass({user:user}).set('_page.doc.cy.nodes.' +nodeId+'.id', nodeId);
@@ -401,14 +384,32 @@ module.exports =  function(model, docId, userId, userName) {
             var status = "Node id not found";
             var nodePath = model.at('_page.doc.cy.nodes.'  + nodeId);
             if(nodePath.get('id')) {
-                model.pass({user: user}).del(('_page.doc.cy.nodes.' + nodeId));
 
                 if(!noHistUpdate){
                     var pos = nodePath.get('position');
-                    var sbgnClass = nodePath.get('sbgnclass');
-                    prevParam = {x: pos.x , y: pos.y , sbgnclass:sbgnClass}
-                    this.updateHistory('delete', 'node',   nodeId, null, prevParam);
+                    var sbgnclass = nodePath.get('sbgnclass');
+                    var borderColor = nodePath.get('borderColor');
+                    var borderWidth = nodePath.get('borderWidth');
+                    var backgroundColor = nodePath.get('backgroundColor');
+                    var width = nodePath.get('width');
+                    var height = nodePath.get('height');
+                    var parent = nodePath.get('parent');
+                    var sbgnlabel = nodePath.get('sbgnlabel');
+                    var isCloneMarker = nodePath.get('isCloneMarker');
+                    var isMultimer = nodePath.get('isMultimer');
+                    var sbgnStatesAndInfos = nodePath.get('sbgnStatesAndInfos');
+
+
+                    prevParam = {x: pos.x , y: pos.y , sbgnclass:sbgnclass, width: width, height: height,
+                                 borderColor: borderColor, borderWidth: borderWidth, sbgnlabel: sbgnlabel,
+                                 sbgnStatesAndInfos:sbgnStatesAndInfos, parent:parent, isCloneMarker: isCloneMarker,
+                                 isMultimer: isMultimer};
+
+
+                    this.updateHistory('delete', 'node',   nodeId, null, null, prevParam);
                 }
+
+                model.pass({user: user}).del(('_page.doc.cy.nodes.' + nodeId));
 
                 status = "success";
             }
@@ -416,6 +417,7 @@ module.exports =  function(model, docId, userId, userName) {
             return status;
 
         },
+
 
         deleteModelEdge: function(edgeId, user, noHistUpdate){
 
@@ -423,16 +425,24 @@ module.exports =  function(model, docId, userId, userName) {
             var edgePath = model.at('_page.doc.cy.edges.'  + edgeId);
 
             if(edgePath.get('id')) {
-                model.pass({user:user}).del(('_page.doc.cy.edges.'  + edgeId));
+
 
                 if(!noHistUpdate) {
-                    var source = nodePath.get('source');
-                    var target = nodePath.get('target');
-                    var sbgnClass = nodePath.get('sbgnclass');
-                    prevParam = {source: source , target:target , sbgnclass:sbgnClass}
-                    this.updateHistory('delete', 'edge',   edgeId, null, prevParam);
+                    var source = edgePath.get('source');
+                    var target = edgePath.get('target');
+                    var sbgnClass = edgePath.get('sbgnclass');
+                    var lineColor = edgePath.get('lineColor');
+                    var lineWidth = edgePath.get('lineWidth');
+                    var cardinality = edgePath.get('cardinality');
+                    prevParam = {source: source , target:target , sbgnclass:sbgnClass, lineColor: lineColor,
+                    lineWidth: lineWidth, cardinality: cardinality};
+
+
+
+                    this.updateHistory('delete', 'edge',   edgeId, null, null, prevParam);
                 }
 
+                model.pass({user:user}).del(('_page.doc.cy.edges.'  + edgeId));
                 status = "success";
             }
 
@@ -440,17 +450,43 @@ module.exports =  function(model, docId, userId, userName) {
 
         },
 
-        deleteModelNodes: function(selectedNodes,user, noHistUpdate){
+
+
+    deleteModelNodes: function(selectedNodes,user, noHistUpdate){
             var self = this;
-            var nodeIds = "";
+            var nodeIds = [];
+            var prevParams = [];
 
             if(selectedNodes != null){
                 selectedNodes.forEach(function(node){
-                    nodeIds += node.id() + " ";
+                    nodeIds.push(node.id());
+                    var nodePath = model.at('_page.doc.cy.nodes.'  + node.id());
+
+
+                    var pos = nodePath.get('position');
+                    var sbgnclass = nodePath.get('sbgnclass');
+
+
+                    var borderColor = nodePath.get('borderColor');
+                    var borderWidth = nodePath.get('borderWidth');
+                    var backgroundColor = nodePath.get('backgroundColor');
+                    var width = nodePath.get('width');
+                    var height = nodePath.get('height');
+                    var parent = nodePath.get('parent');
+                    var sbgnlabel = nodePath.get('sbgnlabel');
+                    var isCloneMarker = nodePath.get('isCloneMarker');
+                    var isMultimer = nodePath.get('isMultimer');
+                    var sbgnStatesAndInfos = nodePath.get('sbgnStatesAndInfos');
+
+                    prevParams.push({x: pos.x , y: pos.y , sbgnclass:sbgnclass, width: width, height: height,
+                        borderColor: borderColor, borderWidth: borderWidth, sbgnlabel: sbgnlabel,
+                        sbgnStatesAndInfos:sbgnStatesAndInfos, parent:parent, isCloneMarker: isCloneMarker,
+                        isMultimer: isMultimer} );
+
                 });
 
                 if(!noHistUpdate)
-                    this.updateHistory('delete', 'node group',  nodeIds);
+                    this.updateHistory('delete', 'node group',  nodeIds, null, null, prevParams);
 
                 selectedNodes.forEach(function(node){
                     self.deleteModelNode(node.id(),user, true); //no history update for child commands
@@ -462,16 +498,29 @@ module.exports =  function(model, docId, userId, userName) {
 
         deleteModelEdges: function(selectedEdges, user, noHistUpdate){
             var self = this;
-            var edgeIds = "";
+            var edgeIds = [];
+            var prevParams = [];
 
             if(selectedEdges != null) {
 
                 selectedEdges.forEach(function(edge){
-                    edgeIds += edge.id() + " ";
+                    edgeIds.push(edge.id());
+
+                    var edgePath = model.at('_page.doc.cy.edges.' + edge.id());
+
+                    var source = edgePath.get('source');
+                    var target = edgePath.get('target');
+                    var sbgnclass = edgePath.get('sbgnclass');
+                    var lineColor = edgePath.get('lineColor');
+                    var lineWidth = edgePath.get('lineWidth');
+                    var cardinality = edgePath.get('cardinality');
+                    prevParams.push( {source: source , target:target , sbgnclass:sbgnclass, lineColor: lineColor,
+                        lineWidth: lineWidth, cardinality: cardinality});
+
                 });
 
                 if(!noHistUpdate)
-                    this.updateHistory('delete', 'edge group',  edgeIds);
+                    this.updateHistory('delete', 'edge group',  edgeIds, null, null,prevParams);
 
                 selectedEdges.forEach(function(edge){
                     self.deleteModelEdge(edge.id(), user, true); //will not update children history
@@ -481,6 +530,9 @@ module.exports =  function(model, docId, userId, userName) {
         },
 
 
+        /**
+         * Restore operations for local undo/redo
+         */
         restoreModelNode: function(node, user, noHistUpdate){
             this.changeModelNodeAttribute('sbgnlabel', node.id(),node.data("sbgnlabel"),user, noHistUpdate );
             this.changeModelNodeAttribute('width', node.id(),node._private.data.sbgnbbox.w,user, noHistUpdate );
@@ -497,6 +549,7 @@ module.exports =  function(model, docId, userId, userName) {
         restoreModelEdge: function(edge, user, noHistUpdate){
 
             this.changeModelEdgeAttribute('lineColor', edge.id(),edge.css('line-color'), user, noHistUpdate);
+
 
         },
 
@@ -526,9 +579,6 @@ module.exports =  function(model, docId, userId, userName) {
 
         },
 
-
-
-
         restoreModelEdges: function(selectedEdges, user, noHistUpdate){
             var self = this;
             var edgeIds = "";
@@ -554,15 +604,51 @@ module.exports =  function(model, docId, userId, userName) {
             }
 
         },
+
+
+        /**
+         * Restore operations for global undo/redo
+         */
+        restoreModelNodeGlobal: function(nodeId, param, user, noHistUpdate){
+
+            this.addModelNode(nodeId, param, user, noHistUpdate);
+
+
+            this.changeModelNodeAttribute('sbgnlabel', nodeId,param.sbgnlabel,user, noHistUpdate );
+            this.changeModelNodeAttribute('width', nodeId,param.width,user, noHistUpdate );
+            this.changeModelNodeAttribute('height', nodeId,param.height,user , noHistUpdate);
+            this.changeModelNodeAttribute('backgroundColor', nodeId,param.backgroundColor,user, noHistUpdate );
+            this.changeModelNodeAttribute('borderColor', nodeId,param.borderColor,user , noHistUpdate);
+            this.changeModelNodeAttribute('borderWidth', nodeId,param.borderWidth,user , noHistUpdate);
+            this.changeModelNodeAttribute('sbgnStatesAndInfos', nodeId, param.sbgnStatesAndInfos,user, noHistUpdate );
+            this.changeModelNodeAttribute('parent', nodeId,param.parent,user, noHistUpdate );
+            this.changeModelNodeAttribute('isCloneMarker', nodeId,param.isCloneMarker,user , noHistUpdate);
+            this.changeModelNodeAttribute('isMultimer', nodeId, param.isMultimer,user, noHistUpdate );
+
+            if(!noHistUpdate)
+                this.updateHistory('restore', 'node',  nodeId);
+        },
+
+        restoreModelEdgeGlobal: function(edgeId, param, user, noHistUpdate){
+
+            this.addModelEdge(edgeId, param, user, noHistUpdate);
+
+            this.changeModelNodeAttribute('lineColor', edgeId,param.lineColor,user, noHistUpdate );
+            this.changeModelNodeAttribute('lineWidth', edgeId,param.lineWidth,user, noHistUpdate );
+            this.changeModelNodeAttribute('cardinality', edgeId,param.cardinality,user , noHistUpdate);
+
+            if(!noHistUpdate)
+                this.updateHistory('restore', 'edge',  edgeId);
+        },
         //should be called before loading a new graph to prevent id confusion
         deleteAll: function(nodes, edges , user, noHistUpdate){
 
             if(!noHistUpdate)
                 this.updateHistory('new', 'model');
 
-            this.deleteModelNodes(nodes,user, noHistUpdate);
-            this.deleteModelEdges(edges,user, noHistUpdate);
 
+            this.deleteModelEdges(edges,user, noHistUpdate);
+            this.deleteModelNodes(nodes,user, noHistUpdate);
 
 
         },
@@ -730,6 +816,7 @@ module.exports =  function(model, docId, userId, userName) {
             jsonObj.nodes.forEach(function(node){
 
                 model.pass({user:user}).set('_page.doc.cy.nodes.' + node.data.id + '.id', node.data.id);
+                model.pass({user:user}).set('_page.doc.cy.nodes.' + node.data.id + '.sbgnclass', node.data.sbgnclass);
                 model.pass({user:user}).set('_page.doc.cy.nodes.' + node.data.id + '.position', {x: node.data.sbgnbbox.x, y: node.data.sbgnbbox.y}); //initialize position
 
                 nodeIds += node.data.id + " ";
@@ -742,6 +829,7 @@ module.exports =  function(model, docId, userId, userName) {
                 var edgeId = edge.data.id;
 
                 model.pass({user:user}).set('_page.doc.cy.edges.' + edgeId + '.id', edgeId);
+                model.pass({user:user}).set('_page.doc.cy.edges.' + edgeId + '.sbgnclass', edge.data.sbgnclass);
 
                 edgeIds += edge.data.id + " ";
             });
