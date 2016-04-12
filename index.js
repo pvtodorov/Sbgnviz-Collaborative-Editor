@@ -272,7 +272,7 @@ app.proto.init = function (model) {
     var timeSort;
 
 
-    
+
     model.on('all', '_page.doc.cy.**', function(id){
         updateServerGraph();
     });

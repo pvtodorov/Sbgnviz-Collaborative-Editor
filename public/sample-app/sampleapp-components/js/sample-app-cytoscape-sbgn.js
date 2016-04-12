@@ -347,7 +347,7 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
                     lastMouseDownNodeInfo = null;
 
 
-
+                    editorActions.manager._do(editorActions.UnselectNodeCommand(this));
 
                     editorActions.refreshUndoRedoButtonsStatus();
                 }
@@ -369,7 +369,11 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
 
                 editorActions.manager._do(editorActions.SelectNodeCommand(this));
             });
-
+            // cy.on('free', 'node', function(event) { //Also works as 'select'
+            //
+            //
+            //     editorActions.manager._do(editorActions.UnselectNodeCommand(this));
+            // });
 
             cy.on('select', 'edge', function(event) {
                 editorActions.manager._do(editorActions.SelectEdgeCommand(this));
@@ -868,7 +872,7 @@ module.exports.handleSBGNInspector = function (editorActions) {
 
         if (type == "node") {
             if (canHaveCloneMarker(selected.data('sbgnclass')) || canHaveStateVariable(selected.data('sbgnclass'))) {
-                module.exports.fillInspectorStateAndInfos(selected, width);
+                module.exports.fillInspectorStateAndInfos(selected, width, editorActions);
             }
 
             if (canBeMultimer(selected.data('sbgnclass'))) {

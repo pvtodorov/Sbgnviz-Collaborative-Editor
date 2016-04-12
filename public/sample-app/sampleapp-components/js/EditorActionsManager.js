@@ -347,7 +347,6 @@ module.exports.performLayoutFunction = function(param) {
     //if (param.firstTime) {
     //
     //    delete param.firstTime;
-    //    return param;
     //}
 
     module.exports.modelManager.updateHistory("run layout");
@@ -1125,6 +1124,8 @@ module.exports.addStateAndInfo = function(param) {
     //module.exports.updateServerGraph();
     param.ele.unselect(); //to refresh inspector
     param.ele.select(); //to refresh inspector
+
+
     cy.forceRender();
     return {
         ele: ele,

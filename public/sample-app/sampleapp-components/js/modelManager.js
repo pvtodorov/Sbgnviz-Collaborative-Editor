@@ -300,6 +300,10 @@ module.exports =  function(model, docId, userId, userName) {
             //Adding the node. Other operations should be called afterwards
             model.pass({user:user}).set('_page.doc.cy.nodes.' + nodeId+'.sbgnclass', param.sbgnclass);
 
+            model.pass({user:user}).set('_page.doc.cy.nodes.' + nodeId+'.backgroundColor', "#f8f8f8"); //blank background
+
+
+
 
             if(!noHistUpdate)
                 //We don't want all the attributes of the param to be printed
@@ -818,9 +822,10 @@ module.exports =  function(model, docId, userId, userName) {
 
             jsonObj.nodes.forEach(function(node){
 
+
                 model.pass({user:user}).set('_page.doc.cy.nodes.' + node.data.id + '.id', node.data.id);
                 model.pass({user:user}).set('_page.doc.cy.nodes.' + node.data.id + '.position', {x: node.data.sbgnbbox.x, y: node.data.sbgnbbox.y}); //initialize position
-//DO NOT SET SBGNCLASS HERE!!!!!
+    //DO NOT SET SBGNCLASS HERE!!!!!
                 nodeIds += node.data.id + " ";
 
             });
