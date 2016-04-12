@@ -41,7 +41,7 @@ var sbgnElementUtilities = require('./sbgn-element-utilities.js')();
 module.exports = function () {
 
     var cheerio = require('cheerio');
-    var $;
+    var cheerio$;
 
     return {
 
@@ -50,14 +50,14 @@ module.exports = function () {
             var compartments = [];
 
 
-           // $(xmlObject).find("glyph[class='compartment']").each(function () {
-            $("glyph[class='compartment']").each(function () {
+           // cheerio$(xmlObject).find("glyph[class='compartment']").each(function () {
+            cheerio$("glyph[class='compartment']").each(function () {
                 compartments.push({
-                    'x': parseFloat($(this).children('bbox').attr('x')),
-                    'y': parseFloat($(this).children('bbox').attr('y')),
-                    'w': parseFloat($(this).children('bbox').attr('w')),
-                    'h': parseFloat($(this).children('bbox').attr('h')),
-                    'id': $(this).attr('id')
+                    'x': parseFloat(cheerio$(this).children('bbox').attr('x')),
+                    'y': parseFloat(cheerio$(this).children('bbox').attr('y')),
+                    'w': parseFloat(cheerio$(this).children('bbox').attr('w')),
+                    'h': parseFloat(cheerio$(this).children('bbox').attr('h')),
+                    'id': cheerio$(this).attr('id')
                 });
             });
 
@@ -84,10 +84,10 @@ module.exports = function () {
         bboxProp: function (ele) {
             var sbgnbbox = new Object();
 
-            sbgnbbox.x = $(ele).find('bbox').attr('x');
-            sbgnbbox.y = $(ele).find('bbox').attr('y');
-            sbgnbbox.w = $(ele).find('bbox').attr('w');
-            sbgnbbox.h = $(ele).find('bbox').attr('h');
+            sbgnbbox.x = cheerio$(ele).find('bbox').attr('x');
+            sbgnbbox.y = cheerio$(ele).find('bbox').attr('y');
+            sbgnbbox.w = cheerio$(ele).find('bbox').attr('w');
+            sbgnbbox.h = cheerio$(ele).find('bbox').attr('h');
 
             //set positions as center
             sbgnbbox.x = parseFloat(sbgnbbox.x) + parseFloat(sbgnbbox.w) / 2;
@@ -101,10 +101,10 @@ module.exports = function () {
 
             var sbgnbbox = new Object();
 
-            sbgnbbox.x = $(ele).find('bbox').attr('x');
-            sbgnbbox.y = $(ele).find('bbox').attr('y');
-            sbgnbbox.w = $(ele).find('bbox').attr('w');
-            sbgnbbox.h = $(ele).find('bbox').attr('h');
+            sbgnbbox.x = cheerio$(ele).find('bbox').attr('x');
+            sbgnbbox.y = cheerio$(ele).find('bbox').attr('y');
+            sbgnbbox.w = cheerio$(ele).find('bbox').attr('w');
+            sbgnbbox.h = cheerio$(ele).find('bbox').attr('h');
 
             //set positions as center
             sbgnbbox.x = parseFloat(sbgnbbox.x) + parseFloat(sbgnbbox.w) / 2 - xPos;
@@ -119,21 +119,21 @@ module.exports = function () {
             var self = this;
             var stateAndInfoArray = new Array();
 
-            $(ele).children('glyph').each(function () {
+            cheerio$(ele).children('glyph').each(function () {
                 var obj = new Object();
-                if ($(this).attr('class') === 'unit of information') {
-                    obj.id = $(this).attr('id');
-                    obj.clazz = $(this).attr('class');
-                    obj.label = {'text': $(this).find('label').attr('text')};
+                if (cheerio$(this).attr('class') === 'unit of information') {
+                    obj.id = cheerio$(this).attr('id');
+                    obj.clazz = cheerio$(this).attr('class');
+                    obj.label = {'text': cheerio$(this).find('label').attr('text')};
                     obj.bbox = self.stateAndInfoBboxProp(this, parentBbox);
                     stateAndInfoArray.push(obj);
                 }
-                else if ($(this).attr('class') === 'state variable') {
-                    obj.id = $(this).attr('id');
-                    obj.clazz = $(this).attr('class');
+                else if (cheerio$(this).attr('class') === 'state variable') {
+                    obj.id = cheerio$(this).attr('id');
+                    obj.clazz = cheerio$(this).attr('class');
                     obj.state = {
-                        'value': $(this).find('state').attr('value'),
-                        'variable': $(this).find('state').attr('variable')
+                        'value': cheerio$(this).find('state').attr('value'),
+                        'variable': cheerio$(this).find('state').attr('variable')
                     };
                     obj.bbox = self.stateAndInfoBboxProp(this, parentBbox);
                     stateAndInfoArray.push(obj);
@@ -147,17 +147,17 @@ module.exports = function () {
             //there is no complex parent
             if (parent == "") {
                 //no compartment reference
-                if (typeof $(ele).attr('compartmentRef') === 'undefined') {
+                if (typeof cheerio$(ele).attr('compartmentRef') === 'undefined') {
                     nodeObj.parent = "";
 
                     //add compartment according to geometry
                     for (var i = 0; i < compartments.length; i++) {
                         var bbox = {
-                            'x': parseFloat($(ele).children('bbox').attr('x')),
-                            'y': parseFloat($(ele).children('bbox').attr('y')),
-                            'w': parseFloat($(ele).children('bbox').attr('w')),
-                            'h': parseFloat($(ele).children('bbox').attr('h')),
-                            'id': $(ele).attr('id')
+                            'x': parseFloat(cheerio$(ele).children('bbox').attr('x')),
+                            'y': parseFloat(cheerio$(ele).children('bbox').attr('y')),
+                            'w': parseFloat(cheerio$(ele).children('bbox').attr('w')),
+                            'h': parseFloat(cheerio$(ele).children('bbox').attr('h')),
+                            'id': cheerio$(ele).attr('id')
                         }
                         if (self.isInBoundingBox(bbox, compartments[i])) {
                             nodeObj.parent = compartments[i].id;
@@ -167,7 +167,7 @@ module.exports = function () {
                 }
                 //there is compartment reference
                 else {
-                    nodeObj.parent = $(ele).attr('compartmentRef');
+                    nodeObj.parent = cheerio$(ele).attr('compartmentRef');
                 }
             }
             //there is complex parent
@@ -182,14 +182,14 @@ module.exports = function () {
 
 
             //add id information
-            nodeObj.id = $(ele).attr('id');
+            nodeObj.id = cheerio$(ele).attr('id');
 
             //add node bounding box information
             nodeObj.sbgnbbox = self.bboxProp(ele);
             //add class information
-            nodeObj.sbgnclass = $(ele).attr('class');
+            nodeObj.sbgnclass = cheerio$(ele).attr('class');
             //add label information
-            nodeObj.sbgnlabel = $(ele).children('label').attr('text');
+            nodeObj.sbgnlabel = cheerio$(ele).children('label').attr('text');
             //add state and info box information
             nodeObj.sbgnstatesandinfos = self.stateAndInfoProp(ele, nodeObj.sbgnbbox);
             //adding parent information
@@ -197,20 +197,20 @@ module.exports = function () {
 
 
             //add clone information
-            if ($(ele).children('clone').length > 0)
+            if (cheerio$(ele).children('clone').length > 0)
                 nodeObj.sbgnclonemarker = true;
             else
                 nodeObj.sbgnclonemarker = undefined;
 
             //add port information
             var ports = [];
-            $(ele).find('port').each(function () {
-                var id = $(this).attr('id');
-                var relativeXPos = parseFloat($(this).attr('x')) - nodeObj.sbgnbbox.x;
-                var relativeYPos = parseFloat($(this).attr('y')) - nodeObj.sbgnbbox.y;
+            cheerio$(ele).find('port').each(function () {
+                var id = cheerio$(this).attr('id');
+                var relativeXPos = parseFloat(cheerio$(this).attr('x')) - nodeObj.sbgnbbox.x;
+                var relativeYPos = parseFloat(cheerio$(this).attr('y')) - nodeObj.sbgnbbox.y;
 
                 ports.push({
-                    id: $(this).attr('id'),
+                    id: cheerio$(this).attr('id'),
                     x: relativeXPos,
                     y: relativeYPos
                 });
@@ -222,20 +222,20 @@ module.exports = function () {
             jsonArray.push(cytoscapeJsNode);
         },
         traverseNodes: function (ele, jsonArray, parent, compartments) {
-            if (!sbgnElementUtilities.handledElements[$(ele).attr('class')]) {
+            if (!sbgnElementUtilities.handledElements[cheerio$(ele).attr('class')]) {
                 return;
             }
             var self = this;
 
 
             //add complex nodes here
-            if ($(ele).attr('class') === 'complex' || $(ele).attr('class') === 'submap') {
+            if (cheerio$(ele).attr('class') === 'complex' || cheerio$(ele).attr('class') === 'submap') {
                 self.addCytoscapeJsNode(ele, jsonArray, parent, compartments);
 
-                $(ele).children('glyph').each(function () {
-                    if ($(this).attr('class') != 'state variable' &&
-                        $(this).attr('class') != 'unit of information') {
-                        self.traverseNodes(this, jsonArray, $(ele).attr('id'), compartments);
+                cheerio$(ele).children('glyph').each(function () {
+                    if (cheerio$(this).attr('class') != 'state variable' &&
+                        cheerio$(this).attr('class') != 'unit of information') {
+                        self.traverseNodes(this, jsonArray, cheerio$(ele).attr('id'), compartments);
                     }
                 });
             }
@@ -245,34 +245,34 @@ module.exports = function () {
         },
         getArcSourceAndTarget: function (arc, xmlObject) {
             //source and target can be inside of a port
-            var source = $(arc).attr('source');
-            var target = $(arc).attr('target');
+            var source = cheerio$(arc).attr('source');
+            var target = cheerio$(arc).attr('target');
             var sourceNodeId, targetNodeId;
 
-         //   $(xmlObject).find('glyph').each(function () {
-            $('glyph').each(function () {
-                if ($(this).attr('id') == source) {
+         //   cheerio$(xmlObject).find('glyph').each(function () {
+            cheerio$('glyph').each(function () {
+                if (cheerio$(this).attr('id') == source) {
                     sourceNodeId = source;
                 }
-                if ($(this).attr('id') == target) {
+                if (cheerio$(this).attr('id') == target) {
                     targetNodeId = target;
                 }
             });
 
             if (typeof sourceNodeId === 'undefined') {
-             //   $(xmlObject).find("port").each(function () {
-                $("port").each(function () {
-                    if ($(this).attr('id') == source) {
-                        sourceNodeId = $(this).parent().attr('id');
+             //   cheerio$(xmlObject).find("port").each(function () {
+                cheerio$("port").each(function () {
+                    if (cheerio$(this).attr('id') == source) {
+                        sourceNodeId = cheerio$(this).parent().attr('id');
                     }
                 });
             }
 
             if (typeof targetNodeId === 'undefined') {
-                //$(xmlObject).find("port").each(function () {
-                $("port").each(function () {
-                    if ($(this).attr('id') == target) {
-                        targetNodeId = $(this).parent().attr('id');
+                //cheerio$(xmlObject).find("port").each(function () {
+                cheerio$("port").each(function () {
+                    if (cheerio$(this).attr('id') == target) {
+                        targetNodeId = cheerio$(this).parent().attr('id');
                     }
                 });
             }
@@ -282,10 +282,10 @@ module.exports = function () {
         getArcBendPointPositions: function (ele) {
             var bendPointPositions = [];
 
-//    $(ele).children('start, next, end').each(function () {
-            $(ele).children('next').each(function () {
-                var posX = $(this).attr('x');
-                var posY = $(this).attr('y');
+//    cheerio$(ele).children('start, next, end').each(function () {
+            cheerio$(ele).children('next').each(function () {
+                var posX = cheerio$(this).attr('x');
+                var posY = cheerio$(this).attr('y');
 
                 var pos = {
                     x: posX,
@@ -298,7 +298,7 @@ module.exports = function () {
             return bendPointPositions;
         },
         addCytoscapeJsEdge: function (ele, jsonArray, xmlObject) {
-            if (!sbgnElementUtilities.handledElements[$(ele).attr('class')]) {
+            if (!sbgnElementUtilities.handledElements[cheerio$(ele).attr('class')]) {
                 return;
             }
 
@@ -306,19 +306,19 @@ module.exports = function () {
             var edgeObj = new Object();
 
             var bendPointPositions = self.getArcBendPointPositions(ele);
-            //funda    edgeObj.id = $(ele).attr('id');
-            edgeObj.id = $(ele).data('id');
+            //funda    edgeObj.id = cheerio$(ele).attr('id');
+            edgeObj.id = cheerio$(ele).data('id');
 
-            edgeObj.sbgnclass = $(ele).attr('class');
+            edgeObj.sbgnclass = cheerio$(ele).attr('class');
             edgeObj.bendPointPositions = bendPointPositions;
 
-            if ($(ele).find('glyph').length <= 0) {
+            if (cheerio$(ele).find('glyph').length <= 0) {
                 edgeObj.sbgncardinality = 0;
             }
             else {
-                $(ele).children('glyph').each(function () {
-                    if ($(this).attr('class') == 'cardinality') {
-                        edgeObj.sbgncardinality = $(this).find('label').attr('text');
+                cheerio$(ele).children('glyph').each(function () {
+                    if (cheerio$(this).attr('class') == 'cardinality') {
+                        edgeObj.sbgncardinality = cheerio$(this).find('label').attr('text');
                     }
                 });
             }
@@ -328,8 +328,8 @@ module.exports = function () {
             edgeObj.source = sourceAndTarget.source;
             edgeObj.target = sourceAndTarget.target;
 
-            edgeObj.portsource = $(ele).attr("source");
-            edgeObj.porttarget = $(ele).attr("target");
+            edgeObj.portsource = cheerio$(ele).attr("source");
+            edgeObj.porttarget = cheerio$(ele).attr("target");
 
 
             var cytoscapeJsEdge = {data: edgeObj};
@@ -342,7 +342,7 @@ module.exports = function () {
             var cytoscapeJsNodes = [];
             var cytoscapeJsEdges = [];
 
-            $ = cheerio.load(xmlObject, {
+            cheerio$ = cheerio.load(xmlObject, {
                 xmlMode: true
             });
 
@@ -350,14 +350,14 @@ module.exports = function () {
             var compartments = self.getAllCompartments(xmlObject);
 
 
-           // $(xmlObject).find("map").children('glyph').each(function (i, elem) {
-            $("map").children('glyph').each(function (i, elem) {
+           // cheerio$(xmlObject).find("map").children('glyph').each(function (i, elem) {
+            cheerio$("map").children('glyph').each(function (i, elem) {
 
                 self.traverseNodes(this, cytoscapeJsNodes, "", compartments);
             });
 
-            //$(xmlObject).find("map").children('arc').each(function () {
-            $("map").children('arc').each(function () {
+            //cheerio$(xmlObject).find("map").children('arc').each(function () {
+            cheerio$("map").children('arc').each(function () {
                 self.addCytoscapeJsEdge(this, cytoscapeJsEdges, xmlObject);
             });
 

@@ -136,7 +136,7 @@ module.exports = function(){
 
             //sbgnContainer =  (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj,  editorActions));
 
-            editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me");
+            editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
             //this.updateSample(-1, true);
 
             editorActions.modelManager.setSampleInd(-1, "me"); //to notify other clients
@@ -425,6 +425,7 @@ module.exports = function(){
         updateSample: function(ind, syncVal){
 
 
+
             //just get a new sbgncontainer
             if(ind < 0){
 
@@ -432,17 +433,20 @@ module.exports = function(){
                 var jsonObj = editorActions.modelManager.getServerGraph();
                 sbgnContainer =  (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj,  editorActions));
                 if(syncVal)
-                    editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me");
+                    editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
 
             }
             else{
 
+                
                 getXMLObject(ind, function (xmlObject) {
 
+
+          
                     var xmlText = new XMLSerializer().serializeToString(xmlObject);
                    
                     var jsonObj = sbgnmlToJson.convert(xmlText);
-
+                    
 
 
                     editorActions.modelManager.updateServerGraph(jsonObj);
@@ -451,7 +455,7 @@ module.exports = function(){
                     sbgnContainer =  (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj,  editorActions));
 
                     if(syncVal)
-                        editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me");
+                        editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
 
 
                 });
@@ -486,7 +490,7 @@ module.exports = function(){
                         }
                     });
 
-                        editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me");
+                        editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
 
                 }
                 else{ //load a sample
@@ -512,7 +516,7 @@ module.exports = function(){
                             }
                         });
 
-                            editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me");
+                            editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
 
 
                     });
@@ -534,7 +538,7 @@ module.exports = function(){
                 });
 
 
-                editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me");
+                editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
             }
 
         },
@@ -550,6 +554,7 @@ module.exports = function(){
             sbgnLayout = new SBGNLayout(modelManager);
 
             var layoutProperties = modelManager.updateLayoutProperties(sbgnLayout.defaultLayoutProperties);
+
             sbgnLayout.initialize(layoutProperties);
 
 
@@ -558,7 +563,10 @@ module.exports = function(){
 
 
 
+
             var jsonObj = modelManager.getServerGraph();
+
+
 
             if (jsonObj == null) {//first time loading the graph-- load from the samples
 
@@ -571,7 +579,9 @@ module.exports = function(){
 
                 sbgnContainer = (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, editorActions));
 
-                editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me");
+
+
+                editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
             }
 
             document.getElementById("ctx-add-bend-point").addEventListener("contextmenu", function (event) {
@@ -638,7 +648,7 @@ module.exports = function(){
                 var jsonObj = {nodes: [], edges: []};
                 editorActions.modelManager.deleteAll(cy.nodes(), cy.edges(), "me");
                 sbgnContainer = new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, editorActions);
-                editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me");
+                editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
 
                 editorActions.manager.reset();
                 //TODO: why is this here?

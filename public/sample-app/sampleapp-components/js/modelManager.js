@@ -661,6 +661,7 @@ module.exports =  function(model, docId, userId, userName) {
 
 
         updateServerGraph: function(cytoscapeJsGraph){
+
             //TODO: could be simplified to a single node/edge update
             model.set('_page.doc.jsonObj', cytoscapeJsGraph);
 
@@ -732,6 +733,7 @@ module.exports =  function(model, docId, userId, userName) {
                 var isMultimer = nodePath.get('isMultimer');
 
                 if (isMultimer != null) {
+
                     var sbgnclass = node.data('sbgnclass');
                     if (isMultimer) {
                         //if not multimer already
@@ -809,6 +811,7 @@ module.exports =  function(model, docId, userId, userName) {
         initModel: function(jsonObj, nodes, edges, user, noHistUpdate){
 
 
+
             var nodeIds = "";
             var edgeIds = "";
 
@@ -816,9 +819,8 @@ module.exports =  function(model, docId, userId, userName) {
             jsonObj.nodes.forEach(function(node){
 
                 model.pass({user:user}).set('_page.doc.cy.nodes.' + node.data.id + '.id', node.data.id);
-                model.pass({user:user}).set('_page.doc.cy.nodes.' + node.data.id + '.sbgnclass', node.data.sbgnclass);
                 model.pass({user:user}).set('_page.doc.cy.nodes.' + node.data.id + '.position', {x: node.data.sbgnbbox.x, y: node.data.sbgnbbox.y}); //initialize position
-
+//DO NOT SET SBGNCLASS HERE!!!!!
                 nodeIds += node.data.id + " ";
 
             });
@@ -829,7 +831,7 @@ module.exports =  function(model, docId, userId, userName) {
                 var edgeId = edge.data.id;
 
                 model.pass({user:user}).set('_page.doc.cy.edges.' + edgeId + '.id', edgeId);
-                model.pass({user:user}).set('_page.doc.cy.edges.' + edgeId + '.sbgnclass', edge.data.sbgnclass);
+
 
                 edgeIds += edge.data.id + " ";
             });

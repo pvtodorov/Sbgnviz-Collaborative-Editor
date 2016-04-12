@@ -258,11 +258,13 @@ app.proto.changeDuration = function () {
 
 
 };
+
+//TODO: open this
 function updateServerGraph(){
     //hack: setTimeout has its own stack  -- waits for the stack to clear
-    setTimeout(function(){
-        menu.updateServerGraph();
-    },0);
+     setTimeout(function(){
+         menu.updateServerGraph();
+     },0);
 
 }
 
@@ -270,7 +272,7 @@ app.proto.init = function (model) {
     var timeSort;
 
 
-
+    
     model.on('all', '_page.doc.cy.**', function(id){
         updateServerGraph();
     });
@@ -551,7 +553,7 @@ app.proto.init = function (model) {
     model.on('all', '_page.doc.cy.edges.*.width', function(id,  op, width,prev, passed){
         if(docReady && passed.user == null) {
             menu.changeElementProperty(id, 'width', 'width', width, 'css', false);
-            //updateServerGraph();
+            updateServerGraph();
         }
     });
 
@@ -633,7 +635,7 @@ app.proto.create = function (model) {
 
 
 
-    //to capture user disconnection, this has to be through sockets-- not model
+    //to capture user disconnection, this has to be throuagh sockets-- not model
     socket.on('userList', function(userList){
         var userIds =[];
         userList.forEach(function(user){
