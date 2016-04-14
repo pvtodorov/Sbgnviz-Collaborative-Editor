@@ -163,8 +163,45 @@ module.exports =  function(model, docId, userId, userName) {
             var undoInd = model.get('_page.doc.undoIndex');
             var cmd = model.get('_page.doc.history.' + (undoInd+ 1)); // cmd: opName, opTarget, opAttr, elId, param
 
-            if(cmd.opName == "set")
-                model.set('_page.doc.cy.' + cmd.opTarget + 's.' +  cmd.elId +  '.' + cmd.opAttr, cmd.param);
+            if(cmd.opName == "set"){
+                if(cmd.opTarget == "node")
+                    this.changeModelNodeAttribute(cmd.opAttr,cmd.elId, cmd.param, null, true); //user is null to enable updating in the editor
+                else if(cmd.opTarget == "edge")
+                    this.changeModelEdgeAttribute(cmd.opAttr,cmd.elId, cmd.param, null, true);
+
+                else if(cmd.opTarget == "node group") {
+                    for (var i = 0; i < cmd.elId.length; i++)
+                        this.changeModelNodeAttribute(cmd.opAttr,cmd.elId[i], cmd.param, null, true); //assuming that all the changed attribute values are the same
+                }
+                else if(cmd.opTarget == "edge group"){
+                    for(var i = 0; i < cmd.elId.length; i++)
+                        this.changeModelEdgeAttribute(cmd.opAttr,cmd.elId[i], cmd.param, null, true);//assuming that all the changed attribute values are the same
+
+                }
+
+            }
+            else if(cmd.opName == "add"){
+                if(cmd.opTarget == "node")
+                    this.restoreModelNodeGlobal(cmd.elId, cmd.param, null, true);
+                else if(cmd.opTarget == "edge")
+                    this.restoreModelEdgeGlobal(cmd.elId, cmd.param, null, true);
+            }
+            else if(cmd.opName == "delete"){
+                if(cmd.opTarget == "node")
+                    this.deleteModelNode(cmd.elId, null, true);
+                else if(cmd.opTarget == "edge")
+                    this.deleteModelEdge(cmd.elId, null, true);
+
+                else if(cmd.opTarget == "node group"){
+                    for(var i = 0; i < cmd.elId.length; i++)
+                        this.deleteModelNode(cmd.elId, null, true);
+                }
+                else if(cmd.opTarget == "edge group"){
+                    for(var i = 0; i < cmd.elId.length; i++)
+                        this.deleteModelEdge(cmd.elId, null, true);
+
+                }
+            }
 
             undoInd = undoInd <  model.get('_page.doc.history').length -1 ? undoInd + 1  : model.get('_page.doc.history').length -1;
 
@@ -181,6 +218,17 @@ module.exports =  function(model, docId, userId, userName) {
                     this.changeModelNodeAttribute(cmd.opAttr,cmd.elId, cmd.prevParam, null, true); //user is null to enable updating in the editor
                 else if(cmd.opTarget == "edge")
                     this.changeModelEdgeAttribute(cmd.opAttr,cmd.elId, cmd.prevParam, null, true);
+
+                else if(cmd.opTarget == "node group") {
+                    for (var i = 0; i < cmd.elId.length; i++)
+                        this.changeModelNodeAttribute(cmd.opAttr,cmd.elId[i], cmd.prevParam, null, true); //assuming that all the changed attribute values are the same
+                }
+                else if(cmd.opTarget == "edge group"){
+                    for(var i = 0; i < cmd.elId.length; i++)
+                        this.changeModelEdgeAttribute(cmd.opAttr,cmd.elId[i], cmd.prevParam, null, true);//assuming that all the changed attribute values are the same
+
+                }
+
             }
             else if(cmd.opName == "add"){
                 if(cmd.opTarget == "node")

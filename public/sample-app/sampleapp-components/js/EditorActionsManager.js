@@ -522,10 +522,17 @@ module.exports.hideSelected = function(param) {
     if (param.firstTime) {
         var nodesToHide = sbgnFiltering.hideSelected(param.selectedEles); //funda changed
         if(param.sync) {//first hide on the other side to make sure elements don't get unselected
+
+            var nodeList = [];
             nodesToHide.forEach(function(el){
-                module.exports.modelManager.changeModelNodeAttribute('visibilityStatus', el.id(), "invisible", "me");
+                nodeList.push(el.id());
             });
-            //module.exports.updateServerGraph();
+            module.exports.modelManager.updateHistory('set', 'node group', nodeList, "visibilityStatus", "invisible", "visible");
+
+            nodesToHide.forEach(function(el){
+                module.exports.modelManager.changeModelNodeAttribute('visibilityStatus', el.id(), "invisible", "me", true);
+            });
+
         }
 
 
@@ -534,12 +541,25 @@ module.exports.hideSelected = function(param) {
 
         sbgnFiltering.showJustGivenNodes(param.nodesToShow);
         if(param.sync){
+
+            var nodeList = [];
             param.selectedEles.forEach(function(el){
-                module.exports.modelManager.changeModelNodeAttribute('visibilityStatus', el.id(), "invisible", "me");
+                nodeList.push(el.id());
+            });
+            module.exports.modelManager.updateHistory('set', 'node group', nodeList, "visibilityStatus", "invisible", "visible");
+
+            param.selectedEles.forEach(function(el){
+                module.exports.modelManager.changeModelNodeAttribute('visibilityStatus', el.id(), "invisible", "me", true);
             });
 
+            var nodeList = [];
             param.nodesToShow.forEach(function(el){
-                module.exports.modelManager.changeModelNodeAttribute('visibilityStatus', el.id(), "visible", "me");
+                nodeList.push(el.id());
+            });
+            module.exports.modelManager.updateHistory('set', 'node group', nodeList, "visibilityStatus", "visible", "invisible");
+
+            param.nodesToShow.forEach(function(el){
+                module.exports.modelManager.changeModelNodeAttribute('visibilityStatus', el.id(), "visible", "me", true);
             });
             //module.exports.updateServerGraph();
         }
@@ -566,13 +586,25 @@ module.exports.showSelected = function(param) {
         var nodesToShow = sbgnFiltering.showSelected(param.selectedEles); //funda changed
 
         if(param.sync){
+            var nodeList = [];
             nodesToShow.forEach(function(el){
-                module.exports.modelManager.changeModelNodeAttribute('visibilityStatus', el.id(), "visible", "me");
+                nodeList.push(el.id());
+            });
+            module.exports.modelManager.updateHistory('set', 'node group', nodeList, "visibilityStatus", "visible", "invisible");
+            nodesToShow.forEach(function(el){
+                module.exports.modelManager.changeModelNodeAttribute('visibilityStatus', el.id(), "visible", "me", true);
             });
 
             var nodesToHide = cy.nodes().not(nodesToShow);
+
+            nodeList = [];
             nodesToHide.forEach(function(el){
-                module.exports.modelManager.changeModelNodeAttribute('visibilityStatus', el.id(), "invisible", "me");
+                nodeList.push(el.id());
+            });
+            module.exports.modelManager.updateHistory('set', 'node group', nodeList, "visibilityStatus", "invisible", "visible");
+
+            nodesToHide.forEach(function(el){
+                module.exports.modelManager.changeModelNodeAttribute('visibilityStatus', el.id(), "invisible", "me", true);
             });
             //module.exports.updateServerGraph();
         }
@@ -583,13 +615,27 @@ module.exports.showSelected = function(param) {
         sbgnFiltering.showJustGivenNodes(param.nodesToShow);
 
         if(param.sync){
+
+            var nodeList = [];
+            nodesToShow.forEach(function(el){
+                nodeList.push(el.id());
+            });
+            module.exports.modelManager.updateHistory('set', 'node group', nodeList, "visibilityStatus", "visible", "invisible");
+
             param.nodesToShow.forEach(function(el){
-                module.exports.modelManager.changeModelNodeAttribute('visibilityStatus', el.id(), "visible", "me");
+                module.exports.modelManager.changeModelNodeAttribute('visibilityStatus', el.id(), "visible", "me", true);
             });
 
             var nodesToHide = cy.nodes().not(param.nodesToShow);
+
+            var nodeList = [];
             nodesToHide.forEach(function(el){
-                module.exports.modelManager.changeModelNodeAttribute('visibilityStatus', el.id(), "invisible", "me");
+                nodeList.push(el.id());
+            });
+            module.exports.modelManager.updateHistory('set', 'node group', nodeList, "visibilityStatus", "invisible", "visible");
+
+            nodesToHide.forEach(function(el){
+                module.exports.modelManager.changeModelNodeAttribute('visibilityStatus', el.id(), "invisible", "me", true);
             });
 
             //module.exports.updateServerGraph();
@@ -606,8 +652,15 @@ module.exports.showAll = function(param) {
     var currentNodes = cy.nodes(":visible");
     sbgnFiltering.showAll();
     if(param.sync){
+        var nodeList = [];
         cy.nodes().forEach(function(el){
-            module.exports.modelManager.changeModelNodeAttribute('visibilityStatus', el.id(), "visible", "me");
+            nodeList.push(el.id());
+        });
+        module.exports.modelManager.updateHistory('set', 'node group', nodeList, "visibilityStatus", "visible", "invisible");
+
+
+        cy.nodes().forEach(function(el){
+            module.exports.modelManager.changeModelNodeAttribute('visibilityStatus', el.id(), "visible", "me", true);
         });
         //module.exports.updateServerGraph();
     }
@@ -662,14 +715,11 @@ module.exports.highlightSelected = function(param) {
         if (param.highlightNeighboursofSelected) {
 
             elesToHighlight = sbgnFiltering.highlightNeighborsOfSelected(param.selectedEles);
-            //if( param.sync) //tell other users to highlight neighbors
-             //   module.exports.modelManager.highlight(1, "me");
+
 
         }
         else if (param.highlightProcessesOfSelected) {
             elesToHighlight = sbgnFiltering.highlightProcessesOfSelected(param.selectedEles);
-//            if( param.sync) //tell other users to highlight processes
-  //              module.exports.modelManager.highlight(2, "me");
         }
         elesToHighlight = elesToHighlight.not(alreadyHighlighted);
         elesToNotHighlight = cy.elements().not(elesToHighlight);
@@ -682,8 +732,6 @@ module.exports.highlightSelected = function(param) {
         sbgnFiltering.highlightElements(elesToHighlight.nodes());
         sbgnFiltering.highlightElements(elesToHighlight.edges());
 
-     //   if(param.sync ) //tell other users to highlight neighbors
-       //      module.exports.modelManager.highlight(1, "me");
 
         //If there are some elements to not highlight handle them
         if (param.elesToNotHighlight != null) {
@@ -700,21 +748,48 @@ module.exports.highlightSelected = function(param) {
 
     if(param.sync){
         if(elesToHighlight != null) {
+            var nodeList = [];
+            var edgeList =[];
+
+
+            elesToHighlight.forEach(function(el){
+                if(el.isNode())
+                    nodeList.push(el.id());
+                else
+                    edgeList.push(el.id());
+            });
+
+            module.exports.modelManager.updateHistory('set', 'node group', nodeList, "highlightStatus", "highlighted", "notHighlighted");
+            module.exports.modelManager.updateHistory('set', 'edge group', edgeList, "highlightStatus", "highlighted", "notHighlighted");
+
             elesToHighlight.forEach(function (el) {
                 if (el.isNode())
-                    module.exports.modelManager.changeModelNodeAttribute('highlightStatus', el.id(), "highlighted", "me");
+                    module.exports.modelManager.changeModelNodeAttribute('highlightStatus', el.id(), "highlighted", "me", true); //don't update individual highlight states
                 else
-                    module.exports.modelManager.changeModelEdgeAttribute('highlightStatus', el.id(), "highlighted", "me");
+                    module.exports.modelManager.changeModelEdgeAttribute('highlightStatus', el.id(), "highlighted", "me", true);
             });
 
         }
 
         if(elesToNotHighlight != null){
+
+            var nodeList = [];
+            var edgeList =[];
+
             elesToNotHighlight.forEach(function(el){
                 if(el.isNode())
-                    module.exports.modelManager.changeModelNodeAttribute('highlightStatus', el.id(), "notHighlighted", "me" );
+                    nodeList.push(el.id());
                 else
-                    module.exports.modelManager.changeModelEdgeAttribute('highlightStatus', el.id(), "notHighlighted", "me" );
+                    edgeList.push(el.id());
+            });
+
+            module.exports.modelManager.updateHistory('set', 'node group', nodeList, "highlightStatus", "notHighlighted", "highlighted");
+            module.exports.modelManager.updateHistory('set', 'edge group', edgeList, "highlightStatus", "notHighlighted", "highlighted");
+            elesToNotHighlight.forEach(function(el){
+                if(el.isNode())
+                    module.exports.modelManager.changeModelNodeAttribute('highlightStatus', el.id(), "notHighlighted", "me", true );
+                else
+                    module.exports.modelManager.changeModelEdgeAttribute('highlightStatus', el.id(), "notHighlighted", "me" , true);
             });
         }
 
@@ -743,6 +818,18 @@ module.exports.notHighlightEles = function(param) {
 
         if(param.sync){
             if(elesToNotHighlight != null) {
+                var nodeList = [];
+                var edgeList =[];
+
+                elesToNotHighlight.forEach(function(el){
+                    if(el.isNode())
+                        nodeList.push(el.id());
+                    else
+                        edgeList.push(el.id());
+                });
+
+                module.exports.modelManager.updateHistory('set', 'node group', nodeList, "highlightStatus", "neutral", "notHighlighted");
+                module.exports.modelManager.updateHistory('set', 'edge group', edgeList, "highlightStatus", "neutral", "notHighlighted");
                 elesToNotHighlight.forEach(function (el) {
                     if (el.isNode())
                         module.exports.modelManager.changeModelNodeAttribute('highlightStatus', el.id(), "neutral", "me");
@@ -751,6 +838,19 @@ module.exports.notHighlightEles = function(param) {
                 });
             }
             if(elesToHighlight != null) {
+                var nodeList = [];
+                var edgeList =[];
+
+                elesToNotHighlight.forEach(function(el){
+                    if(el.isNode())
+                        nodeList.push(el.id());
+                    else
+                        edgeList.push(el.id());
+                });
+
+                module.exports.modelManager.updateHistory('set', 'node group', nodeList, "highlightStatus", "neutral", "highlighted");
+                module.exports.modelManager.updateHistory('set', 'edge group', edgeList, "highlightStatus", "neutral", "highlighted");
+
                 elesToHighlight.forEach(function (el) {
                     if (el.isNode())
                         module.exports.modelManager.changeModelNodeAttribute('highlightStatus', el.id(), "highlighted", "me");
@@ -1282,28 +1382,6 @@ module.exports.changeVisibilityOrHighlightStatus = function(param){
     }
 
 }
-
-//module.exports.changeNodeLabel = function(param){
-//    var result = {
-//    };
-//    var ele = param.ele;
-//    result.ele = ele;
-//    result.sbgnlabel = ele._private.data.sbgnlabel;
-//
-//    ele._private.data.sbgnlabel = param.sbgnlabel;
-//
-//    ele.removeClass('changeContent');
-//    ele.addClass('changeContent');
-//
-//    if (cy.elements(":selected").length == 1 && cy.elements(":selected")[0] == param.ele) {
-//        require('./sample-app-cytoscape-sbgn.js').handleSBGNInspector();
-//    }
-//    if(param.sync) {
-//
-//        module.exports.modelManager.changeModelNodeAttribute(param.modelDataName, param.ele.id(), param.data, "me");
-//    }
-//    return result;
-//}
 
 
 module.exports.changeStyleData = function( param) {
