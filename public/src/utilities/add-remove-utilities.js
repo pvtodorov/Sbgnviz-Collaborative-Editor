@@ -87,7 +87,9 @@ module.exports = function(){
                     id: (source + "-" + target + "-" + sbgnclass),
                     // portsource: source,
                     //  porttarget: target,
-                    sbgnclass: sbgnclass
+                    sbgnclass: sbgnclass,
+                   
+
                 },
                 css: css
             });

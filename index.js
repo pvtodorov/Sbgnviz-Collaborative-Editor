@@ -265,7 +265,6 @@ function updateServerGraph(){
      setTimeout(function(){
          menu.updateServerGraph();
      },0);
-
 }
 
 app.proto.init = function (model) {
@@ -273,8 +272,9 @@ app.proto.init = function (model) {
 
 
 
-    model.on('all', '_page.doc.cy.**', function(id){
-        updateServerGraph();
+    model.on('all', '_page.doc.cy.**', function(id, val, op, prev){
+        if(id.indexOf("highlightColor")< 0) //don't update for highlight operations
+            updateServerGraph();
     });
 
     model.on('all', '_page.doc.cy.nodes.*', function(id, op, val, prev, passed){
@@ -334,16 +334,49 @@ app.proto.init = function (model) {
         }
 
     });
+
+    model.on('all', '_page.doc.cy.nodes.*.id', function(id, op, idName, prev, passed){ //this property must be something that is only changed during insertion
+
+
+        if(docReady && passed.user == null) {
+
+
+             var pos = model.get('_page.doc.cy.nodes.'+ id + '.position');
+             var sbgnlabel = model.get('_page.doc.cy.nodes.'+ id + '.sbgnlabel');
+            var sbgnclass = model.get('_page.doc.cy.nodes.'+ id + '.sbgnclass');
+            //
+             menu.addNode(id, pos.x, pos.y, sbgnclass, sbgnlabel,false);
+            //
+
+
+        }
+
+    });
+
+    model.on('all', '_page.doc.cy.edges.*.id', function(id,op, idName, prev, passed){//this property must be something that is only changed during insertion
+
+        if(docReady && passed.user == null ){
+            //check if edge id exists in the current inspector graph
+            var source = model.get('_page.doc.cy.edges.'+ id + '.source');
+            var target = model.get('_page.doc.cy.edges.'+ id + '.target');
+            var sbgnclass = model.get('_page.doc.cy.edges.'+ id + '.sbgnclass');
+
+            menu.addEdge(id, source, target, sbgnclass, false);
+            //updateServerGraph();
+        }
+
+    });
     model.on('all', '_page.doc.cy.nodes.*.sbgnclass', function(id, op, sbgnclass, prev, passed){ //this property must be something that is only changed during insertion
 
 
         if(docReady && passed.user == null) {
 
-            var pos = model.get('_page.doc.cy.nodes.'+ id + '.position');
-            var sbgnlabel = model.get('_page.doc.cy.nodes.'+ id + '.sbgnlabel');
-
-            menu.addNode(id, pos.x, pos.y, sbgnclass, sbgnlabel,false);
-
+            menu.changeElementProperty(id, 'sbgnclass', 'sbgnclass', sbgnclass, 'data', false);
+            // var pos = model.get('_page.doc.cy.nodes.'+ id + '.position');
+            // var sbgnlabel = model.get('_page.doc.cy.nodes.'+ id + '.sbgnlabel');
+            //
+            // menu.addNode(id, pos.x, pos.y, sbgnclass, sbgnlabel,false);
+            //
 
 
         }
@@ -355,11 +388,12 @@ app.proto.init = function (model) {
     model.on('all', '_page.doc.cy.edges.*.sbgnclass', function(id,op, sbgnclass, prev, passed){//this property must be something that is only changed during insertion
 
         if(docReady && passed.user == null ){
+            menu.changeElementProperty(id, 'sbgnclass', 'sbgnclass', sbgnclass, 'data', false);
             //check if edge id exists in the current inspector graph
-            var source = model.get('_page.doc.cy.edges.'+ id + '.source');
-            var target = model.get('_page.doc.cy.edges.'+ id + '.target');
-
-            menu.addEdge(id, source, target, sbgnclass, false);
+            // var source = model.get('_page.doc.cy.edges.'+ id + '.source');
+            // var target = model.get('_page.doc.cy.edges.'+ id + '.target');
+            //
+            // menu.addEdge(id, source, target, sbgnclass, false);
              //updateServerGraph();
         }
 
@@ -553,7 +587,7 @@ app.proto.init = function (model) {
     model.on('all', '_page.doc.cy.edges.*.width', function(id,  op, width,prev, passed){
         if(docReady && passed.user == null) {
             menu.changeElementProperty(id, 'width', 'width', width, 'css', false);
-            updateServerGraph();
+            //updateServerGraph();
         }
     });
 
