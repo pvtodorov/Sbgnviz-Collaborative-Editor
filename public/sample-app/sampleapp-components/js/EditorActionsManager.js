@@ -14,17 +14,17 @@ var sbgnFiltering = require('../../../src/utilities/sbgn-filtering.js')();
 
 var sbgnmlToJson = require('../../../src/utilities/sbgnml-to-json-converter.js')();
 
-module.exports.updateServerGraph = function(visibleNodes, visibleEdges){
-    var sbgnmlText = jsonToSbgnml.createSbgnml(visibleNodes, visibleEdges);
-
-   // var DOMParser = require('xmldom').DOMParser;
-   // var parser = new DOMParser();
-   // var doc = parser.parseFromString(sbgnmlText, 'text/xml');
-
-    var cytoscapeJsGraph = sbgnmlToJson.convert(sbgnmlText);
-
-    module.exports.modelManager.updateServerGraph(cytoscapeJsGraph);
-};
+// module.exports.updateServerGraph = function(visibleNodes, visibleEdges){
+//     var sbgnmlText = jsonToSbgnml.createSbgnml(visibleNodes, visibleEdges);
+//
+//    // var DOMParser = require('xmldom').DOMParser;
+//    // var parser = new DOMParser();
+//    // var doc = parser.parseFromString(sbgnmlText, 'text/xml');
+//
+//     var cytoscapeJsGraph = sbgnmlToJson.convert(sbgnmlText);
+//
+//     module.exports.modelManager.updateServerGraph(cytoscapeJsGraph);
+// };
 
 module.exports.selectNode = function (node) {
 
@@ -62,6 +62,7 @@ module.exports.addNode = function(param) {
 
         if(param.sync){
             module.exports.modelManager.addModelNode(result.id(),  param, "me");
+            module.exports.modelManager.initModelNode(result);
 
             //module.exports.updateServerGraph();
 
@@ -154,7 +155,7 @@ module.exports.addEdge = function(param)
 
     if(param.sync){
         module.exports.modelManager.addModelEdge(result.id(), param, "me");
-        //module.exports.updateServerGraph();
+        module.exports.modelManager.initModelEdge(result);
 
     }
     return result;
@@ -1055,6 +1056,7 @@ module.exports.createCompoundForSelectedNodes = function(param) {
 
     ////Notify other clients
     module.exports.modelManager.addModelNode(newCompound.id(), {x: newCompound._private.position.x, y: newCompound._private.position.y, sbgnclass: param.compoundType}, "me");
+    module.exports.modelManager.initModelNode(newCompound,"me");
     //
     //
     module.exports.modelManager.changeModelNodeAttribute('width', newCompoundId, newCompound.width(), "me");
@@ -1146,6 +1148,9 @@ module.exports.resizeNode = function(param) {
 
         module.exports.modelManager.changeModelNodeAttribute('width', ele.id(), param.width, "me");
         module.exports.modelManager.changeModelNodeAttribute('height', ele.id(), param.height, "me");
+
+
+
 
 
         //module.exports.updateServerGraph();

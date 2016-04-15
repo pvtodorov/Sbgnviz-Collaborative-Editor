@@ -88,7 +88,7 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
             }
 
             //TODO: if this is called before other client is ready, this causes problems
-              //  editorActions.modelManager.initModel(cytoscapeJsGraph, cy.nodes(), cy.edges(), "me");
+              //  editorActions.modelManager.initFromModel(cytoscapeJsGraph, cy.nodes(), cy.edges(), "me");
 
 
             cy.one('layoutstop', function(){
@@ -1026,7 +1026,7 @@ module.exports.handleSBGNInspector = function (editorActions) {
                     ele: selected,
                     data: $("#inspector-cardinality").attr("value"),
                     dataType: "sbgncardinality",
-                    modelDataName: 'cardinality',
+                    modelDataName: 'sbgncardinality',
                     sync: true
                 };
                 editorActions.manager._do(editorActions.ChangeStyleDataCommand(param));

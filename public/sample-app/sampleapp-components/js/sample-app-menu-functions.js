@@ -118,11 +118,7 @@ module.exports = function(){
           editorActions.refreshGlobalUndoRedoButtonsStatus();
         },
 
-        updateServerGraph:function (){
-
-                editorActions.updateServerGraph(cy.nodes(":visible"), cy.edges(":visible"));
-        },
-
+     
 
         loadFile: function(txtFile){
 
@@ -130,7 +126,7 @@ module.exports = function(){
          //   var jsonObj = sbgnmlToJson.convert(textToXmlObject(txtFile));
             var jsonObj = sbgnmlToJson.convert(txtFile);
 
-            editorActions.modelManager.updateServerGraph(jsonObj);
+            editorActions.modelManager.updateModelFromJson(jsonObj);
 
 
 
@@ -430,7 +426,7 @@ module.exports = function(){
             if(ind < 0){
 
 
-                var jsonObj = editorActions.modelManager.getServerGraph();
+                var jsonObj = editorActions.modelManager.getJsonFromModel();
                 sbgnContainer =  (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj,  editorActions));
                 if(syncVal)
                     editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
@@ -446,17 +442,16 @@ module.exports = function(){
                     var xmlText = new XMLSerializer().serializeToString(xmlObject);
                    
                     var jsonObj = sbgnmlToJson.convert(xmlText);
-                    
 
 
-                    editorActions.modelManager.updateServerGraph(jsonObj);
 
 
                     sbgnContainer =  (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj,  editorActions));
 
-                    if(syncVal)
-                        editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
+                    if(syncVal) {
 
+                        editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
+                    }
 
                 });
             }
@@ -470,7 +465,7 @@ module.exports = function(){
 
             editorActions.modelManager = modelManager;
 
-            var jsonObj = modelManager.getServerGraph();
+            var jsonObj = modelManager.getJsonFromModel();
 
             if (jsonObj == null) {//first time loading the graph-- load from the samples
 
@@ -478,7 +473,7 @@ module.exports = function(){
 
                 if(ind < 0){ //load a new non-sample graph
 
-                    jsonObj = editorActions.modelManager.getServerGraph();
+                    jsonObj = editorActions.modelManager.getJsonFromModel();
                     cytoscape({
                         elements: cytoscapeJsGraph,
                         headless: true,
@@ -502,7 +497,8 @@ module.exports = function(){
                         var jsonObj = sbgnmlToJson.convert(xmlText);
 
 
-                        editorActions.modelManager.updateServerGraph(jsonObj);
+
+
 
 
                         cytoscape({
@@ -516,7 +512,9 @@ module.exports = function(){
                             }
                         });
 
-                            editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
+
+
+                        editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
 
 
                     });
@@ -564,7 +562,7 @@ module.exports = function(){
 
 
 
-            var jsonObj = modelManager.getServerGraph();
+            var jsonObj = modelManager.getJsonFromModel();
 
 
 
@@ -576,6 +574,7 @@ module.exports = function(){
 
             }
             else {//load from a previously loaded graph
+
 
                 sbgnContainer = (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, editorActions));
 
@@ -930,7 +929,7 @@ module.exports = function(){
                     var jsonObj = sbgnmlToJson.convert(this.result);
 
 
-                    editorActions.modelManager.updateServerGraph(jsonObj);
+                    editorActions.modelManager.updateModelFromJson(jsonObj);
 
 
                     self.updateSample(-1, true);

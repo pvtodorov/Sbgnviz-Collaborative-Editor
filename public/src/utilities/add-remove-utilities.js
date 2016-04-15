@@ -88,6 +88,7 @@ module.exports = function(){
                     // portsource: source,
                     //  porttarget: target,
                     sbgnclass: sbgnclass,
+                    sbgncardinality: 0 //funda added
                    
 
                 },

@@ -149,8 +149,8 @@
         <input type="button" value="Delete edge" onclick=deleteEdge()>
 
         <br><br>
-        <input id = "cardinality" type = number>
-        <input type="button" value="Update edge cardinality" onclick=changeEdgeAttribute("cardinality")>
+        <input id = "sbgncardinality" type = number>
+        <input type="button" value="Update edge cardinality" onclick=changeEdgeAttribute("sbgncardinality")>
 
         <br><br>
         <input id = "widthEdge">
@@ -271,7 +271,7 @@
         $('#edgeId').change(function () {
             //update node info
             agent.getEdgeRequest($('#edgeId')[0].value, function () {
-                $('#cardinality')[0].value = agent.selectedEdge.cardinality;
+                $('#sbgncardinality')[0].value = agent.selectedEdge.sbgncardinality;
                 $('#lineColor')[0].value = agent.selectedEdge.lineColor;
                 $('#widthEdge')[0].value = agent.selectedEdge.width;
             });
