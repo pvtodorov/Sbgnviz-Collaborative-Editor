@@ -83,10 +83,8 @@ module.exports = function(){
                 data: {
                     source: source,
                     target: target,
-                    //TODO funda added
-                    id: (source + "-" + target + "-" + sbgnclass),
-                    // portsource: source,
-                    //  porttarget: target,
+                    //TODO funda added : not needed anymore
+      //          id: (source + "-" + target + "-" + sbgnclass),
                     sbgnclass: sbgnclass,
                     sbgncardinality: 0 //funda added
                    

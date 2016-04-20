@@ -995,10 +995,10 @@ module.exports =  function(model, docId, userId, userName) {
 
             edgePath.set('id', edge.id());
 
-            if (parent != null)
-                edge.data('parent', edge);
-            else
-                this.changeModelEdgeAttribute('parent', edge.id(),edge.data('parent'), user, noHistUpdate);
+            // if (parent != null)
+            //     edge.data('parent', edge);
+            // else
+            //     this.changeModelEdgeAttribute('parent', edge.id(),edge.data('parent'), user, noHistUpdate);
 
             var bendPointPositions = edgePath.get('bendPointPositions');
 

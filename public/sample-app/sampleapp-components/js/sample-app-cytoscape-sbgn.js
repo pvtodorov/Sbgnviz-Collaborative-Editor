@@ -15,7 +15,6 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
 
 
 
-
     //notifications
     var notyModel = {layout: "bottomLeft", timeout: 8000, text: "Right click on a gene to see its details!"};
 
@@ -36,6 +35,7 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
 
 
 
+ 
     var cyOptions = {
         elements: cytoscapeJsGraph,
         style: sbgnStyleSheet,
@@ -56,7 +56,6 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
 
             var edges = cy.edges();
             var nodes = cy.nodes();
-
 
             for (var i = 0; i < edges.length; i++) {
                 var edge = edges[i];
@@ -92,7 +91,6 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
 
 
             cy.one('layoutstop', function(){
-
 
 
                 cy.nodes().forEach(function(node){

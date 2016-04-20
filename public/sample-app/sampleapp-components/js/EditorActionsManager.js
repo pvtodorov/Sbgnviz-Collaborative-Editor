@@ -946,7 +946,8 @@ module.exports.changeParent = function(param) {
     var oldParentId = node._private.data.parent;
     var oldParent = node.parent()[0];
     var newParentId = param.data;
-    var newParent = cy.$(('#' + newParentId))[0];//param.newParent;
+
+    var newParent = newParentId? cy.$(('#' + newParentId))[0] : undefined;
     var nodesData = getNodesData();//param.nodesData;
     var result = {
         ele: node,

@@ -123,15 +123,16 @@ module.exports = function(){
         loadFile: function(txtFile){
 
 
+            editorActions.modelManager.deleteAll(cy.nodes(), cy.edges(), "me");
          //   var jsonObj = sbgnmlToJson.convert(textToXmlObject(txtFile));
             var jsonObj = sbgnmlToJson.convert(txtFile);
 
-            editorActions.modelManager.updateModelFromJson(jsonObj);
-
-
+            //editorActions.modelManager.updateModelFromJson(jsonObj);
 
             //sbgnContainer =  (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj,  editorActions));
 
+
+            sbgnContainer =  (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj,  editorActions));
             editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
             //this.updateSample(-1, true);
 
@@ -421,9 +422,7 @@ module.exports = function(){
         updateSample: function(ind, syncVal){
 
 
-
-            //just get a new sbgncontainer
-            if(ind < 0){
+            if(ind < 0){ //for notifying other users -- this part is called through the model
 
 
                 var jsonObj = editorActions.modelManager.getJsonFromModel();
@@ -440,7 +439,7 @@ module.exports = function(){
 
           
                     var xmlText = new XMLSerializer().serializeToString(xmlObject);
-                   
+
                     var jsonObj = sbgnmlToJson.convert(xmlText);
 
 
@@ -454,7 +453,7 @@ module.exports = function(){
                     }
 
                 });
-            }
+          }
 
 
         },
@@ -471,24 +470,24 @@ module.exports = function(){
 
                 var ind = modelManager.getSampleInd("me");
 
-                if(ind < 0){ //load a new non-sample graph
-
-                    jsonObj = editorActions.modelManager.getJsonFromModel();
-                    cytoscape({
-                        elements: cytoscapeJsGraph,
-                        headless: true,
-                        styleEnabled: true,
-
-
-                        ready: function () {
-                            cy = this;
-                        }
-                    });
-
-                        editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
-
-                }
-                else{ //load a sample
+                // if(ind < 0){ //load a new non-sample graph
+                //
+                //     jsonObj = editorActions.modelManager.getJsonFromModel();
+                //     cytoscape({
+                //         elements: cytoscapeJsGraph,
+                //         headless: true,
+                //         styleEnabled: true,
+                //
+                //
+                //         ready: function () {
+                //             cy = this;
+                //         }
+                //     });
+                //
+                //         editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
+                //
+                // }
+                //else{ //load a sample
 
                     getXMLObject(ind, function (xmlObject) {
 
@@ -518,7 +517,7 @@ module.exports = function(){
 
 
                     });
-                }
+      //          }
 
 
             }
@@ -631,6 +630,10 @@ module.exports = function(){
 
 
 
+                if(sbgnContainer)
+                    editorActions.modelManager.deleteAll(cy.nodes(), cy.edges(), "me");
+
+
                 self.updateSample(ind, true);
 
                 editorActions.modelManager.setSampleInd(ind, "me"); //let others know
@@ -645,7 +648,9 @@ module.exports = function(){
                 setFileContent("new_file.sbgnml");
 
                 var jsonObj = {nodes: [], edges: []};
+
                 editorActions.modelManager.deleteAll(cy.nodes(), cy.edges(), "me");
+                cy.remove(cy.elements());
                 sbgnContainer = new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, editorActions);
                 editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
 
@@ -920,19 +925,23 @@ module.exports = function(){
                 var file = fileInput.files[0];
 
 
+
+                //first clear everything
+                $('#new-file').trigger("click");
+
+
                 var reader = new FileReader();
 
                 reader.onload = function (e) {
 
-
-             //funda       var jsonObj = sbgnmlToJson.convert(textToXmlObject(this.result));
                     var jsonObj = sbgnmlToJson.convert(this.result);
 
+                    //get another sbgncontainer
+                    sbgnContainer =  (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj,  editorActions));
 
-                    editorActions.modelManager.updateModelFromJson(jsonObj);
 
+                    editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
 
-                    self.updateSample(-1, true);
 
                     editorActions.modelManager.setSampleInd(-1, "me"); //to notify other clients
                     // sbgnContainer =  new cyMod.SBGNContainer('#sbgn-network-container', jsonObj ,  editorActions);

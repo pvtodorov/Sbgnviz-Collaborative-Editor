@@ -306,8 +306,8 @@ module.exports = function () {
             var edgeObj = new Object();
 
             var bendPointPositions = self.getArcBendPointPositions(ele);
-            //funda    edgeObj.id = cheerio$(ele).attr('id');
-            edgeObj.id = cheerio$(ele).data('id');
+                edgeObj.id = cheerio$(ele).attr('id');
+        //funda2    edgeObj.id = cheerio$(ele).data('id');
 
             edgeObj.sbgnclass = cheerio$(ele).attr('class');
             edgeObj.bendPointPositions = bendPointPositions;
