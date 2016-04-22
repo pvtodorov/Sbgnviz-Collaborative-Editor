@@ -244,6 +244,8 @@ module.exports = function(){
 
             };
 
+
+
             var result = editorActions.addEdge(param);
 
             return result.id();
@@ -573,6 +575,7 @@ module.exports = function(){
 
             }
             else {//load from a previously loaded graph
+
 
 
                 sbgnContainer = (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, editorActions));
@@ -1063,10 +1066,11 @@ module.exports = function(){
 
 
                 //Funda unselect all nodes otherwise they don't get deleted
-                cy.elements().unselect();
+                //TODO cy.elements().unselect();
 
                 
 
+              
                 editorActions.manager._do(editorActions.RemoveElesCommand(selectedEles));
 
 

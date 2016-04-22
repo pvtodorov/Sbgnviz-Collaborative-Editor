@@ -72,26 +72,30 @@ module.exports = function(){
             return removedEles;
         },
 
-        addEdge: function (source, target, sbgnclass) {
+        addEdge: function (source, target, sbgnclass, id) {
             var defaultsMap = this.defaultsMap;
             var defaults = defaultsMap[sbgnclass];
             var css = defaults ? {
                 'width': defaults['width']
             } : {};
-            var eles = cy.add({
-                group: "edges",
+            
+            var newEdge = { group: "edges",
                 data: {
                     source: source,
                     target: target,
                     //TODO funda added : not needed anymore
-      //          id: (source + "-" + target + "-" + sbgnclass),
+                    //          id: (source + "-" + target + "-" + sbgnclass),
                     sbgnclass: sbgnclass,
                     sbgncardinality: 0 //funda added
-                   
+
 
                 },
                 css: css
-            });
+            };
+
+            if(id != null) newEdge.data.id = id; //FUNDA: for restoring edges
+
+            var eles = cy.add(newEdge);
 
 
             var newEdge = eles[eles.length - 1];
@@ -104,20 +108,22 @@ module.exports = function(){
             newEdge.addClass('changeLineColor');
             return newEdge;
         },
+
+
         removeEdges: function (edges) {
             return edges.remove();
         },
         restoreEles: function (eles) {
-            cy.elements().unselect();
+      //funda      cy.elements().unselect();
             eles.restore();
             return eles;
         },
         removeElesSimply: function (eles) {
-            cy.elements().unselect();
+        //funda    cy.elements().unselect();
             return eles.remove();
         },
         removeEles: function (eles) {
-            cy.elements().unselect();
+          //funda  cy.elements().unselect();
             var edges = eles.edges();
             var nodes = eles.nodes();
             var removedEles = this.removeEdges(edges);

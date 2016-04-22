@@ -54,10 +54,8 @@ module.exports.addNode = function(param) {
     var result;
     if (param.firstTime) {
 
-        if(param.id!= null)
-            result = addRemoveUtilities.addNode(param.x, param.y, param.sbgnclass, param.id);
-        else
-            result = addRemoveUtilities.addNode(param.x, param.y, param.sbgnclass);
+
+       result = addRemoveUtilities.addNode(param.x, param.y, param.sbgnclass, param.id);
 
 
         if(param.sync){
@@ -86,7 +84,7 @@ module.exports.removeEles =function(elesToBeRemoved) {
 
 
     //removeEles operation computes edges to be removed
-    
+
     var undoEles = addRemoveUtilities.removeEles(elesToBeRemoved);
 
     if(undoEles.edges().length > 0)
@@ -112,6 +110,7 @@ module.exports.restoreEles = function(eles) {
         module.exports.modelManager.restoreModelNodes(eles.nodes(), "me");
     if(eles.edges().length > 0)
         module.exports.modelManager.restoreModelEdges(eles.edges(), "me");
+
 
 
     return result;
@@ -146,10 +145,11 @@ module.exports.addEdge = function(param)
 {
     var result;
     if (param.firstTime) {
-        //var newEdge = param.newEdge;
-        result = addRemoveUtilities.addEdge(param.source, param.target, param.sbgnclass);
+            result = addRemoveUtilities.addEdge(param.source, param.target, param.sbgnclass, param.id);
     }
     else {
+        
+        
         result = addRemoveUtilities.restoreEles(param);
     }
 
@@ -1332,18 +1332,19 @@ module.exports.changeChildren = function(param){
 
     var elArr = [];
 
-    param.data.forEach(function (nodeId) {
-        elArr.push(cy.getElementById(nodeId));
-    });
+    if(param.data) { //if it has children
+        param.data.forEach(function (nodeId) {
+            elArr.push(cy.getElementById(nodeId));
+        });
 
-    ele._private.children = elArr;
-    refreshPaddings();
+        ele._private.children = elArr;
+        refreshPaddings();
 
-    if(param.sync){
-        module.exports.modelManager.changeModelNodeAttribute(param.modelDataName, param.ele.id(), elArr, "me");
-        //module.exports.updateServerGraph();
+        if (param.sync) {
+            module.exports.modelManager.changeModelNodeAttribute(param.modelDataName, param.ele.id(), elArr, "me");
+            //module.exports.updateServerGraph();
+        }
     }
-
     return result;
 }
 

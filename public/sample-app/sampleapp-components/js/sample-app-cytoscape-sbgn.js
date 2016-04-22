@@ -35,7 +35,7 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
 
 
 
- 
+
     var cyOptions = {
         elements: cytoscapeJsGraph,
         style: sbgnStyleSheet,
@@ -357,7 +357,7 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
                 editorActions.manager._do(editorActions.SelectNodeCommand(this));
 
             });
-            cy.on('unselect', 'node', function() {
+            cy.on('unselect', 'node', function() { //causes sync problems in delete op
 
                 editorActions.manager._do(editorActions.UnselectNodeCommand(this));
 
