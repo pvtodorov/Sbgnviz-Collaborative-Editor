@@ -87,10 +87,11 @@ module.exports.removeEles =function(elesToBeRemoved) {
 
     var undoEles = addRemoveUtilities.removeEles(elesToBeRemoved);
 
-    if(undoEles.edges().length > 0)
-        module.exports.modelManager.deleteModelEdges(undoEles.edges(), "me"); //edges need to be deleted first
-    if(undoEles.nodes().length > 0)
-        module.exports.modelManager.deleteModelNodes(undoEles.nodes(), "me");
+    module.exports.modelManager.deleteModelElements(undoEles, "me"); //edges need to be deleted first
+    // if(undoEles.edges().length > 0)
+    //     module.exports.modelManager.deleteModelEdges(undoEles.edges(), "me"); //edges need to be deleted first
+    // if(undoEles.nodes().length > 0)
+    //     module.exports.modelManager.deleteModelNodes(undoEles.nodes(), "me");
 
 
     //module.exports.updateServerGraph();
@@ -106,10 +107,13 @@ module.exports.restoreEles = function(eles) {
 
     //we need to restore nodes first, otherwise edges without sources or targets cause error
 
-    if(eles.nodes().length > 0)
-        module.exports.modelManager.restoreModelNodes(eles.nodes(), "me");
-    if(eles.edges().length > 0)
-        module.exports.modelManager.restoreModelEdges(eles.edges(), "me");
+
+    module.exports.modelManager.restoreModelElements(eles, "me");
+    //
+    // if(eles.nodes().length > 0)
+    //     module.exports.modelManager.restoreModelNodes(eles.nodes(), "me");
+    // if(eles.edges().length > 0)
+    //     module.exports.modelManager.restoreModelEdges(eles.edges(), "me");
 
 
 
@@ -119,10 +123,11 @@ module.exports.deleteSelected = function(param) {
 
 
     if(param.sync){
-        if(param.eles.edges().length > 0)
-            module.exports.modelManager.deleteModelEdges(param.eles.edges(), "me"); //first delete edges
-        if(param.eles.nodes().length > 0)
-            module.exports.modelManager.deleteModelNodes(param.eles.nodes(), "me");
+        module.exports.modelManager.deleteModelElements(param.eles, "me");
+        // if(param.eles.edges().length > 0)
+        //     module.exports.modelManager.deleteModelEdges(param.eles.edges(), "me"); //first delete edges
+        // if(param.eles.nodes().length > 0)
+        //     module.exports.modelManager.deleteModelNodes(param.eles.nodes(), "me");
 
     }
     var undoEles = addRemoveUtilities.removeElesSimply(param.eles);
@@ -535,8 +540,6 @@ module.exports.hideSelected = function(param) {
             });
 
         }
-
-
     }
     else {
 

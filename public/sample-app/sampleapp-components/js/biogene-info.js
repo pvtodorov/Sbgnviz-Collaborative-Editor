@@ -26,6 +26,7 @@ module.exports = function( model){
         render: function() {
             // pass variables in using Underscore.js template
             var variables = {
+                geneSummary: model.geneSummary,
                 geneDescription: model.geneDescription,
                 geneAliases: this.parseDelimitedInfo(model.geneAliases, ":", ",", null),
                 geneDesignations: this.parseDelimitedInfo(model.geneDesignations, ":", ",", null),
@@ -33,12 +34,12 @@ module.exports = function( model){
                 geneMim: model.geneMim,
                 geneId: model.geneId,
                 geneUniprotId: this.extractFirstUniprotId(model.geneUniprotMapping),
-                geneUniprotLinks: this.generateUniprotLinks(model.geneUniprotMapping),
-                geneSummary: model.geneSummary
+                geneUniprotLinks: this.generateUniprotLinks(model.geneUniprotMapping)
+
             };
 
 
-            // compile the template using underscoret
+            // compile the template using underscore
             var template = _.template( $("#biogene-template").html(), variables);
 
 

@@ -351,6 +351,8 @@ module.exports = function(){
             if(el)
                 el.css('background-color', color);
 
+            
+
         },
         //propName and modelDataName can be different: propName: name in cytoscape, modelDataName: name in nodejs model
         //proptype is either data or css
@@ -1409,12 +1411,12 @@ module.exports = function(){
                 }
             });
 
-            $("#undo-icon").click(function (e) {
-                $("#undo-last-action").trigger('click');
+            $("#undo-icon").click(function (e) { //funda changed to global
+                $("#undo-last-action-global").trigger('click');
             });
 
-            $("#redo-icon").click(function (e) {
-                $("#redo-last-action").trigger('click');
+            $("#redo-icon").click(function (e) { //funda changed to global
+                $("#redo-last-action-global").trigger('click');
             });
 
             $("#save-as-png").click(function (evt) {

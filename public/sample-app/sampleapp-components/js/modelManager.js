@@ -4,28 +4,17 @@
  *	Author: Funda Durupinar Babur<f.durupinar@gmail.com>
  */
 
-function coordinateRound(coordinate, decimals) {
-
-    var newC = {'x': preciseRound(coordinate.x, decimals),'y': preciseRound(coordinate.y, decimals)};
-    return newC;
-}
-
-function preciseRound(num, decimals) {
-    var t=Math.pow(10, decimals);
-    return Number((Math.round((num * t) + (decimals>0?1:0)*(Math.sign(num) * (10 / Math.pow(100, decimals)))) / t).toFixed(decimals));
-}
 
 module.exports =  function(model, docId, userId, userName) {
 
-
-
     var user = model.at('users.' + userId);
-
 
 
     model.ref('_page.doc', 'documents.' + docId);
 
     return{
+
+       
 
         getModel: function(){
             return model;
@@ -34,7 +23,7 @@ module.exports =  function(model, docId, userId, userName) {
         addImage: function(data, user , noHistUpdate){
             model.pass({user:user}).push('_page.doc.images', data);
             if(!noHistUpdate)
-                this.updateHistory('add', 'image', null, null, data.filePath);
+                this.updateHistory({opName:'add', opTarget:'image', opAttr: data.filePath});
         },
 
         setName: function(userName){
@@ -57,13 +46,13 @@ module.exports =  function(model, docId, userId, userName) {
             model.set('_page.doc.layoutProperties', currentLayoutProperties); //synclayout
 
             if(!noHistUpdate)
-                this.updateHistory('set','layout', null, null, JSON.stringify(currentLayoutProperties));
+                this.updateHistory({opName:'set',opTarget:'layout', opAttr: JSON.stringify(currentLayoutProperties)});
             return currentLayoutProperties;
         },
         setLayoutProperties: function(layoutProperties, noHistUpdate){
             model.set('_page.doc.layoutProperties', layoutProperties); //synclayout
             if(!noHistUpdate)
-                this.updateHistory('set', 'layout', null, null, JSON.stringify(layoutProperties));
+                this.updateHistory({opName:'set', opTarget:'layout', opAttr: JSON.stringify(layoutProperties)});
         },
 
 
@@ -76,9 +65,9 @@ module.exports =  function(model, docId, userId, userName) {
 
             if(!noHistUpdate) {
                 if (ind == -1)
-                    this.updateHistory('load', 'model');
+                    this.updateHistory({opName:'load', opTarget:'model'});
                 else
-                    this.updateHistory('open', 'sample', ind);
+                    this.updateHistory({opName:'open', opTarget: 'sample', elId: ind});
             }
             return ind;
 
@@ -88,31 +77,23 @@ module.exports =  function(model, docId, userId, userName) {
 
             if(!noHistUpdate) {
                 if (ind == -1)
-                    this.updateHistory('load', 'model');
+                    this.updateHistory({opName:'load', opTarget:'model'});
                 else
-                    this.updateHistory('open', 'sample', ind);
+                    this.updateHistory({opName:'open', opTarget: 'sample', elId: ind});
             }
         },
 
-        // opNAme: set, load, open, add, select, unselect
-        // opTarget: node, edge, model, sample
-        // opAttr: highlightColor, lineColor, borderColor etc.
-        updateHistory: function(opName, opTarget,  elId, opAttr,param, prevParam){
-            var command = {userName: userName, date: new Date, opName: opName, opTarget: opTarget, opAttr: opAttr, elId: elId, param: param, prevParam: prevParam};
-            // if(param != "") {
-            //
-            //     if (param == Number(param)) {
-            //         param = preciseRound(param, 3);
-            //     }
-            //     else {
-            //         for (var att in param) {
-            //             if (param[att] === Number(param[att]))
-            //                 param[att] = preciseRound(param[att], 3);
-            //         }
-            //     }
-            // }
-            //
-            // command.param = param;
+        /***
+         *
+         * @param cmd  {opName, opTarget,  elType, elId, opAttr,param, prevParam}
+         * opName: set, load, open, add, select, unselect
+         * opTarget: element, element group,  model, sample,
+         * elType: node, edge
+         * opAttr: highlightColor, lineColor, borderColor etc.
+         */
+
+        updateHistory: function(cmd){
+            var command = {userName: userName, date: new Date, opName: cmd.opName, opTarget: cmd.opTarget, elType: cmd.elType, opAttr: cmd.opAttr, elId: cmd.elId, param: cmd.param, prevParam: cmd.prevParam};
 
 
             var ind = model.push('_page.doc.history',command) - 1;
@@ -131,6 +112,7 @@ module.exports =  function(model, docId, userId, userName) {
             var cmd =  model.get('_page.doc.history.' + undoIndex);
 
             var cmdStr = cmd.opName + " " + cmd.opTarget;
+
             if(cmd.opAttr != null)
                 cmdStr += " " + cmd.opAttr;
             if(cmd.elId != null)
@@ -159,48 +141,109 @@ module.exports =  function(model, docId, userId, userName) {
             return(model.get('_page.doc.undoIndex') + 1 < model.get('_page.doc.history').length)
         },
 
+        undoCommand: function(){
+            var undoInd = model.get('_page.doc.undoIndex');
+            var cmd = model.get('_page.doc.history.' + undoInd); // cmd: opName, opTarget, opAttr, elId, param
+
+            if(cmd.opName == "set"){
+                if(cmd.opTarget == "element" && cmd.elType == "node")
+                    this.changeModelNodeAttribute(cmd.opAttr,cmd.elId, cmd.prevParam, null); //user is null to enable updating in the editor
+                else if(cmd.opTarget == "element" && cmd.elType == "edge")
+                    this.changeModelEdgeAttribute(cmd.opAttr,cmd.elId, cmd.prevParam, null);
+
+                else if(cmd.opTarget == "element group") {
+                    for (var i = 0; i < cmd.elId.length; i++) {
+                        if(cmd.elType[i] == "node")
+                            this.changeModelNodeAttribute(cmd.opAttr, cmd.elId[i], cmd.prevParam[i], null);
+                        else
+                            this.changeModelEdgeAttribute(cmd.opAttr,cmd.elId[i], cmd.prevParam[i], null);
+                    }
+                }
+
+
+            }
+            else if(cmd.opName == "add"){
+                if(cmd.opTarget == "element" && cmd.elType == "node")
+                    this.deleteModelNode(cmd.elId, null);
+                else if(cmd.opTarget == "element" && cmd.elType == "edge")
+                    this.deleteModelEdge(cmd.elId, null);
+            }
+            else if(cmd.opName == "delete"){
+                if(cmd.opTarget == "element")
+                    this.restoreModelElementGlobal(cmd.elType, cmd.elId, cmd.prevParam, null);
+                else if(cmd.opTarget == "element group"){
+                    for (var i = 0; i < cmd.elId.length; i++) { //restore nodes first
+                        if (cmd.elType[i] == "node")
+                            this.restoreModelElementGlobal(cmd.elType[i], cmd.elId[i], cmd.prevParam[i], null);
+                    }
+                    for (var i = 0; i < cmd.elId.length; i++) { //restore edges later
+                        if (cmd.elType[i] == "edge")
+                            this.restoreModelElementGlobal(cmd.elType[i], cmd.elId[i], cmd.prevParam[i], null);
+                    }
+                    //change children after adding them all
+                    for(var i = 0; i < cmd.elId.length; i++) {
+                        if(cmd.elType[i] == "node")
+                            this.changeModelNodeAttribute('children', cmd.elId[i], cmd.prevParam[i].children, null);
+                    }
+
+                }
+
+
+            }
+
+
+            undoInd = undoInd > 0 ? undoInd - 1 : 0;
+            model.set('_page.doc.undoIndex', undoInd);
+
+        },
+
         redoCommand: function(){
             var undoInd = model.get('_page.doc.undoIndex');
             var cmd = model.get('_page.doc.history.' + (undoInd+ 1)); // cmd: opName, opTarget, opAttr, elId, param
 
             if(cmd.opName == "set"){
-                if(cmd.opTarget == "node")
+                if(cmd.opTarget == "element" && cmd.elType == "node")
                     this.changeModelNodeAttribute(cmd.opAttr,cmd.elId, cmd.param, null); //user is null to enable updating in the editor
-                else if(cmd.opTarget == "edge")
+                else if(cmd.opTarget == "element" && cmd.elType == "edge")
                     this.changeModelEdgeAttribute(cmd.opAttr,cmd.elId, cmd.param, null);
 
-                else if(cmd.opTarget == "node group") {
-                    for (var i = 0; i < cmd.elId.length; i++)
-                        this.changeModelNodeAttribute(cmd.opAttr,cmd.elId[i], cmd.param, null); //assuming that all the changed attribute values are the same
+                else if(cmd.opTarget == "element group") {
+                    for (var i = 0; i < cmd.elId.length; i++) {
+                        if(cmd.elType[i] == "node")
+                            this.changeModelNodeAttribute(cmd.opAttr, cmd.elId[i], cmd.param[i], null);
+                        else
+                            this.changeModelEdgeAttribute(cmd.opAttr,cmd.elId[i], cmd.param[i], null);
+                    }
                 }
-                else if(cmd.opTarget == "edge group"){
-                    for(var i = 0; i < cmd.elId.length; i++)
-                        this.changeModelEdgeAttribute(cmd.opAttr,cmd.elId[i], cmd.param, null);//assuming that all the changed attribute values are the same
 
-                }
 
             }
             else if(cmd.opName == "add"){
-                if(cmd.opTarget == "node")
-                    this.restoreModelNodeGlobal(cmd.elId, cmd.param, null);
-                else if(cmd.opTarget == "edge")
-                    this.restoreModelEdgeGlobal(cmd.elId, cmd.param, null);
+                if(cmd.opTarget == "element")
+                    this.restoreModelElementGlobal(cmd.elType, cmd.elId, cmd.param, null);
+
             }
             else if(cmd.opName == "delete"){
-                if(cmd.opTarget == "node")
+                if(cmd.opTarget == "element" && cmd.elType == "node")
                     this.deleteModelNode(cmd.elId, null);
-                else if(cmd.opTarget == "edge")
+                else if(cmd.opTarget == "element" && cmd.elType == "edge")
                     this.deleteModelEdge(cmd.elId, null);
 
-                else if(cmd.opTarget == "node group"){
-                    for(var i = 0; i < cmd.elId.length; i++)
-                        this.deleteModelNode(cmd.elId[i], null);
-                }
-                else if(cmd.opTarget == "edge group"){
-                    for(var i = 0; i < cmd.elId.length; i++)
-                        this.deleteModelEdge(cmd.elId[i], null);
+                else if(cmd.opTarget == "element group"){
+                    for(var i = 0; i < cmd.elId.length; i++) { //first delete edges
+                        if (cmd.elType[i] == "edge")
+                            this.deleteModelEdge(cmd.elId[i], null);
+                    }
+                    for(var i = 0; i < cmd.elId.length; i++) { //first edges
+                        if (cmd.elType[i] == "node")
+                            this.deleteModelNode(cmd.elId[i], null);
+                    }
+
 
                 }
+
+
+
             }
 
             undoInd = undoInd <  model.get('_page.doc.history').length -1 ? undoInd + 1  : model.get('_page.doc.history').length -1;
@@ -209,60 +252,6 @@ module.exports =  function(model, docId, userId, userName) {
 
         },
 
-        undoCommand: function(){
-            var undoInd = model.get('_page.doc.undoIndex');
-            var cmd = model.get('_page.doc.history.' + undoInd); // cmd: opName, opTarget, opAttr, elId, param
-
-            if(cmd.opName == "set"){
-                if(cmd.opTarget == "node")
-                    this.changeModelNodeAttribute(cmd.opAttr,cmd.elId, cmd.prevParam, null); //user is null to enable updating in the editor
-                else if(cmd.opTarget == "edge")
-                    this.changeModelEdgeAttribute(cmd.opAttr,cmd.elId, cmd.prevParam, null);
-
-                else if(cmd.opTarget == "node group") {
-                    for (var i = 0; i < cmd.elId.length; i++)
-                        this.changeModelNodeAttribute(cmd.opAttr,cmd.elId[i], cmd.prevParam, null); //assuming that all the changed attribute values are the same
-                }
-                else if(cmd.opTarget == "edge group"){
-                    for(var i = 0; i < cmd.elId.length; i++)
-                        this.changeModelEdgeAttribute(cmd.opAttr,cmd.elId[i], cmd.prevParam, null);//assuming that all the changed attribute values are the same
-
-                }
-
-            }
-            else if(cmd.opName == "add"){
-                if(cmd.opTarget == "node")
-                    this.deleteModelNode(cmd.elId, null);
-                else if(cmd.opTarget == "edge")
-                    this.deleteModelEdge(cmd.elId, null);
-            }
-            else if(cmd.opName == "delete"){
-                if(cmd.opTarget == "node")
-                    this.restoreModelNodeGlobal(cmd.elId, cmd.prevParam, null);
-                else if(cmd.opTarget == "edge")
-                    this.restoreModelEdgeGlobal(cmd.elId, cmd.prevParam, null);
-                else if(cmd.opTarget == "node group"){
-                    for(var i = 0; i < cmd.elId.length; i++) {
-                        this.restoreModelNodeGlobal(cmd.elId[i], cmd.prevParam[i], null);
-                    }
-
-                    //change children after adding them all
-                    for(var i = 0; i < cmd.elId.length; i++)
-                        this.changeModelNodeAttribute('children', cmd.elId[i], cmd.prevParam[i].children, null);
-
-                }
-                else if(cmd.opTarget == "edge group"){
-                    for(var i = 0; i < cmd.elId.length; i++)
-                        this.restoreModelEdgeGlobal(cmd.elId[i], cmd.prevParam[i], null);
-
-                }
-            }
-
-
-            undoInd = undoInd > 0 ? undoInd - 1 : 0;
-            model.set('_page.doc.undoIndex', undoInd);
-
-        },
 
         getModelNode: function(id){
             var nodePath = model.at('_page.doc.cy.nodes.'  + id);
@@ -287,8 +276,8 @@ module.exports =  function(model, docId, userId, userName) {
             }
 
 
-            if(!noHistUpdate)
-                this.updateHistory('select','node',  node.id());
+   //         if(!noHistUpdate)
+     //           this.updateHistory({opName:'select',opTarget:'element', elType:'node', elId: node.id()});
             return status;
 
         },
@@ -302,8 +291,9 @@ module.exports =  function(model, docId, userId, userName) {
                 edgePath.set('highlightColor', user.get('colorCode'));
                 status = "success";
 
-                if(!noHistUpdate)
-                    this.updateHistory('select', 'edge',  edge.id());
+       //         if(!noHistUpdate)
+         //           this.updateHistory({opName:'select',opTarget:'element', elType:'edge', elId: edge.id()});
+
 
             }
 
@@ -317,10 +307,11 @@ module.exports =  function(model, docId, userId, userName) {
 
 
             nodePath.set('highlightColor' , null);
+
             status = "success";
 
-            if(!noHistUpdate)
-                this.updateHistory('unselect', 'node',  node.id());
+        //    if(!noHistUpdate)
+          //      this.updateHistory({opName:'unselect',opTarget:'element', elType:'node', elId: node.id()});
 
             return status;
 
@@ -335,8 +326,8 @@ module.exports =  function(model, docId, userId, userName) {
             edgePath.set('highlightColor', null);
             status = "success";
 
-            if(!noHistUpdate)
-                this.updateHistory('unselect', 'edge',  edge.id());
+//            if(!noHistUpdate)
+  //              this.updateHistory({opName:'unelect',opTarget:'element', elType:'edge', elId: edge.id()});
 
 
             return status;
@@ -358,7 +349,9 @@ module.exports =  function(model, docId, userId, userName) {
 
             if(!noHistUpdate)
                 //We don't want all the attributes of the param to be printed
-                this.updateHistory('add', 'node', nodeId, null,  {x:param.x, y: param.y, sbgnclass: param.sbgnclass});
+                this.updateHistory({opName:'add',opTarget:'element', elType:'node', elId: nodeId, param:{x: param.x, y: param.y, sbgnclass: param.sbgnclass}});
+
+
 
             return "success";
 
@@ -367,7 +360,7 @@ module.exports =  function(model, docId, userId, userName) {
         addModelEdge: function(edgeId, param, user, noHistUpdate){
 
 
-            model.pass({user:user}).set('_page.doc.cy.edges.' + edgeId +'.id', param.id);
+            model.pass({user:user}).set('_page.doc.cy.edges.' + edgeId +'.id', edgeId);
             model.pass({user:user}).set('_page.doc.cy.edges.' + edgeId +'.sbgnclass', param.sbgnclass);
 
             model.pass({user:user}).set('_page.doc.cy.edges.' + edgeId +'.source', param.source);
@@ -379,7 +372,7 @@ module.exports =  function(model, docId, userId, userName) {
 
 
             if(!noHistUpdate)
-                this.updateHistory('add', 'edge', edgeId, null, param);
+                this.updateHistory({opName:'add',opTarget:'element', elType:'edge', elId: edgeId, param:param});
 
             return "success";
 
@@ -392,23 +385,16 @@ module.exports =  function(model, docId, userId, userName) {
             var status = "Node id not found";
             var nodePath = model.at('_page.doc.cy.nodes.'  + nodeId);
 
-          //  if(nodePath.get('id')){
-                var prevAttVal = nodePath.get(attStr);
+            var prevAttVal = nodePath.get(attStr);
 
-                nodePath.pass({user:user}).set(attStr,attVal);
-
-                if(!noHistUpdate)
-                    this.updateHistory('set', 'node', nodeId, attStr,  attVal, prevAttVal);
-
-                //
-                // if(historyData == null) //historydata is about statesAndInfos
-                //     this.updateHistory('set', 'node', nodeId, attStr,  attVal, prevAttVal);
-                // else
-                //     this.updateHistory('set', 'node',  nodeId, attStr,   prevAttVal, historyData);
+            nodePath.pass({user:user}).set(attStr,attVal);
 
 
-                status = "success";
-          //  }
+            if(!noHistUpdate)
+                this.updateHistory({opName:'set',opTarget:'element', elType:'node', elId: nodeId, opAttr:attStr, param:attVal, prevParam: prevAttVal});
+
+
+            status = "success";
 
 
             return status;
@@ -417,16 +403,15 @@ module.exports =  function(model, docId, userId, userName) {
         changeModelEdgeAttribute: function(attStr, edgeId, attVal,  user, noHistUpdate){
             var status = "Edge id not found";
             var edgePath = model.at('_page.doc.cy.edges.'  + edgeId);
-         //   if(edgePath.get('id')){
 
                 var prevAttVal = edgePath.get(attStr);
                 edgePath.pass({user:user}).set(attStr, attVal);
 
                 if(!noHistUpdate)
-                    this.updateHistory("set", "edge" , edgeId, attStr,  attVal, prevAttVal);
+                    this.updateHistory({opName:'set',opTarget:'element', elType:'edge', elId: edgeId, opAttr:attStr, param:attVal, prevParam: prevAttVal});
+
 
                 status = "success";
-         //   }
 
 
 
@@ -453,15 +438,19 @@ module.exports =  function(model, docId, userId, userName) {
                     var isMultimer = nodePath.get('isMultimer');
                     var sbgnStatesAndInfos = nodePath.get('sbgnStatesAndInfos');
                     var children = nodePath.get('children');
+                    var highlightColor = nodePath.get('highlightColor');
+                    var ports = nodePath.get('ports');
 
 
                     prevParam = {x: pos.x , y: pos.y , sbgnclass:sbgnclass, width: width, height: height,
                                  borderColor: borderColor, borderWidth: borderWidth, sbgnlabel: sbgnlabel,
                                  sbgnStatesAndInfos:sbgnStatesAndInfos, parent:parent, isCloneMarker: isCloneMarker,
-                                 isMultimer: isMultimer, children: children};
+                                 isMultimer: isMultimer, children: children, highlightColor: highlightColor, ports: ports};
 
 
-                    this.updateHistory('delete', 'node',   nodeId, null, null, prevParam);
+
+                    this.updateHistory({opName:'delete',opTarget:'element', elType:'node', elId: nodeId, prevParam: prevParam});
+
                 }
 
                 model.pass({user: user}).del(('_page.doc.cy.nodes.' + nodeId));
@@ -479,42 +468,71 @@ module.exports =  function(model, docId, userId, userName) {
             var status = "Edge id not found";
             var edgePath = model.at('_page.doc.cy.edges.'  + edgeId);
 
-          //  if(edgePath.get('id')) {
-
 
                 if(!noHistUpdate) {
                     var source = edgePath.get('source');
                     var target = edgePath.get('target');
                     var sbgnClass = edgePath.get('sbgnclass');
                     var lineColor = edgePath.get('lineColor');
-                    var lineWidth = edgePath.get('lineWidth');
+                    var width = edgePath.get('width');
                     var sbgncardinality = edgePath.get('sbgncardinality');
+                    var portsource = edgePath.get('portsource');
+                    var porttarget = edgePath.get('porttarget');
+                    var bendPointPositions= edgePath.get('bendPointPositions');
+
                     prevParam = {source: source , target:target , sbgnclass:sbgnClass, lineColor: lineColor,
-                    lineWidth: lineWidth, sbgncardinality: sbgncardinality};
+                    width: width, sbgncardinality: sbgncardinality, portsource: portsource, porttarget:porttarget, bendPointPositions: bendPointPositions};
+
+
+                    this.updateHistory({opName:'delete',opTarget:'element', elType:'edge', elId: edgeId, prevParam: prevParam});
 
 
 
-                    this.updateHistory('delete', 'edge',   edgeId, null, null, prevParam);
                 }
 
                 model.pass({user:user}).del(('_page.doc.cy.edges.'  + edgeId));
                 status = "success";
-         //   }
 
             return status;
 
         },
 
 
-
-    deleteModelNodes: function(selectedNodes,user, noHistUpdate){
-            var self = this;
-            var nodeIds = [];
+        deleteModelElements: function(selectedEles, user, noHistUpdate){
+            var elIds = [];
+            var elTypes =[];
             var prevParams = [];
+            var self = this;
+            if(selectedEles.edges().length > 0) {
+                selectedEles.edges().forEach(function(edge){
+                    elIds.push(edge.id());
+                    elTypes.push("edge");
+                    var edgePath = model.at('_page.doc.cy.edges.' + edge.id());
 
-            if(selectedNodes != null){
-                selectedNodes.forEach(function(node){
-                    nodeIds.push(node.id());
+                    var source = edgePath.get('source');
+                    var target = edgePath.get('target');
+                    var sbgnclass = edgePath.get('sbgnclass');
+                    var lineColor = edgePath.get('lineColor');
+                    var width = edgePath.get('width');
+                    var sbgncardinality = edgePath.get('sbgncardinality');
+                    var portsource = edgePath.get('portsource');
+                    var porttarget = edgePath.get('porttarget');
+                    var bendPointPositions= edgePath.get('bendPointPositions');
+
+                    prevParams.push( {source: source , target:target , sbgnclass:sbgnclass, lineColor: lineColor,
+                        width: width, sbgncardinality: sbgncardinality, portsource: portsource, porttarget:porttarget, bendPointPositions: bendPointPositions});
+                });
+
+            }
+
+            selectedEles.edges().forEach(function(edge){
+                self.deleteModelEdge(edge.id(), user, true); //will not update children history
+            });
+
+            if(selectedEles.nodes().length > 0 ) {
+                selectedEles.nodes().forEach(function(node){
+                    elIds.push(node.id());
+                    elTypes.push("node");
                     var nodePath = model.at('_page.doc.cy.nodes.'  + node.id());
 
 
@@ -532,55 +550,23 @@ module.exports =  function(model, docId, userId, userName) {
                     var isCloneMarker = nodePath.get('isCloneMarker');
                     var isMultimer = nodePath.get('isMultimer');
                     var sbgnStatesAndInfos = nodePath.get('sbgnStatesAndInfos');
+                    var highlightColor = nodePath.get('highlightColor');
+                    var ports = nodePath.get('ports');
+
 
                     prevParams.push({x: pos.x , y: pos.y , sbgnclass:sbgnclass, width: width, height: height,
                         borderColor: borderColor, borderWidth: borderWidth, sbgnlabel: sbgnlabel,
                         sbgnStatesAndInfos:sbgnStatesAndInfos, parent:parent, isCloneMarker: isCloneMarker,
-                        isMultimer: isMultimer} );
-
-                });
-
-                if(!noHistUpdate)
-                    this.updateHistory('delete', 'node group',  nodeIds, null, null, prevParams);
-
-                selectedNodes.forEach(function(node){
-                    self.deleteModelNode(node.id(),user, true); //no history update for child commands
+                        isMultimer: isMultimer,  highlightColor: highlightColor, backgroundColor: backgroundColor, ports:ports} );
                 });
 
             }
+            selectedEles.nodes().forEach(function(node){
+                self.deleteModelNode(node.id(), user, true); //will not update children history
+            });
+            if(!noHistUpdate)
+                this.updateHistory({opName:'delete',opTarget:'element group', elType:elTypes, elId: elIds, prevParam: prevParams});
 
-        },
-
-        deleteModelEdges: function(selectedEdges, user, noHistUpdate){
-            var self = this;
-            var edgeIds = [];
-            var prevParams = [];
-
-            if(selectedEdges != null) {
-
-                selectedEdges.forEach(function(edge){
-                    edgeIds.push(edge.id());
-
-                    var edgePath = model.at('_page.doc.cy.edges.' + edge.id());
-
-                    var source = edgePath.get('source');
-                    var target = edgePath.get('target');
-                    var sbgnclass = edgePath.get('sbgnclass');
-                    var lineColor = edgePath.get('lineColor');
-                    var lineWidth = edgePath.get('lineWidth');
-                    var sbgncardinality = edgePath.get('sbgncardinality');
-                    prevParams.push( {source: source , target:target , sbgnclass:sbgnclass, lineColor: lineColor,
-                        lineWidth: lineWidth, sbgncardinality: sbgncardinality});
-
-                });
-
-                if(!noHistUpdate)
-                    this.updateHistory('delete', 'edge group',  edgeIds, null, null,prevParams);
-
-                selectedEdges.forEach(function(edge){
-                    self.deleteModelEdge(edge.id(), user, true); //will not update children history
-                });
-            }
 
         },
 
@@ -590,6 +576,7 @@ module.exports =  function(model, docId, userId, userName) {
          */
         restoreModelNode: function(node, user, noHistUpdate){
 
+            this.changeModelNodeAttribute('ports', node.id(),node.data("ports"),user, noHistUpdate );
             this.changeModelNodeAttribute('sbgnlabel', node.id(),node.data("sbgnlabel"),user, noHistUpdate );
             this.changeModelNodeAttribute('width', node.id(),node._private.data.sbgnbbox.w,user, noHistUpdate );
             this.changeModelNodeAttribute('height', node.id(),node._private.data.sbgnbbox.h,user , noHistUpdate);
@@ -609,17 +596,20 @@ module.exports =  function(model, docId, userId, userName) {
 
         },
 
-        restoreModelNodes: function(selectedNodes, user, noHistUpdate){
+
+        restoreModelElements: function(selectedElements, user, noHistUpdate){
             var self = this;
-            var nodeIds = "";
+            var elIds = [];
+            var elTypes= [];
+            var selectedNodes = selectedElements.nodes();
+            var selectedEdges = selectedElements.edges();
 
             if(selectedNodes != null){
                 selectedNodes.forEach(function(node){
-                    nodeIds += node.id() + " ";
+//                    nodeIds += node.id() + " ";
+                    elIds.push(node.id());
+                    elTypes.push("node");
                 });
-
-                if(!noHistUpdate)
-                    this.updateHistory('restore', 'node group', nodeIds);
 
                 selectedNodes.forEach(function(node){
 
@@ -630,26 +620,16 @@ module.exports =  function(model, docId, userId, userName) {
                     }, user, noHistUpdate);
                     self.restoreModelNode(node,user, noHistUpdate);
                     self.initModelNode(node,user,noHistUpdate);
-                    
+
                 });
-
             }
-
-
-
-        },
-
-        restoreModelEdges: function(selectedEdges, user, noHistUpdate){
-            var self = this;
-            var edgeIds = "";
 
             if(selectedEdges != null){
                 selectedEdges.forEach(function(edge){
-                    edgeIds += edge.id() + " ";
+                    elIds.push(edge.id());
+                    elTypes.push("edge");
                 });
 
-                if(!noHistUpdate)
-                    this.updateHistory('restore', 'edge group',  edgeIds);
 
                 selectedEdges.forEach(function(edge){
                     self.addModelEdge(edge.id(),{
@@ -664,7 +644,14 @@ module.exports =  function(model, docId, userId, userName) {
 
             }
 
+
+            if(!noHistUpdate)
+                this.updateHistory({opName:'restore', opTarget:'element group', elId: nodeIds, elType:elTypes});
+
+
         },
+
+
 
 
         /**
@@ -675,7 +662,8 @@ module.exports =  function(model, docId, userId, userName) {
             this.addModelNode(nodeId, param, user, noHistUpdate);
 
 
-
+            this.changeModelNodeAttribute('ports', nodeId,param.ports,user, noHistUpdate );
+            this.changeModelNodeAttribute('highlightColor', nodeId,param.highlightColor,user, noHistUpdate );
             this.changeModelNodeAttribute('sbgnclass', nodeId,param.sbgnclass,user, noHistUpdate );
             this.changeModelNodeAttribute('width', nodeId,param.width,user, noHistUpdate );
             this.changeModelNodeAttribute('height', nodeId,param.height,user , noHistUpdate);
@@ -689,7 +677,7 @@ module.exports =  function(model, docId, userId, userName) {
             this.changeModelNodeAttribute('isMultimer', nodeId, param.isMultimer,user, noHistUpdate );
 
             if(!noHistUpdate)
-                this.updateHistory('restore', 'node',  nodeId);
+                this.updateHistory({opName:'restore', opTarget:'element', elType:'node',  elId:nodeId});
         },
 
         restoreModelEdgeGlobal: function(edgeId, param, user, noHistUpdate){
@@ -697,17 +685,32 @@ module.exports =  function(model, docId, userId, userName) {
             this.addModelEdge(edgeId, param, user, noHistUpdate);
 
             this.changeModelEdgeAttribute('lineColor', edgeId,param.lineColor,user, noHistUpdate );
-            this.changeModelEdgeAttribute('lineWidth', edgeId,param.lineWidth,user, noHistUpdate );
+            this.changeModelEdgeAttribute('width', edgeId,param.width,user, noHistUpdate );
             this.changeModelEdgeAttribute('sbgncardinality', edgeId,param.sbgncardinality,user , noHistUpdate);
+            this.changeModelEdgeAttribute('portsource', edgeId,param.portsource,user , noHistUpdate);
+            this.changeModelEdgeAttribute('porttarget', edgeId,param.porttarget,user , noHistUpdate);
+            this.changeModelEdgeAttribute('bendPointPositions', edgeId,param.bendPointPositions,user , noHistUpdate);
+
 
             if(!noHistUpdate)
-                this.updateHistory('restore', 'edge',  edgeId);
+                this.updateHistory({opName:'restore', opTarget:'element', elType:'edge',  elId:edgeId});
+        },
+
+
+        restoreModelElementGlobal: function(elType, elId, param, user, noHistUpdate){
+
+            if(elType == "node")
+                this.restoreModelNodeGlobal(elId, param, user, noHistUpdate);
+            else
+                this.restoreModelEdgeGlobal(elId, param, user, noHistUpdate);
+
+
         },
         //should be called before loading a new graph to prevent id confusion
         deleteAll: function(nodes, edges , user, noHistUpdate){
 
             if(!noHistUpdate)
-                this.updateHistory('new', 'model');
+                this.updateHistory({opName:'new', opTarget:'model'});
 
 
             this.deleteModelEdges(edges,user, noHistUpdate);
@@ -784,58 +787,6 @@ module.exports =  function(model, docId, userId, userName) {
         },
 
 
-       //  updateModelFromJson: function(cytoscapeJsGraph){
-       //
-       //
-       //      //convert json properties to model info
-       //
-       //      var nodes = model.get('_page.doc.cy.nodes');
-       //      var edges = model.get('_page.doc.cy.edges');
-       //
-       //      var jsonNodes = [];
-       //      var jsonEdges = [];
-       //
-       //      cytoscapeJsGraph.nodes.forEach(function(node){
-       //          var nodePath = model.at('_page.doc.cy.nodes.' + node.data.id);
-       //          nodePath.set('backgroundOpacity', node.data.backgroundOpacity);
-       //          nodePath.set('borderColor', node.data.borderColor);
-       //          nodePath.set('parent', node.data.parent);
-       //          nodePath.set('ports', node.data.ports);
-       //          nodePath.set('position.x', node.data.sbgnbbox.x);
-       //          nodePath.set('position.y', node.data.sbgnbbox.y);
-       //          nodePath.set('width', node.data.sbgnbbox.w);
-       //          nodePath.set('height', node.data.sbgnbbox.h);
-       //          nodePath.set('sbgnclass', node.data.sbgnclass);
-       //          nodePath.set('isCloneMarker', node.data.sbgnclonemarker);
-       //          nodePath.set('sbgnlabel', node.data.sbgnlabel);
-       //          nodePath.set('sbgnStatesAndInfos', node.data.sbgnstatesandinfos);
-       //          nodePath.set('backgroundOpacity', node.data.backgroundOpacity);
-       //      });
-       //
-       //
-       //      cytoscapeJsGraph.edges.forEach(function(edge) {
-       //          var edgePath = model.at('_page.doc.cy.edges.' + edge.data.id);
-       //          edgePath.set('bendPointPositions', edge.data.bendPointPositions);
-       //          edgePath.set('lineColor', edge.data.lineColor);
-       //          edgePath.set('parent', edge.data.parent);
-       //          edgePath.set('source', edge.data.source);
-       //          edgePath.set('target', edge.data.target);
-       //          edgePath.set('portsource', edge.data.portsource);
-       //          edgePath.set('porttarget', edge.data.porttarget);
-       //          edgePath.set('sbgncardinality', edge.data.sbgncardinality);
-       //          edgePath.set('sbgnclass', edge.data.sbgnclass);
-       //      });
-       //
-       //
-       //
-       // //     model.set('_page.doc.jsonObj', cytoscapeJsGraph);
-       //
-       //
-       //
-       //      //this.updateHistory('load graph');
-       //  },
-       //
-
 
         initModelNode: function(node, user, noHistUpdate){
 
@@ -843,7 +794,7 @@ module.exports =  function(model, docId, userId, userName) {
             var nodePath = model.at('_page.doc.cy.nodes.' + node.id());
 
             if(!noHistUpdate)
-                this.updateHistory('init', 'node', null, node.id());
+                this.updateHistory({opName:'init', opTarget:'element', elType:'node', elId: node.id()});
 
          //   if (nodePath.get('id')) {
 
@@ -1010,7 +961,7 @@ module.exports =  function(model, docId, userId, userName) {
             var edgePath = model.at('_page.doc.cy.edges.' + edge.id());
 
             if(!noHistUpdate)
-                this.updateHistory('init', 'edge', null, edge.id());
+                this.updateHistory({opName:'init', opTarget: 'element', elType:'edge', elId: edge.id()});
       //      if (edgePath.get('id')) {
 
 
@@ -1059,6 +1010,14 @@ module.exports =  function(model, docId, userId, userName) {
                 this.changeModelEdgeAttribute('lineColor', edge.id(),edge.css('line-color'), user, noHistUpdate);
 
 
+            var width = edgePath.get('width');
+
+            if (width != null)
+                edge.css('width', width);
+            else
+                this.changeModelEdgeAttribute('width', edge.id(),edge.css('width'), user, noHistUpdate);
+
+
 
             var source = edgePath.get('source');
 
@@ -1099,8 +1058,9 @@ module.exports =  function(model, docId, userId, userName) {
         //nodes and edges are cytoscape objects. they have css and data properties
         initModel: function(jsonObj, nodes, edges, user, noHistUpdate){
 
-            var nodeIds = "";
-            var edgeIds = "";
+            var elIds = "";
+            var elTypes = [];
+
 
 
             jsonObj.nodes.forEach(function(node){
@@ -1108,23 +1068,24 @@ module.exports =  function(model, docId, userId, userName) {
                 model.pass({user:user}).set('_page.doc.cy.nodes.' + node.data.id + '.position', {x: node.data.sbgnbbox.x, y: node.data.sbgnbbox.y}); //initialize position
 
               //  model.pass({user:user}).set('_page.doc.cy.nodes.' + node.data.id + '.id', node.data.id);
-                nodeIds += node.data.id + " ";
+                elIds += node.data.id + " ";
+                elTypes.push("node");
 
             });
 
 
             jsonObj.edges.forEach(function(edge){
-                edgeIds += edge.data.id + " ";
-
-           //     model.pass({user:user}).set('_page.doc.cy.edges.' + edge.data.id + '.id', edge.data.id);
+                elIds += edge.data.id + " ";
+                elTypes.push("edge");
             });
 
             var self = this;
 
             if(!noHistUpdate){
-                this.updateHistory('init',  'model');
-                this.updateHistory('init','node group', nodeIds);
-                this.updateHistory('init','edge group', edgeIds);
+                this.updateHistory({opName:'init',  opTarget:'model'});
+                this.updateHistory({opName:'init',opTarget:'element group', elId: elIds, elType: elTypes});
+
+
             }
 
 

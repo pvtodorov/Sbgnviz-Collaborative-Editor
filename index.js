@@ -3,7 +3,7 @@
  *  Event handlers of model updates
  *	Author: Funda Durupinar Babur<f.durupinar@gmail.com>
  */
-var app = module.exports = require('derby').createApp('chat', __filename);
+var app = module.exports = require('derby').createApp('cwc', __filename);
 
 
 app.loadViews(__dirname + '/views');
@@ -351,6 +351,7 @@ app.proto.init = function (model) {
 
     model.on('all', '_page.doc.cy.edges.*.addedLater', function(id,op, idName, prev, passed){//this property must be something that is only changed during insertion
 
+
         if(docReady && passed.user == null ){
             //check if edge id exists in the current inspector graph
             var source = model.get('_page.doc.cy.edges.'+ id + '.source');
@@ -447,6 +448,14 @@ app.proto.init = function (model) {
         }
     });
 
+    model.on('all', '_page.doc.cy.nodes.*.backgroundOpacity', function(id,  op, backgroundOpacity,prev, passed){
+
+        if(docReady && passed.user == null) {
+            menu.changeElementProperty(id, 'backgroundOpacity', 'backgroundOpacity', backgroundOpacity, 'data', false);
+
+        }
+    });
+
 
     model.on('all', '_page.doc.cy.nodes.*.isMultimer', function(id,  op,isMultimer,prev, passed){
 
@@ -519,6 +528,13 @@ app.proto.init = function (model) {
         }
     });
 
+    model.on('all', '_page.doc.cy.edges.*.bendPointPositions', function(id,  op, bendPointPositions, prev, passed){
+
+        if(docReady && passed.user == null) {
+            menu.changeElementProperty(id, 'bendPointPositions', 'bendPointPositions', bendPointPositions, 'data', false);
+
+        }
+    });
     model.on('all', '_page.doc.cy.edges.*.lineColor', function(id,  op, lineColor,prev, passed){
 
 
@@ -558,6 +574,8 @@ app.proto.init = function (model) {
 
         }
     });
+
+
     model.on('all', '_page.doc.cy.edges.*.highlightColor', function(id, op, highlightColor,prev, passed){
 
         if(docReady && passed.user == null) {
