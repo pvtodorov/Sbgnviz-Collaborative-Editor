@@ -1594,7 +1594,8 @@ function SBGNLayout(modelManager){
             templateProperties.tilingPaddingHorizontal = sbgnStyleRules['tiling-padding-horizontal'];
 
 
-            self.template = _.template($("#layout-settings-template").html(), templateProperties);
+            self.template = _.template($("#layout-settings-template").html()); //funda: using lodash
+            self.template(templateProperties);
 
 
         },
@@ -1630,9 +1631,9 @@ function SBGNLayout(modelManager){
             templateProperties.tilingPaddingHorizontal = sbgnStyleRules['tiling-padding-horizontal'];
 
 
-            self.template = _.template($("#layout-settings-template").html(), templateProperties);
+            self.template = _.template($("#layout-settings-template").html()); //funda
 
-            $(self.el).html(self.template);
+            $(self.el).html(self.template(templateProperties)); //funda
 
 
             $(self.el).dialog();

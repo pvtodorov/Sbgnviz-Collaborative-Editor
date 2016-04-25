@@ -21,6 +21,7 @@
 
 module.exports = function( model){
 
+
     return{
         el:'#biogene-container',
         render: function() {
@@ -40,11 +41,12 @@ module.exports = function( model){
 
 
             // compile the template using underscore
-            var template = _.template( $("#biogene-template").html(), variables);
-
+            var template = _.template( $("#biogene-template").html()); //funda
 
             // load the compiled HTML into the Backbone "el"
-            $(this.el).html(template);
+            $(this.el).html(template(variables));  //funda!!! has to be called like this
+
+
 
             // format after loading
             this.format(model);
@@ -58,7 +60,7 @@ module.exports = function( model){
             if (model.geneDescription == undefined)
                 $(this.el).find(".biogene-description").hide();
 
-            if (model.geneAliases == undefined)
+                if (model.geneAliases == undefined)
                 $(this.el).find(".biogene-aliases").hide();
 
             if (model.geneDesignations == undefined)
@@ -101,7 +103,9 @@ module.exports = function( model){
         },
         generateUniprotLinks: function(mapping) {
             var formatter = function(id){
-                return _.template($("#uniprot-link-template").html(), { id: id });
+                return
+                var template = _.template($("#uniprot-link-template").html()); //funda
+                return(template({id:id}));
             };
 
             if (mapping == undefined || mapping == null)

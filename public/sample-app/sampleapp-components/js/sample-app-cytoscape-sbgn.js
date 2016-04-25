@@ -409,74 +409,74 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
                 cy.forceRender();
             });
 
-            // cy.on('cxttap', 'node', function (event) { //funda not working on Chrome!!!!!
-            //     var node = this;
-            //     $(".qtip").remove();
-            //
-            //     var geneClass = node._private.data.sbgnclass;
-            //     if (geneClass != 'macromolecule' && geneClass != 'nucleic acid feature' &&
-            //         geneClass != 'unspecified entity')
-            //         return;
-            //
-            //
-            //     socket.emit('BioGeneQuery',  {
-            //         query: node._private.data.sbgnlabel, //gene name
-            //         org: "human",
-            //         format: "json"
-            //     });
-            //
-            //     var queryResult = "";
-            //     var p1 = new Promise(function (resolve, reject) {
-            //         socket.on("BioGeneResult", function (val) {
-            //             queryResult = JSON.parse(val);
-            //             resolve("success");
-            //
-            //         });
-            //     });
-            //
-            //     cy.$(('#' + node.id())).qtip({
-            //         content: {
-            //             text: function (event, api) {
-            //
-            //                 p1.then(function (content) {
-            //                    if (queryResult.count > 0) {
-            //                        var info = (new bioGeneView(queryResult.geneInfo[0])).render();
-            //                         var html = $('#biogene-container').html();
-            //                         api.set('content.text', html);
-            //                    }
-            //                     else {
-            //                         api.set('content.text', "No additional information available &#013; for the selected node!");
-            //                     }
-            //
-            //                 }), function (xhr, status, error) {
-            //                     api.set('content.text', "Error retrieving data: " + error);
-            //                 };
-            //                 api.set('content.title', node._private.data.sbgnlabel);
-            //
-            //                 return _.template($("#loading-small-template").html());
-            //
-            //             }
-            //         },
-            //         show: {
-            //             ready: true
-            //         },
-            //         position: {
-            //             my: 'top center',
-            //             at: 'bottom right',
-            //             adjust: {
-            //                 cyViewport: true
-            //             },
-            //             effect: false
-            //         },
-            //         style: {
-            //             classes: 'qtip-bootstrap',
-            //             tip: {
-            //                 width: 16,
-            //                 height: 8
-            //             }
-            //         }
-            //     });
-            // });
+            cy.on('cxttap', 'node', function (event) { //funda not working on Chrome!!!!!
+                var node = this;
+                $(".qtip").remove();
+
+                var geneClass = node._private.data.sbgnclass;
+                if (geneClass != 'macromolecule' && geneClass != 'nucleic acid feature' &&
+                    geneClass != 'unspecified entity')
+                    return;
+
+
+                socket.emit('BioGeneQuery',  {
+                    query: node._private.data.sbgnlabel, //gene name
+                    org: "human",
+                    format: "json"
+                });
+
+                var queryResult = "";
+                var p1 = new Promise(function (resolve, reject) {
+                    socket.on("BioGeneResult", function (val) {
+                        queryResult = JSON.parse(val);
+                        resolve("success");
+
+                    });
+                });
+
+                cy.$(('#' + node.id())).qtip({
+                    content: {
+                        text: function (event, api) {
+
+                            p1.then(function (content) {
+                               if (queryResult.count > 0) {
+                                   var info = (new bioGeneView(queryResult.geneInfo[0])).render();
+                                    var html = $('#biogene-container').html();
+                                    api.set('content.text', html);
+                               }
+                                else {
+                                    api.set('content.text', "No additional information available &#013; for the selected node!");
+                                }
+
+                            }), function (xhr, status, error) {
+                                api.set('content.text', "Error retrieving data: " + error);
+                            };
+                            api.set('content.title', node._private.data.sbgnlabel);
+
+                            return _.template($("#loading-small-template").html());
+
+                        }
+                    },
+                    show: {
+                        ready: true
+                    },
+                    position: {
+                        my: 'top center',
+                        at: 'bottom right',
+                        adjust: {
+                            cyViewport: true
+                        },
+                        effect: false
+                    },
+                    style: {
+                        classes: 'qtip-bootstrap',
+                        tip: {
+                            width: 16,
+                            height: 8
+                        }
+                    }
+                });
+            });
 
             var cancelSelection;
             var selectAgain;

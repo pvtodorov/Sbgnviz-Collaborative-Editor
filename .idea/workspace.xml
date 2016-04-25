@@ -7,11 +7,8 @@
   <component name="ChangeListManager">
     <list default="true" id="20ab80f0-2cb1-44ff-a133-bd87799f716d" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index.js" afterPath="$PROJECT_DIR$/index.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/index.js" afterPath="$PROJECT_DIR$/lib/index.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/EditorActionsManager.js" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/EditorActionsManager.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/package.json" afterPath="$PROJECT_DIR$/package.json" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/biogene-info.js" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/biogene-info.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/modelManager.js" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/modelManager.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-cytoscape-sbgn.js" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-cytoscape-sbgn.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-menu-functions.js" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-menu-functions.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/index.html" afterPath="$PROJECT_DIR$/views/index.html" />
@@ -50,8 +47,18 @@
       <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/views/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="341">
-              <caret line="472" column="0" selection-start-line="472" selection-start-column="0" selection-end-line="472" selection-end-column="0" />
+            <state relative-caret-position="808">
+              <caret line="751" column="21" selection-start-line="698" selection-start-column="11" selection-end-line="751" selection-end-column="21" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="package.json" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/package.json">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="360">
+              <caret line="24" column="25" selection-start-line="24" selection-start-column="25" selection-end-line="24" selection-end-column="25" />
               <folding />
             </state>
           </provider>
@@ -67,21 +74,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="EditorActionsManager.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/EditorActionsManager.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1815">
-              <caret line="121" column="26" selection-start-line="121" selection-start-column="15" selection-end-line="121" selection-end-column="26" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="sample-app-menu-functions.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="sample-app-menu-functions.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-menu-functions.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="5220">
-              <caret line="348" column="28" selection-start-line="348" selection-start-column="8" selection-end-line="348" selection-end-column="28" />
+            <state relative-caret-position="710">
+              <caret line="1636" column="0" selection-start-line="1636" selection-start-column="0" selection-end-line="1636" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -100,8 +97,8 @@
       <file leaf-file-name="biogene-info.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/biogene-info.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="198">
-              <caret line="29" column="45" selection-start-line="29" selection-start-column="45" selection-end-line="29" selection-end-column="45" />
+            <state relative-caret-position="368">
+              <caret line="107" column="42" selection-start-line="107" selection-start-column="42" selection-end-line="107" selection-end-column="42" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
               </folding>
@@ -109,71 +106,71 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="sample-app-cytoscape-sbgn.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="sample-app-cytoscape-sbgn.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-cytoscape-sbgn.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="690">
-              <caret line="177" column="84" selection-start-line="177" selection-start-column="84" selection-end-line="177" selection-end-column="84" />
+            <state relative-caret-position="650">
+              <caret line="442" column="58" selection-start-line="442" selection-start-column="58" selection-end-line="442" selection-end-column="58" />
               <folding>
-                <marker date="1461366832000" expanded="true" signature="28581:28653" placeholder="..." />
-                <marker date="1461366832000" expanded="true" signature="28834:29139" placeholder="..." />
-                <marker date="1461366832000" expanded="true" signature="28846:28907" placeholder="..." />
-                <marker date="1461366832000" expanded="true" signature="28962:28980" placeholder="..." />
-                <marker date="1461366832000" expanded="true" signature="28981:29134" placeholder="..." />
-                <marker date="1461366832000" expanded="true" signature="29050:29080" placeholder="..." />
-                <marker date="1461366832000" expanded="true" signature="29168:29418" placeholder="..." />
-                <marker date="1461366832000" expanded="true" signature="29180:29202" placeholder="..." />
-                <marker date="1461366832000" expanded="true" signature="29234:29413" placeholder="..." />
-                <marker date="1461366832000" expanded="true" signature="29311:29340" placeholder="..." />
-                <marker date="1461366832000" expanded="true" signature="29446:29696" placeholder="..." />
-                <marker date="1461366832000" expanded="true" signature="29458:29480" placeholder="..." />
-                <marker date="1461366832000" expanded="true" signature="29510:29691" placeholder="..." />
-                <marker date="1461366832000" expanded="true" signature="29585:29614" placeholder="..." />
-                <marker date="1461366832000" expanded="true" signature="29724:30007" placeholder="..." />
-                <marker date="1461366832000" expanded="true" signature="29736:29758" placeholder="..." />
-                <marker date="1461366832000" expanded="true" signature="29790:30002" placeholder="..." />
-                <marker date="1461366832000" expanded="true" signature="29888:29917" placeholder="..." />
-                <marker date="1461366832000" expanded="true" signature="30035:30425" placeholder="..." />
-                <marker date="1461366832000" expanded="true" signature="30047:30108" placeholder="..." />
-                <marker date="1461366832000" expanded="true" signature="30170:30188" placeholder="..." />
-                <marker date="1461366832000" expanded="true" signature="30189:30420" placeholder="..." />
-                <marker date="1461366832000" expanded="true" signature="30300:30329" placeholder="..." />
-                <marker date="1461366832000" expanded="true" signature="30554:30606" placeholder="..." />
-                <marker date="1461366832000" expanded="true" signature="30694:30939" placeholder="..." />
-                <marker date="1461366832000" expanded="true" signature="30706:30767" placeholder="..." />
-                <marker date="1461366832000" expanded="true" signature="30888:30914" placeholder="..." />
-                <marker date="1461366832000" expanded="true" signature="31080:31132" placeholder="..." />
-                <marker date="1461366832000" expanded="true" signature="31220:31475" placeholder="..." />
-                <marker date="1461366832000" expanded="true" signature="31232:31293" placeholder="..." />
-                <marker date="1461366832000" expanded="true" signature="31424:31450" placeholder="..." />
-                <marker date="1461366832000" expanded="true" signature="31745:31797" placeholder="..." />
-                <marker date="1461366832000" expanded="true" signature="31933:32190" placeholder="..." />
-                <marker date="1461366832000" expanded="true" signature="31945:32006" placeholder="..." />
-                <marker date="1461366832000" expanded="true" signature="32089:32115" placeholder="..." />
-                <marker date="1461366832000" expanded="true" signature="32268:32527" placeholder="..." />
-                <marker date="1461366832000" expanded="true" signature="32280:32341" placeholder="..." />
-                <marker date="1461366832000" expanded="true" signature="32422:32448" placeholder="..." />
-                <marker date="1461366832000" expanded="true" signature="32625:32869" placeholder="..." />
-                <marker date="1461366832000" expanded="true" signature="32637:32659" placeholder="..." />
-                <marker date="1461366832000" expanded="true" signature="32689:32864" placeholder="..." />
-                <marker date="1461366832000" expanded="true" signature="32764:32793" placeholder="..." />
-                <marker date="1461366832000" expanded="true" signature="32898:33160" placeholder="..." />
-                <marker date="1461366832000" expanded="true" signature="32910:32932" placeholder="..." />
-                <marker date="1461366832000" expanded="true" signature="32957:33155" placeholder="..." />
-                <marker date="1461366832000" expanded="true" signature="33048:33077" placeholder="..." />
-                <marker date="1461366832000" expanded="true" signature="33300:33603" placeholder="..." />
-                <marker date="1461366832000" expanded="true" signature="33312:33334" placeholder="..." />
-                <marker date="1461366832000" expanded="true" signature="33387:33598" placeholder="..." />
-                <marker date="1461366832000" expanded="true" signature="33476:33505" placeholder="..." />
-                <marker date="1461366832000" expanded="true" signature="33689:33708" placeholder="..." />
-                <marker date="1461366832000" expanded="true" signature="33709:33823" placeholder="..." />
-                <marker date="1461366832000" expanded="true" signature="33725:33739" placeholder="..." />
-                <marker date="1461366832000" expanded="true" signature="33793:33817" placeholder="..." />
-                <marker date="1461366832000" expanded="true" signature="42024:42671" placeholder="..." />
-                <marker date="1461366832000" expanded="true" signature="42117:42159" placeholder="..." />
-                <marker date="1461366832000" expanded="true" signature="42398:42442" placeholder="..." />
-                <marker date="1461366832000" expanded="true" signature="44040:44401" placeholder="..." />
-                <marker date="1461366832000" expanded="true" signature="44138:44176" placeholder="..." />
+                <marker date="1461606536000" expanded="true" signature="28267:28339" placeholder="..." />
+                <marker date="1461606536000" expanded="true" signature="28520:28825" placeholder="..." />
+                <marker date="1461606536000" expanded="true" signature="28532:28593" placeholder="..." />
+                <marker date="1461606536000" expanded="true" signature="28648:28666" placeholder="..." />
+                <marker date="1461606536000" expanded="true" signature="28667:28820" placeholder="..." />
+                <marker date="1461606536000" expanded="true" signature="28736:28766" placeholder="..." />
+                <marker date="1461606536000" expanded="true" signature="28854:29104" placeholder="..." />
+                <marker date="1461606536000" expanded="true" signature="28866:28888" placeholder="..." />
+                <marker date="1461606536000" expanded="true" signature="28920:29099" placeholder="..." />
+                <marker date="1461606536000" expanded="true" signature="28997:29026" placeholder="..." />
+                <marker date="1461606536000" expanded="true" signature="29132:29382" placeholder="..." />
+                <marker date="1461606536000" expanded="true" signature="29144:29166" placeholder="..." />
+                <marker date="1461606536000" expanded="true" signature="29196:29377" placeholder="..." />
+                <marker date="1461606536000" expanded="true" signature="29271:29300" placeholder="..." />
+                <marker date="1461606536000" expanded="true" signature="29410:29693" placeholder="..." />
+                <marker date="1461606536000" expanded="true" signature="29422:29444" placeholder="..." />
+                <marker date="1461606536000" expanded="true" signature="29476:29688" placeholder="..." />
+                <marker date="1461606536000" expanded="true" signature="29574:29603" placeholder="..." />
+                <marker date="1461606536000" expanded="true" signature="29721:30111" placeholder="..." />
+                <marker date="1461606536000" expanded="true" signature="29733:29794" placeholder="..." />
+                <marker date="1461606536000" expanded="true" signature="29856:29874" placeholder="..." />
+                <marker date="1461606536000" expanded="true" signature="29875:30106" placeholder="..." />
+                <marker date="1461606536000" expanded="true" signature="29986:30015" placeholder="..." />
+                <marker date="1461606536000" expanded="true" signature="30240:30292" placeholder="..." />
+                <marker date="1461606536000" expanded="true" signature="30380:30625" placeholder="..." />
+                <marker date="1461606536000" expanded="true" signature="30392:30453" placeholder="..." />
+                <marker date="1461606536000" expanded="true" signature="30574:30600" placeholder="..." />
+                <marker date="1461606536000" expanded="true" signature="30766:30818" placeholder="..." />
+                <marker date="1461606536000" expanded="true" signature="30906:31161" placeholder="..." />
+                <marker date="1461606536000" expanded="true" signature="30918:30979" placeholder="..." />
+                <marker date="1461606536000" expanded="true" signature="31110:31136" placeholder="..." />
+                <marker date="1461606536000" expanded="true" signature="31431:31483" placeholder="..." />
+                <marker date="1461606536000" expanded="true" signature="31619:31876" placeholder="..." />
+                <marker date="1461606536000" expanded="true" signature="31631:31692" placeholder="..." />
+                <marker date="1461606536000" expanded="true" signature="31775:31801" placeholder="..." />
+                <marker date="1461606536000" expanded="true" signature="31954:32213" placeholder="..." />
+                <marker date="1461606536000" expanded="true" signature="31966:32027" placeholder="..." />
+                <marker date="1461606536000" expanded="true" signature="32108:32134" placeholder="..." />
+                <marker date="1461606536000" expanded="true" signature="32311:32555" placeholder="..." />
+                <marker date="1461606536000" expanded="true" signature="32323:32345" placeholder="..." />
+                <marker date="1461606536000" expanded="true" signature="32375:32550" placeholder="..." />
+                <marker date="1461606536000" expanded="true" signature="32450:32479" placeholder="..." />
+                <marker date="1461606536000" expanded="true" signature="32584:32846" placeholder="..." />
+                <marker date="1461606536000" expanded="true" signature="32596:32618" placeholder="..." />
+                <marker date="1461606536000" expanded="true" signature="32643:32841" placeholder="..." />
+                <marker date="1461606536000" expanded="true" signature="32734:32763" placeholder="..." />
+                <marker date="1461606536000" expanded="true" signature="32986:33289" placeholder="..." />
+                <marker date="1461606536000" expanded="true" signature="32998:33020" placeholder="..." />
+                <marker date="1461606536000" expanded="true" signature="33073:33284" placeholder="..." />
+                <marker date="1461606536000" expanded="true" signature="33162:33191" placeholder="..." />
+                <marker date="1461606536000" expanded="true" signature="33375:33394" placeholder="..." />
+                <marker date="1461606536000" expanded="true" signature="33395:33509" placeholder="..." />
+                <marker date="1461606536000" expanded="true" signature="33411:33425" placeholder="..." />
+                <marker date="1461606536000" expanded="true" signature="33479:33503" placeholder="..." />
+                <marker date="1461606536000" expanded="true" signature="41710:42357" placeholder="..." />
+                <marker date="1461606536000" expanded="true" signature="41803:41845" placeholder="..." />
+                <marker date="1461606536000" expanded="true" signature="42084:42128" placeholder="..." />
+                <marker date="1461606536000" expanded="true" signature="43726:44087" placeholder="..." />
+                <marker date="1461606536000" expanded="true" signature="43824:43862" placeholder="..." />
               </folding>
             </state>
           </provider>
@@ -216,14 +213,16 @@
         <option value="$PROJECT_DIR$/public/src/utilities/sbgnml-to-json-converter.js" />
         <option value="$PROJECT_DIR$/public/src/utilities/add-remove-utilities.js" />
         <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/EditorActionsManager.js" />
-        <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-menu-functions.js" />
-        <option value="localhost:3000/lib/js/jquery-1.8.2.js" />
         <option value="$PROJECT_DIR$/index.js" />
-        <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/biogene-info.js" />
-        <option value="$PROJECT_DIR$/views/index.html" />
         <option value="$PROJECT_DIR$/lib/index.js" />
         <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/modelManager.js" />
+        <option value="$PROJECT_DIR$/views/index.html" />
         <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-cytoscape-sbgn.js" />
+        <option value="$PROJECT_DIR$/package.json" />
+        <option value="vm:458" />
+        <option value="localhost:3000/lib/js/jquery-1.8.2.js" />
+        <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/biogene-info.js" />
+        <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-menu-functions.js" />
       </list>
     </option>
   </component>
@@ -482,6 +481,20 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="public" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="CWC" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Sbgnviz-Collaborative-Editor" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="node_modules" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -841,7 +854,14 @@
       <option name="project" value="LOCAL" />
       <updated>1461345027271</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="Global undo/redo updates">
+      <created>1461367028552</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1461367028552</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
@@ -862,19 +882,20 @@
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32830188" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.22037736" sideWeight="0.5105311" order="9" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.22037736" sideWeight="0.51236266" order="9" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32970837" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32830188" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22004521" sideWeight="0.48946887" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22037736" sideWeight="0.48763737" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Gulp" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="true" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.14697802" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25283018" sideWeight="0.4908425" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.23360965" sideWeight="0.49858242" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.23320755" sideWeight="0.4922161" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -886,7 +907,6 @@
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32981133" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25283018" sideWeight="0.4908425" order="1" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -948,7 +968,8 @@
     <MESSAGE value="Refactoring done to improve model initialization and json graph update. &#10;Haven't tested do/undo operations yet." />
     <MESSAGE value="Bug fixes in file loading" />
     <MESSAGE value="Bug fixes in delete" />
-    <option name="LAST_COMMIT_MESSAGE" value="Bug fixes in delete" />
+    <MESSAGE value="Global undo/redo updates" />
+    <option name="LAST_COMMIT_MESSAGE" value="Global undo/redo updates" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -979,86 +1000,16 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-cytoscape-sbgn.js</url>
-          <line>371</line>
-          <properties />
-          <option name="timeStamp" value="119" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-cytoscape-sbgn.js</url>
-          <line>376</line>
-          <properties />
-          <option name="timeStamp" value="122" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-cytoscape-sbgn.js</url>
-          <line>485</line>
-          <properties />
-          <option name="timeStamp" value="126" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-cytoscape-sbgn.js</url>
-          <line>494</line>
-          <properties />
-          <option name="timeStamp" value="127" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-cytoscape-sbgn.js</url>
-          <line>498</line>
-          <properties />
-          <option name="timeStamp" value="128" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-cytoscape-sbgn.js</url>
-          <line>503</line>
-          <properties />
-          <option name="timeStamp" value="129" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-cytoscape-sbgn.js</url>
-          <line>542</line>
-          <properties />
-          <option name="timeStamp" value="130" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-cytoscape-sbgn.js</url>
-          <line>580</line>
-          <properties />
-          <option name="timeStamp" value="131" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-cytoscape-sbgn.js</url>
-          <line>650</line>
-          <properties />
-          <option name="timeStamp" value="132" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-cytoscape-sbgn.js</url>
-          <line>727</line>
-          <properties />
-          <option name="timeStamp" value="134" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-cytoscape-sbgn.js</url>
-          <line>686</line>
-          <properties />
-          <option name="timeStamp" value="136" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-cytoscape-sbgn.js</url>
           <line>300</line>
           <properties />
           <option name="timeStamp" value="137" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="138" />
+      <option name="time" value="148" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="JavascriptDebugType">
-        <watch expression="param.sbgnclass" language="JavaScript" />
-        <watch expression="edge.data('bendPointPositions')" language="JavaScript" />
-        <watch expression="cy.nodes()" language="JavaScript" />
-        <watch expression="jsonObj" language="JavaScript" />
-        <watch expression="cy.edges()" language="JavaScript" />
+        <watch expression="template" language="JavaScript" />
       </configuration>
     </watches-manager>
   </component>
@@ -1067,43 +1018,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/README.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="626">
-            <caret line="431" column="10" selection-start-line="431" selection-start-column="10" selection-end-line="431" selection-end-column="10" />
-          </first_editor>
-          <second_editor />
-        </state>
-      </provider>
-      <provider editor-type-id="text-editor">
-        <state relative-caret-position="465">
-          <caret line="31" column="13" selection-start-line="31" selection-start-column="13" selection-end-line="31" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/node_modules/livedb/test/util.coffee">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="8" column="22" selection-start-line="8" selection-start-column="22" selection-end-line="8" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/derby/chat-d82d776cc9280e1fea981b3cd4c013d6.js" />
-    <entry file="jar://$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/lib/JavaScriptLanguage.jar!/com/intellij/lang/javascript/index/predefined/EcmaScript.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="351">
-          <caret line="638" column="0" selection-start-line="638" selection-start-column="0" selection-end-line="638" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/agent-interaction/agentTester.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1336">
-          <caret line="108" column="35" selection-start-line="108" selection-start-column="35" selection-end-line="108" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/derby/chat-2ea58f3f1d2bfe85356b1acaaf722be1.js" />
     <entry file="http://localhost:3000/lib/js/socket.io.js">
       <provider selected="true" editor-type-id="httpFileEditor">
@@ -1259,14 +1173,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="316">
           <caret line="538" column="17" selection-start-line="538" selection-start-column="15" selection-end-line="538" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/lib/js/cytoscape.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="3557" column="4" selection-start-line="3557" selection-start-column="4" selection-end-line="3557" selection-end-column="4" />
-          <folding />
+          <folding>
+            <marker date="1460760662000" expanded="true" signature="29044:29054" placeholder="..." />
+            <marker date="1460760662000" expanded="true" signature="29208:29218" placeholder="..." />
+            <marker date="1460760662000" expanded="true" signature="29363:29386" placeholder="..." />
+            <marker date="1460760662000" expanded="true" signature="30371:30394" placeholder="..." />
+            <marker date="1460760662000" expanded="true" signature="31312:31335" placeholder="..." />
+            <marker date="1460760662000" expanded="true" signature="31437:31460" placeholder="..." />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1292,17 +1206,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/lib/js/jquery.qtip.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="335">
-          <caret line="2671" column="43" selection-start-line="2671" selection-start-column="43" selection-end-line="2671" selection-end-column="43" />
-          <folding>
-            <marker date="1459379350000" expanded="true" signature="82332:82372" placeholder="..." />
-            <marker date="1459379350000" expanded="true" signature="136885:136988" placeholder="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/lib/js/bootstrap.min.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="495">
@@ -1312,38 +1215,10 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/public/derby/chat-c504319dbdb499dcd560265b52cb0afe.js" />
-    <entry file="http://localhost:3000/lib/js/jquery-1.8.2.js">
-      <provider selected="true" editor-type-id="httpFileEditor">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/node_modules/lodash/lodash.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="464">
-          <caret line="4212" column="24" selection-start-line="4212" selection-start-column="24" selection-end-line="4212" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/EditorActionsManager.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1815">
           <caret line="121" column="26" selection-start-line="121" selection-start-column="15" selection-end-line="121" selection-end-column="26" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-menu-functions.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5220">
-          <caret line="348" column="28" selection-start-line="348" selection-start-column="8" selection-end-line="348" selection-end-column="28" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="341">
-          <caret line="472" column="0" selection-start-line="472" selection-start-column="0" selection-end-line="472" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -1356,14 +1231,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/modelManager.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="16" column="7" selection-start-line="16" selection-start-column="7" selection-end-line="16" selection-end-column="7" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/index.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="326">
@@ -1372,81 +1239,180 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/public/lib/js/cytoscape.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="385">
+          <caret line="8294" column="14" selection-start-line="8294" selection-start-column="14" selection-end-line="8294" selection-end-column="14" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/lodash/lodash.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="325">
+          <caret line="13803" column="0" selection-start-line="13803" selection-start-column="0" selection-end-line="13803" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/package.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="24" column="25" selection-start-line="24" selection-start-column="25" selection-end-line="24" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-cytoscape-sbgn.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="650">
+          <caret line="442" column="58" selection-start-line="442" selection-start-column="58" selection-end-line="442" selection-end-column="58" />
+          <folding>
+            <marker date="1461606536000" expanded="true" signature="28267:28339" placeholder="..." />
+            <marker date="1461606536000" expanded="true" signature="28520:28825" placeholder="..." />
+            <marker date="1461606536000" expanded="true" signature="28532:28593" placeholder="..." />
+            <marker date="1461606536000" expanded="true" signature="28648:28666" placeholder="..." />
+            <marker date="1461606536000" expanded="true" signature="28667:28820" placeholder="..." />
+            <marker date="1461606536000" expanded="true" signature="28736:28766" placeholder="..." />
+            <marker date="1461606536000" expanded="true" signature="28854:29104" placeholder="..." />
+            <marker date="1461606536000" expanded="true" signature="28866:28888" placeholder="..." />
+            <marker date="1461606536000" expanded="true" signature="28920:29099" placeholder="..." />
+            <marker date="1461606536000" expanded="true" signature="28997:29026" placeholder="..." />
+            <marker date="1461606536000" expanded="true" signature="29132:29382" placeholder="..." />
+            <marker date="1461606536000" expanded="true" signature="29144:29166" placeholder="..." />
+            <marker date="1461606536000" expanded="true" signature="29196:29377" placeholder="..." />
+            <marker date="1461606536000" expanded="true" signature="29271:29300" placeholder="..." />
+            <marker date="1461606536000" expanded="true" signature="29410:29693" placeholder="..." />
+            <marker date="1461606536000" expanded="true" signature="29422:29444" placeholder="..." />
+            <marker date="1461606536000" expanded="true" signature="29476:29688" placeholder="..." />
+            <marker date="1461606536000" expanded="true" signature="29574:29603" placeholder="..." />
+            <marker date="1461606536000" expanded="true" signature="29721:30111" placeholder="..." />
+            <marker date="1461606536000" expanded="true" signature="29733:29794" placeholder="..." />
+            <marker date="1461606536000" expanded="true" signature="29856:29874" placeholder="..." />
+            <marker date="1461606536000" expanded="true" signature="29875:30106" placeholder="..." />
+            <marker date="1461606536000" expanded="true" signature="29986:30015" placeholder="..." />
+            <marker date="1461606536000" expanded="true" signature="30240:30292" placeholder="..." />
+            <marker date="1461606536000" expanded="true" signature="30380:30625" placeholder="..." />
+            <marker date="1461606536000" expanded="true" signature="30392:30453" placeholder="..." />
+            <marker date="1461606536000" expanded="true" signature="30574:30600" placeholder="..." />
+            <marker date="1461606536000" expanded="true" signature="30766:30818" placeholder="..." />
+            <marker date="1461606536000" expanded="true" signature="30906:31161" placeholder="..." />
+            <marker date="1461606536000" expanded="true" signature="30918:30979" placeholder="..." />
+            <marker date="1461606536000" expanded="true" signature="31110:31136" placeholder="..." />
+            <marker date="1461606536000" expanded="true" signature="31431:31483" placeholder="..." />
+            <marker date="1461606536000" expanded="true" signature="31619:31876" placeholder="..." />
+            <marker date="1461606536000" expanded="true" signature="31631:31692" placeholder="..." />
+            <marker date="1461606536000" expanded="true" signature="31775:31801" placeholder="..." />
+            <marker date="1461606536000" expanded="true" signature="31954:32213" placeholder="..." />
+            <marker date="1461606536000" expanded="true" signature="31966:32027" placeholder="..." />
+            <marker date="1461606536000" expanded="true" signature="32108:32134" placeholder="..." />
+            <marker date="1461606536000" expanded="true" signature="32311:32555" placeholder="..." />
+            <marker date="1461606536000" expanded="true" signature="32323:32345" placeholder="..." />
+            <marker date="1461606536000" expanded="true" signature="32375:32550" placeholder="..." />
+            <marker date="1461606536000" expanded="true" signature="32450:32479" placeholder="..." />
+            <marker date="1461606536000" expanded="true" signature="32584:32846" placeholder="..." />
+            <marker date="1461606536000" expanded="true" signature="32596:32618" placeholder="..." />
+            <marker date="1461606536000" expanded="true" signature="32643:32841" placeholder="..." />
+            <marker date="1461606536000" expanded="true" signature="32734:32763" placeholder="..." />
+            <marker date="1461606536000" expanded="true" signature="32986:33289" placeholder="..." />
+            <marker date="1461606536000" expanded="true" signature="32998:33020" placeholder="..." />
+            <marker date="1461606536000" expanded="true" signature="33073:33284" placeholder="..." />
+            <marker date="1461606536000" expanded="true" signature="33162:33191" placeholder="..." />
+            <marker date="1461606536000" expanded="true" signature="33375:33394" placeholder="..." />
+            <marker date="1461606536000" expanded="true" signature="33395:33509" placeholder="..." />
+            <marker date="1461606536000" expanded="true" signature="33411:33425" placeholder="..." />
+            <marker date="1461606536000" expanded="true" signature="33479:33503" placeholder="..." />
+            <marker date="1461606536000" expanded="true" signature="41710:42357" placeholder="..." />
+            <marker date="1461606536000" expanded="true" signature="41803:41845" placeholder="..." />
+            <marker date="1461606536000" expanded="true" signature="42084:42128" placeholder="..." />
+            <marker date="1461606536000" expanded="true" signature="43726:44087" placeholder="..." />
+            <marker date="1461606536000" expanded="true" signature="43824:43862" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/cheerio/History.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="307">
+            <caret line="362" column="10" selection-start-line="362" selection-start-column="10" selection-end-line="362" selection-end-column="10" />
+            <folding />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/underscore/underscore.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="845">
+          <caret line="1464" column="46" selection-start-line="1464" selection-start-column="46" selection-end-line="1464" selection-end-column="46" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/modelManager.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="16" column="7" selection-start-line="16" selection-start-column="7" selection-end-line="16" selection-end-column="7" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/lib/js/jquery-1.8.2.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="335">
+          <caret line="5856" column="8" selection-start-line="5856" selection-start-column="8" selection-end-line="5856" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/agent-interaction/jquery-1.8.2.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="335">
+          <caret line="5856" column="8" selection-start-line="5856" selection-start-column="8" selection-end-line="5856" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/lib/js/jquery.qtip.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="674">
+          <caret line="1043" column="71" selection-start-line="1043" selection-start-column="71" selection-end-line="1043" selection-end-column="71" />
+          <folding>
+            <marker date="1459379350000" expanded="true" signature="82332:82372" placeholder="..." />
+            <marker date="1459379350000" expanded="true" signature="136885:136988" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="http://localhost:3000/lib/js/jquery-1.8.2.js">
+      <provider selected="true" editor-type-id="httpFileEditor">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="808">
+          <caret line="751" column="21" selection-start-line="698" selection-start-column="11" selection-end-line="751" selection-end-column="21" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/biogene-info.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="198">
-          <caret line="29" column="45" selection-start-line="29" selection-start-column="45" selection-end-line="29" selection-end-column="45" />
+        <state relative-caret-position="368">
+          <caret line="107" column="42" selection-start-line="107" selection-start-column="42" selection-end-line="107" selection-end-column="42" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-cytoscape-sbgn.js">
+    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-menu-functions.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="690">
-          <caret line="177" column="84" selection-start-line="177" selection-start-column="84" selection-end-line="177" selection-end-column="84" />
-          <folding>
-            <marker date="1461366832000" expanded="true" signature="28581:28653" placeholder="..." />
-            <marker date="1461366832000" expanded="true" signature="28834:29139" placeholder="..." />
-            <marker date="1461366832000" expanded="true" signature="28846:28907" placeholder="..." />
-            <marker date="1461366832000" expanded="true" signature="28962:28980" placeholder="..." />
-            <marker date="1461366832000" expanded="true" signature="28981:29134" placeholder="..." />
-            <marker date="1461366832000" expanded="true" signature="29050:29080" placeholder="..." />
-            <marker date="1461366832000" expanded="true" signature="29168:29418" placeholder="..." />
-            <marker date="1461366832000" expanded="true" signature="29180:29202" placeholder="..." />
-            <marker date="1461366832000" expanded="true" signature="29234:29413" placeholder="..." />
-            <marker date="1461366832000" expanded="true" signature="29311:29340" placeholder="..." />
-            <marker date="1461366832000" expanded="true" signature="29446:29696" placeholder="..." />
-            <marker date="1461366832000" expanded="true" signature="29458:29480" placeholder="..." />
-            <marker date="1461366832000" expanded="true" signature="29510:29691" placeholder="..." />
-            <marker date="1461366832000" expanded="true" signature="29585:29614" placeholder="..." />
-            <marker date="1461366832000" expanded="true" signature="29724:30007" placeholder="..." />
-            <marker date="1461366832000" expanded="true" signature="29736:29758" placeholder="..." />
-            <marker date="1461366832000" expanded="true" signature="29790:30002" placeholder="..." />
-            <marker date="1461366832000" expanded="true" signature="29888:29917" placeholder="..." />
-            <marker date="1461366832000" expanded="true" signature="30035:30425" placeholder="..." />
-            <marker date="1461366832000" expanded="true" signature="30047:30108" placeholder="..." />
-            <marker date="1461366832000" expanded="true" signature="30170:30188" placeholder="..." />
-            <marker date="1461366832000" expanded="true" signature="30189:30420" placeholder="..." />
-            <marker date="1461366832000" expanded="true" signature="30300:30329" placeholder="..." />
-            <marker date="1461366832000" expanded="true" signature="30554:30606" placeholder="..." />
-            <marker date="1461366832000" expanded="true" signature="30694:30939" placeholder="..." />
-            <marker date="1461366832000" expanded="true" signature="30706:30767" placeholder="..." />
-            <marker date="1461366832000" expanded="true" signature="30888:30914" placeholder="..." />
-            <marker date="1461366832000" expanded="true" signature="31080:31132" placeholder="..." />
-            <marker date="1461366832000" expanded="true" signature="31220:31475" placeholder="..." />
-            <marker date="1461366832000" expanded="true" signature="31232:31293" placeholder="..." />
-            <marker date="1461366832000" expanded="true" signature="31424:31450" placeholder="..." />
-            <marker date="1461366832000" expanded="true" signature="31745:31797" placeholder="..." />
-            <marker date="1461366832000" expanded="true" signature="31933:32190" placeholder="..." />
-            <marker date="1461366832000" expanded="true" signature="31945:32006" placeholder="..." />
-            <marker date="1461366832000" expanded="true" signature="32089:32115" placeholder="..." />
-            <marker date="1461366832000" expanded="true" signature="32268:32527" placeholder="..." />
-            <marker date="1461366832000" expanded="true" signature="32280:32341" placeholder="..." />
-            <marker date="1461366832000" expanded="true" signature="32422:32448" placeholder="..." />
-            <marker date="1461366832000" expanded="true" signature="32625:32869" placeholder="..." />
-            <marker date="1461366832000" expanded="true" signature="32637:32659" placeholder="..." />
-            <marker date="1461366832000" expanded="true" signature="32689:32864" placeholder="..." />
-            <marker date="1461366832000" expanded="true" signature="32764:32793" placeholder="..." />
-            <marker date="1461366832000" expanded="true" signature="32898:33160" placeholder="..." />
-            <marker date="1461366832000" expanded="true" signature="32910:32932" placeholder="..." />
-            <marker date="1461366832000" expanded="true" signature="32957:33155" placeholder="..." />
-            <marker date="1461366832000" expanded="true" signature="33048:33077" placeholder="..." />
-            <marker date="1461366832000" expanded="true" signature="33300:33603" placeholder="..." />
-            <marker date="1461366832000" expanded="true" signature="33312:33334" placeholder="..." />
-            <marker date="1461366832000" expanded="true" signature="33387:33598" placeholder="..." />
-            <marker date="1461366832000" expanded="true" signature="33476:33505" placeholder="..." />
-            <marker date="1461366832000" expanded="true" signature="33689:33708" placeholder="..." />
-            <marker date="1461366832000" expanded="true" signature="33709:33823" placeholder="..." />
-            <marker date="1461366832000" expanded="true" signature="33725:33739" placeholder="..." />
-            <marker date="1461366832000" expanded="true" signature="33793:33817" placeholder="..." />
-            <marker date="1461366832000" expanded="true" signature="42024:42671" placeholder="..." />
-            <marker date="1461366832000" expanded="true" signature="42117:42159" placeholder="..." />
-            <marker date="1461366832000" expanded="true" signature="42398:42442" placeholder="..." />
-            <marker date="1461366832000" expanded="true" signature="44040:44401" placeholder="..." />
-            <marker date="1461366832000" expanded="true" signature="44138:44176" placeholder="..." />
-          </folding>
+        <state relative-caret-position="710">
+          <caret line="1636" column="0" selection-start-line="1636" selection-start-column="0" selection-end-line="1636" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
