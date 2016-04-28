@@ -260,6 +260,7 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
                     };
                     lastMouseDownNodeInfo.node = this;
                 }
+
             });
 
             cy.on("mouseup", function (event) {
@@ -331,7 +332,8 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
 
                     var param = {
                         positionDiff: positionDiff,
-                        nodes: nodes, move: false,
+                        nodes: nodes, 
+                       // move: false,
                         sync: true
                     };
 

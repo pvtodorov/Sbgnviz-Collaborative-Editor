@@ -41,35 +41,17 @@ module.exports.unselectEdge = function(edge) {
 module.exports.addNode = function(param) {
 
     var result;
-    if (param.firstTime) {
-
-
        result = addRemoveUtilities.addNode(param.x, param.y, param.sbgnclass, param.id);
 
+    if(param.sync){
+        module.exports.modelManager.addModelNode(result.id(),  param, "me");
+        module.exports.modelManager.initModelNode(result, null, true);
 
-        if(param.sync){
-            module.exports.modelManager.addModelNode(result.id(),  param, "me");
-            module.exports.modelManager.initModelNode(result);
-
-
-        }
     }
-    else {
-
-        //result = addRemoveUtilities.restoreEles(param);
-
-        module.exports.restoreEles(param);
-    }
-
-
-
 
     return result;
 }
 module.exports.removeEles =function(elesToBeRemoved) {
-
-
-
 
     //removeEles operation computes edges to be removed
 
@@ -89,29 +71,9 @@ module.exports.removeEles =function(elesToBeRemoved) {
 
 
     return undoEles;
-    //removeElesSimply causes edges to disappear when operation is undone
-    //return addRemoveUtilities.removeElesSimply(elesToBeRemoved);
 }
 
 
-// module.exports.restoreEles = function(eles) {
-//
-//     var result = addRemoveUtilities.restoreEles(eles);
-//
-//     //we need to restore nodes first, otherwise edges without sources or targets cause error
-//     var nodeList = [];
-//     var edgeList = [];
-//     eles.forEach(function (el) {
-//         if(el.isNode())
-//             nodeList.push({id:el.id()});
-//         else
-//             edgeList.push({id:el.id()});
-//     });
-//
-//     module.exports.modelManager.restoreModelElementGroup({nodes:nodeList,edges: edgeList}, "me");
-//
-//     return result;
-// }
 module.exports.deleteSelected = function(param) {
 
 
@@ -128,10 +90,6 @@ module.exports.deleteSelected = function(param) {
         });
 
         module.exports.modelManager.deleteModelElementGroup({nodes:nodeList,edges: edgeList}, "me");
-        // if(param.eles.edges().length > 0)
-        //     module.exports.modelManager.deleteModelEdges(param.eles.edges(), "me"); //first delete edges
-        // if(param.eles.nodes().length > 0)
-        //     module.exports.modelManager.deleteModelNodes(param.eles.nodes(), "me");
 
     }
     var undoEles = addRemoveUtilities.removeElesSimply(param.eles);
@@ -140,39 +98,19 @@ module.exports.deleteSelected = function(param) {
     return undoEles;
 }
 
-// module.exports.restoreSelected = function(eles) {
-//     var param = {};
-//
-//     param.eles = module.exports.restoreEles(eles); //model updated in restoreEles
-//     param.firstTime = false;
-//     return param;
-// }
-
 module.exports.addEdge = function(param)
 {
     var result;
-    if (param.firstTime) {
-            result = addRemoveUtilities.addEdge(param.source, param.target, param.sbgnclass, param.id);
-    }
-    // else {
-    //
-    //
-    //     result = addRemoveUtilities.restoreEles(param);
-    // }
+    result = addRemoveUtilities.addEdge(param.source, param.target, param.sbgnclass, param.id);
 
     if(param.sync){
         module.exports.modelManager.addModelEdge(result.id(), param, "me");
-        module.exports.modelManager.initModelEdge(result);
+        module.exports.modelManager.initModelEdge(result,  null, true); //no history update but let others update params
 
     }
     return result;
 }
 
-module.exports.removeEdges = function(edgesToBeDeleted)
-{
-    module.exports.modelManager.deleteModelEdges(edgesToBeDeleted, "me");
-    return addRemoveUtilities.removeEdges(edgesToBeDeleted);
-}
 
 module.exports.expandNode = function(param) {
     var result = {
@@ -346,28 +284,23 @@ module.exports.simpleCollapseGivenNodes = function(nodes) {
     return expandCollapseUtilities.simpleCollapseGivenNodes(nodes);
 }
 
+
 module.exports.performLayoutFunction = function(param) {
-
-
-
-    //funda: why is this necessary?
-    //if (param.firstTime) {
-    //
-    //    delete param.firstTime;
-    //}
-
     module.exports.modelManager.updateHistory("run layout");
 
 //notify other clients
     cy.on('layoutstop', function() {
+        var modelElList = [];
+        var paramList = [];
+        cy.nodes().forEach(function(node){
+            modelElList.push({id: node.id(), isNode: true});
+            paramList.push(node.position());
 
-        cy.nodes().forEach(function(node) {
-            module.exports.modelManager.changeModelNodeAttribute("position", node.id(), node.position());
-            //module.exports.modelManager.moveModelNode(node.id(), node.position());
         });
+        module.exports.modelManager.changeModelElementGroupAttribute("position", modelElList, paramList, "me");
     });
 
-    return module.exports.returnToPositionsAndSizes(param);
+  //  return module.exports.returnToPositionsAndSizes(param);
 }
 
 module.exports.returnToPositionsAndSizesConditionally = function(param) {
@@ -401,11 +334,16 @@ module.exports.returnToPositionsAndSizes = function(param) {
     });
 
     if(param.sync){
-        cy.nodes().forEach(function(node) {
-            module.exports.modelManager.changeModelNodeAttribute("position", node.id(), node.position(), "me");
-           // module.exports.modelManager.moveModelNode(node.id(), node.position(), "me");
+        var modelElList = [];
+        var paramList = [];
+        cy.nodes().forEach(function(node){
+            modelElList.push({id: node.id(), isNode: true});
+            paramList.push(node.position());
 
         });
+        module.exports.modelManager.changeModelElementGroupAttribute("position", modelElList, paramList, "me");
+        //
+        // });
     }
 
 
@@ -415,173 +353,86 @@ module.exports.returnToPositionsAndSizes = function(param) {
 //This is used only to inform the model and perform undo. cytoscape moves the node
 module.exports.moveNodesConditionally = function(param) {
 
-    if (param.move) {
-        module.exports.moveNodes(param.positionDiff, param.nodes);
-    }
-    else {
-        if(param.sync) {
+    if(param.sync){
 
-            //
-            //param.nodes.forEach(function (node) {
-            //
-            //    module.exports.moveAncestorNodes(node);
-            ////    console.log(node.parent());
-            //  //  module.exports.modelManager.moveModelNode(node.id(), node.position(), "me");
-            //});
+        var elParamList = module.exports.getDescendentNodes(param.nodes);
+        var modelElList = elParamList.els;
+        var paramList = elParamList.params;
 
-            //also move ancestors and descendents
-
-
-            module.exports.moveDescendentNodes((param.nodes));
-        }
+        module.exports.modelManager.changeModelElementGroupAttribute("position", modelElList, paramList, "me");
 
     }
-
-
 
     return param;
 }
-//Only informs the model -- does not actually move; cytoscape does
-module.exports.moveDescendentNodes = function(nodes) {
+
+module.exports.getDescendentNodes = function(nodes) {
     var modelElList = [];
     var paramList = [];
     if(nodes == null) return;
     nodes.forEach(function(node){
 
-//        module.exports.modelManager.changeModelNodeAttribute("position", node.id(), node.position(), "me");
-
-
         modelElList.push({id: node.id(), isNode: true});
         paramList.push(node.position());
 
-      //  module.exports.modelManager.moveModelNode(node.id(), node.position(), "me");
         var children = node.children();
-        if(children)
-            module.exports.moveDescendentNodes( children);
+        if(children){
+            var elParamList = module.exports.getDescendentNodes(children);
+            elParamList.els.forEach(function(el){
+                modelElList.push(el)
+            });
+            elParamList.params.forEach(function(param){
+                paramList.push(param);
+            });
+        }
 
+        
     });
 
 
-    module.exports.modelManager.changeModelElementGroupAttribute("position", modelElList, paramList, "me");
+    return {els: modelElList, params: paramList};
+
 }
-module.exports.moveAncestorNodes = function(node) {
 
-    if(node == null) return;
+/***
+ * This function actually changes the position of the node as updated in the model -- unlike moveNode
+ * @param param = {ele:, data:}
+ *
+ */
+module.exports.changePosition = function(param){
+    var ele = param.ele;
 
-    var parentId = node._private.data.parent;
 
-    if(parentId){
+    ele.position(param.data);
 
-        var parent = cy.getElementById(parentId);
-        module.exports.modelManager.changeModelNodeAttribute("position", node.id(), node.position(), "me");
-       // module.exports.modelManager.moveModelNode(parentId, parent.position(), "me");
-        module.exports.moveAncestorNodes(parent);
-
+    ele['position'](param.data);
+    if(param.sync){ //don't update history
+        module.exports.modelManager.changeModelNodeAttribute("position", ele.id(), ele.position(), "me", true);
 
     }
 
 }
 
-
-
-module.exports.moveNodesReversely = function(param) {
-    var diff = {
-        x: -1 * param.positionDiff.x,
-        y: -1 * param.positionDiff.y
-    };
-    var result = {
-        positionDiff: param.positionDiff,
-        nodes: param.nodes,
-        move: true,
-        sync: true
-    };
-    module.exports.moveNodes(diff, param.nodes);
-    return result;
-}
-
-module.exports.moveNodes = function(positionDiff, nodes) {
-
-    var modelElList = [];
-    var paramList = [];
-
-
-    for (var i = 0; i < nodes.length; i++) {
-        var node = nodes[i];
-        var oldX = node.position("x");
-        var oldY = node.position("y");
-        node.position({
-            x: Number(oldX + positionDiff.x),
-            y: Number(oldY + positionDiff.y)
-        });
-        modelElList.push({id: node.id(), isNode: true});
-        paramList.push(node.position());
-
-        var children = node.children();
-        module.exports.moveNodes(positionDiff, children);
-
-    }
-
-    module.exports.modelManager.changeModelElementGroupAttribute("position", modelElList, paramList, "me");
-
-
-
-     //   module.exports.modelManager.changeModelNodeAttribute("position", node.id(), node.position(), "me");
-       // module.exports.modelManager.moveModelNode(node.id(), node.position(), "me");
-
-
-
-}
 
 
 module.exports.hideSelected = function(param) {
     var currentNodes = cy.nodes(":visible");
     var result = {
         sync: true,
-        firstTime: false
     };
-    if (param.firstTime) {
-        var nodesToHide = sbgnFiltering.hideSelected(param.selectedEles); //funda changed
-        if(param.sync) {//first hide on the other side to make sure elements don't get unselected
+    var nodesToHide = sbgnFiltering.hideSelected(param.selectedEles); //funda changed
+    if(param.sync) {//first hide on the other side to make sure elements don't get unselected
 
 
-            var modelElList = [];
-            var paramList = [];
-            nodesToHide.forEach(function (el) {
-                modelElList.push({id: el.id(), isNode: el.isNode()});
-                paramList.push("invisible");
-            });
-            module.exports.modelManager.changeModelElementGroupAttribute("visibilityStatus", modelElList, paramList, "me");
+        var modelElList = [];
+        var paramList = [];
+        nodesToHide.forEach(function (el) {
+            modelElList.push({id: el.id(), isNode: el.isNode()});
+            paramList.push("invisible");
+        });
+        module.exports.modelManager.changeModelElementGroupAttribute("visibilityStatus", modelElList, paramList, "me");
 
-        }
     }
-    // else {
-    //
-    //     sbgnFiltering.showJustGivenNodes(param.nodesToShow);
-    //     if(param.sync){
-    //
-    //         var modelElList  = [];
-    //         var paramList = [];
-    //         param.selectedEles.forEach(function(el){
-    //             modelElList.push({id: el.id(), isNode: el.isNode()});
-    //             paramList.push("invisible");
-    //         });
-    //         module.exports.modelManager.changeModelElementGroupAttribute("visibilityStatus",modelElList, paramList, "me");
-    //
-    //
-    //         var modelElList  = [];
-    //         var paramList = [];
-    //         param.nodesToShow.forEach(function(el){
-    //             modelElList.push({id: el.id(), isNode: el.isNode()});
-    //             paramList.push("visible");
-    //         });
-    //         module.exports.modelManager.changeModelElementGroupAttribute("visibilityStatus",modelElList, paramList, "me");
-    //
-    //
-    //
-    //     }
-    //
-    // }
-
 
     result.nodesToShow = currentNodes;
     result.selectedEles = nodesToHide;
@@ -594,63 +445,31 @@ module.exports.showSelected = function(param) {
     var currentNodes = cy.nodes(":visible");
     var result = {
         sync: true,
-        firstTime: false
     };
 
-    if (param.firstTime) {
 
-        var nodesToShow = sbgnFiltering.showSelected(param.selectedEles); //funda changed
+    var nodesToShow = sbgnFiltering.showSelected(param.selectedEles); //funda changed
 
-        if(param.sync){
-            var modelElList  = [];
-            var paramList = [];
-            nodesToShow.forEach(function(el){
-                modelElList.push({id: el.id(), isNode: el.isNode()});
-                paramList.push("visible");
-            });
-            module.exports.modelManager.changeModelElementGroupAttribute("visibilityStatus",modelElList, paramList, "me");
+    if(param.sync){
+        var modelElList  = [];
+        var paramList = [];
+        nodesToShow.forEach(function(el){
+            modelElList.push({id: el.id(), isNode: el.isNode()});
+            paramList.push("visible");
+        });
+        module.exports.modelManager.changeModelElementGroupAttribute("visibilityStatus",modelElList, paramList, "me");
 
 
-             var nodesToHide = cy.nodes().not(nodesToShow);
+         var nodesToHide = cy.nodes().not(nodesToShow);
 
-            var modelElList  = [];
-            var paramList = [];
-            nodesToHide.forEach(function(el){
-                modelElList.push({id: el.id(), isNode: el.isNode()});
-                paramList.push("invisible");
-            });
-            module.exports.modelManager.changeModelElementGroupAttribute("visibilityStatus",modelElList, paramList, "me");
-        }
-
+        var modelElList  = [];
+        var paramList = [];
+        nodesToHide.forEach(function(el){
+            modelElList.push({id: el.id(), isNode: el.isNode()});
+            paramList.push("invisible");
+        });
+        module.exports.modelManager.changeModelElementGroupAttribute("visibilityStatus",modelElList, paramList, "me");
     }
-    // else {
-    //
-    //     sbgnFiltering.showJustGivenNodes(param.nodesToShow);
-    //
-    //     if(param.sync){
-    //
-    //
-    //         var modelElList  = [];
-    //         var paramList = [];
-    //         param.nodesToShow.forEach(function(el){
-    //             modelElList.push({id: el.id(), isNode: el.isNode()});
-    //             paramList.push("visible");
-    //         });
-    //         module.exports.modelManager.changeModelElementGroupAttribute("visibilityStatus",modelElList, paramList, "me");
-    //
-    //
-    //         var nodesToHide = cy.nodes().not(param.nodesToShow);
-    //
-    //         var modelElList  = [];
-    //         var paramList = [];
-    //         nodesToHide.forEach(function(el){
-    //             modelElList.push({id: el.id(), isNode: el.isNode()});
-    //             paramList.push("invisible");
-    //         });
-    //         module.exports.modelManager.changeModelElementGroupAttribute("visibilityStatus",modelElList, paramList, "me");
-    //     }
-    //
-    // }
 
     result.nodesToShow = currentNodes;
     result.selectedEles = nodesToShow;
@@ -678,39 +497,6 @@ module.exports.showAll = function(param) {
     return result;
 }
 
-//This is the undo operation for hideSelected, showSelected and showAll
-// module.exports.showJustGivenNodes = function(param) {
-//     var result = {};
-//     result.nodesToShow = cy.nodes(":visible");
-//     result.firstTime = false;
-//     result.sync = true;
-//     result.selectedEles = param.selectedEles; //nodes to hide
-//     sbgnFiltering.showJustGivenNodes(param.nodesToShow);
-//     if(param.sync){
-//
-//         var modelElList  = [];
-//         var paramList = [];
-//         param.nodesToShow.forEach(function(el){
-//             modelElList.push({id: el.id(), isNode: el.isNode()});
-//             paramList.push("visible");
-//         });
-//         module.exports.modelManager.changeModelElementGroupAttribute("visibilityStatus",modelElList, paramList, "me");
-//
-//
-//
-//         var nodesToHide = cy.nodes().not(param.nodesToShow);
-//         var modelElList  = [];
-//         var paramList = [];
-//         nodesToHide.forEach(function(el){
-//             modelElList.push({id: el.id(), isNode: el.isNode()});
-//             paramList.push("invisible");
-//         });
-//         module.exports.modelManager.changeModelElementGroupAttribute("visibilityStatus",modelElList, paramList, "me");
-//
-//     }
-//
-//     return result;
-// }
 
 
 //funda changed this to include selected nodes explicitly
@@ -718,7 +504,6 @@ module.exports.highlightSelected = function(param) {
     var elesToHighlight, elesToNotHighlight;
     var result = {};
     //If this is the first call of the function then call the original method
-    if (param.firstTime) {
         //find selected elements
         if (sbgnFiltering.isAllElementsAreNotHighlighted()) {
             //mark that there was no highlighted element
@@ -736,27 +521,6 @@ module.exports.highlightSelected = function(param) {
         }
         elesToHighlight = elesToHighlight.not(alreadyHighlighted);
         elesToNotHighlight = cy.elements().not(elesToHighlight);
-
-
-    }
-    // else {
-    //     elesToHighlight = param.elesToHighlight.not(cy.elements("[highlighted='true']").filter(":visible"));
-    //     elesToHighlight.data("highlighted", 'true');
-    //     sbgnFiltering.highlightElements(elesToHighlight.nodes());
-    //     sbgnFiltering.highlightElements(elesToHighlight.edges());
-    //
-    //
-    //     //If there are some elements to not highlight handle them
-    //     if (param.elesToNotHighlight != null) {
-    //         elesToNotHighlight = param.elesToNotHighlight;
-    //         elesToNotHighlight.removeData("highlighted");
-    //         sbgnFiltering.notHighlightElements(elesToNotHighlight.nodes());
-    //         sbgnFiltering.notHighlightElements(elesToNotHighlight.edges());
-    //
-    //         //If there are some elements to not highlight then allElementsWasNotHighlighted should be true
-    //         result.allElementsWasNotHighlighted = true;
-    //     }
-    // }
 
 
     if(param.sync){
@@ -790,82 +554,6 @@ module.exports.highlightSelected = function(param) {
 
     return result;
 }
-
-// module.exports.notHighlightEles = function(param) {
-//     var elesToNotHighlight = param.elesToNotHighlight;
-//     var elesToHighlight = param.elesToHighlight;
-//     var allElementsWasNotHighlighted = param.allElementsWasNotHighlighted;
-//
-//     var result = {};
-//
-//     if (param.allElementsWasNotHighlighted) {
-//
-//         sbgnFiltering.removeHighlights(true);
-//         result.elesToHighlight = elesToNotHighlight;
-//         result.elesToNotHighlight = cy.elements(":visible").not(elesToNotHighlight);
-//
-//         if (param.sync) {
-//
-//             if (elesToNotHighlight != null) {
-//                 var modelElList = [];
-//                 var paramList = [];
-//                 elesToNotHighlight.forEach(function (el) {
-//                     modelElList.push({id: el.id(), isNode: el.isNode()});
-//                     paramList.push("neutral");
-//                 });
-//                 module.exports.modelManager.changeModelElementGroupAttribute("highlightStatus", modelElList, paramList, "me");
-//
-//
-//             }
-//             if (elesToHighlight != null) {
-//                 var modelElList = [];
-//                 var paramList = [];
-//                 elesToHighlight.forEach(function (el) {
-//                     modelElList.push({id: el.id(), isNode: el.isNode()});
-//                     paramList.push("highlighted");
-//                 });
-//                 module.exports.modelManager.changeModelElementGroupAttribute("highlightStatus", modelElList, paramList, "me");
-//             }
-//
-//         }
-//     }
-//     else {
-//         sbgnFiltering.notHighlightElements(elesToNotHighlight.nodes());
-//         sbgnFiltering.notHighlightElements(elesToNotHighlight.edges());
-//         elesToNotHighlight.removeData("highlighted");
-//         result.elesToHighlight = elesToNotHighlight;
-//
-//         var modelElList = [];
-//         var paramList = [];
-//         elesToNotHighlight.forEach(function (el) {
-//             modelElList.push({id: el.id(), isNode: el.isNode()});
-//             paramList.push("notHighlighted");
-//         });
-//         module.exports.modelManager.changeModelElementGroupAttribute("highlightStatus", modelElList, paramList, "me");
-//
-//
-//
-//         var modelElList = [];
-//         var paramList = [];
-//         elesToHighlight.forEach(function (el) {
-//             modelElList.push({id: el.id(), isNode: el.isNode()});
-//             paramList.push("highlighted");
-//         });
-//         module.exports.modelManager.changeModelElementGroupAttribute("highlightStatus", modelElList, paramList, "me");
-//
-//
-//
-//     }
-//
-//
-//
-//
-//     result.sync = true;
-//     result.firstTime = false;
-//     result.elesToHighlight = elesToNotHighlight;
-//     result.elesToNotHighlight = elesToHighlight;
-//     return result;
-// }
 
 //Remove highlights actually means remove fadeouts
 module.exports.removeHighlights = function(param) {
@@ -905,6 +593,30 @@ module.exports.removeHighlights = function(param) {
     return result;
 }
 
+module.exports.changeChildren = function(param){
+    var result = {
+    };
+    var ele = param.ele;
+    result.dataType = param.dataType;
+    result.data = ele.data(param.dataType);
+    result.ele = ele;
+
+    var elArr = [];
+
+    if(param.data) { //if it has children
+        param.data.forEach(function (nodeId) {
+            elArr.push(cy.getElementById(nodeId));
+        });
+
+        ele._private.children = elArr;
+        refreshPaddings();
+
+        if (param.sync) {
+            module.exports.modelManager.changeModelNodeAttribute(param.modelDataName, param.ele.id(), elArr, "me");
+        }
+    }
+    return result;
+}
 
 module.exports.changeParent = function(param) {
     //If there is an inner param firstly call the function with it
@@ -932,6 +644,9 @@ module.exports.changeParent = function(param) {
     };
 
    //funda result.nodesData = getNodesData();
+
+
+
 
     //If new parent is not null some checks should be performed
     if (newParent) {
@@ -962,6 +677,8 @@ module.exports.changeParent = function(param) {
         }
     }
 
+
+
     //Change the parent of the node
     addRemoveUtilities.changeParent(node, oldParentId, newParent ? newParent._private.data.id : undefined);
 
@@ -972,12 +689,13 @@ module.exports.changeParent = function(param) {
         });
     }
 
+
+
     cy.nodes().updateCompoundBounds();
     module.exports.returnToPositionsAndSizesConditionally({nodesData:nodesData, sync: param.sync});
 
     if(param.sync){
         module.exports.modelManager.changeModelNodeAttribute('parent', param.node.id(), newParent.id(), "me");
-        //module.exports.updateServerraph();
 
 //FIXME should not be here
         refreshPaddings();
@@ -1022,28 +740,58 @@ module.exports.createCompoundForSelectedNodes = function(param) {
     newCompound._private.data.sbgnbbox.h = newCompound.height();
     newCompound._private.data.sbgnbbox.w = newCompound.width();
 
+
+    var modelElList = [];
+    var paramList = [];
+    nodesToMakeCompound.forEach(function(node){
+        // nodeIds.push(node.id());
+        modelElList.push({id: node.id(), isNode:true});
+        paramList.push(node.data('parent'));  //before changing parents
+    });
+
+
     addRemoveUtilities.changeParent(nodesToMakeCompound, oldParentId, newCompoundId);
 
 
     refreshPaddings();
 
     ////Notify other clients
-    module.exports.modelManager.addModelNode(newCompound.id(), {x: newCompound._private.position.x, y: newCompound._private.position.y, sbgnclass: param.compoundType}, "me");
-    module.exports.modelManager.initModelNode(newCompound,"me");
+
+
+    
+    module.exports.modelManager.addModelCompound(newCompound.id(), {x: newCompound._private.position.x, y: newCompound._private.position.y, sbgnclass: param.compoundType, width: newCompound.width(), height: newCompound.height()},  modelElList, paramList, "me");
+    
+    //module.exports.modelManager.addModelNode(newCompound.id(), {x: newCompound._private.position.x, y: newCompound._private.position.y, sbgnclass: param.compoundType}, "me");
+    module.exports.modelManager.initModelNode(newCompound,"me", true);
     //
     //
-    module.exports.modelManager.changeModelNodeAttribute('width', newCompoundId, newCompound.width(), "me");
-    module.exports.modelManager.changeModelNodeAttribute('height', newCompoundId, newCompound.height(), "me" );
-
-    var nodeIds =[];
-    nodesToMakeCompound.forEach(function(node){
-        nodeIds.push(node.id());
-
-        module.exports.modelManager.changeModelNodeAttribute('parent',node.id(), node.data('parent'), "me");
-    });
+   // module.exports.modelManager.changeModelNodeAttribute('width', newCompoundId, newCompound.width(), "me");
+   // module.exports.modelManager.changeModelNodeAttribute('height', newCompoundId, newCompound.height(), "me" );
 
 
-    module.exports.modelManager.changeModelNodeAttribute('children', newCompoundId, nodeIds, "me");
+
+    //var nodeIds =[];
+    // nodesToMakeCompound.forEach(function(node){
+    //     nodeIds.push(node.id());
+    //
+    //     module.exports.modelManager.changeModelNodeAttribute('parent',node.id(), node.data('parent'), "me");
+    // });
+
+
+    //
+    // var modelElList = [];
+    // var paramList = [];
+    // nodesToMakeCompound.forEach(function(node){
+    //     //nodeIds.push(node.id());
+    //     modelElList.push({id: node.id(), isNode:true});
+    //     paramList.push(node.data('parent'));
+    // });
+    
+ //   module.exports.modelManager.changeModelElementGroupAttribute("parent", modelElList, paramList, "me");
+
+
+
+    //module.exports.modelManager.changeModelNodeAttribute('children', newCompoundId, nodeIds, "me");
 
     return {
         nodesToMakeCompound: nodesToMakeCompound,
@@ -1089,7 +837,6 @@ module.exports.resizeNode = function(param) {
     var ele = param.ele;
 
     var result = {
-        firstTime: false,
         width: param.initialWidth,
         height: param.initialHeight,
         initialWidth: param.width,
@@ -1116,11 +863,8 @@ module.exports.resizeNode = function(param) {
 
 
     if(param.sync){
-
-        module.exports.modelManager.changeModelNodeAttribute('width', ele.id(), param.width, "me");
+        module.exports.modelManager.changeModelNodeAttribute('width',  ele.id(), param.width, "me");
         module.exports.modelManager.changeModelNodeAttribute('height', ele.id(), param.height, "me");
-
-
     }
 
     return result;
@@ -1149,7 +893,7 @@ module.exports.changeStateVariable = function(param) {
     statesAndInfos[ind] = state;
 
     param.data = statesAndInfos;
-    module.exports.modelManager.changeModelNodeAttribute('sbgnStatesAndInfos', param.ele.id(), param.data, "me", param.state );
+    module.exports.modelManager.changeModelNodeAttribute('sbgnStatesAndInfos', param.ele.id(), param.data, "me" );
 
     return result;
 }
@@ -1174,7 +918,7 @@ module.exports.changeUnitOfInformation = function(param) {
 
     param.data = statesAndInfos;
 
-    module.exports.modelManager.changeModelNodeAttribute('sbgnStatesAndInfos', param.ele.id(), param.data, "me", param.state);
+    module.exports.modelManager.changeModelNodeAttribute('sbgnStatesAndInfos', param.ele.id(), param.data, "me");
 
 
     return result;
@@ -1189,7 +933,7 @@ module.exports.addStateAndInfo = function(param) {
     relocateStateAndInfos(statesAndInfos);
 
     param.data = statesAndInfos;
-    module.exports.modelManager.changeModelNodeAttribute('sbgnStatesAndInfos', param.ele.id(), param.data, "me", param.obj );
+    module.exports.modelManager.changeModelNodeAttribute('sbgnStatesAndInfos', param.ele.id(), param.data, "me");
     param.ele.unselect(); //to refresh inspector
     param.ele.select(); //to refresh inspector
 
@@ -1212,7 +956,7 @@ module.exports.removeStateAndInfo = function(param) {
     relocateStateAndInfos(statesAndInfos);
 
     param.data = statesAndInfos;
-    module.exports.modelManager.changeModelNodeAttribute('sbgnStatesAndInfos', param.ele.id(), param.data, "me", param.state);
+    module.exports.modelManager.changeModelNodeAttribute('sbgnStatesAndInfos', param.ele.id(), param.data, "me");
     param.ele.unselect(); //to refresh inspector
     param.ele.select(); //to refresh inspector
     cy.forceRender();
@@ -1244,16 +988,12 @@ module.exports.changeIsMultimerStatus = function(param) {
         $('#inspector-is-multimer').attr('checked', makeMultimer);
     }
 
-    var result = {
-        data: !makeMultimer,
-        ele: node
-    };
+    cy.forceRender();
 
 
     if(param.sync){
         module.exports.modelManager.changeModelNodeAttribute('isMultimer', param.ele.id(), param.data, "me");
     }
-    return result;
 }
 
 module.exports.changeIsCloneMarkerStatus = function(param) {
@@ -1263,69 +1003,22 @@ module.exports.changeIsCloneMarkerStatus = function(param) {
 
     //node.data('sbgnclonemarker', (makeCloneMarker?true:undefined)); //is not working in this case
 
-    //cy.forceRender();
+
     if (cy.elements(":selected").length == 1 && cy.elements(":selected")[0] == param.ele) {
         $('#inspector-is-clone-marker').attr('checked', makeCloneMarker);
     }
 
-    //result is for undo operation
-    var result = {
-        data: !makeCloneMarker,
-        ele: node
-    };
+    cy.forceRender();
 
     if(param.sync){
         module.exports.modelManager.changeModelNodeAttribute('isCloneMarker', param.ele.id(), param.data);
     }
 
-    return result;
 }
 
-module.exports.changeChildren = function(param){
-    var result = {
-    };
-    var ele = param.ele;
-    result.dataType = param.dataType;
-    result.data = ele.data(param.dataType);
-    result.ele = ele;
-
-    var elArr = [];
-
-    if(param.data) { //if it has children
-        param.data.forEach(function (nodeId) {
-            elArr.push(cy.getElementById(nodeId));
-        });
-
-        ele._private.children = elArr;
-        refreshPaddings();
-
-        if (param.sync) {
-            module.exports.modelManager.changeModelNodeAttribute(param.modelDataName, param.ele.id(), elArr, "me");
-        }
-    }
-    return result;
-}
-
-module.exports.changePosition = function(param){
-    var result = {
-    };
-    var ele = param.ele;
 
 
-   // ele.data(param.dataType, param.data);
-    ele.position(param.data);
 
-    ele['position'](param.data);
-    if(param.sync){
-        //module.exports.modelManager.changeModelNodeAttribute(param.modelDataName, param.ele.id(), param.data, "me");
-        //module.exports.modelManager.moveModelNode(param.ele.id(), param.data, "me");
-        module.exports.modelManager.changeModelNodeAttribute("position", node.id(), node.position(), "me");
-
-    }
-
-    return result;
-
-}
 module.exports.changeVisibilityOrHighlightStatus = function(param){
 
     var ele = param.ele;

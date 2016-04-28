@@ -152,7 +152,6 @@ module.exports = function(){
 
             var param = {
                 sync: true,
-                firstTime: true,
                 selectedEles :  cy.$(":selected")
             };
 
@@ -173,7 +172,6 @@ module.exports = function(){
 
             var param = {
                 sync: true,
-                firstTime: true,
                 selectedEles : cy.$(":selected")
             };
 
@@ -197,7 +195,6 @@ module.exports = function(){
 
             var param = {
                 sync: true,
-                firstTime: true,
                 selectedEles : cy.$(":selected")
             };
 
@@ -219,7 +216,6 @@ module.exports = function(){
 
             var param = {
                 sync: true,
-                firstTime: true,
                 selectedEles : cy.$(":selected")
             };
 
@@ -235,7 +231,7 @@ module.exports = function(){
 
         addEdge:function(elId, source, target, sbgnclass, syncVal){
             var param ={
-                firstTime: true,
+
                 sync: syncVal,
                 id:elId,
                 source: source,
@@ -254,7 +250,7 @@ module.exports = function(){
 
         addNode:function(elId, x, y, sbgnclass, sbgnlabel, syncVal){
             var param ={
-                firstTime: true,
+
                 sync: syncVal,
                 id:elId,
                 x: x,
@@ -298,15 +294,13 @@ module.exports = function(){
             var el = cy.$(('#' + elId))[0];
             var param = {
                 ele: el,
-                id: elId,
                 data: pos,
                 sync: syncVal
             };
 
 
             if(el)
-                //editorActions.manager._do(editorActions.ChangePositionCommand(param));
-                editorActions.changePosition(param); //do/undo not performed here
+                editorActions.changePosition(param);
 
 
         },
@@ -388,6 +382,9 @@ module.exports = function(){
                 else if (propName == "highlightStatus" || propName == "visibilityStatus")
                     editorActions.changeVisibilityOrHighlightStatus(param); //no do/undo here
 
+                // else if(propName == "sbgnstatesandinfos"){
+                //     editorActions.changeUnitOfInformation()
+                // }
                 else {
                     if (propType == 'data')
                         editorActions.changeStyleData(param);
@@ -396,6 +393,8 @@ module.exports = function(){
                         editorActions.changeStyleCss(param);
                         //editorActions.manager._do(editorActions.ChangeStyleCssCommand(param));
                 }
+
+
 
 
               //  editorActions.refreshUndoRedoButtonsStatus();
@@ -432,7 +431,7 @@ module.exports = function(){
                 var jsonObj = editorActions.modelManager.getJsonFromModel();
                 sbgnContainer =  (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj,  editorActions));
                 if(syncVal)
-                    editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
+                    editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me");
 
             }
             else{
@@ -453,7 +452,7 @@ module.exports = function(){
 
                     if(syncVal) {
 
-                        editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
+                        editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me");
                     }
 
                 });
@@ -612,7 +611,6 @@ module.exports = function(){
 
                 sbgnBendPointUtilities.addBendPoint();
                 editorActions.manager._do(editorActions.changeBendPointsCommand(param));
-                refreshUndoRedoButtonsStatus();
             });
 
             $('#ctx-remove-bend-point').click(function (e) {
@@ -625,7 +623,6 @@ module.exports = function(){
 
                 sbgnBendPointUtilities.removeBendPoint();
                 editorActions.manager._do(editorActions.changeBendPointsCommand(param));
-                refreshUndoRedoButtonsStatus();
             });
 
             $('#samples').click(function (e) {
@@ -748,11 +745,7 @@ module.exports = function(){
                     sbgnElementUtilities.propogateReplacementToChildren(node, 0, newPosY - oldPosY);
                 }
 
-                cy.nodes().forEach(function(node){
-                    self.changePosition(node.id(), node.position(), "true");
-                })
-
-                editorActions.manager._do(editorActions.ReturnToPositionsAndSizesCommand({firstTime: true, sync: true,  nodesData: nodesData}));
+                editorActions.moveNodesConditionally({sync:true, nodes: selectedNodes});  //enable synchronization
                 editorActions.refreshUndoRedoButtonsStatus();
             });
 
@@ -780,11 +773,7 @@ module.exports = function(){
                     sbgnElementUtilities.propogateReplacementToChildren(node, 0, newPosY - oldPosY);
                 }
 
-                cy.nodes().forEach(function(node){
-                    self.changePosition(node.id(), node.position(), "true");
-                })
-
-                editorActions.manager._do(editorActions.ReturnToPositionsAndSizesCommand({firstTime: true, sync: true,  nodesData: nodesData}));
+                editorActions.moveNodesConditionally({sync:true, nodes: selectedNodes});  //enable synchronization
                 editorActions.refreshUndoRedoButtonsStatus();
             });
 
@@ -812,11 +801,7 @@ module.exports = function(){
                     sbgnElementUtilities.propogateReplacementToChildren(node, 0, newPosY - oldPosY);
                 }
 
-                cy.nodes().forEach(function(node){
-                    self.changePosition(node.id(), node.position(), "true");
-                })
-
-                editorActions.manager._do(editorActions.ReturnToPositionsAndSizesCommand({firstTime: true, sync: true, nodesData: nodesData}));
+                editorActions.moveNodesConditionally({sync:true, nodes: selectedNodes});  //enable synchronization
                 editorActions.refreshUndoRedoButtonsStatus();
             });
 
@@ -844,11 +829,7 @@ module.exports = function(){
                     sbgnElementUtilities.propogateReplacementToChildren(node, newPosX - oldPosX, 0);
                 }
 
-                cy.nodes().forEach(function(node){
-                    self.changePosition(node.id(), node.position(), "true");
-                })
-
-                editorActions.manager._do(editorActions.ReturnToPositionsAndSizesCommand({firstTime: true, sync: true, nodesData: nodesData}));
+                editorActions.moveNodesConditionally({sync:true, nodes: selectedNodes});  //enable synchronization
                 editorActions.refreshUndoRedoButtonsStatus();
             });
 
@@ -875,12 +856,8 @@ module.exports = function(){
                     });
                     sbgnElementUtilities.propogateReplacementToChildren(node, newPosX - oldPosX, 0);
                 }
-                cy.nodes().forEach(function(node){
-                    self.changePosition(node.id(), node.position(), "true");
-                })
 
-
-                editorActions.manager._do(editorActions.ReturnToPositionsAndSizesCommand({firstTime: true, sync: true, nodesData: nodesData}));
+                editorActions.moveNodesConditionally({sync:true, nodes: selectedNodes});  //enable synchronization
                 editorActions.refreshUndoRedoButtonsStatus();
             });
 
@@ -907,12 +884,8 @@ module.exports = function(){
                     });
                     sbgnElementUtilities.propogateReplacementToChildren(node, newPosX - oldPosX, 0);
                 }
-                cy.nodes().forEach(function(node){
-                    self.changePosition(node.id(), node.position(), "true");
-                })
 
-
-                editorActions.manager._do(editorActions.ReturnToPositionsAndSizesCommand({firstTime: true, sync: true, nodesData: nodesData}));
+                editorActions.moveNodesConditionally({sync:true, nodes: selectedNodes});  //enable synchronization
                 editorActions.refreshUndoRedoButtonsStatus();
             });
 
