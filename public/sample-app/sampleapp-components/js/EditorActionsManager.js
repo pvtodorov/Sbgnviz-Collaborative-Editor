@@ -112,38 +112,29 @@ module.exports.addEdge = function(param)
 }
 
 
+
 module.exports.expandNode = function(param) {
-    var result = {
-        firstTime: false
-    };
-    var node = param.node;
-    result.node = node;
-    result.nodesData = module.exports.getNodePositionsAndSizes();
-    if (param.firstTime) {
-        expandCollapseUtilities.expandNode(node);
-    }
-    else {
-        expandCollapseUtilities.simpleExpandNode(node);
-        module.exports.returnToPositionsAndSizes(param);
-    }
-    return result;
+        expandCollapseUtilities.expandNode(param.node);
+    if(param.sync)
+        module.exports.modelManager.changeModelNodeAttribute("expandCollapseStatus", param.node.id(), "expand", "me");
 }
 
 module.exports.collapseNode = function(param) {
-    var result = {
-        firstTime: false
-    };
-    var node = param.node;
-    result.node = node;
-    result.nodesData = module.exports.getNodePositionsAndSizes();
-    if (param.firstTime) {
-        expandCollapseUtilities.collapseNode(node);
-    }
-    else {
-        expandCollapseUtilities.simpleCollapseNode(node);
-        module.exports.returnToPositionsAndSizes(param);
-    }
-    return result;
+    expandCollapseUtilities.collapseNode(param.node);
+    if(param.sync)
+        module.exports.modelManager.changeModelNodeAttribute("expandCollapseStatus", param.node.id(), "collapse", "me");
+
+}
+module.exports.simpleExpandNode = function(param) {
+    expandCollapseUtilities.simpleExpandNode(param.node);
+    if(param.sync)
+        module.exports.modelManager.changeModelNodeAttribute("expandCollapseStatus", param.node.id(), "simpleExpand", "me");
+}
+
+module.exports.simpleCollapseNode = function(param) {
+    expandCollapseUtilities.simpleCollapseNode(param.node);
+    if(param.sync)
+        module.exports.modelManager.changeModelNodeAttribute("expandCollapseStatus", param.node.id(), "simpleCollapse", "me");
 }
 
 module.exports.expandGivenNodes = function(param) {
@@ -153,13 +144,8 @@ module.exports.expandGivenNodes = function(param) {
     };
     result.nodes = nodes;
     result.nodesData = module.exports.getNodePositionsAndSizes();
-    if (param.firstTime) {
+
         expandCollapseUtilities.expandGivenNodes(nodes);
-    }
-    else {
-        expandCollapseUtilities.simpleExpandGivenNodes(nodes);
-        module.exports.returnToPositionsAndSizes(param);
-    }
     return result;
 }
 
@@ -168,28 +154,26 @@ module.exports.collapseGivenNodes = function(param) {
     var result = {};
     result.nodes = nodes;
     result.nodesData = module.exports.getNodePositionsAndSizes();
-    if (param.firstTime) {
         expandCollapseUtilities.collapseGivenNodes(nodes);
-    }
-    else {
-        expandCollapseUtilities.simpleCollapseGivenNodes(nodes);
-        module.exports.returnToPositionsAndSizes(param);
-    }
+
     return result;
 }
 
+
+
+module.exports.simpleExpandGivenNodes = function(nodes) {
+    return expandCollapseUtilities.simpleExpandGivenNodes(nodes);
+}
+
+module.exports.simpleCollapseGivenNodes = function(nodes) {
+    return expandCollapseUtilities.simpleCollapseGivenNodes(nodes);
+}
 module.exports.expandAllNodes = function(param) {
     var result = {
         firstTime: false
     };
     result.nodesData = module.exports.getNodePositionsAndSizes();
-    if (param.firstTime) {
         result.expandStack = expandCollapseUtilities.expandAllNodes();
-    }
-    else {
-        result.expandStack = expandCollapseUtilities.simpleExpandAllNodes();
-        module.exports.returnToPositionsAndSizes(param);
-    }
     return result;
 }
 
@@ -201,15 +185,7 @@ module.exports.collapseExpandedStack = function(expandedStack) {
     return expandCollapseUtilities.collapseExpandedStack(expandedStack);
 }
 
-module.exports.undoExpandAllNodes = function(param) {
-    var result = {
-        firstTime: false
-    };
-    result.nodesData = module.exports.getNodePositionsAndSizes();
-    expandCollapseUtilities.collapseExpandedStack(param.expandStack);
-    module.exports.returnToPositionsAndSizes(param);
-    return result;
-}
+
 
 module.exports.getNodePositionsAndSizes = function() {
     var positionsAndSizes = {};
@@ -228,61 +204,6 @@ module.exports.getNodePositionsAndSizes = function() {
     return positionsAndSizes;
 }
 
-module.exports.undoExpandNode = function(param) {
-    var result = {
-        firstTime: false
-    };
-    result.nodesData = module.exports.getNodePositionsAndSizes();
-    result.node = expandCollapseUtilities.simpleCollapseNode(param.node);
-    module.exports.returnToPositionsAndSizes(param);
-    return result;
-}
-
-module.exports.undoCollapseNode = function(param) {
-    var result = {
-        firstTime: false
-    };
-    result.nodesData = module.exports.getNodePositionsAndSizes();
-    result.node = expandCollapseUtilities.simpleExpandNode(param.node);
-    module.exports.returnToPositionsAndSizes(param);
-    return result;
-}
-
-module.exports.undoExpandGivenNodes = function(param) {
-    var result = {
-        firstTime: false
-    };
-    result.nodesData = module.exports.getNodePositionsAndSizes();
-    result.nodes = expandCollapseUtilities.simpleCollapseGivenNodes(param.nodes);
-    module.exports.returnToPositionsAndSizes(param);
-    return result;
-}
-
-module.exports.undoCollapseGivenNodes = function(param) {
-    var result = {
-        firstTime: false
-    };
-    result.nodesData = module.exports.getNodePositionsAndSizes();
-    result.nodes = expandCollapseUtilities.simpleExpandGivenNodes(param.nodes);
-    module.exports.returnToPositionsAndSizes(param);
-    return result;
-}
-
-module.exports.simpleExpandNode = function(node) {
-    return expandCollapseUtilities.simpleExpandNode(node);
-}
-
-module.exports.simpleCollapseNode = function(node) {
-    return expandCollapseUtilities.simpleCollapseNode(node);
-}
-
-module.exports.simpleExpandGivenNodes = function(nodes) {
-    return expandCollapseUtilities.simpleExpandGivenNodes(nodes);
-}
-
-module.exports.simpleCollapseGivenNodes = function(nodes) {
-    return expandCollapseUtilities.simpleCollapseGivenNodes(nodes);
-}
 
 
 module.exports.performLayoutFunction = function(param) {
@@ -609,7 +530,7 @@ module.exports.changeChildren = function(param){
         });
 
         ele._private.children = elArr;
-        refreshPaddings();
+        expandCollapseUtilities.refreshPaddings();
 
         if (param.sync) {
             module.exports.modelManager.changeModelNodeAttribute(param.modelDataName, param.ele.id(), elArr, "me");
@@ -697,8 +618,8 @@ module.exports.changeParent = function(param) {
     if(param.sync){
         module.exports.modelManager.changeModelNodeAttribute('parent', param.node.id(), newParent.id(), "me");
 
-//FIXME should not be here
-        refreshPaddings();
+
+        expandCollapseUtilities.refreshPaddings();
     }
 
 
@@ -753,7 +674,7 @@ module.exports.createCompoundForSelectedNodes = function(param) {
     addRemoveUtilities.changeParent(nodesToMakeCompound, oldParentId, newCompoundId);
 
 
-    refreshPaddings();
+    expandCollapseUtilities.refreshPaddings();
 
     ////Notify other clients
 
@@ -764,34 +685,7 @@ module.exports.createCompoundForSelectedNodes = function(param) {
     //module.exports.modelManager.addModelNode(newCompound.id(), {x: newCompound._private.position.x, y: newCompound._private.position.y, sbgnclass: param.compoundType}, "me");
     module.exports.modelManager.initModelNode(newCompound,"me", true);
     //
-    //
-   // module.exports.modelManager.changeModelNodeAttribute('width', newCompoundId, newCompound.width(), "me");
-   // module.exports.modelManager.changeModelNodeAttribute('height', newCompoundId, newCompound.height(), "me" );
 
-
-
-    //var nodeIds =[];
-    // nodesToMakeCompound.forEach(function(node){
-    //     nodeIds.push(node.id());
-    //
-    //     module.exports.modelManager.changeModelNodeAttribute('parent',node.id(), node.data('parent'), "me");
-    // });
-
-
-    //
-    // var modelElList = [];
-    // var paramList = [];
-    // nodesToMakeCompound.forEach(function(node){
-    //     //nodeIds.push(node.id());
-    //     modelElList.push({id: node.id(), isNode:true});
-    //     paramList.push(node.data('parent'));
-    // });
-    
- //   module.exports.modelManager.changeModelElementGroupAttribute("parent", modelElList, paramList, "me");
-
-
-
-    //module.exports.modelManager.changeModelNodeAttribute('children', newCompoundId, nodeIds, "me");
 
     return {
         nodesToMakeCompound: nodesToMakeCompound,
@@ -823,7 +717,7 @@ module.exports.removeCompound = function(param) {
     module.exports.modelManager.deleteModelNode(removedCompound.id(), "me", true);
 
 
-    refreshPaddings();
+    expandCollapseUtilities.refreshPaddings();
 
     return {
         nodesToMakeCompound: childrenOfCompound,
@@ -1247,12 +1141,12 @@ module.exports.CollapseNodeCommand = function (param) {
     return new Command(module.exports.collapseNode, module.exports.undoCollapseNode, param, "collapseNode");
 };
 
-module.exports.SimpleExpandNodeCommand = function (node) {
-    return new Command(module.exports.simpleExpandNode, module.exports.simpleCollapseNode, node, "simpleExpandNode");
+module.exports.SimpleExpandNodeCommand = function (param) {
+    return new Command(module.exports.simpleExpandNode, module.exports.simpleCollapseNode, param, "simpleExpandNode");
 };
 
-module.exports.simpleCollapseNodeCommand = function (node) {
-    return new Command(module.exports.simpleCollapseNode, module.exports.simpleExpandNode, node, "simpleCollapseNode");
+module.exports.SimpleCollapseNodeCommand = function (param) {
+    return new Command(module.exports.simpleCollapseNode, module.exports.simpleExpandNode, param, "simpleCollapseNode");
 };
 
 module.exports.ExpandGivenNodesCommand = function (param) {

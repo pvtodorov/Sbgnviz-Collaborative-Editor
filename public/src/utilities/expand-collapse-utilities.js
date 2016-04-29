@@ -6,11 +6,10 @@ module.exports = function() {
         collapsedMetaEdgesInfo: {},
         //This map keeps track of the meta levels of edges by their id's
         edgesMetaLevels: {},
-        //Some nodes are initialized as collapsed this method handles them
+        //Some nodes are initilized as collapsed this method handles them
         initCollapsedNodes: function () {
             var nodesToCollapse = cy.nodes().filter(function (i, ele) {
-
-                if (ele.css()['expanded-collapsed'] != null && ele.css('expanded-collapsed') == 'collapsed') {
+                if (ele.data('expanded-collapsed') == 'collapsed') {
                     return true;
                 }
             });
@@ -68,9 +67,25 @@ module.exports = function() {
             }
             return nodes;
         },
-        simpleExpandAllNodes: function () {
-            var nodes = cy.nodes();
-            var orphans = nodes.orphans();
+        simpleExpandAllNodes: function (nodes, selector) {
+            if (nodes === undefined) {
+                nodes = cy.nodes();
+            }
+            var orphans;
+            if (selector) {
+                if (selector === "complex-parent") {
+                    orphans = cy.nodes().filter(function (i, element) {
+                        var parent = element.parent()[0];
+                        if (parent && parent.data('sbgnclass') == 'complex') {
+                            return false;
+                        }
+                        return true;
+                    });
+                }
+            }
+            else {
+                orphans = nodes.orphans();
+            }
             var expandStack = [];
             for (var i = 0; i < orphans.length; i++) {
                 var root = orphans[i];
@@ -78,8 +93,8 @@ module.exports = function() {
             }
             return expandStack;
         },
-        expandAllNodes: function () {
-            var expandedStack = this.simpleExpandAllNodes();
+        expandAllNodes: function (nodes, selector) {
+            var expandedStack = this.simpleExpandAllNodes(nodes, selector);
 
             $("#perform-incremental-layout").trigger("click");
 
@@ -135,9 +150,6 @@ module.exports = function() {
                 this.collapseBottomUp(node);
             }
             //If the root is a compound node to be collapsed then collapse it
-            //    if ((root.children().length > 0 || root._private.data.collapsedChildren != null)
-            //            && root.css()['expanded-collapsed'] != null
-            //            && root.css('expanded-collapsed') == 'collapsed')
             if (root.data("collapse") && root.children().length > 0) {
                 this.simpleCollapseNode(root);
                 root.removeData("collapse");
@@ -177,12 +189,18 @@ module.exports = function() {
          */
         simpleExpandNode: function (node) {
             if (node._private.data.collapsedChildren != null) {
+                //check how the position of the node is changed
+                var positionDiff = {
+                    x: node.position('x') - node.data('position-before-collapse').x,
+                    y: node.position('y') - node.data('position-before-collapse').y
+                };
+
                 node.removeData("infoLabel");
-                node.css('expanded-collapsed', 'expanded');
+                node.data('expanded-collapsed', 'expanded');
                 node._private.data.collapsedChildren.restore();
                 this.repairEdgesOfCollapsedChildren(node);
                 node._private.data.collapsedChildren = null;
-                node.removeClass('collapsed');
+//      node.removeClass('collapsed');
 
                 cy.nodes().updateCompoundBounds();
 
@@ -191,41 +209,62 @@ module.exports = function() {
                     node.removeStyle('content');
                 }
 
+                this.moveNodes(positionDiff, node.children()); //funda added this here
+                node.removeData('position-before-collapse');
+
+                this.refreshPaddings();
+
                 //return the node to undo the operation
                 return node;
             }
         },
+        moveNodes: function(positionDiff, nodes) {
+        for (var i = 0; i < nodes.length; i++) {
+            var node = nodes[i];
+            var oldX = node.position("x");
+            var oldY = node.position("y");
+            node.position({
+                x: oldX + positionDiff.x,
+                y: oldY + positionDiff.y
+            });
+            var children = node.children();
+            this.moveNodes(positionDiff, children);
+        }
+        },
         //collapse the given node without making incremental layout
         simpleCollapseNode: function (node) {
             if (node._private.data.collapsedChildren == null) {
+                node.data('position-before-collapse', {
+                    x: node.position().x,
+                    y: node.position().y
+                });
                 node.children().unselect();
                 node.children().connectedEdges().unselect();
 
-                node.css('expanded-collapsed', 'collapsed');
+                node.data('expanded-collapsed', 'collapsed');
 
                 var children = node.children();
 
                 //The children info of complex nodes should be shown when they are collapsed
                 if (node._private.data.sbgnclass == "complex") {
-                    var new_content;
                     //The node is being collapsed store infolabel to use it later
                     var infoLabel = getInfoLabel(node);
                     node._private.data.infoLabel = infoLabel;
-
-                    new_content = node._private.data.sbgnlabel;
-
-                    if (new_content == null || new_content == "") {
-                        new_content = infoLabel;
-                    }
-                    node.css('content', new_content);
                 }
 
                 for (var i = 0; i < children.length; i++) {
                     var child = children[i];
                     this.barrowEdgesOfcollapsedChildren(node, child);
                 }
+
                 this.removeChildren(node, node);
-                node.addClass('collapsed');
+                this.refreshPaddings();
+
+                if (node._private.data.sbgnclass == "complex") {
+                    node.addClass('changeContent');
+                }
+
+                node.position(node.data('position-before-collapse'));
 
                 //return the node to undo the operation
                 return node;
@@ -287,7 +326,7 @@ module.exports = function() {
                 var targetNode = edge.target();
                 var newEdge = jQuery.extend(true, {}, edge.jsons()[0]);
 
-                //Initialize the meta level of this edge if it is not initialized yet
+                //Initilize the meta level of this edge if it is not initilized yet
                 if (this.edgesMetaLevels[edge.id()] == null) {
                     this.edgesMetaLevels[edge.id()] = 0;
                 }
@@ -467,6 +506,71 @@ module.exports = function() {
                 numOfSimples: numOfSimples,
                 total: total
             };
+        },
+
+        calculatePaddings: function(paddingPercent) { //funda moved this here
+            var self = this;
+        //As default use the compound padding value
+        if(!paddingPercent){
+            paddingPercent = parseInt(sbgnStyleRules['compound-padding'], 10);
         }
+
+        var nodes = cy.nodes();
+        var total = 0;
+        var numOfSimples = 0;
+
+        for (var i = 0; i < nodes.length; i++) {
+            var theNode = nodes[i];
+            if (theNode.children() == null || theNode.children().length == 0) {
+                var collapsedChildren = theNode._private.data.collapsedChildren;
+                if (collapsedChildren == null || collapsedChildren.length == 0) {
+                    total += Number(theNode._private.data.sbgnbbox.w);
+                    total += Number(theNode._private.data.sbgnbbox.h);
+                    numOfSimples++;
+                }
+                else {
+                    var result = self.getCollapsedChildrenData(collapsedChildren, numOfSimples, total);
+                    numOfSimples = result.numOfSimples;
+                    total = result.total;
+                }
+            }
+        }
+
+        var calc_padding = (paddingPercent / 100) * Math.floor(total / (2 * numOfSimples));
+
+        if (calc_padding < 15) {
+            calc_padding = 15;
+        }
+
+        return calc_padding;
+    },
+
+    
+
+
+    refreshPaddings: function() { //funda moved this here
+
+        var calc_padding = this.calculatePaddings();
+
+        var nodes = cy.nodes();
+        nodes.css('padding-left', 0);
+        nodes.css('padding-right', 0);
+        nodes.css('padding-top', 0);
+        nodes.css('padding-bottom', 0);
+
+        var compounds = nodes.filter('$node > node');
+
+        compounds.css('padding-left', calc_padding);
+        compounds.css('padding-right', calc_padding);
+        compounds.css('padding-top', calc_padding);
+        compounds.css('padding-bottom', calc_padding);
+        //To refresh the nodes on the screen apply the preset layout
+        cy.layout({
+            name: "preset"
+        });
+
+
     }
-};
+
+    };
+}

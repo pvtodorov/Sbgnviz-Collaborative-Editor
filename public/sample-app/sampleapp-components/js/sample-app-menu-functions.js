@@ -13,26 +13,6 @@ var sbgnmlToJson =require('../../../src/utilities/sbgnml-to-json-converter.js')(
 var cytoscape = require('cytoscape');
 
 
-// var textToXmlObject = function(text) {
-//
-//     try {
-//         if (window.ActiveXObject) {
-//             var doc = new ActiveXObject('Microsoft.XMLDOM');
-//             doc.async = 'false';
-//             doc.loadXML(text);
-//
-//         } }
-//     catch(e){
-//         var DOMParser = require('xmldom').DOMParser;
-//         var parser = new DOMParser();
-//         var doc = parser.parseFromString(text, 'text/xml');
-//
-//     }
-//
-//     return doc;
-// };
-
-
 
 //Local functions
 var setFileContent = function (fileName) {
@@ -402,16 +382,19 @@ module.exports = function(){
 
         },
 
+        changeExpandCollapseStatus: function(elId, status, syncVal) {
+            var el = cy.$(('#' + elId))[0];
+            if (status == 'expand')
+                editorActions.expandNode( {node: el, sync: syncVal});
+            else if (status == 'simpleExpand')
+                editorActions.simpleExpandNode({node: el, sync: syncVal});
+            else if (status == 'collapse')
+                editorActions.collapseNode({node: el, sync: syncVal});
+            else if (status == 'simpleCollapse')
+                editorActions.simpleCollapseNode({node: el, sync: syncVal});
 
-
-
-
-
-
-
-
-
-
+        },
+        
         updateLayoutProperties: function(lp){
 
             if(sbgnLayout)
@@ -1232,7 +1215,8 @@ module.exports = function(){
             });
 
             $("#collapse-selected").click(function (e) {
-                var thereIs = expandCollapseUtilities.thereIsNodeToExpandOrCollapse(cy.nodes(":selected"), "collapse");
+                var nodes = cy.nodes(":selected").filter("[expanded-collapsed='expanded']");
+                var thereIs = expandCollapseUtilities.thereIsNodeToExpandOrCollapse(nodes, "collapse");
 
                 if (!thereIs) {
                     return;
@@ -1244,12 +1228,33 @@ module.exports = function(){
                 }
                 if (incrementalLayoutAfterExpandCollapse)
                     editorActions.manager._do(editorActions.CollapseGivenNodesCommand({
-                        nodes: cy.nodes(":selected"),
+                        nodes: nodes,
                         firstTime: true
                     }));
                 else
-                    editorActions.manager._do(editorActions.SimpleCollapseGivenNodesCommand(cy.nodes(":selected")));
+                    editorActions.manager._do(editorActions.SimpleCollapseGivenNodesCommand(nodes));
                 editorActions.refreshUndoRedoButtonsStatus();
+            });
+            $("#collapse-complexes").click(function (e) {
+                var complexes = cy.nodes("[sbgnclass='complex'][expanded-collapsed='expanded']");
+                var thereIs = expandCollapseUtilities.thereIsNodeToExpandOrCollapse(complexes, "collapse");
+
+                if (!thereIs) {
+                    return;
+                }
+
+                if (window.incrementalLayoutAfterExpandCollapse == null) {
+                    window.incrementalLayoutAfterExpandCollapse =
+                        (sbgnStyleRules['incremental-layout-after-expand-collapse'] == 'true');
+                }
+                if (incrementalLayoutAfterExpandCollapse)
+                    editorActions.manager._do(editorActions.manager.CollapseGivenNodesCommand({
+                        nodes: complexes,
+                        firstTime: true
+                    }));
+                else
+                    editorActions.manager._do(editorActions.SimpleCollapseGivenNodesCommand(complexes));
+                refreshUndoRedoButtonsStatus();
             });
             $("#collapse-selected-icon").click(function (e) {
                 if (modeHandler.mode == "selection-mode") {
@@ -1257,7 +1262,8 @@ module.exports = function(){
                 }
             });
             $("#expand-selected").click(function (e) {
-                var thereIs = expandCollapseUtilities.thereIsNodeToExpandOrCollapse(cy.nodes(":selected"), "expand");
+                var nodes = cy.nodes(":selected").filter("[expanded-collapsed='collapsed']");
+                var thereIs = expandCollapseUtilities.thereIsNodeToExpandOrCollapse(nodes, "expand");
 
                 if (!thereIs) {
                     return;
@@ -1273,10 +1279,36 @@ module.exports = function(){
                         firstTime: true
                     }));
                 else
-                    editorActions.manager._do(editorActions.SimpleExpandGivenNodesCommand(cy.nodes(":selected")));
+                    editorActions.manager._do(editorActions.SimpleExpandGivenNodesCommand(nodes));
                 editorActions.refreshUndoRedoButtonsStatus();
             });
 
+
+            $("#expand-complexes").click(function (e) {
+                var complexes = cy.nodes("[sbgnclass='complex'][expanded-collapsed='collapsed']");
+                var thereIs = expandCollapseUtilities.thereIsNodeToExpandOrCollapse(complexes, "expand");
+
+                if (!thereIs) {
+                    return;
+                }
+
+                if (window.incrementalLayoutAfterExpandCollapse == null) {
+                    window.incrementalLayoutAfterExpandCollapse =
+                        (sbgnStyleRules['incremental-layout-after-expand-collapse'] == 'true');
+                }
+                if (incrementalLayoutAfterExpandCollapse)
+                    editorActions.manager._do(editorActions.ExpandAllNodesCommand({
+                        nodes: complexes,
+                        firstTime: true,
+                        selector: "complex-parent"
+                    }));
+                else
+                    editorActions.manager._do(editorActions.SimpleExpandAllNodesCommand({
+                        nodes: complexes,
+                        selector: "complex-parent"
+                    }));
+                refreshUndoRedoButtonsStatus();
+            });
             $("#expand-selected-icon").click(function (e) {
                 if (modeHandler.mode == "selection-mode") {
                     $("#expand-selected").trigger('click');
@@ -1538,15 +1570,11 @@ function SBGNLayout(modelManager){
             animate: true,
             randomize: true,
             tilingPaddingVertical: function () {
-                return calculateTilingPaddings(parseInt(sbgnStyleRules['tiling-padding-vertical'], 10));
+                return expandCollapseUtilities.calculatePaddings(parseInt(sbgnStyleRules['tiling-padding-vertical'], 10)); //funda changed name
             },
             tilingPaddingHorizontal: function () {
-                return calculateTilingPaddings(parseInt(sbgnStyleRules['tiling-padding-horizontal'], 10));
+                return expandCollapseUtilities.calculatePaddings(parseInt(sbgnStyleRules['tiling-padding-horizontal'], 10));//funda changed name
             }
-           // tilingPaddingVertical: 20,
-           // tilingPaddingHorizontal: 20
-
-
 
         },
 
@@ -1682,15 +1710,16 @@ function SBGNProperties(){
         initialize: function () {
             var self = this;
             self.copyProperties();
-            self.template = _.template($("#sbgn-properties-template").html(), self.currentSBGNProperties);
+            self.template = _.template($("#sbgn-properties-template").html());
+            self.template(self.currentSBGNProperties);
         },
         copyProperties: function () {
             this.currentSBGNProperties = _.clone(this.defaultSBGNProperties);
         },
         render: function () {
             var self = this;
-            self.template = _.template($("#sbgn-properties-template").html(), self.currentSBGNProperties);
-            $(self.el).html(self.template);
+            self.template = _.template($("#sbgn-properties-template").html());
+            $(self.el).html(self.template( self.currentSBGNProperties));
 
             $(self.el).dialog();
 
@@ -1709,7 +1738,7 @@ function SBGNProperties(){
                 //Refresh paddings if needed
                 if (sbgnStyleRules['compound-padding'] != self.currentSBGNProperties.compoundPadding) {
                     sbgnStyleRules['compound-padding'] = self.currentSBGNProperties.compoundPadding;
-                    refreshPaddings();
+                    expandCollapseUtilities.refreshPaddings();
                 }
                 //Refresh label size if needed
                 if (sbgnStyleRules['dynamic-label-size'] != self.currentSBGNProperties.dynamicLabelSize) {
@@ -1739,4 +1768,3 @@ function SBGNProperties(){
             return this;
         }
     }}
-

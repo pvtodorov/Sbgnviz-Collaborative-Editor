@@ -148,6 +148,7 @@ module.exports =  function(model, docId, userId, userName) {
             if(cmd.opName == "set"){
                 if(cmd.opTarget == "element" && cmd.elType == "node")
                     this.changeModelNodeAttribute(cmd.opAttr,cmd.elId, cmd.prevParam, null); //user is null to enable updating in the editor
+
                 else if(cmd.opTarget == "element" && cmd.elType == "edge")
                     this.changeModelEdgeAttribute(cmd.opAttr,cmd.elId, cmd.prevParam, null);
                 else if(cmd.opTarget == "element group")
@@ -461,8 +462,24 @@ module.exports =  function(model, docId, userId, userName) {
             var status = "Node id not found";
             var nodePath = model.at('_page.doc.cy.nodes.'  + nodeId);
 
+
             var prevAttVal = nodePath.get(attStr);
+
+
             nodePath.pass({user:user}).set(attStr,attVal);
+
+
+            if(attStr == "expandCollapseStatus") {
+                if (attVal == "expand")
+                    prevAttVal = "collapse";
+                if (attVal == "collapse")
+                    prevAttVal = "expand";
+                if (attVal == "simpleExpand")
+                    prevAttVal = "simpleCollapse";
+                if (attVal == "simpleCollapse")
+                    prevAttVal = "simpleExpand";
+            }
+
 
             if(!noHistUpdate) {
 
@@ -825,6 +842,7 @@ module.exports =  function(model, docId, userId, userName) {
 
 
             nodePath.set('id', node.id());
+
 
             var backgroundOpacity= nodePath.get('backgroundOpacity');
 

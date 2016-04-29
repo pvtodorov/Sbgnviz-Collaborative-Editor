@@ -67,7 +67,7 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
                 }
             }
 
-            refreshPaddings();
+            expandCollapseUtilities.refreshPaddings();
 
             for (var i = 0; i < nodes.length; i++) {
                 var node = nodes[i];
@@ -606,29 +606,24 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
 
                     selectAgain = cy.filter(":selected");
                     cancelSelection = true;
-                    var expandedOrcollapsed = this.css('expanded-collapsed');
+                    var expandedOrcollapsed = this.data('expanded-collapsed');
 
                     var incrementalLayoutAfterExpandCollapse =
                         (sbgnStyleRules['incremental-layout-after-expand-collapse'] == 'true');
 
                     if (expandedOrcollapsed == 'expanded') {
                         if (incrementalLayoutAfterExpandCollapse)
-                            editorActions.manager._do(editorActions.CollapseNodeCommand({
-                                node: this,
-                                firstTime: true
-                            }));
+                            editorActions.collapseNode({node:this, sync: true}); //funda
+
                         else
-                            editorActions.manager._do(new SimpleCollapseNodeCommand(this));
+                            editorActions.simpleCollapseNode({node:this, sync: true});
+
                         editorActions.refreshUndoRedoButtonsStatus();
                     }
                     else {
                         if (incrementalLayoutAfterExpandCollapse)
-                            editorActions.manager._do(editorActions.ExpandNodeCommand({
-                                node: this,
-                                firstTime: true
-                            }));
-                        else
-                            editorActions.manager._do(editorActions.SimpleExpandNodeCommand(this));
+                            editorActions.expandNode({node:this, sync: true}); //funda
+                            editorActions.simpleExpandNode({node:this, sync: true});
                         editorActions.refreshUndoRedoButtonsStatus();
                     }
                 }

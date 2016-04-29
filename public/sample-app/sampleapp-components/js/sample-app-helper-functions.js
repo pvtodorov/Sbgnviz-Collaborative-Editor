@@ -173,74 +173,10 @@ $(document).keydown(function (e) {
 
 
 
-var calculatePaddings = function(paddingPercent) {
-    //As default use the compound padding value
-    if(!paddingPercent){
-        paddingPercent = parseInt(sbgnStyleRules['compound-padding'], 10);
-    }
-
-    var nodes = cy.nodes();
-    var total = 0;
-    var numOfSimples = 0;
-
-    for (var i = 0; i < nodes.length; i++) {
-        var theNode = nodes[i];
-        if (theNode.children() == null || theNode.children().length == 0) {
-            var collapsedChildren = theNode._private.data.collapsedChildren;
-            if (collapsedChildren == null || collapsedChildren.length == 0) {
-                total += Number(theNode._private.data.sbgnbbox.w);
-                total += Number(theNode._private.data.sbgnbbox.h);
-                numOfSimples++;
-            }
-            else {
-                var result = expandCollapseUtilities.getCollapsedChildrenData(collapsedChildren, numOfSimples, total);
-                numOfSimples = result.numOfSimples;
-                total = result.total;
-            }
-        }
-    }
-
-    var calc_padding = (paddingPercent / 100) * Math.floor(total / (2 * numOfSimples));
-
-    if (calc_padding < 15) {
-        calc_padding = 15;
-    }
-
-    return calc_padding;
-};
-
-var calculateTilingPaddings = calculatePaddings;
-var calculateCompoundPaddings = calculatePaddings;
 
 
-var refreshPaddings = function () {
-
-    var calc_padding = calculateCompoundPaddings();
-
-    var nodes = cy.nodes();
-    nodes.css('padding-left', 0);
-    nodes.css('padding-right', 0);
-    nodes.css('padding-top', 0);
-    nodes.css('padding-bottom', 0);
-
-    var compounds = nodes.filter('$node > node');
-
-    compounds.css('padding-left', calc_padding);
-    compounds.css('padding-right', calc_padding);
-    compounds.css('padding-top', calc_padding);
-    compounds.css('padding-bottom', calc_padding);
-    //To refresh the nodes on the screen apply the preset layout
-    makePresetLayout();
 
 
-};
-
-
-var makePresetLayout = function () {
-    cy.layout({
-        name: "preset"
-    });
-};
 var enableDragAndDropMode = function () {
     window.dragAndDropModeEnabled = true;
     $("#sbgn-network-container").addClass("target-cursor");

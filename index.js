@@ -544,6 +544,15 @@ app.proto.init = function (model) {
         }
     });
 
+    model.on('all', '_page.doc.cy.nodes.*.expandCollapseStatus', function(id,  op, expandCollapseStatus, prev, passed){
+
+        if(docReady && passed.user == null) {
+            menu.changeExpandCollapseStatus(id, expandCollapseStatus, false);
+         //   menu.changeElementProperty(id, 'highlightStatus', 'highlightStatus', highlightStatus, 'data', false);
+
+        }
+    });
+
     model.on('all', '_page.doc.cy.nodes.*.highlightStatus', function(id,  op, highlightStatus, prev, passed){
 
         if(docReady && passed.user == null) {
