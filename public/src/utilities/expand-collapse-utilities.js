@@ -287,7 +287,7 @@ module.exports = function() {
          * for all children of the node parameter call this method
          * with the same root parameter,
          * remove the child and add the removed child to the collapsedchildren data
-         * of the root to restore them in the case of expandation
+         * of the root to restore them in the case of expansion
          * root._private.data.collapsedChildren keeps the nodes to restore when the
          * root is expanded
          */

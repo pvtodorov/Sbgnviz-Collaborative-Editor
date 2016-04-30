@@ -623,7 +623,9 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
                     else {
                         if (incrementalLayoutAfterExpandCollapse)
                             editorActions.expandNode({node:this, sync: true}); //funda
+                        else
                             editorActions.simpleExpandNode({node:this, sync: true});
+                        
                         editorActions.refreshUndoRedoButtonsStatus();
                     }
                 }

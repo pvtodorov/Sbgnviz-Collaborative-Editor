@@ -548,10 +548,10 @@ app.proto.init = function (model) {
 
         if(docReady && passed.user == null) {
             menu.changeExpandCollapseStatus(id, expandCollapseStatus, false);
-         //   menu.changeElementProperty(id, 'highlightStatus', 'highlightStatus', highlightStatus, 'data', false);
 
         }
     });
+
 
     model.on('all', '_page.doc.cy.nodes.*.highlightStatus', function(id,  op, highlightStatus, prev, passed){
 

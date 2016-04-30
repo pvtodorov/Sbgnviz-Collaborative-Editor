@@ -345,54 +345,37 @@ module.exports = function(){
 
                 if (propName == 'parent')//TODO
                     editorActions.changeParent(param);
-                    //editorActions.manager._do(editorActions.ChangeParentCommand(param));
 
                 else if (propName == 'children') {
                     editorActions.changeChildren(param);
-                    //editorActions.manager._do(editorActions.ChangeChildrenCommand(param));
+                }
+                else if (propName == 'collapsedChildren') {
+                    editorActions.changeCollapsedChildren(param);
                 }
 
-                //else if(propName == 'highlighted'){
-                //
-                //    if(data == true)
-                //        editorActions.manager._do(editorActions.ShowSelectedCommand(param));
-                //    else
-                //        editorActions.manager._do(editorActions.HideSelectedCommand(param));
-                //}
                 else if (propName == "highlightStatus" || propName == "visibilityStatus")
                     editorActions.changeVisibilityOrHighlightStatus(param); //no do/undo here
 
-                // else if(propName == "sbgnstatesandinfos"){
-                //     editorActions.changeUnitOfInformation()
-                // }
                 else {
                     if (propType == 'data')
                         editorActions.changeStyleData(param);
-                        //editorActions.manager._do(editorActions.ChangeStyleDataCommand(param));
                     else if (propType == 'css')
                         editorActions.changeStyleCss(param);
-                        //editorActions.manager._do(editorActions.ChangeStyleCssCommand(param));
                 }
-
-
-
-
-              //  editorActions.refreshUndoRedoButtonsStatus();
             }
 
         },
 
         changeExpandCollapseStatus: function(elId, status, syncVal) {
             var el = cy.$(('#' + elId))[0];
-            if (status == 'expand')
-                editorActions.expandNode( {node: el, sync: syncVal});
-            else if (status == 'simpleExpand')
-                editorActions.simpleExpandNode({node: el, sync: syncVal});
-            else if (status == 'collapse')
-                editorActions.collapseNode({node: el, sync: syncVal});
-            else if (status == 'simpleCollapse')
-                editorActions.simpleCollapseNode({node: el, sync: syncVal});
 
+            setTimeout(function() { //wait for the layout to run on the other client's side
+                if (status == 'expand') //no need to run incremental layout here -- other client will have run it already
+                    editorActions.simpleExpandNode({node: el, sync: syncVal});
+                else if (status == 'collapse')
+                    editorActions.simpleCollapseNode({node: el, sync: syncVal});
+
+            },0);
         },
         
         updateLayoutProperties: function(lp){
@@ -456,53 +439,31 @@ module.exports = function(){
 
                 var ind = modelManager.getSampleInd("me");
 
-                // if(ind < 0){ //load a new non-sample graph
-                //
-                //     jsonObj = editorActions.modelManager.getJsonFromModel();
-                //     cytoscape({
-                //         elements: cytoscapeJsGraph,
-                //         headless: true,
-                //         styleEnabled: true,
-                //
-                //
-                //         ready: function () {
-                //             cy = this;
-                //         }
-                //     });
-                //
-                //         editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
-                //
-                // }
-                //else{ //load a sample
 
-                    getXMLObject(ind, function (xmlObject) {
+                getXMLObject(ind, function (xmlObject) {
 
-                        var xmlText = new XMLSerializer().serializeToString(xmlObject);
-                       // var $ = require('jquery');
-                        var jsonObj = sbgnmlToJson.convert(xmlText);
+                    var xmlText = new XMLSerializer().serializeToString(xmlObject);
+                   // var $ = require('jquery');
+                    var jsonObj = sbgnmlToJson.convert(xmlText);
 
 
+                    cytoscape({
+                        elements: jsonObj,
+                        headless: true,
+                        styleEnabled: true,
 
 
-
-
-                        cytoscape({
-                            elements: jsonObj,
-                            headless: true,
-                            styleEnabled: true,
-
-
-                            ready: function () {
-                                cy = this;
-                            }
-                        });
-
-
-
-                        editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
-
-
+                        ready: function () {
+                            cy = this;
+                        }
                     });
+
+
+
+                    editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
+
+
+                });
       //          }
 
 
@@ -1229,10 +1190,10 @@ module.exports = function(){
                 if (incrementalLayoutAfterExpandCollapse)
                     editorActions.manager._do(editorActions.CollapseGivenNodesCommand({
                         nodes: nodes,
-                        firstTime: true
+                        sync: true
                     }));
                 else
-                    editorActions.manager._do(editorActions.SimpleCollapseGivenNodesCommand(nodes));
+                    editorActions.manager._do(editorActions.SimpleCollapseGivenNodesCommand({nodes:nodes, sync: true}));
                 editorActions.refreshUndoRedoButtonsStatus();
             });
             $("#collapse-complexes").click(function (e) {
@@ -1250,10 +1211,10 @@ module.exports = function(){
                 if (incrementalLayoutAfterExpandCollapse)
                     editorActions.manager._do(editorActions.manager.CollapseGivenNodesCommand({
                         nodes: complexes,
-                        firstTime: true
+                        sync: true
                     }));
                 else
-                    editorActions.manager._do(editorActions.SimpleCollapseGivenNodesCommand(complexes));
+                    editorActions.manager._do(editorActions.SimpleCollapseGivenNodesCommand({nodes:compexes, sync: true}));
                 refreshUndoRedoButtonsStatus();
             });
             $("#collapse-selected-icon").click(function (e) {
@@ -1276,10 +1237,10 @@ module.exports = function(){
                 if (incrementalLayoutAfterExpandCollapse)
                     editorActions.manager._do(editorActions.ExpandGivenNodesCommand({
                         nodes: cy.nodes(":selected"),
-                        firstTime: true
+                        sync: true
                     }));
                 else
-                    editorActions.manager._do(editorActions.SimpleExpandGivenNodesCommand(nodes));
+                    editorActions.manager._do(editorActions.SimpleExpandGivenNodesCommand({nodes:nodes, sync: true}));
                 editorActions.refreshUndoRedoButtonsStatus();
             });
 
@@ -1299,12 +1260,13 @@ module.exports = function(){
                 if (incrementalLayoutAfterExpandCollapse)
                     editorActions.manager._do(editorActions.ExpandAllNodesCommand({
                         nodes: complexes,
-                        firstTime: true,
+                        sync: true,
                         selector: "complex-parent"
                     }));
                 else
                     editorActions.manager._do(editorActions.SimpleExpandAllNodesCommand({
                         nodes: complexes,
+                        sync: true,
                         selector: "complex-parent"
                     }));
                 refreshUndoRedoButtonsStatus();
@@ -1329,10 +1291,10 @@ module.exports = function(){
                 if (incrementalLayoutAfterExpandCollapse)
                     editorActions.manager._do(editorActions.CollapseGivenNodesCommand({
                         nodes: cy.nodes(),
-                        firstTime: true
+                        sync: true
                     }));
                 else
-                    editorActions.manager._do(editorActions.SimpleCollapseGivenNodesCommand(cy.nodes()));
+                    editorActions.manager._do(editorActions.SimpleCollapseGivenNodesCommand({nodes: cy.nodes(), sync: true}));
                 editorActions.refreshUndoRedoButtonsStatus();
             });
 
@@ -1383,9 +1345,16 @@ module.exports = function(){
 
 
             $("#perform-incremental-layout").click(function (e) {
+
+                var nodesData = getNodesData();
+
                 beforePerformLayout();
 
                 sbgnLayout.applyIncrementalLayout();
+
+                //funda
+                editorActions.manager._do(editorActions.PerformLayoutCommand({nodesData:nodesData}));
+                editorActions.refreshUndoRedoButtonsStatus();
             });
 
             $("#undo-last-action").click(function (e) {

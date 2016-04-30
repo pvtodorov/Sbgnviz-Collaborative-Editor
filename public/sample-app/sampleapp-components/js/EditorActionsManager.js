@@ -117,6 +117,7 @@ module.exports.expandNode = function(param) {
         expandCollapseUtilities.expandNode(param.node);
     if(param.sync)
         module.exports.modelManager.changeModelNodeAttribute("expandCollapseStatus", param.node.id(), "expand", "me");
+
 }
 
 module.exports.collapseNode = function(param) {
@@ -128,64 +129,67 @@ module.exports.collapseNode = function(param) {
 module.exports.simpleExpandNode = function(param) {
     expandCollapseUtilities.simpleExpandNode(param.node);
     if(param.sync)
-        module.exports.modelManager.changeModelNodeAttribute("expandCollapseStatus", param.node.id(), "simpleExpand", "me");
+        module.exports.modelManager.changeModelNodeAttribute("expandCollapseStatus", param.node.id(), "expand", "me");
 }
 
 module.exports.simpleCollapseNode = function(param) {
     expandCollapseUtilities.simpleCollapseNode(param.node);
     if(param.sync)
-        module.exports.modelManager.changeModelNodeAttribute("expandCollapseStatus", param.node.id(), "simpleCollapse", "me");
+        module.exports.modelManager.changeModelNodeAttribute("expandCollapseStatus", param.node.id(), "collapse", "me");
+
 }
 
 module.exports.expandGivenNodes = function(param) {
-    var nodes = param.nodes;
-    var result = {
-        firstTime: false
-    };
-    result.nodes = nodes;
-    result.nodesData = module.exports.getNodePositionsAndSizes();
-
-        expandCollapseUtilities.expandGivenNodes(nodes);
-    return result;
+    expandCollapseUtilities.expandGivenNodes(param.nodes);
+    if(param.sync){
+        param.nodes.forEach(function(node){
+            module.exports.modelManager.changeModelNodeAttribute("expandCollapseStatus", node.id(), "expand", "me");
+        });
+    }
 }
 
 module.exports.collapseGivenNodes = function(param) {
-    var nodes = param.nodes;
-    var result = {};
-    result.nodes = nodes;
-    result.nodesData = module.exports.getNodePositionsAndSizes();
-        expandCollapseUtilities.collapseGivenNodes(nodes);
+    expandCollapseUtilities.collapseGivenNodes(param.nodes);
+    if(param.sync){
+        param.nodes.forEach(function(node){
+            module.exports.modelManager.changeModelNodeAttribute("expandCollapseStatus", node.id(), "collapse", "me");
+        });
+    }
 
-    return result;
 }
 
-
-
-module.exports.simpleExpandGivenNodes = function(nodes) {
-    return expandCollapseUtilities.simpleExpandGivenNodes(nodes);
+module.exports.simpleExpandGivenNodes = function(param) {
+    expandCollapseUtilities.simpleExpandGivenNodes(param.nodes);
+    if(param.sync){
+        param.nodes.forEach(function(node){
+            module.exports.modelManager.changeModelNodeAttribute("expandCollapseStatus", node.id(), "expand", "me");
+        });
+    }
 }
 
-module.exports.simpleCollapseGivenNodes = function(nodes) {
-    return expandCollapseUtilities.simpleCollapseGivenNodes(nodes);
+module.exports.simpleCollapseGivenNodes = function(param) {
+    expandCollapseUtilities.simpleCollapseGivenNodes(param.nodes);
+    if(param.sync){
+        param.nodes.forEach(function(node){
+            module.exports.modelManager.changeModelNodeAttribute("expandCollapseStatus", node.id(), "collapse", "me");
+        });
+    }
 }
-module.exports.expandAllNodes = function(param) {
-    var result = {
-        firstTime: false
-    };
-    result.nodesData = module.exports.getNodePositionsAndSizes();
-        result.expandStack = expandCollapseUtilities.expandAllNodes();
-    return result;
+module.exports.expandAllNodes = function() {
+    expandCollapseUtilities.expandAllNodes();
+    cy.nodes().forEach(function(node){
+        module.exports.modelManager.changeModelNodeAttribute("expandCollapseStatus", node.id(), "expand", "me");
+    });
+
 }
 
 module.exports.simpleExpandAllNodes = function() {
-    return expandCollapseUtilities.simpleExpandAllNodes();
+    expandCollapseUtilities.simpleExpandAllNodes();
+    cy.nodes().forEach(function(node){
+        module.exports.modelManager.changeModelNodeAttribute("expandCollapseStatus", node.id(), "collapse", "me");
+    });
+
 }
-
-module.exports.collapseExpandedStack = function(expandedStack) {
-    return expandCollapseUtilities.collapseExpandedStack(expandedStack);
-}
-
-
 
 module.exports.getNodePositionsAndSizes = function() {
     var positionsAndSizes = {};
@@ -221,7 +225,6 @@ module.exports.performLayoutFunction = function(param) {
         module.exports.modelManager.changeModelElementGroupAttribute("position", modelElList, paramList, "me");
     });
 
-  //  return module.exports.returnToPositionsAndSizes(param);
 }
 
 module.exports.returnToPositionsAndSizesConditionally = function(param) {
@@ -996,6 +999,9 @@ module.exports.changeStyleData = function( param) {
         ele.addClass('changeContent');
 
     }
+    else if(param.dataType == "collapsedChildren"){
+        
+    }
 
 
     if(param.sync){
@@ -1133,22 +1139,6 @@ module.exports.AddEdgeCommand = function (newEdge)
 };
 
 
-module.exports.ExpandNodeCommand = function (param) {
-    return new Command(module.exports.expandNode, module.exports.undoExpandNode, param, "expandNode");
-};
-
-module.exports.CollapseNodeCommand = function (param) {
-    return new Command(module.exports.collapseNode, module.exports.undoCollapseNode, param, "collapseNode");
-};
-
-module.exports.SimpleExpandNodeCommand = function (param) {
-    return new Command(module.exports.simpleExpandNode, module.exports.simpleCollapseNode, param, "simpleExpandNode");
-};
-
-module.exports.SimpleCollapseNodeCommand = function (param) {
-    return new Command(module.exports.simpleCollapseNode, module.exports.simpleExpandNode, param, "simpleCollapseNode");
-};
-
 module.exports.ExpandGivenNodesCommand = function (param) {
     return new Command(module.exports.expandGivenNodes, module.exports.undoExpandGivenNodes, param, "expandGivenNodes");
 };
@@ -1157,12 +1147,12 @@ module.exports.CollapseGivenNodesCommand = function (param) {
     return new Command(module.exports.collapseGivenNodes, module.exports.undoCollapseGivenNodes, param, "collapseGivenNodes");
 };
 
-module.exports.SimpleExpandGivenNodesCommand = function (nodes) {
-    return new Command(module.exports.simpleExpandGivenNodes, module.exports.simpleCollapseGivenNodes, nodes, "simpleExpandGivenNodes");
+module.exports.SimpleExpandGivenNodesCommand = function (param) {
+    return new Command(module.exports.simpleExpandGivenNodes, module.exports.simpleCollapseGivenNodes, param, "simpleExpandGivenNodes");
 };
 
-module.exports.SimpleCollapseGivenNodesCommand = function (nodes) {
-    return new Command(module.exports.simpleCollapseGivenNodes, module.exports.simpleExpandGivenNodes, nodes, "simpleCollapseGivenNodes");
+module.exports.SimpleCollapseGivenNodesCommand = function (param) {
+    return new Command(module.exports.simpleCollapseGivenNodes, module.exports.simpleExpandGivenNodes, param, "simpleCollapseGivenNodes");
 };
 
 module.exports.SimpleExpandAllNodesCommand = function () {
@@ -1353,7 +1343,7 @@ module.exports.manager = new Manager();
 
 
 /*
- * This function refreshs the enabled-disabled status of undo-redo buttons.
+ * This function refreshes the enabled-disabled status of undo-redo buttons.
  * The status of buttons are determined by whether the undo-redo stacks are empty.
  */
 module.exports.refreshUndoRedoButtonsStatus = function () {

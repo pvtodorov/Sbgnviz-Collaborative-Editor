@@ -474,10 +474,6 @@ module.exports =  function(model, docId, userId, userName) {
                     prevAttVal = "collapse";
                 if (attVal == "collapse")
                     prevAttVal = "expand";
-                if (attVal == "simpleExpand")
-                    prevAttVal = "simpleCollapse";
-                if (attVal == "simpleCollapse")
-                    prevAttVal = "simpleExpand";
             }
 
 
@@ -532,41 +528,40 @@ module.exports =  function(model, docId, userId, userName) {
         deleteModelNode: function(nodeId, user, noHistUpdate){
             var status = "Node id not found";
             var nodePath = model.at('_page.doc.cy.nodes.'  + nodeId);
-        //    if(nodePath.get('id')) {
 
-                if(!noHistUpdate){
-                    var pos = nodePath.get('position');
-                    var sbgnclass = nodePath.get('sbgnclass');
-                    var borderColor = nodePath.get('borderColor');
-                    var borderWidth = nodePath.get('borderWidth');
-                    var backgroundColor = nodePath.get('backgroundColor');
-                    var width = nodePath.get('width');
-                    var height = nodePath.get('height');
-                    var parent = nodePath.get('parent');
-                    var sbgnlabel = nodePath.get('sbgnlabel');
-                    var isCloneMarker = nodePath.get('isCloneMarker');
-                    var isMultimer = nodePath.get('isMultimer');
-                    var sbgnStatesAndInfos = nodePath.get('sbgnStatesAndInfos');
-                    var children = nodePath.get('children');
-                    var highlightColor = nodePath.get('highlightColor');
-                    var ports = nodePath.get('ports');
-
-
-                    prevParam = {x: pos.x , y: pos.y , sbgnclass:sbgnclass, width: width, height: height,
-                                 borderColor: borderColor, borderWidth: borderWidth, sbgnlabel: sbgnlabel,
-                                 sbgnStatesAndInfos:sbgnStatesAndInfos, parent:parent, isCloneMarker: isCloneMarker,
-                                 isMultimer: isMultimer, children: children, highlightColor: highlightColor, ports: ports};
+            if(!noHistUpdate){
+                var pos = nodePath.get('position');
+                var sbgnclass = nodePath.get('sbgnclass');
+                var borderColor = nodePath.get('borderColor');
+                var borderWidth = nodePath.get('borderWidth');
+                var backgroundColor = nodePath.get('backgroundColor');
+                var width = nodePath.get('width');
+                var height = nodePath.get('height');
+                var parent = nodePath.get('parent');
+                var sbgnlabel = nodePath.get('sbgnlabel');
+                var isCloneMarker = nodePath.get('isCloneMarker');
+                var isMultimer = nodePath.get('isMultimer');
+                var sbgnStatesAndInfos = nodePath.get('sbgnStatesAndInfos');
+                var children = nodePath.get('children');
+                var highlightColor = nodePath.get('highlightColor');
+                var ports = nodePath.get('ports');
 
 
+                prevParam = {x: pos.x , y: pos.y , sbgnclass:sbgnclass, width: width, height: height,
+                             borderColor: borderColor, borderWidth: borderWidth, sbgnlabel: sbgnlabel,
+                             sbgnStatesAndInfos:sbgnStatesAndInfos, parent:parent, isCloneMarker: isCloneMarker,
+                             isMultimer: isMultimer, children: children, highlightColor: highlightColor, ports: ports};
 
-                    this.updateHistory({opName:'delete',opTarget:'element', elType:'node', elId: nodeId, prevParam: prevParam});
 
-                }
 
-                model.pass({user: user}).del(('_page.doc.cy.nodes.' + nodeId));
+                this.updateHistory({opName:'delete',opTarget:'element', elType:'node', elId: nodeId, prevParam: prevParam});
 
-                status = "success";
-        //    }
+            }
+
+            model.pass({user: user}).del(('_page.doc.cy.nodes.' + nodeId));
+
+            status = "success";
+
 
             return status;
 
@@ -1126,9 +1121,6 @@ module.exports =  function(model, docId, userId, userName) {
 
             if(!noHistUpdate){
                 this.updateHistory({opName:'init',  opTarget:'model'});
-           //     this.updateHistory({opName:'init',opTarget:'element group', elId: elIds, elType: elTypes});
-
-
             }
 
 
