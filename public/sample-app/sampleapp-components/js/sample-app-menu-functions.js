@@ -92,7 +92,7 @@ module.exports = function(){
     var sbgnProp;
 
 
-    return {
+     return MenuFunctions = { //global reference for testing
 
         refreshGlobalUndoRedoButtonsStatus: function(){
           editorActions.refreshGlobalUndoRedoButtonsStatus();
@@ -230,13 +230,12 @@ module.exports = function(){
 
         addNode:function(elId, x, y, sbgnclass, sbgnlabel, syncVal){
             var param ={
-
                 sync: syncVal,
                 id:elId,
                 x: x,
                 y: y,
                 sbgnclass: sbgnclass,
-                sbgnlabel: sbgnlabel
+                sbgnlabel: sbgnlabel //for agents
 
             };
 
@@ -385,14 +384,10 @@ module.exports = function(){
 
         },
 
-
-
-
         updateSample: function(ind, syncVal){
 
 
             if(ind < 0){ //for notifying other users -- this part is called through the model
-
 
                 var jsonObj = editorActions.modelManager.getJsonFromModel();
                 sbgnContainer =  (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj,  editorActions));
@@ -405,14 +400,9 @@ module.exports = function(){
                 
                 getXMLObject(ind, function (xmlObject) {
 
-
-          
                     var xmlText = new XMLSerializer().serializeToString(xmlObject);
 
                     var jsonObj = sbgnmlToJson.convert(xmlText);
-
-
-
 
                     sbgnContainer =  (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj,  editorActions));
 
@@ -493,6 +483,7 @@ module.exports = function(){
 
 
             editorActions.modelManager = modelManager;
+
 
 
             sbgnLayout = new SBGNLayout(modelManager);

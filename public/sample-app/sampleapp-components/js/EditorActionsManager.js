@@ -40,8 +40,10 @@ module.exports.unselectEdge = function(edge) {
 
 module.exports.addNode = function(param) {
 
-    var result;
-       result = addRemoveUtilities.addNode(param.x, param.y, param.sbgnclass, param.id);
+
+    var  result = addRemoveUtilities.addNode(param.x, param.y, param.sbgnclass, param.id);
+    if(param.sbgnlabel!=null)
+        result.data('sbgnlabel', param.sbgnlabel); //funda
 
     if(param.sync){
         module.exports.modelManager.addModelNode(result.id(),  param, "me");
@@ -1091,12 +1093,7 @@ var Command = function (_do, undo, params, name, callback) {
 module.exports.ReturnToPositionsAndSizesCommand = function (nodesData) {
     return new Command(module.exports.returnToPositionsAndSizesConditionally, module.exports.returnToPositionsAndSizes, nodesData, "returnToPositionsAndSizes");
 };
-module.exports.ChangeParentCommand = function (param) {
-    return new Command(module.exports.changeParent, module.exports.changeParent, param, "changeParent");
-};
-module.exports.ChangeChildrenCommand = function (param) {
-    return new Command(module.exports.changeChildren, module.exports.changeChildren, param, "changeChildren");
-};
+
 
 module.exports.changeBendPointsCommand = function (param) {
     return new Command(module.exports.changeBendPoints, module.exports.changeBendPoints, param, "changeBendPoints");
@@ -1120,11 +1117,6 @@ module.exports.SelectEdgeCommand = function (edge)
 module.exports.UnselectEdgeCommand = function (edge)
 {
     return new Command(module.exports.unselectEdge, module.exports.selectEdge, edge, "unselectEdge");
-};
-
-module.exports.AddNodeCommand = function (newNode)
-{
-    return new Command(module.exports.addNode, module.exports.removeEles, newNode, "addNode");
 };
 
 
@@ -1167,9 +1159,6 @@ module.exports.PerformLayoutCommand = function (param) {
     return new Command(module.exports.performLayoutFunction, module.exports.returnToPositionsAndSizes, param, "performLayout");
 };
 
-module.exports.MoveNodeCommand = function (param) {
-    return new Command(module.exports.moveNodesConditionally, module.exports.moveNodesReversely, param, "moveNode");
-};
 
 module.exports.DeleteSelectedCommand = function (param) {
     return new Command(module.exports.deleteSelected, module.exports.restoreSelected, param, "deleteSelected");

@@ -86,21 +86,13 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
                 edge.addClass('changeLineColor');
             }
 
-            //TODO: if this is called before other client is ready, this causes problems
-              //  editorActions.modelManager.initFromModel(cytoscapeJsGraph, cy.nodes(), cy.edges(), "me");
-
-
             cy.one('layoutstop', function(){
 
-
                 cy.nodes().forEach(function(node){
-
-
                     var stateAndInfos = node._private.data.sbgnstatesandinfos;
                     relocateStateAndInfos(stateAndInfos);
 
                 });
-
 
             });
 
@@ -293,7 +285,7 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
                         posX: event.cyPosition.x,
                         posY: event.cyPosition.y
                     };
-                    editorActions.manager._do(editorActions.ChangeParentCommand(param));
+                   editorActions.changeParent(param);
                 }
             });
 
@@ -338,7 +330,7 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
                     };
 
 
-                    editorActions.manager._do(editorActions.MoveNodeCommand(param));
+                    editorActions.moveNodesConditionally(param);
 
 
 
@@ -518,7 +510,6 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
                     var cyPosY = event.cyPosition.y;
                     var sbgnclass = modeHandler.elementsHTMLNameToName[modeHandler.selectedNodeType];
                     var param = {
-                        firstTime: true,
                         sync: true,
                         x: cyPosX,
                         y: cyPosY,
@@ -526,7 +517,7 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
                     };
 
 
-                    editorActions.manager._do( editorActions.AddNodeCommand(param));
+                   editorActions.addNode(param);
                     modeHandler.setSelectionMode();
 
                     //node.select();

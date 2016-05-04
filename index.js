@@ -19,6 +19,8 @@ var ONE_MINUTE = 1000 * 60;
 
 var docReady = false;
 
+var useQunit = true;
+
 var menu;
 
 
@@ -85,6 +87,10 @@ app.get('/', function (page, model, params) {
         docId = getId();
     }
 
+    // if( useQunit ){ // use qunit testing doc if we're testing so we don't disrupt real docs
+    //     docId = 'qunit';
+    // }
+
     return page.redirect('/' + docId);
 });
 
@@ -92,6 +98,8 @@ app.get('/', function (page, model, params) {
 app.get('/:docId', function (page, model, arg, next) {
     var messagesQuery, room;
     room = arg.docId;
+
+
 
 
 
@@ -204,10 +212,8 @@ app.get('/:docId', function (page, model, arg, next) {
                         colorCode: getNewColor()
                     });
 
-
-
-
                     return page.render();
+
                 });
             });
         });
@@ -786,6 +792,11 @@ app.proto.changeColorCode = function(){
     user.set('colorCode', getNewColor());
 
 };
+app.proto.runUnitTests = function(){
+    var test = require("./public/qunit/tests.js")();
+
+
+}
 
 
 

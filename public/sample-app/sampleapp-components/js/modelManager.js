@@ -12,7 +12,7 @@ module.exports =  function(model, docId, userId, userName) {
 
     model.ref('_page.doc', 'documents.' + docId);
 
-    return{
+    return ModelManager = { //global reference for testing
 
 
 
@@ -32,6 +32,39 @@ module.exports =  function(model, docId, userId, userName) {
                user.set('name', userName);
            });
         },
+
+        getName: function(){
+            return model.get('users.' + userId +'.name');
+        },
+
+        setSampleInd: function(ind, user, noHistUpdate){
+            model.pass({user:user}).set('_page.doc.sampleInd', ind);
+
+            if(!noHistUpdate) {
+                if (ind == -1)
+                    this.updateHistory({opName:'load', opTarget:'model'});
+                else
+                    this.updateHistory({opName:'open', opTarget: 'sample', elId: ind});
+            }
+        },
+        getSampleInd: function(user, noHistUpdate){
+            var ind = model.get('_page.doc.sampleInd');
+            if(ind == null)
+                ind = "0";
+            if(!noHistUpdate)
+                this.setSampleInd(ind, user, noHistUpdate);
+
+            if(!noHistUpdate) {
+                if (ind == -1)
+                    this.updateHistory({opName:'load', opTarget:'model'});
+                else
+                    this.updateHistory({opName:'open', opTarget: 'sample', elId: ind});
+            }
+            return ind;
+
+        },
+
+
         updateLayoutProperties: function(layoutProperties, noHistUpdate){
 
             var currentLayoutProperties;
@@ -56,32 +89,7 @@ module.exports =  function(model, docId, userId, userName) {
         },
 
 
-        getSampleInd: function(user, noHistUpdate){
-            var ind = model.get('_page.doc.sampleInd');
-            if(ind == null)
-                ind = "0";
-            if(!noHistUpdate)
-                this.setSampleInd(ind, user, noHistUpdate);
 
-            if(!noHistUpdate) {
-                if (ind == -1)
-                    this.updateHistory({opName:'load', opTarget:'model'});
-                else
-                    this.updateHistory({opName:'open', opTarget: 'sample', elId: ind});
-            }
-            return ind;
-
-        },
-        setSampleInd: function(ind, user, noHistUpdate){
-            model.pass({user:user}).set('_page.doc.sampleInd', ind);
-
-            if(!noHistUpdate) {
-                if (ind == -1)
-                    this.updateHistory({opName:'load', opTarget:'model'});
-                else
-                    this.updateHistory({opName:'open', opTarget: 'sample', elId: ind});
-            }
-        },
 
         /***
          *
@@ -313,6 +321,9 @@ module.exports =  function(model, docId, userId, userName) {
 
         addModelNode: function(nodeId,  param, user, noHistUpdate){
 
+
+            if(model.get("_page.doc.cy.nodes." + nodeId + '.id') != null)
+                return "Node cannot be duplicated";
 
             model.pass({user:user}).set('_page.doc.cy.nodes.' +nodeId +'.id', nodeId);
             model.pass({user:user}).set('_page.doc.cy.nodes.' +nodeId +'.position', {x: param.x, y: param.y});
@@ -858,7 +869,7 @@ module.exports =  function(model, docId, userId, userName) {
                 this.changeModelNodeAttribute('ports', node.id(),node.data('ports'), user, noHistUpdate);
 
 
-
+            
             var sbgnclass = nodePath.get('sbgnclass');
 
             if (sbgnclass != null)
@@ -932,8 +943,12 @@ module.exports =  function(model, docId, userId, userName) {
                 }
             }
 
-            else
-                nodePath.pass({user: user}).set('isMultimer', false);
+            else {
+                //nodePath.pass({user: user}).set('isMultimer', false);
+                var nodeIsMultimer = node.data('sbgnclass').indexOf(' multimer') > 0 ;
+                this.changeModelNodeAttribute('isMultimer', node.id(), nodeIsMultimer, user, noHistUpdate);
+            }
+
 
             var sbgnStatesAndInfos = nodePath.get('sbgnStatesAndInfos');
 
