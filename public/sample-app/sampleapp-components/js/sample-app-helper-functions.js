@@ -163,11 +163,11 @@ function scrollToBottom(docId){
 $(document).keydown(function (e) {
     if (e.which === 90 && e.ctrlKey) {
         editorActions.manager.undo();
-        editorActions.refreshUndoRedoButtonsStatus();
+        
     }
     else if (e.which === 89 && e.ctrlKey) {
         editorActions.manager.redo();
-        editorActions.refreshUndoRedoButtonsStatus();
+        
     }
 });
 

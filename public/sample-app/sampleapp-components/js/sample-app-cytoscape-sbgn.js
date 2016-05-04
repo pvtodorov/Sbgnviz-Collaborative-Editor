@@ -131,8 +131,8 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
                     paramResize.width = sourceNode.width();
                     paramResize.height = sourceNode.height();
 
-                    editorActions.manager._do(new editorActions.ResizeNodeCommand(paramResize));
-                    editorActions.refreshUndoRedoButtonsStatus();
+                    editorActions.resizeNode(paramResize);
+
 
 
 
@@ -205,12 +205,12 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
                         firstTime: true,
                         sync:true
                     };
-                    editorActions.manager._do(new editorActions.AddEdgeCommand(param));
+                    editorActions.addEdge(param);
                     modeHandler.setSelectionMode();
                     var edge = cy.edges()[cy.edges().length -1].select();
 
 
-                    editorActions.refreshUndoRedoButtonsStatus();
+                      
 
 
                 }
@@ -227,8 +227,7 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
 
             expandCollapseUtilities.initCollapsedNodes();
 
-            editorActions.manager.reset();
-            editorActions.refreshUndoRedoButtonsStatus();
+
 
             var panProps = ({
                 fitPadding: 10
@@ -339,36 +338,36 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
                     lastMouseDownNodeInfo = null;
 
 
-                    editorActions.manager._do(editorActions.UnselectNodeCommand(this));
+                   editorActions.unselectNode(this);
 
-                    editorActions.refreshUndoRedoButtonsStatus();
+                      
                 }
             });
 
 
 
             cy.on('select', 'node', function(event) { //Necessary for multiple selections
-                editorActions.manager._do(editorActions.SelectNodeCommand(this));
+                editorActions.selectNode(this);
 
             });
             cy.on('unselect', 'node', function() { //causes sync problems in delete op
 
-                editorActions.manager._do(editorActions.UnselectNodeCommand(this));
+                editorActions.unselectNode(this);
 
             });
             cy.on('grab', 'node', function(event) { //Also works as 'select'
 
 
-                editorActions.manager._do(editorActions.SelectNodeCommand(this));
+                editorActions.selectNode(this);
             });
 
             cy.on('select', 'edge', function(event) {
-                editorActions.manager._do(editorActions.SelectEdgeCommand(this));
+                editorActions.selectEdge(this);
 
             });
 
             cy.on('unselect', 'edge', function(event) {
-                editorActions.manager._do(editorActions.UnselectEdgeCommand(this));
+                editorActions.unselectEdge(this);
             });
 
 
@@ -521,7 +520,7 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
                     modeHandler.setSelectionMode();
 
                     //node.select();
-                    editorActions.refreshUndoRedoButtonsStatus();
+                      
 
 
 
@@ -609,7 +608,7 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
                         else
                             editorActions.simpleCollapseNode({node:this, sync: true});
 
-                        editorActions.refreshUndoRedoButtonsStatus();
+                          
                     }
                     else {
                         if (incrementalLayoutAfterExpandCollapse)
@@ -617,7 +616,7 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
                         else
                             editorActions.simpleExpandNode({node:this, sync: true});
                         
-                        editorActions.refreshUndoRedoButtonsStatus();
+                          
                     }
                 }
 
@@ -719,8 +718,8 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
 
                 if(moveBendParam !== undefined && edge.data('weights')
                     && edge.data('weights').toString() != moveBendParam.weights.toString()){
-                    module.exports.editorActionsManager._do(new changeBendPointsCommand(moveBendParam));
-                    refreshUndoRedoButtonsStatus();
+                    editorActions.changeBendPoints(moveBendParam);
+
                 }
 
                 movedBendIndex = undefined;
@@ -900,7 +899,7 @@ module.exports.handleSBGNInspector = function (editorActions) {
                     sync: true
                 };
 
-                editorActions.manager._do(editorActions.ChangeIsMultimerStatusCommand(param));
+                editorActions.changeIsMultimerStatus(param);
 
 
             });
@@ -911,8 +910,7 @@ module.exports.handleSBGNInspector = function (editorActions) {
                     ele: selected,
                     sync: true
                 };
-                editorActions.manager._do(editorActions.ChangeIsCloneMarkerStatusCommand(param));
-                editorActions.refreshUndoRedoButtonsStatus();
+                editorActions.changeIsCloneMarkerStatus(param);
 
 
             });
@@ -925,8 +923,8 @@ module.exports.handleSBGNInspector = function (editorActions) {
                     modelDataName: 'borderColor',
                     sync: true
                 };
-                editorActions.manager._do(editorActions.ChangeStyleDataCommand(param));
-                editorActions.refreshUndoRedoButtonsStatus();
+                editorActions.changeStyleData(param);
+                  
 
             });
 
@@ -938,8 +936,8 @@ module.exports.handleSBGNInspector = function (editorActions) {
                     modelDataName: 'sbgnlabel',
                     sync: true
                 };
-                editorActions.manager._do(editorActions.ChangeStyleDataCommand(param));
-                editorActions.refreshUndoRedoButtonsStatus();
+                editorActions.changeStyleData(param);
+                  
             });
 
             $("#inspector-background-opacity").on('change', function () {
@@ -950,8 +948,8 @@ module.exports.handleSBGNInspector = function (editorActions) {
                     modelDataName: 'backgroundOpacity',
                     sync: true
                 };
-                editorActions.manager._do(editorActions.ChangeStyleDataCommand(param));
-                editorActions.refreshUndoRedoButtonsStatus();
+                editorActions.changeStyleData(param);
+                  
             });
 
             $("#inspector-fill-color").on('change', function () {
@@ -964,8 +962,8 @@ module.exports.handleSBGNInspector = function (editorActions) {
                     sync: true
                 };
 
-                editorActions.manager._do(editorActions.ChangeStyleCssCommand(param));
-                editorActions.refreshUndoRedoButtonsStatus();
+                editorActions.changeStyleCss(param);
+                  
 
             });
 
@@ -977,8 +975,8 @@ module.exports.handleSBGNInspector = function (editorActions) {
                     modelDataName: 'borderWidth',
                     sync: true
                 };
-                editorActions.manager._do(editorActions.ChangeStyleCssCommand(param));
-                editorActions.refreshUndoRedoButtonsStatus();
+                editorActions.changeStyleCss(param);
+                  
             });
         }
         else {
@@ -999,8 +997,8 @@ module.exports.handleSBGNInspector = function (editorActions) {
                     modelDataName: 'lineColor',
                     sync: true
                 };
-                editorActions.manager._do(editorActions.ChangeStyleDataCommand(param));
-                editorActions.refreshUndoRedoButtonsStatus();
+                editorActions.changeStyleData(param);
+                  
 
 
 
@@ -1013,8 +1011,8 @@ module.exports.handleSBGNInspector = function (editorActions) {
                     modelDataName: 'sbgncardinality',
                     sync: true
                 };
-                editorActions.manager._do(editorActions.ChangeStyleDataCommand(param));
-                editorActions.refreshUndoRedoButtonsStatus();
+                editorActions.changeStyleData(param);
+                  
 
 
             });
@@ -1028,8 +1026,8 @@ module.exports.handleSBGNInspector = function (editorActions) {
                     modelDataName: 'width',
                     sync: true
                 };
-                editorActions.manager._do(editorActions.ChangeStyleCssCommand(param));
-                editorActions.refreshUndoRedoButtonsStatus();
+                editorActions.changeStyleCss(param);
+                  
 
 
             });
@@ -1066,8 +1064,8 @@ module.exports.fillInspectorStateAndInfos = function (ele, width, editorActions)
                     sync: true
                 };
 
-                editorActions.manager._do(editorActions.ChangeStateVariableCommand(param));
-                editorActions.refreshUndoRedoButtonsStatus();
+                editorActions.changeStateVariable(param);
+                  
             });
 
 
@@ -1082,8 +1080,8 @@ module.exports.fillInspectorStateAndInfos = function (ele, width, editorActions)
                     sync: true
                 };
 
-                editorActions.manager._do(editorActions.ChangeStateVariableCommand(param));
-                editorActions.refreshUndoRedoButtonsStatus();
+                editorActions.changeStateVariable(param);
+                  
             });
 
 
@@ -1103,8 +1101,8 @@ module.exports.fillInspectorStateAndInfos = function (ele, width, editorActions)
                     width: width,
                     sync: true
                 };
-                editorActions.manager._do(editorActions.ChangeUnitOfInformationCommand(param));
-                editorActions.refreshUndoRedoButtonsStatus();
+                editorActions.changeUnitOfInformation(param);
+                  
             });
         }
 
@@ -1115,7 +1113,7 @@ module.exports.fillInspectorStateAndInfos = function (ele, width, editorActions)
                 width: width,
                 sync: true
             };
-            editorActions.manager._do(editorActions.RemoveStateAndInfoCommand(param));
+            editorActions.removeStateAndInfo(param);
         });
 
         $(".just-added-inspector-input").data("state", state);
@@ -1142,7 +1140,7 @@ module.exports.fillInspectorStateAndInfos = function (ele, width, editorActions)
             width: width,
             sync: true
         };
-        editorActions.manager._do(editorActions.AddStateAndInfoCommand(param));
+        editorActions.addStateAndInfo(param);
     });
 
     $("#inspector-add-unit-of-information").click(function () {
@@ -1161,6 +1159,8 @@ module.exports.fillInspectorStateAndInfos = function (ele, width, editorActions)
             width: width,
             sync: true
         };
-        editorActions.manager._do(editorActions.AddStateAndInfoCommand(param));
+        editorActions.addStateAndInfo(param);
+
+
     });
 };

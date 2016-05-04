@@ -136,7 +136,7 @@ module.exports = function(){
             };
 
 
-            editorActions.manager._do(editorActions.ShowSelectedCommand(param));
+            editorActions.showSelected(param);
 
         },
 
@@ -155,12 +155,12 @@ module.exports = function(){
                 selectedEles : cy.$(":selected")
             };
 
-            editorActions.manager._do(editorActions.HideSelectedCommand(param));
+            editorActions.hideSelected(param);
 
         },
 
         showAll: function(){
-            editorActions.manager._do(editorActions.ShowAllCommand({sync:true}));
+            editorActions.showAll({sync:true});
         },
 
         highlightNeighbors: function(selectedNodeIds){
@@ -175,12 +175,13 @@ module.exports = function(){
 
             var param = {
                 sync: true,
-                selectedEles : cy.$(":selected")
+                selectedEles : cy.$(":selected"),
+                highlightNeighboursofSelected: true
             };
 
 
 
-            editorActions.manager._do(editorActions.HighlightNeighborsOfSelectedCommand(param));
+            editorActions.highlightSelected(param);
 
         },
         
@@ -196,17 +197,18 @@ module.exports = function(){
 
             var param = {
                 sync: true,
-                selectedEles : cy.$(":selected")
+                selectedEles : cy.$(":selected"),
+                highlightProcessesOfSelected: true
             };
 
 
 
-            editorActions.manager._do(editorActions.HighlightProcessesOfSelectedCommand(param));
+            editorActions.highlightSelected(param);
 
         },
         
         removeHighlights: function(){
-            editorActions.manager._do(editorActions.RemoveHighlightsCommand({sync:true}));
+            editorActions.removeHighlights({sync:true});
         },
 
         addEdge:function(elId, source, target, sbgnclass, syncVal){
@@ -265,7 +267,6 @@ module.exports = function(){
                 }
                 editorActions.deleteSelected(param);
 
-                //editorActions.manager._do(editorActions.DeleteSelectedCommand(param));
             }
         },
 
@@ -297,7 +298,6 @@ module.exports = function(){
 
             if(el)
                 editorActions.changeIsMultimerStatus(param);
-                //editorActions.manager._do(editorActions.ChangeIsMultimerStatusCommand(param));
 
         },
 
@@ -313,7 +313,6 @@ module.exports = function(){
 
             if(el)
                 editorActions.changeIsCloneMarkerStatus(param);
-                //editorActions.manager._do(editorActions.ChangeIsCloneMarkerStatusCommand(param));
 
         },
 
@@ -545,7 +544,7 @@ module.exports = function(){
                 };
 
                 sbgnBendPointUtilities.addBendPoint();
-                editorActions.manager._do(editorActions.changeBendPointsCommand(param));
+                editorActions.changeBendPoints(param);
             });
 
             $('#ctx-remove-bend-point').click(function (e) {
@@ -557,7 +556,7 @@ module.exports = function(){
                 };
 
                 sbgnBendPointUtilities.removeBendPoint();
-                editorActions.manager._do(editorActions.changeBendPointsCommand(param));
+                editorActions.changeBendPoints(param);
             });
 
             $('#samples').click(function (e) {
@@ -681,7 +680,7 @@ module.exports = function(){
                 }
 
                 editorActions.moveNodesConditionally({sync:true, nodes: selectedNodes});  //enable synchronization
-                editorActions.refreshUndoRedoButtonsStatus();
+                
             });
 
             $("#align-horizontal-top-icon").click(function (e) {
@@ -709,7 +708,7 @@ module.exports = function(){
                 }
 
                 editorActions.moveNodesConditionally({sync:true, nodes: selectedNodes});  //enable synchronization
-                editorActions.refreshUndoRedoButtonsStatus();
+                
             });
 
             $("#align-horizontal-middle-icon").click(function (e) {
@@ -737,7 +736,7 @@ module.exports = function(){
                 }
 
                 editorActions.moveNodesConditionally({sync:true, nodes: selectedNodes});  //enable synchronization
-                editorActions.refreshUndoRedoButtonsStatus();
+                
             });
 
             $("#align-horizontal-bottom-icon").click(function (e) {
@@ -765,7 +764,7 @@ module.exports = function(){
                 }
 
                 editorActions.moveNodesConditionally({sync:true, nodes: selectedNodes});  //enable synchronization
-                editorActions.refreshUndoRedoButtonsStatus();
+                
             });
 
             $("#align-vertical-left-icon").click(function (e) {
@@ -793,7 +792,7 @@ module.exports = function(){
                 }
 
                 editorActions.moveNodesConditionally({sync:true, nodes: selectedNodes});  //enable synchronization
-                editorActions.refreshUndoRedoButtonsStatus();
+                
             });
 
             $("#align-vertical-center-icon").click(function (e) {
@@ -821,7 +820,7 @@ module.exports = function(){
                 }
 
                 editorActions.moveNodesConditionally({sync:true, nodes: selectedNodes});  //enable synchronization
-                editorActions.refreshUndoRedoButtonsStatus();
+                
             });
 
             $("#align-vertical-right-icon").click(function (e) {
@@ -938,8 +937,8 @@ module.exports = function(){
                     selectedEles : cy.$(":selected")
                 };
 
-                editorActions.manager._do(editorActions.HideSelectedCommand(param));
-                editorActions.refreshUndoRedoButtonsStatus();
+                editorActions.hideSelected(param);
+                
             });
             $("#hide-selected-icon").click(function (e) {
                 $("#hide-selected").trigger('click');
@@ -952,16 +951,16 @@ module.exports = function(){
                     firstTime: true,
                     selectedEles : cy.$(":selected")
                 };
-                editorActions.manager._do(editorActions.ShowSelectedCommand(param));
-                editorActions.refreshUndoRedoButtonsStatus();
+                editorActions.showSelected(param);
+                
             });
             $("#show-selected-icon").click(function (e) {
                 $("#show-selected").trigger('click');
             });
 
             $("#show-all").click(function (e) {
-                editorActions.manager._do(editorActions.ShowAllCommand({sync:true}));
-                editorActions.refreshUndoRedoButtonsStatus();
+                editorActions.showAll({sync:true});
+                
             });
 
             $("#delete-selected-simple").click(function (e) {
@@ -981,12 +980,10 @@ module.exports = function(){
                 
 
               
-                editorActions.manager._do(editorActions.RemoveElesCommand(selectedEles));
+               editorActions.removeEles(selectedEles);
 
 
-                //  editorActions.manager._do(editorActions.DeleteSelectedCommand(param));
 
-                editorActions.refreshUndoRedoButtonsStatus();
 
 
             });
@@ -1014,8 +1011,8 @@ module.exports = function(){
                 };
 
 
-                editorActions.manager._do(editorActions.DeleteSelectedCommand(param));
-                editorActions.refreshUndoRedoButtonsStatus();
+                editorActions.deleteSelected(param);
+                
 
 
             });
@@ -1028,12 +1025,13 @@ module.exports = function(){
                 var param = {
                     sync: true,
                     firstTime: true,
-                    selectedEles : cy.$(":selected")
+                    selectedEles : cy.$(":selected"),
+                    highlightNeighboursofSelected: true
 
                 };
 
-                editorActions.manager._do(editorActions.HighlightNeighborsOfSelectedCommand(param));
-                editorActions.refreshUndoRedoButtonsStatus();
+                editorActions.highlightSelected(param);
+                
 
 
             });
@@ -1063,11 +1061,12 @@ module.exports = function(){
                 var param = {
                     firstTime: true,
                     sync: true,
-                    selectedEles : cy.$(":selected")
+                    selectedEles : cy.$(":selected"),
+                    highlightProcessesOfSelected: true
                 };
 
-                editorActions.manager._do(editorActions.HighlightProcessesOfSelectedCommand(param));
-                editorActions.refreshUndoRedoButtonsStatus();
+                editorActions.highlightSelected(param);
+                
             });
 
             $("#search-by-label-text-box").keydown(function (e) {
@@ -1084,19 +1083,21 @@ module.exports = function(){
                 var param = {
                     sync: true,
                     firstTime: true,
-                    selectedEles : cy.$(":selected")
+                    selectedEles : cy.$(":selected"),
+                    highlightProcessesOfSelected: true
                 };
 
-                editorActions.manager._do(editorActions.HighlightProcessesOfSelectedCommand(param));
-                editorActions.refreshUndoRedoButtonsStatus();
+
+               editorActions.highlightSelected(param);
+                
 
 
             });
 
             $("#remove-highlights").click(function (e) {
 
-                editorActions.manager._do(editorActions.RemoveHighlightsCommand({sync:true}));
-                editorActions.refreshUndoRedoButtonsStatus();
+                ditorActions.removeHighlights({sync:true});
+                
 
 
 
@@ -1128,8 +1129,8 @@ module.exports = function(){
                 };
 
                 cy.elements().unselect();
-                editorActions.manager._do(editorActions.CreateCompoundForSelectedNodesCommand(param));
-                editorActions.refreshUndoRedoButtonsStatus();
+                editorActions.createCompoundForSelectedNodes(param);
+                
             });
 
             $("#make-compound-compartment").click(function (e) {
@@ -1145,8 +1146,8 @@ module.exports = function(){
                     nodesToMakeCompound: selected
                 };
                 cy.elements().unselect();
-                editorActions.manager._do(editorActions.CreateCompoundForSelectedNodesCommand(param));
-                editorActions.refreshUndoRedoButtonsStatus();
+                editorActions.createCompoundForSelectedNodes(param);
+                
 
             });
 
@@ -1179,13 +1180,13 @@ module.exports = function(){
                         (sbgnStyleRules['incremental-layout-after-expand-collapse'] == 'true');
                 }
                 if (incrementalLayoutAfterExpandCollapse)
-                    editorActions.manager._do(editorActions.CollapseGivenNodesCommand({
+                    editorActions.collapseGivenNodes({
                         nodes: nodes,
                         sync: true
-                    }));
+                    });
                 else
-                    editorActions.manager._do(editorActions.SimpleCollapseGivenNodesCommand({nodes:nodes, sync: true}));
-                editorActions.refreshUndoRedoButtonsStatus();
+                    editorActions.simpleCollapseGivenNodes({nodes:nodes, sync: true});
+                
             });
             $("#collapse-complexes").click(function (e) {
                 var complexes = cy.nodes("[sbgnclass='complex'][expanded-collapsed='expanded']");
@@ -1200,13 +1201,12 @@ module.exports = function(){
                         (sbgnStyleRules['incremental-layout-after-expand-collapse'] == 'true');
                 }
                 if (incrementalLayoutAfterExpandCollapse)
-                    editorActions.manager._do(editorActions.manager.CollapseGivenNodesCommand({
+                    editorActions.simpleCollapseGivenNodes({
                         nodes: complexes,
                         sync: true
-                    }));
+                    });
                 else
-                    editorActions.manager._do(editorActions.SimpleCollapseGivenNodesCommand({nodes:compexes, sync: true}));
-                refreshUndoRedoButtonsStatus();
+                    editorActions.simpleCollapseGivenNodes({nodes:complexes, sync: true});
             });
             $("#collapse-selected-icon").click(function (e) {
                 if (modeHandler.mode == "selection-mode") {
@@ -1226,13 +1226,13 @@ module.exports = function(){
                         (sbgnStyleRules['incremental-layout-after-expand-collapse'] == 'true');
                 }
                 if (incrementalLayoutAfterExpandCollapse)
-                    editorActions.manager._do(editorActions.ExpandGivenNodesCommand({
+                    editorActions.expandGivenNodes({
                         nodes: cy.nodes(":selected"),
                         sync: true
-                    }));
+                    });
                 else
-                    editorActions.manager._do(editorActions.SimpleExpandGivenNodesCommand({nodes:nodes, sync: true}));
-                editorActions.refreshUndoRedoButtonsStatus();
+                    editorActions.simpleExpandGivenNodes({nodes:nodes, sync: true});
+                
             });
 
 
@@ -1249,18 +1249,17 @@ module.exports = function(){
                         (sbgnStyleRules['incremental-layout-after-expand-collapse'] == 'true');
                 }
                 if (incrementalLayoutAfterExpandCollapse)
-                    editorActions.manager._do(editorActions.ExpandAllNodesCommand({
+                    editorActions.expandAllNodes({
                         nodes: complexes,
                         sync: true,
                         selector: "complex-parent"
-                    }));
+                    });
                 else
-                    editorActions.manager._do(editorActions.SimpleExpandAllNodesCommand({
+                   editorActions.simpleExpandAllNodes({
                         nodes: complexes,
                         sync: true,
                         selector: "complex-parent"
-                    }));
-                refreshUndoRedoButtonsStatus();
+                    });
             });
             $("#expand-selected-icon").click(function (e) {
                 if (modeHandler.mode == "selection-mode") {
@@ -1280,13 +1279,13 @@ module.exports = function(){
                         (sbgnStyleRules['incremental-layout-after-expand-collapse'] == 'true');
                 }
                 if (incrementalLayoutAfterExpandCollapse)
-                    editorActions.manager._do(editorActions.CollapseGivenNodesCommand({
+                    ditorActions.collapseGivenNodes({
                         nodes: cy.nodes(),
                         sync: true
-                    }));
+                    });
                 else
-                    editorActions.manager._do(editorActions.SimpleCollapseGivenNodesCommand({nodes: cy.nodes(), sync: true}));
-                editorActions.refreshUndoRedoButtonsStatus();
+                   editorActions.simpleCollapseGivenNodes({nodes: cy.nodes(), sync: true});
+                
             });
 
             $("#expand-all").click(function (e) {
@@ -1301,12 +1300,12 @@ module.exports = function(){
                         (sbgnStyleRules['incremental-layout-after-expand-collapse'] == 'true');
                 }
                 if (incrementalLayoutAfterExpandCollapse)
-                    editorActions.manager._do(editorActions.ExpandAllNodesCommand({
+                    editorActions.expandAllNodes({
                         firstTime: true
-                    }));
+                    });
                 else
-                    editorActions.manager._do(editorActions.SimpleExpandAllNodesCommand());
-                editorActions.refreshUndoRedoButtonsStatus();
+                    editorActions.simpleExpandAllNodes();
+                
             });
 
             $("#perform-layout-icon").click(function (e) {
@@ -1324,12 +1323,9 @@ module.exports = function(){
                 sbgnLayout.applyLayout(editorActions.modelManager);
 
 
-                editorActions.manager._do(editorActions.PerformLayoutCommand({nodesData:nodesData}));
+                editorActions.performLayoutFunction({nodesData:nodesData});
 
                 //       editorActions.manager._do(editorActions.ReturnToPositionsAndSizesCommand({nodesData: nodesData}));
-
-
-                editorActions.refreshUndoRedoButtonsStatus();
 
 
             });
@@ -1344,35 +1340,35 @@ module.exports = function(){
                 sbgnLayout.applyIncrementalLayout();
 
                 //funda
-                editorActions.manager._do(editorActions.PerformLayoutCommand({nodesData:nodesData}));
-                editorActions.refreshUndoRedoButtonsStatus();
+                editorActions.performLayoutFunction({nodesData:nodesData});
+                
             });
 
             $("#undo-last-action").click(function (e) {
                 if(!editorActions.manager.isUndoStackEmpty()){ //funda added this check
                     editorActions.manager.undo();
-                    editorActions.refreshUndoRedoButtonsStatus();
+                    
                 }
             });
 
             $("#redo-last-action").click(function (e) {
                 if(!editorActions.manager.isRedoStackEmpty()) { //funda added this check
                 editorActions.manager.redo();
-                editorActions.refreshUndoRedoButtonsStatus();
+                
             }
             });
 
             $("#undo-last-action-global").click(function (e) {
                 if(editorActions.modelManager.isUndoPossible()){
                     editorActions.modelManager.undoCommand();
-                    editorActions.refreshUndoRedoButtonsStatus();
+                    
                 }
             });
 
             $("#redo-last-action-global").click(function (e) {
                 if(editorActions.modelManager.isRedoPossible()) {
                     editorActions.modelManager.redoCommand();
-                    editorActions.refreshUndoRedoButtonsStatus();
+                    
                 }
             });
 
