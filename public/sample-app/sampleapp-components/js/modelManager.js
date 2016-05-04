@@ -245,35 +245,36 @@ module.exports =  function(model, docId, userId, userName) {
         getModelEdge: function(id){
 
             var edgePath = model.at('_page.doc.cy.edges.'  + id);
+
             return edgePath.get();
         },
 
         selectModelNode: function(node, noHistUpdate){
 
-            var status = "Node id not found";
+
             var nodePath = model.at('_page.doc.cy.nodes.'  +node.id());
-            //if(nodePath.get('id') && user){
-            if( user){
+            if(nodePath.get() == null)
+                return "Node id not found";
+            if(user)
                 nodePath.set('highlightColor' , user.get('colorCode'));
 
-                status = "success";
-            }
+
 
 
    //         if(!noHistUpdate)
      //           this.updateHistory({opName:'select',opTarget:'element', elType:'node', elId: node.id()});
-            return status;
+            return "success";
 
         },
 
+
         selectModelEdge: function(edge, noHistUpdate){
-            var status = "Edge id not found";
             var user = model.at('users.' + userId);
             var edgePath = model.at('_page.doc.cy.edges.'  +edge.id());
-            //if(edgePath.get('id') && user) {
+            if(edgePath.get() == null)
+                return "Edge id not found";
             if( user) {
                 edgePath.set('highlightColor', user.get('colorCode'));
-                status = "success";
 
        //         if(!noHistUpdate)
          //           this.updateHistory({opName:'select',opTarget:'element', elType:'edge', elId: edge.id()});
@@ -281,23 +282,21 @@ module.exports =  function(model, docId, userId, userName) {
 
             }
 
-            return status;
-
+            return "success";
 
         },
         unselectModelNode: function(node, noHistUpdate){
-            var status = "Node id not found";
+
             var nodePath = model.at('_page.doc.cy.nodes.'  +node.id());
 
+            if(nodePath.get() == null)
+                return "Node id not found";
 
             nodePath.set('highlightColor' , null);
-
-            status = "success";
-
-        //    if(!noHistUpdate)
+            //if(!noHistUpdate)
           //      this.updateHistory({opName:'unselect',opTarget:'element', elType:'node', elId: node.id()});
 
-            return status;
+            return "success";
 
         },
 
@@ -305,16 +304,18 @@ module.exports =  function(model, docId, userId, userName) {
 
 
         unselectModelEdge: function(edge, noHistUpdate){
-            var status = "Edge id not found";
+
             var edgePath = model.at('_page.doc.cy.edges.'  +edge.id());
+            if(edgePath.get() == null)
+                return "Edge id not found";
+
             edgePath.set('highlightColor', null);
-            status = "success";
 
 //            if(!noHistUpdate)
   //              this.updateHistory({opName:'unelect',opTarget:'element', elType:'edge', elId: edge.id()});
 
 
-            return status;
+            return "success";
 
 
         },
@@ -346,6 +347,8 @@ module.exports =  function(model, docId, userId, userName) {
 
         addModelEdge: function(edgeId, param, user, noHistUpdate){
 
+            if(model.get("_page.doc.cy.edges." + edgeId + '.id') != null)
+                return "Edge cannot be duplicated";
 
             model.pass({user:user}).set('_page.doc.cy.edges.' + edgeId +'.id', edgeId);
             model.pass({user:user}).set('_page.doc.cy.edges.' + edgeId +'.sbgnclass', param.sbgnclass);
@@ -537,8 +540,10 @@ module.exports =  function(model, docId, userId, userName) {
 
         //willUpdateHistory: Depending on the parent command, history will be updated or not
         deleteModelNode: function(nodeId, user, noHistUpdate){
-            var status = "Node id not found";
             var nodePath = model.at('_page.doc.cy.nodes.'  + nodeId);
+
+            if(nodePath.get() == null)
+                return "Node id not found";
 
             if(!noHistUpdate){
                 var pos = nodePath.get('position');
@@ -571,18 +576,18 @@ module.exports =  function(model, docId, userId, userName) {
 
             model.pass({user: user}).del(('_page.doc.cy.nodes.' + nodeId));
 
-            status = "success";
 
 
-            return status;
+            return "success";
 
         },
 
 
         deleteModelEdge: function(edgeId, user, noHistUpdate){
 
-            var status = "Edge id not found";
             var edgePath = model.at('_page.doc.cy.edges.'  + edgeId);
+            if(edgePath.get() == null)
+                return "Edge id not found";
 
 
                 if(!noHistUpdate) {
@@ -595,9 +600,10 @@ module.exports =  function(model, docId, userId, userName) {
                     var portsource = edgePath.get('portsource');
                     var porttarget = edgePath.get('porttarget');
                     var bendPointPositions= edgePath.get('bendPointPositions');
+                    var highlightColor = edgePath.get('highlightColor');
 
                     prevParam = {source: source , target:target , sbgnclass:sbgnClass, lineColor: lineColor,
-                    width: width, sbgncardinality: sbgncardinality, portsource: portsource, porttarget:porttarget, bendPointPositions: bendPointPositions};
+                    width: width, sbgncardinality: sbgncardinality, portsource: portsource, porttarget:porttarget, bendPointPositions: bendPointPositions, highlightColor:highlightColor};
 
 
                     this.updateHistory({opName:'delete',opTarget:'element', elType:'edge', elId: edgeId, prevParam: prevParam});
@@ -607,9 +613,8 @@ module.exports =  function(model, docId, userId, userName) {
                 }
 
                 model.pass({user:user}).del(('_page.doc.cy.edges.'  + edgeId));
-                status = "success";
 
-            return status;
+            return "success";
 
         },
 
@@ -731,12 +736,14 @@ module.exports =  function(model, docId, userId, userName) {
 
             this.addModelEdge(edgeId, param, user, noHistUpdate);
 
+            
             this.changeModelEdgeAttribute('lineColor', edgeId,param.lineColor,user, noHistUpdate );
             this.changeModelEdgeAttribute('width', edgeId,param.width,user, noHistUpdate );
             this.changeModelEdgeAttribute('sbgncardinality', edgeId,param.sbgncardinality,user , noHistUpdate);
             this.changeModelEdgeAttribute('portsource', edgeId,param.portsource,user , noHistUpdate);
             this.changeModelEdgeAttribute('porttarget', edgeId,param.porttarget,user , noHistUpdate);
             this.changeModelEdgeAttribute('bendPointPositions', edgeId,param.bendPointPositions,user , noHistUpdate);
+            this.changeModelEdgeAttribute('highlightColor', edgeId,param.highlightColor,user, noHistUpdate );
 
 
             if(!noHistUpdate)
@@ -905,8 +912,6 @@ module.exports =  function(model, docId, userId, userName) {
             //SBGN properties are stored in the data component
 
 
-
-
             var sbgnlabel = nodePath.get('sbgnlabel');
 
             if (sbgnlabel != null)
@@ -1005,7 +1010,7 @@ module.exports =  function(model, docId, userId, userName) {
 
             //IMPORTANT!!!!! Calling width height updates causes node moving errors
 
-     //       }
+
 
         },
         initModelEdge: function(edge, user, noHistUpdate){
@@ -1015,7 +1020,6 @@ module.exports =  function(model, docId, userId, userName) {
 
             if(!noHistUpdate)
                 this.updateHistory({opName:'init', opTarget: 'element', elType:'edge', elId: edge.id()});
-      //      if (edgePath.get('id')) {
 
 
             edgePath.set('id', edge.id());
@@ -1077,14 +1081,14 @@ module.exports =  function(model, docId, userId, userName) {
             if(source != null)
                 edge.data('source', source);
             else
-                this.changeModelEdgeAttribute('source', edge.id(),edge.data('source'), user, noHistUpdate);
+                this.changeModelEdgeAttribute('source', edge.id(),edge._private.data.source, user, noHistUpdate);
 
 
             var target = edgePath.get('target');
             if(target != null)
                 edge.data('target', target);
             else
-                this.changeModelEdgeAttribute('target', edge.id(),edge.data('target'), user, noHistUpdate);
+                this.changeModelEdgeAttribute('target', edge.id(),edge._private.data.target, user, noHistUpdate);
 
 
 
@@ -1104,7 +1108,6 @@ module.exports =  function(model, docId, userId, userName) {
                 this.changeModelEdgeAttribute('porttarget', edge.id(),edge.data('porttarget'), user, noHistUpdate);
 
 
-            //      }
 
         },
 

@@ -520,28 +520,25 @@ module.exports.removeHighlights = function(param) {
 }
 
 module.exports.changeChildren = function(param){
-    var result = {
-    };
     var ele = param.ele;
-    result.dataType = param.dataType;
-    result.data = ele.data(param.dataType);
-    result.ele = ele;
 
     var elArr = [];
+    var elIdArr = [];
 
     if(param.data) { //if it has children
         param.data.forEach(function (nodeId) {
             elArr.push(cy.getElementById(nodeId));
+            elIdArr.push(nodeId);
         });
 
         ele._private.children = elArr;
         expandCollapseUtilities.refreshPaddings();
 
         if (param.sync) {
-            module.exports.modelManager.changeModelNodeAttribute(param.modelDataName, param.ele.id(), elArr, "me");
+            
+            module.exports.modelManager.changeModelNodeAttribute(param.modelDataName, param.ele.id(), elIdArr, "me");
         }
     }
-    return result;
 }
 
 module.exports.changeParent = function(param) {
@@ -559,20 +556,6 @@ module.exports.changeParent = function(param) {
 
     var newParent = newParentId? cy.$(('#' + newParentId))[0] : undefined;
     var nodesData = getNodesData();//param.nodesData;
-    var result = {
-        ele: node,
-        //newParent: oldParent,
-        id: node.id(),
-        dataType: param.dataType,
-        data: oldParentId,
-        modelDataName: param.modelDataName,
-        sync: true
-    };
-
-   //funda result.nodesData = getNodesData();
-
-
-
 
     //If new parent is not null some checks should be performed
     if (newParent) {
@@ -591,15 +574,6 @@ module.exports.changeParent = function(param) {
             var parentOfNewParent = newParent.parent()[0];
             addRemoveUtilities.changeParent(newParent, newParent._private.data.parent, node._private.data.parent);
             oldParentId = node._private.data.parent;
-            //We have an internal change parent operation to redo this operation
-            //we need an inner param to call the function with it at the beginning
-            result.innerParam = {
-                ele: newParent,
-                newParent: parentOfNewParent
-           //     nodesData: {
-             //       firstTime: true
-              //  }
-            };
         }
     }
 
@@ -628,8 +602,6 @@ module.exports.changeParent = function(param) {
     }
 
 
-
-    return result;
 }
 
 /*
@@ -977,6 +949,15 @@ module.exports.changeStyleData = function( param) {
         ele._private.style.height.pfValue = param.data;
         ele._private.data.sbgnbbox.h = param.data;
 
+    }
+
+    else if(param.dataType == 'source'){
+        ele._private.data.source = param.data;
+        ele._private.source = cy.getElementById(param.data); //to take immediate effect on the graph
+    }
+    else if(param.dataType == 'target'){
+        ele._private.data.target = param.data;
+        ele._private.target = cy.getElementById(param.data); //to take immediate effect on the graph
     }
     else if(param.dataType == "highlightStatus"){
         if(param.data == "highlighted"){

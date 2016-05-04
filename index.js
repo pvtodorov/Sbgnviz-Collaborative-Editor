@@ -386,15 +386,41 @@ app.proto.init = function (model) {
 
         if(docReady && passed.user == null ){
             menu.changeElementProperty(id, 'sbgnclass', 'sbgnclass', sbgnclass, 'data', false);
-            //check if edge id exists in the current inspector graph
-            // var source = model.get('_page.doc.cy.edges.'+ id + '.source');
-            // var target = model.get('_page.doc.cy.edges.'+ id + '.target');
-            //
-            // menu.addEdge(id, source, target, sbgnclass, false);
+        }
+    });
+    model.on('all', '_page.doc.cy.edges.*.source', function(id,op, source, prev, passed){//this property must be something that is only changed during insertion
 
+        if(docReady && passed.user == null ){
+            menu.changeElementProperty(id, 'source', 'source', source, 'data', false);
         }
 
     });
+
+    model.on('all', '_page.doc.cy.edges.*.target', function(id,op, target, prev, passed){//this property must be something that is only changed during insertion
+
+        if(docReady && passed.user == null ){
+            menu.changeElementProperty(id, 'target', 'target', target, 'data', false);
+        }
+
+    });
+
+    model.on('all', '_page.doc.cy.edges.*.portsource', function(id,op, portsource, prev, passed){//this property must be something that is only changed during insertion
+
+        if(docReady && passed.user == null ){
+            menu.changeElementProperty(id, 'portsource', 'portsource', portsource, 'data', false);
+        }
+
+    });
+
+    model.on('all', '_page.doc.cy.edges.*.porttarget', function(id,op, porttarget, prev, passed){//this property must be something that is only changed during insertion
+
+        if(docReady && passed.user == null ){
+            menu.changeElementProperty(id, 'porttarget', 'porttarget', porttarget, 'data', false);
+        }
+
+    });
+
+
 
     model.on('change', '_page.doc.cy.nodes.*.position', function(id, pos, prev, passed){
 
@@ -419,6 +445,21 @@ app.proto.init = function (model) {
                 color = model.get('_page.doc.cy.nodes.' + id + '.backgroundColor');
 
             menu.changeHighlightColor(id, color);
+
+        }
+
+    });
+    
+    model.on('all', '_page.doc.cy.edges.*.highlightColor', function(id, op, highlightColor,prev, passed){
+
+        if(docReady && passed.user == null) {
+            var color;
+            if (highlightColor != null)
+                color = highlightColor;
+            else
+                color = model.get('_page.doc.cy.edges.' + id + '.lineColor');
+
+            menu.changeElementProperty(id, 'line-color', 'lineColor', color, 'css', false);
 
         }
 
@@ -497,13 +538,25 @@ app.proto.init = function (model) {
 
         if(docReady && passed.user == null) {
 
-            menu.changeElementProperty(id, 'children', 'children', children, 'data', false);
+            menu.changeElementProperty(id, 'children', 'children', children, null, false);
 
          //TODO   addRemoveUtilities.changeParentForNodeIds(children,  id);
 
 
         }
     });
+
+    model.on('all', '_page.doc.cy.nodes.*.ports', function(id, op, ports, prev, passed){ //this property must be something that is only changed during insertion
+
+
+        if(docReady && passed.user == null) {
+
+            menu.changeElementProperty(id, 'ports', 'ports', ports, 'data', false);
+
+        }
+
+    });
+
 
     model.on('all', '_page.doc.cy.nodes.*.width', function(id,  op, width ,prev, passed){
 
@@ -513,6 +566,16 @@ app.proto.init = function (model) {
 
         }
     });
+
+    model.on('all', '_page.doc.cy.edges.*.width', function(id,  op, width ,prev, passed){
+
+        if(docReady && passed.user == null) {
+            menu.changeElementProperty(id, 'width', 'width', width, 'css', false);
+
+
+        }
+    });
+
 
     model.on('all', '_page.doc.cy.nodes.*.height', function(id,  op, height, prev, passed){
 
@@ -545,7 +608,7 @@ app.proto.init = function (model) {
 
 
         if(docReady && passed.user == null) {
-            menu.changeElementProperty(id, 'lineColor', 'lineColor', lineColor, 'data', false);
+            menu.changeElementProperty(id, 'line-color', 'lineColor', lineColor, 'css', false);
 
         }
     });
@@ -591,20 +654,7 @@ app.proto.init = function (model) {
     });
 
 
-    model.on('all', '_page.doc.cy.edges.*.highlightColor', function(id, op, highlightColor,prev, passed){
 
-        if(docReady && passed.user == null) {
-            var color;
-            if (highlightColor != null)
-                color = highlightColor;
-            else
-                color = model.get('_page.doc.cy.edges.' + id + '.lineColor');
-
-            menu.changeElementProperty(id, 'lineColor', 'lineColor', color, 'data', false);
-
-        }
-
-    });
 
 
     model.on('all', '_page.doc.cy.edges.*.width', function(id,  op, width,prev, passed){
@@ -793,8 +843,9 @@ app.proto.changeColorCode = function(){
 
 };
 app.proto.runUnitTests = function(){
-    var test = require("./public/qunit/tests.js")();
-
+    require("./public/qunit/testsModelManager.js")();
+    require("./public/qunit/testsMenuFunctions.js")();
+    require("./public/qunit/testOptions.js")(); //to print out results
 
 }
 
