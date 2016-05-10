@@ -113,10 +113,10 @@ module.exports = function(){
 
 
             sbgnContainer =  (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj,  editorActions));
-            editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
+            editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me");
             //this.updateSample(-1, true);
 
-            editorActions.modelManager.setSampleInd(-1, "me"); //to notify other clients
+            editorActions.modelManager.setSampleInd(-1, "me", 0); //to notify other clients
 
         },
         //Methods for agents to interact with cytoscape
@@ -449,7 +449,7 @@ module.exports = function(){
 
 
 
-                    editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
+                    editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me");
 
 
                 });
@@ -471,7 +471,7 @@ module.exports = function(){
                 });
 
 
-                editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
+                editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me");
             }
 
         },
@@ -487,7 +487,7 @@ module.exports = function(){
 
             sbgnLayout = new SBGNLayout(modelManager);
 
-            var layoutProperties = modelManager.updateLayoutProperties(sbgnLayout.defaultLayoutProperties);
+            var layoutProperties = modelManager.updateLayoutProperties(sbgnLayout.defaultLayoutProperties, 0);
 
             sbgnLayout.initialize(layoutProperties);
 
@@ -517,7 +517,7 @@ module.exports = function(){
 
 
 
-                editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
+                editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me");
             }
 
             document.getElementById("ctx-add-bend-point").addEventListener("contextmenu", function (event) {
@@ -567,12 +567,12 @@ module.exports = function(){
 
 
                 if(sbgnContainer)
-                    editorActions.modelManager.deleteAll(cy.nodes(), cy.edges(), "me");
+                    editorActions.modelManager.deleteAll(cy.nodes(), cy.edges(), "me", 0);
 
 
                 self.updateSample(ind, true);
 
-                editorActions.modelManager.setSampleInd(ind, "me"); //let others know
+                editorActions.modelManager.setSampleInd(ind, "me", 0); //let others know
 
             });
 
@@ -588,7 +588,7 @@ module.exports = function(){
                 editorActions.modelManager.deleteAll(cy.nodes(), cy.edges(), "me");
                 cy.remove(cy.elements());
                 sbgnContainer = new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, editorActions);
-                editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
+                editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me");
 
                 editorActions.manager.reset();
                 //TODO: why is this here?
@@ -852,10 +852,10 @@ module.exports = function(){
                     sbgnContainer =  (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj,  editorActions));
 
 
-                    editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
+                    editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me");
 
 
-                    editorActions.modelManager.setSampleInd(-1, "me"); //to notify other clients
+                    editorActions.modelManager.setSampleInd(-1, "me", 0); //to notify other clients
                     // sbgnContainer =  new cyMod.SBGNContainer('#sbgn-network-container', jsonObj ,  editorActions);
                 }
                 reader.readAsText(file);
@@ -1096,7 +1096,7 @@ module.exports = function(){
 
             $("#remove-highlights").click(function (e) {
 
-                ditorActions.removeHighlights({sync:true});
+                editorActions.removeHighlights({sync:true});
                 
 
 
@@ -1123,7 +1123,7 @@ module.exports = function(){
                     return;
                 }
                 var param = {
-                    firstTime: true,
+                    sync: true,
                     compoundType: "complex",
                     nodesToMakeCompound: selected
                 };
@@ -1141,7 +1141,7 @@ module.exports = function(){
                 }
 
                 var param = {
-                    firstTime: true,
+                    sync: true,
                     compoundType: "compartment",
                     nodesToMakeCompound: selected
                 };
@@ -1152,7 +1152,7 @@ module.exports = function(){
             });
 
             $("#layout-properties").click(function (e) {
-                var lp = editorActions.modelManager.updateLayoutProperties(sbgnLayout.defaultLayoutProperties);
+                var lp = editorActions.modelManager.updateLayoutProperties(sbgnLayout.defaultLayoutProperties, 0);
                 sbgnLayout.render(lp);
             });
 
@@ -1344,32 +1344,20 @@ module.exports = function(){
                 
             });
 
-            $("#undo-last-action").click(function (e) {
-                if(!editorActions.manager.isUndoStackEmpty()){ //funda added this check
-                    editorActions.manager.undo();
-                    
-                }
-            });
 
-            $("#redo-last-action").click(function (e) {
-                if(!editorActions.manager.isRedoStackEmpty()) { //funda added this check
-                editorActions.manager.redo();
-                
-            }
-            });
 
             $("#undo-last-action-global").click(function (e) {
-                if(editorActions.modelManager.isUndoPossible()){
-                    editorActions.modelManager.undoCommand();
+                
+                if(editorActions.modelManager.isUndoPossible())
+                    editorActions.modelManager.undoCommandGroup();
                     
-                }
             });
 
             $("#redo-last-action-global").click(function (e) {
-                if(editorActions.modelManager.isRedoPossible()) {
-                    editorActions.modelManager.redoCommand();
+                if(editorActions.modelManager.isRedoPossible())
+                    editorActions.modelManager.redoCommandGroup();
                     
-                }
+
             });
 
             $("#undo-icon").click(function (e) { //funda changed to global
@@ -1624,7 +1612,7 @@ function SBGNLayout(modelManager){
                 sbgnStyleRules['tiling-padding-vertical'] = Number(document.getElementById("tiling-padding-vertical").value);
                 sbgnStyleRules['tiling-padding-horizontal'] = Number(document.getElementById("tiling-padding-horizontal").value);
 
-                modelManager.setLayoutProperties(self.currentLayoutProperties);
+                modelManager.setLayoutProperties(self.currentLayoutProperties, 0);
 
 
 

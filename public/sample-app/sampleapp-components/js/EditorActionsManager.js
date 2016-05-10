@@ -12,8 +12,6 @@ var addRemoveUtilities = require('../../../src/utilities/add-remove-utilities.js
 var expandCollapseUtilities = require('../../../src/utilities/expand-collapse-utilities.js')();
 var sbgnFiltering = require('../../../src/utilities/sbgn-filtering.js')();
 
-var sbgnmlToJson = require('../../../src/utilities/sbgnml-to-json-converter.js')();
-
 
 module.exports.selectNode = function (node) {
 
@@ -40,112 +38,153 @@ module.exports.unselectEdge = function(edge) {
 
 module.exports.addNode = function(param) {
 
-
-    var  result = addRemoveUtilities.addNode(param.x, param.y, param.sbgnclass, param.id);
+    var  newNode = addRemoveUtilities.addNode(param.x, param.y, param.sbgnclass, param.id);
     if(param.sbgnlabel!=null)
-        result.data('sbgnlabel', param.sbgnlabel); //funda
+        newNode.data('sbgnlabel', param.sbgnlabel); //funda
 
     if(param.sync){
-        module.exports.modelManager.addModelNode(result.id(),  param, "me");
-        module.exports.modelManager.initModelNode(result, null, true);
+        module.exports.modelManager.updateHistory({opName: "add node", depth: -1}); //do not actually perform command, just group
+        module.exports.modelManager.addModelNode(newNode.id(),  param, "me", 0);
+        module.exports.modelManager.initModelNode(newNode, null, 1);
 
     }
 
-    return result;
+    return newNode;
 }
 module.exports.removeEles =function(elesToBeRemoved) {
 
     //removeEles operation computes edges to be removed
 
-    var undoEles = addRemoveUtilities.removeEles(elesToBeRemoved);
+    var removedEles = addRemoveUtilities.removeEles(elesToBeRemoved);
     var nodeList = [];
     var edgeList = [];
 
-    undoEles.forEach(function (el) {
+    removedEles.forEach(function (el) {
         if(el.isNode())
-            nodeList.push({id:el.id()});
+            nodeList.push(el.id());
         else
-            edgeList.push({id:el.id()});
+            edgeList.push(el.id());
     });
 
 
-    module.exports.modelManager.deleteModelElementGroup({nodes:nodeList,edges: edgeList}, "me"); //edges need to be deleted first
+    module.exports.modelManager.updateHistory({opName: "remove elements simply", depth: -1}); //do not actually perform command, just group
 
 
-    return undoEles;
+    //first update children so that we can restore it later
+
+
+    //first delete edges so that we can restore nodes first
+    edgeList.forEach(function (elId) {
+        module.exports.modelManager.deleteModelEdge(elId, "me", 0);
+    });
+    nodeList.forEach(function(elId){
+        module.exports.modelManager.deleteModelNode(elId, "me", 0);
+    });
+
+    
+    //module.exports.modelManager.deleteModelElementGroup({nodes:nodeList,edges: edgeList}, "me", 0); //edges need to be deleted first
+
+
+
 }
 
 
 module.exports.deleteSelected = function(param) {
 
 
-    if(param.sync){
+    var eles = param.eles;
+
+
+    if(param.sync) {
+        module.exports.modelManager.updateHistory({opName: "remove elements smartly", depth: -1}); //do not actually perform command, just group
         var nodeList = [];
         var edgeList = [];
 
+       // eles.forEach(function(el){
+        //     if(el.isNode()) {
+        //         var childIdList = [];
+        //         el.children().forEach(function(child){
+        //             childIdList.push(child.id());
+        //         });
+        //         module.exports.modelManager.changeModelNodeAttribute('children', el.id(),childIdList,"me", 0)
+        //     }
+        // });
 
-        param.eles.forEach(function (el) {
-            if(el.isNode())
-                nodeList.push({id:el.id()});
+        eles.forEach(function (el) {
+            if(el.isNode()) {
+                nodeList.push(el.id());
+            }
             else
-                edgeList.push({id:el.id()});
+                edgeList.push(el.id());
         });
 
-        module.exports.modelManager.deleteModelElementGroup({nodes:nodeList,edges: edgeList}, "me");
+        edgeList.forEach(function (elId) {
+            module.exports.modelManager.deleteModelEdge(elId, "me", 0);
+        });
+
+        nodeList.forEach(function(elId){
+            module.exports.modelManager.deleteModelNode(elId, "me", 0);
+        });
 
     }
-    var undoEles = addRemoveUtilities.removeElesSimply(param.eles);
 
+    addRemoveUtilities.removeElesSimply(param.eles);
 
-    return undoEles;
 }
 
-module.exports.addEdge = function(param)
-{
-    var result;
-    result = addRemoveUtilities.addEdge(param.source, param.target, param.sbgnclass, param.id);
+module.exports.addEdge = function(param) {
+    var newEdge;
+    newEdge = addRemoveUtilities.addEdge(param.source, param.target, param.sbgnclass, param.id);
 
     if(param.sync){
-        module.exports.modelManager.addModelEdge(result.id(), param, "me");
-        module.exports.modelManager.initModelEdge(result,  null, true); //no history update but let others update params
+        module.exports.modelManager.updateHistory({opName: "add edge", depth: -1}); //do not actually perform command, just group
+        module.exports.modelManager.addModelEdge(newEdge.id(), param, "me", 0);
+        module.exports.modelManager.initModelEdge(newEdge,  null, 1); //no history update but let others update params
 
     }
-    return result;
+    return newEdge;
 }
 
 
 
 module.exports.expandNode = function(param) {
-        expandCollapseUtilities.expandNode(param.node);
-    if(param.sync)
-        module.exports.modelManager.changeModelNodeAttribute("expandCollapseStatus", param.node.id(), "expand", "me");
+    expandCollapseUtilities.expandNode(param.node);
+    if(param.sync) {
+        module.exports.modelManager.updateHistory({opName: "expand node", depth: -1}); //do not actually perform command, just group
+        module.exports.modelManager.changeModelNodeAttribute("expandCollapseStatus", param.node.id(), "expand", "me", 0);
+    }
 
 }
 
 module.exports.collapseNode = function(param) {
     expandCollapseUtilities.collapseNode(param.node);
-    if(param.sync)
-        module.exports.modelManager.changeModelNodeAttribute("expandCollapseStatus", param.node.id(), "collapse", "me");
+    if(param.sync) {
+        module.exports.modelManager.updateHistory({opName: "collapse node", depth: -1}); //do not actually perform command, just group
+        module.exports.modelManager.changeModelNodeAttribute("expandCollapseStatus", param.node.id(), "collapse", "me", 0);
+    }
 
 }
 module.exports.simpleExpandNode = function(param) {
     expandCollapseUtilities.simpleExpandNode(param.node);
-    if(param.sync)
-        module.exports.modelManager.changeModelNodeAttribute("expandCollapseStatus", param.node.id(), "expand", "me");
+    if (param.sync) {
+        module.exports.modelManager.updateHistory({opName: "simple expand node", depth: -1}); //do not actually perform command, just group
+        module.exports.modelManager.changeModelNodeAttribute("expandCollapseStatus", param.node.id(), "expand", "me", 0);
+    }
 }
 
 module.exports.simpleCollapseNode = function(param) {
     expandCollapseUtilities.simpleCollapseNode(param.node);
     if(param.sync)
-        module.exports.modelManager.changeModelNodeAttribute("expandCollapseStatus", param.node.id(), "collapse", "me");
+        module.exports.modelManager.changeModelNodeAttribute("expandCollapseStatus", param.node.id(), "collapse", "me", 0);
 
 }
 
 module.exports.expandGivenNodes = function(param) {
     expandCollapseUtilities.expandGivenNodes(param.nodes);
     if(param.sync){
+        module.exports.modelManager.updateHistory({opName: "expand nodes", depth: -1}); //do not actually perform command, just group
         param.nodes.forEach(function(node){
-            module.exports.modelManager.changeModelNodeAttribute("expandCollapseStatus", node.id(), "expand", "me");
+            module.exports.modelManager.changeModelNodeAttribute("expandCollapseStatus", node.id(), "expand", "me", 0);
         });
     }
 }
@@ -153,8 +192,9 @@ module.exports.expandGivenNodes = function(param) {
 module.exports.collapseGivenNodes = function(param) {
     expandCollapseUtilities.collapseGivenNodes(param.nodes);
     if(param.sync){
+        module.exports.modelManager.updateHistory({opName: "collapse nodes", depth: -1}); //do not actually perform command, just group
         param.nodes.forEach(function(node){
-            module.exports.modelManager.changeModelNodeAttribute("expandCollapseStatus", node.id(), "collapse", "me");
+            module.exports.modelManager.changeModelNodeAttribute("expandCollapseStatus", node.id(), "collapse", "me", 0);
         });
     }
 
@@ -163,33 +203,41 @@ module.exports.collapseGivenNodes = function(param) {
 module.exports.simpleExpandGivenNodes = function(param) {
     expandCollapseUtilities.simpleExpandGivenNodes(param.nodes);
     if(param.sync){
+        module.exports.modelManager.updateHistory({opName: "simple expand nodes", depth: -1}); //do not actually perform command, just group
         param.nodes.forEach(function(node){
-            module.exports.modelManager.changeModelNodeAttribute("expandCollapseStatus", node.id(), "expand", "me");
+            module.exports.modelManager.changeModelNodeAttribute("expandCollapseStatus", node.id(), "expand", "me", 0);
         });
     }
 }
 
 module.exports.simpleCollapseGivenNodes = function(param) {
+    module.exports.modelManager.updateHistory({opName: "simple collapse nodes", depth: -1}); //do not actually perform command, just group
     expandCollapseUtilities.simpleCollapseGivenNodes(param.nodes);
     if(param.sync){
         param.nodes.forEach(function(node){
-            module.exports.modelManager.changeModelNodeAttribute("expandCollapseStatus", node.id(), "collapse", "me");
+            module.exports.modelManager.changeModelNodeAttribute("expandCollapseStatus", node.id(), "collapse", "me", 0);
         });
     }
 }
 module.exports.expandAllNodes = function() {
+    module.exports.modelManager.updateHistory({opName: "expand nodes", depth: -1}); //do not actually perform command, just group
     expandCollapseUtilities.expandAllNodes();
-    cy.nodes().forEach(function(node){
-        module.exports.modelManager.changeModelNodeAttribute("expandCollapseStatus", node.id(), "expand", "me");
-    });
+    if(param.sync) {
+        cy.nodes().forEach(function (node) {
+            module.exports.modelManager.changeModelNodeAttribute("expandCollapseStatus", node.id(), "expand", "me", 0);
+        });
+    }
 
 }
 
 module.exports.simpleExpandAllNodes = function() {
     expandCollapseUtilities.simpleExpandAllNodes();
-    cy.nodes().forEach(function(node){
-        module.exports.modelManager.changeModelNodeAttribute("expandCollapseStatus", node.id(), "collapse", "me");
-    });
+    module.exports.modelManager.updateHistory({opName: "simple collapse nodes", depth: -1}); //do not actually perform command, just group
+    if(param.sync) {
+        cy.nodes().forEach(function(node){
+            module.exports.modelManager.changeModelNodeAttribute("expandCollapseStatus", node.id(), "collapse", "me", 0);
+        });
+    }
 
 }
 
@@ -213,18 +261,14 @@ module.exports.getNodePositionsAndSizes = function() {
 
 
 module.exports.performLayoutFunction = function(param) {
-    module.exports.modelManager.updateHistory("run layout");
 
+    module.exports.modelManager.updateHistory({opName:"run layout", depth:-1});
 //notify other clients
     cy.on('layoutstop', function() {
-        var modelElList = [];
-        var paramList = [];
         cy.nodes().forEach(function(node){
-            modelElList.push({id: node.id(), isNode: true});
-            paramList.push(node.position());
-
+            module.exports.modelManager.changeModelNodeAttribute("position", node.id(), node.position(), "me", 0);
         });
-        module.exports.modelManager.changeModelElementGroupAttribute("position", modelElList, paramList, "me");
+
     });
 
 }
@@ -260,16 +304,19 @@ module.exports.returnToPositionsAndSizes = function(param) {
     });
 
     if(param.sync){
-        var modelElList = [];
-        var paramList = [];
+    //    var modelElList = [];
+     //   var paramList = [];
+        module.exports.modelManager.changeModelNodeAttribute("rollback positions and sizes", node.id(), node.position(), "me", 0);
         cy.nodes().forEach(function(node){
-            modelElList.push({id: node.id(), isNode: true});
-            paramList.push(node.position());
+            module.exports.modelManager.changeModelNodeAttribute("position", node.id(), node.position(), "me", 0);
+            module.exports.modelManager.changeModelNodeAttribute("width", node.id(), node.width(), "me", 0);
+            module.exports.modelManager.changeModelNodeAttribute("height", node.id(), node.height(), "me", 0);
+  //          modelElList.push({id: node.id(), isNode: true});
+    //        paramList.push(node.position());
 
         });
-        module.exports.modelManager.changeModelElementGroupAttribute("position", modelElList, paramList, "me");
-        //
-        // });
+//        module.exports.modelManager.changeModelElementGroupAttribute("position", modelElList, paramList, "me", 0);
+
     }
 
 
@@ -279,44 +326,26 @@ module.exports.returnToPositionsAndSizes = function(param) {
 //This is used only to inform the model and perform undo. cytoscape moves the node
 module.exports.moveNodesConditionally = function(param) {
 
+    module.exports.modelManager.updateHistory({opName:"move node group", depth:-1}); //do not actually perform command, just group
     if(param.sync){
 
         var elParamList = module.exports.getDescendentNodes(param.nodes);
-        var modelElList = elParamList.els;
-        var paramList = elParamList.params;
-
-        module.exports.modelManager.changeModelElementGroupAttribute("position", modelElList, paramList, "me");
 
     }
+
 
     return param;
 }
 
 module.exports.getDescendentNodes = function(nodes) {
-    var modelElList = [];
-    var paramList = [];
     if(nodes == null) return;
     nodes.forEach(function(node){
 
-        modelElList.push({id: node.id(), isNode: true});
-        paramList.push(node.position());
-
+        module.exports.modelManager.changeModelNodeAttribute("position", node.id(), node.position(), "me", 1);
         var children = node.children();
-        if(children){
-            var elParamList = module.exports.getDescendentNodes(children);
-            elParamList.els.forEach(function(el){
-                modelElList.push(el)
-            });
-            elParamList.params.forEach(function(param){
-                paramList.push(param);
-            });
-        }
-
+        module.exports.getDescendentNodes(children);
         
     });
-
-
-    return {els: modelElList, params: paramList};
 
 }
 
@@ -333,7 +362,8 @@ module.exports.changePosition = function(param){
 
     ele['position'](param.data);
     if(param.sync){ //don't update history
-        module.exports.modelManager.changeModelNodeAttribute("position", ele.id(), ele.position(), "me", true);
+        module.exports.modelManager.updateHistory({opName:"move node", depth:-1}); //do not actually perform command, just group
+        module.exports.modelManager.changeModelNodeAttribute("position", ele.id(), ele.position(), "me", 1);
 
     }
 
@@ -343,84 +373,53 @@ module.exports.changePosition = function(param){
 
 module.exports.hideSelected = function(param) {
     var currentNodes = cy.nodes(":visible");
-    var result = {
-        sync: true,
-    };
+    
     var nodesToHide = sbgnFiltering.hideSelected(param.selectedEles); //funda changed
     if(param.sync) {//first hide on the other side to make sure elements don't get unselected
+        module.exports.modelManager.updateHistory({opName:"hide selected", depth:-1});
 
-
-        var modelElList = [];
-        var paramList = [];
         nodesToHide.forEach(function (el) {
-            modelElList.push({id: el.id(), isNode: el.isNode()});
-            paramList.push("invisible");
+            module.exports.modelManager.changeModelNodeAttribute("visibilityStatus", el.id(), "invisible", "me", 0);
         });
-        module.exports.modelManager.changeModelElementGroupAttribute("visibilityStatus", modelElList, paramList, "me");
 
     }
-
-    result.nodesToShow = currentNodes;
-    result.selectedEles = nodesToHide;
-    return result;
+    
 }
 
 
 
 module.exports.showSelected = function(param) {
-    var currentNodes = cy.nodes(":visible");
-    var result = {
-        sync: true,
-    };
-
 
     var nodesToShow = sbgnFiltering.showSelected(param.selectedEles); //funda changed
 
     if(param.sync){
-        var modelElList  = [];
-        var paramList = [];
+        module.exports.modelManager.updateHistory({opName:"show selected", depth:-1});
         nodesToShow.forEach(function(el){
-            modelElList.push({id: el.id(), isNode: el.isNode()});
-            paramList.push("visible");
+            module.exports.modelManager.changeModelNodeAttribute("visibilityStatus", el.id(), "visible", "me", 0);
         });
-        module.exports.modelManager.changeModelElementGroupAttribute("visibilityStatus",modelElList, paramList, "me");
 
 
          var nodesToHide = cy.nodes().not(nodesToShow);
 
-        var modelElList  = [];
-        var paramList = [];
         nodesToHide.forEach(function(el){
-            modelElList.push({id: el.id(), isNode: el.isNode()});
-            paramList.push("invisible");
+            module.exports.modelManager.changeModelNodeAttribute("visibilityStatus", el.id(), "invisible", "me", 0);
         });
-        module.exports.modelManager.changeModelElementGroupAttribute("visibilityStatus",modelElList, paramList, "me");
     }
 
-    result.nodesToShow = currentNodes;
-    result.selectedEles = nodesToShow;
-    return result;
+    
 }
 
 module.exports.showAll = function(param) {
-    var currentNodes = cy.nodes(":visible");
     sbgnFiltering.showAll();
     if(param.sync){
-        var modelElList  = [];
-        var paramList = [];
+        module.exports.modelManager.updateHistory({opName:"show all", depth:-1});
         cy.nodes().forEach(function(el){
-            modelElList.push({id: el.id(), isNode: el.isNode()});
-            paramList.push("visible");
+            module.exports.modelManager.changeModelNodeAttribute("visibilityStatus", el.id(), "visible", "me", 0);
         });
-        module.exports.modelManager.changeModelElementGroupAttribute("visibilityStatus",modelElList, paramList, "me");
 
     }
 
-    var result ={
-        sync: true,
-        nodesToShow: currentNodes
-    };
-    return result;
+    
 }
 
 
@@ -428,13 +427,9 @@ module.exports.showAll = function(param) {
 //funda changed this to include selected nodes explicitly
 module.exports.highlightSelected = function(param) {
     var elesToHighlight, elesToNotHighlight;
-    var result = {};
+    
     //If this is the first call of the function then call the original method
         //find selected elements
-        if (sbgnFiltering.isAllElementsAreNotHighlighted()) {
-            //mark that there was no highlighted element
-            result.allElementsWasNotHighlighted = true;
-        }
         var alreadyHighlighted = cy.elements("[highlighted='true']").filter(":visible");
         if (param.highlightNeighboursofSelected) {
 
@@ -450,73 +445,53 @@ module.exports.highlightSelected = function(param) {
 
 
     if(param.sync){
+        module.exports.modelManager.updateHistory({opName:"highlight selected", depth:-1}); //do not actually perform command, just group
         if(elesToHighlight != null) {
-            var modelElList = [];
-            var paramList = [];
-            elesToHighlight.forEach(function (el) {
-                modelElList.push({id: el.id(), isNode: el.isNode()});
-                paramList.push("highlighted");
+             elesToHighlight.forEach(function (el) {
+                 if(el.isNode())
+                    module.exports.modelManager.changeModelNodeAttribute("highlightStatus", el.id(), "highlighted", "me", 0);
+                 else
+                     module.exports.modelManager.changeModelEdgeAttribute("highlightStatus", el.id(), "highlighted", "me", 0);
             });
-            module.exports.modelManager.changeModelElementGroupAttribute("highlightStatus", modelElList, paramList, "me");
         }
 
         if(elesToNotHighlight != null){
 
-            var modelElList = [];
-            var paramList = [];
             elesToNotHighlight.forEach(function (el) {
-                modelElList.push({id: el.id(), isNode: el.isNode()});
-                paramList.push("notHighlighted");
+                if(el.isNode())
+                    module.exports.modelManager.changeModelNodeAttribute("highlightStatus", el.id(), "notHighlighted", "me", 0);
+                else
+                    module.exports.modelManager.changeModelEdgeAttribute("highlightStatus", el.id(), "notHighlighted", "me", 0);
+
             });
-            module.exports.modelManager.changeModelElementGroupAttribute("highlightStatus", modelElList, paramList, "me");
 
         }
 
     }
 
-    result.sync = true;
-    result.elesToNotHighlight = elesToHighlight;
-    result.elesToHighlight = elesToNotHighlight;
-
-    return result;
+   
 }
 
 //Remove highlights actually means remove fadeouts
 module.exports.removeHighlights = function(param) {
-    var result = {};
-    if (sbgnFiltering.isAllElementsAreNotHighlighted()) {
-        result.elesToHighlight = cy.elements(":visible");
-    }
-    else {
-        result.elesToHighlight = cy.elements("[highlighted='true']").filter(":visible");
-    }
-
+   
+   
     sbgnFiltering.removeHighlights();
 
     if(param.sync){
-        // cy.elements().forEach(function(el){
-        //     module.exports.modelManager.changeModelNodeAttribute('highlightStatus', el.id(), "highlighted", "me");
-        // });
+        module.exports.modelManager.updateHistory({opName:"remove highlights", depth:-1}); //do not actually perform command, just group
 
-        var modelElList = [];
-        var paramList = [];
-        cy.elements().forEach(function (el) {
-            modelElList.push({id: el.id(), isNode: el.isNode()});
-            paramList.push("highlighted");
+        cy.nodes().forEach(function (el) {
+
+            module.exports.modelManager.changeModelNodeAttribute("highlightStatus", el.id(), "highlighted", "me", 0);
         });
-        module.exports.modelManager.changeModelElementGroupAttribute("highlightStatus", modelElList, paramList, "me");
-
+        cy.edges().forEach(function(el){
+            module.exports.modelManager.changeModelEdgeAttribute("highlightStatus", el.id(), "highlighted", "me", 0);
+        });
 
     }
-
-
-    result.sync = true;
-    result.elesToNotHighlight = cy.elements().not(result.elesToHighlight);
-    result.firstTime = false;
-
-
-
-    return result;
+    
+   
 }
 
 module.exports.changeChildren = function(param){
@@ -532,11 +507,12 @@ module.exports.changeChildren = function(param){
         });
 
         ele._private.children = elArr;
+        //ele._private.data.children = elIdArr;
         expandCollapseUtilities.refreshPaddings();
 
         if (param.sync) {
-            
-            module.exports.modelManager.changeModelNodeAttribute(param.modelDataName, param.ele.id(), elIdArr, "me");
+            module.exports.modelManager.updateHistory({opName:"change children", depth:-1}); //do not actually perform command, just group
+            module.exports.modelManager.changeModelNodeAttribute(param.modelDataName, param.ele.id(), elIdArr, "me", 0);
         }
     }
 }
@@ -595,7 +571,8 @@ module.exports.changeParent = function(param) {
     module.exports.returnToPositionsAndSizesConditionally({nodesData:nodesData, sync: param.sync});
 
     if(param.sync){
-        module.exports.modelManager.changeModelNodeAttribute('parent', param.node.id(), newParent.id(), "me");
+        module.exports.modelManager.updateHistory({opName:"change parent", depth:-1}); //do not actually perform command, just group
+        module.exports.modelManager.changeModelNodeAttribute('parent', param.node.id(), newParent.id(), "me", 0);
 
 
         expandCollapseUtilities.refreshPaddings();
@@ -613,7 +590,6 @@ module.exports.createCompoundForSelectedNodes = function(param) {
     var oldParentId = nodesToMakeCompound[0].data("parent");
     var newCompound;
 
-    if (param.firstTime) {
         var eles = cy.add({
             group: "nodes",
             data: {
@@ -628,10 +604,7 @@ module.exports.createCompoundForSelectedNodes = function(param) {
 
         newCompound = eles[eles.length - 1];
 
-    }
-    else {
-        newCompound = param.removedCompound.restore();
-    }
+
 
     var newCompoundId = newCompound.id();
 
@@ -640,11 +613,8 @@ module.exports.createCompoundForSelectedNodes = function(param) {
 
 
     var modelElList = [];
-    var paramList = [];
     nodesToMakeCompound.forEach(function(node){
-        // nodeIds.push(node.id());
-        modelElList.push({id: node.id(), isNode:true});
-        paramList.push(node.data('parent'));  //before changing parents
+        modelElList.push(node.id());
     });
 
 
@@ -656,21 +626,21 @@ module.exports.createCompoundForSelectedNodes = function(param) {
     ////Notify other clients
 
 
-    
-    module.exports.modelManager.addModelCompound(newCompound.id(), {x: newCompound._private.position.x, y: newCompound._private.position.y, sbgnclass: param.compoundType, width: newCompound.width(), height: newCompound.height()},  modelElList, paramList, "me");
-    
-    //module.exports.modelManager.addModelNode(newCompound.id(), {x: newCompound._private.position.x, y: newCompound._private.position.y, sbgnclass: param.compoundType}, "me");
-    module.exports.modelManager.initModelNode(newCompound,"me", true);
-    //
+    if(param.sync) {
+        module.exports.modelManager.updateHistory({opName:"add compound", depth:-1}); //do not actually perform command, just group
+        module.exports.modelManager.addModelCompound(newCompound.id(), {
+            x: newCompound._private.position.x,
+            y: newCompound._private.position.y,
+            sbgnclass: param.compoundType,
+            width: newCompound.width(),
+            height: newCompound.height()
+        }, modelElList, oldParentId, "me", 0);
+
+        //module.exports.modelManager.addModelNode(newCompound.id(), {x: newCompound._private.position.x, y: newCompound._private.position.y, sbgnclass: param.compoundType}, "me");
+        module.exports.modelManager.initModelNode(newCompound, "me", 1);
+    }
 
 
-    return {
-        nodesToMakeCompound: nodesToMakeCompound,
-        compoundToRemove: newCompound,
-        compoundType: param.compoundType,
-        firstTime: false
-
-    };
 }
 
 module.exports.removeCompound = function(param) {
@@ -679,43 +649,36 @@ module.exports.removeCompound = function(param) {
     var compoundId = compoundToRemove.id();
     var newParentId = compoundToRemove.data("parent");
     var childrenOfCompound = compoundToRemove.children();
-
+    
     addRemoveUtilities.changeParent(childrenOfCompound, compoundId, newParentId);
     //change parents of children
-    childrenOfCompound.forEach(function(node){
-        module.exports.modelManager.changeModelNodeAttribute('parent',node.id(), newParentId, "me");
-    });
 
 
     var removedCompound = compoundToRemove.remove();
     //remove children of compound node
-    module.exports.modelManager.changeModelNodeAttribute('children', removedCompound.id(), [], "me");
 
-    module.exports.modelManager.deleteModelNode(removedCompound.id(), "me", true);
 
+    if(param.sync) {
+        module.exports.modelManager.updateHistory({opName:"remove compound", depth:-1}); //do not actually perform command, just group
+        childrenOfCompound.forEach(function (node) {
+            module.exports.modelManager.changeModelNodeAttribute('parent', node.id(), newParentId, "me", 0);
+        });
+
+        module.exports.modelManager.changeModelNodeAttribute('children', removedCompound.id(), [], "me", 0);
+
+        module.exports.modelManager.deleteModelNode(removedCompound.id(), "me", 1);
+    }
 
     expandCollapseUtilities.refreshPaddings();
 
-    return {
-        nodesToMakeCompound: childrenOfCompound,
-        removedCompound: compoundToRemove,
-        firstTime: false
-    };
+
 }
 
 module.exports.resizeNode = function(param) {
 
     var ele = param.ele;
 
-    var result = {
-        width: param.initialWidth,
-        height: param.initialHeight,
-        initialWidth: param.width,
-        initialHeight: param.height,
-        ele: ele,
-        sync: true
-    };
-
+    
     //if (!param.firstTime) {
         ele.data("width", param.width);
         ele.data("height", param.height);
@@ -734,25 +697,19 @@ module.exports.resizeNode = function(param) {
 
 
     if(param.sync){
-        module.exports.modelManager.changeModelNodeAttribute('width',  ele.id(), param.width, "me");
-        module.exports.modelManager.changeModelNodeAttribute('height', ele.id(), param.height, "me");
+        module.exports.modelManager.updateHistory({opName:"resize node", depth:-1}); //do not actually perform command, just group
+        module.exports.modelManager.changeModelNodeAttribute('width',  ele.id(), param.width, "me", 0);
+        module.exports.modelManager.changeModelNodeAttribute('height', ele.id(), param.height, "me", 0);
     }
 
-    return result;
+    
 }
 
 
 module.exports.changeStateVariable = function(param) {
-    var result = {
-    };
     var state = param.state;
     var type = param.type;
-    result.state = state;
-    result.type = type;
-    result.valueOrVariable = state.state[type];
-    result.ele = param.ele;
-    result.width = param.width;
-
+    
     state.state[type] = param.valueOrVariable;
     cy.forceRender();
 
@@ -764,20 +721,15 @@ module.exports.changeStateVariable = function(param) {
     statesAndInfos[ind] = state;
 
     param.data = statesAndInfos;
-    module.exports.modelManager.changeModelNodeAttribute('sbgnStatesAndInfos', param.ele.id(), param.data, "me" );
+    if(param.sync) {
+        module.exports.modelManager.updateHistory({opName:"change state variable", depth:-1}); //do not actually perform command, just group
+        module.exports.modelManager.changeModelNodeAttribute('sbgnStatesAndInfos', param.ele.id(), param.data, "me", 0);
+    }
 
-    return result;
 }
 
 module.exports.changeUnitOfInformation = function(param) {
-    var result = {
-    };
     var state = param.state;
-    result.state = state;
-    result.text = state.label.text;
-    result.ele = param.ele;
-    result.width = param.width;
-
 
     state.label.text = param.text;
     cy.forceRender();
@@ -789,10 +741,12 @@ module.exports.changeUnitOfInformation = function(param) {
 
     param.data = statesAndInfos;
 
-    module.exports.modelManager.changeModelNodeAttribute('sbgnStatesAndInfos', param.ele.id(), param.data, "me");
+    if(param.sync){
+        module.exports.modelManager.updateHistory({opName:"change unit of information", depth:-1}); //do not actually perform command, just group
+        module.exports.modelManager.changeModelNodeAttribute('sbgnStatesAndInfos', param.ele.id(), param.data, "me", 0);
+    }
+    
 
-
-    return result;
 }
 
 module.exports.addStateAndInfo = function(param) {
@@ -804,7 +758,10 @@ module.exports.addStateAndInfo = function(param) {
     relocateStateAndInfos(statesAndInfos);
 
     param.data = statesAndInfos;
-    module.exports.modelManager.changeModelNodeAttribute('sbgnStatesAndInfos', param.ele.id(), param.data, "me");
+    if(param.sync) {
+        module.exports.modelManager.updateHistory({opName: "add state info", depth: -1}); //do not actually perform command, just group
+        module.exports.modelManager.changeModelNodeAttribute('sbgnStatesAndInfos', param.ele.id(), param.data, "me", 0);
+    }
     param.ele.unselect(); //to refresh inspector
     param.ele.select(); //to refresh inspector
 
@@ -827,7 +784,10 @@ module.exports.removeStateAndInfo = function(param) {
     relocateStateAndInfos(statesAndInfos);
 
     param.data = statesAndInfos;
-    module.exports.modelManager.changeModelNodeAttribute('sbgnStatesAndInfos', param.ele.id(), param.data, "me");
+    if(param.sync) {
+        module.exports.modelManager.updateHistory({opName: "remove state info", depth: -1}); //do not actually perform command, just group
+        module.exports.modelManager.changeModelNodeAttribute('sbgnStatesAndInfos', param.ele.id(), param.data, "me", 0);
+    }
     param.ele.unselect(); //to refresh inspector
     param.ele.select(); //to refresh inspector
     cy.forceRender();
@@ -863,7 +823,8 @@ module.exports.changeIsMultimerStatus = function(param) {
 
 
     if(param.sync){
-        module.exports.modelManager.changeModelNodeAttribute('isMultimer', param.ele.id(), param.data, "me");
+        module.exports.modelManager.updateHistory({opName: "change multimer status", depth: -1}); //do not actually perform command, just group
+        module.exports.modelManager.changeModelNodeAttribute('isMultimer', param.ele.id(), param.data, "me", 0);
     }
 }
 
@@ -882,7 +843,8 @@ module.exports.changeIsCloneMarkerStatus = function(param) {
     cy.forceRender();
 
     if(param.sync){
-        module.exports.modelManager.changeModelNodeAttribute('isCloneMarker', param.ele.id(), param.data);
+        module.exports.modelManager.updateHistory({opName: "change clone marker status", depth: -1}); //do not actually perform command, just group
+        module.exports.modelManager.changeModelNodeAttribute('isCloneMarker', param.ele.id(), param.data, "me", 0);
     }
 
 }
@@ -902,7 +864,11 @@ module.exports.changeVisibilityOrHighlightStatus = function(param){
         sbgnFiltering.applyFilter(ele);
     }
     else if(param.data == null){
-        sbgnFiltering.removeFilter(ele);
+        if(param.dataType == "visibilityStatus")
+            sbgnFiltering.removeFilter(ele);
+        else
+            sbgnFiltering.highlightElements(ele);
+
     }
     else if(param.data == "highlighted"){
         sbgnFiltering.highlightElements(ele);
@@ -916,20 +882,10 @@ module.exports.changeVisibilityOrHighlightStatus = function(param){
 
 
 module.exports.changeStyleData = function( param) {
-    var result = {
-        ele: param.ele,
-        dataType: param.dataType,
-        data: param.ele.data(param.dataType),
-        modelDataName: param.modelDataName,
-        sync: true
-    };
+    
     var ele = param.ele;
-
-
-
     ele.data(param.dataType, param.data);
-
-
+    
 
     if (cy.elements(":selected").length == 1 && cy.elements(":selected")[0] == param.ele) {
         require('./sample-app-cytoscape-sbgn.js').handleSBGNInspector(module.exports);
@@ -988,28 +944,19 @@ module.exports.changeStyleData = function( param) {
 
 
     if(param.sync){
+        module.exports.modelManager.updateHistory({opName:"change style data", depth:-1}); //do not actually perform command, just group
 
     if(ele.isNode())
-        module.exports.modelManager.changeModelNodeAttribute(param.modelDataName, param.ele.id(), param.data, "me");
+        module.exports.modelManager.changeModelNodeAttribute(param.modelDataName, param.ele.id(), param.data, "me", 0);
     else
-        module.exports.modelManager.changeModelEdgeAttribute(param.modelDataName, param.ele.id(), param.data, "me");
+        module.exports.modelManager.changeModelEdgeAttribute(param.modelDataName, param.ele.id(), param.data, "me", 0);
 
     }
-
-    return result;
 
 
 }
 
 module.exports.changeStyleCss = function(param) {
-    var result = {
-        ele: param.ele,
-        dataType: param.dataType,
-        data: param.ele.css(param.dataType),
-        modelDataName: param.modelDataName,
-        sync: true
-
-    };
 
     var ele = param.ele;
 
@@ -1021,26 +968,19 @@ module.exports.changeStyleCss = function(param) {
     }
 
     if(param.sync) {
+        module.exports.modelManager.updateHistory({opName:"change style css", depth:-1}); //do not actually perform command, just group
         if (ele.isNode()) {
-            module.exports.modelManager.changeModelNodeAttribute(param.modelDataName, param.ele.id(), param.data, "me");
+            module.exports.modelManager.changeModelNodeAttribute(param.modelDataName, param.ele.id(), param.data, "me", 0);
         }
         else
-            module.exports.modelManager.changeModelEdgeAttribute(param.modelDataName, param.ele.id(), param.data, "me");
+            module.exports.modelManager.changeModelEdgeAttribute(param.modelDataName, param.ele.id(), param.data, "me", 0);
 
     }
-
-    return result;
 }
 
 module.exports.changeBendPoints = function(param){
     var edge = param.edge;
-    var result = {
-        edge: edge,
-        weights: param.set?edge.data('weights'):param.weights,
-        distances: param.set?edge.data('distances'):param.distances,
-        set: true//As the result will not be used for the first function call params should be used to set the data
-    };
-
+   
     //Check if we need to set the weights and distances by the param values
     if(param.set) {
         param.weights?edge.data('weights', param.weights):edge.removeData('weights');
@@ -1055,7 +995,6 @@ module.exports.changeBendPoints = function(param){
         }
     }
 
-    return result;
 }
 
 module.exports.refreshGlobalUndoRedoButtonsStatus = function(){

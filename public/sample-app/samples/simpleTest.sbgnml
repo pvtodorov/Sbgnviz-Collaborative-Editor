@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes'?>
+<sbgn xmlns='http://sbgn.org/libsbgn/0.2'>
+<map language='process description'>
+<glyph id='ele11' class='macromolecule' >
+<label text='ab' />
+<bbox y='152' x='156' w='50' h='50' />
+</glyph>
+<glyph id='ele12' class='process' >
+<label text='cd' />
+<bbox y='127.5' x='332.5' w='125' h='125' />
+</glyph>
+<glyph id='ele15' class='macromolecule' >
+<label text='ef' />
+<bbox y='141' x='598' w='50' h='50' />
+</glyph>
+<arc id='ele11-ele12' target='ele12' source='ele11' class='consumption'>
+<start y='178.5642523364486' x='206.75'/>
+<end y='186.2032710280374' x='332.5'/>
+</arc>
+<arc id='ele12-ele15' target='ele15' source='ele12' class='production'>
+<start y='183.42105263157896' x='457.5'/>
+<end y='169.05089645881728' x='594.0164836412358'/>
+</arc>
+</map>
+</sbgn>

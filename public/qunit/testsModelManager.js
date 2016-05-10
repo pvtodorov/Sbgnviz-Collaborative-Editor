@@ -12,7 +12,7 @@ module.exports = function(){
     QUnit.test('modelManager.setSampleInd()', function(assert) {
 
         for(var i = 0; i < 5; i++) {
-            ModelManager.setSampleInd(i);
+            ModelManager.setSampleInd(i,0);
             assert.equal(ModelManager.getSampleInd(), i, ("Sample index " + i + " is correctly set" ));
         }
 
@@ -23,7 +23,7 @@ module.exports = function(){
     function addModelNodeTest(id){
         QUnit.test('modelManager.addModelNode()', function(assert) {
 
-            ModelManager.addModelNode(id, {x: 100, y: 200, sbgnclass: "macromolecule", sbgnlabel:"tmpLabel" });
+            ModelManager.addModelNode(id, {x: 100, y: 200, sbgnclass: "macromolecule", sbgnlabel:"tmpLabel" },null, 0);
 
 
             assert.ok(cy.getElementById(id),"Node added to cytoscape");
@@ -47,7 +47,7 @@ module.exports = function(){
     function initModelNodeTest(id){
         QUnit.test('modelManager.initNode()', function(assert) {
 
-            ModelManager.initModelNode(cy.getElementById(id));
+            ModelManager.initModelNode(cy.getElementById(id),null, 0);
 
             var node = cy.getElementById(id);
             var modelNode = ModelManager.getModelNode(id);
@@ -71,12 +71,12 @@ module.exports = function(){
         });
     }
 
-    function addModelEdgeTest(id1, id2, firstTime){
+    function addModelEdgeTest(id1, id2){
         QUnit.test('modelManager.addModelEdge()', function(assert) {
 
 
             var id = (id1 + "-"+ id2);
-            ModelManager.addModelEdge(id, {source: id1, target: id2, sbgnclass: "consumption"});
+            ModelManager.addModelEdge(id, {source: id1, target: id2, sbgnclass: "consumption"},null, 0);
 
             assert.ok(cy.getElementById(id),"Edge added to cytoscape");
             assert.equal(cy.getElementById(id)._private.data.sbgnclass, "consumption", "Edge sbgnclass is correct.");
@@ -92,7 +92,7 @@ module.exports = function(){
     function initModelEdgeTest(id) {
         QUnit.test('modelManager.initEdge()', function (assert) {
 
-            ModelManager.initModelEdge(cy.getElementById(id));
+            ModelManager.initModelEdge(cy.getElementById(id), null, 0);
 
             var edge = cy.getElementById(id);
             var modelEdge = ModelManager.getModelEdge(id);
@@ -111,7 +111,7 @@ module.exports = function(){
 
     function deleteModelNodeTest(id){
         QUnit.test('modelManager.deleteModelNode()', function(assert){
-            ModelManager.deleteModelNode(id);
+            ModelManager.deleteModelNode(id, null, 0);
             assert.equal(ModelManager.getModelNode(id), null, "Node removed from model.");
             assert.equal(cy.getElementById(id).length,0, "Node removed from cytoscape.");
 
@@ -120,7 +120,7 @@ module.exports = function(){
 
     function deleteModelEdgeTest(id){
         QUnit.test('modelManager.deleteModelEdge()', function(assert){
-            ModelManager.deleteModelEdge(id);
+            ModelManager.deleteModelEdge(id, null, 0);
             assert.equal(ModelManager.getModelEdge(id), null, "Edge removed from model.");
             assert.equal(cy.getElementById(id).length,0, "Edge removed from cytoscape.");
 
@@ -175,8 +175,8 @@ module.exports = function(){
 
     function changeModelNodeAttributeTest(id){
         QUnit.test('modelManager.changeModelNodeAttribute()', function(assert) {
-            
-            ModelManager.changeModelNodeAttribute("position", id, {x: 300, y: 400});
+
+            ModelManager.changeModelNodeAttribute("position", id, {x: 300, y: 400}, null, 0);
             assert.equal(300, cy.getElementById(id).position().x,  "Node position x is correct in cytoscape.");
             assert.equal(ModelManager.getModelNode(id).position.x,cy.getElementById(id).position().x,  "Node position x is equal in model and cytoscape.");
 
@@ -184,60 +184,60 @@ module.exports = function(){
             assert.equal(ModelManager.getModelNode(id).position.y, cy.getElementById(id).position().y,  "Node position y is equal in model and cytoscape.");
 
 
-            ModelManager.changeModelNodeAttribute("sbgnclass", id, "phenotype");
+            ModelManager.changeModelNodeAttribute("sbgnclass", id, "phenotype", null, 0);
             assert.equal("phenotype", cy.getElementById(id).data('sbgnclass'),  "Node sbgnclass is correct in cytoscape.");
             assert.equal(ModelManager.getModelNode(id).sbgnclass, cy.getElementById(id).data('sbgnclass'),  "Node sbgnclass is equal in model and cytoscape.");
 
-            ModelManager.changeModelNodeAttribute("sbgnlabel", id, "label2");
+            ModelManager.changeModelNodeAttribute("sbgnlabel", id, "label2", null, 0);
             assert.equal("label2", cy.getElementById(id).data('sbgnlabel'),  "Node sbgnlabel is correct in cytoscape.");
             assert.equal(ModelManager.getModelNode(id).sbgnlabel, cy.getElementById(id).data('sbgnlabel'),  "Node sbgnlabel is equal in model and cytoscape..");
 
-            ModelManager.changeModelNodeAttribute("backgroundOpacity", id, 1);
+            ModelManager.changeModelNodeAttribute("backgroundOpacity", id, 1, null, 0);
             assert.equal(1, cy.getElementById(id).data('backgroundOpacity'),  "Node backgroundOpacity is correct in cytoscape.");
             assert.equal(ModelManager.getModelNode(id).backgroundOpacity, cy.getElementById(id).data('backgroundOpacity'),  "Node backgroundOpacity is equal in model and cytoscape..");
 
-            ModelManager.changeModelNodeAttribute("backgroundColor", id, '#333343');
+            ModelManager.changeModelNodeAttribute("backgroundColor", id, '#333343', null, 0);
             assert.equal('#333343', cy.getElementById(id).css('background-color'), "Node backgroundColor is correct in cytoscape.");
             assert.equal(ModelManager.getModelNode(id).backgroundColor, cy.getElementById(id).css('background-color'), "Node backgroundColor is equal in model and cytoscape..");
 
-            ModelManager.changeModelNodeAttribute("borderColor", id, '#222222');
+            ModelManager.changeModelNodeAttribute("borderColor", id, '#222222', null, 0);
             assert.equal('#222222', cy.getElementById(id).css('border-color'), "Node borderColor is correct in cytoscape.");
             assert.equal(ModelManager.getModelNode(id).borderColor, cy.getElementById(id).css('border-color'), "Node borderColor is equal in model and cytoscape..");
 
-            ModelManager.changeModelNodeAttribute("borderWidth", id, "3px");
+            ModelManager.changeModelNodeAttribute("borderWidth", id, "3px", null, 0);
             assert.equal("3px", cy.getElementById(id).css('border-width'), "Node borderWidth is correct in cytoscape.");
             assert.equal(ModelManager.getModelNode(id).borderWidth, cy.getElementById(id).css('border-width'), "Node borderWidth is equal in model and cytoscape..");
 
-            ModelManager.changeModelNodeAttribute("isCloneMarker", id, true);
+            ModelManager.changeModelNodeAttribute("isCloneMarker", id, true, null, 0);
             assert.equal(true, cy.getElementById(id).data('sbgnclonemarker'), "Node isCloneMarker is correct in cytoscape.");
             assert.equal(ModelManager.getModelNode(id).isCloneMarker, cy.getElementById(id).data('sbgnclonemarker'), "Node isCloneMarker is equal in model and cytoscape..");
 
-            ModelManager.changeModelNodeAttribute("isMultimer", id, true);
+            ModelManager.changeModelNodeAttribute("isMultimer", id, true, null, 0);
             assert.equal(true, cy.getElementById(id).data('sbgnclass').indexOf(' multimer') > 0, "Node isMultimer is correct in cytoscape.");
             assert.equal(ModelManager.getModelNode(id).isMultimer, cy.getElementById(id).data('sbgnclass').indexOf(' multimer') > 0, "Node isMultimer is equal in model and cytoscape..");
 
-            ModelManager.changeModelNodeAttribute("sbgnStatesAndInfos", id, [{clazz:"unit of information", label:{text:"uoi"}}]);
+            ModelManager.changeModelNodeAttribute("sbgnStatesAndInfos", id, [{clazz:"unit of information", label:{text:"uoi"}}], null, 0);
             assert.equal("unit of information", cy.getElementById(id).data('sbgnstatesandinfos')[0].clazz, "Node sbgnStatesAndInfos are correct in cytoscape.");
             assert.equal(ModelManager.getModelNode(id).sbgnStatesAndInfos[0].clazz, cy.getElementById(id).data('sbgnstatesandinfos')[0].clazz, "Node sbgnStatesAndInfos are equal in model and cytoscape..");
 
-            ModelManager.changeModelNodeAttribute("parent", id, "glyph2");
+            ModelManager.changeModelNodeAttribute("parent", id, "glyph2", null, 0);
             assert.equal("glyph2", cy.getElementById(id).data('parent'), "Node parent is correct in cytoscape.");
             assert.equal(ModelManager.getModelNode(id).parent, cy.getElementById(id).data('parent'), "Node parent is equal in model and cytoscape..");
 
 
-            ModelManager.changeModelNodeAttribute("children", id, ["glyph3"]);
+            ModelManager.changeModelNodeAttribute("children", id, ["glyph3"], null, 0);
             assert.equal("glyph3", cy.getElementById(id)._private.children[0].id(), "Node children are correct in cytoscape.");
             assert.equal(ModelManager.getModelNode(id).children[0], cy.getElementById(id)._private.children[0].id(), "Node children are equal in model and cytoscape..");
 
-            ModelManager.changeModelNodeAttribute("ports", id, ["glyph4"]);
+            ModelManager.changeModelNodeAttribute("ports", id, ["glyph4"], null, 0);
             assert.equal(ModelManager.getModelNode(id).ports[0], cy.getElementById(id).data('ports')[0], "Node ports are correct in cytoscape.");
             assert.equal(ModelManager.getModelNode(id).ports[0], cy.getElementById(id).data('ports')[0], "Node ports are equal in model and cytoscape..");
 
-            ModelManager.changeModelNodeAttribute("height", id, 4);
+            ModelManager.changeModelNodeAttribute("height", id, 4, null, 0);
             assert.equal(4, cy.getElementById(id)._private.data.sbgnbbox.h, "Node height is correct in cytoscape.");
             assert.equal(ModelManager.getModelNode(id).height, cy.getElementById(id)._private.data.sbgnbbox.h, "Node height is equal in model and cytoscape..");
 
-            ModelManager.changeModelNodeAttribute("width", id, 5);
+            ModelManager.changeModelNodeAttribute("width", id, 5, null, 0);
             assert.equal(5, cy.getElementById(id)._private.data.sbgnbbox.w, "Node width is correct in cytoscape.");
             assert.equal(ModelManager.getModelNode(id).width, cy.getElementById(id)._private.data.sbgnbbox.w, "Node width is equal in model and cytoscape..");
 
@@ -249,42 +249,42 @@ module.exports = function(){
 
     function changeModelEdgeAttributeTest(id){
         QUnit.test('modelManager.changeModelEdgeAttribute()', function(assert){
-            ModelManager.changeModelEdgeAttribute("sbgnclass", id, "catalysis");
+            ModelManager.changeModelEdgeAttribute("sbgnclass", id, "catalysis", null, 0);
             assert.equal("catalysis", cy.getElementById(id).data('sbgnclass'),  "Edge sbgnclass is correct in cytoscape.");
             assert.equal(ModelManager.getModelEdge(id).sbgnclass, cy.getElementById(id).data('sbgnclass'),  "Edge sbgnclass is equal in model and cytoscape.");
 
-            ModelManager.changeModelEdgeAttribute("source", id, "glyph14");
+            ModelManager.changeModelEdgeAttribute("source", id, "glyph14", null, 0);
             assert.equal("glyph14", cy.getElementById(id).data("source"),  "Edge source is correct in cytoscape.");
             assert.equal(ModelManager.getModelEdge(id).source, cy.getElementById(id).data("source"),  "Edge source is equal in model and cytoscape.");
 
-            ModelManager.changeModelEdgeAttribute("target", id, "glyph5");
+            ModelManager.changeModelEdgeAttribute("target", id, "glyph5", null, 0);
             assert.equal("glyph5", cy.getElementById(id)._private.data.target,  "Edge target is correct in cytoscape.");
             assert.equal(ModelManager.getModelEdge(id).target, cy.getElementById(id)._private.data.target,  "Edge target is equal in model and cytoscape.");
 
 
-            ModelManager.changeModelEdgeAttribute("sbgncardinality", id, 5);
+            ModelManager.changeModelEdgeAttribute("sbgncardinality", id, 5, null, 0);
             assert.equal(5, cy.getElementById(id)._private.data.sbgncardinality,  "Edge sbgncardinality is correct in cytoscape.");
             assert.equal(ModelManager.getModelEdge(id).sbgncardinality, cy.getElementById(id)._private.data.sbgncardinality,  "Edge sbgncardinality is equal in model and cytoscape.");
 
-            ModelManager.changeModelEdgeAttribute("portsource", id, "glyph14");
+            ModelManager.changeModelEdgeAttribute("portsource", id, "glyph14", null, 0);
             assert.equal("glyph14", cy.getElementById(id).data('portsource'),  "Edge portsource is correct in cytoscape.");
             assert.equal(ModelManager.getModelEdge(id).portsource, cy.getElementById(id).data('portsource'),  "Edge portsource is equal in model and cytoscape.");
 
-            ModelManager.changeModelEdgeAttribute("porttarget", id, "glyph5");
+            ModelManager.changeModelEdgeAttribute("porttarget", id, "glyph5", null, 0);
             assert.equal("glyph5", cy.getElementById(id).data('porttarget'),  "Edge porttarget is correct in cytoscape.");
             assert.equal(ModelManager.getModelEdge(id).porttarget, cy.getElementById(id).data('porttarget'),  "Edge porttarget is equal in model and cytoscape.");
 
 
-            ModelManager.changeModelEdgeAttribute("lineColor", id, "#411515");
+            ModelManager.changeModelEdgeAttribute("lineColor", id, "#411515", null, 0);
             assert.equal("#411515", cy.getElementById(id).css("line-color"),  "Edge lineColor is correct in cytoscape.");
             assert.equal(ModelManager.getModelEdge(id).lineColor, cy.getElementById(id).css("line-color"),  "Edge lineColor is equal in model and cytoscape.");
 
-            ModelManager.changeModelEdgeAttribute("width", id, "8px");
+            ModelManager.changeModelEdgeAttribute("width", id, "8px", null, 0);
             assert.equal("8px", cy.getElementById(id).css("width"),  "Edge width is correct in cytoscape.");
             assert.equal(ModelManager.getModelEdge(id).width, cy.getElementById(id).css("width"),  "Edge width is equal in model and cytoscape.");
 
-            //Test lated
-            // ModelManager.changeModelEdgeAttribute("bendPointPositions", id, [{x: 300, y: 400}]);
+            //TODO
+            // ModelManager.changeModelEdgeAttribute("bendPointPositions", id, [{x: 300, y: 400}], null, 0);
             // assert.equal(300, cy.getElementById(id)._private.data.bendPointPositions[0].x,  "Edge bendPointPositions are correct in cytoscape.");
             // assert.equal(ModelManager.getModelEdge(id).bendPointPositions[0].x,cy.getElementById(id)._private.data.bendPointPositions[0].x,  "Edge bendPointPositions are equal in model and cytoscape.");
 
