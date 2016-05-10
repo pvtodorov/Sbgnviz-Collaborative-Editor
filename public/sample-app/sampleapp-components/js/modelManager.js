@@ -162,8 +162,6 @@ module.exports =  function(model, docId, userId, userName) {
                 else if(cmd.opTarget == "element group")
                     this.changeModelElementGroupAttribute(cmd.opAttr, cmd.elId, cmd.prevParam, null);
 
-
-
             }
             else if(cmd.opName == "add"){
                 if(cmd.opTarget == "element" && cmd.elType == "node")
@@ -224,10 +222,6 @@ module.exports =  function(model, docId, userId, userName) {
                     this.removeModelCompound(cmd.elId, cmd.param.childrenList, cmd.param);
 
 
-
-
-
-
             }
 
             undoInd = undoInd <  model.get('_page.doc.history').length -1 ? undoInd + 1  : model.get('_page.doc.history').length -1;
@@ -251,7 +245,6 @@ module.exports =  function(model, docId, userId, userName) {
 
         selectModelNode: function(node, noHistUpdate){
 
-
             var nodePath = model.at('_page.doc.cy.nodes.'  +node.id());
             if(nodePath.get() == null)
                 return "Node id not found";
@@ -259,10 +252,6 @@ module.exports =  function(model, docId, userId, userName) {
                 nodePath.set('highlightColor' , user.get('colorCode'));
 
 
-
-
-   //         if(!noHistUpdate)
-     //           this.updateHistory({opName:'select',opTarget:'element', elType:'node', elId: node.id()});
             return "success";
 
         },
@@ -275,9 +264,6 @@ module.exports =  function(model, docId, userId, userName) {
                 return "Edge id not found";
             if( user) {
                 edgePath.set('highlightColor', user.get('colorCode'));
-
-       //         if(!noHistUpdate)
-         //           this.updateHistory({opName:'select',opTarget:'element', elType:'edge', elId: edge.id()});
 
 
             }
@@ -293,8 +279,6 @@ module.exports =  function(model, docId, userId, userName) {
                 return "Node id not found";
 
             nodePath.set('highlightColor' , null);
-            //if(!noHistUpdate)
-          //      this.updateHistory({opName:'unselect',opTarget:'element', elType:'node', elId: node.id()});
 
             return "success";
 
@@ -310,10 +294,6 @@ module.exports =  function(model, docId, userId, userName) {
                 return "Edge id not found";
 
             edgePath.set('highlightColor', null);
-
-//            if(!noHistUpdate)
-  //              this.updateHistory({opName:'unelect',opTarget:'element', elType:'edge', elId: edge.id()});
-
 
             return "success";
 
@@ -376,7 +356,6 @@ module.exports =  function(model, docId, userId, userName) {
 
             //isolate the compound first, then delete
             this.changeModelElementGroupAttribute("parent", childrenList, prevParentList, null, true);
-            this.changeModelNodeAttribute("children", compoundId, null, null, true);
             this.deleteModelNode(compoundId, user, true);
 
 
@@ -414,8 +393,6 @@ module.exports =  function(model, docId, userId, userName) {
             this.changeModelElementGroupAttribute("parent", childrenList, parentList, user, true);
 
 
-
-            this.changeModelNodeAttribute('children', compoundId, nodeIds, user, true);
 
 
             if(!noHistUpdate)
@@ -558,7 +535,6 @@ module.exports =  function(model, docId, userId, userName) {
                 var isCloneMarker = nodePath.get('isCloneMarker');
                 var isMultimer = nodePath.get('isMultimer');
                 var sbgnStatesAndInfos = nodePath.get('sbgnStatesAndInfos');
-                var children = nodePath.get('children');
                 var highlightColor = nodePath.get('highlightColor');
                 var ports = nodePath.get('ports');
 
@@ -566,7 +542,7 @@ module.exports =  function(model, docId, userId, userName) {
                 prevParam = {x: pos.x , y: pos.y , sbgnclass:sbgnclass, width: width, height: height,
                              borderColor: borderColor, borderWidth: borderWidth, sbgnlabel: sbgnlabel,
                              sbgnStatesAndInfos:sbgnStatesAndInfos, parent:parent, isCloneMarker: isCloneMarker,
-                             isMultimer: isMultimer, children: children, highlightColor: highlightColor, ports: ports};
+                             isMultimer: isMultimer, highlightColor: highlightColor, ports: ports};
 
 
 
@@ -605,10 +581,7 @@ module.exports =  function(model, docId, userId, userName) {
                     prevParam = {source: source , target:target , sbgnclass:sbgnClass, lineColor: lineColor,
                     width: width, sbgncardinality: sbgncardinality, portsource: portsource, porttarget:porttarget, bendPointPositions: bendPointPositions, highlightColor:highlightColor};
 
-
                     this.updateHistory({opName:'delete',opTarget:'element', elType:'edge', elId: edgeId, prevParam: prevParam});
-
-
 
                 }
 
@@ -665,13 +638,11 @@ module.exports =  function(model, docId, userId, userName) {
                 var sbgnStatesAndInfos = nodePath.get('sbgnStatesAndInfos');
                 var highlightColor = nodePath.get('highlightColor');
                 var ports = nodePath.get('ports');
-                var children = nodePath.get('children');
-
 
                 prevParamsNodes.push({x: pos.x , y: pos.y , sbgnclass:sbgnclass, width: width, height: height,
                     borderColor: borderColor, borderWidth: borderWidth, sbgnlabel: sbgnlabel,
                     sbgnStatesAndInfos:sbgnStatesAndInfos, parent:parent, isCloneMarker: isCloneMarker,
-                    isMultimer: isMultimer,  highlightColor: highlightColor, backgroundColor: backgroundColor, ports:ports, children: children} );
+                    isMultimer: isMultimer,  highlightColor: highlightColor, backgroundColor: backgroundColor, ports:ports } );
             });
 
 
@@ -688,20 +659,21 @@ module.exports =  function(model, docId, userId, userName) {
             var self = this;
             //Restore nodes first
 
-            for (var i = 0; i < elList. nodes.length; i++) {
+            for (var i = 0; i < elList.nodes.length; i++) {
                 self.restoreModelNode(elList.nodes[i].id, param.nodes[i], user, true);
             }
 
             //restore edges later
-            for (var i = 0; i < elList. edges.length; i++) {
+            for (var i = 0; i < elList.edges.length; i++) {
                 self.restoreModelEdge(elList.edges[i].id, param.edges[i], user, true);
             }
 
-            
-            //change children after adding them all
-            for (var i = 0; i < elList. nodes.length; i++) {
-                self.changeModelNodeAttribute('children', elList.nodes[i].id, param.nodes[i].children, null);
+            //change parents after adding them all
+            for (var i = 0; i < elList.nodes.length; i++) {
+
+                self.changeModelNodeAttribute('parent', elList.nodes[i].id, param.nodes[i].parent, null, false);
             };
+
 
             if(!noHistUpdate)
                 self.updateHistory({opName:'restore', opTarget:'element group', elId:elList});
@@ -976,13 +948,6 @@ module.exports =  function(model, docId, userId, userName) {
             else
                 this.changeModelNodeAttribute('parent', node.id(),node.data('parent'), user, noHistUpdate);
 
-
-            var children = nodePath.get('children');
-
-            if (children != null)
-                node.data('children', children);
-            else
-                this.changeModelNodeAttribute('children', node.id(),node.data('children'), user, noHistUpdate);
 
 
             var height = nodePath.get('height');

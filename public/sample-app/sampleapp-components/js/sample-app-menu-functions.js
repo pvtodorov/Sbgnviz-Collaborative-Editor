@@ -343,11 +343,8 @@ module.exports = function(){
 
                 if (propName == 'parent')//TODO
                     editorActions.changeParent(param);
-
-                else if (propName == 'children') {
-                    editorActions.changeChildren(param);
-                }
-                else if (propName == 'collapsedChildren') {
+                    
+                else if (propName == 'collapsedChildren') { //TODO???????
                     editorActions.changeCollapsedChildren(param);
                 }
 
@@ -933,7 +930,6 @@ module.exports = function(){
             $("#hide-selected").click(function (e) {
                 var param = {
                     sync: true,
-                    firstTime: true,
                     selectedEles : cy.$(":selected")
                 };
 
@@ -1024,7 +1020,6 @@ module.exports = function(){
             $("#neighbors-of-selected").click(function (e) {
                 var param = {
                     sync: true,
-                    firstTime: true,
                     selectedEles : cy.$(":selected"),
                     highlightNeighboursofSelected: true
 
@@ -1082,7 +1077,6 @@ module.exports = function(){
             $("#processes-of-selected").click(function (e) {
                 var param = {
                     sync: true,
-                    firstTime: true,
                     selectedEles : cy.$(":selected"),
                     highlightProcessesOfSelected: true
                 };
@@ -1141,7 +1135,6 @@ module.exports = function(){
                 }
 
                 var param = {
-                    firstTime: true,
                     compoundType: "compartment",
                     nodesToMakeCompound: selected
                 };
@@ -1682,7 +1675,6 @@ function SBGNProperties(){
             $("#save-sbgn").die("click").live("click", function (evt) {
 
                 var param = {};
-                param.firstTime = true;
                 param.previousSBGNProperties = _.clone(self.currentSBGNProperties);
 
                 self.currentSBGNProperties.compoundPadding = Number(document.getElementById("compound-padding").value);

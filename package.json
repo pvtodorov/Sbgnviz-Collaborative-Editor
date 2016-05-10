@@ -37,7 +37,6 @@
     "livedb-mongo": "~0.3.0",
     "lodash": "^4.11.1",
     "onecolor": "^2.5.0",
-    "qunit": "^0.9.1",
     "racer-browserchannel": "^0.3.0",
     "racer-bundle": "~0.1.1",
     "racer-highway": "^1.4.1",

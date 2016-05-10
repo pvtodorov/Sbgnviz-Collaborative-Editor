@@ -291,22 +291,23 @@ module.exports = function(){
 
         });
     }
-
-    addModelNodeTest(1000);
-    addModelNodeTest(1000); //already added
-    initModelNodeTest(1000);
-    selectModelNodeTest(1000);
-    unselectModelNodeTest(1000);
+    
+    //
+    // addModelNodeTest(1000);
+    // addModelNodeTest(1000); //already added
+    // initModelNodeTest(1000);
+    // selectModelNodeTest(1000);
+    // unselectModelNodeTest(1000);
 
     // changeModelNodeAttributeTest(1000);
     // deleteModelNodeTest(1000);
     // deleteModelNodeTest(1000); //already deleted
 
-    addModelEdgeTest("glyph2", "glyph6");
-    addModelEdgeTest("glyph2", "glyph6"); //already added
-    initModelEdgeTest("glyph2-glyph6");
-    selectModelEdgeTest("glyph2-glyph6");
-    unselectModelEdgeTest("glyph2-glyph6");
+    // addModelEdgeTest("glyph2", "glyph6");
+    // addModelEdgeTest("glyph2", "glyph6"); //already added
+    // initModelEdgeTest("glyph2-glyph6");
+    // selectModelEdgeTest("glyph2-glyph6");
+    // unselectModelEdgeTest("glyph2-glyph6");
 
     // changeModelEdgeAttributeTest(("glyph2-glyph6"));
     // deleteModelEdgeTest("glyph2-glyph6");

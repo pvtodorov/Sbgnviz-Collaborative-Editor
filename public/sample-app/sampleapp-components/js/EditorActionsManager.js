@@ -96,8 +96,6 @@ module.exports.deleteSelected = function(param) {
     }
     var undoEles = addRemoveUtilities.removeElesSimply(param.eles);
 
-
-    return undoEles;
 }
 
 module.exports.addEdge = function(param)
@@ -231,10 +229,6 @@ module.exports.performLayoutFunction = function(param) {
 
 module.exports.returnToPositionsAndSizesConditionally = function(param) {
 
-    if (param.firstTime) {
-        delete param.firstTime;
-        return param;
-    }
     return module.exports.returnToPositionsAndSizes(param);
 }
 module.exports.returnToPositionsAndSizes = function(param) {
@@ -428,13 +422,8 @@ module.exports.showAll = function(param) {
 //funda changed this to include selected nodes explicitly
 module.exports.highlightSelected = function(param) {
     var elesToHighlight, elesToNotHighlight;
-    var result = {};
     //If this is the first call of the function then call the original method
         //find selected elements
-        if (sbgnFiltering.isAllElementsAreNotHighlighted()) {
-            //mark that there was no highlighted element
-            result.allElementsWasNotHighlighted = true;
-        }
         var alreadyHighlighted = cy.elements("[highlighted='true']").filter(":visible");
         if (param.highlightNeighboursofSelected) {
 
@@ -474,22 +463,10 @@ module.exports.highlightSelected = function(param) {
 
     }
 
-    result.sync = true;
-    result.elesToNotHighlight = elesToHighlight;
-    result.elesToHighlight = elesToNotHighlight;
-
-    return result;
 }
 
 //Remove highlights actually means remove fadeouts
 module.exports.removeHighlights = function(param) {
-    var result = {};
-    if (sbgnFiltering.isAllElementsAreNotHighlighted()) {
-        result.elesToHighlight = cy.elements(":visible");
-    }
-    else {
-        result.elesToHighlight = cy.elements("[highlighted='true']").filter(":visible");
-    }
 
     sbgnFiltering.removeHighlights();
 
@@ -510,36 +487,8 @@ module.exports.removeHighlights = function(param) {
     }
 
 
-    result.sync = true;
-    result.elesToNotHighlight = cy.elements().not(result.elesToHighlight);
-    result.firstTime = false;
-
-
-
-    return result;
 }
 
-module.exports.changeChildren = function(param){
-    var ele = param.ele;
-
-    var elArr = [];
-    var elIdArr = [];
-
-    if(param.data) { //if it has children
-        param.data.forEach(function (nodeId) {
-            elArr.push(cy.getElementById(nodeId));
-            elIdArr.push(nodeId);
-        });
-
-        ele._private.children = elArr;
-        expandCollapseUtilities.refreshPaddings();
-
-        if (param.sync) {
-            
-            module.exports.modelManager.changeModelNodeAttribute(param.modelDataName, param.ele.id(), elIdArr, "me");
-        }
-    }
-}
 
 module.exports.changeParent = function(param) {
     //If there is an inner param firstly call the function with it
@@ -613,25 +562,21 @@ module.exports.createCompoundForSelectedNodes = function(param) {
     var oldParentId = nodesToMakeCompound[0].data("parent");
     var newCompound;
 
-    if (param.firstTime) {
-        var eles = cy.add({
-            group: "nodes",
-            data: {
-                sbgnclass: param.compoundType,
-                parent: oldParentId,
-                sbgnbbox: {
-                },
-                sbgnstatesandinfos: [],
-                ports: []
-            }
-        });
 
-        newCompound = eles[eles.length - 1];
+    var eles = cy.add({
+        group: "nodes",
+        data: {
+            sbgnclass: param.compoundType,
+            parent: oldParentId,
+            sbgnbbox: {
+            },
+            sbgnstatesandinfos: [],
+            ports: []
+        }
+    });
 
-    }
-    else {
-        newCompound = param.removedCompound.restore();
-    }
+    newCompound = eles[eles.length - 1];
+
 
     var newCompoundId = newCompound.id();
 
@@ -664,13 +609,6 @@ module.exports.createCompoundForSelectedNodes = function(param) {
     //
 
 
-    return {
-        nodesToMakeCompound: nodesToMakeCompound,
-        compoundToRemove: newCompound,
-        compoundType: param.compoundType,
-        firstTime: false
-
-    };
 }
 
 module.exports.removeCompound = function(param) {
@@ -696,27 +634,14 @@ module.exports.removeCompound = function(param) {
 
     expandCollapseUtilities.refreshPaddings();
 
-    return {
-        nodesToMakeCompound: childrenOfCompound,
-        removedCompound: compoundToRemove,
-        firstTime: false
-    };
+
 }
 
 module.exports.resizeNode = function(param) {
 
     var ele = param.ele;
 
-    var result = {
-        width: param.initialWidth,
-        height: param.initialHeight,
-        initialWidth: param.width,
-        initialHeight: param.height,
-        ele: ele,
-        sync: true
-    };
 
-    //if (!param.firstTime) {
         ele.data("width", param.width);
         ele.data("height", param.height);
 
@@ -738,20 +663,15 @@ module.exports.resizeNode = function(param) {
         module.exports.modelManager.changeModelNodeAttribute('height', ele.id(), param.height, "me");
     }
 
-    return result;
+  
 }
 
 
 module.exports.changeStateVariable = function(param) {
-    var result = {
-    };
+   
     var state = param.state;
     var type = param.type;
-    result.state = state;
-    result.type = type;
-    result.valueOrVariable = state.state[type];
-    result.ele = param.ele;
-    result.width = param.width;
+   
 
     state.state[type] = param.valueOrVariable;
     cy.forceRender();
@@ -766,12 +686,10 @@ module.exports.changeStateVariable = function(param) {
     param.data = statesAndInfos;
     module.exports.modelManager.changeModelNodeAttribute('sbgnStatesAndInfos', param.ele.id(), param.data, "me" );
 
-    return result;
 }
 
 module.exports.changeUnitOfInformation = function(param) {
-    var result = {
-    };
+   
     var state = param.state;
     result.state = state;
     result.text = state.label.text;
@@ -792,7 +710,7 @@ module.exports.changeUnitOfInformation = function(param) {
     module.exports.modelManager.changeModelNodeAttribute('sbgnStatesAndInfos', param.ele.id(), param.data, "me");
 
 
-    return result;
+ 
 }
 
 module.exports.addStateAndInfo = function(param) {
@@ -902,7 +820,10 @@ module.exports.changeVisibilityOrHighlightStatus = function(param){
         sbgnFiltering.applyFilter(ele);
     }
     else if(param.data == null){
-        sbgnFiltering.removeFilter(ele);
+        if(param.propName == "visibilityStatus")
+            sbgnFiltering.removeFilter(ele);
+        else
+            sbgnFiltering.highlightElements(ele);
     }
     else if(param.data == "highlighted"){
         sbgnFiltering.highlightElements(ele);

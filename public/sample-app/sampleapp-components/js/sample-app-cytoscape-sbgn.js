@@ -202,7 +202,6 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
                         source: source,
                         target: target,
                         sbgnclass: sbgnclass,
-                        firstTime: true,
                         sync:true
                     };
                     editorActions.addEdge(param);

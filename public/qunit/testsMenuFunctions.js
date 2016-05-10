@@ -33,10 +33,6 @@ module.exports = function(){
     };
 
 
-    // addNodeFromMenuTest(1000);
-    // initModelNodeTest(1000);
-    // deleteNodeFromMenuTest(1000);
-
 
     QUnit.module( "Editor-actions tests to see if model is updated correctly." );
 
@@ -48,7 +44,7 @@ module.exports = function(){
             var node = editorActions.addNode({x:50, y:70, sbgnclass:"macromolecule", sync: true});
 
             var modelNode = ModelManager.getModelNode(node.id());
-            assert.ok(modelNode, "Node added to model through menu.")
+            assert.ok(modelNode, "Node added to model through editorActions.")
             assert.equal(modelNode.id, node.id(), "Node id correctly added.");
             assert.equal(modelNode.sbgnclass, "macromolecule", "Node sbgnclass correctly added.");
             assert.equal(modelNode.position.x, 50, "Node position x correctly added.");
@@ -75,8 +71,15 @@ module.exports = function(){
 
         });
     }
+    
+    function changeHighlightStatusTest(id){
+        QUnit.test('editorActions.')
+    }
 
-    //addNodeFromEditorActionsTest();
+   addNodeFromMenuTest(1000);
+   deleteNodeFromMenuTest(1000);
+    
+    addNodeFromEditorActionsTest();
 
 
   

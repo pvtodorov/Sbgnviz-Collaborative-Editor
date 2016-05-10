@@ -449,7 +449,7 @@ app.proto.init = function (model) {
         }
 
     });
-    
+
     model.on('all', '_page.doc.cy.edges.*.highlightColor', function(id, op, highlightColor,prev, passed){
 
         if(docReady && passed.user == null) {
@@ -531,20 +531,7 @@ app.proto.init = function (model) {
 
         }
     });
-
-    //a new compound node is added
-    model.on('all', '_page.doc.cy.nodes.*.children', function(id, op, children,prev, passed){
-
-
-        if(docReady && passed.user == null) {
-
-            menu.changeElementProperty(id, 'children', 'children', children, null, false);
-
-         //TODO   addRemoveUtilities.changeParentForNodeIds(children,  id);
-
-
-        }
-    });
+    
 
     model.on('all', '_page.doc.cy.nodes.*.ports', function(id, op, ports, prev, passed){ //this property must be something that is only changed during insertion
 
