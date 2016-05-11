@@ -12,8 +12,6 @@ var addRemoveUtilities = require('../../../src/utilities/add-remove-utilities.js
 var expandCollapseUtilities = require('../../../src/utilities/expand-collapse-utilities.js')();
 var sbgnFiltering = require('../../../src/utilities/sbgn-filtering.js')();
 
-var sbgnmlToJson = require('../../../src/utilities/sbgnml-to-json-converter.js')();
-
 
 module.exports.selectNode = function (node) {
 
@@ -330,16 +328,12 @@ module.exports.changePosition = function(param){
         module.exports.modelManager.changeModelNodeAttribute("position", ele.id(), ele.position(), "me", true);
 
     }
-
 }
 
 
 
 module.exports.hideSelected = function(param) {
-    var currentNodes = cy.nodes(":visible");
-    var result = {
-        sync: true,
-    };
+
     var nodesToHide = sbgnFiltering.hideSelected(param.selectedEles); //funda changed
     if(param.sync) {//first hide on the other side to make sure elements don't get unselected
 
@@ -351,22 +345,13 @@ module.exports.hideSelected = function(param) {
             paramList.push("invisible");
         });
         module.exports.modelManager.changeModelElementGroupAttribute("visibilityStatus", modelElList, paramList, "me");
-
     }
 
-    result.nodesToShow = currentNodes;
-    result.selectedEles = nodesToHide;
-    return result;
 }
 
 
 
 module.exports.showSelected = function(param) {
-    var currentNodes = cy.nodes(":visible");
-    var result = {
-        sync: true,
-    };
-
 
     var nodesToShow = sbgnFiltering.showSelected(param.selectedEles); //funda changed
 
@@ -391,13 +376,9 @@ module.exports.showSelected = function(param) {
         module.exports.modelManager.changeModelElementGroupAttribute("visibilityStatus",modelElList, paramList, "me");
     }
 
-    result.nodesToShow = currentNodes;
-    result.selectedEles = nodesToShow;
-    return result;
 }
 
 module.exports.showAll = function(param) {
-    var currentNodes = cy.nodes(":visible");
     sbgnFiltering.showAll();
     if(param.sync){
         var modelElList  = [];
@@ -410,11 +391,6 @@ module.exports.showAll = function(param) {
 
     }
 
-    var result ={
-        sync: true,
-        nodesToShow: currentNodes
-    };
-    return result;
 }
 
 
@@ -955,12 +931,6 @@ module.exports.changeStyleCss = function(param) {
 
 module.exports.changeBendPoints = function(param){
     var edge = param.edge;
-    var result = {
-        edge: edge,
-        weights: param.set?edge.data('weights'):param.weights,
-        distances: param.set?edge.data('distances'):param.distances,
-        set: true//As the result will not be used for the first function call params should be used to set the data
-    };
 
     //Check if we need to set the weights and distances by the param values
     if(param.set) {
@@ -976,7 +946,6 @@ module.exports.changeBendPoints = function(param){
         }
     }
 
-    return result;
 }
 
 module.exports.refreshGlobalUndoRedoButtonsStatus = function(){

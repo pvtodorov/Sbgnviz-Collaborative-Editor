@@ -343,7 +343,7 @@ module.exports = function(){
 
                 if (propName == 'parent')//TODO
                     editorActions.changeParent(param);
-                    
+
                 else if (propName == 'collapsedChildren') { //TODO???????
                     editorActions.changeCollapsedChildren(param);
                 }
@@ -359,9 +359,9 @@ module.exports = function(){
                 }
             }
 
-        },
+         },
 
-        changeExpandCollapseStatus: function(elId, status, syncVal) {
+         changeExpandCollapseStatus: function(elId, status, syncVal) {
             var el = cy.$(('#' + elId))[0];
 
             setTimeout(function() { //wait for the layout to run on the other client's side
@@ -372,7 +372,34 @@ module.exports = function(){
 
             },0);
         },
-        
+
+         changeBendPoints:function(elId, newBendPointPositions, syncVal){
+             var edge = cy.getElementById(elId);
+
+
+             this.changeElementProperty(elId, 'bendPointPositions', 'bendPointPositions', newBendPointPositions, 'data', syncVal);
+
+             var result = sbgnBendPointUtilities.convertToRelativeBendPositions(edge);
+             console.log(result.distances.length);
+
+             if(result.distances.length > 0){
+                 edge.data('weights', result.weights);
+                 edge.data('distances', result.distances);
+                 edge.css('curve-style', 'segments');
+             }
+
+             if(newBendPointPositions.length == 0){
+                 edge.removeData('distances');
+                 edge.removeData('weights');
+                 edge.css('curve-style', 'bezier');
+             }
+
+
+             cy.forceRender();
+
+         },
+
+
         updateLayoutProperties: function(lp){
 
             if(sbgnLayout)
@@ -534,35 +561,40 @@ module.exports = function(){
 
             $('#ctx-add-bend-point').click(function (e) {
                 var edge = sbgnBendPointUtilities.currentCtxEdge;
-                var param = {
-                    edge: edge,
-                    weights: edge.data('weights') ? [].concat(edge.data('weights')) : edge.data('weights'),
-                    distances: edge.data('distances') ? [].concat(edge.data('distances')) : edge.data('distances')
-                };
+
+                //funda: add current bend point
+                var newBendPointPositions = edge.data('bendPointPositions');
+                newBendPointPositions.push(sbgnBendPointUtilities.currentCtxPos);
+
+
 
                 sbgnBendPointUtilities.addBendPoint();
-                editorActions.changeBendPoints(param);
+
+                self.changeBendPoints(edge.id(), newBendPointPositions, true);
+
+
             });
 
             $('#ctx-remove-bend-point').click(function (e) {
                 var edge = sbgnBendPointUtilities.currentCtxEdge;
-                var param = {
-                    edge: edge,
-                    weights: [].concat(edge.data('weights')),
-                    distances: [].concat(edge.data('distances'))
-                };
 
                 sbgnBendPointUtilities.removeBendPoint();
-                editorActions.changeBendPoints(param);
+
+
+                var bendPointPositions = edge.data('bendPointPositions');
+
+
+                bendPointPositions.splice(sbgnBendPointUtilities.currentBendIndex,1);
+
+
+
+                self.changeBendPoints(edge.id(), bendPointPositions, true);
             });
 
             $('#samples').click(function (e) {
 
                 var ind = e.target.id;
-
-
-
-
+                
                 if(sbgnContainer)
                     editorActions.modelManager.deleteAll(cy.nodes(), cy.edges(), "me");
 
@@ -1090,7 +1122,7 @@ module.exports = function(){
 
             $("#remove-highlights").click(function (e) {
 
-                ditorActions.removeHighlights({sync:true});
+                editorActions.removeHighlights({sync:true});
                 
 
 

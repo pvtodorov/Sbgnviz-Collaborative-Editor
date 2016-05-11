@@ -283,10 +283,10 @@ module.exports = function(){
             assert.equal("8px", cy.getElementById(id).css("width"),  "Edge width is correct in cytoscape.");
             assert.equal(ModelManager.getModelEdge(id).width, cy.getElementById(id).css("width"),  "Edge width is equal in model and cytoscape.");
 
-            //Test lated
-            // ModelManager.changeModelEdgeAttribute("bendPointPositions", id, [{x: 300, y: 400}]);
-            // assert.equal(300, cy.getElementById(id)._private.data.bendPointPositions[0].x,  "Edge bendPointPositions are correct in cytoscape.");
-            // assert.equal(ModelManager.getModelEdge(id).bendPointPositions[0].x,cy.getElementById(id)._private.data.bendPointPositions[0].x,  "Edge bendPointPositions are equal in model and cytoscape.");
+
+            ModelManager.changeModelEdgeAttribute("bendPointPositions", id, [{x: 300, y: 400}]);
+            assert.equal(300, cy.getElementById(id)._private.data.bendPointPositions[0].x,  "Edge bendPointPositions are correct in cytoscape.");
+            assert.equal(ModelManager.getModelEdge(id).bendPointPositions[0].x,cy.getElementById(id)._private.data.bendPointPositions[0].x,  "Edge bendPointPositions are equal in model and cytoscape.");
 
 
         });
@@ -308,8 +308,7 @@ module.exports = function(){
     // initModelEdgeTest("glyph2-glyph6");
     // selectModelEdgeTest("glyph2-glyph6");
     // unselectModelEdgeTest("glyph2-glyph6");
-
-    // changeModelEdgeAttributeTest(("glyph2-glyph6"));
+    //  changeModelEdgeAttributeTest(("glyph2-glyph6"));
     // deleteModelEdgeTest("glyph2-glyph6");
     // deleteModelEdgeTest("glyph2-glyph6"); //already deleted
 

@@ -286,11 +286,11 @@ var sbgnBendPointUtilities = {
 //    weights.push(relativeBendPosition.weight);
 //    distances.push(relativeBendPosition.distance);
     if(newBendIndex != -1){
-      console.log(weights);
-      console.log(newBendIndex);
+     // console.log(weights);
+     // console.log(newBendIndex);
       weights.splice(newBendIndex, 0, relativeBendPosition.weight);
       distances.splice(newBendIndex, 0, relativeBendPosition.distance);
-      console.log(weights);
+   //   console.log(weights);
     }
     
     edge.data('weights', weights);

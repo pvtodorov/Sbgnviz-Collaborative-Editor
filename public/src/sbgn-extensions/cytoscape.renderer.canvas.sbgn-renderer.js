@@ -45,38 +45,45 @@
 
     $$.sbgn.fillBendShapes = function(edge, context){
         var segpts = edge._private.rscratch.segpts;
-        var radius = $$.sbgn.getBendCirclesRadius(edge);
+        var radius = $$.sbgn.getBendShapesLenght(edge);
 
         for(var i = 0; segpts && i < segpts.length; i = i + 2){
             var bendX = segpts[i];
             var bendY = segpts[i + 1];
 
+            var oldStyle = context.fillStyle;
+            context.fillStyle = edge.css('line-color');
             $$.sbgn.fillBendShape(bendX, bendY, radius, context);
+            context.fillStyle = oldStyle;
         }
     };
 
-    $$.sbgn.fillBendShape = function(bendX, bendY, radius, context){
-        window.cyRenderer.drawPolygonPath(context, bendX, bendY, length, length, window.cyNodeShapes['process'].points);
+    $$.sbgn.fillBendShape = function(bendX, bendY, length, context){
+        window.cyRenderer.drawPolygonPath(context,
+            bendX, bendY,
+            length, length,
+            window.cyNodeShapes['process'].points);
         context.fill();
     };
 
-    $$.sbgn.getBendShapesLength = function(edge) {
+    $$.sbgn.getBendShapesLenght = function(edge){
         var factor = 6;
         var length = parseFloat(edge.css('width')) * factor;
         return length;
     };
 
-    $$.sbgn.checkIfInsideBendShape  = function(x, y, length, centerX, centerY){
-        return window.cyMath.pointInsidePolygon(x, y, window.cyNodeShapes['process'].points, centerX, centerY, length, length, [0, -1], 0);
+    $$.sbgn.checkIfInsideBendShape = function(x, y, length, centerX, centerY){
+        return window.cyMath.pointInsidePolygon(x, y, window.cyNodeShapes['process'].points,
+            centerX, centerY, length, length, [0, -1], 0);
     };
 
     $$.sbgn.getContainingBendShapeIndex = function(x, y, edge) {
-        if(edge.data('weights') == null || edge.data('weights').length == 0){
+        if(edge.data('weights') == null || edge.data('weights').lenght == 0){
             return -1;
         }
 
         var segpts = edge._private.rscratch.segpts;
-        var length = cytoscape.sbgn.getBendShapesLength(edge);
+        var length = cytoscape.sbgn.getBendShapesLenght(edge);
 
         for(var i = 0; segpts && i < segpts.length; i = i + 2){
             var bendX = segpts[i];
@@ -349,8 +356,8 @@
     };
 
     $$.sbgn.drawStateText = function (context, textProp) {
-        var stateValue = textProp.state.value;
-        var stateVariable = textProp.state.variable;
+        var stateValue = stringAfterValueCheck(textProp.state.value);
+        var stateVariable = stringAfterValueCheck(textProp.state.variable);
 
         var stateLabel = stateValue + (stateVariable
                 ? "@" + stateVariable
@@ -381,11 +388,15 @@
         var oldOpacity = context.globalAlpha;
         context.globalAlpha = textProp.opacity;
         var text;
+
+        textProp.label = stringAfterValueCheck(textProp.label);
+
         if (truncate == false) {
             text = textProp.label;
         } else {
             text = truncateText(textProp, context.font);
         }
+
         context.fillText(text, textProp.centerX, textProp.centerY);
         context.fillStyle = oldStyle;
         context.font = oldFont;
@@ -501,7 +512,7 @@
 
                 context.fill();
 
-                textProp.label = state.label.text;
+                textProp.label = stringAfterValueCheck(state.label.text);
                 $$.sbgn.drawInfoText(context, textProp);
 
                 context.stroke();
@@ -819,8 +830,7 @@
                 var centerY = node._private.position.y;
                 var width = node.width();
                 var height = node.height();
-                //fundavar padding = node._private.style["border-width"].pxValue / 2;
-                var padding = parseFloat(node._private.style["border-width"].pxValue) / 2;
+                var padding = node._private.style['border-width'].pxValue / 2;
 
                 return window.cyMath.pointInsidePolygon(x, y, window.cyNodeShapes['process'].points,
                     centerX, centerY, width, height, [0, -1], padding);

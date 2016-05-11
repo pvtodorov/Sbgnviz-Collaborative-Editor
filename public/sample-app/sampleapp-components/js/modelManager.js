@@ -737,12 +737,18 @@ module.exports =  function(model, docId, userId, userName) {
         //should be called before loading a new graph to prevent id confusion
         deleteAll: function(nodes, edges , user, noHistUpdate){
 
+            var self = this;
             if(!noHistUpdate)
                 this.updateHistory({opName:'new', opTarget:'model'});
 
 
-            this.deleteModelEdges(edges,user, noHistUpdate);
-            this.deleteModelNodes(nodes,user, noHistUpdate);
+            edges.forEach(function(edge){
+                self.deleteModelEdge(edge.id(), user, noHistUpdate);
+            });
+
+            nodes.forEach(function(node){
+                self.deleteModelNode(node.id(), user, noHistUpdate);
+            });
 
 
         },
@@ -996,6 +1002,7 @@ module.exports =  function(model, docId, userId, userName) {
 
             var bendPointPositions = edgePath.get('bendPointPositions');
 
+
             if (bendPointPositions != null)
                 edge.data('bendPointPositions', bendPointPositions);
             else {
@@ -1004,6 +1011,9 @@ module.exports =  function(model, docId, userId, userName) {
 
                 this.changeModelEdgeAttribute('bendPointPositions', edge.id(), bp, user, noHistUpdate);
             }
+
+
+
 
             var sbgnclass = edgePath.get('sbgnclass');
 

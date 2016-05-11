@@ -710,6 +710,14 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
 
                 edge.data('weights', weights);
                 edge.data('distances', distances);
+
+
+                //notify others
+                //update bendpoint positions
+                var bendPointPositions = edge.data('bendPointPositions');
+                bendPointPositions[movedBendIndex] = event.cyPosition;
+
+                editorActions.changeStyleData({dataType:'bendPointPositions', data: bendPointPositions, sync:true, modelDataName:'bendPointPositions', ele:edge});
             });
 
             cy.on('tapend', 'edge', function (event) {
@@ -718,6 +726,8 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
                 if(moveBendParam !== undefined && edge.data('weights')
                     && edge.data('weights').toString() != moveBendParam.weights.toString()){
                     editorActions.changeBendPoints(moveBendParam);
+
+
 
                 }
 

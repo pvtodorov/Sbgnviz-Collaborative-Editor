@@ -16,9 +16,7 @@ module.exports = function(){
             assert.equal(modelNode.sbgnlabel, "nodeLabel", "Node label correctly added.");
             assert.equal(modelNode.position.x, 50, "Node position x correctly added.");
             assert.equal(modelNode.position.y, 70, "Node position y correctly added.");
-
-
-
+            
         });
     }
 
@@ -72,16 +70,196 @@ module.exports = function(){
         });
     }
     
-    function changeHighlightStatusTest(id){
-        QUnit.test('editorActions.')
+    function changeHighlightStatusTest(){
+        
+        QUnit.test('editorActions.higlightSelected() for neighbors', function(assert){
+            var param = {
+                sync: true,
+                selectedEles : cy.getElementById("glyph2"),
+                highlightNeighboursofSelected: true
+            };
+            editorActions.highlightSelected(param);
+
+            //Not-highlighted nodes
+            cy.nodes().forEach(function(node){
+                if(node.id()!= "glyph2" && node.id()!= "glyph9") {
+                    assert.equal(ModelManager.getModelNode(node.id()).highlightStatus, "notHighlighted", (node.id() + " highlighted correctly in model."));
+                    assert.equal(node.hasClass("not-highlighted"), true, (node.id() + " highlighted correctly in cytoscape."));
+                }
+                else{
+                    assert.equal(ModelManager.getModelNode(node.id()).highlightStatus, "highlighted", (node.id() + " highlighted correctly in model."));
+                    assert.equal(node.hasClass("not-highlighted"), false, (node.id() + " highlighted correctly in cytoscape."));
+                }
+            });
+
+            cy.edges().forEach(function(edge){
+                if(edge.id()!= "ele10") {
+                    assert.equal(ModelManager.getModelEdge(edge.id()).highlightStatus, "notHighlighted", (edge.id() + " highlighted correctly in model."));
+                    assert.equal(edge.hasClass("not-highlighted"), true, (edge.id() + " highlighted correctly in cytoscape."));
+                }
+                else{
+                    assert.equal(ModelManager.getModelEdge(edge.id()).highlightStatus, "highlighted", (edge.id() + " highlighted correctly in model."));
+                    assert.equal(edge.hasClass("not-highlighted"), false, (edge.id() + " highlighted correctly in cytoscape."));
+
+                }
+            });
+
+        });
+        
+        QUnit.test('editorActions.removeHighlights()', function(assert){
+
+            editorActions.removeHighlights({sync:true});
+        
+            //Not-highlighted nodes
+            cy.nodes().forEach(function(node){
+                assert.equal(ModelManager.getModelNode(node.id()).highlightStatus, "highlighted", (node.id() + " highlighted correctly in model."));
+                assert.equal(node.hasClass("not-highlighted"), false, (node.id() + " highlighted correctly in cytoscape."));
+
+            });
+        
+            cy.edges().forEach(function(edge){
+                assert.equal(ModelManager.getModelEdge(edge.id()).highlightStatus, "highlighted", (edge.id() + " highlighted correctly in model."));
+                assert.equal(edge.hasClass("not-highlighted"), false, (edge.id() + " highlighted correctly in cytoscape."));
+
+
+            });
+        
+        });
+
+
+        QUnit.test('editorActions.higlightSelected() for processes', function(assert){
+            var param = {
+                sync: true,
+                selectedEles : cy.getElementById("glyph2"),
+                highlightProcessesOfSelected: true
+            };
+            editorActions.highlightSelected(param);
+
+
+            cy.nodes().forEach(function(node){
+                //Not-highlighted nodes
+                if(node.id()!= "glyph2" && node.id()!= "glyph9" && node.id()!= "glyph0" && node.id()!= "glyph1" && node.id()!= "glyph10" && node.id()!= "glyph11" && node.id()!= "glyph12" && node.id()!= "glyph13") {
+                    assert.equal(ModelManager.getModelNode(node.id()).highlightStatus, "notHighlighted", (node.id() + " highlighted correctly in model."));
+                    assert.equal(node.hasClass("not-highlighted"), true, (node.id() + " highlighted correctly in cytoscape."));
+                }
+                else{ //highlighted nodes
+                    assert.equal(ModelManager.getModelNode(node.id()).highlightStatus, "highlighted", (node.id() + " highlighted correctly in model."));
+                    assert.equal(node.hasClass("not-highlighted"), false, (node.id() + " highlighted correctly in cytoscape."));
+                }
+            });
+
+            cy.edges().forEach(function(edge){
+                if(edge.id()!= "ele10" && edge.id()!= "ele9" && edge.id()!= "ele6") {
+                    assert.equal(ModelManager.getModelEdge(edge.id()).highlightStatus, "notHighlighted", (edge.id() + " highlighted correctly in model."));
+                    assert.equal(edge.hasClass("not-highlighted"), true, (edge.id() + " highlighted correctly in cytoscape."));
+                }
+                else{
+                    assert.equal(ModelManager.getModelEdge(edge.id()).highlightStatus, "highlighted", (edge.id() + " highlighted correctly in model."));
+                    assert.equal(edge.hasClass("not-highlighted"), false, (edge.id() + " highlighted correctly in cytoscape."));
+
+                }
+            });
+
+       });
+
+
+        QUnit.test('editorActions.removeHighlights() again', function(assert){
+
+            editorActions.removeHighlights({sync:true});
+
+            //Not-highlighted nodes
+            cy.nodes().forEach(function(node){
+                assert.equal(ModelManager.getModelNode(node.id()).highlightStatus, "highlighted", (node.id() + " highlighted correctly in model."));
+                assert.equal(node.hasClass("not-highlighted"), false, (node.id() + " highlighted correctly in cytoscape."));
+
+            });
+
+            cy.edges().forEach(function(edge){
+                assert.equal(ModelManager.getModelEdge(edge.id()).highlightStatus, "highlighted", (edge.id() + " highlighted correctly in model."));
+                assert.equal(edge.hasClass("not-highlighted"), false, (edge.id() + " highlighted correctly in cytoscape."));
+
+
+            });
+
+        });
+
+    }
+    
+    function changeVisibilityStatusTest(){
+        QUnit.test('editorActions.showSelected()', function(assert){
+            var param = {
+                sync: true,
+                selectedEles : cy.getElementById("glyph2"),
+
+            };
+            editorActions.showSelected(param);
+
+            cy.nodes().forEach(function(node){
+                //Visible nodes
+                if(node.id()!= "glyph2" && node.id()!= "glyph9" && node.id()!= "glyph0" && node.id()!= "glyph1" && node.id()!= "glyph10" && node.id()!= "glyph11" && node.id()!= "glyph12" && node.id()!= "glyph13") {
+                    assert.equal(ModelManager.getModelNode(node.id()).visibilityStatus, "invisible", (node.id() + " hidden correctly in model."));
+                    assert.equal(node.visible(), false, (node.id() + " hidden correctly in cytoscape."));
+                }
+                else{ //hidden nodes
+                    assert.equal(ModelManager.getModelNode(node.id()).visibilityStatus, "visible", (node.id() + " shown correctly in model."));
+                    assert.equal(node.visible(), true, (node.id() + " shown correctly in cytoscape."));
+                }
+            });
+
+        });
+
+        QUnit.test('editorActions.showAll()', function(assert){
+            editorActions.showAll({sync:true});
+
+            cy.nodes().forEach(function(node){
+                assert.equal(ModelManager.getModelNode(node.id()).visibilityStatus, "visible", (node.id() + " shown correctly in model."));
+                assert.equal(node.visible(), true, (node.id() + " shown correctly in cytoscape."));
+
+            });
+
+        });
+
+        QUnit.test('editorActions.hideSelected()', function(assert){
+            var param = {
+                sync: true,
+                selectedEles : cy.getElementById("glyph2"),
+
+            };
+            editorActions.hideSelected(param);
+
+            cy.nodes().forEach(function(node){
+                //Hidden nodes
+                if(node.id()!= "glyph2" && node.id()!= "glyph9" && node.id()!= "glyph0" && node.id()!= "glyph1" && node.id()!= "glyph10" && node.id()!= "glyph11" && node.id()!= "glyph12" && node.id()!= "glyph13") {
+                    assert.equal(ModelManager.getModelNode(node.id()).visibilityStatus, "visible", (node.id() + " shown correctly in model."));
+                    assert.equal(node.visible(), true, (node.id() + " shown correctly in cytoscape."));
+                }
+                else{ //visible nodes
+                    assert.equal(ModelManager.getModelNode(node.id()).visibilityStatus, "invisible", (node.id() + " hidden correctly in model."));
+                    assert.equal(node.visible(), false, (node.id() + " hidden correctly in cytoscape."));
+                }
+            });
+
+        });
+
+        QUnit.test('editorActions.showAll() again', function(assert){
+            editorActions.showAll({sync:true});
+
+            cy.nodes().forEach(function(node){
+                assert.equal(ModelManager.getModelNode(node.id()).visibilityStatus, "visible", (node.id() + " shown correctly in model."));
+                assert.equal(node.visible(), true, (node.id() + " shown correctly in cytoscape."));
+
+            });
+
+        });
+
     }
 
-   addNodeFromMenuTest(1000);
-   deleteNodeFromMenuTest(1000);
-    
-    addNodeFromEditorActionsTest();
+    //addNodeFromMenuTest(1000);
+    //deleteNodeFromMenuTest(1000);
+    //addNodeFromEditorActionsTest();
 
 
-  
+   // changeHighlightStatusTest();
+   // changeVisibilityStatusTest();
 
 };
