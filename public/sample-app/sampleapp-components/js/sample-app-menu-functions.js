@@ -619,7 +619,7 @@ module.exports = function(){
                 sbgnContainer = new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, editorActions);
                 editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
 
-                editorActions.manager.reset();
+                //editorActions.manager.reset();
                 //TODO: why is this here?
                 //funda?????   cyMod.handleSBGNInspector(editorActions);
             });

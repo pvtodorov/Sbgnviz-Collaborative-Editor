@@ -1,5 +1,4 @@
 
-<!--<import: src="./qunit">-->
 <Title:>
     SBGNViz Collaborative Editor  ({{count(messages)}})  - {{users[_session.userId].name}} - {{_page.doc.sampleInd}}
 
@@ -473,7 +472,8 @@
 
 
         <div id="run-unit-test" ><view name='unit-tests'></view> </div>
-
+<br>
+    <button id = "popupButton" on-click="runQuery()">Query</button>
 
     <!-- templates -->
          <script type="text/template" id="node-legend-template">
