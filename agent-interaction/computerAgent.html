@@ -10,6 +10,7 @@
 <script src="./jquery-1.8.2.js"></script>
 <script src="./tinycolor.js"></script>
 <script src="./agentAPI.js"></script>
+<script src="./contextAgent.js"></script>
 
 <form>
     <input type="button" value="Delete Cookies" onclick=deleteAllCookies()>
@@ -310,7 +311,7 @@
         }
 
 
-        agent = new Agent($('#agentName')[0].value, agentId);
+        agent = new ContextAgent($('#agentName')[0].value, agentId);
         var socket = agent.connectToServer(serverIp, function(){
 
             writeUserList(agent.userList);
@@ -356,6 +357,7 @@
 
                 socket.on('operation', function(data){
                     writeCommand(data);
+                    agent.analyzeCommand(data);
 
                 });
                 socket.on('message', function(data){
@@ -763,10 +765,11 @@
 
     function writeCommand(op){
 
-        var id = op.elId !=null? op.elId:'';
+        var id = op.elId !=null? JSON.stringify(op.elId):'';
         var param = op.param !=null? JSON.stringify(op.param):'';
+        var attr = op.opAttr!= null? op.opAttr : '';
 
-        var command = "<b>" + op.userName + " (" + formatTime(op) + "): " + "</b>"  + id + " " + op.opName + " " +param;
+        var command = "<b>" + op.userName + " (" + formatTime(op) + "): " + "</b>"  + id + " " + op.opName + " " + attr + " " + op.opTarget + " " + param;
         //can also be called as:
         // var command = JSON.stringify(op);
 

@@ -98,6 +98,7 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
 
             cy.nodes('[sbgnclass="complex"],[sbgnclass="compartment"],[sbgnclass="submap"]').data('expanded-collapsed', 'expanded');
 
+
             var paramResize;
             cy.noderesize({
                 handleColor: '#000000', // the colour of the handle and the line drawn from it
@@ -141,7 +142,7 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
 
             //For adding edges interactively
             cy.edgehandles({
-                preview: true,
+               // preview: true,
                 complete: function (sourceNode, targetNodes, addedEntities) {
                     // fired when edgehandles is done and entities are added
                     var param = {};
@@ -209,36 +210,35 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
                     var edge = cy.edges()[cy.edges().length -1].select();
 
 
-                      
-
 
                 }
             });
 
 
-            //
-            //try { //Todo FUNDA : gives error????
-            //    cy.edgehandles('drawoff');
-            //}
-            //catch(err){
-            //    console.log(err);
-            //}
+
+            try { //Todo FUNDA : gives error????
+               cy.edgehandles('drawoff');
+            }
+            catch(err){
+               console.log(err);
+            }
 
             expandCollapseUtilities.initCollapsedNodes();
 
-
-
             var panProps = ({
-                fitPadding: 10
+                fitPadding: 10,
             });
             container.cytoscapePanzoom(panProps);
 
 
+
             var lastMouseDownNodeInfo = null;
             cy.on("mousedown", "node", function () {
+                
 
                 var self = this;
                 if (modeHandler.mode == 'selection-mode' && window.ctrlKeyDown) {
+
                     enableDragAndDropMode();
                     window.nodeToDragAndDrop = self;
                 }
@@ -278,10 +278,12 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
                     }
                     var param = {
                         newParent: newParent,
-                        node: node,
+                        ele: node,
+                        id: node.id(),
                         nodesData: nodesData,
                         posX: event.cyPosition.x,
-                        posY: event.cyPosition.y
+                        posY: event.cyPosition.y,
+                        sync: true,
                     };
                    editorActions.changeParent(param);
                 }
@@ -322,7 +324,7 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
 
                     var param = {
                         positionDiff: positionDiff,
-                        nodes: nodes, 
+                        nodes: nodes,
                        // move: false,
                         sync: true
                     };
@@ -339,7 +341,7 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
 
                    editorActions.unselectNode(this);
 
-                      
+
                 }
             });
 
@@ -401,6 +403,8 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
                 cy.forceRender();
             });
 
+
+
             cy.on('cxttap', 'node', function (event) { //funda not working on Chrome!!!!!
                 var node = this;
                 $(".qtip").remove();
@@ -416,6 +420,7 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
                     org: "human",
                     format: "json"
                 });
+                editorActions.modelManager.updateHistory({opName:"query", opTarget:"element", elType: "node", elId:node.id(), param: node._private.data.sbgnlabel});
 
                 var queryResult = "";
                 var p1 = new Promise(function (resolve, reject) {
@@ -519,7 +524,7 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
                     modeHandler.setSelectionMode();
 
                     //node.select();
-                      
+
 
 
 
@@ -607,15 +612,15 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
                         else
                             editorActions.simpleCollapseNode({node:this, sync: true});
 
-                          
+
                     }
                     else {
                         if (incrementalLayoutAfterExpandCollapse)
                             editorActions.expandNode({node:this, sync: true}); //funda
                         else
                             editorActions.simpleExpandNode({node:this, sync: true});
-                        
-                          
+
+
                     }
                 }
 
@@ -629,7 +634,7 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
                     node.qtipTimeOutFcn = null;
                 }
 
-           //funda???      nodeQtipFunction(node);
+                 nodeQtipFunction(node); //shows the full label
 
             });
 
@@ -739,8 +744,13 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
                 cy.boxSelectionEnabled(true);
             });
 
+
+
+
         }
     };
+
+
     container.html("");
     container.cy(cyOptions);
 
@@ -754,16 +764,22 @@ module.exports.handleSBGNInspector = function (editorActions) {
 
 
     var selectedEles = cy.elements(":selected");
+    if(selectedEles.length == 0){
+        $("#sbgn-inspector").html("");
+        return;
+    }
     var width = $("#sbgn-inspector").width() * 0.45;
 
-    if (selectedEles.length == 1) {
-        var selected = selectedEles[0];
-        var sbgnlabel = selected.data("sbgnlabel");
+    var allNodes = allAreNode(selectedEles);
+    var allEdges = allAreEdge(selectedEles);
+
+    if (allNodes || allEdges) {
+        var sbgnlabel = getCommonLabel(selectedEles);
         if (sbgnlabel == null) {
             sbgnlabel = "";
         }
 
-        var classInfo = selected.data("sbgnclass");
+        var classInfo = getCommonSBGNClass(selectedEles);
         if (classInfo == 'and' || classInfo == 'or' || classInfo == 'not') {
             classInfo = classInfo.toUpperCase();
         }
@@ -776,8 +792,8 @@ module.exports.handleSBGNInspector = function (editorActions) {
             classInfo = classInfo.replace(' Or ', ' or ');
             classInfo = classInfo.replace(' Not ', ' not ');
         }
-        var title = classInfo;
 
+        var title = classInfo == "" ? "Properties" : classInfo + " Properties";
 
         var buttonwidth = width;
         if (buttonwidth > 50) {
@@ -786,43 +802,82 @@ module.exports.handleSBGNInspector = function (editorActions) {
 
         var html = "<div style='text-align: center; color: black; font-weight: bold; margin-bottom: 5px;'>" + title + "</div><table cellpadding='0' cellspacing='0'>";
         var type;
-        if (selectedEles.nodes().length == 1) {
+        var fillStateAndInfos;
+        var multimerCheck;
+        var clonedCheck;
+        var commonIsMultimer;
+        var commonIsCloned;
+        var commonStateAndInfos;
+        var commonSBGNCardinality;
+
+        if (allNodes) {
             type = "node";
 
+            var borderColor = getCommonBorderColor(selectedEles);
+            borderColor = borderColor ? borderColor : '#FFFFFF';
+
+            var backgroundColor = getCommonFillColor(selectedEles);
+            backgroundColor = backgroundColor ? backgroundColor : '#FFFFFF';
+
+            var borderWidth = getCommonBorderWidth(selectedEles);
+
+            var backgroundOpacity = getCommonBackgroundOpacity(selectedEles);
+            backgroundOpacity = backgroundOpacity ? backgroundOpacity : 0.5;
+
             html += "<tr><td style='width: " + width + "px; text-align:right; padding-right: 5px;'>" + "<font size='2'>Label</font>" + "</td><td style='padding-left: 5px;'>"
-                + "<input id='inspector-label' type='text' style='width: " + width / 1.25 + "px;' value='" + sbgnlabel
+                + "<input id='inspector-label' class='inspector-input-box' type='text' style='width: " + width / 1.25 + "px;' value='" + sbgnlabel
                 + "'/>" + "</td></tr>";
+            html += "<tr><td style='width: " + width + "px; text-align:right; padding-right: 5px;'>" + "<font size='2'>Border Color</font>" + "</td><td style='padding-left: 5px;'>"
+                + "<input id='inspector-border-color' class='inspector-input-box' type='color' style='width: " + buttonwidth + "px;' value='" + borderColor
+                + "'/>" + "</td></tr>";
+            html += "<tr><td style='width: " + width + "px; text-align:right; padding-right: 5px;'>" + "<font size='2'>Fill Color</font>" + "</td><td style='padding-left: 5px;'>"
+                + "<input id='inspector-fill-color' class='inspector-input-box' type='color' style='width: " + buttonwidth + "px;' value='" + backgroundColor
+                + "'/>" + "</td></tr>";
+            html += "<tr><td style='width: " + width + "px; text-align:right; padding-right: 5px;'>" + "<font size='2'>Border Width</font>" + "</td><td style='padding-left: 5px;'>"
+                + "<input id='inspector-border-width' class='inspector-input-box' type='number' step='0.01' min='0' style='width: " + buttonwidth + "px;'";
 
-            html += "<tr><td style='width: " + width + "px'>" + "Border Color" + "</td><td>"
-                + "<input id='inspector-border-color' type='color' style='width: " + buttonwidth + "px;' value='" + selected.data('borderColor')
-                + "'/>" + "</td></tr>";
-            html += "<tr><td style='width: " + width + "px'>" + "Fill Color" + "</td><td>"
-                + "<input id='inspector-fill-color' type='color' style='width: " + buttonwidth + "px;' value='" + selected.css('background-color')
-                + "'/>" + "</td></tr>";
-            html += "<tr><td style='width: " + width + "px'>" + "Border Width" + "</td><td>"
-                + "<input id='inspector-border-width' type='number' step='0.01' min='0' style='width: " + buttonwidth + "px;' value='" + parseFloat(selected.css('border-width'))
-                + "'/>" + "</td></tr>";
+            if (borderWidth) {
+                html += " value='" + parseFloat(borderWidth) + "'";
+            }
+
+            html += "/>" + "</td></tr>";
+
             html += "<tr><td style='width: " + width + "px; text-align:right; padding-right: 5px;'>" + "<font size='2'>Fill Opacity</font>" + "</td><td style='padding-left: 5px;'>"
-                + "<input id='inspector-background-opacity' type='range' step='0.01' min='0' max='1' style='width: " + buttonwidth + "px;' value='" + parseFloat(selected.data('backgroundOpacity'))
+                + "<input id='inspector-background-opacity' class='inspector-input-box' type='range' step='0.01' min='0' max='1' style='width: " + buttonwidth + "px;' value='" + parseFloat(backgroundOpacity)
                 + "'/>" + "</td></tr>";
 
-            if (canHaveStateVariable(selected.data('sbgnclass'))) {
-                html += "<tr><td colspan='2'><hr style='padding: 0px; margin-top: 15px; margin-bottom: 15px;' width='" + $("#sbgn-inspector").width() + "'></td></tr>";
-                html += "<tr><td style='width: " + width + "px; text-align:right; padding-right: 5px;'>" + "<font size='2'>State Variables</font>" + "</td>"
-                    + "<td id='inspector-state-variables' style='padding-left: 5px; width: '" + width + "'></td></tr>";
+            commonStateAndInfos = getCommonStateAndInfos(selectedEles);
+
+            if (commonStateAndInfos) {
+                if (allCanHaveStateVariable(selectedEles)) {
+                    fillStateAndInfos = true;
+
+                    html += "<tr><td colspan='2'><hr style='padding: 0px; margin-top: 5px; margin-bottom: 5px;' width='" + $("#sbgn-inspector").width() + "'></td></tr>";
+                    html += "<tr><td style='width: " + width + "px; text-align:right; padding-right: 5px;'>" + "<font size='2'>State Variables</font>" + "</td>"
+                        + "<td id='inspector-state-variables' style='padding-left: 5px; width: '" + width + "'></td></tr>";
+                }
+
+                if (allCanHaveUnitOfInformation(selectedEles)) {
+                    fillStateAndInfos = true;
+
+                    html += "<tr><td colspan='2'><hr style='padding: 0px; margin-top: 5px; margin-bottom: 5px;' width='" + $("#sbgn-inspector").width() + "'></td></tr>";
+                    html += "<tr><td style='width: " + width + "px; text-align:right; padding-right: 5px;'>" + "<font size='2'>Units of Information</font>" + "</td>"
+                        + "<td id='inspector-unit-of-informations' style='padding-left: 5px; width: '" + width + "'></td></tr>";
+                }
             }
 
-            if (canHaveCloneMarker(selected.data('sbgnclass'))) {
-                html += "<tr><td colspan='2'><hr style='padding: 0px; margin-top: 15px; margin-bottom: 15px;' width='" + $("#sbgn-inspector").width() + "'></td></tr>";
-                html += "<tr><td style='width: " + width + "px; text-align:right; padding-right: 5px;'>" + "<font size='2'>Units of Information</font>" + "</td>"
-                    + "<td id='inspector-unit-of-informations' style='padding-left: 5px; width: '" + width + "'></td></tr>";
-            }
+            commonIsMultimer = getCommonIsMultimer(selectedEles);
+            commonIsCloned = getCommonIsCloned(selectedEles);
+//      multimerCheck = ( commonIsMultimer !== null ) && allCanBeMultimer(selectedEles);
+//      clonedCheck = ( commonIsCloned !== null ) && allCanBeCloned(selectedEles);
+            multimerCheck = allCanBeMultimer(selectedEles);
+            clonedCheck = allCanBeCloned(selectedEles);
 
-            var multimerCheck = canBeMultimer(selected.data('sbgnclass'));
-            var clonedCheck = canBeCloned(selected.data('sbgnclass'));
+            multimerCheck = multimerCheck ? multimerCheck : false;
+            clonedCheck = clonedCheck ? clonedCheck : false;
 
             if (multimerCheck || clonedCheck) {
-                html += "<tr><td colspan='2'><hr style='padding: 0px; margin-top: 15px; margin-bottom: 15px;' width='" + $("#sbgn-inspector").width() + "'></td></tr>";
+                html += "<tr><td colspan='2'><hr style='padding: 0px; margin-top: 5px; margin-bottom: 5px;' width='" + $("#sbgn-inspector").width() + "'></td></tr>";
             }
 
             if (multimerCheck) {
@@ -834,53 +889,85 @@ module.exports.handleSBGNInspector = function (editorActions) {
                 html += "<tr><td style='width: " + width + "px; text-align:right; padding-right: 5px;'>" + "<font size='2'>Cloned</font>" + "</td>"
                     + "<td style='padding-left: 5px; width: '" + width + "'><input type='checkbox' id='inspector-is-clone-marker'></td></tr>";
             }
-
-
-
-
         }
         else {
             type = "edge";
-            html += "<tr><td style='width: " + width + "px'>" + "Fill Color" + "</td><td>"
-                + "<input id='inspector-line-color' type='color' style='width: " + buttonwidth + "px;' value='" + selected.data('lineColor')
+
+            var commonLineColor = getCommonLineColor(selectedEles);
+            commonLineColor = commonLineColor ? commonLineColor : '#FFFFFF';
+
+            var commonLineWidth = getCommonLineWidth(selectedEles);
+
+            html += "<tr><td style='width: " + width + "px; text-align:right; padding-right: 5px;'>" + "<font size='2'>Fill Color</font>" + "</td><td style='padding-left: 5px;'>"
+                + "<input id='inspector-line-color' class='inspector-input-box' type='color' style='width: " + buttonwidth + "px;' value='" + commonLineColor
                 + "'/>" + "</td></tr>";
 
-            html += "<tr><td style='width: " + width + "px'>" + "Width" + "</td><td>"
-                + "<input id='inspector-width' type='number' step='0.01' min='0' style='width: " + buttonwidth + "px;' value='" + parseFloat(selected.css('width'))
-                + "'/>" + "</td></tr>";
+            html += "<tr><td style='width: " + width + "px; text-align:right; padding-right: 5px;'>" + "<font size='2'>Width</font>" + "</td><td style='padding-left: 5px;'>"
+                + "<input id='inspector-width' class='inspector-input-box' type='number' step='0.01' min='0' style='width: " + buttonwidth + "px;'";
 
-            if(selected.data('sbgnclass') == 'consumption' || selected.data('sbgnclass') == 'production'){
-                html += "<tr><td style='width: " + width + "px'>" + "<font size='2'>Cardinality</font>" + "</td><td>"
-                    + "<input id='inspector-cardinality' type='number' min='0' style='width: " + buttonwidth + "px;' value='" + parseFloat(selected.data('sbgncardinality'))
+            if (commonLineWidth) {
+                html += " value='" + parseFloat(commonLineWidth) + "'";
+            }
+
+            html += "/>" + "</td></tr>";
+
+            if (allCanHaveSBGNCardinality(selectedEles)) {
+                var cardinality = getCommonSBGNCardinality(selectedEles);
+                commonSBGNCardinality = cardinality;
+
+                if (cardinality <= 0) {
+                    cardinality = undefined;
+                }
+                html += "<tr><td style='width: " + width + "px; text-align:right; padding-right: 5px;'>" + "<font size='2'>Cardinality</font>" + "</td><td style='padding-left: 5px;'>"
+                    + "<input id='inspector-cardinality' class='inspector-input-box' type='number' min='0' step='1' style='width: " + buttonwidth + "px;' value='" + cardinality
                     + "'/>" + "</td></tr>";
             }
 
         }
         html += "</table>";
-        html += "<div style='text-align: center;'><button style='align: center;' id='inspector-set-as-default-button'"
-            + ">Set as Default</button></div>";
+
+        if (selectedEles.length == 1) {
+            html += "<div style='text-align: center; margin-top: 5px;'><button style='align: center;' id='inspector-set-as-default-button'"
+                + ">Set as Default</button></div>";
+        }
+
+        html += "<hr style='padding: 0px; margin-top: 5px; margin-bottom: 5px;' width='" + $("#sbgn-inspector").width() + "'>";
 //    html += "<button type='button' style='display: block; margin: 0 auto;' class='btn btn-default' id='inspector-apply-button'>Apply Changes</button>";
         $("#sbgn-inspector").html(html);
 
         if (type == "node") {
-            if (canHaveCloneMarker(selected.data('sbgnclass')) || canHaveStateVariable(selected.data('sbgnclass'))) {
-                module.exports.fillInspectorStateAndInfos(selected, width, editorActions);
+
+            if (fillStateAndInfos) {
+                module.exports.fillInspectorStateAndInfos(selectedEles, width, commonStateAndInfos, editorActions);
+                //module.exports.fillInspectorStateAndInfos(selectedEles, commonStateAndInfos, width);
             }
 
-            if (canBeMultimer(selected.data('sbgnclass'))) {
-                if (selected.data('sbgnclass').endsWith(' multimer')) {
-                    $('#inspector-is-multimer').attr('checked', true);
-                }
+            if (multimerCheck && commonIsMultimer) {
+                $('#inspector-is-multimer').attr('checked', true);
             }
 
-            if (canBeCloned(selected.data('sbgnclass'))) {
-                if (selected.data('sbgnclonemarker')) {
-                    $('#inspector-is-clone-marker').attr('checked', true);
-                }
+            if (clonedCheck && commonIsCloned) {
+                $('#inspector-is-clone-marker').attr('checked', true);
             }
+            // if (canHaveCloneMarker(selected.data('sbgnclass')) || canHaveStateVariable(selected.data('sbgnclass'))) {
+            //     module.exports.fillInspectorStateAndInfos(selected, width, editorActions);
+            // }
+            //
+            // if (canBeMultimer(selected.data('sbgnclass'))) {
+            //     if (selected.data('sbgnclass').endsWith(' multimer')) {
+            //         $('#inspector-is-multimer').attr('checked', true);
+            //     }
+            // }
+            //
+            // if (canBeCloned(selected.data('sbgnclass'))) {
+            //     if (selected.data('sbgnclonemarker')) {
+            //         $('#inspector-is-clone-marker').attr('checked', true);
+            //     }
+            // }
 
             $('#inspector-set-as-default-button').on('click', function () {
                 var multimer;
+                var selected = selectedEles[0];
                 var sbgnclass = selected.data('sbgnclass');
                 if (sbgnclass.endsWith(' multimer')) {
                     sbgnclass = sbgnclass.replace(' multimer', '');
@@ -902,94 +989,107 @@ module.exports.handleSBGNInspector = function (editorActions) {
             });
 
             $('#inspector-is-multimer').on('click', function () {
-                var param = {
-                    data: $('#inspector-is-multimer').attr('checked') == 'checked',
-                    ele: selected,
-                    sync: true
-                };
 
-                editorActions.changeIsMultimerStatus(param);
+             //   selectedEles.forEach(function(selected){
 
+                    var param = {
+                        data: $('#inspector-is-multimer').attr('checked') == 'checked',
+                        ele: selectedEles,
+                        sync: true
+                    };
 
+                    editorActions.changeIsMultimerStatus(param);
+
+              //  });
             });
 
             $('#inspector-is-clone-marker').on('click', function () {
-                var param = {
-                    data: $('#inspector-is-clone-marker').attr('checked') == 'checked',
-                    ele: selected,
-                    sync: true
-                };
-                editorActions.changeIsCloneMarkerStatus(param);
-
+                //selectedEles.forEach(function(selected) {
+                    var param = {
+                        data: $('#inspector-is-clone-marker').attr('checked') == 'checked',
+                        ele: selectedEles,
+                        sync: true
+                    };
+                    editorActions.changeIsCloneMarkerStatus(param);
+               // });
 
             });
 
             $("#inspector-border-color").on('change', function () {
-                var param = {
-                    ele: selected,
-                    data: $("#inspector-border-color").attr("value"),
-                    dataType: "borderColor",
-                    modelDataName: 'borderColor',
-                    sync: true
-                };
-                editorActions.changeStyleData(param);
-                  
+                //selectedEles.forEach(function(selected) {
+                    var param = {
+                        ele: selectedEles,
+                        data: $("#inspector-border-color").attr("value"),
+                        dataType: "borderColor",
+                        modelDataName: 'borderColor',
+                        sync: true
+                    };
+                    editorActions.changeStyleData(param);
+              //  });
+
 
             });
 
             $("#inspector-label").on('change', function () {
-                var param = {
-                    ele: selected,
-                    data: $(this).attr('value'),
-                    dataType: 'sbgnlabel',
-                    modelDataName: 'sbgnlabel',
-                    sync: true
-                };
-                editorActions.changeStyleData(param);
-                  
+
+                //selectedEles.forEach(function(selected) {
+                    var param = {
+                        ele: selectedEles,
+                        data: $("#inspector-label").attr('value'),
+                        dataType: 'sbgnlabel',
+                        modelDataName: 'sbgnlabel',
+                        sync: true
+                    };
+                    editorActions.changeStyleData(param);
+               // });
+
             });
 
             $("#inspector-background-opacity").on('change', function () {
-                var param = {
-                    ele: selected,
-                    data: $("#inspector-background-opacity").attr("value"),
-                    dataType: "backgroundOpacity",
-                    modelDataName: 'backgroundOpacity',
-                    sync: true
-                };
-                editorActions.changeStyleData(param);
-                  
+                //selectedEles.forEach(function(selected) {
+                    var param = {
+                        ele: selectedEles,
+                        data: $("#inspector-background-opacity").attr("value"),
+                        dataType: "backgroundOpacity",
+                        modelDataName: 'backgroundOpacity',
+                        sync: true
+                    };
+                    editorActions.changeStyleData(param);
+                //});
+
             });
 
             $("#inspector-fill-color").on('change', function () {
+                //selectedEles.forEach(function(selected) {
+                    var param = {
+                        ele: selectedEles,
+                        data: $("#inspector-fill-color").attr("value"),
+                        dataType: "background-color",
+                        modelDataName: 'backgroundColor',
+                        sync: true
+                    };
 
-                var param = {
-                    ele: selected,
-                    data: $("#inspector-fill-color").attr("value"),
-                    dataType: "background-color",
-                    modelDataName: 'backgroundColor',
-                    sync: true
-                };
-
-                editorActions.changeStyleCss(param);
-                  
+                    editorActions.changeStyleCss(param);
+//                });
 
             });
 
             $("#inspector-border-width").bind('change').on('change', function () {
-                var param = {
-                    ele: selected,
-                    data: $("#inspector-border-width").attr("value"),
-                    dataType: "border-width",
-                    modelDataName: 'borderWidth',
-                    sync: true
-                };
-                editorActions.changeStyleCss(param);
-                  
+                //selectedEles.forEach(function(selected) {
+                    var param = {
+                        ele: selectedEles,
+                        data: $("#inspector-border-width").attr("value"),
+                        dataType: "border-width",
+                        modelDataName: 'borderWidth',
+                        sync: true
+                    };
+                    editorActions.changeStyleCss(param);
+               // });
             });
         }
         else {
             $('#inspector-set-as-default-button').on('click', function () {
+                var selected = selectedEles[0];
                 if (addRemoveUtilities.defaultsMap[selected.data('sbgnclass')] == null) {
                     addRemoveUtilities.defaultsMap[selected.data('sbgnclass')] = {};
                 }
@@ -999,58 +1099,57 @@ module.exports.handleSBGNInspector = function (editorActions) {
             });
 
             $("#inspector-line-color").on('change', function () {
-                var param = {
-                    ele: selected,
-                    data: $("#inspector-line-color").attr("value"),
-                    dataType: "lineColor",
-                    modelDataName: 'lineColor',
-                    sync: true
-                };
-                editorActions.changeStyleData(param);
-                  
-
+                //selectedEles.forEach(function(selected) {
+                    var param = {
+                        ele: selectedEles,
+                        data: $("#inspector-line-color").attr("value"),
+                        dataType: "lineColor",
+                        modelDataName: 'lineColor',
+                        sync: true
+                    };
+                    editorActions.changeStyleData(param);
+               // });
 
 
             });
             $("#inspector-cardinality").bind('change').on('change', function () {
-                var param = {
-                    ele: selected,
-                    data: $("#inspector-cardinality").attr("value"),
-                    dataType: "sbgncardinality",
-                    modelDataName: 'sbgncardinality',
-                    sync: true
-                };
-                editorActions.changeStyleData(param);
-                  
 
+              //  selectedEles.forEach(function(selected) {
+                    var param = {
+                        ele: selectedEles,
+                        data: $("#inspector-cardinality").attr("value"),
+                        dataType: "sbgncardinality",
+                        modelDataName: 'sbgncardinality',
+                        sync: true
+                    };
+                    editorActions.changeStyleData(param);
+               // });
 
             });
 
 
             $("#inspector-width").bind('change').on('change', function () {
-                var param = {
-                    ele: selected,
-                    data: $("#inspector-width").attr("value"),
-                    dataType: "width",
-                    modelDataName: 'width',
-                    sync: true
-                };
-                editorActions.changeStyleCss(param);
-                  
+                //selectedEles.forEach(function(selected) {
+                    var param = {
+                        ele: selectedEles,
+                        data: $("#inspector-width").attr("value"),
+                        dataType: "width",
+                        modelDataName: 'width',
+                        sync: true
+                    };
+                    editorActions.changeStyleCss(param);
 
-
-            });
+                });
+            //});
         }
     }
-    else {
-        $("#sbgn-inspector").html("");
-    }
+
 };
-module.exports.fillInspectorStateAndInfos = function (ele, width, editorActions) {
+module.exports.fillInspectorStateAndInfos = function (ele, width, stateAndInfos, editorActions) {
     //first empty the state variables and infos data in inspector
     $("#inspector-state-variables").html("");
     $("#inspector-unit-of-informations").html("");
-    var stateAndInfos = ele._private.data.sbgnstatesandinfos;
+    //var stateAndInfos = ele._private.data.sbgnstatesandinfos;
     for (var i = 0; i < stateAndInfos.length; i++) {
         var state = stateAndInfos[i];
         if (state.clazz == "state variable") {
@@ -1173,3 +1272,11 @@ module.exports.fillInspectorStateAndInfos = function (ele, width, editorActions)
 
     });
 };
+
+
+
+$("#node-label-textbox").keydown(function (e) {
+    if (e.which === 13) {
+        $("#node-label-textbox").blur();
+    }
+});

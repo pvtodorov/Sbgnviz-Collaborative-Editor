@@ -18055,7 +18055,7 @@
     for (var i = 0; i < CRp.CANVAS_LAYERS; i++) {
       var canvas = r.data.canvases[i] = document.createElement('canvas');
       r.data.contexts[i] = canvas.getContext('2d');
-      canvas.setAttribute( 'style', '-webkit-user-select: none; -moz-user-select: -moz-none; user-select: none; -webkit-tap-highlight-color: rgba(0,0,0,0); outline-style: none;' + ( is.ms() ? ' -ms-touch-action: none; touch-action: none; ' : '' ) );
+      canvas.setAttribute( 'style', '-webkit-user-select: none; -moz-user-select: -moz-none; user-select: none; -webkit-tap-highlight-color: rgba(-w,0,0,0); outline-style: none;' + ( is.ms() ? ' -ms-touch-action: none; touch-action: none; ' : '' ) );
       canvas.style.position = 'absolute';
       canvas.setAttribute('data-id', 'layer' + i);
       canvas.style.zIndex = String(CRp.CANVAS_LAYERS - i);

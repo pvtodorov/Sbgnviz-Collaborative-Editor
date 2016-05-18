@@ -8,7 +8,7 @@
      * @param id
      * @constructor
      */
-    var Agent = function (name, id) {
+    function Agent (name, id) {
 
 
         //public
@@ -18,81 +18,91 @@
 
         this.selectedNode;
         this.selectedEdge;
-        this.opHistory  = [];
-        this.chatHistory =[];
+        this.opHistory = [];
+        this.chatHistory = [];
         this.userList = [];
+        this.pageDoc;
+        this.socket;
+        this.room;
 
         //private variables
-        var nextNodeCnt  ;
-        var room;
-        var socket;
-        var pageDoc;
+        var nextNodeCnt;
+
+    }
 
 
+    //var self = this;
+
+    /**
+     *
+     * @param url Server address
+     * @param callback After connecting to server we get the user list
+     * @returns socket Io socket to the node.js server
+     */
+    Agent.prototype.connectToServer = function (url, callback) {
+
+
+     //Parse
         var self = this;
+        var sInd = url.search("3000/") + 5; //roomId index
+        var serverIp = url.slice(0,sInd);
+        this.room = url.slice(sInd, url.length);
+        this.socket =  io(serverIp);
+        this.socket.emit("subscribeAgent", {userName: self.agentName, room: self.room, userId: self.agentId}, function(data){
+            self.userList = data;
 
-        /**
-         *
-         * @param url Server address
-         * @param callback After connecting to server we get the user list
-         * @returns socket Io socket to the node.js server
-         */
-        this.connectToServer = function (url, callback) {
-                //Parse
-                var sInd = url.search("3000/") + 5; //roomId index
-                var serverIp = url.slice(0,sInd);
-                room = url.slice(sInd, url.length);
-                socket =  io(serverIp);
-                socket.emit("subscribeAgent", {userName: self.agentName, room: room, userId: self.agentId}, function(data){
-                    self.userList = data;
-                    if (data == null)
-                        self.userList = [];
+            if (data == null)
+                self.userList = [];
 
 
-                    if (callback != null) callback();
-                });
-                return socket;
-        };
+            if (callback != null) callback();
+        });
+        return this.socket;
 
-        ;
+    }
+
+
 
 
         //get model for the current room
-        this.loadModel = function (callback) {
+    Agent.prototype.loadModel = function (callback) {
 
-            socket.emit('agentPageDocRequest', {room: room}, function(data){
-                pageDoc = data;
-                if (callback != null) callback();
-            });
-
-
-        };
-        /**
-         * Gets list of operations from the node.js server
-         * @param callback Function to call after getting operation history
-         */
-        this.loadOperationHistory = function (callback) {
-
-            socket.emit('agentOperationHistoryRequest', {room: room}, function(data){
-                self.opHistory = data;
-                if (data == null)
-                    self.opHistory = [];
+        var self = this;
+        this.socket.emit('agentPageDocRequest', {room: this.room}, function(data){
+            self.pageDoc = data;
+            if (callback != null) callback();
+        });
 
 
-                if (callback != null) callback();
+    };
+    /**
+     * Gets list of operations from the node.js server
+     * @param callback Function to call after getting operation history
+     */
+    Agent.prototype.loadOperationHistory = function (callback) {
+
+        var self = this;
+        this.socket.emit('agentOperationHistoryRequest', {room: this.room}, function(data){
+            self.opHistory = data;
+            if (data == null)
+                self.opHistory = [];
 
 
-            });
+            if (callback != null) callback();
 
-        };
+
+        });
+
+    };
 
         /**
          * Gets user list from the node.js server
          * @param callback Function to call after getting user list
          */
 
-        this.loadUserList = function(callback) {
-            socket.emit('agentUserListRequest', {room: room}, function(data){
+        Agent.prototype.loadUserList = function(callback) {
+            var self = this;
+            this.socket.emit('agentUserListRequest', {room: this.room}, function(data){
 
                     self.userList = data;
                     if (data == null)
@@ -107,8 +117,9 @@
          * @param callback Function to call after getting chat history
          */
             //get operation history
-        this.loadChatHistory= function (callback) {
-            socket.emit('agentChatHistoryRequest', {room: room}, function(data){
+        Agent.prototype.loadChatHistory= function (callback) {
+            var self = this;
+            this.socket.emit('agentChatHistoryRequest', {room: this.room}, function(data){
                 self.chatHistory = data;
                 if (data == null)
                     self.chatHistory = [];
@@ -121,33 +132,33 @@
          *
          * @returns {Object} Node list in the shared model
          */
-        this.getNodeList = function(){
-            return pageDoc.cy.nodes;
+        Agent.prototype.getNodeList = function(){
+            return this.pageDoc.cy.nodes;
         };
 
         /**
          *
          * @returns {Object} Edge list in the shared model
          */
-        this.getEdgeList = function(){
-            return pageDoc.cy.edges;
+        Agent.prototype.getEdgeList = function(){
+            return this.pageDoc.cy.edges;
         };
 
         /**
          *
          * @returns {*} Layout properties in the shared model
          */
-        this.getLayoutProperties = function(){
-            return pageDoc.layoutProperties;
+        Agent.prototype.getLayoutProperties = function(){
+            return this.pageDoc.layoutProperties;
         }
 
         /**
          * Sends request to the node.js server to change agent's name
          * @param newName New agent name
          */
-        this.changeName = function(newName){
-            self.agentName = newName;
-            self.sendRequest("agentChangeNameRequest", {userName: newName, userId: self.agentId});
+        Agent.prototype.changeName = function(newName){
+            this.agentName = newName;
+            this.sendRequest("agentChangeNameRequest", {userName: newName, userId: self.agentId});
 
         };
 
@@ -159,8 +170,9 @@
          * @param id Node id
          * @param callback Function to call after getting node
          */
-        this.getNodeRequest = function(id, callback){
-            socket.emit('agentGetNodeRequest', {room: room,  userId: self.agentId, id:id}, function(data){
+        Agent.prototype.getNodeRequest = function(id, callback){
+            var self = this;
+            this.socket.emit('agentGetNodeRequest', {room: this.room,  userId: self.agentId, id:id}, function(data){
                 self.selectedNode = data;
                 if (callback != null) callback();
 
@@ -172,8 +184,9 @@
          * @param id Edge id
          * @param callback Function to call after getting edge
          */
-        this.getEdgeRequest = function(id, callback){
-            socket.emit('agentGetEdgeRequest', {room: room, userId: self.agentId, id:id}, function(data){
+        Agent.prototype.getEdgeRequest = function(id, callback){
+            var self = this;
+            this.socket.emit('agentGetEdgeRequest', {room: this.room, userId: self.agentId, id:id}, function(data){
                 self.selectedEdge = data;
                 if (callback != null) callback();
 
@@ -198,12 +211,12 @@
          * </ul>
          *
          */
-        this.sendRequest = function(reqName, param, callback){ //model operations
+        Agent.prototype.sendRequest = function(reqName, param, callback){ //model operations
 
-            param.room = room;
-            param.userId = self.agentId;
+            param.room = this.room;
+            param.userId = this.agentId;
 
-            socket.emit(reqName, param, function(data){
+            this.socket.emit(reqName, param, function(data){
                 if(callback)
                     callback(data);
                 else
@@ -217,20 +230,21 @@
          * Socket listener
          * @param callback
          */
-        this.listen = function(callback){
-            socket.on('operation', function(data){
+        Agent.prototype.listen = function(callback){
+            var self = this;
+            this.socket.on('operation', function(data){
                 self.opHistory.push(data);
             });
 
-            socket.on('message', function(data){
+            this.socket.on('message', function(data){
                 self.chatHistory.push(data);
             });
 
-            socket.on('userList', function(data){
+            this.socket.on('userList', function(data){
                 self.userList = data;
             });
 
-            socket.on('imageFile', function(data){
+            this.socket.on('imageFile', function(data){
 
 
             });
@@ -238,7 +252,7 @@
             if (callback != null) callback();
 
 
-        };
+        }
 
         /**
          * Sends chat message
@@ -246,15 +260,15 @@
          * @param targets Ids of targets
          * @param callback Function to call after sending message
          */
-        this.sendMessage = function(comment, targets, callback){
+        Agent.prototype.sendMessage = function(comment, targets, callback){
 
-            var message = {room: room, comment: comment, userName:self.agentName, userId: self.agentId, time: 1, targets: targets}; //set time on the server
-            socket.emit('agentMessage', message, function(){
+            var message = {room: this.room, comment: comment, userName:this.agentName, userId: this.agentId, time: 1, targets: targets}; //set time on the server
+            this.socket.emit('agentMessage', message, function(){
             if(callback!=null)
                 if (callback != null) callback();
             });
-        };
-    }
+        }
+
 
 
     /**

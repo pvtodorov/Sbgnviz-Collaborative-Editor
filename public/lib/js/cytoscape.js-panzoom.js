@@ -31,7 +31,7 @@
         panDistance: 10, // max pan distance per tick
         panDragAreaSize: 75, // the length of the pan drag box in which the vector for panning is calculated (bigger = finer control of pan speed and direction)
         panMinPercentSpeed: 0.25, // the slowest speed we can pan by (as a percent of panSpeed)
-        panInactiveArea: 8, // radius of inactive area in pan drag box
+        panInactiveArea: 80, // radius of inactive area in pan drag box
         panIndicatorMinOpacity: 0.5, // min opacity of pan indicator (the draggable nib); scales from this to 1.0
         zoomOnly: false, // a minimal version of the ui only with zooming (useful on systems with bad mousewheel resolution)
 
@@ -281,6 +281,7 @@
                     };
 
                     $pHandle.bind("mousedown", function(e){
+                        
                         // handle click of icon
                         handler(e);
 

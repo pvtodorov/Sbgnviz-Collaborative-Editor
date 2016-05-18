@@ -330,16 +330,17 @@ module.exports = function(){
         //proptype is either data or css
         changeElementProperty: function(elId, propName, modelDataName,propValue, propType, syncVal){
             var el = cy.$(('#' + elId))[0];
-            var param = {
-                ele: el,
-                id: elId,
-                dataType: propName,
-                data: propValue,
-                modelDataName: modelDataName,
-                sync: syncVal
-            };
 
             if(el) {
+
+                var param = {
+                    ele: el,
+                    id: elId,
+                    dataType: propName,
+                    data: propValue,
+                    modelDataName: modelDataName,
+                    sync: syncVal
+                };
 
                 if (propName == 'parent')//TODO
                     editorActions.changeParent(param);
@@ -352,6 +353,16 @@ module.exports = function(){
                     editorActions.changeVisibilityOrHighlightStatus(param); //no do/undo here
 
                 else {
+                    var param = {
+                        ele: [el],
+                        id: elId,
+                        dataType: propName,
+                        data: propValue,
+                        modelDataName: modelDataName,
+                        sync: syncVal
+                    };
+
+
                     if (propType == 'data')
                         editorActions.changeStyleData(param);
                     else if (propType == 'css')
@@ -380,7 +391,6 @@ module.exports = function(){
              this.changeElementProperty(elId, 'bendPointPositions', 'bendPointPositions', newBendPointPositions, 'data', syncVal);
 
              var result = sbgnBendPointUtilities.convertToRelativeBendPositions(edge);
-             console.log(result.distances.length);
 
              if(result.distances.length > 0){
                  edge.data('weights', result.weights);

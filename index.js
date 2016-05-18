@@ -529,6 +529,7 @@ app.proto.init = function (model) {
 
             menu.changeElementProperty(id, 'parent', 'parent', parent, 'data', false);
 
+
         }
     });
 
@@ -786,19 +787,17 @@ app.proto.create = function (model) {
     socket.on('PCResult', function(sbgnData){
         var sbgnVizLink = "http://localhost:63342/Bilkent%20SBGNViz/sbgnviz-js-editor/sample-app/index.html";
 
-        var w = window.open(sbgnVizLink, "Query", "width = 1600, height = 1200");
+        var w = window.open(sbgnVizLink, "Query", "width = 1600, height = 1200, left = " + window.left + " right = " +window.right);
 
         // //FIXME: find a more elegant solution
         setTimeout(function(){
             w.postMessage(sbgnData, "*");
              },1000);
-        
+
     });
 
 
     modelManager = require('./public/sample-app/sampleapp-components/js/modelManager.js')(model, model.get('_page.room'), model.get('_session.userId'),name );
-
-
 
 
     menu =  require('./public/sample-app/sampleapp-components/js/sample-app-menu-functions.js')();
@@ -851,35 +850,28 @@ app.proto.runUnitTests = function(){
 }
 
 
-//
-// app.proto.runQuery = function() {
-//     var sbgnVizLink = "http://localhost:63342/Bilkent%20SBGNViz/sbgnviz-js-editor/sample-app/index.html";
-//
-//     var w = window.open(sbgnVizLink, "Query", "width = 1600, height = 1200");
-//
-//
-//     loadXML(function(xmlObject) {
-//         var xmlText = new XMLSerializer().serializeToString(xmlObject);
-//
-//         //FIXME: find a more elegant solution
-//         setTimeout(function(){
-//             w.postMessage(xmlText, "*");
-//         },2000);
-//
-//
-//     });
-//
-// };
-
 
 app.proto.runQuery = function() {
     var sbgnVizLink = "http://localhost:63342/Bilkent%20SBGNViz/sbgnviz-js-editor/sample-app/index.html";
 
-    var w = window.open(sbgnVizLink, "Query", "width = 1600, height = 1200");
 
-    socket.emit('PCQuery',  {
-        name: "Q06609",//node._private.data.sbgnlabel, //gene name
-    });
+
+    var selectedNodes = modelManager.getSelectedModelNodes();
+    if(selectedNodes.length == 0)
+        return;
+
+    var sourceStr = "source=";
+
+    for(var i = 0; i < selectedNodes.length-1; i++){
+        sourceStr += selectedNodes[i].sbgnlabel + '&source=';
+    }
+
+    sourceStr+= selectedNodes[i].sbgnlabel;
+
+
+
+    var queryStr = sourceStr + "&format=sbgn&kind=pathsbetween";
+    socket.emit('PCQuery',  queryStr);
 
 };
 

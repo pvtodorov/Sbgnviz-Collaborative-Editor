@@ -300,6 +300,21 @@ module.exports =  function(model, docId, userId, userName) {
 
         },
 
+        getSelectedModelNodes: function(){
+            var nodes = model.get('_page.doc.cy.nodes');
+            var selectedNodes = [];
+
+           for(var att in nodes) {
+               if (nodes.hasOwnProperty(att)) {
+                   var node = nodes[att];
+                   if (node.highlightColor != null) //could be selected by anyone
+                       selectedNodes.push(node);
+               }
+           }
+
+            return selectedNodes;
+        },
+
         addModelNode: function(nodeId,  param, user, noHistUpdate){
 
 
@@ -311,7 +326,7 @@ module.exports =  function(model, docId, userId, userName) {
             model.pass({user:user}).set('_page.doc.cy.nodes.' + nodeId+'.sbgnclass', param.sbgnclass);
             model.pass({user:user}).set('_page.doc.cy.nodes.' + nodeId+'.sbgnlabel', param.sbgnlabel);
 
-            //adding the node...other operations should be called after this
+            //adding the node in cytoscape
             model.pass({user:user}).set('_page.doc.cy.nodes.' +nodeId+'.addedLater', true);
 
 
