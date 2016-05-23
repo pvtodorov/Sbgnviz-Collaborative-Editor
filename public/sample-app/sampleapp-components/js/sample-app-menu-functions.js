@@ -12,6 +12,7 @@ var expandCollapseUtilities = require('../../../src/utilities/expand-collapse-ut
 var sbgnmlToJson =require('../../../src/utilities/sbgnml-to-json-converter.js')();
 var cytoscape = require('cytoscape');
 
+    var socket = io();
 
 
 //Local functions
@@ -90,6 +91,7 @@ module.exports = function(){
 
     var sbgnLayout;
     var sbgnProp;
+    var pathsBetweenQuery;
 
 
      return MenuFunctions = { //global reference for testing
@@ -529,6 +531,8 @@ module.exports = function(){
             sbgnProp = new SBGNProperties();
             sbgnProp.initialize();
 
+            pathsBetweenQuery = new PathsBetweenQuery();
+            pathsBetweenQuery.initialize();
 
 
 
@@ -885,16 +889,43 @@ module.exports = function(){
 
                 reader.onload = function (e) {
 
-                    var jsonObj = sbgnmlToJson.convert(this.result);
+                    if(file.name.indexOf(".owl") > -1) {
+                        socket.emit('BioPAXRequest', this.result);
+                        socket.on('SBGNResult', function(sbgnData){
 
-                    //get another sbgncontainer
-                    sbgnContainer =  (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj,  editorActions));
+                            if(sbgnData.graph!= null){
+
+                                var jsonObj = sbgnmlToJson.convert(sbgnData.graph);
 
 
-                    editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
+
+                                //get another sbgncontainer
+                                sbgnContainer = (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, editorActions));
 
 
-                    editorActions.modelManager.setSampleInd(-1, "me"); //to notify other clients
+
+                                editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
+
+
+
+                                editorActions.modelManager.setSampleInd(-1, "me"); //to notify other clients
+
+                            }
+                        });
+                    }
+                    else {
+
+                        var jsonObj = sbgnmlToJson.convert(this.result);
+
+
+                        //get another sbgncontainer
+                        sbgnContainer = (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, editorActions));
+
+                        editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
+
+
+                        editorActions.modelManager.setSampleInd(-1, "me"); //to notify other clients
+                    }
                     // sbgnContainer =  new cyMod.SBGNContainer('#sbgn-network-container', jsonObj ,  editorActions);
                 }
                 reader.readAsText(file);
@@ -1198,6 +1229,12 @@ module.exports = function(){
             $("#sbgn-properties").click(function (e) {
                 sbgnProp.render();
             });
+
+            $("#query-pathsbetween").click(function (e) {
+                pathsBetweenQuery.render();
+        
+            });
+
             $("#properties-icon").click(function (e) {
                 $("#sbgn-properties").trigger('click');
             });
@@ -1542,6 +1579,101 @@ module.exports = function(){
     }
 }
 
+function PathsBetweenQuery(){
+
+    return{
+        el: '#query-pathsbetween-table',
+
+        defaultQueryParameters: {
+            geneSymbols: "",
+            lengthLimit: 1
+            //    shortestK: 0,
+            //    enableShortestKAlteration: false,
+            //    ignoreS2SandT2TTargets: false
+        },
+        currentQueryParameters: null,
+        initialize: function () {
+            var self = this;
+            self.copyProperties();
+
+        },
+        copyProperties: function () {
+            this.currentQueryParameters = _.clone(this.defaultQueryParameters);
+        },
+        render: function () {
+            var self = this;
+          //  self.template = _.template($("#query-pathsbetween-template").html(), self.currentQueryParameters);
+           // $(self.el).html(self.template);
+
+
+
+            self.template = _.template($("#query-pathsbetween-template").html()); //funda
+            self.template(self.currentQueryParameters);
+            $(self.el).html(self.template(self.currentQueryParameters)); //funda
+
+
+
+
+            $("#query-pathsbetween-enable-shortest-k-alteration").change(function (e) {
+                if (document.getElementById("query-pathsbetween-enable-shortest-k-alteration").checked) {
+                    $("#query-pathsbetween-shortest-k").prop("disabled", false);
+                }
+                else {
+                    $("#query-pathsbetween-shortest-k").prop("disabled", true);
+                }
+            });
+
+            $(self.el).dialog({width: 'auto'});
+
+            $("#save-query-pathsbetween").die("click").live("click", function (evt) {
+
+                self.currentQueryParameters.geneSymbols = document.getElementById("query-pathsbetween-gene-symbols").value;
+                self.currentQueryParameters.lengthLimit = Number(document.getElementById("query-pathsbetween-length-limit").value);
+
+                var pc2URL = "http://www.pathwaycommons.org/pc2/";
+                var format = "graph?format=SBGN";
+                var kind = "&kind=PATHSBETWEEN";
+                var limit = "&limit=" + self.currentQueryParameters.lengthLimit;
+                var sources = "";
+                var newfilename = "";
+
+                var geneSymbolsArray = self.currentQueryParameters.geneSymbols.replace("\n", " ").replace("\t", " ").split(" ");
+                for (var i = 0; i < geneSymbolsArray.length; i++) {
+                    var currentGeneSymbol = geneSymbolsArray[i];
+                    if (currentGeneSymbol.length == 0 || currentGeneSymbol == ' ' || currentGeneSymbol == '\n' || currentGeneSymbol == '\t') {
+                        continue;
+                    }
+
+                    sources = sources + "&source=" + currentGeneSymbol;
+
+                    // if (newfilename == '') {
+                    //     newfilename = currentGeneSymbol;
+                    // }
+                    // else {
+                    //     newfilename = newfilename + '_' + currentGeneSymbol;
+                    // }
+                }
+
+           //     newfilename = newfilename + '_PBTWN.sbgnml';
+
+           //     setFileContent(newfilename);
+                pc2URL = pc2URL + format + kind + limit + sources;
+                socket.emit('PCQuery',  pc2URL);
+
+
+
+                $(self.el).dialog('close');
+            });
+
+            $("#cancel-query-pathsbetween").die("click").live("click", function (evt) {
+                $(self.el).dialog('close');
+            });
+
+
+        }
+
+    }
+}
 
 function SBGNLayout(modelManager){
 
@@ -1586,8 +1718,8 @@ function SBGNLayout(modelManager){
             templateProperties.tilingPaddingHorizontal = sbgnStyleRules['tiling-padding-horizontal'];
 
 
-            self.template = _.template($("#layout-settings-template").html()); //funda: using lodash
-            self.template(templateProperties);
+           // self.template = _.template($("#layout-settings-template").html()); //funda: using lodash
+          //  self.template(templateProperties);
 
 
         },
@@ -1701,8 +1833,8 @@ function SBGNProperties(){
         initialize: function () {
             var self = this;
             self.copyProperties();
-            self.template = _.template($("#sbgn-properties-template").html());
-            self.template(self.currentSBGNProperties);
+     //       self.template = _.template($("#sbgn-properties-template").html());
+     //       self.template(self.currentSBGNProperties);
         },
         copyProperties: function () {
             this.currentSBGNProperties = _.clone(this.defaultSBGNProperties);

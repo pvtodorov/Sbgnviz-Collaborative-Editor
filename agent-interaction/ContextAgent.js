@@ -16,13 +16,14 @@ function ContextAgent(name, id){
 
 ContextAgent.prototype.analyzeCommand = function(cmd){
 
-        if(cmd.opName == "query"){
+    if(cmd.opName == "query"){
 
+        var node = this.pageDoc.cy.nodes[cmd.elId];
+        this.socket.emit("PCQuery", "source="+node.sbgnlabel + "&format=sbgn&kind=pathsbetween");
+    }
 
-            var node = this.pageDoc.cy.nodes[cmd.elId];
-            this.socket.emit("PCQuery", "source="+node.sbgnlabel + "&format=sbgn&kind=pathsbetween");
+}
 
-
-        }
+ContextAgent.prototype.findProcesses = function(){
 
 }

@@ -604,7 +604,7 @@ module.exports.removeCompound = function(param) {
 
     var removedCompound = compoundToRemove.remove();
     //remove children of compound node
-    module.exports.modelManager.changeModelNodeAttribute('children', removedCompound.id(), [], "me");
+//no more children module.exports.modelManager.changeModelNodeAttribute('children', removedCompound.id(), [], "me");
 
     module.exports.modelManager.deleteModelNode(removedCompound.id(), "me", true);
 

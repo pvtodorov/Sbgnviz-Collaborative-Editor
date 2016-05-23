@@ -783,6 +783,7 @@ module.exports =  function(model, docId, userId, userName) {
             var jsonEdges = [];
 
 
+
             for(var att in nodes){
                 if(nodes.hasOwnProperty(att)) {
                     var node = nodes[att];
@@ -1002,13 +1003,19 @@ module.exports =  function(model, docId, userId, userName) {
         initModelEdge: function(edge, user, noHistUpdate){
             edge.addClass('changeLineColor');
 
+
+
             var edgePath = model.at('_page.doc.cy.edges.' + edge.id());
+
 
             if(!noHistUpdate)
                 this.updateHistory({opName:'init', opTarget: 'element', elType:'edge', elId: edge.id()});
 
 
             edgePath.set('id', edge.id());
+
+
+
 
             // if (parent != null)
             //     edge.data('parent', edge);
@@ -1121,6 +1128,7 @@ module.exports =  function(model, docId, userId, userName) {
 
 
             jsonObj.edges.forEach(function(edge){
+            //    model.pass({user:user}).set('_page.doc.cy.edges.' + edge.data.id + '.source', edge.data.source); //initialize position
                 elIds += edge.data.id + " ";
                 elTypes.push("edge");
             });
@@ -1141,6 +1149,8 @@ module.exports =  function(model, docId, userId, userName) {
             edges.forEach(function (edge) {
                 self.initModelEdge(edge, user, true);
             });
+
+
 
 
         }

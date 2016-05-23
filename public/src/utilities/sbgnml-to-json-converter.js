@@ -38,6 +38,14 @@
 
 var sbgnElementUtilities = require('./sbgn-element-utilities.js')();
 
+
+//funda
+String.prototype.replaceAll = function(search, replacement) {
+
+    var target = this;
+    return target.split(search).join(replacement);
+};
+
 module.exports = function () {
 
     var cheerio = require('cheerio');
@@ -182,7 +190,10 @@ module.exports = function () {
 
 
             //add id information
-            nodeObj.id = cheerio$(ele).attr('id');
+            if(cheerio$(ele).attr('id'))
+                nodeObj.id = (cheerio$(ele).attr('id')).replaceAll('.', "_"); //funda: to prevent derby path confusion;
+            else
+                nodeObj.id = null;
 
             //add node bounding box information
             nodeObj.sbgnbbox = self.bboxProp(ele);
@@ -306,7 +317,12 @@ module.exports = function () {
             var edgeObj = new Object();
 
             var bendPointPositions = self.getArcBendPointPositions(ele);
-                edgeObj.id = cheerio$(ele).attr('id');
+
+            if(cheerio$(ele).attr('id'))
+                edgeObj.id = (cheerio$(ele).attr('id')).replaceAll('.', "_"); //funda: to prevent derby path confusion
+            else
+                edgeObj.id = null;
+
         //funda2    edgeObj.id = cheerio$(ele).data('id');
 
             edgeObj.sbgnclass = cheerio$(ele).attr('class');

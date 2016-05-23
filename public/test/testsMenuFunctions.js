@@ -254,12 +254,12 @@ module.exports = function(){
 
     }
 
-    //addNodeFromMenuTest(1000);
-    //deleteNodeFromMenuTest(1000);
-    //addNodeFromEditorActionsTest();
+    addNodeFromMenuTest(1000);
+    deleteNodeFromMenuTest(1000);
+    addNodeFromEditorActionsTest();
 
 
-   // changeHighlightStatusTest();
-   // changeVisibilityStatusTest();
+   changeHighlightStatusTest();
+   changeVisibilityStatusTest();
 
 };

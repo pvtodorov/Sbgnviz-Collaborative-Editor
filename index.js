@@ -784,17 +784,27 @@ app.proto.create = function (model) {
 
 
 
-    socket.on('PCResult', function(sbgnData){
-        var sbgnVizLink = "http://localhost:63342/Bilkent%20SBGNViz/sbgnviz-js-editor/sample-app/index.html";
 
-        var w = window.open(sbgnVizLink, "Query", "width = 1600, height = 1200, left = " + window.left + " right = " +window.right);
 
-        // //FIXME: find a more elegant solution
-        setTimeout(function(){
-            w.postMessage(sbgnData, "*");
-             },1000);
+    socket.on('PCQueryResult', function(sbgnData){
+
+        if(sbgnData.graph!= null){
+            var sbgnVizLink = "http://localhost:63342/Bilkent%20SBGNViz/sbgnviz-js-editor/sample-app/index.html";
+
+            var w = window.open(sbgnVizLink, "Query", "width = 1600, height = 1200, left = " + window.left + " right = " +window.right);
+
+            // //FIXME: find a more elegant solution
+            setTimeout(function(){
+                w.postMessage(sbgnData, "*");
+                 },1000);
+
+        }
+        else
+            alert("No results found!");
 
     });
+
+
 
 
     modelManager = require('./public/sample-app/sampleapp-components/js/modelManager.js')(model, model.get('_page.room'), model.get('_session.userId'),name );
@@ -843,37 +853,14 @@ app.proto.changeColorCode = function(){
 
 };
 app.proto.runUnitTests = function(){
-    require("./public/qunit/testsModelManager.js")();
-    require("./public/qunit/testsMenuFunctions.js")();
-    require("./public/qunit/testOptions.js")(); //to print out results
+    require("./public/test/testsMenuFunctions.js")();
+    require("./public/test/testsModelManager.js")();
+
+    require("./public/test/testOptions.js")(); //to print out results
 
 }
 
 
-
-app.proto.runQuery = function() {
-    var sbgnVizLink = "http://localhost:63342/Bilkent%20SBGNViz/sbgnviz-js-editor/sample-app/index.html";
-
-
-
-    var selectedNodes = modelManager.getSelectedModelNodes();
-    if(selectedNodes.length == 0)
-        return;
-
-    var sourceStr = "source=";
-
-    for(var i = 0; i < selectedNodes.length-1; i++){
-        sourceStr += selectedNodes[i].sbgnlabel + '&source=';
-    }
-
-    sourceStr+= selectedNodes[i].sbgnlabel;
-
-
-
-    var queryStr = sourceStr + "&format=sbgn&kind=pathsbetween";
-    socket.emit('PCQuery',  queryStr);
-
-};
 
 app.proto.add = function (model, filePath) {
 

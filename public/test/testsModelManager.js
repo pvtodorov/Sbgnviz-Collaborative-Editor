@@ -225,9 +225,9 @@ module.exports = function(){
             assert.equal(ModelManager.getModelNode(id).parent, cy.getElementById(id).data('parent'), "Node parent is equal in model and cytoscape..");
 
 
-            ModelManager.changeModelNodeAttribute("children", id, ["glyph3"]);
-            assert.equal("glyph3", cy.getElementById(id)._private.children[0].id(), "Node children are correct in cytoscape.");
-            assert.equal(ModelManager.getModelNode(id).children[0], cy.getElementById(id)._private.children[0].id(), "Node children are equal in model and cytoscape..");
+            // ModelManager.changeModelNodeAttribute("children", id, ["glyph3"]);
+            // assert.equal("glyph3", cy.getElementById(id)._private.children[0].id(), "Node children are correct in cytoscape.");
+            // assert.equal(ModelManager.getModelNode(id).children[0], cy.getElementById(id)._private.children[0].id(), "Node children are equal in model and cytoscape..");
 
             ModelManager.changeModelNodeAttribute("ports", id, ["glyph4"]);
             assert.equal(ModelManager.getModelNode(id).ports[0], cy.getElementById(id).data('ports')[0], "Node ports are correct in cytoscape.");
@@ -292,25 +292,25 @@ module.exports = function(){
         });
     }
     
-    //
-    // addModelNodeTest(1000);
-    // addModelNodeTest(1000); //already added
-    // initModelNodeTest(1000);
-    // selectModelNodeTest(1000);
-    // unselectModelNodeTest(1000);
 
-    // changeModelNodeAttributeTest(1000);
-    // deleteModelNodeTest(1000);
-    // deleteModelNodeTest(1000); //already deleted
+    addModelNodeTest(1000);
+    addModelNodeTest(1000); //already added
+    initModelNodeTest(1000);
+    selectModelNodeTest(1000);
+    unselectModelNodeTest(1000);
 
-    // addModelEdgeTest("glyph2", "glyph6");
-    // addModelEdgeTest("glyph2", "glyph6"); //already added
-    // initModelEdgeTest("glyph2-glyph6");
-    // selectModelEdgeTest("glyph2-glyph6");
-    // unselectModelEdgeTest("glyph2-glyph6");
-    //  changeModelEdgeAttributeTest(("glyph2-glyph6"));
-    // deleteModelEdgeTest("glyph2-glyph6");
-    // deleteModelEdgeTest("glyph2-glyph6"); //already deleted
+    changeModelNodeAttributeTest(1000);
+    deleteModelNodeTest(1000);
+    deleteModelNodeTest(1000); //already deleted
+
+    addModelEdgeTest("glyph2", "glyph6");
+    addModelEdgeTest("glyph2", "glyph6"); //already added
+    initModelEdgeTest("glyph2-glyph6");
+    selectModelEdgeTest("glyph2-glyph6");
+    unselectModelEdgeTest("glyph2-glyph6");
+     changeModelEdgeAttributeTest(("glyph2-glyph6"));
+    deleteModelEdgeTest("glyph2-glyph6");
+    deleteModelEdgeTest("glyph2-glyph6"); //already deleted
 
 
 
