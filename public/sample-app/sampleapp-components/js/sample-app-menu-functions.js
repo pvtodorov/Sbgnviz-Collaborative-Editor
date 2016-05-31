@@ -12,7 +12,7 @@ var expandCollapseUtilities = require('../../../src/utilities/expand-collapse-ut
 var sbgnmlToJson =require('../../../src/utilities/sbgnml-to-json-converter.js')();
 var cytoscape = require('cytoscape');
 
-    var socket = io();
+
 
 
 //Local functions
@@ -84,9 +84,10 @@ function getXMLObject(itemId, loadXMLDoc) {
 };
 
 module.exports = function(){
-
     var cyMod =  require('./sample-app-cytoscape-sbgn.js');
+
     var editorActions = require('./EditorActionsManager.js');
+
     var sbgnContainer;
 
     var sbgnLayout;
@@ -456,6 +457,8 @@ module.exports = function(){
 
 
 
+
+            
             editorActions.modelManager = modelManager;
 
             var jsonObj = modelManager.getJsonFromModel();
@@ -516,6 +519,7 @@ module.exports = function(){
 
             var self = this;
 
+            var socket = io();
 
             editorActions.modelManager = modelManager;
 
@@ -890,7 +894,7 @@ module.exports = function(){
                 reader.onload = function (e) {
 
                     if(file.name.indexOf(".owl") > -1) {
-                        socket.emit('BioPAXRequest', this.result);
+                        socket.emit('BioPAXRequest', this.result, "sbgn");
                         socket.on('SBGNResult', function(sbgnData){
 
                             if(sbgnData.graph!= null){
@@ -912,6 +916,20 @@ module.exports = function(){
 
                             }
                         });
+
+
+                        // socket.emit('BioPAXRequest', this.result, "json");
+                        //
+                        // socket.on('JSONResult', function(jsonData){
+                        //     console.log("here");
+                        //     if(jsonData.graph!= null){
+                        //
+                        //         console.log(jsonData);
+                        //
+                        //
+                        //     }
+                        // });
+
                     }
                     else {
 

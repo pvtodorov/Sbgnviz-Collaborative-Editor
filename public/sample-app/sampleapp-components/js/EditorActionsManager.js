@@ -38,18 +38,21 @@ module.exports.unselectEdge = function(edge) {
 
 module.exports.addNode = function(param) {
 
+    var socket = io()
+    socket.emit("addNode", param, function(data){
+        if(data == "ok") {
+            var result = addRemoveUtilities.addNode(param.x, param.y, param.sbgnclass, param.id);
+            if (param.sbgnlabel != null)
+                result.data('sbgnlabel', param.sbgnlabel); //funda
+            if (param.sync) {
+                module.exports.modelManager.addModelNode(result.id(), param, "me");
+                module.exports.modelManager.initModelNode(result, null, true);
+            }
 
-    var  result = addRemoveUtilities.addNode(param.x, param.y, param.sbgnclass, param.id);
-    if(param.sbgnlabel!=null)
-        result.data('sbgnlabel', param.sbgnlabel); //funda
+            return result;
+        }
+    });
 
-    if(param.sync){
-        module.exports.modelManager.addModelNode(result.id(),  param, "me");
-        module.exports.modelManager.initModelNode(result, null, true);
-
-    }
-
-    return result;
 }
 module.exports.removeEles =function(elesToBeRemoved) {
 
