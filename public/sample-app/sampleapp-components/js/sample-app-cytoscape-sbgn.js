@@ -1,16 +1,12 @@
 
 module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
 
-console.log("6");
     var addRemoveUtilities = require('../../../src/utilities/add-remove-utilities.js');
-    console.log("7");
     var expandCollapseUtilities = require('../../../src/utilities/expand-collapse-utilities.js')();
     var bioGeneView = require('./biogene-info.js');
-    console.log("8");
     var socket = io();
     var nodeLabelChanged = false;
     var prevNode;
-    console.log("9");
 
     var self = this;
 
@@ -1273,11 +1269,3 @@ module.exports.fillInspectorStateAndInfos = function (ele, width, stateAndInfos,
 
     });
 };
-
-
-//
-// $("#node-label-textbox").keydown(function (e) {
-//     if (e.which === 13) {
-//         $("#node-label-textbox").blur();
-//     }
-// });

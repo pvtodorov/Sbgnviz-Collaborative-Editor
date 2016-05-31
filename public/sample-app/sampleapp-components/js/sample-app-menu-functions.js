@@ -1593,6 +1593,15 @@ module.exports = function(){
 
 
 
+
+            $("#node-label-textbox").keydown(function (e) {
+                if (e.which === 13) {
+                    $("#node-label-textbox").blur();
+                }
+            });
+
+
+
         }
     }
 }
