@@ -133,7 +133,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="computerAgent.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="computerAgent.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/agent-interaction/computerAgent.html">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="180">
@@ -145,6 +145,18 @@
                 <marker date="1464735450000" expanded="true" signature="30634:30657" ph="..." />
                 <marker date="1464735450000" expanded="true" signature="31575:31598" ph="..." />
                 <marker date="1464735450000" expanded="true" signature="31700:31723" ph="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="contextAgent.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/agent-interaction/contextAgent.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="375">
+              <caret line="29" column="0" selection-start-line="29" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
+              <folding>
+                <element signature="e#42#84#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -913,7 +925,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value=" Included the &quot;addModelEdge&quot; function to modelManager + bug fixes" />
     <MESSAGE value="-updateServerGraph automated to all changes in the model.&#10;-Implementing hierarchical commands..." />
     <MESSAGE value="First version of global do/undo operations." />
     <MESSAGE value="Undo delete is working but still with issues." />
@@ -938,7 +949,8 @@
     <MESSAGE value="Can display BioPAX files by communicating with the PAXTools server." />
     <MESSAGE value="Issue with socket.io not loading before node.js fixed." />
     <MESSAGE value="issue with io() problem in EditorActionsManager." />
-    <option name="LAST_COMMIT_MESSAGE" value="issue with io() problem in EditorActionsManager." />
+    <MESSAGE value="contextAgent naming problem" />
+    <option name="LAST_COMMIT_MESSAGE" value="contextAgent naming problem" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1346,14 +1358,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/agent-interaction/contextAgent.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="465">
-          <caret line="35" column="0" selection-start-line="35" selection-start-column="0" selection-end-line="35" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/agent-interaction/computerAgent.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
@@ -1365,6 +1369,16 @@
             <marker date="1464735450000" expanded="true" signature="30634:30657" ph="..." />
             <marker date="1464735450000" expanded="true" signature="31575:31598" ph="..." />
             <marker date="1464735450000" expanded="true" signature="31700:31723" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/agent-interaction/contextAgent.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="375">
+          <caret line="29" column="0" selection-start-line="29" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
+          <folding>
+            <element signature="e#42#84#0" expanded="false" />
           </folding>
         </state>
       </provider>
