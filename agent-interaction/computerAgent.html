@@ -313,7 +313,7 @@
       //  agent = new Agent($('#agentName')[0].value, agentId);
 
        agent = new ContextAgent($('#agentName')[0].value, agentId);
-        agent.tmpCmd();
+
         var socket = agent.connectToServer(serverIp, function(){
 
             writeUserList(agent.userList);
