@@ -38,9 +38,9 @@ module.exports.unselectEdge = function(edge) {
 
 module.exports.addNode = function(param) {
 
-    var socket = io()
-    socket.emit("addNode", param, function(data){
-        if(data == "ok") {
+  //  var socket = io();
+  //  socket.emit("addNode", param, function(data){
+      //  if(data == "ok") {
             var result = addRemoveUtilities.addNode(param.x, param.y, param.sbgnclass, param.id);
             if (param.sbgnlabel != null)
                 result.data('sbgnlabel', param.sbgnlabel); //funda
@@ -50,8 +50,8 @@ module.exports.addNode = function(param) {
             }
 
             return result;
-        }
-    });
+     //   }
+   // });
 
 }
 module.exports.removeEles =function(elesToBeRemoved) {
