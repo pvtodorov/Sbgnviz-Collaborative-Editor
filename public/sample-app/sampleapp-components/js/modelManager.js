@@ -785,6 +785,7 @@ module.exports =  function(model, docId, userId, userName) {
 
 
             for(var att in nodes){
+
                 if(nodes.hasOwnProperty(att)) {
                     var node = nodes[att];
                     var jsonNode = {
@@ -1134,6 +1135,7 @@ module.exports =  function(model, docId, userId, userName) {
             });
 
             var self = this;
+
 
             if(!noHistUpdate){
                 this.updateHistory({opName:'init',  opTarget:'model'});

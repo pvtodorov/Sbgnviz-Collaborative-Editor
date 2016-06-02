@@ -4,7 +4,7 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
     var addRemoveUtilities = require('../../../src/utilities/add-remove-utilities.js');
     var expandCollapseUtilities = require('../../../src/utilities/expand-collapse-utilities.js')();
     var bioGeneView = require('./biogene-info.js');
-    var socket = io();
+
     var nodeLabelChanged = false;
     var prevNode;
 
@@ -49,6 +49,7 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
 
         ready: function () {
 
+            var socket = io();
             window.cy = this;
 
             var edges = cy.edges();

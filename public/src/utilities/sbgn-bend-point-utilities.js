@@ -66,7 +66,7 @@ var sbgnBendPointUtilities = {
     
     var srcClippingPoint = this.getClippingPoint(sourceNode, tgtPosition.x, tgtPosition.y, edge._private.data.portsource);
     var tgtClippingPoint = this.getClippingPoint(targetNode, srcPosition.x, srcPosition.y, edge._private.data.porttarget);
-    
+
 //    var srcClippingPoint = {
 //      x: edge._private.rscratch.startX,
 //      y: edge._private.rscratch.startY

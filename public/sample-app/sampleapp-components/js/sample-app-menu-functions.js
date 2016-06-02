@@ -103,21 +103,34 @@ module.exports = function(){
 
      
 
+         //Agent loads the file
         loadFile: function(txtFile){
 
 
             editorActions.modelManager.deleteAll(cy.nodes(), cy.edges(), "me");
-         //   var jsonObj = sbgnmlToJson.convert(textToXmlObject(txtFile));
             var jsonObj = sbgnmlToJson.convert(txtFile);
 
-            //editorActions.modelManager.updateModelFromJson(jsonObj);
+            //initialize cytoscape
+            cytoscape({
+                elements: jsonObj,
+                headless: true,
+                styleEnabled: true,
 
-            //sbgnContainer =  (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj,  editorActions));
+
+                ready: function () {
+                    cy = this;
+                }
+            });
 
 
-            sbgnContainer =  (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj,  editorActions));
+
+
+            //no container is necessary
+//            sbgnContainer =  (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj,  editorActions));
             editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
             //this.updateSample(-1, true);
+
+          
 
             editorActions.modelManager.setSampleInd(-1, "me"); //to notify other clients
 
@@ -391,20 +404,23 @@ module.exports = function(){
              var edge = cy.getElementById(elId);
 
 
+
              this.changeElementProperty(elId, 'bendPointPositions', 'bendPointPositions', newBendPointPositions, 'data', syncVal);
 
-             var result = sbgnBendPointUtilities.convertToRelativeBendPositions(edge);
+             if(newBendPointPositions.length > 0 ){
+                 var result = sbgnBendPointUtilities.convertToRelativeBendPositions(edge);
 
-             if(result.distances.length > 0){
-                 edge.data('weights', result.weights);
-                 edge.data('distances', result.distances);
-                 edge.css('curve-style', 'segments');
-             }
+                 if(result.distances.length > 0){
+                     edge.data('weights', result.weights);
+                     edge.data('distances', result.distances);
+                     edge.css('curve-style', 'segments');
+                 }
 
-             if(newBendPointPositions.length == 0){
-                 edge.removeData('distances');
-                 edge.removeData('weights');
-                 edge.css('curve-style', 'bezier');
+                 if(newBendPointPositions.length == 0){
+                     edge.removeData('distances');
+                     edge.removeData('weights');
+                     edge.css('curve-style', 'bezier');
+                 }
              }
 
 
@@ -426,6 +442,7 @@ module.exports = function(){
             if(ind < 0){ //for notifying other users -- this part is called through the model
 
                 var jsonObj = editorActions.modelManager.getJsonFromModel();
+
                 sbgnContainer =  (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj,  editorActions));
                 if(syncVal)
                     editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me");
@@ -917,18 +934,6 @@ module.exports = function(){
                             }
                         });
 
-
-                        // socket.emit('BioPAXRequest', this.result, "json");
-                        //
-                        // socket.on('JSONResult', function(jsonData){
-                        //     console.log("here");
-                        //     if(jsonData.graph!= null){
-                        //
-                        //         console.log(jsonData);
-                        //
-                        //
-                        //     }
-                        // });
 
                     }
                     else {
