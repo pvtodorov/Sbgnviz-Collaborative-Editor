@@ -104,7 +104,7 @@ module.exports = function(){
      
 
          //Agent loads the file
-        loadFile: function(txtFile){
+        loadFileInNode: function(txtFile){
 
 
             editorActions.modelManager.deleteAll(cy.nodes(), cy.edges(), "me");
@@ -122,15 +122,9 @@ module.exports = function(){
                 }
             });
 
-
-
-
             //no container is necessary
-//            sbgnContainer =  (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj,  editorActions));
-            editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
-            //this.updateSample(-1, true);
 
-          
+            editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
 
             editorActions.modelManager.setSampleInd(-1, "me"); //to notify other clients
 

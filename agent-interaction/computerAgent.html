@@ -514,7 +514,11 @@
 
                 var txtContent = this.result;
 
-                agent.sendRequest("agentLoadFileRequest",{param:txtContent});
+                var fileType = "sbgn";
+                if(file.name.indexOf(".owl") > -1)
+                        fileType = "owl";
+
+                agent.sendRequest("agentLoadFileRequest",{param:txtContent, fileType:fileType});
             }
         }
 
