@@ -58,6 +58,7 @@
         Pos x : <input type = number id = "posX" name="posX" value = 200>
         Pos y : <input type = number id = "posY" name="posY" value = 200>
         Sbgnclass: <input type = "text" id = "sbgnclass" name="sbgnclass" value = "macromolecule">
+        Id: <input type = "text" id = "newNodeId" name="newNodeId" value = "">
         <input type="button" value="Add node" onclick=addNode()>
 
         <br>
@@ -130,7 +131,7 @@
         <tr style='border: 1px solid #dddddd;'><td style='width: 100px'> State Variables </td><td id='stateVariables'style='width: 10px'></td></tr>
 
         <br>
-        <tr style='border: 1px solid #dddddd;'><td style='width: 100px'> Unit Of Information</td><td id='unitsOfInformation' style='width: 10px'></td></tr>
+        <tr style='border: 1px solid #dddddd;'><td style='width: 100px'> Unit Of Information</td><td id='unitOfInformation' style='width: 10px'></td></tr>
         </table>
 
     </form>
@@ -360,6 +361,12 @@
                 socket.on('operation', function(data){
                     writeCommand(data);
                     agent.analyzeCommand(data);
+                    //update ids and features
+                    agent.loadModel(function(){ //reload model
+                        fillNodeIds('nodeId');
+                        fillEdgeIds('edgeId');
+                    });
+
 
                 });
                 socket.on('message', function(data){
@@ -532,8 +539,12 @@
         var x = $('#posX')[0].value;
         var y = $('#posY')[0].value;
         var sbgnclass = $('#sbgnclass')[0].value;
+        var id = $('#newNodeId')[0].value;
+        if(id.length == 0)
+                id = null;
 
-        var param = {x:Number(x), y:Number(y), sbgnclass:sbgnclass }
+        var param = {x:Number(x), y:Number(y), sbgnclass:sbgnclass , id:id};
+
 
         agent.sendRequest("agentAddNodeRequest", {param:param}, function(nodeId){
             console.log(nodeId);
@@ -665,8 +676,9 @@
             });
             agent.sendRequest("agentChangeNodeAttributeRequest", {
                 id: id,
-                attStr: "sbgnStatesAndInfos",
-                attVal: states
+                attStr: "unitOfInformation",
+                attVal: states, //for updating the editor
+                unitOfInformation: $('.unitOfInformationLabel')[0].value, //for asking biopax
             });
         });
 
@@ -690,8 +702,10 @@
             });
             agent.sendRequest("agentChangeNodeAttributeRequest", {
                 id: id,
-                attStr: "sbgnStatesAndInfos",
-                attVal: states
+                attStr: "stateVariables",
+                attVal: states,  //for updating the editor
+                stateValue:$('.stateVariableValue')[0].value,
+                stateVariable:$('.stateVariableVariable')[0].value, //for asking biopax
             });
         });
 
@@ -892,11 +906,13 @@
     function fillInspectorStateAndInfos(ele) {
 
 
+
         var width = 100;
         //first empty the state variables and infos data in inspector
         $("#stateVariables").html("");
-        $("#unitsOfInformation").html("");
+        $("#unitOfInformation").html("");
         var stateAndInfos = ele.sbgnStatesAndInfos;
+
 
 
         for(var si in stateAndInfos){
@@ -930,7 +946,7 @@
             else if (state.clazz == "unit of information") {
 
                 //var total = width / 5 + width / 5 + width / 2.5;
-                $("#unitsOfInformation").append("<div><input type='text' class='justAddedStateVariablesInput unitOfInformationLabel' value='" + state.label.text+ "'/>"
+                $("#unitOfInformation").append("<div><input type='text' class='justAddedStateVariablesInput unitOfInformationLabel' value='" + state.label.text+ "'/>"
                         +"<img style=\"width:12px;height:12px;\" class='justAddedStateVariablesInput deleteStateAndInfo' src='delete.png'></div>");
 
                 var oldLabelText = state.label.text;
@@ -952,7 +968,7 @@
             $(".justAddedStateVariablesInput").removeClass("justAddedStateVariablesInput");
         }
         $("#stateVariables").append("<img id='addStateVariable' style=\"width:12px;height:12px;\" src='add.png'/>");
-        $("#unitsOfInformation").append("<img id='addUnitOfInformation' style=\"width:12px;height:12px;\" src='add.png'/>");
+        $("#unitOfInformation").append("<img id='addUnitOfInformation' style=\"width:12px;height:12px;\" src='add.png'/>");
 
         $("#addStateVariable").click(function () {
             var obj = {};
@@ -968,13 +984,13 @@
             };
             var param = {
                 obj: obj,
-                ele: ele,
-                width: width
+                ele: ele
             };
           //todo  editorActions.manager._do(editorActions.AddStateAndInfoCommand(param));
         });
 
         $("#addUnitOfInformation").click(function () {
+
             var obj = {};
             obj.clazz = "unit of information";
             obj.label = {
@@ -984,12 +1000,17 @@
                 w: 53,
                 h: 18
             };
-            var param = {
-                obj: obj,
-                ele: ele,
-                width: width
-            };
-            //todo editorActions.manager._do(editorActions.AddStateAndInfoCommand(param));
+
+            var states = agent.selectedNode.sbgnStatesAndInfos;
+            states.push(obj);
+
+
+            agent.sendRequest("agentChangeNodeAttributeRequest", {
+                id: $('#nodeId')[0].value,
+                attStr: "unitOfInformation",
+                attVal: states, //for updating the editor
+                unitOfInformation: "", //empty unit of information
+            });
         });
     }
 

@@ -1243,7 +1243,7 @@ module.exports.fillInspectorStateAndInfos = function (ele, width, stateAndInfos,
         var param = {
             obj: obj,
             ele: ele,
-            width: width,
+      //      width: width,
             sync: true
         };
         editorActions.addStateAndInfo(param);
@@ -1262,7 +1262,7 @@ module.exports.fillInspectorStateAndInfos = function (ele, width, stateAndInfos,
         var param = {
             obj: obj,
             ele: ele,
-            width: width,
+       //     width: width,
             sync: true
         };
         editorActions.addStateAndInfo(param);

@@ -38,20 +38,18 @@ module.exports.unselectEdge = function(edge) {
 
 module.exports.addNode = function(param) {
 
-  //  var socket = io();
-  //  socket.emit("addNode", param, function(data){
-      //  if(data == "ok") {
-            var result = addRemoveUtilities.addNode(param.x, param.y, param.sbgnclass, param.id);
-            if (param.sbgnlabel != null)
-                result.data('sbgnlabel', param.sbgnlabel); //funda
-            if (param.sync) {
-                module.exports.modelManager.addModelNode(result.id(), param, "me");
-                module.exports.modelManager.initModelNode(result, null, true);
-            }
 
-            return result;
-     //   }
-   // });
+
+
+    var result = addRemoveUtilities.addNode(param.x, param.y, param.sbgnclass, param.id);
+    if (param.sbgnlabel != null)
+        result.data('sbgnlabel', param.sbgnlabel); //funda
+    if (param.sync) {
+        module.exports.modelManager.addModelNode(result.id(), param, "me");
+        module.exports.modelManager.initModelNode(result, null, true);
+    }
+
+    return result;
 
 }
 module.exports.removeEles =function(elesToBeRemoved) {
@@ -686,7 +684,11 @@ module.exports.changeUnitOfInformation = function(param) {
     if(param.sync)
         module.exports.modelManager.changeModelNodeAttribute('sbgnStatesAndInfos', param.ele.id(), param.data, "me");
 
+    param.ele.unselect(); //to refresh inspector
+    param.ele.select(); //to refresh inspector
 
+
+    cy.forceRender();
  
 }
 

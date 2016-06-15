@@ -251,6 +251,9 @@ module.exports = function(){
 
             };
 
+            if(cy.getElementById(elId).length > 0)
+                return null;
+
             var result = editorActions.addNode(param);
 
 

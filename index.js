@@ -314,7 +314,7 @@ app.proto.init = function (model) {
 
     });
 
-    model.on('all', '_page.doc.sampleInd', function(op, ind, prev, passed){
+    model.on('all', '_page.doc.cy.sampleInd', function(op, ind, prev, passed){
 
 
         if(docReady && passed.user == null) {
@@ -327,11 +327,11 @@ app.proto.init = function (model) {
 
 
 
-    model.on('all', '_page.doc.layoutProperties', function(index){
+    model.on('all', '_page.doc.cy.layoutProperties', function(index){
 
 
         if(docReady && menu ){
-            var layoutProps = model.get('_page.doc.layoutProperties');
+            var layoutProps = model.get('_page.doc.cy.layoutProperties');
 
             menu.updateLayoutProperties(layoutProps);
 
@@ -984,3 +984,19 @@ app.proto.formatObj = function(obj){
 }
 
 
+app.proto.processReach = function(msg) {
+    var httpRequest;
+    if (window.XMLHttpRequest) {
+        httpRequest = new XMLHttpRequest();
+    } else {
+        httpRequest = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    httpRequest.open("POST", "http://agathon.sista.arizona.edu:8080/odinweb/api/text", true);
+    httpRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    httpRequest.send("text="+msg+"&output=fries");
+    httpRequest.onreadystatechange = function () {
+        if (httpRequest.readyState == 4 && httpRequest.status == 200) {
+            console.log(httpRequest.responseText);
+        }
+    }
+};

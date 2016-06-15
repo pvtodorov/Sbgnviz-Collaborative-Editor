@@ -38,7 +38,7 @@ module.exports =  function(model, docId, userId, userName) {
         },
 
         setSampleInd: function(ind, user, noHistUpdate){
-            model.pass({user:user}).set('_page.doc.sampleInd', ind);
+            model.pass({user:user}).set('_page.doc.cy.sampleInd', ind);
 
             if(!noHistUpdate) {
                 if (ind == -1)
@@ -48,7 +48,7 @@ module.exports =  function(model, docId, userId, userName) {
             }
         },
         getSampleInd: function(user, noHistUpdate){
-            var ind = model.get('_page.doc.sampleInd');
+            var ind = model.get('_page.doc.cy.sampleInd');
             if(ind == null)
                 ind = "0";
             if(!noHistUpdate)
@@ -68,7 +68,7 @@ module.exports =  function(model, docId, userId, userName) {
         updateLayoutProperties: function(layoutProperties, noHistUpdate){
 
             var currentLayoutProperties;
-            var lp =  model.get('_page.doc.layoutProperties');
+            var lp =  model.get('_page.doc.cy.layoutProperties');
 
             if(lp == null)
                 currentLayoutProperties = _.clone(layoutProperties);
@@ -76,14 +76,14 @@ module.exports =  function(model, docId, userId, userName) {
                 currentLayoutProperties = _.clone(lp);
 
 
-            model.set('_page.doc.layoutProperties', currentLayoutProperties); //synclayout
+            model.set('_page.doc.cy.layoutProperties', currentLayoutProperties); //synclayout
 
             if(!noHistUpdate)
                 this.updateHistory({opName:'set',opTarget:'layout', opAttr: JSON.stringify(currentLayoutProperties)});
             return currentLayoutProperties;
         },
         setLayoutProperties: function(layoutProperties, noHistUpdate){
-            model.set('_page.doc.layoutProperties', layoutProperties); //synclayout
+            model.set('_page.doc.cy.layoutProperties', layoutProperties); //synclayout
             if(!noHistUpdate)
                 this.updateHistory({opName:'set', opTarget:'layout', opAttr: JSON.stringify(layoutProperties)});
         },

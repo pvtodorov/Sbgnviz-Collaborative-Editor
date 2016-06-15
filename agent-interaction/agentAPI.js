@@ -149,7 +149,7 @@
          * @returns {*} Layout properties in the shared model
          */
         Agent.prototype.getLayoutProperties = function(){
-            return this.pageDoc.layoutProperties;
+            return this.pageDoc.cy.layoutProperties;
         }
 
         /**

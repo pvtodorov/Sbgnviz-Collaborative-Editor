@@ -1,6 +1,6 @@
 
 <Title:>
-    SBGNViz Collaborative Editor  ({{count(messages)}})  - {{users[_session.userId].name}} - {{_page.doc.sampleInd}}
+    SBGNViz Collaborative Editor  ({{count(messages)}})  - {{users[_session.userId].name}} - {{_page.doc.cy.sampleInd}}
 
 <Head:>
     <meta name="viewport" content="width=device-width">
@@ -914,7 +914,8 @@
         <div id="inputs">
           <input id="inputs-name" value="{{users[_session.userId].name}}">
           <form id="inputs-form" on-submit="add()">
-            <input id="inputs-comment"  value="{{_page.newComment}}" autofocus> <button>Send</button>
+            <!--<input id="inputs-comment"  value="{{_page.newComment}}" autofocus> <button>Send</button>-->
+              <input id="inputs-comment"  value="{{_page.newComment}}" autofocus> <button on-click = "processReach(document.getElementById('inputs-comment').value)">Send</button>
                   <div class="filebutton"><input type="file" id="imagefile" accept="image/*" on-change = "uploadFile($event)" value = {{_page.newFile}}></div>
 
           </form>
