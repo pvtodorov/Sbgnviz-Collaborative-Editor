@@ -97,14 +97,29 @@ module.exports = function(){
 
      return MenuFunctions = { //global reference for testing
 
-        refreshGlobalUndoRedoButtonsStatus: function(){
-          editorActions.refreshGlobalUndoRedoButtonsStatus();
-        },
 
+         refreshGlobalUndoRedoButtonsStatus: function(){
+          editorActions.refreshGlobalUndoRedoButtonsStatus();
+         },
+
+         loadFile:function(txtFile){
+
+             editorActions.modelManager.deleteAll(cy.nodes(), cy.edges(), "me");
+             var jsonObj = sbgnmlToJson.convert(txtFile);
+
+
+
+             //get another sbgncontainer
+             sbgnContainer = (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, editorActions));
+
+             editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
+             editorActions.modelManager.setSampleInd(-1, "me"); //to notify other clients
+
+         },
      
 
          //Agent loads the file
-        loadFileInNode: function(txtFile){
+         loadFileInNode: function(txtFile){
 
 
             editorActions.modelManager.deleteAll(cy.nodes(), cy.edges(), "me");
@@ -128,9 +143,10 @@ module.exports = function(){
 
             editorActions.modelManager.setSampleInd(-1, "me"); //to notify other clients
 
-        },
-        //Methods for agents to interact with cytoscape
-        showNodes: function(selectedNodeIds){
+         },
+
+         //Methods for agents to interact with cytoscape
+         showNodes: function(selectedNodeIds){
             //unselect all others
             cy.nodes().unselect();
 
@@ -528,6 +544,21 @@ module.exports = function(){
 
         start: function (modelManager) {
 
+
+            //
+            // //If we get a message om a separate window
+            window.addEventListener('message', function(event) {
+
+
+
+                if(event.data.graph)
+                    self.loadFile(event.data.graph);
+
+
+            }, false);
+
+
+
             var self = this;
 
             var socket = io();
@@ -546,7 +577,7 @@ module.exports = function(){
             sbgnProp = new SBGNProperties();
             sbgnProp.initialize();
 
-            pathsBetweenQuery = new PathsBetweenQuery();
+            pathsBetweenQuery = new PathsBetweenQuery(socket,  editorActions.modelManager.getName());
             pathsBetweenQuery.initialize();
 
 
@@ -564,11 +595,7 @@ module.exports = function(){
             }
             else {//load from a previously loaded graph
 
-
-
                 sbgnContainer = (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, editorActions));
-
-
 
                 editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
             }
@@ -905,7 +932,7 @@ module.exports = function(){
                 reader.onload = function (e) {
 
                     if(file.name.indexOf(".owl") > -1) {
-                        socket.emit('BioPAXRequest', this.result, "sbgn");
+                        socket.emit('BioPAXRequest', this.result, "sbgn"); //convert to sbgn
                         socket.on('SBGNResult', function(sbgnData){
 
                             if(sbgnData.graph!= null){
@@ -932,16 +959,20 @@ module.exports = function(){
                     }
                     else {
 
-                        var jsonObj = sbgnmlToJson.convert(this.result);
+                        //TODO
+                        socket.emit('BioPAXRequest', this.result, "biopax"); //convert to biopax
 
-
-                        //get another sbgncontainer
-                        sbgnContainer = (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, editorActions));
-
-                        editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
-
-
-                        editorActions.modelManager.setSampleInd(-1, "me"); //to notify other clients
+                        self.loadFile(this.result);
+                        // var jsonObj = sbgnmlToJson.convert(this.result);
+                        //
+                        //
+                        // //get another sbgncontainer
+                        // sbgnContainer = (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, editorActions));
+                        //
+                        // editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
+                        //
+                        //
+                        // editorActions.modelManager.setSampleInd(-1, "me"); //to notify other clients
                     }
                     // sbgnContainer =  new cyMod.SBGNContainer('#sbgn-network-container', jsonObj ,  editorActions);
                 }
@@ -1605,13 +1636,13 @@ module.exports = function(){
     }
 }
 
-function PathsBetweenQuery(){
+function PathsBetweenQuery(socket, userName){
 
     return{
         el: '#query-pathsbetween-table',
 
         defaultQueryParameters: {
-            geneSymbols: "",
+            geneSymbols: "CDK4 RB1",
             lengthLimit: 1
             //    shortestK: 0,
             //    enableShortestKAlteration: false,
@@ -1657,11 +1688,11 @@ function PathsBetweenQuery(){
                 self.currentQueryParameters.lengthLimit = Number(document.getElementById("query-pathsbetween-length-limit").value);
 
                 var pc2URL = "http://www.pathwaycommons.org/pc2/";
-                var format = "graph?format=SBGN";
+                //var format = "graph?format=SBGN";
+                var format = "graph?format=BIOPAX";
                 var kind = "&kind=PATHSBETWEEN";
                 var limit = "&limit=" + self.currentQueryParameters.lengthLimit;
                 var sources = "";
-                var newfilename = "";
 
                 var geneSymbolsArray = self.currentQueryParameters.geneSymbols.replace("\n", " ").replace("\t", " ").split(" ");
                 for (var i = 0; i < geneSymbolsArray.length; i++) {
@@ -1672,19 +1703,37 @@ function PathsBetweenQuery(){
 
                     sources = sources + "&source=" + currentGeneSymbol;
 
-                    // if (newfilename == '') {
-                    //     newfilename = currentGeneSymbol;
-                    // }
-                    // else {
-                    //     newfilename = newfilename + '_' + currentGeneSymbol;
-                    // }
                 }
 
-           //     newfilename = newfilename + '_PBTWN.sbgnml';
 
-           //     setFileContent(newfilename);
                 pc2URL = pc2URL + format + kind + limit + sources;
+
+
+
                 socket.emit('PCQuery',  pc2URL);
+
+                socket.on('PCQueryResult', function(owlData){
+
+                    if(owlData.graph!=null) {
+                        socket.emit('BioPAXRequest', owlData.graph, "sbgn"); //convert to sbgn
+                        socket.on('SBGNResult', function (sbgnData) {
+                            var w = window.open(("query_" + userName), "width = 1600, height = 1200, left = " + window.left + " right = " + window.right);
+
+                            // // //FIXME: find a more elegant solution
+                            setTimeout(function () {
+                                w.postMessage(sbgnData, "*");
+                            }, 1000);
+
+                        });
+                    }
+                    else
+                         alert("No results found!");
+
+                });
+
+
+
+
 
 
 

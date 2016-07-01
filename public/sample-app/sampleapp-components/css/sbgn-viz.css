@@ -526,14 +526,14 @@ input, button {
 }
 
 /*#messages-list {*/
-    /*list-style: none;*/
-    /*position: absolute;*/
-    /*left: 0px;*/
-    /*top:0px;*/
-    /*/!*position: relative;*!/*/
-    /*overflow: hidden;*/
-    /*/!*right: 5px;*!/*/
-    /*font-size: small*/
+/*list-style: none;*/
+/*position: absolute;*/
+/*left: 0px;*/
+/*top:0px;*/
+/*/!*position: relative;*!/*/
+/*overflow: hidden;*/
+/*/!*right: 5px;*!/*/
+/*font-size: small*/
 /*}*/
 
 .message{
@@ -587,7 +587,3 @@ input, button {
     margin-bottom: 1px;
 
 }
-
-
-
-

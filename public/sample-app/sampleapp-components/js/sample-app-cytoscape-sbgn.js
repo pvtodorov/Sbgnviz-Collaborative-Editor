@@ -152,8 +152,8 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
                     if (sbgnclass == 'consumption' || sbgnclass == 'modulation'
                         || sbgnclass == 'stimulation' || sbgnclass == 'catalysis'
                         || sbgnclass == 'inhibition' || sbgnclass == 'necessary stimulation') {
-                        if (!isEPNClass(sourceClass) || !isPNClass(targetClass)) {
-                            if (isPNClass(sourceClass) && isEPNClass(targetClass)) {
+                        if (!isEPNClass(sourceClass) || !isPNClass(targetClass) || !isLogicalOperator(sourceClass) || !isLogicalOperator(targetClass)) { //funda
+                            if (isPNClass(sourceClass) && (isEPNClass(targetClass) || isLogicalOperator(targetClass))) {
                                 //If just the direction is not valid reverse the direction
                                 var temp = source;
                                 source = target;
@@ -165,8 +165,8 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
                         }
                     }
                     else if (sbgnclass == 'production') {
-                        if (!isPNClass(sourceClass) || !isEPNClass(targetClass)) {
-                            if (isEPNClass(sourceClass) && isPNClass(targetClass)) {
+                        if (!isPNClass(sourceClass) || !isEPNClass(targetClass)|| !isLogicalOperator(sourceClass) || !isLogicalOperator(targetClass)) {
+                            if (isEPNClass(sourceClass) && isPNClass(targetClass) || isLogicalOperator(sourceClass)) {
                                 //If just the direction is not valid reverse the direction
                                 var temp = source;
                                 source = target;
@@ -177,9 +177,10 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
                             }
                         }
                     }
-                    else if (sbgnclass == 'logic arc') {
+                    /*else if (sbgnclass == 'logic arc') { //FUNDA
                         if (!isEPNClass(sourceClass) || !isLogicalOperator(targetClass)) {
                             if (isLogicalOperator(sourceClass) && isEPNClass(targetClass)) {
+                                //if (isLogicalOperator(sourceClass) || isEPNClass(sourceClass) ) {
                                 //If just the direction is not valid reverse the direction
                                 var temp = source;
                                 source = target;
@@ -189,7 +190,8 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
                                 return;
                             }
                         }
-                    }
+
+                    }*/
                     else if (sbgnclass == 'equivalence arc') {
                         if (!(isEPNClass(sourceClass) && convenientToEquivalence(targetClass))
                             && !(isEPNClass(targetClass) && convenientToEquivalence(sourceClass))) {
@@ -270,7 +272,7 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
                         return;
                     }
 
-                    disableDragAndDropMode();
+           //funda         disableDragAndDropMode();
                     if (node.parent()[0] == newParent || node._private.data.parent == node.id()) {
                         return;
                     }
@@ -807,6 +809,9 @@ module.exports.handleSBGNInspector = function (editorActions) {
         var commonIsCloned;
         var commonStateAndInfos;
         var commonSBGNCardinality;
+
+        //FUNDA: for debugging
+        html += "<p>"+ selectedEles[0].id() +"</p>";
 
         if (allNodes) {
             type = "node";

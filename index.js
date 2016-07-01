@@ -23,7 +23,6 @@ var useQunit = true;
 
 var menu;
 
-
 var userCount;
 var socket;
 
@@ -786,25 +785,7 @@ app.proto.create = function (model) {
 
 
 
-    socket.on('PCQueryResult', function(sbgnData){
-
-        if(sbgnData.graph!= null){
-            var sbgnVizLink = "http://localhost:63342/Bilkent%20SBGNViz/sbgnviz-js-editor/sample-app/index.html";
-
-            var w = window.open(sbgnVizLink, "Query", "width = 1600, height = 1200, left = " + window.left + " right = " +window.right);
-
-            // //FIXME: find a more elegant solution
-            setTimeout(function(){
-                w.postMessage(sbgnData, "*");
-                 },1000);
-
-        }
-        else
-            alert("No results found!");
-
-    });
-
-
+    
 
 
     modelManager = require('./public/sample-app/sampleapp-components/js/modelManager.js')(model, model.get('_page.room'), model.get('_session.userId'),name );
