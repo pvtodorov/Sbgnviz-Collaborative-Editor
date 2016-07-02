@@ -49,10 +49,9 @@ ContextAgent.prototype.analyzeCommand = function (cmd) {
 }
 
 ContextAgent.prototype.requestMutationQuery = function(proteinName, callback){
-    this.sendRequest("agentCBioPortalQueryRequest", proteinName);
-
-    socket.on("agentCBioPortalQueryResult", function(data){
-        if(callback) callback(data);
+    this.sendRequest("agentCBioPortalQueryRequest", proteinName, function(cancerData){
+        console.log(cancerData);
     });
+
 }
 
