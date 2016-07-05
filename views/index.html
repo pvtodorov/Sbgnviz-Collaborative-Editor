@@ -905,7 +905,8 @@
                 <div id="inputs">
                     <input id="inputs-name" value="{{users[_session.userId].name}}">
                     <form id="inputs-form" on-submit="add()">
-                        <input id="inputs-comment"  value="{{_page.newComment}}" autofocus> <button on-click = "processReach(document.getElementById('inputs-comment').value)">Send</button>
+                        <input id="inputs-comment"  value="{{_page.newComment}}" autofocus> <button id = "send-message">Send</button>
+                        <!--<input id="inputs-comment"  value="{{_page.newComment}}" autofocus> <button on-click = "processReach(document.getElementById('inputs-comment').value)">Send</button>-->
                         <div class="filebutton"><input type="file" id="imagefile" accept="image/*" on-change = "uploadFile($event)" value = {{_page.newFile}}></div>
                     </form>
                 </div>

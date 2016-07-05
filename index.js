@@ -785,7 +785,7 @@ app.proto.create = function (model) {
 
 
 
-    
+
 
 
     modelManager = require('./public/sample-app/sampleapp-components/js/modelManager.js')(model, model.get('_page.room'), model.get('_session.userId'),name );
@@ -964,6 +964,7 @@ app.proto.formatObj = function(obj){
     return JSON.stringify(obj);
 };
 
+/*
 app.proto.processReach = function(msg) {
     var httpRequest;
     if (window.XMLHttpRequest) {
@@ -980,3 +981,4 @@ app.proto.processReach = function(msg) {
         }
     }
 };
+*/

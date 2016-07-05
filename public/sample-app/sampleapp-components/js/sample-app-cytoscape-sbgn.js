@@ -228,11 +228,11 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
             var panProps = ({
                 fitPadding: 10,
             });
-            container.cytoscapePanzoom(panProps);
+            //funda container.cytoscapePanzoom(panProps);
 
 
 
-            var lastMouseDownNodeInfo = null;
+        var lastMouseDownNodeInfo = null;
             cy.on("mousedown", "node", function () {
                 
 

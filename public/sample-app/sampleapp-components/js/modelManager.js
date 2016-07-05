@@ -920,11 +920,15 @@ module.exports =  function(model, docId, userId, userName) {
             var isCloneMarker = nodePath.get('isCloneMarker');
 
 
-            if (isCloneMarker != null)
+
+            if (isCloneMarker != null) {
+                node._private.data.sbgnclonemarker = isCloneMarker ? true : undefined;
                 node.data('sbgnclonemarker', isCloneMarker ? true : undefined);
+            }
 
             else
-                this.changeModelNodeAttribute('isCloneMarker', node.id(),node.data('sbgnclonemarker'), user, noHistUpdate);
+                this.changeModelNodeAttribute('isCloneMarker', node.id(),node._private.data.sbgnclonemarker, user, noHistUpdate);
+                   //this.changeModelNodeAttribute('isCloneMarker', node.id(),node.data('sbgnclonemarker'), user, noHistUpdate);
 
             //todo: restore doesn't get correct
 
