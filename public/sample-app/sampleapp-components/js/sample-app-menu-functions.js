@@ -6,6 +6,8 @@
  * **/
 
 
+var sbgnMerger = require('../../../src/utilities/sbgnml-merger.js');
+var idxcardjson = require('../../../src/utilities/idxcardjson-to-sbgnml-converter.js');
 var sbgnFiltering = require('../../../src/utilities/sbgn-filtering.js')();
 var sbgnElementUtilities = require('../../../src/utilities/sbgn-element-utilities.js')();
 var expandCollapseUtilities = require('../../../src/utilities/expand-collapse-utilities.js')();
@@ -1403,6 +1405,7 @@ module.exports = function(){
                 }
             });
 
+
             $("#perform-layout").click(function (e) {
 
                 var nodesData = getNodesData();
@@ -1590,8 +1593,36 @@ module.exports = function(){
                 expanderOpts.widow = 0;
             });
 
+			//Create a new model from REACH everytime a message is posted
+			// in the chat box.
+		    $("#send-message").click(function(evt) {
+				var httpRequest;
+				if (window.XMLHttpRequest)
+	    	    	httpRequest = new XMLHttpRequest();
+				else
+	        		httpRequest = new ActiveXObject("Microsoft.XMLHTTP");
 
+				//Let REACH process the message posted in the chat box.
+		    	httpRequest.open("POST", "http://agathon.sista.arizona.edu:8080/odinweb/api/text", true);
+    			httpRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    			httpRequest.send("text="+document.getElementById("inputs-comment").value+"&output=indexcard");
+   	 			httpRequest.onreadystatechange = function () { 
+    	    		if (httpRequest.readyState == 4 && httpRequest.status == 200) {
+						var reachResponse = JSON.parse(httpRequest.responseText);
+						var newSbgnml = idxcardjson.createSbgnml(reachResponse); //Translate the index card JSON data format into an SBGN model.
+						var currSbgnml = jsonToSbgnml.createSbgnml(cy.nodes(":visible"), cy.edges(":visible")); //Translate the current model into an SBGN model.
+						var sbgnmlText = sbgnMerger.merge(newSbgnml, currSbgnml); //Merge the two SBGN models.
+                		var jsonObj = sbgnmlToJson.convert(sbgnmlText);
 
+               			//get another sbgncontainer and display the new SBGN model.
+            			editorActions.modelManager.deleteAll(cy.nodes(), cy.edges(), "me");
+	               		sbgnContainer = (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, editorActions));
+                        editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
+
+						$("#perform-layout").trigger('click');
+					}
+				}
+		    }); 
 
             $("#node-label-textbox").keydown(function (e) {
                 if (e.which === 13) {
