@@ -46,7 +46,7 @@ ContextAgent.prototype.analyzeCommand = function (cmd) {
 
 }
 ContextAgent.prototype.printMutationData = function(cancerData){
-    cancerStudies.forEach(function(study) {
+    cancerData.forEach(function(study) {
         if(study.seqCaseCnt > 0)
             console.log(study.id + ": %"+ (study.mutationCaseIds.length*100/study.seqCaseCnt));
         // console.log(study.seqCaseCnt + " " + study.caseIds.length);
