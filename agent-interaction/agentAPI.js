@@ -264,6 +264,10 @@
     Agent.prototype.sendMessage = function(comment, targets, callback){
 
         var message = {room: this.room, comment: comment, userName:this.agentName, userId: this.agentId, time: 1, targets: targets}; //set time on the server
+
+        console.log(comment);
+
+
         this.socket.emit('agentMessage', message, function(){
         if(callback!=null)
             if (callback != null) callback();
