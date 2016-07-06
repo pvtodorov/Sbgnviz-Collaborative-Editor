@@ -6,15 +6,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="20ab80f0-2cb1-44ff-a133-bd87799f716d" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/src/utilities/idxcardjson-to-sbgnml-converter.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/src/utilities/sbgnml-merger.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/agent-interaction/ContextAgent.js" afterPath="$PROJECT_DIR$/agent-interaction/ContextAgent.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index.js" afterPath="$PROJECT_DIR$/index.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/modelManager.js" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/modelManager.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-cytoscape-sbgn.js" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-cytoscape-sbgn.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-menu-functions.js" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-menu-functions.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/cancerDataOrganizer.js" afterPath="$PROJECT_DIR$/lib/cancerDataOrganizer.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/index.js" afterPath="$PROJECT_DIR$/lib/index.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/src/utilities/json-to-sbgnml-converter.js" afterPath="$PROJECT_DIR$/public/src/utilities/json-to-sbgnml-converter.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/index.html" afterPath="$PROJECT_DIR$/views/index.html" />
     </list>
     <ignored path="CWC.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -47,8 +44,28 @@
       <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/lib/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="431">
-              <caret line="417" column="16" selection-start-line="417" selection-start-column="16" selection-end-line="417" selection-end-column="16" />
+            <state relative-caret-position="386">
+              <caret line="418" column="0" selection-start-line="417" selection-start-column="0" selection-end-line="418" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="cancerDataOrganizer.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/lib/cancerDataOrganizer.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="822">
+              <caret line="156" column="9" selection-start-line="156" selection-start-column="9" selection-end-line="156" selection-end-column="9" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="bundle.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/bundle.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="15">
+              <caret line="64" column="0" selection-start-line="64" selection-start-column="0" selection-end-line="64" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -57,34 +74,9 @@
       <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="939">
-              <caret line="983" column="2" selection-start-line="983" selection-start-column="2" selection-end-line="983" selection-end-column="2" />
+            <state relative-caret-position="1981">
+              <caret line="966" column="0" selection-start-line="966" selection-start-column="0" selection-end-line="966" selection-end-column="0" />
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="EditorActionsManager.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/EditorActionsManager.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="321">
-              <caret line="782" column="27" selection-start-line="782" selection-start-column="27" selection-end-line="782" selection-end-column="27" />
-              <folding>
-                <marker date="1466014241000" expanded="true" signature="1026:1029" ph="{...}" />
-                <marker date="1466014241000" expanded="true" signature="20297:20301" ph="{...}" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/views/index.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="602">
-              <caret line="907" column="118" selection-start-line="907" selection-start-column="118" selection-end-line="907" selection-end-column="118" />
-              <folding>
-                <element signature="n#style#0;n#div#0;n#chat-user:#0;n#unit-tests:#0;n#Body:#0;n#Head:#0;n#Title:#0;n#!!top" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -99,21 +91,29 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="json-to-sbgnml-converter.js" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/public/src/utilities/json-to-sbgnml-converter.js">
+      <file leaf-file-name="computerAgent.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/agent-interaction/computerAgent.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="731">
-              <caret line="140" column="34" selection-start-line="140" selection-start-column="34" selection-end-line="140" selection-end-column="34" />
-              <folding />
+            <state relative-caret-position="321">
+              <caret line="474" column="21" selection-start-line="474" selection-start-column="14" selection-end-line="474" selection-end-column="21" />
+              <folding>
+                <marker date="1467418271000" expanded="true" signature="29699:29709" ph="..." />
+                <marker date="1467418271000" expanded="true" signature="29863:29873" ph="..." />
+                <marker date="1467418271000" expanded="true" signature="30018:30041" ph="..." />
+                <marker date="1467418271000" expanded="true" signature="31026:31049" ph="..." />
+                <marker date="1467418271000" expanded="true" signature="31967:31990" ph="..." />
+                <marker date="1467418271000" expanded="true" signature="32092:32115" ph="..." />
+                <marker date="1467418271000" expanded="true" signature="33154:33166" ph="{...}" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ContextAgent.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="ContextAgent.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/agent-interaction/ContextAgent.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="780">
-              <caret line="54" column="0" selection-start-line="54" selection-start-column="0" selection-end-line="54" selection-end-column="0" />
+            <state relative-caret-position="840">
+              <caret line="56" column="20" selection-start-line="56" selection-start-column="20" selection-end-line="56" selection-end-column="20" />
               <folding />
             </state>
           </provider>
@@ -132,8 +132,8 @@
       <file leaf-file-name="sample-app-cytoscape-sbgn.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-cytoscape-sbgn.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="416">
-              <caret line="234" column="29" selection-start-line="234" selection-start-column="29" selection-end-line="234" selection-end-column="41" />
+            <state relative-caret-position="316">
+              <caret line="425" column="36" selection-start-line="425" selection-start-column="29" selection-end-line="425" selection-end-column="36" />
               <folding>
                 <marker date="1467753279000" expanded="true" signature="27993:28065" ph="..." />
                 <marker date="1467753279000" expanded="true" signature="29030:29091" ph="..." />
@@ -177,24 +177,6 @@
                 <marker date="1467753279000" expanded="true" signature="45275:45317" ph="..." />
                 <marker date="1467753279000" expanded="true" signature="45556:45600" ph="..." />
                 <marker date="1467753279000" expanded="true" signature="47142:47180" ph="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="computerAgent.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/agent-interaction/computerAgent.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="648">
-              <caret line="494" column="51" selection-start-line="494" selection-start-column="51" selection-end-line="494" selection-end-column="51" />
-              <folding>
-                <marker date="1467418271000" expanded="true" signature="29699:29709" ph="..." />
-                <marker date="1467418271000" expanded="true" signature="29863:29873" ph="..." />
-                <marker date="1467418271000" expanded="true" signature="30018:30041" ph="..." />
-                <marker date="1467418271000" expanded="true" signature="31026:31049" ph="..." />
-                <marker date="1467418271000" expanded="true" signature="31967:31990" ph="..." />
-                <marker date="1467418271000" expanded="true" signature="32092:32115" ph="..." />
-                <marker date="1467418271000" expanded="true" signature="33154:33166" ph="{...}" />
               </folding>
             </state>
           </provider>
@@ -265,18 +247,18 @@
         <option value="$PROJECT_DIR$/agent-interaction/cancerTypes" />
         <option value="$PROJECT_DIR$/agent-interaction/cancerStudies" />
         <option value="$PROJECT_DIR$/agent-interaction/agentAPI.js" />
-        <option value="$PROJECT_DIR$/lib/cancerDataOrganizer.js" />
-        <option value="$PROJECT_DIR$/lib/index.js" />
-        <option value="$PROJECT_DIR$/agent-interaction/ContextAgent.js" />
         <option value="$PROJECT_DIR$/agent-interaction/computerAgent.html" />
         <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-cytoscape-sbgn.js" />
         <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-menu-functions.js" />
         <option value="$PROJECT_DIR$/public/src/utilities/sbgnml-merger.js" />
         <option value="$PROJECT_DIR$/public/src/utilities/idxcardjson-to-sbgnml-converter.js" />
-        <option value="$PROJECT_DIR$/index.js" />
         <option value="$PROJECT_DIR$/views/index.html" />
         <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/modelManager.js" />
         <option value="$PROJECT_DIR$/public/src/utilities/json-to-sbgnml-converter.js" />
+        <option value="$PROJECT_DIR$/index.js" />
+        <option value="$PROJECT_DIR$/lib/cancerDataOrganizer.js" />
+        <option value="$PROJECT_DIR$/lib/index.js" />
+        <option value="$PROJECT_DIR$/agent-interaction/ContextAgent.js" />
       </list>
     </option>
   </component>
@@ -304,7 +286,7 @@
     <treeState />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="321" />
+    <option name="x" value="102" />
     <option name="y" value="23" />
     <option name="width" value="2115" />
     <option name="height" value="1416" />
@@ -879,7 +861,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="321" y="23" width="2115" height="1416" extended-state="0" />
+    <frame x="102" y="23" width="2115" height="1416" extended-state="0" />
     <editor active="false" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32830188" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -956,7 +938,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Issues about node selection and sbgn state variables fixed." />
     <MESSAGE value="Undo/redo of visibility and highlighting working&#10;" />
     <MESSAGE value="Before servergraph changes" />
     <MESSAGE value="Refactoring done to improve model initialization and json graph update. &#10;Haven't tested do/undo operations yet." />
@@ -981,7 +962,8 @@
     <MESSAGE value="Agent can load .owl files.&#10;Node addition requires confirmation from the Paxtools server.&#10;Set &quot;useBiopax = false&quot; in /lib/index.js to disable this feature." />
     <MESSAGE value="Server gets mutation data from cBioPortal and computes percentage rates." />
     <MESSAGE value="Server gets mutation data from cBioPortal , computes case counts and mutation counts, and sends them to the context agent." />
-    <option name="LAST_COMMIT_MESSAGE" value="Server gets mutation data from cBioPortal , computes case counts and mutation counts, and sends them to the context agent." />
+    <MESSAGE value="Fixed a bug about initial clonemarker states." />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed a bug about initial clonemarker states." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1012,20 +994,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file:///usr/local/apache-tomcat-8.0.35/webapps/examples/servlets/reqheaders.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="143">
-          <caret line="11" column="67" selection-start-line="11" selection-start-column="67" selection-end-line="11" selection-end-column="67" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///usr/local/apache-tomcat-8.0.35/webapps/examples/servlets/reqinfo.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="11" column="67" selection-start-line="11" selection-start-column="67" selection-end-line="11" selection-end-column="67" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file:///usr/local/apache-tomcat-8.0.35/webapps/examples/servlets/helloworld.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="563">
@@ -1280,14 +1248,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/cancerDataOrganizer.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="713">
-          <caret line="120" column="0" selection-start-line="120" selection-start-column="0" selection-end-line="120" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/agent-interaction/agentAPI.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="584">
@@ -1296,18 +1256,63 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/agent-interaction/ContextAgent.js">
+    <entry file="file://$PROJECT_DIR$/public/src/utilities/sbgnml-merger.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="780">
-          <caret line="54" column="0" selection-start-line="54" selection-start-column="0" selection-end-line="54" selection-end-column="0" />
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/src/utilities/idxcardjson-to-sbgnml-converter.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1110">
+          <caret line="36" column="31" selection-start-line="36" selection-start-column="31" selection-end-line="36" selection-end-column="31" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="602">
+          <caret line="907" column="118" selection-start-line="907" selection-start-column="118" selection-end-line="907" selection-end-column="118" />
+          <folding>
+            <element signature="n#style#0;n#div#0;n#chat-user:#0;n#unit-tests:#0;n#Body:#0;n#Head:#0;n#Title:#0;n#!!top" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/EditorActionsManager.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="321">
+          <caret line="782" column="27" selection-start-line="782" selection-start-column="27" selection-end-line="782" selection-end-column="27" />
+          <folding>
+            <marker date="1466014241000" expanded="true" signature="1026:1029" ph="{...}" />
+            <marker date="1466014241000" expanded="true" signature="20297:20301" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/src/utilities/json-to-sbgnml-converter.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="791">
+          <caret line="144" column="22" selection-start-line="144" selection-start-column="22" selection-end-line="144" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-menu-functions.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="569">
+          <caret line="1641" column="67" selection-start-line="1641" selection-start-column="67" selection-end-line="1641" selection-end-column="67" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/agent-interaction/computerAgent.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="648">
-          <caret line="494" column="51" selection-start-line="494" selection-start-column="51" selection-end-line="494" selection-end-column="51" />
+        <state relative-caret-position="321">
+          <caret line="474" column="21" selection-start-line="474" selection-start-column="14" selection-end-line="474" selection-end-column="21" />
           <folding>
             <marker date="1467418271000" expanded="true" signature="29699:29709" ph="..." />
             <marker date="1467418271000" expanded="true" signature="29863:29873" ph="..." />
@@ -1320,10 +1325,26 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1981">
+          <caret line="966" column="0" selection-start-line="966" selection-start-column="0" selection-end-line="966" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bundle.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="64" column="0" selection-start-line="64" selection-start-column="0" selection-end-line="64" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-cytoscape-sbgn.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="416">
-          <caret line="234" column="29" selection-start-line="234" selection-start-column="29" selection-end-line="234" selection-end-column="41" />
+        <state relative-caret-position="316">
+          <caret line="425" column="36" selection-start-line="425" selection-start-column="29" selection-end-line="425" selection-end-column="36" />
           <folding>
             <marker date="1467753279000" expanded="true" signature="27993:28065" ph="..." />
             <marker date="1467753279000" expanded="true" signature="29030:29091" ph="..." />
@@ -1371,59 +1392,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/src/utilities/sbgnml-merger.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/src/utilities/idxcardjson-to-sbgnml-converter.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1110">
-          <caret line="36" column="31" selection-start-line="36" selection-start-column="31" selection-end-line="36" selection-end-column="31" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="939">
-          <caret line="983" column="2" selection-start-line="983" selection-start-column="2" selection-end-line="983" selection-end-column="2" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="431">
-          <caret line="417" column="16" selection-start-line="417" selection-start-column="16" selection-end-line="417" selection-end-column="16" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="602">
-          <caret line="907" column="118" selection-start-line="907" selection-start-column="118" selection-end-line="907" selection-end-column="118" />
-          <folding>
-            <element signature="n#style#0;n#div#0;n#chat-user:#0;n#unit-tests:#0;n#Body:#0;n#Head:#0;n#Title:#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/EditorActionsManager.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="321">
-          <caret line="782" column="27" selection-start-line="782" selection-start-column="27" selection-end-line="782" selection-end-column="27" />
-          <folding>
-            <marker date="1466014241000" expanded="true" signature="1026:1029" ph="{...}" />
-            <marker date="1466014241000" expanded="true" signature="20297:20301" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/modelManager.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="226">
@@ -1432,18 +1400,34 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-menu-functions.js">
+    <entry file="file://$PROJECT_DIR$/public/lib/js/underscore.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="569">
-          <caret line="1641" column="67" selection-start-line="1641" selection-start-column="67" selection-end-line="1641" selection-end-column="67" />
+        <state relative-caret-position="465">
+          <caret line="0" column="6998" selection-start-line="0" selection-start-column="6998" selection-end-line="0" selection-end-column="6998" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/src/utilities/json-to-sbgnml-converter.js">
+    <entry file="file://$PROJECT_DIR$/lib/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="731">
-          <caret line="140" column="34" selection-start-line="140" selection-start-column="34" selection-end-line="140" selection-end-column="34" />
+        <state relative-caret-position="386">
+          <caret line="418" column="0" selection-start-line="417" selection-start-column="0" selection-end-line="418" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/cancerDataOrganizer.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="822">
+          <caret line="156" column="9" selection-start-line="156" selection-start-column="9" selection-end-line="156" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/agent-interaction/ContextAgent.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="840">
+          <caret line="56" column="20" selection-start-line="56" selection-start-column="20" selection-end-line="56" selection-end-column="20" />
           <folding />
         </state>
       </provider>

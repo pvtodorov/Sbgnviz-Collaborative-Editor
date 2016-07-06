@@ -1,6 +1,4 @@
-/**
- * Created by durupina on 6/1/16.
- */
+
 /**
  * Created by durupina on 5/13/16.
  */
@@ -47,10 +45,19 @@ ContextAgent.prototype.analyzeCommand = function (cmd) {
     }
 
 }
+ContextAgent.prototype.printMutationData = function(cancerData){
+    cancerStudies.forEach(function(study) {
+        if(study.seqCaseCnt > 0)
+            console.log(study.id + ": %"+ (study.mutationCaseIds.length*100/study.seqCaseCnt));
+        // console.log(study.seqCaseCnt + " " + study.caseIds.length);
+    });
+}
 
 ContextAgent.prototype.requestMutationQuery = function(proteinName, callback){
+    var self = this;
     this.sendRequest("agentCBioPortalQueryRequest", proteinName, function(cancerData){
-        console.log(cancerData);
+        self.printMutationData(cancerData);
+        if(callback) callback();
     });
 
 }
