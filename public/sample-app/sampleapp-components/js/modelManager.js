@@ -329,6 +329,7 @@ module.exports =  function(model, docId, userId, userName) {
             //adding the node in cytoscape
             model.pass({user:user}).set('_page.doc.cy.nodes.' +nodeId+'.addedLater', true);
 
+            
 
             if(!noHistUpdate)
                 //We don't want all the attributes of the param to be printed
@@ -1120,7 +1121,7 @@ module.exports =  function(model, docId, userId, userName) {
             var elTypes = [];
 
 
-
+//FUNDA??????ndoe.data.sbgnbbox????
             jsonObj.nodes.forEach(function(node){
                 //do not set id here: it means node addition
                 model.pass({user:user}).set('_page.doc.cy.nodes.' + node.data.id + '.position', {x: node.data.sbgnbbox.x, y: node.data.sbgnbbox.y}); //initialize position

@@ -10,7 +10,7 @@
 <script src="./jquery-1.8.2.js"></script>
 <script src="./tinycolor.js"></script>
 <script src="./agentAPI.js"></script>
-<script src="HashMap.js"></script>
+<script src="./HashMap.js"></script>
 <script src="ContextAgent.js"></script>
 
 <form>
@@ -174,7 +174,7 @@
 
 
 <div id = modelHistory>
-<ul id = 'operationHistory'  as="container" onchange = scrollToBottom('operationHistory')><b>Commands<br></b></ul>
+<ul id = 'operationHistory'  as="container" onchange = scrollToBottom('operationHistory')><b>Operations<br></b></ul>
 <ul id = 'chat' as="container" onchange = scrollToBottom('chat')><b>Chat Messages<br></b>
 
 
@@ -333,6 +333,7 @@
         });
 
         socket.on('connect', function(){
+
             $('#createAgentButton').attr('disabled','disabled');
 
             agent.loadModel(function() {
@@ -341,10 +342,11 @@
                 agent.loadOperationHistory(function(){
 
                     agent.loadChatHistory(function(){
+
                             //Write history
                         if(agent.opHistory != null){
                             agent.opHistory.forEach(function(op){
-                                writeCommand(op);
+                                writeOperation(op);
                             });
                         }
 
@@ -358,16 +360,20 @@
                         fillNodeIds('nodeId');
                         fillEdgeIds('edgeId');
 
+                        agent.analyzeOperationHistory();
+                        //agent.analyzeGraph(); //compute initial protein scores
                     });
                 });
             });
 
             agent.listen(function(){
 
-                socket.on('operation', function(data){
-                    writeCommand(data);
-                    agent.analyzeCommand(data);
-                    console.log(agent.proteinList);
+                socket.on('operation', function(op){
+                    writeOperation(op);
+                    agent.loadModel(function() { //first make sure to get the latest model
+                      agent.updateContext(op);
+
+                    });
 
                 });
                 socket.on('message', function(data){
@@ -407,7 +413,6 @@
         return targets;
     }
     function sendMessage(){
-
 
 
         agent.sendMessage($('#chatMessage')[0].value, computeTargets(), function(){
@@ -474,6 +479,7 @@
     function callQuery(){
         //agent.requestMutationQuery("KRAS");
         agent.requestMutationQuery("TP53");
+
     }
 
     function updateModel(callback){
@@ -487,7 +493,7 @@
                     //Write history
                     if (agent.opHistory != null) {
                         agent.opHistory.forEach(function (op) {
-                            writeCommand(op);
+                            writeOperation(op);
                         });
                     }
 
@@ -783,17 +789,17 @@
         });
     }
 
-    function writeCommand(op){
+    function writeOperation(op){
 
         var id = op.elId !=null? JSON.stringify(op.elId):'';
         var param = op.param !=null? JSON.stringify(op.param):'';
         var attr = op.opAttr!= null? op.opAttr : '';
 
-        var command = "<b>" + op.userName + " (" + formatTime(op) + "): " + "</b>"  + id + " " + op.opName + " " + attr + " " + op.opTarget + " " + param;
+        var operation = "<b>" + op.userName + " (" + formatTime(op) + "): " + "</b>"  + id + " " + op.opName + " " + attr + " " + op.opTarget + " " + param;
         //can also be called as:
         // var command = JSON.stringify(op);
 
-        $('#operationHistory').append("<li>" + command+ "</li>");
+        $('#operationHistory').append("<li>" + operation+ "</li>");
         $('#operationHistory').trigger('contentchanged');
 
     }

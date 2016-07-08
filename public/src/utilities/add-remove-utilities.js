@@ -47,7 +47,12 @@ module.exports = function(){
 
             var eles = cy.add(el);
 
+
+
             var newNode = eles[eles.length - 1];
+
+          
+
             if (defaults && defaults['border-color']) {
                 newNode.data('borderColor', defaults['border-color']);
             }

@@ -1,3 +1,6 @@
+/**
+ * Created by durupina on 7/7/16.
+ */
 HashMap = function(){
     this._dict = {};
 }

@@ -69,6 +69,7 @@
 
         var self = this;
         this.socket.emit('agentPageDocRequest', {room: this.room}, function(data){
+
             self.pageDoc = data;
             if (callback != null) callback();
         });
@@ -133,6 +134,7 @@
      * @returns {Object} Node list in the shared model
      */
     Agent.prototype.getNodeList = function(){
+        
         return this.pageDoc.cy.nodes;
     };
 
@@ -265,12 +267,12 @@
 
         var message = {room: this.room, comment: comment, userName:this.agentName, userId: this.agentId, time: 1, targets: targets}; //set time on the server
 
-        console.log(comment);
 
 
-        this.socket.emit('agentMessage', message, function(){
-        if(callback!=null)
-            if (callback != null) callback();
+
+        this.socket.emit('agentMessage', message, function(data){
+        console.log(data);
+            if (callback != null) callback(data);
         });
     }
 
