@@ -181,10 +181,9 @@
         <input id="chatMessage" type = "text"> <button onclick = "sendMessage()">Send</button>
         <div class="filebutton"><input type="file" id="imagefile" accept="image/*" onchange = "uploadFile(this)"></div>
 
-
-
-
 </ul>
+
+
 
 <ul id = 'userList' as="container" onchange = scrollToBottom('userList')><b>Online Users<br></b></ul>
 
@@ -192,6 +191,12 @@
     <br>
     <br>
     <div id = "receivedImage"  onclick =openImage() ></div>
+
+
+
+
+    <ul id = contextInformation><b>Context</b></ul>
+
 </div>
 
 
@@ -338,6 +343,10 @@
 
             agent.loadModel(function() {
 
+
+                agent.initContext();
+                fillContextInformation( agent.contextList);
+
                 fillLayoutProperties();
                 agent.loadOperationHistory(function(){
 
@@ -360,8 +369,9 @@
                         fillNodeIds('nodeId');
                         fillEdgeIds('edgeId');
 
-                        agent.analyzeOperationHistory();
-                        //agent.analyzeGraph(); //compute initial protein scores
+
+
+
                     });
                 });
             });
@@ -372,6 +382,7 @@
                     writeOperation(op);
                     agent.loadModel(function() { //first make sure to get the latest model
                       agent.updateContext(op);
+                        fillContextInformation( agent.contextList);
 
                     });
 
@@ -507,6 +518,7 @@
 
                     fillNodeIds('nodeId');
                     fillEdgeIds('edgeId');
+
 
                 });
             });
@@ -804,6 +816,17 @@
 
     }
 
+    function fillContextInformation(contextList){
+
+
+        $('#contextInformation').empty();
+        $('#contextInformation').append("<b>Context</b>")
+        contextList.forEach(function(context){
+
+            $('#contextInformation').append("<li>" + context.proteinName +  " " + context.contextName + " " + context.relevance.toFixed(2) + " " + context.score + " " + context.confidence +  "</li>");
+        })
+    }
+
     function writeMessage(msg){
 
         var htmlMessage = "<b>" + msg.userName + " (" + formatTime(msg) + "): "+ "</b>"  +msg.comment ;
@@ -906,6 +929,7 @@
             window.open(url, 'Image', 'width=largeImage.stylewidth,height=largeImage.style.height,resizable=1');
         }
     }
+
 
 
 
@@ -1012,6 +1036,7 @@
             //todo editorActions.manager._do(editorActions.AddStateAndInfoCommand(param));
         });
     }
+
 
 
 </script>

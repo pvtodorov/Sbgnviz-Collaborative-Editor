@@ -12,9 +12,9 @@ var expandCollapseUtilities = require('../../../src/utilities/expand-collapse-ut
 var sbgnmlToJson =require('../../../src/utilities/sbgnml-to-json-converter.js')();
 var cytoscape = require('cytoscape');
 
-var sbgnMerger = require('../../../src/utilities/sbgnml-merger.js');
-var idxcardjson = require('../../../src/utilities/idxcardjson-to-sbgnml-converter.js');
-
+    var jsonCorrector = require('../../../src/utilities/json-corrector.js');
+    var jsonMerger = require('../../../src/utilities/json-merger.js');
+    var idxcardjson = require('../../../src/utilities/idxcardjson-to-json-converter.js');
 
 //Local functions
 var setFileContent = function (fileName) {
@@ -1621,6 +1621,9 @@ module.exports = function(){
                 expanderOpts.slicePoint = 2;
                 expanderOpts.widow = 0;
             });
+
+
+            /*TODO: Funda
 //Create a new model from REACH everytime a message is posted
             			// in the chat box.
                 $("#send-message").click(function(evt) {
@@ -1638,10 +1641,12 @@ module.exports = function(){
                     httpRequest.onreadystatechange = function () {
                         if (httpRequest.readyState == 4 && httpRequest.status == 200) {
                             var reachResponse = JSON.parse(httpRequest.responseText);
-                            var newSbgnml = idxcardjson.createSbgnml(reachResponse); //Translate the index card JSON data format into an SBGN model.
-                            var currSbgnml = jsonToSbgnml.createSbgnml(cy.nodes(":visible"), cy.edges(":visible")); //Translate the current model into an SBGN model.
-                            var sbgnmlText = sbgnMerger.merge(newSbgnml, currSbgnml); //Merge the two SBGN models.
-                            var jsonObj = sbgnmlToJson.convert(sbgnmlText);
+                            var newJson = idxcardjson.createJson(reachResponse); //Translate the index card JSON data format into a valid JSON model for SBGNviz.
+                            var currSbgnml = jsonToSbgnml.createSbgnml(cy.nodes(":visible"), cy.edges(":visible"));
+                            var currJson = sbgnmlToJson.convert(currSbgnml);
+                            var jsonObj = jsonMerger.merge(newJson, currJson); //Merge the two SBGN models.
+                            jsonObj = jsonCorrector.unification(jsonObj);
+
 
                             //get another sbgncontainer and display the new SBGN model.
                             editorActions.modelManager.deleteAll(cy.nodes(), cy.edges(), "me");
@@ -1653,7 +1658,7 @@ module.exports = function(){
                         }
                     }
                 });
-
+*/
 
 
             $("#node-label-textbox").keydown(function (e) {
@@ -1762,11 +1767,6 @@ function PathsBetweenQuery(socket, userName){
                          alert("No results found!");
 
                 });
-
-
-
-
-
 
 
                 $(self.el).dialog('close');

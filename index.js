@@ -119,6 +119,7 @@ app.get('/:docId', function (page, model, arg, next) {
             model.ref('_page.doc', 'documents.' + arg.docId);
             model.subscribe(docPath, 'history');
             model.subscribe(docPath, 'undoIndex');
+            model.subscribe(docPath, 'context');
 
 
         }

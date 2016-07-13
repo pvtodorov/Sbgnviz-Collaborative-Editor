@@ -138,6 +138,7 @@
         return this.pageDoc.cy.nodes;
     };
 
+    
 
     /**
      *
@@ -266,9 +267,6 @@
     Agent.prototype.sendMessage = function(comment, targets, callback){
 
         var message = {room: this.room, comment: comment, userName:this.agentName, userId: this.agentId, time: 1, targets: targets}; //set time on the server
-
-
-
 
         this.socket.emit('agentMessage', message, function(data){
         console.log(data);

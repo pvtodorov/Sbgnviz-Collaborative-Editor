@@ -98,8 +98,22 @@ body {
     height: 750px;
     -webkit-overflow-scrolling: touch;
     overflow-y: scroll;
-
 }
+
+#contextInformation{
+    position: absolute;
+
+    width: 500px;
+    /*line-height: 150%;*/
+    left: 5px;
+    top: 800px;
+    height: 200px;
+    /*should specify height to enable scrolling*/
+    -webkit-overflow-scrolling: touch;
+    overflow-y: scroll;
+}
+
+
 #receivedImage{
     position: absolute;
     left: 550px;
