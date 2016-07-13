@@ -278,13 +278,7 @@ app.proto.init = function (model) {
 
 
 
-    // model.on('all', '_page.doc.cy.**', function(id, val, op, prev){
-    //     if(id.indexOf("highlightColor")< 0) //don't update for highlight operations
-    //         updateServerGraph();
-    // });
-
     model.on('all', '_page.doc.cy.nodes.*', function(id, op, val, prev, passed){
-
 
         if(docReady &&  passed.user == null) {
             var node  = model.get('_page.doc.cy.nodes.' + id);
@@ -763,6 +757,14 @@ app.proto.create = function (model) {
 
     });
 
+    socket.on('agentContextQuestion', function(socketId){
+        setTimeout(function() {
+            var answer = confirm("Do you agree with the context?");
+            socket.emit('contextAnswer', {socketId: socketId, value:answer});
+            //if (callback) callback(answer);
+        }, 1000); //wait for the human to read
+
+    });
 
     //TODO: make this a function in menu-functions
     socket.on('addCompound', function(data){
@@ -883,7 +885,9 @@ app.proto.add = function (model, filePath) {
         });
 
 
-        //append image  after updating the message list on the page
+
+
+    //append image  after updating the message list on the page
         //if(filePath!=null) {
         //    var msgs = $("div[class='message']");
         //    //append this to the message with the filepath as a thumbnail

@@ -381,8 +381,9 @@
                 socket.on('operation', function(op){
                     writeOperation(op);
                     agent.loadModel(function() { //first make sure to get the latest model
-                      agent.updateContext(op);
+                      agent.updateContext(op, function(){
                         fillContextInformation( agent.contextList);
+                      });
 
                     });
 
@@ -823,7 +824,7 @@
         $('#contextInformation').append("<b>Context</b>")
         contextList.forEach(function(context){
 
-            $('#contextInformation').append("<li>" + context.proteinName +  " " + context.contextName + " " + context.relevance.toFixed(2) + " " + context.score + " " + context.confidence +  "</li>");
+            $('#contextInformation').append("<li>" + context.proteinName +  "\t" + context.contextName + "\t" + context.relevance.toFixed(2) + "\t"  + context.confidence +  "</li>");
         })
     }
 
