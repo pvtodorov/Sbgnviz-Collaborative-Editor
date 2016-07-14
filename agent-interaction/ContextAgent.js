@@ -17,9 +17,11 @@
         this.contextList = []; //contextName, proteinName, relevance, confidence
 
 
-        this.CONFIDENCE_THRESHOLD = 5;
+        this.RELEVANCE_THRESHOLD = 0.5; //over 50%
 
-        this.RELEVANCE_THRESHOLD = 0.005; //over 5%
+        this.questionInd;
+
+        this.contextInd;
     }
 
     ContextAgent.prototype.initContext = function(){
@@ -152,6 +154,31 @@
             }
         }
     }
+    ContextAgent.prototype.evaluateMessage = function(callback){
+        var self = this;
+        self.socket.on('message', function(data){
+
+
+            //FIXME: find a better solution to get human response
+            if(data.userId != self.userId && self.chatHistory.length  ==  self.questionInd + 2 ) //means human answered in response to agent's question
+            {
+
+                var answer = data.comment;
+
+                if(answer.toLowerCase().search("ye") > -1 )  //yes
+                    self.contextList[self.contextInd].confidence *= 2;
+
+                else if (answer.toLowerCase().search("no")> -1)
+                    self.contextList[self.contextInd].confidence *= 0.5;
+
+                //else don't change confidence
+
+                if(callback) callback();
+            }
+
+
+        });
+    }
 
     /**
      * Update context scores at each operation
@@ -163,23 +190,17 @@
 
         self.analyzeOperation(op, function(){ //requests a query call if necessary, hence the callback
 
-            var contextInd = self.findBestContext();
+            self.contextInd = self.findBestContext();
 
-            if(contextInd>-1) {
-                self.informAboutContext(self.contextList[contextInd]);
+            if(self.contextInd>-1) {
+                self.informAboutContext(self.contextList[self.contextInd]);
 
                 //send updated contextlist to the server
                 self.sendRequest("agentContextUpdate", {param: self.contextList});
 
-                self.socket.on('contextAnswerValue', function (answer) {
-                    console.log("here");
-                    if (answer == true)
-                        self.contextList[contextInd].confidence *= 2;
-                    else
-                        self.contextList[contextInd].confidence *= 0.5;
 
-                    if (callback) callback();
-                });
+                if (callback) callback();
+
             }
 
         }); //updates node contribution
@@ -220,7 +241,8 @@
 
         var self = this;
 
-        var agentComment = "The most likely context is  " + context.contextName + " with %" + (context.relevance.toFixed(2));
+        var agentComment = "The most likely context is  " + context.contextName + " with %" + (context.relevance.toFixed(2) * 100);
+        agentComment +=". Do you agree?"
         
         var targets = [];
         for(var i = 0; i < self.userList.length; i++){ //FIXME: send to all the users for now
@@ -229,6 +251,9 @@
 
         
         self.sendMessage(agentComment, targets);
+
+        self.questionInd = self.chatHistory.length - 1; //last question ind in history
+
 
     }
 
@@ -258,13 +283,3 @@
 
 
 
-
-    ContextAgent.prototype.evaluateAnswer = function(contextName, answer){
-        if(answer.toLowerCase().search("ye") > -1 )  //yes
-            self.updateContextList(contextName,  0, 3); //don't change relevance, just increase confidence by 3
-
-        else if (answer.toLowerCase().search("no")> -1)
-            self.updateContextList(contextName, 0, -3); //don't change relevance, just decrease confidence by 3
-
-        //else don't change confidence
-    }

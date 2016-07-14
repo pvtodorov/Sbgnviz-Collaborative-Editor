@@ -107,6 +107,7 @@ body {
     /*line-height: 150%;*/
     left: 5px;
     top: 800px;
+    width: 1000px;
     height: 200px;
     /*should specify height to enable scrolling*/
     -webkit-overflow-scrolling: touch;

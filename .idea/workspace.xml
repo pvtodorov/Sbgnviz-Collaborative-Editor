@@ -7,11 +7,14 @@
     <bookmark url="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/modelManager.js" line="152" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="20ab80f0-2cb1-44ff-a133-bd87799f716d" name="Default" comment="">
+    <list default="true" id="20ab80f0-2cb1-44ff-a133-bd87799f716d" name="Default" comment="Format changes">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/agent-interaction/ContextAgent.js" afterPath="$PROJECT_DIR$/agent-interaction/ContextAgent.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/agent-interaction/agentAPI.js" afterPath="$PROJECT_DIR$/agent-interaction/agentAPI.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/agent-interaction/agentTester.css" afterPath="$PROJECT_DIR$/agent-interaction/agentTester.css" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/agent-interaction/computerAgent.html" afterPath="$PROJECT_DIR$/agent-interaction/computerAgent.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index.js" afterPath="$PROJECT_DIR$/index.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/cancerDataOrganizer.js" afterPath="$PROJECT_DIR$/lib/cancerDataOrganizer.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/serverSideSocketListener.js" afterPath="$PROJECT_DIR$/lib/serverSideSocketListener.js" />
     </list>
     <ignored path="CWC.iws" />
@@ -25,7 +28,6 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ChangesViewManager" flattened_view="true" show_ignored="false" />
   <component name="CreatePatchCommitExecutor">
     <option name="PATCH_PATH" value="" />
   </component>
@@ -45,18 +47,18 @@
       <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="491">
-              <caret line="768" column="50" selection-start-line="768" selection-start-column="50" selection-end-line="768" selection-end-column="50" />
+            <state relative-caret-position="2170">
+              <caret line="870" column="26" selection-start-line="870" selection-start-column="19" selection-end-line="870" selection-end-column="26" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="serverSideSocketListener.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="serverSideSocketListener.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/lib/serverSideSocketListener.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="764">
-              <caret line="461" column="0" selection-start-line="461" selection-start-column="0" selection-end-line="461" selection-end-column="0" />
+            <state relative-caret-position="3490">
+              <caret line="446" column="64" selection-start-line="446" selection-start-column="64" selection-end-line="446" selection-end-column="64" />
               <folding />
             </state>
           </provider>
@@ -65,26 +67,46 @@
       <file leaf-file-name="computerAgent.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/agent-interaction/computerAgent.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="321">
-              <caret line="383" column="41" selection-start-line="383" selection-start-column="28" selection-end-line="383" selection-end-column="41" />
+            <state relative-caret-position="468">
+              <caret line="382" column="35" selection-start-line="382" selection-start-column="35" selection-end-line="382" selection-end-column="35" />
               <folding>
-                <marker date="1468441024000" expanded="true" signature="30488:30498" ph="..." />
-                <marker date="1468441024000" expanded="true" signature="30652:30662" ph="..." />
-                <marker date="1468441024000" expanded="true" signature="30807:30830" ph="..." />
-                <marker date="1468441024000" expanded="true" signature="31815:31838" ph="..." />
-                <marker date="1468441024000" expanded="true" signature="32756:32779" ph="..." />
-                <marker date="1468441024000" expanded="true" signature="32881:32904" ph="..." />
-                <marker date="1468441024000" expanded="true" signature="33943:33955" ph="{...}" />
+                <marker date="1468538980000" expanded="true" signature="31239:31249" ph="..." />
+                <marker date="1468538980000" expanded="true" signature="31403:31413" ph="..." />
+                <marker date="1468538980000" expanded="true" signature="31558:31581" ph="..." />
+                <marker date="1468538980000" expanded="true" signature="32566:32589" ph="..." />
+                <marker date="1468538980000" expanded="true" signature="33507:33530" ph="..." />
+                <marker date="1468538980000" expanded="true" signature="33632:33655" ph="..." />
+                <marker date="1468538980000" expanded="true" signature="34694:34706" ph="{...}" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ContextAgent.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="cancerDataOrganizer.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/lib/cancerDataOrganizer.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="735">
+              <caret line="51" column="59" selection-start-line="51" selection-start-column="59" selection-end-line="51" selection-end-column="59" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="agentTester.css" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/agent-interaction/agentTester.css">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="651">
+              <caret line="109" column="13" selection-start-line="109" selection-start-column="13" selection-end-line="109" selection-end-column="13" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ContextAgent.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/agent-interaction/ContextAgent.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="630">
-              <caret line="184" column="39" selection-start-line="184" selection-start-column="39" selection-end-line="184" selection-end-column="39" />
+            <state relative-caret-position="188">
+              <caret line="146" column="0" selection-start-line="146" selection-start-column="0" selection-end-line="146" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -93,8 +115,8 @@
       <file leaf-file-name="agentAPI.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/agent-interaction/agentAPI.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="629">
-              <caret line="253" column="11" selection-start-line="253" selection-start-column="11" selection-end-line="253" selection-end-column="11" />
+            <state relative-caret-position="1330">
+              <caret line="271" column="4" selection-start-line="271" selection-start-column="4" selection-end-line="271" selection-end-column="4" />
               <folding />
             </state>
           </provider>
@@ -151,7 +173,6 @@
         <option value="$PROJECT_DIR$/public/src/utilities/sbgn-bend-point-utilities.js" />
         <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/EditorActionsManager.js" />
         <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/css/sbgn-viz.css" />
-        <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/agent-interaction/cancerTypes" />
         <option value="$PROJECT_DIR$/agent-interaction/cancerStudies" />
         <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-cytoscape-sbgn.js" />
@@ -166,17 +187,18 @@
         <option value="$PROJECT_DIR$/agent-interaction/HashMap.js" />
         <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/modelManager.js" />
         <option value="$PROJECT_DIR$/public/src/utilities/expand-collapse-utilities.js" />
-        <option value="$PROJECT_DIR$/agent-interaction/agentAPI.js" />
         <option value="$PROJECT_DIR$/public/src/utilities/idxcardjson-to-sbgnml-converter.js" />
         <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/json-corrector.js" />
         <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/json-merger.js" />
         <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-menu-functions.js" />
+        <option value="$PROJECT_DIR$/README.md" />
+        <option value="$PROJECT_DIR$/index.js" />
+        <option value="$PROJECT_DIR$/lib/serverSideSocketListener.js" />
+        <option value="$PROJECT_DIR$/agent-interaction/agentAPI.js" />
         <option value="$PROJECT_DIR$/agent-interaction/agentTester.css" />
         <option value="$PROJECT_DIR$/lib/cancerDataOrganizer.js" />
         <option value="$PROJECT_DIR$/agent-interaction/computerAgent.html" />
         <option value="$PROJECT_DIR$/agent-interaction/ContextAgent.js" />
-        <option value="$PROJECT_DIR$/index.js" />
-        <option value="$PROJECT_DIR$/lib/serverSideSocketListener.js" />
       </list>
     </option>
   </component>
@@ -204,7 +226,7 @@
     <treeState />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="258" />
+    <option name="x" value="168" />
     <option name="y" value="23" />
     <option name="width" value="1964" />
     <option name="height" value="1417" />
@@ -251,6 +273,7 @@
     </navigator>
     <panes>
       <pane id="Scope" />
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -452,7 +475,6 @@
         </subPane>
       </pane>
       <pane id="PackagesPane" />
-      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -485,6 +507,9 @@
   <component name="RunManager" selected="JavaScript Debug.localhost:3000 JavaScript">
     <configuration default="false" name="localhost:3000" type="NodeJSConfigurationType" factoryName="Node.js" temporary="true" path-to-node="project" path-to-js-file="$PROJECT_DIR$/server.js" node-parameters="--debug-brk" working-dir="$PROJECT_DIR$/lib">
       <browser name="98ca6316-2f89-46d9-a9e5-fa9e2b0625b3" start="true" with-js-debugger="true" url="http://localhost:3000" />
+      <EXTENSION ID="com.jetbrains.nodejs.run.NodeJSStartBrowserRunConfigurationExtension">
+        <browser name="98ca6316-2f89-46d9-a9e5-fa9e2b0625b3" start="true" with-js-debugger="true" url="http://localhost:3000" />
+      </EXTENSION>
       <method />
     </configuration>
     <configuration default="false" name="testPage.html" type="JavascriptDebugType" factoryName="JavaScript Debug" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/CWC/public/test/testPage.html">
@@ -544,10 +569,6 @@
     <configuration default="true" type="NodeJSConfigurationType" factoryName="Node.js" path-to-node="project" working-dir="">
       <method />
     </configuration>
-    <configuration default="true" type="NodeJSRemoteDebug" factoryName="Node.js Remote Debug">
-      <node-js-remote-debug />
-      <method />
-    </configuration>
     <configuration default="true" type="executeSpecs" factoryName="Gauge Execution">
       <setting name="environment" value="" />
       <setting name="specsToExecute" value="" />
@@ -578,12 +599,12 @@
       <method />
     </configuration>
     <configuration default="true" type="mocha-javascript-test-runner" factoryName="Mocha">
-      <node-interpreter>/usr/local/bin/node</node-interpreter>
+      <node-interpreter>project</node-interpreter>
       <node-options />
-      <working-directory>$PROJECT_DIR$</working-directory>
+      <working-directory />
       <pass-parent-env>true</pass-parent-env>
       <envs />
-      <ui>bdd</ui>
+      <ui />
       <extra-mocha-options />
       <test-kind>DIRECTORY</test-kind>
       <test-directory />
@@ -601,11 +622,10 @@
       <item index="4" class="java.lang.String" itemvalue="JavaScript Debug.qunit.html" />
     </list>
     <recent_temporary>
-      <list size="4">
+      <list size="3">
         <item index="0" class="java.lang.String" itemvalue="JavaScript Debug.qunit.html" />
         <item index="1" class="java.lang.String" itemvalue="JavaScript Debug.testPage.html" />
         <item index="2" class="java.lang.String" itemvalue="JavaScript Debug.unitTests.html" />
-        <item index="3" class="java.lang.String" itemvalue="Node.js.localhost:3000" />
       </list>
     </recent_temporary>
   </component>
@@ -801,22 +821,21 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="258" y="23" width="1964" height="1417" extended-state="0" />
+    <frame x="168" y="23" width="1964" height="1417" extended-state="0" />
     <editor active="false" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32830188" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33132076" sideWeight="0.5140562" order="9" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.21283019" sideWeight="0.5182102" order="9" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32970837" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32830188" sideWeight="0.49236947" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21283019" sideWeight="0.48594376" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21283019" sideWeight="0.4817898" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Gulp" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.20417371" sideWeight="0.503643" order="5" side_tool="true" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2294485" sideWeight="0.49468085" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32998943" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.29389602" sideWeight="0.48915663" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24985899" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.15839493" sideWeight="0.5053192" order="4" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.31396225" sideWeight="0.4922161" order="5" side_tool="false" content_ui="tabs" />
@@ -832,6 +851,7 @@
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32981133" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.29389602" sideWeight="0.48915663" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven-2 Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
@@ -878,8 +898,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Bug fixes in delete" />
-    <MESSAGE value="Global undo/redo updates" />
     <MESSAGE value="BioGene query and layoutProperties template view issues fixed. Probably caused by lodash/ underscore version differences." />
     <MESSAGE value="Before removing local undo commands" />
     <MESSAGE value="Global undo/redo working." />
@@ -903,7 +921,9 @@
     <MESSAGE value="ContextAgent returns the most likely context in a chat message." />
     <MESSAGE value="ContextAgent updates with context = &lt;relevance, confidence&gt;" />
     <MESSAGE value="ContextAgent structural changes. Not ready yet." />
-    <option name="LAST_COMMIT_MESSAGE" value="ContextAgent structural changes. Not ready yet." />
+    <MESSAGE value="REadme" />
+    <MESSAGE value="Format changes" />
+    <option name="LAST_COMMIT_MESSAGE" value="Format changes" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1015,14 +1035,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/README.md">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="1" column="0" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/src/utilities/sbgn-element-utilities.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="660">
@@ -1046,13 +1058,7 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/agent-interaction/cancerStudies" />
-    <entry file="file://$PROJECT_DIR$/public/src/utilities/sbgnml-merger.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/public/src/utilities/sbgnml-merger.js" />
     <entry file="file://$PROJECT_DIR$/views/index.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="602">
@@ -1105,7 +1111,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="147">
           <caret line="59" column="0" selection-start-line="59" selection-start-column="0" selection-end-line="59" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1113,7 +1118,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="429">
           <caret line="528" column="54" selection-start-line="528" selection-start-column="54" selection-end-line="528" selection-end-column="54" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1121,7 +1125,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="329">
           <caret line="204" column="30" selection-start-line="204" selection-start-column="20" selection-end-line="204" selection-end-column="30" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1129,9 +1132,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="375">
           <caret line="27" column="1" selection-start-line="27" selection-start-column="1" selection-end-line="27" selection-end-column="1" />
-          <folding>
-            <element signature="e#0#41#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1139,7 +1139,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="720">
           <caret line="48" column="4" selection-start-line="48" selection-start-column="4" selection-end-line="48" selection-end-column="4" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1147,11 +1146,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="356">
           <caret line="579" column="24" selection-start-line="579" selection-start-column="24" selection-end-line="579" selection-end-column="24" />
-          <folding>
-            <marker date="1463598632000" expanded="true" signature="18005:18038" ph="..." />
-            <marker date="1463598632000" expanded="true" signature="18770:18803" ph="..." />
-            <marker date="1463598632000" expanded="true" signature="19149:19182" ph="..." />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1159,7 +1153,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="5" column="37" selection-start-line="5" selection-start-column="37" selection-end-line="5" selection-end-column="37" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1167,7 +1160,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="285">
           <caret line="19" column="45" selection-start-line="19" selection-start-column="45" selection-end-line="19" selection-end-column="45" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1175,7 +1167,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="45">
           <caret line="3" column="4" selection-start-line="3" selection-start-column="4" selection-end-line="3" selection-end-column="4" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1183,10 +1174,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="334">
           <caret line="459" column="38" selection-start-line="459" selection-start-column="38" selection-end-line="459" selection-end-column="38" />
-          <folding>
-            <marker date="1466014241000" expanded="true" signature="1026:1029" ph="{...}" />
-            <marker date="1466014241000" expanded="true" signature="20297:20301" ph="{...}" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1194,58 +1181,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="915">
           <caret line="1079" column="0" selection-start-line="1079" selection-start-column="0" selection-end-line="1079" selection-end-column="0" />
-          <folding>
-            <marker date="1467753279000" expanded="true" signature="27993:28065" ph="..." />
-            <marker date="1467753279000" expanded="true" signature="29030:29091" ph="..." />
-            <marker date="1467753279000" expanded="true" signature="29146:29164" ph="..." />
-            <marker date="1467753279000" expanded="true" signature="29262:29292" ph="..." />
-            <marker date="1467753279000" expanded="true" signature="29391:29452" ph="..." />
-            <marker date="1467753279000" expanded="true" signature="29514:29532" ph="..." />
-            <marker date="1467753279000" expanded="true" signature="29638:29667" ph="..." />
-            <marker date="1467753279000" expanded="true" signature="29768:29829" ph="..." />
-            <marker date="1467753279000" expanded="true" signature="29889:29907" ph="..." />
-            <marker date="1467753279000" expanded="true" signature="30011:30040" ph="..." />
-            <marker date="1467753279000" expanded="true" signature="30145:30206" ph="..." />
-            <marker date="1467753279000" expanded="true" signature="30268:30286" ph="..." />
-            <marker date="1467753279000" expanded="true" signature="30413:30442" ph="..." />
-            <marker date="1467753279000" expanded="true" signature="30639:30700" ph="..." />
-            <marker date="1467753279000" expanded="true" signature="30762:30780" ph="..." />
-            <marker date="1467753279000" expanded="true" signature="30920:30949" ph="..." />
-            <marker date="1467753279000" expanded="true" signature="31313:31363" ph="..." />
-            <marker date="1467753279000" expanded="true" signature="31467:31528" ph="..." />
-            <marker date="1467753279000" expanded="true" signature="31653:31679" ph="..." />
-            <marker date="1467753279000" expanded="true" signature="31899:31949" ph="..." />
-            <marker date="1467753279000" expanded="true" signature="32053:32114" ph="..." />
-            <marker date="1467753279000" expanded="true" signature="32249:32275" ph="..." />
-            <marker date="1467753279000" expanded="true" signature="32987:33037" ph="..." />
-            <marker date="1467753279000" expanded="true" signature="33185:33246" ph="..." />
-            <marker date="1467753279000" expanded="true" signature="33329:33355" ph="..." />
-            <marker date="1467753279000" expanded="true" signature="33520:33581" ph="..." />
-            <marker date="1467753279000" expanded="true" signature="33662:33688" ph="..." />
-            <marker date="1467753279000" expanded="true" signature="34089:34150" ph="..." />
-            <marker date="1467753279000" expanded="true" signature="34210:34228" ph="..." />
-            <marker date="1467753279000" expanded="true" signature="34332:34361" ph="..." />
-            <marker date="1467753279000" expanded="true" signature="34467:34528" ph="..." />
-            <marker date="1467753279000" expanded="true" signature="34583:34601" ph="..." />
-            <marker date="1467753279000" expanded="true" signature="34721:34750" ph="..." />
-            <marker date="1467753279000" expanded="true" signature="35249:35310" ph="..." />
-            <marker date="1467753279000" expanded="true" signature="35371:35389" ph="..." />
-            <marker date="1467753279000" expanded="true" signature="35516:35545" ph="..." />
-            <marker date="1467753279000" expanded="true" signature="35741:35777" ph="..." />
-            <marker date="1467753279000" expanded="true" signature="35794:35808" ph="..." />
-            <marker date="1467753279000" expanded="true" signature="35939:35989" ph="..." />
-            <marker date="1467753279000" expanded="true" signature="45275:45317" ph="..." />
-            <marker date="1467753279000" expanded="true" signature="45556:45600" ph="..." />
-            <marker date="1467753279000" expanded="true" signature="47142:47180" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/agent-interaction/agentTester.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="666">
-          <caret line="110" column="47" selection-start-line="110" selection-start-column="47" selection-end-line="110" selection-end-column="47" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1253,7 +1188,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="334">
           <caret line="923" column="3" selection-start-line="923" selection-start-column="3" selection-end-line="923" selection-end-column="3" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1277,62 +1211,76 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="338">
           <caret line="1170" column="0" selection-start-line="1170" selection-start-column="0" selection-end-line="1170" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/agent-interaction/agentAPI.js">
+    <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="629">
-          <caret line="253" column="11" selection-start-line="253" selection-start-column="11" selection-end-line="253" selection-end-column="11" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/agent-interaction/computerAgent.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="321">
-          <caret line="383" column="41" selection-start-line="383" selection-start-column="28" selection-end-line="383" selection-end-column="41" />
-          <folding>
-            <marker date="1468441024000" expanded="true" signature="30488:30498" ph="..." />
-            <marker date="1468441024000" expanded="true" signature="30652:30662" ph="..." />
-            <marker date="1468441024000" expanded="true" signature="30807:30830" ph="..." />
-            <marker date="1468441024000" expanded="true" signature="31815:31838" ph="..." />
-            <marker date="1468441024000" expanded="true" signature="32756:32779" ph="..." />
-            <marker date="1468441024000" expanded="true" signature="32881:32904" ph="..." />
-            <marker date="1468441024000" expanded="true" signature="33943:33955" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/cancerDataOrganizer.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="960">
-          <caret line="87" column="12" selection-start-line="87" selection-start-column="12" selection-end-line="87" selection-end-column="12" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/agent-interaction/ContextAgent.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="630">
-          <caret line="184" column="39" selection-start-line="184" selection-start-column="39" selection-end-line="184" selection-end-column="39" />
-          <folding />
+        <state relative-caret-position="870">
+          <caret line="0" column="36234" selection-start-line="0" selection-start-column="36234" selection-end-line="0" selection-end-column="36234" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="491">
-          <caret line="768" column="50" selection-start-line="768" selection-start-column="50" selection-end-line="768" selection-end-column="50" />
+        <state relative-caret-position="2170">
+          <caret line="870" column="26" selection-start-line="870" selection-start-column="19" selection-end-line="870" selection-end-column="26" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/lib/serverSideSocketListener.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="764">
-          <caret line="461" column="0" selection-start-line="461" selection-start-column="0" selection-end-line="461" selection-end-column="0" />
+        <state relative-caret-position="3490">
+          <caret line="446" column="64" selection-start-line="446" selection-start-column="64" selection-end-line="446" selection-end-column="64" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/agent-interaction/agentAPI.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1330">
+          <caret line="271" column="4" selection-start-line="271" selection-start-column="4" selection-end-line="271" selection-end-column="4" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/agent-interaction/agentTester.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="651">
+          <caret line="109" column="13" selection-start-line="109" selection-start-column="13" selection-end-line="109" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/cancerDataOrganizer.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="735">
+          <caret line="51" column="59" selection-start-line="51" selection-start-column="59" selection-end-line="51" selection-end-column="59" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/agent-interaction/computerAgent.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="468">
+          <caret line="382" column="35" selection-start-line="382" selection-start-column="35" selection-end-line="382" selection-end-column="35" />
+          <folding>
+            <marker date="1468538980000" expanded="true" signature="31239:31249" ph="..." />
+            <marker date="1468538980000" expanded="true" signature="31403:31413" ph="..." />
+            <marker date="1468538980000" expanded="true" signature="31558:31581" ph="..." />
+            <marker date="1468538980000" expanded="true" signature="32566:32589" ph="..." />
+            <marker date="1468538980000" expanded="true" signature="33507:33530" ph="..." />
+            <marker date="1468538980000" expanded="true" signature="33632:33655" ph="..." />
+            <marker date="1468538980000" expanded="true" signature="34694:34706" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/agent-interaction/ContextAgent.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="188">
+          <caret line="146" column="0" selection-start-line="146" selection-start-column="0" selection-end-line="146" selection-end-column="0" />
           <folding />
         </state>
       </provider>

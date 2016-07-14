@@ -757,14 +757,14 @@ app.proto.create = function (model) {
 
     });
 
-    socket.on('agentContextQuestion', function(socketId){
-        setTimeout(function() {
-            var answer = confirm("Do you agree with the context?");
-            socket.emit('contextAnswer', {socketId: socketId, value:answer});
-            //if (callback) callback(answer);
-        }, 1000); //wait for the human to read
-
-    });
+    // socket.on('agentContextQuestion', function(socketId){
+    //     setTimeout(function() {
+    //         var answer = confirm("Do you agree with the context?");
+    //         socket.emit('contextAnswer', {socketId: socketId, value:answer});
+    //         //if (callback) callback(answer);
+    //     }, 1000); //wait for the human to read
+    //
+    // });
 
     //TODO: make this a function in menu-functions
     socket.on('addCompound', function(data){
@@ -782,13 +782,6 @@ app.proto.create = function (model) {
         menu.addCompound(data.type);
 
     });
-
-
-
-
-
-
-
 
 
     modelManager = require('./public/sample-app/sampleapp-components/js/modelManager.js')(model, model.get('_page.room'), model.get('_session.userId'),name );

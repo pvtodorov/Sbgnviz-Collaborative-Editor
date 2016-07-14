@@ -343,10 +343,10 @@
 
             agent.loadModel(function() {
 
-
-                agent.initContext();
-                fillContextInformation( agent.contextList);
-
+                if(agent instanceof ContextAgent){
+                    agent.initContext();
+                    fillContextInformation(agent.contextList, agent.contextInd);
+                }
                 fillLayoutProperties();
                 agent.loadOperationHistory(function(){
 
@@ -376,14 +376,24 @@
                 });
             });
 
+
+
+            //contextAgent
+            if(agent instanceof ContextAgent)
+                agent.evaluateMessage( function(){
+                    fillContextInformation(agent.contextList, agent.contextInd);
+                });
+
             agent.listen(function(){
 
                 socket.on('operation', function(op){
                     writeOperation(op);
                     agent.loadModel(function() { //first make sure to get the latest model
-                      agent.updateContext(op, function(){
-                        fillContextInformation( agent.contextList);
-                      });
+                        if(agent instanceof ContextAgent) {
+                            agent.updateContext(op, function () {
+                                fillContextInformation(agent.contextList, agent.contextInd);
+                            });
+                        }
 
                     });
 
@@ -817,15 +827,20 @@
 
     }
 
-    function fillContextInformation(contextList){
+    function fillContextInformation(contextList, contextInd){
 
 
         $('#contextInformation').empty();
         $('#contextInformation').append("<b>Context</b>")
-        contextList.forEach(function(context){
 
-            $('#contextInformation').append("<li>" + context.proteinName +  "\t" + context.contextName + "\t" + context.relevance.toFixed(2) + "\t"  + context.confidence +  "</li>");
-        })
+        for(var i = 0; i < contextList.length; i++){
+            var context = contextList[i];
+            if(i==contextInd)
+                $('#contextInformation').append("<li> <b>" + context.proteinName +  "\t" + context.contextName + "\t" + context.relevance.toFixed(2) + "\t"  + context.confidence +  "</b></li>");
+            else
+                $('#contextInformation').append("<li>" + context.proteinName +  "\t" + context.contextName + "\t" + context.relevance.toFixed(2) + "\t"  + context.confidence +  "</li>");
+
+        }
     }
 
     function writeMessage(msg){
