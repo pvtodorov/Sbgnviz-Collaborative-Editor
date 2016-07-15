@@ -1623,42 +1623,43 @@ module.exports = function(){
             });
 
 
-            /*TODO: Funda
+            //TODO: Funda
 //Create a new model from REACH everytime a message is posted
-            			// in the chat box.
-                $("#send-message").click(function(evt) {
-                    var httpRequest;
-                    if (window.XMLHttpRequest)
-                        httpRequest = new XMLHttpRequest();
-                    else
-                        httpRequest = new ActiveXObject("Microsoft.XMLHTTP");
+ //           			// in the chat box.
+            $("#send-message").click(function(evt) {
+                var httpRequest;
+                if (window.XMLHttpRequest)
+                    httpRequest = new XMLHttpRequest();
+                else
+                    httpRequest = new ActiveXObject("Microsoft.XMLHTTP");
 
-                        //Let REACH process the message posted in the chat box.
-                    httpRequest.open("POST", "http://agathon.sista.arizona.edu:8080/odinweb/api/text", true);
-                    httpRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                    httpRequest.send("text="+document.getElementById("inputs-comment").value+"&output=indexcard");
+                //Let REACH process the message posted in the chat box.
+                httpRequest.open("POST", "http://agathon.sista.arizona.edu:8080/odinweb/api/text", true);
+                httpRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                httpRequest.send("text="+document.getElementById("inputs-comment").value+"&output=indexcard");
+                httpRequest.onreadystatechange = function () {
+                    if (httpRequest.readyState == 4 && httpRequest.status == 200) {
+                        var reachResponse = JSON.parse(httpRequest.responseText);
+                        var newJson = idxcardjson.createJson(reachResponse); //Translate the index card JSON data format into a valid JSON model for SBGNviz.
+                        var currSbgnml = jsonToSbgnml.createSbgnml(cy.nodes(":visible"), cy.edges(":visible"));
+                        var currJson = sbgnmlToJson.convert(currSbgnml);
 
-                    httpRequest.onreadystatechange = function () {
-                        if (httpRequest.readyState == 4 && httpRequest.status == 200) {
-                            var reachResponse = JSON.parse(httpRequest.responseText);
-                            var newJson = idxcardjson.createJson(reachResponse); //Translate the index card JSON data format into a valid JSON model for SBGNviz.
-                            var currSbgnml = jsonToSbgnml.createSbgnml(cy.nodes(":visible"), cy.edges(":visible"));
-                            var currJson = sbgnmlToJson.convert(currSbgnml);
+
+                        if(newJson!=null){
                             var jsonObj = jsonMerger.merge(newJson, currJson); //Merge the two SBGN models.
-                            jsonObj = jsonCorrector.unification(jsonObj);
-
 
                             //get another sbgncontainer and display the new SBGN model.
                             editorActions.modelManager.deleteAll(cy.nodes(), cy.edges(), "me");
-                            sbgnContainer = (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, editorActions));
+                            sbgnContainer = new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, editorActions);
                             editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
-
 
                             $("#perform-layout").trigger('click');
                         }
                     }
-                });
-*/
+                }
+            });
+
+
 
 
             $("#node-label-textbox").keydown(function (e) {

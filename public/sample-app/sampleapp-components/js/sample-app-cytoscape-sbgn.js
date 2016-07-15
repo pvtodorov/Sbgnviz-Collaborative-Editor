@@ -88,7 +88,8 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
 
                 cy.nodes().forEach(function(node){
                     var stateAndInfos = node._private.data.sbgnstatesandinfos;
-                    relocateStateAndInfos(stateAndInfos);
+                    if(stateAndInfos)
+                        relocateStateAndInfos(stateAndInfos);
 
                 });
 

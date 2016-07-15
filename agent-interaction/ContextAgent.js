@@ -129,9 +129,12 @@
                     for(var ind = 0; ind < cancerData.length; ind++){
                         var data = cancerData[ind];
                         if(data.seqCaseCnt > 0) {
-                            var relevance = data.mutationCaseIds.length / data.seqCaseCnt;
 
-                            if (relevance >= self.RELEVANCE_THRESHOLD) { //no need to push the ones with smaller scores
+                            var relevance = data.mutationCaseIds.length / data.seqCaseCnt;
+                       //     console.log(data.name + " " + data.mutationCaseIds.length + " " + data.seqCaseCnt);
+
+
+                          //  if (relevance >= self.RELEVANCE_THRESHOLD) { //no need to push the ones with smaller scores
                                 //   var endInd = data.name.indexOf("(") < 0 ? data.name.length: data.name.indexOf("(");
                                 //  var name = data.name.slice(0, endInd);
                                 self.contextList.push({
@@ -142,7 +145,7 @@
 
                                 });
 
-                            }
+                        //    }
                         }
 
                     };
@@ -190,19 +193,17 @@
 
         self.analyzeOperation(op, function(){ //requests a query call if necessary, hence the callback
 
+            var prevContextInd = self.contextInd;
             self.contextInd = self.findBestContext();
 
-            if(self.contextInd>-1) {
+            if(self.contextInd>-1 && prevContextInd!=self.contextInd) { //only inform if the most likely context has changed
                 self.informAboutContext(self.contextList[self.contextInd]);
-
-                //send updated contextlist to the server
-                self.sendRequest("agentContextUpdate", {param: self.contextList});
-
-
-                if (callback) callback();
-
             }
 
+            //send updated contextlist to the server
+            self.sendRequest("agentContextUpdate", {param: self.contextList});
+
+            if (callback) callback();
         }); //updates node contribution
 
 
@@ -212,8 +213,10 @@
 
     ContextAgent.prototype.printMutationData = function(cancerData){
         cancerData.forEach(function(study) {
-            if(study.seqCaseCnt > 0)
+            if(study.seqCaseCnt > 0){
+
                 console.log(study.id +  ": %"+  (study.mutationCaseIds.length*100/study.seqCaseCnt));
+            }
 
         });
     }
