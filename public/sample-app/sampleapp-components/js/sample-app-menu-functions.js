@@ -1626,7 +1626,7 @@ module.exports = function(){
             //TODO: Funda
 //Create a new model from REACH everytime a message is posted
  //           			// in the chat box.
-            $("#send-message").click(function(evt) {
+            /*$("#send-message").click(function(evt) {
                 var httpRequest;
                 if (window.XMLHttpRequest)
                     httpRequest = new XMLHttpRequest();
@@ -1660,7 +1660,7 @@ module.exports = function(){
             });
 
 
-
+*/
 
             $("#node-label-textbox").keydown(function (e) {
                 if (e.which === 13) {
