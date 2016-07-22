@@ -6,15 +6,16 @@
  * **/
 
 
+var jsonMerger = require('../../../src/utilities/json-merger.js');
+var idxcardjson = require('../../../src/utilities/idxcardjson-to-json-converter.js');
 var sbgnFiltering = require('../../../src/utilities/sbgn-filtering.js')();
 var sbgnElementUtilities = require('../../../src/utilities/sbgn-element-utilities.js')();
 var expandCollapseUtilities = require('../../../src/utilities/expand-collapse-utilities.js')();
 var sbgnmlToJson =require('../../../src/utilities/sbgnml-to-json-converter.js')();
 var cytoscape = require('cytoscape');
 
-    var jsonCorrector = require('../../../src/utilities/json-corrector.js');
-    var jsonMerger = require('../../../src/utilities/json-merger.js');
-    var idxcardjson = require('../../../src/utilities/idxcardjson-to-json-converter.js');
+
+
 
 //Local functions
 var setFileContent = function (fileName) {
@@ -98,29 +99,14 @@ module.exports = function(){
 
      return MenuFunctions = { //global reference for testing
 
-
-         refreshGlobalUndoRedoButtonsStatus: function(){
+        refreshGlobalUndoRedoButtonsStatus: function(){
           editorActions.refreshGlobalUndoRedoButtonsStatus();
-         },
+        },
 
-         loadFile:function(txtFile){
-
-             editorActions.modelManager.deleteAll(cy.nodes(), cy.edges(), "me");
-             var jsonObj = sbgnmlToJson.convert(txtFile);
-
-
-
-             //get another sbgncontainer
-             sbgnContainer = (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, editorActions));
-
-             editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
-             editorActions.modelManager.setSampleInd(-1, "me"); //to notify other clients
-
-         },
      
 
          //Agent loads the file
-         loadFileInNode: function(txtFile){
+        loadFileInNode: function(txtFile){
 
 
             editorActions.modelManager.deleteAll(cy.nodes(), cy.edges(), "me");
@@ -144,10 +130,9 @@ module.exports = function(){
 
             editorActions.modelManager.setSampleInd(-1, "me"); //to notify other clients
 
-         },
-
-         //Methods for agents to interact with cytoscape
-         showNodes: function(selectedNodeIds){
+        },
+        //Methods for agents to interact with cytoscape
+        showNodes: function(selectedNodeIds){
             //unselect all others
             cy.nodes().unselect();
 
@@ -545,21 +530,6 @@ module.exports = function(){
 
         start: function (modelManager) {
 
-
-            //
-            // //If we get a message om a separate window
-            window.addEventListener('message', function(event) {
-
-
-
-                if(event.data.graph)
-                    self.loadFile(event.data.graph);
-
-
-            }, false);
-
-
-
             var self = this;
 
             var socket = io();
@@ -578,7 +548,7 @@ module.exports = function(){
             sbgnProp = new SBGNProperties();
             sbgnProp.initialize();
 
-            pathsBetweenQuery = new PathsBetweenQuery(socket,  editorActions.modelManager.getName());
+            pathsBetweenQuery = new PathsBetweenQuery();
             pathsBetweenQuery.initialize();
 
 
@@ -596,7 +566,11 @@ module.exports = function(){
             }
             else {//load from a previously loaded graph
 
+
+
                 sbgnContainer = (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, editorActions));
+
+
 
                 editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
             }
@@ -933,7 +907,7 @@ module.exports = function(){
                 reader.onload = function (e) {
 
                     if(file.name.indexOf(".owl") > -1) {
-                        socket.emit('BioPAXRequest', this.result, "sbgn"); //convert to sbgn
+                        socket.emit('BioPAXRequest', this.result, "sbgn");
                         socket.on('SBGNResult', function(sbgnData){
 
                             if(sbgnData.graph!= null){
@@ -960,20 +934,16 @@ module.exports = function(){
                     }
                     else {
 
-                        //TODO
-                        socket.emit('BioPAXRequest', this.result, "biopax"); //convert to biopax
+                        var jsonObj = sbgnmlToJson.convert(this.result);
 
-                        self.loadFile(this.result);
-                        // var jsonObj = sbgnmlToJson.convert(this.result);
-                        //
-                        //
-                        // //get another sbgncontainer
-                        // sbgnContainer = (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, editorActions));
-                        //
-                        // editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
-                        //
-                        //
-                        // editorActions.modelManager.setSampleInd(-1, "me"); //to notify other clients
+
+                        //get another sbgncontainer
+                        sbgnContainer = (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, editorActions));
+
+                        editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
+
+
+                        editorActions.modelManager.setSampleInd(-1, "me"); //to notify other clients
                     }
                     // sbgnContainer =  new cyMod.SBGNContainer('#sbgn-network-container', jsonObj ,  editorActions);
                 }
@@ -1400,7 +1370,7 @@ module.exports = function(){
                         (sbgnStyleRules['incremental-layout-after-expand-collapse'] == 'true');
                 }
                 if (incrementalLayoutAfterExpandCollapse)
-                    ditorActions.collapseGivenNodes({
+                   editorActions.collapseGivenNodes({
                         nodes: cy.nodes(),
                         sync: true
                     });
@@ -1434,6 +1404,7 @@ module.exports = function(){
                     $("#perform-layout").trigger('click');
                 }
             });
+
 
             $("#perform-layout").click(function (e) {
 
@@ -1622,45 +1593,36 @@ module.exports = function(){
                 expanderOpts.widow = 0;
             });
 
+			//Create a new model from REACH everytime a message is posted
+			// in the chat box.
+		    $("#send-message").click(function(evt) {
+				var httpRequest;
+				if (window.XMLHttpRequest)
+	    	    	httpRequest = new XMLHttpRequest();
+				else
+	        		httpRequest = new ActiveXObject("Microsoft.XMLHTTP");
 
-            //TODO: Funda
-//Create a new model from REACH everytime a message is posted
- //           			// in the chat box.
-            /*$("#send-message").click(function(evt) {
-                var httpRequest;
-                if (window.XMLHttpRequest)
-                    httpRequest = new XMLHttpRequest();
-                else
-                    httpRequest = new ActiveXObject("Microsoft.XMLHTTP");
+				//Let REACH process the message posted in the chat box.
+		    	httpRequest.open("POST", "http://agathon.sista.arizona.edu:8080/odinweb/api/text", true);
+    			httpRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    			httpRequest.send("text="+document.getElementById("inputs-comment").value+"&output=indexcard");
+   	 			httpRequest.onreadystatechange = function () { 
+    	    		if (httpRequest.readyState == 4 && httpRequest.status == 200) {
+						var reachResponse = JSON.parse(httpRequest.responseText);
+						var newJson = idxcardjson.createJson(reachResponse); //Translate the index card JSON data format into a valid JSON model for SBGNviz.
+						var currSbgnml = jsonToSbgnml.createSbgnml(cy.nodes(":visible"), cy.edges(":visible"));
+						var currJson = sbgnmlToJson.convert(currSbgnml);
+						var jsonObj = jsonMerger.merge(newJson, currJson); //Merge the two SBGN models.
 
-                //Let REACH process the message posted in the chat box.
-                httpRequest.open("POST", "http://agathon.sista.arizona.edu:8080/odinweb/api/text", true);
-                httpRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                httpRequest.send("text="+document.getElementById("inputs-comment").value+"&output=indexcard");
-                httpRequest.onreadystatechange = function () {
-                    if (httpRequest.readyState == 4 && httpRequest.status == 200) {
-                        var reachResponse = JSON.parse(httpRequest.responseText);
-                        var newJson = idxcardjson.createJson(reachResponse); //Translate the index card JSON data format into a valid JSON model for SBGNviz.
-                        var currSbgnml = jsonToSbgnml.createSbgnml(cy.nodes(":visible"), cy.edges(":visible"));
-                        var currJson = sbgnmlToJson.convert(currSbgnml);
+               			//get another sbgncontainer and display the new SBGN model.
+            			editorActions.modelManager.deleteAll(cy.nodes(), cy.edges(), "me");
+	               		sbgnContainer = new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, editorActions);
+                        editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
 
-
-                        if(newJson!=null){
-                            var jsonObj = jsonMerger.merge(newJson, currJson); //Merge the two SBGN models.
-
-                            //get another sbgncontainer and display the new SBGN model.
-                            editorActions.modelManager.deleteAll(cy.nodes(), cy.edges(), "me");
-                            sbgnContainer = new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, editorActions);
-                            editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
-
-                            $("#perform-layout").trigger('click');
-                        }
-                    }
-                }
-            });
-
-
-*/
+						$("#perform-layout").trigger('click');
+					}
+				}
+		    }); 
 
             $("#node-label-textbox").keydown(function (e) {
                 if (e.which === 13) {
@@ -1674,13 +1636,13 @@ module.exports = function(){
     }
 }
 
-function PathsBetweenQuery(socket, userName){
+function PathsBetweenQuery(){
 
     return{
         el: '#query-pathsbetween-table',
 
         defaultQueryParameters: {
-            geneSymbols: "CDK4 RB1",
+            geneSymbols: "",
             lengthLimit: 1
             //    shortestK: 0,
             //    enableShortestKAlteration: false,
@@ -1726,11 +1688,11 @@ function PathsBetweenQuery(socket, userName){
                 self.currentQueryParameters.lengthLimit = Number(document.getElementById("query-pathsbetween-length-limit").value);
 
                 var pc2URL = "http://www.pathwaycommons.org/pc2/";
-                //var format = "graph?format=SBGN";
-                var format = "graph?format=BIOPAX";
+                var format = "graph?format=SBGN";
                 var kind = "&kind=PATHSBETWEEN";
                 var limit = "&limit=" + self.currentQueryParameters.lengthLimit;
                 var sources = "";
+                var newfilename = "";
 
                 var geneSymbolsArray = self.currentQueryParameters.geneSymbols.replace("\n", " ").replace("\t", " ").split(" ");
                 for (var i = 0; i < geneSymbolsArray.length; i++) {
@@ -1741,33 +1703,20 @@ function PathsBetweenQuery(socket, userName){
 
                     sources = sources + "&source=" + currentGeneSymbol;
 
+                    // if (newfilename == '') {
+                    //     newfilename = currentGeneSymbol;
+                    // }
+                    // else {
+                    //     newfilename = newfilename + '_' + currentGeneSymbol;
+                    // }
                 }
 
+           //     newfilename = newfilename + '_PBTWN.sbgnml';
 
+           //     setFileContent(newfilename);
                 pc2URL = pc2URL + format + kind + limit + sources;
-
-
-
                 socket.emit('PCQuery',  pc2URL);
 
-                socket.on('PCQueryResult', function(owlData){
-
-                    if(owlData.graph!=null) {
-                        socket.emit('BioPAXRequest', owlData.graph, "sbgn"); //convert to sbgn
-                        socket.on('SBGNResult', function (sbgnData) {
-                            var w = window.open(("query_" + userName), "width = 1600, height = 1200, left = " + window.left + " right = " + window.right);
-
-                            // // //FIXME: find a more elegant solution
-                            setTimeout(function () {
-                                w.postMessage(sbgnData, "*");
-                            }, 1000);
-
-                        });
-                    }
-                    else
-                         alert("No results found!");
-
-                });
 
 
                 $(self.el).dialog('close');
