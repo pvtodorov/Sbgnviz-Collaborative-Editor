@@ -3,6 +3,8 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
 
     var addRemoveUtilities = require('../../../src/utilities/add-remove-utilities.js');
     var expandCollapseUtilities = require('../../../src/utilities/expand-collapse-utilities.js')();
+    var undoRedoActions = require('./register-undo-redo-actions.js');
+
     var bioGeneView = require('./biogene-info.js');
 
     var nodeLabelChanged = false;
@@ -31,8 +33,6 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
     }
 
 
-
-
     var cyOptions = {
         elements: cytoscapeJsGraph,
         style: sbgnStyleSheet,
@@ -52,50 +52,102 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
             var socket = io();
             window.cy = this;
 
-            var edges = cy.edges();
-            var nodes = cy.nodes();
+            undoRedoActions.registerUndoRedoActions();
 
-            for (var i = 0; i < edges.length; i++) {
-                var edge = edges[i];
-                var result = sbgnBendPointUtilities.convertToRelativeBendPositions(edge);
+            cy.expandCollapse(getExpandCollapseOptions());
 
-                if(result.distances.length > 0){
-                    edge.data('weights', result.weights);
-                    edge.data('distances', result.distances);
-                }
-            }
-
-            expandCollapseUtilities.refreshPaddings();
-
-            for (var i = 0; i < nodes.length; i++) {
-                var node = nodes[i];
-
-
-                node.data("borderColor", node.css('border-color'));
-                node.addClass('changeBorderColor');
-
-                node.data("backgroundOpacity", node.css('background-opacity'));
-                node.addClass('changeBackgroundOpacity');
-            }
-
-            for (var i = 0; i < edges.length; i++) {
-                var edge = edges[i];
-                edge.data("lineColor", edge.css('line-color'));
-                edge.addClass('changeLineColor');
-            }
-
-            cy.one('layoutstop', function(){
-
-                cy.nodes().forEach(function(node){
-                    var stateAndInfos = node._private.data.sbgnstatesandinfos;
-                    if(stateAndInfos)
-                        relocateStateAndInfos(stateAndInfos);
-
-                });
-
+            cy.edgeBendEditing({
+                // this function specifies the positions of bend points
+                bendPositionsFunction: function(ele) {
+                    return ele.data('bendPointPositions');
+                },
+                // whether the bend editing operations are undoable (requires cytoscape-undo-redo.js)
+                undoable: true
             });
 
-            cy.nodes('[sbgnclass="complex"],[sbgnclass="compartment"],[sbgnclass="submap"]').data('expanded-collapsed', 'expanded');
+            cy.clipboard({
+                clipboardSize: 5, // Size of clipboard. 0 means unlimited. If size is exceeded, first added item in clipboard will be removed.
+                shortcuts: {
+                    enabled: true, // Whether keyboard shortcuts are enabled
+                    undoable: true // and if undoRedo extension exists
+                }
+            });
+
+            cy.viewUtilities({
+                node: {
+                    highlighted: {}, // styles for when nodes are highlighted.
+                    unhighlighted: { // styles for when nodes are unhighlighted.
+                        'border-opacity': 0.3,
+                        'text-opacity': 0.3,
+                        'background-opacity': 0.3
+                    },
+                    hidden: {
+                        'display': 'none'
+                    }
+                },
+                edge: {
+                    highlighted: {}, // styles for when edges are highlighted.
+                    unhighlighted: { // styles for when edges are unhighlighted.
+                        'opacity': 0.3,
+                        'text-opacity': 0.3,
+                        'background-opacity': 0.3
+                    },
+                    hidden: {
+                        'display': 'none'
+                    }
+                }
+            });
+
+
+
+            var edges = cy.edges();
+            var nodes = cy.nodes();
+            //
+            // for (var i = 0; i < edges.length; i++) {
+            //     var edge = edges[i];
+            //     var result = sbgnBendPointUtilities.convertToRelativeBendPositions(edge);
+            //
+            //     if(result.distances.length > 0){
+            //         edge.data('weights', result.weights);
+            //         edge.data('distances', result.distances);
+            //     }
+            // }
+
+       //     expandCollapseUtilities.refreshPaddings();
+
+            refreshPaddings();
+            initilizeUnselectedDataOfElements();
+
+            //
+            // for (var i = 0; i < nodes.length; i++) {
+            //     var node = nodes[i];
+            //
+            //
+            //     node.data("borderColor", node.css('border-color'));
+            //     node.addClass('changeBorderColor');
+            //
+            //     node.data("backgroundOpacity", node.css('background-opacity'));
+            //     node.addClass('changeBackgroundOpacity');
+            // }
+            //
+            // for (var i = 0; i < edges.length; i++) {
+            //     var edge = edges[i];
+            //     edge.data("lineColor", edge.css('line-color'));
+            //     edge.addClass('changeLineColor');
+            // }
+            //
+            // cy.one('layoutstop', function(){
+            //
+            //     cy.nodes().forEach(function(node){
+            //         var stateAndInfos = node._private.data.sbgnstatesandinfos;
+            //         if(stateAndInfos)
+            //             relocateStateAndInfos(stateAndInfos);
+            //
+            //     });
+            //
+            // });
+
+       //     cy.nodes('[sbgnclass="complex"],[sbgnclass="compartment"],[sbgnclass="submap"]').data('expanded-collapsed', 'expanded');
 
 
             var paramResize;
@@ -131,9 +183,9 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
                     paramResize.width = sourceNode.width();
                     paramResize.height = sourceNode.height();
 
-                    editorActions.resizeNode(paramResize);
+               //     editorActions.resizeNode(paramResize);
 
-
+                    cy.undoRedo().do("resizeNode", paramResize);
 
 
                 }
@@ -206,7 +258,9 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
                         sbgnclass: sbgnclass,
                         sync:true
                     };
-                    editorActions.addEdge(param);
+            //        editorActions.addEdge(param);
+
+                    cy.undoRedo().do("addEdge", param);
                     modeHandler.setSelectionMode();
                     var edge = cy.edges()[cy.edges().length -1].select();
 
@@ -228,12 +282,83 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
 
             var panProps = ({
                 fitPadding: 10,
+                fitSelector: ':visible',
+                animateOnFit: function(){
+                    return sbgnStyleRules['animate-on-drawing-changes'];
+                },
+                animateOnZoom: function(){
+                    return sbgnStyleRules['animate-on-drawing-changes'];
+                }
             });
-            //funda container.cytoscapePanzoom(panProps);
 
+            container.cytoscapePanzoom(panProps); //funda
 
+            cy.gridGuide({
+                drawGrid: sbgnStyleRules['show-grid'],
+                snapToGrid: sbgnStyleRules['snap-to-grid'],
+                discreteDrag: sbgnStyleRules['discrete-drag'],
+                gridSpacing: sbgnStyleRules['grid-size'],
+                resize: sbgnStyleRules['auto-resize-nodes'],
+                guidelines: sbgnStyleRules['show-alignment-guidelines'],
+                guidelinesTolerance: sbgnStyleRules['guideline-tolerance'],
+                guidelinesStyle: {
+                    strokeStyle: sbgnStyleRules['guideline-color']
+                }
+            });
 
         var lastMouseDownNodeInfo = null;
+
+            //Listen events
+            cy.on("beforeCollapse", "node", function (event) {
+                var node = this;
+                //The children info of complex nodes should be shown when they are collapsed
+                if (node._private.data.sbgnclass == "complex") {
+                    //The node is being collapsed store infolabel to use it later
+                    var infoLabel = getInfoLabel(node);
+                    node._private.data.infoLabel = infoLabel;
+                }
+
+                var edges = cy.edges();
+
+                // remove bend points before collapse
+                for (var i = 0; i < edges.length; i++) {
+                    var edge = edges[i];
+                    if(edge.hasClass('edgebendediting-hasbendpoints')) {
+                        edge.removeClass('edgebendediting-hasbendpoints');
+                        delete edge._private.classes['edgebendediting-hasbendpoints'];
+                    }
+                }
+
+                edges.scratch('cyedgebendeditingWeights', []);
+                edges.scratch('cyedgebendeditingDistances', []);
+
+            });
+
+            cy.on("afterCollapse", "node", function (event) {
+                var node = this;
+                refreshPaddings();
+
+                if (node._private.data.sbgnclass == "complex") {
+                    node.addClass('changeContent');
+                }
+            });
+
+            cy.on("beforeExpand", "node", function (event) {
+                var node = this;
+                node.removeData("infoLabel");
+            });
+
+            cy.on("afterExpand", "node", function (event) {
+                var node = this;
+                cy.nodes().updateCompoundBounds();
+
+                //Don't show children info when the complex node is expanded
+                if (node._private.data.sbgnclass == "complex") {
+                    node.removeStyle('content');
+                }
+
+                refreshPaddings();
+            });
             cy.on("mousedown", "node", function () {
                 
 
@@ -286,7 +411,8 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
                         posY: event.cyPosition.y,
                         sync: true,
                     };
-                   editorActions.changeParent(param);
+                    cy.undoRedo().do("changeParent", param);
+                   //editorActions.changeParent(param);
                 }
             });
 
@@ -521,10 +647,12 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
                     };
 
 
-                   editorActions.addNode(param);
-                    modeHandler.setSelectionMode();
+                    cy.undoRedo().do("addNode", param);
 
-                    //node.select();
+                   //editorActions.addNode(param);
+                    modeHandler.setSelectionMode();
+                    cy.nodes()[cy.nodes().length - 1].select();
+
 
 
 

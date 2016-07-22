@@ -1,7 +1,7 @@
 module.exports = function(){
     return {
         defaultsMap: {},
-        addNode: function (x, y, sbgnclass, id) {
+        addNode: function (x, y, sbgnclass, id, parent, visibility) {
             var defaultsMap = this.defaultsMap;
             var defaults = defaultsMap[sbgnclass];
             var width = defaults ? defaults.width : 50;
@@ -16,6 +16,9 @@ module.exports = function(){
 
             if (defaults && defaults.multimer) {
                 sbgnclass += " multimer";
+            }
+            if(visibility){
+                css.visibility = visibility;
             }
 
 
@@ -42,6 +45,11 @@ module.exports = function(){
                     y: Number(y)
                 }
             };
+
+            if(parent){
+                el.data.parent = parent;
+            }
+
             if (id != null)
                 el.data.id = id;
 
@@ -65,6 +73,7 @@ module.exports = function(){
             newNode.addClass('changeBorderColor');
             return newNode;
         },
+
         removeNodes: function (nodes) {
             var removedEles = nodes.connectedEdges().remove();
             var children = nodes.children();
@@ -88,8 +97,6 @@ module.exports = function(){
                 data: {
                     source: source,
                     target: target,
-                    //TODO funda added : not needed anymore
-                    //          id: (source + "-" + target + "-" + sbgnclass),
                     sbgnclass: sbgnclass,
                     sbgncardinality: 0 //funda added
 
@@ -119,7 +126,6 @@ module.exports = function(){
             return edges.remove();
         },
         restoreEles: function (eles) {
-      //funda      cy.elements().unselect();
             eles.restore();
             return eles;
         },
