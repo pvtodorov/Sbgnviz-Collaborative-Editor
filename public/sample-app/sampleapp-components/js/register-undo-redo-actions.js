@@ -1,7 +1,7 @@
 
 module.exports.registerUndoRedoActions = function() {
 
-  var editorActions = require('./EditorActionsManager.js');
+  var synchronizationManager = require('./synchronizationManager.js');
 
   // create undo-redo instance
   var ur = cy.undoRedo({
@@ -12,16 +12,26 @@ module.exports.registerUndoRedoActions = function() {
     }
   });
 
-  // register add remove actions
-  ur.action("addNode", editorActions.addNode);
-  // ur.action("removeEles", addRemoveActionFunctions.removeEles, addRemoveActionFunctions.restoreEles);
-   ur.action("addEdge", editorActions.addEdge);
-  // ur.action("deleteSelected", addRemoveActionFunctions.deleteSelected, addRemoveActionFunctions.restoreSelected);
-  // ur.action("createCompoundForSelectedNodes", addRemoveActionFunctions.createCompoundForSelectedNodes, addRemoveActionFunctions.removeCompound);
-   ur.action("changeParent", editorActions.changeParent);
-  //
-  // // register general actions
-   ur.action("resizeNode", editorActions.resizeNode);
+
+    // register add remove actions
+    ur.action("addNode", addRemoveActionFunctions.addNode, addRemoveActionFunctions.removeNodes);
+    ur.action("removeEles", addRemoveActionFunctions.removeEles, addRemoveActionFunctions.restoreEles);
+    ur.action("addEdge", addRemoveActionFunctions.addEdge, addRemoveActionFunctions.removeEdges);
+    ur.action("deleteSelected", addRemoveActionFunctions.deleteSelected, addRemoveActionFunctions.restoreSelected);
+    ur.action("createCompoundForSelectedNodes", addRemoveActionFunctions.createCompoundForSelectedNodes, addRemoveActionFunctions.removeCompound);
+    ur.action("changeParent", addRemoveActionFunctions.changeParent, addRemoveActionFunctions.changeParent);
+
+
+    // register add remove actions
+  // ur.action("addNode", synchronizationManager.addNode);
+  // // ur.action("removeEles", addRemoveActionFunctions.removeEles, addRemoveActionFunctions.restoreEles);
+  //  ur.action("addEdge", synchronizationManager.addEdge);
+  //  ur.action("deleteSelected", synchronizationManager.deleteSelected);
+  //  ur.action("createCompoundForSelectedNodes", synchronizationManager.createCompoundForSelectedNodes);
+  //  ur.action("changeParent", synchronizationManager.changeParent);
+  // //
+  // // // register general actions
+  //  ur.action("resizeNode", synchronizationManager.resizeNode);
   // ur.action("changeNodeLabel", generalActionFunctions.changeNodeLabel, generalActionFunctions.changeNodeLabel);
   // ur.action("changeStyleData", generalActionFunctions.changeStyleData, generalActionFunctions.changeStyleData);
   // ur.action("changeStyleCss", generalActionFunctions.changeStyleCss, generalActionFunctions.changeStyleCss);

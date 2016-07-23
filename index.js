@@ -22,7 +22,7 @@ var docReady = false;
 var useQunit = true;
 
 var menu;
-
+var syncManager;
 var userCount;
 var socket;
 
@@ -334,6 +334,15 @@ app.proto.init = function (model) {
 
     });
 
+
+    model.on('all', '_page.doc.cy.nodes.*', function(id, op, idName, prev, passed) {
+
+        if (docReady && passed.user == null) {
+
+
+        }
+    });
+
     model.on('all', '_page.doc.cy.nodes.*.addedLater', function(id, op, idName, prev, passed){ //this property must be something that is only changed during insertion
 
 
@@ -344,6 +353,7 @@ app.proto.init = function (model) {
               var sbgnlabel = model.get('_page.doc.cy.nodes.'+ id + '.sbgnlabel');
              var sbgnclass = model.get('_page.doc.cy.nodes.'+ id + '.sbgnclass');
               menu.addNode(id, pos.x, pos.y, sbgnclass, sbgnlabel,false);
+
 
         }
 
@@ -787,11 +797,15 @@ app.proto.create = function (model) {
     modelManager = require('./public/sample-app/sampleapp-components/js/modelManager.js')(model, model.get('_page.room'), model.get('_session.userId'),name );
 
 
+
     menu =  require('./public/sample-app/sampleapp-components/js/sample-app-menu-functions.js')();
+
 
     //send modelManager to web client
     //make sure cytoscape is loaded
     menu.start(modelManager);
+
+    syncManager = require('./public/sample-app/sampleapp-components/js/synchronizationManager.js');
 
 
 

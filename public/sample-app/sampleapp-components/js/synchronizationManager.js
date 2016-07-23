@@ -1,15 +1,13 @@
 /**
- *	Design for SBGNViz Editor actions.
- *  Command Design Pattern is used.
- *  A simple undo-redo manager is implemented(EditorActionsManager)
- *	Author: Istemi Bahceci<istemi.bahceci@gmail.com>
+ * Cytoscape-Model Synchronization Functions
+ * Both notifies model updates and updates the collaborator's editor
  */
 
 
 
 module.exports.modelManager;
 var addRemoveUtilities = require('../../../src/utilities/add-remove-utilities.js')();
-var expandCollapseUtilities = require('../../../src/utilities/expand-collapse-utilities.js')();
+//var expandCollapseUtilities = require('../../../src/utilities/expand-collapse-utilities.js')();
 var sbgnFiltering = require('../../../src/utilities/sbgn-filtering.js')();
 
 
@@ -38,20 +36,15 @@ module.exports.unselectEdge = function(edge) {
 
 module.exports.addNode = function(param) {
 
-  //  var socket = io();
-  //  socket.emit("addNode", param, function(data){
-      //  if(data == "ok") {
-            var result = addRemoveUtilities.addNode(param.x, param.y, param.sbgnclass, param.id);
-            if (param.sbgnlabel != null)
-                result.data('sbgnlabel', param.sbgnlabel); //funda
-            if (param.sync) {
-                module.exports.modelManager.addModelNode(result.id(), param, "me");
-                module.exports.modelManager.initModelNode(result, null, true);
-            }
+    var result = addRemoveUtilities.addNode(param.x, param.y, param.sbgnclass, param.id);
+        if (param.sbgnlabel != null)
+            result.data('sbgnlabel', param.sbgnlabel); //funda
+        if (param.sync) {
+            module.exports.modelManager.addModelNode(result.id(), param, "me");
+            module.exports.modelManager.initModelNode(result, null, true);
+        }
 
-            return result;
-     //   }
-   // });
+        return result;
 
 }
 module.exports.removeEles =function(elesToBeRemoved) {
@@ -115,33 +108,33 @@ module.exports.addEdge = function(param)
 
 
 module.exports.expandNode = function(param) {
-        expandCollapseUtilities.expandNode(param.node);
+     //   expandCollapseUtilities.expandNode(param.node);
     if(param.sync)
         module.exports.modelManager.changeModelNodeAttribute("expandCollapseStatus", param.node.id(), "expand", "me");
 
 }
 
 module.exports.collapseNode = function(param) {
-    expandCollapseUtilities.collapseNode(param.node);
+    // expandCollapseUtilities.collapseNode(param.node);
     if(param.sync)
         module.exports.modelManager.changeModelNodeAttribute("expandCollapseStatus", param.node.id(), "collapse", "me");
 
 }
 module.exports.simpleExpandNode = function(param) {
-    expandCollapseUtilities.simpleExpandNode(param.node);
+    // expandCollapseUtilities.simpleExpandNode(param.node);
     if(param.sync)
         module.exports.modelManager.changeModelNodeAttribute("expandCollapseStatus", param.node.id(), "expand", "me");
 }
 
 module.exports.simpleCollapseNode = function(param) {
-    expandCollapseUtilities.simpleCollapseNode(param.node);
+    // expandCollapseUtilities.simpleCollapseNode(param.node);
     if(param.sync)
         module.exports.modelManager.changeModelNodeAttribute("expandCollapseStatus", param.node.id(), "collapse", "me");
 
 }
 
 module.exports.expandGivenNodes = function(param) {
-    expandCollapseUtilities.expandGivenNodes(param.nodes);
+    // expandCollapseUtilities.expandGivenNodes(param.nodes);
     if(param.sync){
         param.nodes.forEach(function(node){
             module.exports.modelManager.changeModelNodeAttribute("expandCollapseStatus", node.id(), "expand", "me");
@@ -150,7 +143,7 @@ module.exports.expandGivenNodes = function(param) {
 }
 
 module.exports.collapseGivenNodes = function(param) {
-    expandCollapseUtilities.collapseGivenNodes(param.nodes);
+    // expandCollapseUtilities.collapseGivenNodes(param.nodes);
     if(param.sync){
         param.nodes.forEach(function(node){
             module.exports.modelManager.changeModelNodeAttribute("expandCollapseStatus", node.id(), "collapse", "me");
@@ -160,7 +153,7 @@ module.exports.collapseGivenNodes = function(param) {
 }
 
 module.exports.simpleExpandGivenNodes = function(param) {
-    expandCollapseUtilities.simpleExpandGivenNodes(param.nodes);
+    // expandCollapseUtilities.simpleExpandGivenNodes(param.nodes);
     if(param.sync){
         param.nodes.forEach(function(node){
             module.exports.modelManager.changeModelNodeAttribute("expandCollapseStatus", node.id(), "expand", "me");
@@ -169,7 +162,7 @@ module.exports.simpleExpandGivenNodes = function(param) {
 }
 
 module.exports.simpleCollapseGivenNodes = function(param) {
-    expandCollapseUtilities.simpleCollapseGivenNodes(param.nodes);
+    // expandCollapseUtilities.simpleCollapseGivenNodes(param.nodes);
     if(param.sync){
         param.nodes.forEach(function(node){
             module.exports.modelManager.changeModelNodeAttribute("expandCollapseStatus", node.id(), "collapse", "me");
@@ -177,7 +170,7 @@ module.exports.simpleCollapseGivenNodes = function(param) {
     }
 }
 module.exports.expandAllNodes = function() {
-    expandCollapseUtilities.expandAllNodes();
+    // expandCollapseUtilities.expandAllNodes();
     cy.nodes().forEach(function(node){
         module.exports.modelManager.changeModelNodeAttribute("expandCollapseStatus", node.id(), "expand", "me");
     });
@@ -185,7 +178,7 @@ module.exports.expandAllNodes = function() {
 }
 
 module.exports.simpleExpandAllNodes = function() {
-    expandCollapseUtilities.simpleExpandAllNodes();
+    // expandCollapseUtilities.simpleExpandAllNodes();
     cy.nodes().forEach(function(node){
         module.exports.modelManager.changeModelNodeAttribute("expandCollapseStatus", node.id(), "collapse", "me");
     });
@@ -272,19 +265,15 @@ module.exports.returnToPositionsAndSizes = function(param) {
 }
 
 //This is used only to inform the model and perform undo. cytoscape moves the node
-module.exports.moveNodesConditionally = function(param) {
+module.exports.moveNodesConditionally = function(nodes) {
 
-    if(param.sync){
 
-        var elParamList = module.exports.getDescendentNodes(param.nodes);
+        var elParamList = module.exports.getDescendentNodes(nodes);
         var modelElList = elParamList.els;
         var paramList = elParamList.params;
 
         module.exports.modelManager.changeModelElementGroupAttribute("position", modelElList, paramList, "me");
 
-    }
-
-    return param;
 }
 
 module.exports.getDescendentNodes = function(nodes) {
@@ -399,8 +388,8 @@ module.exports.showAll = function(param) {
 
 
 //funda changed this to include selected nodes explicitly
-module.exports.highlightSelected = function(param) {
-    var elesToHighlight, elesToNotHighlight;
+module.exports.highlightSelected = function(elesToHighlight) {
+/*    var elesToHighlight, elesToNotHighlight;
     //If this is the first call of the function then call the original method
         //find selected elements
         var alreadyHighlighted = cy.elements("[highlighted='true']").filter(":visible");
@@ -415,9 +404,9 @@ module.exports.highlightSelected = function(param) {
         }
         elesToHighlight = elesToHighlight.not(alreadyHighlighted);
         elesToNotHighlight = cy.elements().not(elesToHighlight);
+*/
 
-
-    if(param.sync){
+  //  if(param.sync){
         if(elesToHighlight != null) {
             var modelElList = [];
             var paramList = [];
@@ -440,7 +429,7 @@ module.exports.highlightSelected = function(param) {
 
         }
 
-    }
+    //}
 
 }
 
@@ -522,7 +511,7 @@ module.exports.changeParent = function(param) {
 
     cy.nodes().updateCompoundBounds();
     module.exports.returnToPositionsAndSizesConditionally({nodesData:nodesData, sync: param.sync});
-    expandCollapseUtilities.refreshPaddings();
+    //expandCollapseUtilities.refreshPaddings();
 
     if(param.sync){
 
@@ -576,7 +565,7 @@ module.exports.createCompoundForSelectedNodes = function(param) {
     addRemoveUtilities.changeParent(nodesToMakeCompound, oldParentId, newCompoundId);
 
 
-    expandCollapseUtilities.refreshPaddings();
+    //expandCollapseUtilities.refreshPaddings();
 
     ////Notify other clients
 
@@ -666,6 +655,9 @@ module.exports.changeStateVariable = function(param) {
     param.data = statesAndInfos;
     module.exports.modelManager.changeModelNodeAttribute('sbgnStatesAndInfos', param.ele.id(), param.data, "me" );
 
+    param.ele.unselect(); //to refresh inspector
+    param.ele.select(); //to refresh inspector
+    cy.forceRender();
 }
 
 module.exports.changeUnitOfInformation = function(param) {
@@ -686,7 +678,9 @@ module.exports.changeUnitOfInformation = function(param) {
     if(param.sync)
         module.exports.modelManager.changeModelNodeAttribute('sbgnStatesAndInfos', param.ele.id(), param.data, "me");
 
-
+    param.ele.unselect(); //to refresh inspector
+    param.ele.select(); //to refresh inspector
+    cy.forceRender();
  
 }
 
@@ -783,7 +777,10 @@ module.exports.changeIsCloneMarkerStatus = function(param) {
         node._private.data.sbgnclonemarker = makeCloneMarker ? true : undefined;
 
         //node.data('sbgnclonemarker', (makeCloneMarker?true:undefined)); //is not working in this case
-
+        if (node.data('sbgnclass') === 'perturbing agent') {
+            node.removeClass('changeClonedStatus');
+            node.addClass('changeClonedStatus');
+        }
 
         if (cy.elements(":selected").length == 1 && cy.elements(":selected")[0] == param.ele) {
             $('#inspector-is-clone-marker').attr('checked', makeCloneMarker);
@@ -847,7 +844,7 @@ module.exports.changeStyleData = function( param) {
 
 
         if (cy.elements(":selected").length == 1 && cy.elements(":selected")[0] == param.ele) {
-            require('./sample-app-cytoscape-sbgn.js').handleSBGNInspector(module.exports);
+            require('./sample-app-inspector-functions.js').handleSBGNInspector(module.exports);
         }
 
 
@@ -928,7 +925,7 @@ module.exports.changeStyleCss = function(param) {
 
 
         if (cy.elements(":selected").length == 1 && cy.elements(":selected")[0] == ele) {
-            require('./sample-app-cytoscape-sbgn.js').handleSBGNInspector(module.exports);
+            require('./sample-app-inspector-functions.js').handleSBGNInspector(module.exports);
         }
     });
 

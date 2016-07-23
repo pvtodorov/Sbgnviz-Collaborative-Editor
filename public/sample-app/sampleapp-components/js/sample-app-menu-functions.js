@@ -1,6 +1,6 @@
     /**
  * Menu class
- * Initializes sbgnContainer, editorActions modelManager, SBGNLayout properties and SBGN Properties,
+ * Initializes sbgnContainer, syncManager modelManager, SBGNLayout properties and SBGN Properties,
  * Listens to menu actions
  *
  * **/
@@ -8,7 +8,7 @@
 
 var sbgnFiltering = require('../../../src/utilities/sbgn-filtering.js')();
 var sbgnElementUtilities = require('../../../src/utilities/sbgn-element-utilities.js')();
-var expandCollapseUtilities = require('../../../src/utilities/expand-collapse-utilities.js')();
+//var expandCollapseUtilities = require('../../../src/utilities/expand-collapse-utilities.js')();
 var sbgnmlToJson =require('../../../src/utilities/sbgnml-to-json-converter.js')();
 var cytoscape = require('cytoscape');
 
@@ -34,10 +34,15 @@ var beforePerformLayout = function(){
     cy.edges().data("portsource", []);
     cy.edges().data("porttarget", []);
 
-    cy.edges().removeData('weights');
-    cy.edges().removeData('distances');
+    // cy.edges().removeData('weights');
+    // cy.edges().removeData('distances');
+    //
+    // cy.edges().css('curve-style', 'bezier');
 
-    cy.edges().css('curve-style', 'bezier');
+    // TODO do this by using extension API
+    cy.$('.edgebendediting-hasbendpoints').removeClass('edgebendediting-hasbendpoints');
+    edges.scratch('cyedgebendeditingWeights', []);
+    edges.scratch('cyedgebendeditingDistances', []);
 };
 
 
@@ -87,34 +92,39 @@ function getXMLObject(itemId, loadXMLDoc) {
 module.exports = function(){
     var cyMod =  require('./sample-app-cytoscape-sbgn.js');
 
-    var editorActions = require('./EditorActionsManager.js');
+    var syncManager = require('./synchronizationManager.js');
 
     var sbgnContainer;
 
     var sbgnLayout;
-    var sbgnProp;
+    var sbgnProperties;
+    var gridProperties;
     var pathsBetweenQuery;
 
 
      return MenuFunctions = { //global reference for testing
 
+         changeVisibilityStatus: function(id){
+
+         },
+
 
          refreshGlobalUndoRedoButtonsStatus: function(){
-          editorActions.refreshGlobalUndoRedoButtonsStatus();
+          syncManager.refreshGlobalUndoRedoButtonsStatus();
          },
 
          loadFile:function(txtFile){
 
-             editorActions.modelManager.deleteAll(cy.nodes(), cy.edges(), "me");
+             syncManager.modelManager.deleteAll(cy.nodes(), cy.edges(), "me");
              var jsonObj = sbgnmlToJson.convert(txtFile);
 
 
 
              //get another sbgncontainer
-             sbgnContainer = (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, editorActions));
+             sbgnContainer = (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, syncManager));
 
-             editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
-             editorActions.modelManager.setSampleInd(-1, "me"); //to notify other clients
+             syncManager.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
+             syncManager.modelManager.setSampleInd(-1, "me"); //to notify other clients
 
          },
      
@@ -123,7 +133,7 @@ module.exports = function(){
          loadFileInNode: function(txtFile){
 
 
-            editorActions.modelManager.deleteAll(cy.nodes(), cy.edges(), "me");
+            syncManager.modelManager.deleteAll(cy.nodes(), cy.edges(), "me");
             var jsonObj = sbgnmlToJson.convert(txtFile);
 
             //initialize cytoscape
@@ -140,9 +150,9 @@ module.exports = function(){
 
             //no container is necessary
 
-            editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
+            syncManager.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
 
-            editorActions.modelManager.setSampleInd(-1, "me"); //to notify other clients
+            syncManager.modelManager.setSampleInd(-1, "me"); //to notify other clients
 
          },
 
@@ -163,7 +173,7 @@ module.exports = function(){
             };
 
 
-            editorActions.showSelected(param);
+            syncManager.showSelected(param);
 
         },
 
@@ -182,12 +192,12 @@ module.exports = function(){
                 selectedEles : cy.$(":selected")
             };
 
-            editorActions.hideSelected(param);
+            syncManager.hideSelected(param);
 
         },
 
         showAll: function(){
-            editorActions.showAll({sync:true});
+            syncManager.showAll({sync:true});
         },
 
         highlightNeighbors: function(selectedNodeIds){
@@ -208,7 +218,7 @@ module.exports = function(){
 
 
 
-            editorActions.highlightSelected(param);
+            syncManager.highlightSelected(param);
 
         },
         
@@ -230,12 +240,12 @@ module.exports = function(){
 
 
 
-            editorActions.highlightSelected(param);
+            syncManager.highlightSelected(param);
 
         },
         
         removeHighlights: function(){
-            editorActions.removeHighlights({sync:true});
+            syncManager.removeHighlights({sync:true});
         },
 
         addEdge:function(elId, source, target, sbgnclass, syncVal){
@@ -251,7 +261,7 @@ module.exports = function(){
 
 
 
-            var result = editorActions.addEdge(param);
+            var result = syncManager.addEdge(param);
 
             return result.id();
 
@@ -268,7 +278,7 @@ module.exports = function(){
 
             };
 
-            var result = editorActions.addNode(param);
+            var result = syncManager.addNode(param);
 
 
             return result.id();
@@ -292,7 +302,7 @@ module.exports = function(){
                     eles:el,
                     sync: syncVal
                 }
-                editorActions.deleteSelected(param);
+                syncManager.deleteSelected(param);
 
             }
         },
@@ -307,7 +317,7 @@ module.exports = function(){
 
 
             if(el)
-                editorActions.changePosition(param);
+                syncManager.changePosition(param);
 
 
         },
@@ -324,7 +334,7 @@ module.exports = function(){
             };
 
             if(el)
-                editorActions.changeIsMultimerStatus(param);
+                syncManager.changeIsMultimerStatus(param);
 
         },
 
@@ -339,7 +349,7 @@ module.exports = function(){
             };
 
             if(el)
-                editorActions.changeIsCloneMarkerStatus(param);
+                syncManager.changeIsCloneMarkerStatus(param);
 
         },
 
@@ -370,14 +380,16 @@ module.exports = function(){
                 };
 
                 if (propName == 'parent')//TODO
-                    editorActions.changeParent(param);
+
+                    syncManager.changeParent(param);
 
                 else if (propName == 'collapsedChildren') { //TODO???????
-                    editorActions.changeCollapsedChildren(param);
+                    syncManager.changeCollapsedChildren(param);
                 }
 
                 else if (propName == "highlightStatus" || propName == "visibilityStatus")
-                    editorActions.changeVisibilityOrHighlightStatus(param); //no do/undo here
+
+                    syncManager.changeVisibilityOrHighlightStatus(param); //no do/undo here
 
                 else {
                     var param = {
@@ -391,9 +403,9 @@ module.exports = function(){
 
 
                     if (propType == 'data')
-                        editorActions.changeStyleData(param);
+                        syncManager.changeStyleData(param);
                     else if (propType == 'css')
-                        editorActions.changeStyleCss(param);
+                        syncManager.changeStyleCss(param);
                 }
             }
 
@@ -404,9 +416,9 @@ module.exports = function(){
 
             setTimeout(function() { //wait for the layout to run on the other client's side
                 if (status == 'expand') //no need to run incremental layout here -- other client will have run it already
-                    editorActions.simpleExpandNode({node: el, sync: syncVal});
+                    syncManager.simpleExpandNode({node: el, sync: syncVal});
                 else if (status == 'collapse')
-                    editorActions.simpleCollapseNode({node: el, sync: syncVal});
+                    syncManager.simpleCollapseNode({node: el, sync: syncVal});
 
             },0);
         },
@@ -452,11 +464,11 @@ module.exports = function(){
 
             if(ind < 0){ //for notifying other users -- this part is called through the model
 
-                var jsonObj = editorActions.modelManager.getJsonFromModel();
+                var jsonObj = syncManager.modelManager.getJsonFromModel();
 
-                sbgnContainer =  (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj,  editorActions));
+                sbgnContainer =  (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj,  syncManager));
                 if(syncVal)
-                    editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me");
+                    syncManager.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me");
 
             }
             else{
@@ -468,11 +480,11 @@ module.exports = function(){
 
                     var jsonObj = sbgnmlToJson.convert(xmlText);
 
-                    sbgnContainer =  (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj,  editorActions));
+                    sbgnContainer =  (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj,  syncManager));
 
                     if(syncVal) {
 
-                        editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me");
+                        syncManager.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me");
                     }
 
                 });
@@ -487,7 +499,7 @@ module.exports = function(){
 
 
             
-            editorActions.modelManager = modelManager;
+            syncManager.modelManager = modelManager;
 
             var jsonObj = modelManager.getJsonFromModel();
 
@@ -516,7 +528,7 @@ module.exports = function(){
 
 
 
-                    editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
+                    syncManager.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
 
 
                 });
@@ -538,7 +550,7 @@ module.exports = function(){
                 });
 
 
-                editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
+                syncManager.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
             }
 
         },
@@ -564,7 +576,7 @@ module.exports = function(){
 
             var socket = io();
 
-            editorActions.modelManager = modelManager;
+            syncManager.modelManager = modelManager;
 
 
 
@@ -575,11 +587,14 @@ module.exports = function(){
             sbgnLayout.initialize(layoutProperties);
 
 
-            sbgnProp = new SBGNProperties();
-            sbgnProp.initialize();
+            sbgnProperties = new SBGNProperties();
+            sbgnProperties.initialize();
 
-            pathsBetweenQuery = new PathsBetweenQuery(socket,  editorActions.modelManager.getName());
+            pathsBetweenQuery = new PathsBetweenQuery(socket,  syncManager.modelManager.getName());
             pathsBetweenQuery.initialize();
+
+            gridProperties = new GridProperties();
+            gridProperties.initialize();
 
 
 
@@ -596,11 +611,12 @@ module.exports = function(){
             }
             else {//load from a previously loaded graph
 
-                sbgnContainer = (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, editorActions));
+                sbgnContainer = (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, syncManager));
 
-                editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
+                syncManager.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
             }
 
+            /*
             document.getElementById("ctx-add-bend-point").addEventListener("contextmenu", function (event) {
                 event.preventDefault();
             }, false);
@@ -647,18 +663,18 @@ module.exports = function(){
 
                 self.changeBendPoints(edge.id(), bendPointPositions, true);
             });
-
+*/
             $('#samples').click(function (e) {
 
                 var ind = e.target.id;
                 
                 if(sbgnContainer)
-                    editorActions.modelManager.deleteAll(cy.nodes(), cy.edges(), "me");
+                    syncManager.modelManager.deleteAll(cy.nodes(), cy.edges(), "me");
 
 
                 self.updateSample(ind, true);
 
-                editorActions.modelManager.setSampleInd(ind, "me"); //let others know
+                syncManager.modelManager.setSampleInd(ind, "me"); //let others know
 
             });
 
@@ -671,14 +687,14 @@ module.exports = function(){
 
                 var jsonObj = {nodes: [], edges: []};
 
-                editorActions.modelManager.deleteAll(cy.nodes(), cy.edges(), "me");
+                syncManager.modelManager.deleteAll(cy.nodes(), cy.edges(), "me");
                 cy.remove(cy.elements());
-                sbgnContainer = new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, editorActions);
-                editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
+                sbgnContainer = new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, syncManager);
+                syncManager.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
 
-                //editorActions.manager.reset();
+                //syncManager.manager.reset();
                 //TODO: why is this here?
-                //funda?????   cyMod.handleSBGNInspector(editorActions);
+                //funda?????   cyMod.handleSBGNInspector(syncManager);
             });
 
             $('.add-node-menu-item').click(function (e) {
@@ -743,30 +759,25 @@ module.exports = function(){
             $('#select-edit').click(function (e) {
                 modeHandler.setSelectionMode();
             });
-
+            $('#clone-selected').click(function (e) {
+                var selectedNodes = cy.nodes(':selected');
+                var cb = cy.clipboard();
+                var _id = cb.copy(selectedNodes, "cloneOperation");
+                cy.undoRedo().do("paste", { id: _id });
+            });
+            function getFirstSelectedNode() {
+                return window.firstSelectedNode ? window.firstSelectedNode : cy.nodes(":selected")[0];
+            }
 
             $('#align-horizontal-top').click(function (e) {
-                var selectedNodes = sbgnElementUtilities.getRootsOfGivenNodes(cy.nodes(":selected").filter(":visible"));
-                if (selectedNodes.length <= 1) {
-                    return;
-                }
-                var nodesData = getNodesData();
+                cy.undoRedo().do("align", {
+                    nodes: cy.nodes(":selected"),
+                    horizontal: "top",
+                    alignTo: getFirstSelectedNode()
+                });
 
-                var modelNode = window.firstSelectedNode ? firstSelectedNode : selectedNodes[0];
-                var commonTopY = modelNode.position("y") - modelNode.height() / 2;
 
-                for (var i = 0; i < selectedNodes.length; i++) {
-                    var node = selectedNodes[i];
-                    var oldPosY = node.position('y');
-                    var newPosY = commonTopY + node.height() / 2;
-                    node.position({
-                        y: newPosY
-                    });
-                    sbgnElementUtilities.propogateReplacementToChildren(node, 0, newPosY - oldPosY);
-                }
-
-                editorActions.moveNodesConditionally({sync:true, nodes: selectedNodes});  //enable synchronization
-                
+                syncManager.moveNodesConditionally(cy.nodes(":selected")); //synchronize
             });
 
             $("#align-horizontal-top-icon").click(function (e) {
@@ -774,27 +785,12 @@ module.exports = function(){
             });
 
             $('#align-horizontal-middle').click(function (e) {
-                var selectedNodes = sbgnElementUtilities.getRootsOfGivenNodes(cy.nodes(":selected").filter(":visible"));
-                if (selectedNodes.length <= 1) {
-                    return;
-                }
-                var nodesData = getNodesData();
-
-                var modelNode = window.firstSelectedNode ? firstSelectedNode : selectedNodes[0];
-                var commonMiddleY = modelNode.position("y");
-
-                for (var i = 0; i < selectedNodes.length; i++) {
-                    var node = selectedNodes[i];
-                    var oldPosY = node.position('y');
-                    var newPosY = commonMiddleY;
-                    node.position({
-                        y: newPosY
-                    });
-                    sbgnElementUtilities.propogateReplacementToChildren(node, 0, newPosY - oldPosY);
-                }
-
-                editorActions.moveNodesConditionally({sync:true, nodes: selectedNodes});  //enable synchronization
-                
+                cy.undoRedo().do("align", {
+                    nodes: cy.nodes(":selected"),
+                    horizontal: "center",
+                    alignTo: getFirstSelectedNode()
+                });
+                syncManager.moveNodesConditionally(cy.nodes(":selected")); //synchronize
             });
 
             $("#align-horizontal-middle-icon").click(function (e) {
@@ -802,27 +798,12 @@ module.exports = function(){
             });
 
             $('#align-horizontal-bottom').click(function (e) {
-                var selectedNodes = sbgnElementUtilities.getRootsOfGivenNodes(cy.nodes(":selected").filter(":visible"));
-                if (selectedNodes.length <= 1) {
-                    return;
-                }
-                var nodesData = getNodesData();
-
-                var modelNode = window.firstSelectedNode ? firstSelectedNode : selectedNodes[0];
-                var commonBottomY = modelNode.position("y") + modelNode.height() / 2;
-
-                for (var i = 0; i < selectedNodes.length; i++) {
-                    var node = selectedNodes[i];
-                    var oldPosY = node.position('y');
-                    var newPosY = commonBottomY - node.height() / 2;
-                    node.position({
-                        y: newPosY
-                    });
-                    sbgnElementUtilities.propogateReplacementToChildren(node, 0, newPosY - oldPosY);
-                }
-
-                editorActions.moveNodesConditionally({sync:true, nodes: selectedNodes});  //enable synchronization
-                
+                cy.undoRedo().do("align", {
+                    nodes: cy.nodes(":selected"),
+                    horizontal: "bottom",
+                    alignTo: getFirstSelectedNode()
+                });
+                syncManager.moveNodesConditionally(cy.nodes(":selected")); //synchronize
             });
 
             $("#align-horizontal-bottom-icon").click(function (e) {
@@ -830,27 +811,13 @@ module.exports = function(){
             });
 
             $('#align-vertical-left').click(function (e) {
-                var selectedNodes = sbgnElementUtilities.getRootsOfGivenNodes(cy.nodes(":selected").filter(":visible"));
-                if (selectedNodes.length <= 1) {
-                    return;
-                }
-                var nodesData = getNodesData();
+                cy.undoRedo().do("align", {
+                    nodes: cy.nodes(":selected"),
+                    vertical: "left",
+                    alignTo: getFirstSelectedNode()
+                });
 
-                var modelNode = window.firstSelectedNode ? firstSelectedNode : selectedNodes[0];
-                var commonLeftX = modelNode.position("x") - modelNode.width() / 2;
-
-                for (var i = 0; i < selectedNodes.length; i++) {
-                    var node = selectedNodes[i];
-                    var oldPosX = node.position('x');
-                    var newPosX = commonLeftX + node.width() / 2;
-                    node.position({
-                        x: newPosX
-                    });
-                    sbgnElementUtilities.propogateReplacementToChildren(node, newPosX - oldPosX, 0);
-                }
-
-                editorActions.moveNodesConditionally({sync:true, nodes: selectedNodes});  //enable synchronization
-                
+                syncManager.moveNodesConditionally(cy.nodes(":selected")); //synchronize
             });
 
             $("#align-vertical-left-icon").click(function (e) {
@@ -858,27 +825,12 @@ module.exports = function(){
             });
 
             $('#align-vertical-center').click(function (e) {
-                var selectedNodes = sbgnElementUtilities.getRootsOfGivenNodes(cy.nodes(":selected").filter(":visible"));
-                if (selectedNodes.length <= 1) {
-                    return;
-                }
-                var nodesData = getNodesData();
-
-                var modelNode = window.firstSelectedNode ? firstSelectedNode : selectedNodes[0];
-                var commonCenterX = modelNode.position("x");
-
-                for (var i = 0; i < selectedNodes.length; i++) {
-                    var node = selectedNodes[i];
-                    var oldPosX = node.position('x');
-                    var newPosX = commonCenterX
-                    node.position({
-                        x: newPosX
-                    });
-                    sbgnElementUtilities.propogateReplacementToChildren(node, newPosX - oldPosX, 0);
-                }
-
-                editorActions.moveNodesConditionally({sync:true, nodes: selectedNodes});  //enable synchronization
-                
+                cy.undoRedo().do("align", {
+                    nodes: cy.nodes(":selected"),
+                    vertical: "center",
+                    alignTo: getFirstSelectedNode()
+                });
+                syncManager.moveNodesConditionally(cy.nodes(":selected")); //synchronize
             });
 
             $("#align-vertical-center-icon").click(function (e) {
@@ -886,32 +838,18 @@ module.exports = function(){
             });
 
             $('#align-vertical-right').click(function (e) {
-                var selectedNodes = sbgnElementUtilities.getRootsOfGivenNodes(cy.nodes(":selected").filter(":visible"));
-                if (selectedNodes.length <= 1) {
-                    return;
-                }
-                var nodesData = getNodesData();
-
-                var modelNode = window.firstSelectedNode ? firstSelectedNode : selectedNodes[0];
-                var commonRightX = modelNode.position("x") + modelNode.width() / 2;
-
-                for (var i = 0; i < selectedNodes.length; i++) {
-                    var node = selectedNodes[i];
-                    var oldPosX = node.position('x');
-                    var newPosX = commonRightX - node.width() / 2;
-                    node.position({
-                        x: newPosX
-                    });
-                    sbgnElementUtilities.propogateReplacementToChildren(node, newPosX - oldPosX, 0);
-                }
-
-                editorActions.moveNodesConditionally({sync:true, nodes: selectedNodes});  //enable synchronization
-                
+                cy.undoRedo().do("align", {
+                    nodes: cy.nodes(":selected"),
+                    vertical: "right",
+                    alignTo: getFirstSelectedNode()
+                });
+                syncManager.moveNodesConditionally(cy.nodes(":selected")); //synchronize
             });
 
             $("#align-vertical-right-icon").click(function (e) {
                 $("#align-vertical-right").trigger('click');
             });
+
 
 
             $("body").on("change", "#file-input", function (e) {
@@ -943,15 +881,15 @@ module.exports = function(){
 
 
                                 //get another sbgncontainer
-                                sbgnContainer = (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, editorActions));
+                                sbgnContainer = (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, syncManager));
 
 
 
-                                editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
+                                syncManager.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
 
 
 
-                                editorActions.modelManager.setSampleInd(-1, "me"); //to notify other clients
+                                syncManager.modelManager.setSampleInd(-1, "me"); //to notify other clients
 
                             }
                         });
@@ -968,14 +906,14 @@ module.exports = function(){
                         //
                         //
                         // //get another sbgncontainer
-                        // sbgnContainer = (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, editorActions));
+                        // sbgnContainer = (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, syncManager));
                         //
-                        // editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
+                        // syncManager.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
                         //
                         //
-                        // editorActions.modelManager.setSampleInd(-1, "me"); //to notify other clients
+                        // syncManager.modelManager.setSampleInd(-1, "me"); //to notify other clients
                     }
-                    // sbgnContainer =  new cyMod.SBGNContainer('#sbgn-network-container', jsonObj ,  editorActions);
+                    // sbgnContainer =  new cyMod.SBGNContainer('#sbgn-network-container', jsonObj ,  syncManager);
                 }
                 reader.readAsText(file);
                 setFileContent(file.name);
@@ -988,8 +926,8 @@ module.exports = function(){
                     _.template($("#node-legend-template").html(), {}),
                     {
                         'autoDimensions': false,
-                        'width': 420,
-                        'height': 393,
+                        'width': 504,
+                        'height': 325,
                         'transitionIn': 'none',
                         'transitionOut': 'none',
                     });
@@ -1011,8 +949,8 @@ module.exports = function(){
                     _.template($("#edge-legend-template").html(), {}),
                     {
                         'autoDimensions': false,
-                        'width': 400,
-                        'height': 220,
+                        'width': 325,
+                        'height': 285,
                         'transitionIn': 'none',
                         'transitionOut': 'none',
                     });
@@ -1044,18 +982,19 @@ module.exports = function(){
                     {
                         'autoDimensions': false,
                         'width': 300,
-                        'height': 320,
+                        'height': 250,
                         'transitionIn': 'none',
                         'transitionOut': 'none',
                     });
             });
+            /*
             $("#hide-selected").click(function (e) {
                 var param = {
                     sync: true,
                     selectedEles : cy.$(":selected")
                 };
 
-                editorActions.hideSelected(param);
+                syncManager.hideSelected(param);
                 
             });
             $("#hide-selected-icon").click(function (e) {
@@ -1069,7 +1008,7 @@ module.exports = function(){
                     firstTime: true,
                     selectedEles : cy.$(":selected")
                 };
-                editorActions.showSelected(param);
+                syncManager.showSelected(param);
                 
             });
             $("#show-selected-icon").click(function (e) {
@@ -1077,9 +1016,52 @@ module.exports = function(){
             });
 
             $("#show-all").click(function (e) {
-                editorActions.showAll({sync:true});
+                syncManager.showAll({sync:true});
                 
             });
+*/
+            $("#hide-selected").click(function (e) {
+                var selectedEles = cy.$(":selected");
+
+                if(selectedEles.length === 0){
+                    return;
+                }
+
+                cy.undoRedo().do("hide", selectedEles);
+
+                syncManager.hideSelected(selectedEles);
+
+            });
+
+            $("#hide-selected-icon").click(function (e) {
+                $("#hide-selected").trigger('click');
+            });
+
+            $("#show-selected").click(function (e) {
+                if(cy.elements(":selected").length === cy.elements(':visible').length) {
+                    return;
+                }
+
+                cy.undoRedo().do("show", cy.elements(":selected"));
+                syncManager.showSelected(cy.elements(":selected"));
+
+            });
+
+            $("#show-selected-icon").click(function (e) {
+                $("#show-selected").trigger('click');
+            });
+
+            $("#show-all").click(function (e) {
+                if(cy.elements().length === cy.elements(':visible').length) {
+                    return;
+                }
+
+                cy.undoRedo().do("show", cy.elements());
+                syncManager.showSelected(cy.elements());
+
+            });
+
+
 
             $("#delete-selected-simple").click(function (e) {
 
@@ -1095,10 +1077,10 @@ module.exports = function(){
                 //Funda unselect all nodes otherwise they don't get deleted
                 //TODO cy.elements().unselect();
 
-                
 
+           //TODO     cy.undoRedo().do("removeEles", param);
               
-               editorActions.removeEles(selectedEles);
+               syncManager.removeEles(selectedEles);
 
 
 
@@ -1129,7 +1111,9 @@ module.exports = function(){
                 };
 
 
-                editorActions.deleteSelected(param);
+                cy.undoRedo().do("deleteSelected", param);
+
+                //syncManager.deleteSelected(param);
                 
 
 
@@ -1140,6 +1124,94 @@ module.exports = function(){
             });
 
             $("#neighbors-of-selected").click(function (e) {
+                var elesToHighlight = sbgnFiltering.getNeighboursOfSelected();
+
+                if(elesToHighlight.length === 0) {
+                    return;
+                }
+
+                var notHighlightedEles = cy.elements(".nothighlighted").filter(":visible");
+                var highlightedEles = cy.elements(':visible').difference(notHighlightedEles);
+
+                if(elesToHighlight.same(highlightedEles)) {
+                    return;
+                }
+
+                cy.undoRedo().do("highlight", elesToHighlight);
+
+
+            });
+
+            $("#highlight-neighbors-of-selected-icon").click(function (e) {
+                $("#neighbors-of-selected").trigger('click');
+            });
+
+            $("#search-by-label-icon").click(function (e) {
+                var text = $("#search-by-label-text-box").val().toLowerCase();
+                if (text.length == 0) {
+                    return;
+                }
+                cy.nodes().unselect();
+
+                var nodesToSelect = cy.nodes(":visible").filter(function (i, ele) {
+                    if (ele.data("sbgnlabel") && ele.data("sbgnlabel").toLowerCase().indexOf(text) >= 0) {
+                        return true;
+                    }
+                    return false;
+                });
+
+                if (nodesToSelect.length == 0) {
+                    return;
+                }
+
+                nodesToSelect.select();
+
+                var nodesToHighlight = sbgnFiltering.getProcessesOfSelected();
+                cy.undoRedo().do("highlight", nodesToHighlight);
+            });
+
+            $("#search-by-label-text-box").keydown(function (e) {
+                if (e.which === 13) {
+                    $("#search-by-label-icon").trigger('click');
+                }
+            });
+
+            $("#highlight-search-menu-item").click(function (e) {
+                $("#search-by-label-text-box").focus();
+            });
+
+            $("#processes-of-selected").click(function (e) {
+                var elesToHighlight = sbgnFiltering.getProcessesOfSelected();
+
+                if(elesToHighlight.length === 0) {
+                    return;
+                }
+
+                var notHighlightedEles = cy.elements(".nothighlighted").filter(":visible");
+                var highlightedEles = cy.elements(':visible').difference(notHighlightedEles);
+
+                if(elesToHighlight.same(highlightedEles)) {
+                    return;
+                }
+
+                cy.undoRedo().do("highlight", elesToHighlight);
+                syncManager.highlightSelected(elesToHighlight);
+            });
+
+            $("#remove-highlights").click(function (e) {
+
+                if (sbgnFiltering.noneIsNotHighlighted()){
+                    return;
+                }
+
+                cy.undoRedo().do("removeHighlights");
+            });
+
+            $('#remove-highlights-icon').click(function (e) {
+                $('#remove-highlights').trigger("click");
+            });
+/*
+            $("#neighbors-of-selected").click(function (e) {
                 var param = {
                     sync: true,
                     selectedEles : cy.$(":selected"),
@@ -1147,7 +1219,7 @@ module.exports = function(){
 
                 };
 
-                editorActions.highlightSelected(param);
+                syncManager.highlightSelected(param);
                 
 
 
@@ -1182,7 +1254,7 @@ module.exports = function(){
                     highlightProcessesOfSelected: true
                 };
 
-                editorActions.highlightSelected(param);
+                syncManager.highlightSelected(param);
                 
             });
 
@@ -1204,7 +1276,7 @@ module.exports = function(){
                 };
 
 
-               editorActions.highlightSelected(param);
+               syncManager.highlightSelected(param);
                 
 
 
@@ -1212,7 +1284,7 @@ module.exports = function(){
 
             $("#remove-highlights").click(function (e) {
 
-                editorActions.removeHighlights({sync:true});
+                syncManager.removeHighlights({sync:true});
                 
 
 
@@ -1221,53 +1293,48 @@ module.exports = function(){
             $('#remove-highlights-icon').click(function (e) {
                 $('#remove-highlights').trigger("click");
             });
+
+            */
             $("#make-compound-complex").click(function (e) {
                 var selected = cy.nodes(":selected").filter(function (i, element) {
                     var sbgnclass = element.data("sbgnclass")
-                    if (sbgnclass == 'unspecified entity'
-                        || sbgnclass == 'simple chemical'
-                        || sbgnclass == 'macromolecule'
-                        || sbgnclass == 'nucleic acid feature'
-                        || sbgnclass == 'complex') {
-                        return true;
-                    }
-                    return false;
+                    return isEPNClass(sbgnclass);
                 });
 
-                selected = sbgnElementUtilities.getRootsOfGivenNodes(selected);
+                selected = sbgnElementUtilities.getTopMostNodes(selected);
                 if (selected.length == 0 || !sbgnElementUtilities.allHaveTheSameParent(selected)) {
                     return;
                 }
                 var param = {
-                    firstTime: true,
                     compoundType: "complex",
                     nodesToMakeCompound: selected
                 };
 
                 cy.elements().unselect();
-                editorActions.createCompoundForSelectedNodes(param);
+                syncManager.createCompoundForSelectedNodes(param);
+                //cy.undoRedo().do("createCompoundForSelectedNodes", param);
                 
             });
 
             $("#make-compound-compartment").click(function (e) {
                 var selected = cy.nodes(":selected");
-                selected = sbgnElementUtilities.getRootsOfGivenNodes(selected);
+                selected = sbgnElementUtilities.getTopMostNodes(selected);
                 if (selected.length == 0 || !sbgnElementUtilities.allHaveTheSameParent(selected)) {
                     return;
                 }
 
                 var param = {
-                    compoundType: "compartment",
+                    compundType: "compartment",
                     nodesToMakeCompound: selected
                 };
-                cy.elements().unselect();
-                editorActions.createCompoundForSelectedNodes(param);
+
+                syncManager.createCompoundForSelectedNodes(param);
                 
 
             });
 
-            $("#layout-properties").click(function (e) {
-                var lp = editorActions.modelManager.updateLayoutProperties(sbgnLayout.defaultLayoutProperties);
+            $("#layout-properties").click(function (e) { //funda
+                var lp = syncManager.modelManager.updateLayoutProperties(sbgnLayout.defaultLayoutProperties);
                 sbgnLayout.render(lp);
             });
 
@@ -1275,8 +1342,11 @@ module.exports = function(){
                 $("#layout-properties").trigger('click');
             });
 
+            $("#grid-properties").click(function (e) {
+                gridProperties.render();
+            });
             $("#sbgn-properties").click(function (e) {
-                sbgnProp.render();
+                sbgnProperties.render();
             });
 
             $("#query-pathsbetween").click(function (e) {
@@ -1288,7 +1358,7 @@ module.exports = function(){
                 $("#sbgn-properties").trigger('click');
             });
 
-            $("#collapse-selected").click(function (e) {
+        /*    $("#collapse-selected").click(function (e) {
                 var nodes = cy.nodes(":selected").filter("[expanded-collapsed='expanded']");
                 var thereIs = expandCollapseUtilities.thereIsNodeToExpandOrCollapse(nodes, "collapse");
 
@@ -1301,12 +1371,12 @@ module.exports = function(){
                         (sbgnStyleRules['incremental-layout-after-expand-collapse'] == 'true');
                 }
                 if (incrementalLayoutAfterExpandCollapse)
-                    editorActions.collapseGivenNodes({
+                    syncManager.collapseGivenNodes({
                         nodes: nodes,
                         sync: true
                     });
                 else
-                    editorActions.simpleCollapseGivenNodes({nodes:nodes, sync: true});
+                    syncManager.simpleCollapseGivenNodes({nodes:nodes, sync: true});
                 
             });
             $("#collapse-complexes").click(function (e) {
@@ -1322,12 +1392,12 @@ module.exports = function(){
                         (sbgnStyleRules['incremental-layout-after-expand-collapse'] == 'true');
                 }
                 if (incrementalLayoutAfterExpandCollapse)
-                    editorActions.simpleCollapseGivenNodes({
+                    syncManager.simpleCollapseGivenNodes({
                         nodes: complexes,
                         sync: true
                     });
                 else
-                    editorActions.simpleCollapseGivenNodes({nodes:complexes, sync: true});
+                    syncManager.simpleCollapseGivenNodes({nodes:complexes, sync: true});
             });
             $("#collapse-selected-icon").click(function (e) {
                 if (modeHandler.mode == "selection-mode") {
@@ -1347,12 +1417,12 @@ module.exports = function(){
                         (sbgnStyleRules['incremental-layout-after-expand-collapse'] == 'true');
                 }
                 if (incrementalLayoutAfterExpandCollapse)
-                    editorActions.expandGivenNodes({
+                    syncManager.expandGivenNodes({
                         nodes: cy.nodes(":selected"),
                         sync: true
                     });
                 else
-                    editorActions.simpleExpandGivenNodes({nodes:nodes, sync: true});
+                    syncManager.simpleExpandGivenNodes({nodes:nodes, sync: true});
                 
             });
 
@@ -1370,13 +1440,13 @@ module.exports = function(){
                         (sbgnStyleRules['incremental-layout-after-expand-collapse'] == 'true');
                 }
                 if (incrementalLayoutAfterExpandCollapse)
-                    editorActions.expandAllNodes({
+                    syncManager.expandAllNodes({
                         nodes: complexes,
                         sync: true,
                         selector: "complex-parent"
                     });
                 else
-                   editorActions.simpleExpandAllNodes({
+                   syncManager.simpleExpandAllNodes({
                         nodes: complexes,
                         sync: true,
                         selector: "complex-parent"
@@ -1405,7 +1475,7 @@ module.exports = function(){
                         sync: true
                     });
                 else
-                   editorActions.simpleCollapseGivenNodes({nodes: cy.nodes(), sync: true});
+                   syncManager.simpleCollapseGivenNodes({nodes: cy.nodes(), sync: true});
                 
             });
 
@@ -1421,14 +1491,112 @@ module.exports = function(){
                         (sbgnStyleRules['incremental-layout-after-expand-collapse'] == 'true');
                 }
                 if (incrementalLayoutAfterExpandCollapse)
-                    editorActions.expandAllNodes({
+                    syncManager.expandAllNodes({
                         firstTime: true
                     });
                 else
-                    editorActions.simpleExpandAllNodes();
+                    syncManager.simpleExpandAllNodes();
                 
             });
+*/
 
+            $("#collapse-selected").click(function (e) {
+                var nodes = cy.nodes(":selected").filter("[expanded-collapsed='expanded']");
+                var thereIs = nodes.collapsibleNodes().length > 0;
+
+                if (!thereIs) {
+                    return;
+                }
+
+                cy.undoRedo().do("collapse", {
+                    nodes: nodes,
+//      options: getExpandCollapseOptions()
+                });
+
+
+            });
+
+            $("#collapse-complexes").click(function (e) {
+                var complexes = cy.nodes("[sbgnclass='complex'][expanded-collapsed='expanded']");
+                var thereIs = complexes.collapsibleNodes().length > 0;
+
+                if (!thereIs) {
+                    return;
+                }
+
+                cy.undoRedo().do("collapseRecursively", {
+                    nodes: complexes,
+//      options: getExpandCollapseOptions()
+                });
+            });
+
+            $("#collapse-selected-icon").click(function (e) {
+                if (modeHandler.mode == "selection-mode") {
+                    $("#collapse-selected").trigger('click');
+                }
+            });
+
+            $("#expand-selected").click(function (e) {
+                var nodes = cy.nodes(":selected").filter("[expanded-collapsed='collapsed']");
+                var thereIs = nodes.expandableNodes().length > 0;
+
+                if (!thereIs) {
+                    return;
+                }
+
+                cy.undoRedo().do("expand", {
+                    nodes: nodes,
+//      options: getExpandCollapseOptions()
+                });
+            });
+
+            $("#expand-complexes").click(function (e) {
+                var nodes = cy.nodes(":selected").filter("[sbgnclass='complex'][expanded-collapsed='collapsed']");
+                var thereIs = nodes.expandableNodes().length > 0;
+
+                if (!thereIs) {
+                    return;
+                }
+
+                cy.undoRedo().do("expandRecursively", {
+                    nodes: nodes,
+//      options: getExpandCollapseOptions()
+                });
+            });
+
+            $("#expand-selected-icon").click(function (e) {
+                if (modeHandler.mode == "selection-mode") {
+                    $("#expand-selected").trigger('click');
+                }
+            });
+
+            $("#collapse-all").click(function (e) {
+                var nodes = cy.nodes(':visible').filter("[expanded-collapsed='expanded']");
+                var thereIs = nodes.collapsibleNodes().length > 0;
+
+                if (!thereIs) {
+                    return;
+                }
+
+                cy.undoRedo().do("collapseRecursively", {
+                    nodes: nodes,
+//      options: getExpandCollapseOptions()
+                });
+            });
+
+            $("#expand-all").click(function (e) {
+                var nodes = cy.nodes(':visible').filter("[expanded-collapsed='collapsed']");
+                var thereIs = nodes.expandableNodes().length > 0;
+
+                if (!thereIs) {
+                    return;
+                }
+
+                cy.undoRedo().do("expandRecursively", {
+                    nodes: nodes,
+//      options: getExpandCollapseOptions()
+                });
+            });
             $("#perform-layout-icon").click(function (e) {
                 if (modeHandler.mode == "selection-mode") {
                     $("#perform-layout").trigger('click');
@@ -1439,14 +1607,28 @@ module.exports = function(){
 
                 var nodesData = getNodesData();
 
+                if($('.layout-spinner').length === 0){
+                    var containerWidth = cy.width();
+                    var containerHeight = cy.height();
+                    $('#sbgn-network-container').prepend('<i style="position: absolute; z-index: 9999999; left: ' + containerWidth / 2 + 'px; top: ' + containerHeight / 2 + 'px;" class="fa fa-spinner fa-spin fa-3x fa-fw layout-spinner"></i>');
+                }
+
                 beforePerformLayout();
 
-                sbgnLayout.applyLayout(editorActions.modelManager);
+                var preferences = {
+                    animate: sbgnStyleRules['animate-on-drawing-changes']?'end':false
+                };
+
+                if(sbgnLayoutProp.currentLayoutProperties.animate == 'during'){
+                    delete preferences.animate;
+                }
+
+                sbgnLayout.applyLayout(preferences);
 
 
-                editorActions.performLayoutFunction({nodesData:nodesData});
+                syncManager.performLayoutFunction({nodesData:nodesData});
 
-                //       editorActions.manager._do(editorActions.ReturnToPositionsAndSizesCommand({nodesData: nodesData}));
+                //       syncManager.manager._do(syncManager.ReturnToPositionsAndSizesCommand({nodesData: nodesData}));
 
 
             });
@@ -1461,34 +1643,34 @@ module.exports = function(){
                 sbgnLayout.applyIncrementalLayout();
 
                 //funda
-                editorActions.performLayoutFunction({nodesData:nodesData});
+                syncManager.performLayoutFunction({nodesData:nodesData});
                 
             });
 
             $("#undo-last-action").click(function (e) {
-                if(!editorActions.manager.isUndoStackEmpty()){ //funda added this check
-                    editorActions.manager.undo();
+                if(!syncManager.manager.isUndoStackEmpty()){ //funda added this check
+                    syncManager.manager.undo();
                     
                 }
             });
 
             $("#redo-last-action").click(function (e) {
-                if(!editorActions.manager.isRedoStackEmpty()) { //funda added this check
-                editorActions.manager.redo();
+                if(!syncManager.manager.isRedoStackEmpty()) { //funda added this check
+                syncManager.manager.redo();
                 
             }
             });
 
             $("#undo-last-action-global").click(function (e) {
-                if(editorActions.modelManager.isUndoPossible()){
-                    editorActions.modelManager.undoCommand();
+                if(syncManager.modelManager.isUndoPossible()){
+                    syncManager.modelManager.undoCommand();
                     
                 }
             });
 
             $("#redo-last-action-global").click(function (e) {
-                if(editorActions.modelManager.isRedoPossible()) {
-                    editorActions.modelManager.redoCommand();
+                if(syncManager.modelManager.isRedoPossible()) {
+                    syncManager.modelManager.redoCommand();
                     
                 }
             });
@@ -1594,7 +1776,7 @@ module.exports = function(){
             });
 
             $("#save-command-history").click(function (evt) {
-                var cmdTxt = JSON.stringify(editorActions.modelManager.getHistory());
+                var cmdTxt = JSON.stringify(syncManager.modelManager.getHistory());
 
                 var blob = new Blob([cmdTxt], {
                     type: "text/plain;charset=utf-8;",
@@ -1649,9 +1831,9 @@ module.exports = function(){
                             var jsonObj = jsonMerger.merge(newJson, currJson); //Merge the two SBGN models.
 
                             //get another sbgncontainer and display the new SBGN model.
-                            editorActions.modelManager.deleteAll(cy.nodes(), cy.edges(), "me");
-                            sbgnContainer = new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, editorActions);
-                            editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
+                            syncManager.modelManager.deleteAll(cy.nodes(), cy.edges(), "me");
+                            sbgnContainer = new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, syncManager);
+                            syncManager.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
 
                             $("#perform-layout").trigger('click');
                         }
@@ -1786,7 +1968,7 @@ function PathsBetweenQuery(socket, userName){
 function SBGNLayout(modelManager){
 
 
-    return{
+    return {
 
         defaultLayoutProperties: {
             name: 'cose-bilkent',
@@ -1795,16 +1977,20 @@ function SBGNLayout(modelManager){
             idealEdgeLength: 50,
             edgeElasticity: 0.45,
             nestingFactor: 0.1,
-            gravity: 0.4,
+            gravity: 0.25,
             numIter: 2500,
-            tile: true,//funda: true gives error
-            animate: true,
+            tile: true,
+            animationEasing: 'cubic-bezier(0.19, 1, 0.22, 1)',
+            animate: 'end',
+            animationDuration: 1000,
             randomize: true,
             tilingPaddingVertical: function () {
-                return expandCollapseUtilities.calculatePaddings(parseInt(sbgnStyleRules['tiling-padding-vertical'], 10)); //funda changed name
+                return calculateTilingPaddings(parseInt(sbgnStyleRules['tiling-padding-vertical'], 10));
+                //return expandCollapseUtilities.calculatePaddings(parseInt(sbgnStyleRules['tiling-padding-vertical'], 10)); //funda changed name
             },
             tilingPaddingHorizontal: function () {
-                return expandCollapseUtilities.calculatePaddings(parseInt(sbgnStyleRules['tiling-padding-horizontal'], 10));//funda changed name
+                return calculateTilingPaddings(parseInt(sbgnStyleRules['tiling-padding-horizontal'], 10));
+                //return expandCollapseUtilities.calculatePaddings(parseInt(sbgnStyleRules['tiling-padding-horizontal'], 10));//funda changed name
             }
 
         },
@@ -1813,7 +1999,7 @@ function SBGNLayout(modelManager){
         currentLayoutProperties: null,
 
 
-        initialize: function(lp) {
+        initialize: function (lp) {
             var self = this;
 
             self.currentLayoutProperties = lp;
@@ -1826,30 +2012,32 @@ function SBGNLayout(modelManager){
             templateProperties.tilingPaddingHorizontal = sbgnStyleRules['tiling-padding-horizontal'];
 
 
-           // self.template = _.template($("#layout-settings-template").html()); //funda: using lodash
-          //  self.template(templateProperties);
+            // self.template = _.template($("#layout-settings-template").html()); //funda: using lodash
+            //  self.template(templateProperties);
 
 
         },
         copyProperties: function () {
             this.currentLayoutProperties = _.clone(this.defaultLayoutProperties);
         },
-        applyLayout: function () {
-            var options = this.currentLayoutProperties;
-            options.fit = options.randomize;
+        applyLayout: function (preferences) {
+            if (preferences === undefined) {
+                preferences = {};
+            }
+            var options = $.extend({}, this.currentLayoutProperties, preferences);
 
             cy.elements().filter(':visible').layout(options);
-
         },
 
-        applyIncrementalLayout: function () {
-            var options = _.clone(this.currentLayoutProperties);
-            options.randomize = false;
-            options.animate = false;
-            options.fit = false;
-            cy.elements().filter(':visible').layout(options);
-        },
-        updateLayoutProperties: function(layoutProps){
+
+        // applyIncrementalLayout: function () {
+        //     var options = _.clone(this.currentLayoutProperties);
+        //     options.randomize = false;
+        //     options.animate = false;
+        //     options.fit = false;
+        //     cy.elements().filter(':visible').layout(options);
+        // },
+       updateLayoutProperties: function(layoutProps){ //funda added
 
             this.currentLayoutProperties = _.clone(layoutProps);
 
@@ -1880,6 +2068,9 @@ function SBGNLayout(modelManager){
             $("#num-iter")[0].value = lp.numIter.toString();
             $("#tile")[0].checked = lp.tile;
             $("#animate")[0].checked = lp.animate;
+            $("#gravity-range-compound")[0].value = lp.gravityRangeCompound.toString();
+            $("#gravity-compound")[0].value = lp.gravityCompound.toString();
+            $("#gravity-range")[0].value = lp.gravityRange.toString();
 
 
             $("#save-layout").die("click").live("click", function (evt) {
@@ -1893,8 +2084,11 @@ function SBGNLayout(modelManager){
                 self.currentLayoutProperties.gravity = Number(document.getElementById("gravity").value);
                 self.currentLayoutProperties.numIter = Number(document.getElementById("num-iter").value);
                 self.currentLayoutProperties.tile = document.getElementById("tile").checked;
-                self.currentLayoutProperties.animate = document.getElementById("animate").checked;
+                self.currentLayoutProperties.animate = document.getElementById("animate").checked?'during':'end';
                 self.currentLayoutProperties.randomize = !document.getElementById("incremental").checked;
+                self.currentLayoutProperties.gravityRangeCompound = Number(document.getElementById("gravity-range-compound").value);
+                self.currentLayoutProperties.gravityCompound = Number(document.getElementById("gravity-compound").value);
+                self.currentLayoutProperties.gravityRange = Number(document.getElementById("gravity-range").value);
 
                 sbgnStyleRules['tiling-padding-vertical'] = Number(document.getElementById("tiling-padding-vertical").value);
                 sbgnStyleRules['tiling-padding-horizontal'] = Number(document.getElementById("tiling-padding-horizontal").value);
@@ -1934,15 +2128,14 @@ function SBGNProperties(){
         defaultSBGNProperties: {
             compoundPadding: parseInt(sbgnStyleRules['compound-padding'], 10),
             dynamicLabelSize: sbgnStyleRules['dynamic-label-size'],
-            fitLabelsToNodes: (sbgnStyleRules['fit-labels-to-nodes'] == 'true'),
-            incrementalLayoutAfterExpandCollapse: (sbgnStyleRules['incremental-layout-after-expand-collapse'] == 'true')
+            fitLabelsToNodes: sbgnStyleRules['fit-labels-to-nodes'],
+            rearrangeAfterExpandCollapse: sbgnStyleRules['rearrange-after-expand-collapse'],
+            animateOnDrawingChanges: sbgnStyleRules['animate-on-drawing-changes']
         },
         currentSBGNProperties: null,
         initialize: function () {
             var self = this;
             self.copyProperties();
-     //       self.template = _.template($("#sbgn-properties-template").html());
-     //       self.template(self.currentSBGNProperties);
         },
         copyProperties: function () {
             this.currentSBGNProperties = _.clone(this.defaultSBGNProperties);
@@ -1957,18 +2150,21 @@ function SBGNProperties(){
             $("#save-sbgn").die("click").live("click", function (evt) {
 
                 var param = {};
+                param.firstTime = true;
                 param.previousSBGNProperties = _.clone(self.currentSBGNProperties);
 
                 self.currentSBGNProperties.compoundPadding = Number(document.getElementById("compound-padding").value);
                 self.currentSBGNProperties.dynamicLabelSize = $('select[name="dynamic-label-size"] option:selected').val();
                 self.currentSBGNProperties.fitLabelsToNodes = document.getElementById("fit-labels-to-nodes").checked;
-                self.currentSBGNProperties.incrementalLayoutAfterExpandCollapse =
-                    document.getElementById("incremental-layout-after-expand-collapse").checked;
+                self.currentSBGNProperties.rearrangeAfterExpandCollapse =
+                    document.getElementById("rearrange-after-expand-collapse").checked;
+                self.currentSBGNProperties.animateOnDrawingChanges =
+                    document.getElementById("animate-on-drawing-changes").checked;
 
                 //Refresh paddings if needed
                 if (sbgnStyleRules['compound-padding'] != self.currentSBGNProperties.compoundPadding) {
                     sbgnStyleRules['compound-padding'] = self.currentSBGNProperties.compoundPadding;
-                    expandCollapseUtilities.refreshPaddings();
+                    refreshPaddings();
                 }
                 //Refresh label size if needed
                 if (sbgnStyleRules['dynamic-label-size'] != self.currentSBGNProperties.dynamicLabelSize) {
@@ -1978,13 +2174,16 @@ function SBGNProperties(){
                 }
                 //Refresh truncations if needed
                 if (sbgnStyleRules['fit-labels-to-nodes'] != self.currentSBGNProperties.fitLabelsToNodes) {
-                    sbgnStyleRules['fit-labels-to-nodes'] = '' + self.currentSBGNProperties.fitLabelsToNodes;
+                    sbgnStyleRules['fit-labels-to-nodes'] = self.currentSBGNProperties.fitLabelsToNodes;
                     cy.nodes().removeClass('changeContent');
                     cy.nodes().addClass('changeContent');
                 }
 
-                sbgnStyleRules['incremental-layout-after-expand-collapse'] =
-                    '' + self.currentSBGNProperties.incrementalLayoutAfterExpandCollapse;
+                sbgnStyleRules['rearrange-after-expand-collapse'] =
+                    self.currentSBGNProperties.rearrangeAfterExpandCollapse;
+
+                sbgnStyleRules['animate-on-drawing-changes'] =
+                    self.currentSBGNProperties.animateOnDrawingChanges;
 
                 $(self.el).dialog('close');
             });
@@ -1998,3 +2197,87 @@ function SBGNProperties(){
             return this;
         }
     }}
+
+    function GridProperties(){
+
+        return {
+
+            el: '#grid-properties-table',
+
+            defaultGridProperties: {
+                showGrid: sbgnStyleRules['show-grid'],
+                snapToGrid: sbgnStyleRules['snap-to-grid'],
+                discreteDrag: sbgnStyleRules['discrete-drag'],
+                gridSize: sbgnStyleRules['grid-size'],
+                autoResizeNodes: sbgnStyleRules['auto-resize-nodes'],
+                showAlignmentGuidelines: sbgnStyleRules['show-alignment-guidelines'],
+                guidelineTolerance: sbgnStyleRules['guideline-tolerance'],
+                guidelineColor: sbgnStyleRules['guideline-color']
+            },
+            currentGridProperties: null,
+            initialize: function () {
+                var self = this;
+                self.copyProperties();
+                self.template = _.template($("#grid-properties-template").html()); //funda : format change
+                self.template(self.currentGridProperties);
+
+            },
+            copyProperties: function () {
+                this.currentGridProperties = _.clone(this.defaultGridProperties);
+            },
+            render: function () {
+                var self = this;
+
+
+                self.template = _.template($("#grid-properties-template").html()); //funda : format change
+                self.template(self.currentGridProperties);
+                $(self.el).html(self.template(self.currentGridProperties)); //funda
+
+                $(self.el).dialog();
+
+                $("#save-grid").die("click").live("click", function (evt) {
+                    var self = this;
+
+                    var param = {};
+                    param.firstTime = true;
+                    param.previousGrid = _.clone(self.currentGridProperties);
+
+                    self.currentGridProperties.showGrid = document.getElementById("show-grid").checked;
+                    self.currentGridProperties.snapToGrid = document.getElementById("snap-to-grid").checked;
+                    self.currentGridProperties.gridSize = Number(document.getElementById("grid-size").value);
+                    self.currentGridProperties.discreteDrag = document.getElementById("discrete-drag").checked;
+                    self.currentGridProperties.autoResizeNodes = document.getElementById("auto-resize-nodes").checked;
+                    self.currentGridProperties.showAlignmentGuidelines = document.getElementById("show-alignment-guidelines").checked;
+                    self.currentGridProperties.guidelineTolerance = Number(document.getElementById("guideline-tolerance").value);
+                    self.currentGridProperties.guidelineColor = document.getElementById("guideline-color").value;
+
+
+                    cy.gridGuide({
+                        drawGrid: self.currentGridProperties.showGrid,
+                        snapToGrid: self.currentGridProperties.snapToGrid,
+                        gridSpacing: self.currentGridProperties.gridSize,
+                        discreteDrag: self.currentGridProperties.discreteDrag,
+                        resize: self.currentGridProperties.autoResizeNodes,
+                        guidelines: self.currentGridProperties.showAlignmentGuidelines,
+                        guidelinesTolerance: self.currentGridProperties.guidelineTolerance,
+                        guidelinesStyle: {
+                            strokeStyle: self.currentGridProperties.guidelineColor
+                        }
+                    });
+
+                    $(self.el).dialog('close');
+                });
+
+                $("#default-grid").die("click").live("click", function (evt) {
+                    var self = this;
+
+                    self.copyProperties();
+                    self.template = _.template($("#grid-properties-template").html(), self.currentGridProperties);
+                    $(self.el).html(self.template);
+                });
+
+                return this;
+            }
+
+        }
+    }

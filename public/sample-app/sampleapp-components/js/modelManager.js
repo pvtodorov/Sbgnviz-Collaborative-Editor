@@ -1160,6 +1160,66 @@ module.exports =  function(model, docId, userId, userName) {
 
 
 
+        },
+
+        /**
+         *
+         * @param node : cytoscape node
+         */
+        synchronizeNodeAttributes: function(node, noHistUpdate){
+            var nodePath = model.at('_page.doc.cy.nodes.' + node.id());
+            var user = "me";
+
+                this.changeModelNodeAttribute('backgroundOpacity', node.id(),node.data('backgroundOpacity'), user, noHistUpdate);
+
+
+
+
+                this.changeModelNodeAttribute('ports', node.id(),node.data('ports'), user, noHistUpdate);
+
+
+
+                this.changeModelNodeAttribute('sbgnclass', node.id(),node.data('sbgnclass'), user, noHistUpdate);
+
+                this.changeModelNodeAttribute('borderColor', node.id(),node.css('border-color'), user, noHistUpdate); //initially css is active, it is then loaded to data('borderColor')
+
+                this.changeModelNodeAttribute('borderWidth', node.id(),node.css('border-width'), user, noHistUpdate);
+
+
+
+
+
+                this.changeModelNodeAttribute('backgroundColor', node.id(),node.css('background-color'), user, noHistUpdate);
+                this.changeModelNodeAttribute('sbgnlabel', node.id(),node.data('sbgnlabel'), user, noHistUpdate);
+
+
+
+                this.changeModelNodeAttribute('isCloneMarker', node.id(),node._private.data.sbgnclonemarker, user, noHistUpdate);
+            //this.changeModelNodeAttribute('isCloneMarker', node.id(),node.data('sbgnclonemarker'), user, noHistUpdate);
+
+            //todo: restore doesn't get correct
+
+                //nodePath.pass({user: user}).set('isMultimer', false);
+                var nodeIsMultimer = node.data('sbgnclass').indexOf(' multimer') > 0 ;
+                this.changeModelNodeAttribute('isMultimer', node.id(), nodeIsMultimer, user, noHistUpdate);
+
+
+
+                var si = node.data('sbgnstatesandinfos');
+                if(!si) si = [];
+                this.changeModelNodeAttribute('sbgnStatesAndInfos', node.id(), si, user, noHistUpdate);
+                this.changeModelNodeAttribute('parent', node.id(),node.data('parent'), user, noHistUpdate);
+
+
+
+                this.changeModelNodeAttribute('height', node.id(), node._private.data.sbgnbbox.h , user, noHistUpdate);
+                this.changeModelNodeAttribute('width', node.id(),node._private.data.sbgnbbox.w, user, noHistUpdate);
+
+
+         //   cy.unbind("class");
+
         }
     }
+
+
 }

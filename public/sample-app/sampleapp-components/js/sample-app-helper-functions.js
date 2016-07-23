@@ -164,12 +164,12 @@ $(document).keydown(function (e) {
     if (e.ctrlKey) {
         window.ctrlKeyDown = true;
         // if (e.which === 90) {
-        //   editorActionsManager.undo();
+        //   notificationActionsManager.undo();
         //refreshUndoRedoButtonsStatus();
 //    $(document.activeElement).attr("value");
     }
     // else if (e.which === 89) {
-    //  editorActionsManager.redo();
+    //  notificationActionsManager.redo();
     //  refreshUndoRedoButtonsStatus();
     //  }
     //}

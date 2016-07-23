@@ -11,7 +11,7 @@
         <link href="lib/css/font-awesome-4.0.3/css/font-awesome.css" rel="stylesheet">
         <link href="lib/css/jquery.qtip.min.css" rel="stylesheet">
         <link href="sample-app/sampleapp-components/css/sbgn-viz.css" rel="stylesheet">
-
+        <link href="../node_modules/cytoscape-edge-bend-editing/cytoscape.js-edge-bend-editing.css" rel="stylesheet" type="text/css" />
 
         <Body:>
 
@@ -181,6 +181,9 @@
                                     <li class="divider"></li>
                                     <li><a href="#" id="make-compound-complex" >Add Complex for Selected</a></li>
                                     <li><a href="#" id="make-compound-compartment" >Add Compartment for Selected</a></li>
+                                    <li><a href="#" id="create-reaction-template" >Add From Template...</a></li>
+                                    <li><a href="#" id="clone-selected" >Clone Selected</a></li>
+
 
                                     <li class="divider"></li>
 
@@ -259,6 +262,7 @@
                                             </li>
                                         </ul>
                                     </li>
+                                    <li><a href="#" id="grid-properties">Grid...</a></li>
                                 </ul>
                             </li>
 
@@ -488,6 +492,10 @@
                 <!-- sbgn properties table will be shown here -->
             </div>
 
+            <div id="grid-properties-table" title="Grid Properties" style="display: inline">
+                <!-- grid properties table will be shown here -->
+            </div>
+
             <div id="biogene-container" style="display: none">
             </div>
 
@@ -499,8 +507,8 @@
 
             <input id="node-label-textbox" type="text">
 
-            <menu title="Add Bend Point" id="ctx-add-bend-point" class="ctx-bend-operation"></menu>
-            <menu title="Remove Bend Point" id="ctx-remove-bend-point" class="ctx-bend-operation"></menu>
+            <!--<menu title="Add Bend Point" id="ctx-add-bend-point" class="ctx-bend-operation"></menu>-->
+            <!--<menu title="Remove Bend Point" id="ctx-remove-bend-point" class="ctx-bend-operation"></menu>-->
 
 
             <div id="run-unit-test" ><view name='unit-tests'></view> </div>
@@ -775,6 +783,96 @@
                     </tr>
                 </table>
             </script>
+
+            <script type="text/template" id="grid-properties-template">
+            <table class="table-condensed layout-table">
+                <tr>
+                    <td>
+                        <span class="add-on layout-text"> Show Grid </span>
+                    </td>
+
+                    <td>
+                        <input id="show-grid" type="checkbox" class="input-small layout-text" <% if (showGrid){ %> checked<%}%>>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="add-on layout-text"> Snap to Grid </span>
+                    </td>
+
+                    <td>
+                        <input id="snap-to-grid" type="checkbox" class="input-small layout-text" <% if (snapToGrid){ %> checked<%}%>>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="add-on layout-text"> Grid Size </span>
+                    </td>
+
+                    <td>
+                        <input id="grid-size" type="number" min=5 class="input-small layout-text" value= <%= gridSize %> >
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="add-on layout-text"> Discrete Drag </span>
+                    </td>
+
+                    <td>
+                        <input id="discrete-drag" type="checkbox" class="input-small layout-text" <% if (discreteDrag){ %> checked<%}%>>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="add-on layout-text"> Auto  Resize Nodes </span>
+                    </td>
+
+                    <td>
+                        <input id="auto-resize-nodes" type="checkbox" class="input-small layout-text" <% if (autoResizeNodes){ %> checked<%}%>>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <span class="add-on layout-text"> Show Alignment Guidelines </span>
+                    </td>
+
+                    <td>
+                        <input id="show-alignment-guidelines" type="checkbox" class="input-small layout-text" <% if (showAlignmentGuidelines){ %> checked<%}%>>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="add-on layout-text"> Guideline Tolerance </span>
+                    </td>
+
+                    <td>
+                        <input id="guideline-tolerance" type="number" min=0 step=0.1 class="input-small layout-text" value= <%= guidelineTolerance %> >
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="add-on layout-text"> Guideline Color </span>
+                    </td>
+
+                    <td>
+                        <input id="guideline-color" type="color" class="input-small layout-text" value= <%= guidelineColor %> >
+                    </td>
+                    <td></td>
+                </tr>
+                <tr id="grid-buttons">
+                    <td colspan="2">
+                        <div style="margin-left: 30%;">
+                            <button id="save-grid" class="btn btn-default" >Save</button>
+                            <button id="default-grid" class="btn btn-default">Default</button>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            </script>
+
 
             <!--Paths-between query for PC -->
             <script type="text/template" id="query-pathsbetween-template">
