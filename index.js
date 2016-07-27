@@ -22,7 +22,6 @@ var docReady = false;
 var useQunit = true;
 
 var menu;
-var syncManager;
 var userCount;
 var socket;
 
@@ -618,6 +617,7 @@ app.proto.init = function (model) {
     model.on('all', '_page.doc.cy.nodes.*.highlightStatus', function(id,  op, highlightStatus, prev, passed){
 
         if(docReady && passed.user == null) {
+         //   menu.changeHighlightStatus(id, highlightStatus);
             menu.changeElementProperty(id, 'highlightStatus', 'highlightStatus', highlightStatus, 'data', false);
 
         }
@@ -805,7 +805,6 @@ app.proto.create = function (model) {
     //make sure cytoscape is loaded
     menu.start(modelManager);
 
-    syncManager = require('./public/sample-app/sampleapp-components/js/synchronizationManager.js');
 
 
 

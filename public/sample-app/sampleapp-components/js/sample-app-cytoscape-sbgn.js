@@ -708,6 +708,8 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, syncManager) {
                     tappedBefore = tappedNow;
                 }
 
+
+
                 /*               //Handle expand-collapse box
                 var cyPosX = event.cyPosition.x;
                 var cyPosY = event.cyPosition.y;

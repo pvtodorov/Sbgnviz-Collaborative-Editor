@@ -200,8 +200,10 @@ module.exports = function(){
             syncManager.showAll({sync:true});
         },
 
-        highlightNeighbors: function(selectedNodeIds){
-            //unselect all others
+
+         //Here for agents
+         highlightNeighbors: function(selectedNodeIds){
+
             cy.nodes().unselect();
 
 
@@ -210,15 +212,45 @@ module.exports = function(){
             });
 
 
-            var param = {
-                sync: true,
-                selectedEles : cy.$(":selected"),
-                highlightNeighboursofSelected: true
-            };
+
+            var elesToHighlight = sbgnFiltering.getNeighboursOfSelected();
+
+            if(elesToHighlight.length === 0) {
+                return;
+            }
+
+            var notHighlightedEles = cy.elements(".nothighlighted").filter(":visible");
+            var highlightedEles = cy.elements(':visible').difference(notHighlightedEles);
+
+            if(elesToHighlight.same(highlightedEles)) {
+                return;
+            }
+
+            var eles =  cy.undoRedo().do("highlight", elesToHighlight);
+
+            syncManager.highlightSelected(eles);
 
 
-
-            syncManager.highlightSelected(param);
+            //
+            // ///////////eski
+            // //unselect all others
+            // cy.nodes().unselect();
+            //
+            //
+            // selectedNodeIds.forEach(function(nodeId){
+            //     cy.getElementById( nodeId).select();
+            // });
+            //
+            //
+            // var param = {
+            //     sync: true,
+            //     selectedEles : cy.$(":selected"),
+            //     highlightNeighboursofSelected: true
+            // };
+            //
+            //
+            //
+            // syncManager.highlightSelected(param);
 
         },
         
@@ -245,7 +277,13 @@ module.exports = function(){
         },
         
         removeHighlights: function(){
-            syncManager.removeHighlights({sync:true});
+
+            if (sbgnFiltering.noneIsNotHighlighted()){
+                return;
+            }
+
+            var eles  = cy.undoRedo().do("removeHighlights");
+            syncManager.highlightSelected(eles.current);
         },
 
         addEdge:function(elId, source, target, sbgnclass, syncVal){
@@ -363,6 +401,28 @@ module.exports = function(){
             
 
         },
+
+        changeHighlightStatus: function(param){
+
+         var ele = param.ele;
+
+         if(param.data == "highlighted"){
+             cy.undoRedo().do("highlight", ele);
+
+         }
+         if(param.data == "unhighlighted"){
+             cy.undoRedo().do("unhighlight", ele);
+
+         }
+
+         else if(param.data == "notHighlighted" || param.data == null){
+             ele.removeClass("highlighted")
+                 .removeClass("unhighlighted")
+                 .removeData("highlighted");
+
+         }
+
+     },
         //propName and modelDataName can be different: propName: name in cytoscape, modelDataName: name in nodejs model
         //proptype is either data or css
         changeElementProperty: function(elId, propName, modelDataName,propValue, propType, syncVal){
@@ -386,10 +446,11 @@ module.exports = function(){
                 else if (propName == 'collapsedChildren') { //TODO???????
                     syncManager.changeCollapsedChildren(param);
                 }
+                else if (propName == "highlightStatus")
+                    this.changeHighlightStatus(param);
 
-                else if (propName == "highlightStatus" || propName == "visibilityStatus")
-
-                    syncManager.changeVisibilityOrHighlightStatus(param); //no do/undo here
+                else if(propName == "visibilityStatus")
+                    syncManager.changeVisibilityStatus(param);
 
                 else {
                     var param = {
@@ -1124,6 +1185,7 @@ module.exports = function(){
             });
 
             $("#neighbors-of-selected").click(function (e) {
+
                 var elesToHighlight = sbgnFiltering.getNeighboursOfSelected();
 
                 if(elesToHighlight.length === 0) {
@@ -1133,11 +1195,17 @@ module.exports = function(){
                 var notHighlightedEles = cy.elements(".nothighlighted").filter(":visible");
                 var highlightedEles = cy.elements(':visible').difference(notHighlightedEles);
 
+
+
                 if(elesToHighlight.same(highlightedEles)) {
                     return;
                 }
 
-                cy.undoRedo().do("highlight", elesToHighlight);
+
+                 var eles =  cy.undoRedo().do("highlight", elesToHighlight);
+
+
+                syncManager.highlightSelected(eles.current);
 
 
             });
@@ -1167,7 +1235,9 @@ module.exports = function(){
                 nodesToSelect.select();
 
                 var nodesToHighlight = sbgnFiltering.getProcessesOfSelected();
-                cy.undoRedo().do("highlight", nodesToHighlight);
+                var eles = cy.undoRedo().do("highlight", nodesToHighlight);
+
+                syncManager.highlightSelected(eles.current);
             });
 
             $("#search-by-label-text-box").keydown(function (e) {
@@ -1194,8 +1264,8 @@ module.exports = function(){
                     return;
                 }
 
-                cy.undoRedo().do("highlight", elesToHighlight);
-                syncManager.highlightSelected(elesToHighlight);
+                var eles = cy.undoRedo().do("highlight", elesToHighlight);
+                syncManager.highlightSelected(eles.current);
             });
 
             $("#remove-highlights").click(function (e) {
@@ -1204,97 +1274,15 @@ module.exports = function(){
                     return;
                 }
 
-                cy.undoRedo().do("removeHighlights");
+                var eles  = cy.undoRedo().do("removeHighlights");
+                syncManager.highlightSelected(eles.current);
+
             });
 
             $('#remove-highlights-icon').click(function (e) {
                 $('#remove-highlights').trigger("click");
             });
-/*
-            $("#neighbors-of-selected").click(function (e) {
-                var param = {
-                    sync: true,
-                    selectedEles : cy.$(":selected"),
-                    highlightNeighboursofSelected: true
 
-                };
-
-                syncManager.highlightSelected(param);
-                
-
-
-            });
-            $("#highlight-neighbors-of-selected-icon").click(function (e) {
-                $("#neighbors-of-selected").trigger('click');
-            });
-
-            $("#search-by-label-icon").click(function (e) {
-                var text = $("#search-by-label-text-box").val().toLowerCase();
-                if (text.length == 0) {
-                    return;
-                }
-                cy.nodes().unselect();
-
-                var nodesToSelect = cy.nodes(":visible").filter(function (i, ele) {
-                    if (ele.data("sbgnlabel") && ele.data("sbgnlabel").toLowerCase().indexOf(text) >= 0) {
-                        return true;
-                    }
-                    return false;
-                });
-
-                if (nodesToSelect.length == 0) {
-                    return;
-                }
-
-                nodesToSelect.select();
-                var param = {
-                    firstTime: true,
-                    sync: true,
-                    selectedEles : cy.$(":selected"),
-                    highlightProcessesOfSelected: true
-                };
-
-                syncManager.highlightSelected(param);
-                
-            });
-
-            $("#search-by-label-text-box").keydown(function (e) {
-                if (e.which === 13) {
-                    $("#search-by-label-icon").trigger('click');
-                }
-            });
-
-            $("#highlight-search-menu-item").click(function (e) {
-                $("#search-by-label-text-box").focus();
-            });
-
-            $("#processes-of-selected").click(function (e) {
-                var param = {
-                    sync: true,
-                    selectedEles : cy.$(":selected"),
-                    highlightProcessesOfSelected: true
-                };
-
-
-               syncManager.highlightSelected(param);
-                
-
-
-            });
-
-            $("#remove-highlights").click(function (e) {
-
-                syncManager.removeHighlights({sync:true});
-                
-
-
-
-            });
-            $('#remove-highlights-icon').click(function (e) {
-                $('#remove-highlights').trigger("click");
-            });
-
-            */
             $("#make-compound-complex").click(function (e) {
                 var selected = cy.nodes(":selected").filter(function (i, element) {
                     var sbgnclass = element.data("sbgnclass")
