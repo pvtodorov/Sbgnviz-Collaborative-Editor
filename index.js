@@ -22,11 +22,13 @@ var docReady = false;
 var useQunit = true;
 
 var menu;
+
 var userCount;
 var socket;
 
 var modelManager;
 var oneColor = require('onecolor');
+var CircularJSON = require('circular-json');
 app.on('model', function (model) {
 
 
@@ -342,6 +344,56 @@ app.proto.init = function (model) {
         }
     });
 
+    model.on('change', '_page.doc.cy.nodes.*.position', function(id, pos, prev, passed){
+
+        if(docReady && passed.user == null){
+            cy.getElementById(id).position(pos);
+
+           // console.log(pos);
+            //cy.getElementById(id)._private.position = pos;
+        }
+
+
+    });
+
+
+    model.on('all', '_page.doc.cy.nodes.*.data', function(id, op, val, prev, passed){
+        if(docReady && passed.user == null) {
+            cy.getElementById(id)._private.data = CircularJSON.parse(val);
+            cy.getElementById(id).data(CircularJSON.parse(val));
+            cy.forceRender();
+        }
+    });
+
+
+    model.on('all', '_page.doc.cy.nodes.*.style', function(id, op, val, prev, passed){
+        if(docReady && passed.user == null) {
+
+            cy.getElementById(id)._private.style =  CircularJSON.parse(val);
+            cy.forceRender();
+
+        }
+    });
+
+
+
+    model.on('all', '_page.doc.cy.edges.*.data', function(id, op, val, prev, passed){
+        if(docReady && passed.user == null) {
+            cy.getElementById(id)._private.data = CircularJSON.parse(val);
+            cy.forceRender();
+        }
+    });
+
+
+    model.on('all', '_page.doc.cy.edges.*.style', function(id, op, val, prev, passed){
+        if(docReady && passed.user == null) {
+
+            cy.getElementById(id)._private.style =  CircularJSON.parse(val);
+            cy.forceRender();
+
+        }
+    });
+
     model.on('all', '_page.doc.cy.nodes.*.addedLater', function(id, op, idName, prev, passed){ //this property must be something that is only changed during insertion
 
 
@@ -372,69 +424,10 @@ app.proto.init = function (model) {
         }
 
     });
-    model.on('all', '_page.doc.cy.nodes.*.sbgnclass', function(id, op, sbgnclass, prev, passed){ //this property must be something that is only changed during insertion
-
-
-        if(docReady && passed.user == null) {
-
-            menu.changeElementProperty(id, 'sbgnclass', 'sbgnclass', sbgnclass, 'data', false);
-
-        }
 
 
 
-    });
 
-    model.on('all', '_page.doc.cy.edges.*.sbgnclass', function(id,op, sbgnclass, prev, passed){//this property must be something that is only changed during insertion
-
-        if(docReady && passed.user == null ){
-            menu.changeElementProperty(id, 'sbgnclass', 'sbgnclass', sbgnclass, 'data', false);
-        }
-    });
-    model.on('all', '_page.doc.cy.edges.*.source', function(id,op, source, prev, passed){//this property must be something that is only changed during insertion
-
-        if(docReady && passed.user == null ){
-            menu.changeElementProperty(id, 'source', 'source', source, 'data', false);
-        }
-
-    });
-
-    model.on('all', '_page.doc.cy.edges.*.target', function(id,op, target, prev, passed){//this property must be something that is only changed during insertion
-
-        if(docReady && passed.user == null ){
-            menu.changeElementProperty(id, 'target', 'target', target, 'data', false);
-        }
-
-    });
-
-    model.on('all', '_page.doc.cy.edges.*.portsource', function(id,op, portsource, prev, passed){//this property must be something that is only changed during insertion
-
-        if(docReady && passed.user == null ){
-            menu.changeElementProperty(id, 'portsource', 'portsource', portsource, 'data', false);
-        }
-
-    });
-
-    model.on('all', '_page.doc.cy.edges.*.porttarget', function(id,op, porttarget, prev, passed){//this property must be something that is only changed during insertion
-
-        if(docReady && passed.user == null ){
-            menu.changeElementProperty(id, 'porttarget', 'porttarget', porttarget, 'data', false);
-        }
-
-    });
-
-
-
-    model.on('change', '_page.doc.cy.nodes.*.position', function(id, pos, prev, passed){
-
-        if(docReady && passed.user == null){
-            menu.changePosition(id,  pos, false);
-
-
-        }
-
-
-    });
 
     model.on('change', '_page.doc.cy.nodes.*.highlightColor', function(id, highlightColor, prev,passed){
 
@@ -466,203 +459,6 @@ app.proto.init = function (model) {
 
         }
 
-    });
-    model.on('all', '_page.doc.cy.nodes.*.sbgnlabel', function(id, op, label,prev, passed){
-
-        if(docReady && passed.user == null) {
-            menu.changeElementProperty(id, 'sbgnlabel', 'sbgnlabel', label, 'data', false);
-
-        }
-    });
-    model.on('all', '_page.doc.cy.nodes.*.borderColor', function(id, op, borderColor,prev, passed){
-
-        if(docReady && passed.user == null) {
-            menu.changeElementProperty(id, 'borderColor', 'borderColor', borderColor, 'data', false);
-
-        }
-    });
-
-    model.on('all', '_page.doc.cy.nodes.*.borderWidth', function(id,  op,borderWidth,prev, passed){
-
-        if(docReady && passed.user == null) {
-            menu.changeElementProperty(id, 'border-width', 'borderWidth', borderWidth, 'css', false);
-
-        }
-    });
-
-    model.on('all', '_page.doc.cy.nodes.*.backgroundColor', function(id,  op, backgroundColor,prev, passed){
-
-        if(docReady && passed.user == null) {
-            menu.changeElementProperty(id, 'background-color', 'backgroundColor', backgroundColor, 'css', false);
-
-        }
-    });
-
-    model.on('all', '_page.doc.cy.nodes.*.backgroundOpacity', function(id,  op, backgroundOpacity,prev, passed){
-
-        if(docReady && passed.user == null) {
-            menu.changeElementProperty(id, 'backgroundOpacity', 'backgroundOpacity', backgroundOpacity, 'data', false);
-
-        }
-    });
-
-
-    model.on('all', '_page.doc.cy.nodes.*.isMultimer', function(id,  op,isMultimer,prev, passed){
-
-        if(docReady && passed.user == null) {
-            menu.changeMultimerStatus(id, isMultimer);
-
-
-
-        }
-    });
-
-    model.on('all', '_page.doc.cy.nodes.*.isCloneMarker', function(id,  op,isCloneMarker,prev, passed){
-
-        if(docReady && passed.user == null) {
-            menu.changeCloneMarkerStatus(id, isCloneMarker);
-
-        }
-    });
-
-    model.on('all', '_page.doc.cy.nodes.*.parent', function(id,  op,parent,prev, passed){
-
-
-        if(docReady && passed.user == null) {
-
-            menu.changeElementProperty(id, 'parent', 'parent', parent, 'data', false);
-
-
-        }
-    });
-
-
-    model.on('all', '_page.doc.cy.nodes.*.ports', function(id, op, ports, prev, passed){ //this property must be something that is only changed during insertion
-
-
-        if(docReady && passed.user == null) {
-
-            menu.changeElementProperty(id, 'ports', 'ports', ports, 'data', false);
-
-        }
-
-    });
-
-
-    model.on('all', '_page.doc.cy.nodes.*.width', function(id,  op, width ,prev, passed){
-
-        if(docReady && passed.user == null) {
-            menu.changeElementProperty(id, 'width', 'width', width, 'data', false);
-
-
-        }
-    });
-
-    model.on('all', '_page.doc.cy.edges.*.width', function(id,  op, width ,prev, passed){
-
-        if(docReady && passed.user == null) {
-            menu.changeElementProperty(id, 'width', 'width', width, 'css', false);
-
-
-        }
-    });
-
-
-    model.on('all', '_page.doc.cy.nodes.*.height', function(id,  op, height, prev, passed){
-
-        if(docReady && passed.user == null) {
-            menu.changeElementProperty(id, 'height', 'height', height, 'data', false);
-
-        }
-    });
-
-
-
-    model.on('all', '_page.doc.cy.nodes.*.sbgnStatesAndInfos', function(id,  op, sbgnStatesAndInfos,prev, passed){
-
-
-        if(docReady && passed.user == null) {
-            menu.changeElementProperty(id, 'sbgnstatesandinfos', 'sbgnStatesAndInfos', sbgnStatesAndInfos, 'data', false);
-
-
-        }
-    });
-
-    model.on('all', '_page.doc.cy.edges.*.bendPointPositions', function(id,  op, bendPointPositions, prev, passed){
-
-        if(docReady && passed.user == null) {
-            //if(prev.length < bendPointPositions.length)
-            menu.changeBendPoints(id, bendPointPositions, false);
-
-        }
-    });
-    model.on('all', '_page.doc.cy.edges.*.lineColor', function(id,  op, lineColor,prev, passed){
-
-
-        if(docReady && passed.user == null) {
-            menu.changeElementProperty(id, 'line-color', 'lineColor', lineColor, 'css', false);
-
-        }
-    });
-
-    model.on('all', '_page.doc.cy.nodes.*.expandCollapseStatus', function(id,  op, expandCollapseStatus, prev, passed){
-
-        if(docReady && passed.user == null) {
-            menu.changeExpandCollapseStatus(id, expandCollapseStatus, false);
-
-        }
-    });
-
-
-    model.on('all', '_page.doc.cy.nodes.*.highlightStatus', function(id,  op, highlightStatus, prev, passed){
-
-        if(docReady && passed.user == null) {
-         //   menu.changeHighlightStatus(id, highlightStatus);
-            menu.changeElementProperty(id, 'highlightStatus', 'highlightStatus', highlightStatus, 'data', false);
-
-        }
-    });
-
-    model.on('all', '_page.doc.cy.edges.*.highlightStatus', function(id,  op, highlightStatus, prev, passed){
-
-        if(docReady && passed.user == null) {
-            menu.changeElementProperty(id, 'highlightStatus', 'highlightStatus', highlightStatus, 'data', false);
-
-        }
-    });
-    model.on('all', '_page.doc.cy.nodes.*.visibilityStatus', function(id,  op, visibilityStatus, prev, passed){
-
-        if(docReady && passed.user == null) {
-            menu.changeElementProperty(id, 'visibilityStatus', 'visibilityStatus', visibilityStatus, 'data', false);
-
-        }
-    });
-
-    model.on('all', '_page.doc.cy.edges.*.visibilityStatus', function(id,  op, visibilityStatus, prev, passed){
-
-        if(docReady && passed.user == null) {
-            menu.changeElementProperty(id, 'visibilityStatus', 'visibilityStatus', visibilityStatus, 'data', false);
-
-        }
-    });
-
-
-
-
-
-    model.on('all', '_page.doc.cy.edges.*.width', function(id,  op, width,prev, passed){
-        if(docReady && passed.user == null) {
-            menu.changeElementProperty(id, 'width', 'width', width, 'css', false);
-
-        }
-    });
-
-    model.on('all', '_page.doc.cy.edges.*.sbgncardinality', function(id, op,  sbgncardinality,prev, passed){
-
-        if(docReady && passed.user == null) {
-            menu.changeElementProperty(id, 'sbgncardinality', 'sbgncardinality', sbgncardinality, 'data', false);
-
-        }
     });
 
     model.on('all', '_page.doc.images', function() {

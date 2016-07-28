@@ -3,7 +3,7 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, syncManager) {
 
     var addRemoveUtilities = require('../../../src/utilities/add-remove-utilities.js');
     //var expandCollapseUtilities = require('../../../src/utilities/expand-collapse-utilities.js')();
-   // var undoRedoActions = require('./register-undo-redo-actions.js');
+    var undoRedoActions = require('./register-undo-redo-actions.js');
 
     var bioGeneView = require('./biogene-info.js');
 
@@ -52,7 +52,7 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, syncManager) {
             var socket = io();
             window.cy = this;
 
-        //    undoRedoActions.registerUndoRedoActions();
+            undoRedoActions.registerUndoRedoActions();
 
             cy.expandCollapse(getExpandCollapseOptions());
 
@@ -271,6 +271,8 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, syncManager) {
 
 
 
+
+
             try { //Todo FUNDA : gives error????
                cy.edgehandles('drawoff');
             }
@@ -309,6 +311,26 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, syncManager) {
         var lastMouseDownNodeInfo = null;
 
 
+            cy.on("changeStyleData",  function (event, collection) {
+                collection.forEach(function(el) {
+                    syncManager.modelManager.updateModelNodeData(el.id(), el._private.data);
+                });
+            });
+
+            cy.on("changeStyleCss",  function (event, collection) {
+                collection.forEach(function(el){
+                    syncManager.modelManager.updateModelNodeStyle(el.id(), el._private.style);
+                });
+            });
+
+            cy.on("changePosition",  function (event, collection) {
+                collection.forEach(function(el) {
+                    syncManager.modelManager.updateModelNodePosition(el.id(),  el.position());
+                });
+            });
+
+
+
 
             //Listen events
             cy.on("beforeCollapse", "node", function (event) {
@@ -345,7 +367,7 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, syncManager) {
                 }
 
 
-                syncManager.collapseNode({node:node, sync:true});
+                // syncManager.collapseNode({node:node, sync:true});
             });
 
             cy.on("beforeExpand", "node", function (event) {
@@ -365,21 +387,11 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, syncManager) {
                 refreshPaddings();
             });
             cy.on("mousedown", "node", function () {
-                
 
                 var self = this;
                 if (modeHandler.mode == 'selection-mode' && window.ctrlKeyDown) {
-
                     enableDragAndDropMode();
                     window.nodeToDragAndDrop = self;
-                }
-                else {
-                    lastMouseDownNodeInfo = {};
-                    lastMouseDownNodeInfo.lastMouseDownPosition = {
-                        x: this.position("x"),
-                        y: this.position("y")
-                    };
-                    lastMouseDownNodeInfo.node = this;
                 }
 
             });
@@ -403,67 +415,32 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, syncManager) {
                         return;
                     }
 
-           //funda         disableDragAndDropMode();
+                    disableDragAndDropMode();
+
                     if (node.parent()[0] == newParent || node._private.data.parent == node.id()) {
                         return;
                     }
+
                     var param = {
                         newParent: newParent,
-                        ele: node,
-                        id: node.id(),
+                        node: node,
                         nodesData: nodesData,
                         posX: event.cyPosition.x,
-                        posY: event.cyPosition.y,
-                        sync: true,
+                        posY: event.cyPosition.y
                     };
-                  //  cy.undoRedo().do("changeParent", param);
-                   syncManager.changeParent(param);
+
+                    cy.undoRedo().do("changeParent", param);
                 }
             });
 
             //cy.on("mouseup", "node", function () {
             cy.on("mouseup", "node", function () {
-                if (window.dragAndDropModeEnabled) {
-                    return;
-                }
-
-                if (lastMouseDownNodeInfo == null) {
-                    return;
-                }
-
-
-                var node = lastMouseDownNodeInfo.node;
-                var lastMouseDownPosition = lastMouseDownNodeInfo.lastMouseDownPosition;
-                var mouseUpPosition = {
-                    x: node.position("x"),
-                    y: node.position("y")
-                };
-                if (mouseUpPosition.x != lastMouseDownPosition.x ||
-                    mouseUpPosition.y != lastMouseDownPosition.y) {
-                    var positionDiff = {
-                        x: mouseUpPosition.x - lastMouseDownPosition.x,
-                        y: mouseUpPosition.y - lastMouseDownPosition.y
-                    };
-
-                    var nodes;
-                    if (node.selected()) {
-                        nodes = cy.nodes(":visible").filter(":selected");
-                    }
-                    else {
-                        nodes = [];
-                        nodes.push(node);
-                    }
-
-                    syncManager.moveNodesConditionally(nodes);
-
-
-                    lastMouseDownNodeInfo = null;
 
 
                    syncManager.unselectNode(this);
 
 
-                }
+
             });
 
 
@@ -610,11 +587,11 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, syncManager) {
             });
 
             cy.on('select', function (event) {
-                require('./sample-app-inspector-functions.js').handleSBGNInspector(syncManager);
+                inspectorUtilities.handleSBGNInspector();
             });
 
             cy.on('unselect', function (event) {
-                require('./sample-app-inspector-functions.js').handleSBGNInspector(syncManager);
+                inspectorUtilities.handleSBGNInspector();
             });
 
 
@@ -658,9 +635,7 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, syncManager) {
 
 
             cy.on('doubleTap', 'node', function (event) {
-
                 if (modeHandler.mode == 'selection-mode') {
-
                     var node = this;
                     var containerPos = $(cy.container()).position();
                     var left = containerPos.left + this.renderedPosition().x;
@@ -673,22 +648,16 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, syncManager) {
                     $("#node-label-textbox").css('left', left);
                     $("#node-label-textbox").css('top', top);
                     $("#node-label-textbox").show();
-                    var sbgnlabel = this._private.data.sbgnlabel || "";
-
+                    var sbgnlabel = this._private.data.sbgnlabel;
+                    if (sbgnlabel == null) {
+                        sbgnlabel = "";
+                    }
                     $("#node-label-textbox").attr('value', sbgnlabel);
                     $("#node-label-textbox").data('node', this);
                     $("#node-label-textbox").focus();
 
 
-                  /*  nodeLabelChanged = true;
-                    node.data('sbgnlabel', sbgnlabel);
-
-
-                    prevNode = node;
-*/
                 }
-
-
             });
 
             cy.on('tap', 'node', function (event) {
@@ -825,50 +794,6 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, syncManager) {
                 }
             });
 
-            cy.on('tapdrag', function (event) {
-                var edge = movedBendEdge;
-
-                if(movedBendEdge === undefined || movedBendIndex === undefined){
-                    return;
-                }
-
-                var weights = edge.data('weights');
-                var distances = edge.data('distances');
-
-                var relativeBendPosition = sbgnBendPointUtilities.convertToRelativeBendPosition(edge, event.cyPosition);
-                weights[movedBendIndex] = relativeBendPosition.weight;
-                distances[movedBendIndex] = relativeBendPosition.distance;
-
-                edge.data('weights', weights);
-                edge.data('distances', distances);
-
-
-                //notify others
-                //update bendpoint positions
-                var bendPointPositions = edge.data('bendPointPositions');
-                bendPointPositions[movedBendIndex] = event.cyPosition;
-
-                syncManager.changeStyleData({dataType:'bendPointPositions', data: bendPointPositions, sync:true, modelDataName:'bendPointPositions', ele:edge});
-            });
-
-            cy.on('tapend', 'edge', function (event) {
-                var edge = movedBendEdge;
-
-                if(moveBendParam !== undefined && edge.data('weights')
-                    && edge.data('weights').toString() != moveBendParam.weights.toString()){
-                    syncManager.changeBendPoints(moveBendParam);
-
-
-
-                }
-
-                movedBendIndex = undefined;
-                movedBendEdge = undefined;
-                moveBendParam = undefined;
-
-                cy.panningEnabled(true);
-                cy.boxSelectionEnabled(true);
-            });
 
 
 

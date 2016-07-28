@@ -836,9 +836,6 @@ module.exports = function(){
                     horizontal: "top",
                     alignTo: getFirstSelectedNode()
                 });
-
-
-                syncManager.moveNodesConditionally(cy.nodes(":selected")); //synchronize
             });
 
             $("#align-horizontal-top-icon").click(function (e) {
@@ -851,7 +848,6 @@ module.exports = function(){
                     horizontal: "center",
                     alignTo: getFirstSelectedNode()
                 });
-                syncManager.moveNodesConditionally(cy.nodes(":selected")); //synchronize
             });
 
             $("#align-horizontal-middle-icon").click(function (e) {
@@ -864,7 +860,6 @@ module.exports = function(){
                     horizontal: "bottom",
                     alignTo: getFirstSelectedNode()
                 });
-                syncManager.moveNodesConditionally(cy.nodes(":selected")); //synchronize
             });
 
             $("#align-horizontal-bottom-icon").click(function (e) {
@@ -877,8 +872,6 @@ module.exports = function(){
                     vertical: "left",
                     alignTo: getFirstSelectedNode()
                 });
-
-                syncManager.moveNodesConditionally(cy.nodes(":selected")); //synchronize
             });
 
             $("#align-vertical-left-icon").click(function (e) {
@@ -891,7 +884,6 @@ module.exports = function(){
                     vertical: "center",
                     alignTo: getFirstSelectedNode()
                 });
-                syncManager.moveNodesConditionally(cy.nodes(":selected")); //synchronize
             });
 
             $("#align-vertical-center-icon").click(function (e) {
@@ -904,8 +896,8 @@ module.exports = function(){
                     vertical: "right",
                     alignTo: getFirstSelectedNode()
                 });
-                syncManager.moveNodesConditionally(cy.nodes(":selected")); //synchronize
             });
+
 
             $("#align-vertical-right-icon").click(function (e) {
                 $("#align-vertical-right").trigger('click');
@@ -1000,10 +992,15 @@ module.exports = function(){
             });
 
             $("#node-label-textbox").on('change', function () {
-                self.changeElementProperty( $(this).data('node').id(), 'sbgnlabel', 'sbgnlabel', $(this).attr('value'), 'data', true);
-                $("#node-label-textbox").blur(); //funda added
-            });
+                var node = $(this).data('node');
+                var param = {
+                    nodes: cy.collection(node),
+                    sbgnlabel: $(this).attr('value'),
+                    firstTime: true
+                };
 
+                cy.undoRedo().do("changeNodeLabel", param);
+            });
             $("#edge-legend").click(function (e) {
                 e.preventDefault();
                 $.fancybox(
@@ -1090,8 +1087,6 @@ module.exports = function(){
 
                 cy.undoRedo().do("hide", selectedEles);
 
-                syncManager.hideSelected(selectedEles);
-
             });
 
             $("#hide-selected-icon").click(function (e) {
@@ -1104,7 +1099,10 @@ module.exports = function(){
                 }
 
                 cy.undoRedo().do("show", cy.elements(":selected"));
-                syncManager.showSelected(cy.elements(":selected"));
+
+//    var param = {};
+//
+//    cy.undoRedo().do("showSelected", param);
 
             });
 
@@ -1118,7 +1116,8 @@ module.exports = function(){
                 }
 
                 cy.undoRedo().do("show", cy.elements());
-                syncManager.showSelected(cy.elements());
+
+//    cy.undoRedo().do("showAll", {});
 
             });
 
@@ -1195,19 +1194,11 @@ module.exports = function(){
                 var notHighlightedEles = cy.elements(".nothighlighted").filter(":visible");
                 var highlightedEles = cy.elements(':visible').difference(notHighlightedEles);
 
-
-
                 if(elesToHighlight.same(highlightedEles)) {
                     return;
                 }
 
-
-                 var eles =  cy.undoRedo().do("highlight", elesToHighlight);
-
-
-                syncManager.highlightSelected(eles.current);
-
-
+                cy.undoRedo().do("highlight", elesToHighlight);
             });
 
             $("#highlight-neighbors-of-selected-icon").click(function (e) {
@@ -1235,9 +1226,7 @@ module.exports = function(){
                 nodesToSelect.select();
 
                 var nodesToHighlight = sbgnFiltering.getProcessesOfSelected();
-                var eles = cy.undoRedo().do("highlight", nodesToHighlight);
-
-                syncManager.highlightSelected(eles.current);
+                cy.undoRedo().do("highlight", nodesToHighlight);
             });
 
             $("#search-by-label-text-box").keydown(function (e) {
@@ -1264,8 +1253,7 @@ module.exports = function(){
                     return;
                 }
 
-                var eles = cy.undoRedo().do("highlight", elesToHighlight);
-                syncManager.highlightSelected(eles.current);
+                cy.undoRedo().do("highlight", elesToHighlight);
             });
 
             $("#remove-highlights").click(function (e) {
@@ -1274,9 +1262,7 @@ module.exports = function(){
                     return;
                 }
 
-                var eles  = cy.undoRedo().do("removeHighlights");
-                syncManager.highlightSelected(eles.current);
-
+                cy.undoRedo().do("removeHighlights");
             });
 
             $('#remove-highlights-icon').click(function (e) {

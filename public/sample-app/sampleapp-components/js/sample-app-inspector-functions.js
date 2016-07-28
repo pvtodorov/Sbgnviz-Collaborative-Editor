@@ -232,101 +232,83 @@ module.exports.handleSBGNInspector = function (synchronizationManager) {
 
             $('#inspector-is-multimer').on('click', function () {
 
-                //   selectedEles.forEach(function(selected){
-
                 var param = {
-                    data: $('#inspector-is-multimer').attr('checked') == 'checked',
-                    ele: selectedEles,
-                    sync: true
+                    makeMultimer: $('#inspector-is-multimer').attr('checked') == 'checked',
+                    nodes: selectedEles,
+                    firstTime: true
                 };
 
-                synchronizationManager.changeIsMultimerStatus(param);
-
-                //  });
+                cy.undoRedo().do("changeIsMultimerStatus", param);
             });
 
             $('#inspector-is-clone-marker').on('click', function () {
-                //selectedEles.forEach(function(selected) {
                 var param = {
-                    data: $('#inspector-is-clone-marker').attr('checked') == 'checked',
-                    ele: selectedEles,
-                    sync: true
+                    makeCloneMarker: $('#inspector-is-clone-marker').attr('checked') == 'checked',
+                    nodes: selectedEles,
+                    firstTime: true
                 };
-                synchronizationManager.changeIsCloneMarkerStatus(param);
-                // });
 
+                cy.undoRedo().do("changeIsCloneMarkerStatus", param);
             });
 
             $("#inspector-border-color").on('change', function () {
-                //selectedEles.forEach(function(selected) {
                 var param = {
-                    ele: selectedEles,
+                    eles: selectedEles,
                     data: $("#inspector-border-color").attr("value"),
                     dataType: "borderColor",
-                    modelDataName: 'borderColor',
-                    sync: true
+                    firstTime: true
                 };
-                synchronizationManager.changeStyleData(param);
-                //  });
 
+                cy.undoRedo().do("changeStyleData", param);
 
             });
 
             $("#inspector-label").on('change', function () {
 
-                //selectedEles.forEach(function(selected) {
                 var param = {
-                    ele: selectedEles,
-                    data: $("#inspector-label").attr('value'),
-                    dataType: 'sbgnlabel',
-                    modelDataName: 'sbgnlabel',
-                    sync: true
+                    nodes: selectedEles,
+                    sbgnlabel: $(this).attr('value'),
+                    firstTime: true
                 };
-                synchronizationManager.changeStyleData(param);
-                // });
+
+                cy.undoRedo().do("changeNodeLabel", param);
 
             });
 
             $("#inspector-background-opacity").on('change', function () {
-                //selectedEles.forEach(function(selected) {
                 var param = {
-                    ele: selectedEles,
+                    eles: selectedEles,
                     data: $("#inspector-background-opacity").attr("value"),
                     dataType: "backgroundOpacity",
-                    modelDataName: 'backgroundOpacity',
-                    sync: true
+                    firstTime: true
                 };
-                synchronizationManager.changeStyleData(param);
+
+                cy.undoRedo().do("changeStyleData", param);
                 //});
 
             });
 
             $("#inspector-fill-color").on('change', function () {
-                //selectedEles.forEach(function(selected) {
                 var param = {
-                    ele: selectedEles,
+                    eles: selectedEles,
                     data: $("#inspector-fill-color").attr("value"),
                     dataType: "background-color",
-                    modelDataName: 'backgroundColor',
-                    sync: true
+                    firstTime: true
                 };
 
-                synchronizationManager.changeStyleCss(param);
-//                });
+                cy.undoRedo().do("changeStyleCss", param);
 
             });
 
             $("#inspector-border-width").bind('change').on('change', function () {
-                //selectedEles.forEach(function(selected) {
                 var param = {
-                    ele: selectedEles,
+                    eles: selectedEles,
                     data: $("#inspector-border-width").attr("value"),
                     dataType: "border-width",
-                    modelDataName: 'borderWidth',
-                    sync: true
+                    firstTime: true
                 };
-                synchronizationManager.changeStyleCss(param);
-                // });
+
+                cy.undoRedo().do("changeStyleCss", param);
             });
         }
         else {
