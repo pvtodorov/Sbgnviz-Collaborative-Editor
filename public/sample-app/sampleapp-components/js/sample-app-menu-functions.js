@@ -26,18 +26,16 @@ var setFileContent = function (fileName) {
 };
 
 var beforePerformLayout = function(){
-    cy.nodes().removeData("ports");
-    cy.edges().removeData("portsource");
-    cy.edges().removeData("porttarget");
+    var nodes = cy.nodes();
+    var edges = cy.edges();
 
-    cy.nodes().data("ports", []);
-    cy.edges().data("portsource", []);
-    cy.edges().data("porttarget", []);
+    nodes.removeData("ports");
+    edges.removeData("portsource");
+    edges.removeData("porttarget");
 
-    // cy.edges().removeData('weights');
-    // cy.edges().removeData('distances');
-    //
-    // cy.edges().css('curve-style', 'bezier');
+    nodes.data("ports", []);
+    edges.data("portsource", []);
+    edges.data("porttarget", []);
 
     // TODO do this by using extension API
     cy.$('.edgebendediting-hasbendpoints').removeClass('edgebendediting-hasbendpoints');
@@ -345,172 +343,9 @@ module.exports = function(){
             }
         },
 
-        changePosition: function(elId, pos, syncVal){
-            var el = cy.$(('#' + elId))[0];
-            var param = {
-                ele: el,
-                data: pos,
-                sync: syncVal
-            };
-
-
-            if(el)
-                syncManager.changePosition(param);
-
-
-        },
-
-
-       changeMultimerStatus: function(elId, isMultimer){
-
-            var el = cy.$(('#' + elId))[0];
-            var param = {
-                ele: el,
-                id: elId,
-                data: isMultimer,
-                sync: false
-            };
-
-            if(el)
-                syncManager.changeIsMultimerStatus(param);
-
-        },
-
-        changeCloneMarkerStatus: function(elId, isCloneMarker){
-
-            var el = cy.$(('#' + elId))[0];
-            var param = {
-                ele: el,
-                id: elId,
-                data: isCloneMarker,
-                sync: false
-            };
-
-            if(el)
-                syncManager.changeIsCloneMarkerStatus(param);
-
-        },
-
-        //Changes background-color
-        //A separate command for highlighting nodes as we don't want the do/undo stack to be affected
-        changeHighlightColor: function(elId, color){
-            var el = cy.$(('#' + elId))[0];
-            if(el)
-                el.css('background-color', color);
-
-            
-
-        },
-
-        changeHighlightStatus: function(param){
-
-         var ele = param.ele;
-
-         if(param.data == "highlighted"){
-             cy.undoRedo().do("highlight", ele);
-
-         }
-         if(param.data == "unhighlighted"){
-             cy.undoRedo().do("unhighlight", ele);
-
-         }
-
-         else if(param.data == "notHighlighted" || param.data == null){
-             ele.removeClass("highlighted")
-                 .removeClass("unhighlighted")
-                 .removeData("highlighted");
-
-         }
-
-     },
-        //propName and modelDataName can be different: propName: name in cytoscape, modelDataName: name in nodejs model
-        //proptype is either data or css
-        changeElementProperty: function(elId, propName, modelDataName,propValue, propType, syncVal){
-            var el = cy.$(('#' + elId))[0];
-
-            if(el) {
-
-                var param = {
-                    ele: el,
-                    id: elId,
-                    dataType: propName,
-                    data: propValue,
-                    modelDataName: modelDataName,
-                    sync: syncVal
-                };
-
-                if (propName == 'parent')//TODO
-
-                    syncManager.changeParent(param);
-
-                else if (propName == 'collapsedChildren') { //TODO???????
-                    syncManager.changeCollapsedChildren(param);
-                }
-                else if (propName == "highlightStatus")
-                    this.changeHighlightStatus(param);
-
-                else if(propName == "visibilityStatus")
-                    syncManager.changeVisibilityStatus(param);
-
-                else {
-                    var param = {
-                        ele: [el],
-                        id: elId,
-                        dataType: propName,
-                        data: propValue,
-                        modelDataName: modelDataName,
-                        sync: syncVal
-                    };
-
-
-                    if (propType == 'data')
-                        syncManager.changeStyleData(param);
-                    else if (propType == 'css')
-                        syncManager.changeStyleCss(param);
-                }
-            }
-
-         },
-
-         changeExpandCollapseStatus: function(elId, status, syncVal) {
-            var el = cy.$(('#' + elId))[0];
-
-            setTimeout(function() { //wait for the layout to run on the other client's side
-                if (status == 'expand') //no need to run incremental layout here -- other client will have run it already
-                    syncManager.simpleExpandNode({node: el, sync: syncVal});
-                else if (status == 'collapse')
-                    syncManager.simpleCollapseNode({node: el, sync: syncVal});
-
-            },0);
-        },
-
-         changeBendPoints:function(elId, newBendPointPositions, syncVal){
-             var edge = cy.getElementById(elId);
 
 
 
-             this.changeElementProperty(elId, 'bendPointPositions', 'bendPointPositions', newBendPointPositions, 'data', syncVal);
-
-             if(newBendPointPositions.length > 0 ){
-                 var result = sbgnBendPointUtilities.convertToRelativeBendPositions(edge);
-
-                 if(result.distances.length > 0){
-                     edge.data('weights', result.weights);
-                     edge.data('distances', result.distances);
-                     edge.css('curve-style', 'segments');
-                 }
-
-                 if(newBendPointPositions.length == 0){
-                     edge.removeData('distances');
-                     edge.removeData('weights');
-                     edge.css('curve-style', 'bezier');
-                 }
-             }
-
-
-             cy.forceRender();
-
-         },
 
 
         updateLayoutProperties: function(lp){
@@ -1593,7 +1428,7 @@ module.exports = function(){
                     animate: sbgnStyleRules['animate-on-drawing-changes']?'end':false
                 };
 
-                if(sbgnLayoutProp.currentLayoutProperties.animate == 'during'){
+                if(sbgnLayout.currentLayoutProperties.animate == 'during'){
                     delete preferences.animate;
                 }
 
@@ -1637,15 +1472,15 @@ module.exports = function(){
 
             $("#undo-last-action-global").click(function (e) {
                 if(syncManager.modelManager.isUndoPossible()){
-                    syncManager.modelManager.undoCommand();
+                    syncManager.modelManager.doCommand("undo");
                     
                 }
             });
 
             $("#redo-last-action-global").click(function (e) {
                 if(syncManager.modelManager.isRedoPossible()) {
-                    syncManager.modelManager.redoCommand();
-                    
+                    syncManager.modelManager.doCommand("redo");
+
                 }
             });
 

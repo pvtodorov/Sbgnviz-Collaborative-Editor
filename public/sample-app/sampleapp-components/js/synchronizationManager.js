@@ -801,10 +801,10 @@ module.exports.changeStyleData = function( param) {
         ele.data(param.dataType, param.data);
 
 
-
-        if (cy.elements(":selected").length == 1 && cy.elements(":selected")[0] == param.ele) {
-            require('./sample-app-inspector-functions.js').handleSBGNInspector(module.exports);
-        }
+        //
+        // if (cy.elements(":selected").length == 1 && cy.elements(":selected")[0] == param.ele) {
+        //     require('./sample-app-inspector-functions.js').handleSBGNInspector(module.exports);
+        // }
 
 
         if(param.dataType == 'width'){
@@ -875,9 +875,9 @@ module.exports.changeStyleCss = function(param) {
         ele.css(param.dataType, param.data);
 
 
-        if (cy.elements(":selected").length == 1 && cy.elements(":selected")[0] == ele) {
-            require('./sample-app-inspector-functions.js').handleSBGNInspector(module.exports);
-        }
+        //if (cy.elements(":selected").length == 1 && cy.elements(":selected")[0] == ele) {
+        //    require('./sample-app-inspector-functions.js').handleSBGNInspector(module.exports);
+       // }
     });
 
     if(param.sync) {

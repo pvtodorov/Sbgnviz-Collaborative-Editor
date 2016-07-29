@@ -377,6 +377,19 @@ app.proto.init = function (model) {
 
 
 
+    model.on('all', '_page.doc.cy.nodes.*.classes', function(id, op, val, prev, passed){
+        if(docReady && passed.user == null) {
+
+            cy.getElementById(id)._private.classes =  CircularJSON.parse(val);
+            //cy.getElementById(id).classes( CircularJSON.parse(val));
+       //     console.log(  cy.getElementById(id)._private.classes );
+            cy.forceRender();
+
+        }
+    });
+
+
+
     model.on('all', '_page.doc.cy.edges.*.data', function(id, op, val, prev, passed){
         if(docReady && passed.user == null) {
             cy.getElementById(id)._private.data = CircularJSON.parse(val);
@@ -389,6 +402,17 @@ app.proto.init = function (model) {
         if(docReady && passed.user == null) {
 
             cy.getElementById(id)._private.style =  CircularJSON.parse(val);
+            cy.forceRender();
+
+        }
+    });
+
+
+    model.on('all', '_page.doc.cy.edges.*.classes', function(id, op, val, prev, passed){
+        if(docReady && passed.user == null) {
+
+            cy.getElementById(id)._private.classes =  CircularJSON.parse(val);
+            //cy.getElementById(id).classes( CircularJSON.parse(val));
             cy.forceRender();
 
         }
@@ -438,28 +462,18 @@ app.proto.init = function (model) {
             if (highlightColor != null)
                 color =  highlightColor;
             else
-                color = model.get('_page.doc.cy.nodes.' + id + '.backgroundColor');
+                color = model.get('_page.doc.cy.nodes.' + id + '.backgroundColor'); //default background color
 
-            menu.changeHighlightColor(id, color);
 
-        }
+            cy.getElementById(id).css("background-color", color);
 
-    });
 
-    model.on('all', '_page.doc.cy.edges.*.highlightColor', function(id, op, highlightColor,prev, passed){
-
-        if(docReady && passed.user == null) {
-            var color;
-            if (highlightColor != null)
-                color = highlightColor;
-            else
-                color = model.get('_page.doc.cy.edges.' + id + '.lineColor');
-
-            menu.changeElementProperty(id, 'line-color', 'lineColor', color, 'css', false);
 
         }
 
     });
+
+
 
     model.on('all', '_page.doc.images', function() {
         if (docReady)
