@@ -14,16 +14,7 @@ module.exports.registerUndoRedoActions = function() {
   });
 
 
-    // register add remove actions
-    // ur.action("addNode", addRemoveActionFunctions.addNode, addRemoveActionFunctions.removeNodes);
-    // ur.action("removeEles", addRemoveActionFunctions.removeEles, addRemoveActionFunctions.restoreEles);
-    // ur.action("addEdge", addRemoveActionFunctions.addEdge, addRemoveActionFunctions.removeEdges);
-    // ur.action("deleteSelected", addRemoveActionFunctions.deleteSelected, addRemoveActionFunctions.restoreSelected);
-    // ur.action("createCompoundForSelectedNodes", addRemoveActionFunctions.createCompoundForSelectedNodes, addRemoveActionFunctions.removeCompound);
-    // ur.action("changeParent", addRemoveActionFunctions.changeParent, addRemoveActionFunctions.changeParent);
 
-
-    // register add remove actions
   // ur.action("addNode", synchronizationManager.addNode);
   // // ur.action("removeEles", addRemoveActionFunctions.removeEles, addRemoveActionFunctions.restoreEles);
   //  ur.action("addEdge", synchronizationManager.addEdge);
@@ -31,6 +22,16 @@ module.exports.registerUndoRedoActions = function() {
   //  ur.action("createCompoundForSelectedNodes", synchronizationManager.createCompoundForSelectedNodes);
   //  ur.action("changeParent", synchronizationManager.changeParent);
   // //
+
+  // register add remove actions
+  ur.action("addNode", addRemoveActionFunctions.addNode, addRemoveActionFunctions.removeNodes);
+  ur.action("removeEles", addRemoveActionFunctions.removeEles, addRemoveActionFunctions.restoreEles);
+  ur.action("addEdge", addRemoveActionFunctions.addEdge, addRemoveActionFunctions.removeEdges);
+  ur.action("deleteSelected", addRemoveActionFunctions.deleteSelected, addRemoveActionFunctions.restoreSelected);
+  ur.action("createCompoundForSelectedNodes", addRemoveActionFunctions.createCompoundForSelectedNodes, addRemoveActionFunctions.removeCompound);
+  ur.action("changeParent", addRemoveActionFunctions.changeParent, addRemoveActionFunctions.changeParent);
+
+
   // // register general actions
     ur.action("resizeNode", generalActionFunctions.resizeNode);
   ur.action("changeNodeLabel", generalActionFunctions.changeNodeLabel, generalActionFunctions.changeNodeLabel);

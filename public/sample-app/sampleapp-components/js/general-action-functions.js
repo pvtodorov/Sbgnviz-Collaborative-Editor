@@ -102,6 +102,21 @@ var generalActionFunctions = {
       node._private.data.sbgnbbox.w = node.data('width') || node.width();
       node._private.data.sbgnbbox.h = node.data('height') || node.height();
 
+
+
+      //FUNDA: had to add this. why????
+
+      // node._private.data.width =node._private.data.sbgnbbox.w ;
+      // node._private.data.height =node._private.data.sbgnbbox.h ;
+      //     node._private.style.autoWidth = node._private.data.sbgnbbox.w ;
+      // node._private.style.width.value = node._private.data.sbgnbbox.w ;
+      // node._private.style.width.pfValue =  node._private.data.sbgnbbox.w ;
+      // node._private.style.height.value = node._private.data.sbgnbbox.h ;
+      // node._private.style.autoHeight = node._private.data.sbgnbbox.h ;
+      // node._private.style.height.pfValue =  node._private.data.sbgnbbox.h ;
+
+
+
       node.removeClass('noderesize-resized');
       node.addClass('noderesize-resized');
     }

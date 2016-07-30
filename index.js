@@ -285,8 +285,11 @@ app.proto.init = function (model) {
             var node  = model.get('_page.doc.cy.nodes.' + id);
 
             if(!node || !node.id){ //node is deleted
+                console.log(id);
+                addRemoveUtilities.removeEles(cy.getElementById(id));
 
-               menu.deleteElement(id, false);
+
+              // menu.deleteElement(id, false);
 
             }
         }
@@ -301,7 +304,9 @@ app.proto.init = function (model) {
             var edge  = model.get('_page.doc.cy.edges.' + id); //check
 
             if(!edge|| !edge.id){ //edge is deleted
-                menu.deleteElement(id, false);
+                console.log(id);
+                addRemoveUtilities.removeEles(cy.getElementById(id));
+            //    menu.deleteElement(id, false);
 
             }
             //else insertion
@@ -336,13 +341,7 @@ app.proto.init = function (model) {
     });
 
 
-    model.on('all', '_page.doc.cy.nodes.*', function(id, op, idName, prev, passed) {
 
-        if (docReady && passed.user == null) {
-
-
-        }
-    });
 
     model.on('change', '_page.doc.cy.nodes.*.position', function(id, pos, prev, passed){
 
@@ -412,39 +411,23 @@ app.proto.init = function (model) {
         if(docReady && passed.user == null) {
 
             cy.getElementById(id)._private.classes =  CircularJSON.parse(val);
-            //cy.getElementById(id).classes( CircularJSON.parse(val));
             cy.forceRender();
 
         }
     });
 
-    model.on('all', '_page.doc.cy.nodes.*.addedLater', function(id, op, idName, prev, passed){ //this property must be something that is only changed during insertion
-
+    model.on('all', '_page.doc.cy.nodes.*.addedLater', function(id, op, value, prev, passed){ //this property must be something that is only changed during insertion
 
         if(docReady && passed.user == null) {
-
-            
-              var pos = model.get('_page.doc.cy.nodes.'+ id + '.position');
-              var sbgnlabel = model.get('_page.doc.cy.nodes.'+ id + '.sbgnlabel');
-             var sbgnclass = model.get('_page.doc.cy.nodes.'+ id + '.sbgnclass');
-              menu.addNode(id, pos.x, pos.y, sbgnclass, sbgnlabel,false);
-
-
+            addRemoveUtilities.addNode(value.x, value.y, value.sbgnclass,null, null, id);
         }
 
     });
 
-    model.on('all', '_page.doc.cy.edges.*.addedLater', function(id,op, idName, prev, passed){//this property must be something that is only changed during insertion
+    model.on('all', '_page.doc.cy.edges.*.addedLater', function(id,op, value, prev, passed){//this property must be something that is only changed during insertion
 
-
-        if(docReady && passed.user == null ){
-            //check if edge id exists in the current inspector graph
-            var source = model.get('_page.doc.cy.edges.'+ id + '.source');
-            var target = model.get('_page.doc.cy.edges.'+ id + '.target');
-            var sbgnclass = model.get('_page.doc.cy.edges.'+ id + '.sbgnclass');
-
-            menu.addEdge(id, source, target, sbgnclass, false);
-
+        if(docReady && passed.user == null) {
+            addRemoveUtilities.addEdge(value.source, value.target, value.sbgnclass,null, id);
         }
 
     });
@@ -464,9 +447,7 @@ app.proto.init = function (model) {
             else
                 color = model.get('_page.doc.cy.nodes.' + id + '.backgroundColor'); //default background color
 
-
             cy.getElementById(id).css("background-color", color);
-
 
 
         }

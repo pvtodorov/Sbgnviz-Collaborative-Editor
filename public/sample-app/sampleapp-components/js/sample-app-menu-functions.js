@@ -6,7 +6,7 @@
  * **/
 
 
-var sbgnFiltering = require('../../../src/utilities/sbgn-filtering.js')();
+// var sbgnFiltering = require('../../../src/utilities/sbgn-filtering.js')();
 var sbgnElementUtilities = require('../../../src/utilities/sbgn-element-utilities.js')();
 //var expandCollapseUtilities = require('../../../src/utilities/expand-collapse-utilities.js')();
 var sbgnmlToJson =require('../../../src/utilities/sbgnml-to-json-converter.js')();
@@ -119,7 +119,7 @@ module.exports = function(){
 
 
              //get another sbgncontainer
-             sbgnContainer = (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, syncManager));
+             sbgnContainer = (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, syncManager.modelManager));
 
              syncManager.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
              syncManager.modelManager.setSampleInd(-1, "me"); //to notify other clients
@@ -199,35 +199,35 @@ module.exports = function(){
         },
 
 
-         //Here for agents
-         highlightNeighbors: function(selectedNodeIds){
-
-            cy.nodes().unselect();
-
-
-            selectedNodeIds.forEach(function(nodeId){
-                cy.getElementById( nodeId).select();
-            });
-
-
-
-            var elesToHighlight = sbgnFiltering.getNeighboursOfSelected();
-
-            if(elesToHighlight.length === 0) {
-                return;
-            }
-
-            var notHighlightedEles = cy.elements(".nothighlighted").filter(":visible");
-            var highlightedEles = cy.elements(':visible').difference(notHighlightedEles);
-
-            if(elesToHighlight.same(highlightedEles)) {
-                return;
-            }
-
-            var eles =  cy.undoRedo().do("highlight", elesToHighlight);
-
-            syncManager.highlightSelected(eles);
-
+         // //Here for agents
+         // highlightNeighbors: function(selectedNodeIds){
+         //
+         //    cy.nodes().unselect();
+         //
+         //
+         //    selectedNodeIds.forEach(function(nodeId){
+         //        cy.getElementById( nodeId).select();
+         //    });
+         //
+         //
+         //
+         //    var elesToHighlight = sbgnFiltering.getNeighboursOfSelected();
+         //
+         //    if(elesToHighlight.length === 0) {
+         //        return;
+         //    }
+         //
+         //    var notHighlightedEles = cy.elements(".nothighlighted").filter(":visible");
+         //    var highlightedEles = cy.elements(':visible').difference(notHighlightedEles);
+         //
+         //    if(elesToHighlight.same(highlightedEles)) {
+         //        return;
+         //    }
+         //
+         //    var eles =  cy.undoRedo().do("highlight", elesToHighlight);
+         //
+         //    syncManager.highlightSelected(eles);
+         //
 
             //
             // ///////////eski
@@ -250,39 +250,39 @@ module.exports = function(){
             //
             // syncManager.highlightSelected(param);
 
-        },
+    //    },
         
-        highlightProcesses: function(selectedNodeIds){
-            //unselect all others
-            cy.nodes().unselect();
-
-
-            selectedNodeIds.forEach(function(nodeId){
-                cy.getElementById( nodeId).select();
-            });
-
-
-            var param = {
-                sync: true,
-                selectedEles : cy.$(":selected"),
-                highlightProcessesOfSelected: true
-            };
-
-
-
-            syncManager.highlightSelected(param);
-
-        },
-        
-        removeHighlights: function(){
-
-            if (sbgnFiltering.noneIsNotHighlighted()){
-                return;
-            }
-
-            var eles  = cy.undoRedo().do("removeHighlights");
-            syncManager.highlightSelected(eles.current);
-        },
+        // highlightProcesses: function(selectedNodeIds){
+        //     //unselect all others
+        //     cy.nodes().unselect();
+        //
+        //
+        //     selectedNodeIds.forEach(function(nodeId){
+        //         cy.getElementById( nodeId).select();
+        //     });
+        //
+        //
+        //     var param = {
+        //         sync: true,
+        //         selectedEles : cy.$(":selected"),
+        //         highlightProcessesOfSelected: true
+        //     };
+        //
+        //
+        //
+        //     syncManager.highlightSelected(param);
+        //
+        // },
+        //
+        // removeHighlights: function(){
+        //
+        //     if (sbgnFiltering.noneIsNotHighlighted()){
+        //         return;
+        //     }
+        //
+        //     var eles  = cy.undoRedo().do("removeHighlights");
+        //     syncManager.highlightSelected(eles.current);
+        // },
 
         addEdge:function(elId, source, target, sbgnclass, syncVal){
             var param ={
@@ -362,7 +362,7 @@ module.exports = function(){
 
                 var jsonObj = syncManager.modelManager.getJsonFromModel();
 
-                sbgnContainer =  (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj,  syncManager));
+                sbgnContainer =  (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj,  syncManager.modelManager));
                 if(syncVal)
                     syncManager.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me");
 
@@ -376,7 +376,7 @@ module.exports = function(){
 
                     var jsonObj = sbgnmlToJson.convert(xmlText);
 
-                    sbgnContainer =  (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj,  syncManager));
+                    sbgnContainer =  (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj,  syncManager.modelManager));
 
                     if(syncVal) {
 
@@ -507,59 +507,12 @@ module.exports = function(){
             }
             else {//load from a previously loaded graph
 
-                sbgnContainer = (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, syncManager));
+                sbgnContainer = (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, syncManager.modelManager));
 
                 syncManager.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
             }
 
-            /*
-            document.getElementById("ctx-add-bend-point").addEventListener("contextmenu", function (event) {
-                event.preventDefault();
-            }, false);
 
-            document.getElementById("ctx-remove-bend-point").addEventListener("contextmenu", function (event) {
-                event.preventDefault();
-            }, false);
-
-
-            //Listen to menu actions
-
-            $('.ctx-bend-operation').click(function (e) {
-                $('.ctx-bend-operation').css('display', 'none');
-            });
-
-            $('#ctx-add-bend-point').click(function (e) {
-                var edge = sbgnBendPointUtilities.currentCtxEdge;
-
-                //funda: add current bend point
-                var newBendPointPositions = edge.data('bendPointPositions');
-                newBendPointPositions.push(sbgnBendPointUtilities.currentCtxPos);
-
-
-
-                sbgnBendPointUtilities.addBendPoint();
-
-                self.changeBendPoints(edge.id(), newBendPointPositions, true);
-
-
-            });
-
-            $('#ctx-remove-bend-point').click(function (e) {
-                var edge = sbgnBendPointUtilities.currentCtxEdge;
-
-                sbgnBendPointUtilities.removeBendPoint();
-
-
-                var bendPointPositions = edge.data('bendPointPositions');
-
-
-                bendPointPositions.splice(sbgnBendPointUtilities.currentBendIndex,1);
-
-
-
-                self.changeBendPoints(edge.id(), bendPointPositions, true);
-            });
-*/
             $('#samples').click(function (e) {
 
                 var ind = e.target.id;
@@ -585,7 +538,7 @@ module.exports = function(){
 
                 syncManager.modelManager.deleteAll(cy.nodes(), cy.edges(), "me");
                 cy.remove(cy.elements());
-                sbgnContainer = new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, syncManager);
+                sbgnContainer = new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, syncManager.modelManager);
                 syncManager.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
 
                 //syncManager.manager.reset();
@@ -769,7 +722,7 @@ module.exports = function(){
 
 
                                 //get another sbgncontainer
-                                sbgnContainer = (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, syncManager));
+                                sbgnContainer = (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, syncManager.modelManager));
 
 
 
@@ -794,14 +747,14 @@ module.exports = function(){
                         //
                         //
                         // //get another sbgncontainer
-                        // sbgnContainer = (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, syncManager));
+                        // sbgnContainer = (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, syncManager.modelManager));
                         //
                         // syncManager.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
                         //
                         //
                         // syncManager.modelManager.setSampleInd(-1, "me"); //to notify other clients
                     }
-                    // sbgnContainer =  new cyMod.SBGNContainer('#sbgn-network-container', jsonObj ,  syncManager);
+                    // sbgnContainer =  new cyMod.SBGNContainer('#sbgn-network-container', jsonObj ,  syncManager.modelManager);
                 }
                 reader.readAsText(file);
                 setFileContent(file.name);
@@ -880,39 +833,7 @@ module.exports = function(){
                         'transitionOut': 'none',
                     });
             });
-            /*
-            $("#hide-selected").click(function (e) {
-                var param = {
-                    sync: true,
-                    selectedEles : cy.$(":selected")
-                };
 
-                syncManager.hideSelected(param);
-                
-            });
-            $("#hide-selected-icon").click(function (e) {
-                $("#hide-selected").trigger('click');
-            });
-
-
-            $("#show-selected").click(function (e) {
-                var param = {
-                    sync: true,
-                    firstTime: true,
-                    selectedEles : cy.$(":selected")
-                };
-                syncManager.showSelected(param);
-                
-            });
-            $("#show-selected-icon").click(function (e) {
-                $("#show-selected").trigger('click');
-            });
-
-            $("#show-all").click(function (e) {
-                syncManager.showAll({sync:true});
-                
-            });
-*/
             $("#hide-selected").click(function (e) {
                 var selectedEles = cy.$(":selected");
 
@@ -935,10 +856,6 @@ module.exports = function(){
 
                 cy.undoRedo().do("show", cy.elements(":selected"));
 
-//    var param = {};
-//
-//    cy.undoRedo().do("showSelected", param);
-
             });
 
             $("#show-selected-icon").click(function (e) {
@@ -952,33 +869,17 @@ module.exports = function(){
 
                 cy.undoRedo().do("show", cy.elements());
 
-//    cy.undoRedo().do("showAll", {});
-
             });
 
 
 
             $("#delete-selected-simple").click(function (e) {
-
                 var selectedEles = cy.$(":selected");
 
-                var param = {
-                    // firstTime: false,
-                    eles: selectedEles,
-                    sync:true
-                };
-
-
-                //Funda unselect all nodes otherwise they don't get deleted
-                //TODO cy.elements().unselect();
-
-
-           //TODO     cy.undoRedo().do("removeEles", param);
-              
-               syncManager.removeEles(selectedEles);
-
-
-
+                if(selectedEles.length == 0){
+                    return;
+                }
+                cy.undoRedo().do("removeEles", selectedEles);
 
 
             });
@@ -987,30 +888,15 @@ module.exports = function(){
                 $("#delete-selected-simple").trigger('click');
             });
             $("#delete-selected-smart").click(function (e) {
-                //find which elements will be selected
-
-                var allNodes = cy.nodes();
-                var selectedNodes = cy.nodes(":selected");
-                cy.elements().unselect();
-                var nodesToShow = sbgnFiltering.expandRemainingNodes(selectedNodes, allNodes);
-                var nodesNotToShow = allNodes.not(nodesToShow);
-                var connectedEdges = nodesNotToShow.connectedEdges();
-                var selectedEles = connectedEdges.remove();
-
-                selectedEles = selectedEles.union(nodesNotToShow.remove());
+                if(cy.$(":selected").length == 0){
+                    return;
+                }
 
                 var param = {
-                    // firstTime: false,
-                    eles: selectedEles,
-                    sync: true
+                    firstTime: true
                 };
 
-
                 cy.undoRedo().do("deleteSelected", param);
-
-                //syncManager.deleteSelected(param);
-                
-
 
             });
 
@@ -1641,7 +1527,7 @@ module.exports = function(){
 
                             //get another sbgncontainer and display the new SBGN model.
                             syncManager.modelManager.deleteAll(cy.nodes(), cy.edges(), "me");
-                            sbgnContainer = new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, syncManager);
+                            sbgnContainer = new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, syncManager.modelManager);
                             syncManager.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
 
                             $("#perform-layout").trigger('click');

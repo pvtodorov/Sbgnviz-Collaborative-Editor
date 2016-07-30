@@ -6,9 +6,9 @@
 
 
 module.exports.modelManager;
-var addRemoveUtilities = require('../../../src/utilities/add-remove-utilities.js')();
+// var addRemoveUtilities = require('../../../src/utilities/add-remove-utilities.js')();
 //var expandCollapseUtilities = require('../../../src/utilities/expand-collapse-utilities.js')();
-var sbgnFiltering = require('../../../src/utilities/sbgn-filtering.js')();
+// var sbgnFiltering = require('../../../src/utilities/sbgn-filtering.js')();
 
 
 module.exports.selectNode = function (node) {
@@ -34,6 +34,7 @@ module.exports.unselectEdge = function(edge) {
     return edge;
 }
 
+/*
 module.exports.addNode = function(param) {
 
     var result = addRemoveUtilities.addNode(param.x, param.y, param.sbgnclass, param.id);
@@ -104,7 +105,7 @@ module.exports.addEdge = function(param)
     }
     return result;
 }
-
+ */
 
 
 module.exports.expandNode = function(param) {

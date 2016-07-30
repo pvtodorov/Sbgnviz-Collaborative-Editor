@@ -1,9 +1,9 @@
 var CircularJSON = require('circular-json');
 
 
-module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, syncManager) {
+module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, modelManager) {
 
-    var addRemoveUtilities = require('../../../src/utilities/add-remove-utilities.js');
+    // var addRemoveUtilities = require('../../../src/utilities/add-remove-utilities.js');
     //var expandCollapseUtilities = require('../../../src/utilities/expand-collapse-utilities.js')();
     var undoRedoActions = require('./register-undo-redo-actions.js');
 
@@ -109,14 +109,13 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, syncManager) {
             initilizeUnselectedDataOfElements();
 
 
-            var paramResize;
             cy.noderesize({
                 handleColor: '#000000', // the colour of the handle and the line drawn from it
                 hoverDelay: 1, // time spend over a target node before it is considered a target selection
                 enabled: true, // whether to start the plugin in the enabled state
                 minNodeWidth: 30,
                 minNodeHeight: 30,
-                triangleSize: 10,
+                triangleSize: 20,
                 lines: 3,
                 padding: 5,
                 start: function (sourceNode) {
@@ -132,8 +131,14 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, syncManager) {
                     // fired when noderesize is done and entities are added
                 },
                 stop: function (sourceNode) {
+
                     sourceNode._private.data.sbgnbbox.w = sourceNode.width();
                     sourceNode._private.data.sbgnbbox.h = sourceNode.height();
+
+
+
+
+
                 }
             });
             //For adding edges interactively
@@ -254,8 +259,8 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, syncManager) {
             cy.on("changeStyleData",  function (event, dataType, collection) {
 
                 collection.forEach(function(el) {
-                         var nonCircularData = CircularJSON.stringify(el._private.data);
-                        syncManager.modelManager.updateModelElData(el.id(), el.isNode(), nonCircularData, dataType, "me");
+                    var nonCircularData = CircularJSON.stringify(el._private.data);
+                    modelManager.updateModelElData(el.id(), el.isNode(), nonCircularData, dataType, "me");
 
                 });
             });
@@ -263,7 +268,7 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, syncManager) {
             cy.on("changeStyleCss",  function (event, dataType, collection) {
                 collection.forEach(function(el){
                     var nonCircularStyle = CircularJSON.stringify(el._private.style);
-                    syncManager.modelManager.updateModelElStyle(el.id(), el.isNode(), nonCircularStyle, dataType, "me");
+                    modelManager.updateModelElStyle(el.id(), el.isNode(), nonCircularStyle, dataType, "me");
                 });
             });
 
@@ -275,19 +280,32 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, syncManager) {
                     var nonCircularStyle = CircularJSON.stringify(el._private.style);
                     var nonCircularData = CircularJSON.stringify(el._private.data);
 
-                    syncManager.modelManager.updateModelElClasses(el.id(), el.isNode(), nonCircularClasses, opName, "me");
-                    syncManager.modelManager.updateModelElStyle(el.id(), el.isNode(), nonCircularStyle, "all", "me");  //these are updated as well
-                    syncManager.modelManager.updateModelElData(el.id(), el.isNode(), nonCircularData, "all", "me");
+                    modelManager.updateModelElClasses(el.id(), el.isNode(), nonCircularClasses, opName, "me");
+                    modelManager.updateModelElStyle(el.id(), el.isNode(), nonCircularStyle, "all", "me");  //these are updated as well
+                    modelManager.updateModelElData(el.id(), el.isNode(), nonCircularData, "all", "me");
                 });
             });
 
             cy.on("changePosition",  function (event, collection) {
                 collection.forEach(function(el) {
-                    syncManager.modelManager.updateModelNodePosition(el.id(),  el.position(), "me");
+                    modelManager.updateModelNodePosition(el.id(),  el.position(), "me");
                 });
             });
 
 
+            cy.on("addNode", function(event, id, newNode){
+                modelManager.addModelNode(id,newNode,"me");
+
+            });
+            cy.on("addEdge", function(event, id, newEdge){
+                modelManager.addModelEdge(id,newEdge,"me");
+
+            });
+
+            cy.on("removeEles", function(event, collection){
+
+                modelManager.deleteModelElementGroup(collection,"me");
+            });
 
 
             //Listen events
@@ -325,7 +343,7 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, syncManager) {
                 }
 
 
-                // syncManager.collapseNode({node:node, sync:true});
+
             });
 
             cy.on("beforeExpand", "node", function (event) {
@@ -395,7 +413,7 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, syncManager) {
             cy.on("mouseup", "node", function () {
 
 
-                   syncManager.unselectNode(this);
+                modelManager.unselectModelNode(this);
 
 
 
@@ -404,40 +422,32 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, syncManager) {
 
 
             cy.on('select', 'node', function(event) { //Necessary for multiple selections
-                syncManager.selectNode(this);
+                modelManager.selectModelNode(this);
 
             });
             cy.on('unselect', 'node', function() { //causes sync problems in delete op
 
-                syncManager.unselectNode(this);
+                modelManager.unselectModelNode(this);
 
             });
             cy.on('grab', 'node', function(event) { //Also works as 'select'
 
 
-                syncManager.selectNode(this);
+                modelManager.selectModelNode(this);
             });
 
             cy.on('select', 'edge', function(event) {
-                syncManager.selectEdge(this);
+                modelManager.selectModelEdge(this);
 
             });
 
             cy.on('unselect', 'edge', function(event) {
-                syncManager.unselectEdge(this);
+                modelManager.unselectModelEdge(this);
             });
 
 
             cy.on('mouseover', 'node', function (event) {
                 var node = this;
-                if (modeHandler.mode != "selection-mode") {
-                    node.mouseover = false;
-                }
-                else if (!node.mouseover) {
-                    node.mouseover = true;
-                    //make preset layout to redraw the nodes
-                    cy.forceRender();
-                }
 
                 $(".qtip").remove();
 
@@ -476,7 +486,7 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, syncManager) {
                     org: "human",
                     format: "json"
                 });
-                syncManager.modelManager.updateHistory({opName:"query", opTarget:"element", elType: "node", elId:node.id(), param: node._private.data.sbgnlabel});
+                modelManager.updateHistory({opName:"query", opTarget:"element", elType: "node", elId:node.id(), param: node._private.data.sbgnlabel});
 
                 var queryResult = "";
                 var p1 = new Promise(function (resolve, reject) {
@@ -535,12 +545,13 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, syncManager) {
             var selectAgain;
             cy.on('select', 'node', function (event) {
 
-
-                if (cancelSelection) {
-                    this.unselect();
-                    cancelSelection = null;
-                    selectAgain.select();
-                    selectAgain = null;
+                if (cy.nodes(':selected').filter(':visible').length == 1) {
+                    window.firstSelectedNode = this;
+                }
+            });
+            cy.on('unselect', 'node', function (event) {
+                if (window.firstSelectedNode == this) {
+                    window.firstSelectedNode = null;
                 }
             });
 
@@ -567,18 +578,17 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, syncManager) {
                 if (modeHandler.mode == "add-node-mode") {
                     var cyPosX = event.cyPosition.x;
                     var cyPosY = event.cyPosition.y;
+                    var param = {};
                     var sbgnclass = modeHandler.elementsHTMLNameToName[modeHandler.selectedNodeType];
-                    var param = {
-                        sync: true,
+
+                    param.newNode = {
                         x: cyPosX,
                         y: cyPosY,
                         sbgnclass: sbgnclass
                     };
+                    param.firstTime = true;
 
-
-                    syncManager.addNode(param);
-
-
+                    cy.undoRedo().do("addNode", param);
                     modeHandler.setSelectionMode();
                     cy.nodes()[cy.nodes().length - 1].select();
 
@@ -637,46 +647,6 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, syncManager) {
 
 
 
-                /*               //Handle expand-collapse box
-                var cyPosX = event.cyPosition.x;
-                var cyPosY = event.cyPosition.y;
-
-
-
-                if (modeHandler.mode == "selection-mode"
-                    && cyPosX >= node._private.data.expandcollapseStartX
-                    && cyPosX <= node._private.data.expandcollapseEndX
-                    && cyPosY >= node._private.data.expandcollapseStartY
-                    && cyPosY <= node._private.data.expandcollapseEndY) {
-
-
-                    selectAgain = cy.filter(":selected");
-                    cancelSelection = true;
-                    var expandedOrcollapsed = this.data('expanded-collapsed');
-
-                    var incrementalLayoutAfterExpandCollapse =
-                        (sbgnStyleRules['incremental-layout-after-expand-collapse'] == 'true');
-
-                    if (expandedOrcollapsed == 'expanded') {
-                        if (incrementalLayoutAfterExpandCollapse)
-                            syncManager.collapseNode({node:this, sync: true}); //funda
-
-                        else
-                            syncManager.simpleCollapseNode({node:this, sync: true});
-
-
-                    }
-                    else {
-                        if (incrementalLayoutAfterExpandCollapse)
-                            syncManager.expandNode({node:this, sync: true}); //funda
-                        else
-                            syncManager.simpleExpandNode({node:this, sync: true});
-
-
-                    }
-                }
-                */
-
                 $(".qtip").remove();
 
                 if (event.originalEvent.shiftKey)
@@ -689,67 +659,6 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, syncManager) {
 
                  nodeQtipFunction(node); //shows the full label
 
-            });
-
-
-            cy.on('cxttap', 'edge', function (event) {
-                var edge = this;
-                var containerPos = $(cy.container()).position();
-
-                var left = containerPos.left + event.cyRenderedPosition.x;
-                left = left.toString() + 'px';
-
-                var top = containerPos.top +  event.cyRenderedPosition.y;
-                top = top.toString() + 'px';
-
-
-                $('.ctx-bend-operation').css('display', 'none');
-
-                var selectedBendIndex = cytoscape.sbgn.getContainingBendShapeIndex(event.cyPosition.x, event.cyPosition.y, edge);
-                if(selectedBendIndex == -1){
-                    $('#ctx-add-bend-point').css('display', 'block');
-                    sbgnBendPointUtilities.currentCtxPos = event.cyPosition;
-                    ctxMenu = document.getElementById("ctx-add-bend-point");
-                }
-                else {
-                    $('#ctx-remove-bend-point').css('display', 'block');
-                    sbgnBendPointUtilities.currentBendIndex = selectedBendIndex;
-                    ctxMenu = document.getElementById("ctx-remove-bend-point");
-                }
-
-                ctxMenu.style.display = "block";
-                ctxMenu.style.left = left;
-                ctxMenu.style.top = top;
-
-
-
-                sbgnBendPointUtilities.currentCtxEdge = edge;
-            });
-            var movedBendIndex;
-            var movedBendEdge;
-            var moveBendParam;
-
-            cy.on('tapstart', 'edge', function (event) {
-                var edge = this;
-                movedBendEdge = edge;
-
-                moveBendParam = {
-                    edge: edge,
-                    weights: edge.data('weights')?[].concat(edge.data('weights')):edge.data('weights'),
-                    distances: edge.data('distances')?[].concat(edge.data('distances')):edge.data('distances')
-                };
-
-                var cyPosX = event.cyPosition.x;
-                var cyPosY = event.cyPosition.y;
-
-                if(edge._private.selected){
-                    var index = cytoscape.sbgn.getContainingBendShapeIndex(cyPosX, cyPosY, edge);
-                    if(index != -1){
-                        movedBendIndex = index;
-                        cy.panningEnabled(false);
-                        cy.boxSelectionEnabled(false);
-                    }
-                }
             });
 
 
