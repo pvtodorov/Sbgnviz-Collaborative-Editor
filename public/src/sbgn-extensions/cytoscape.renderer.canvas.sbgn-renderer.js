@@ -43,6 +43,61 @@
         $$.sbgn.drawText(context, textProp, false);
     };
 
+    $$.sbgn.fillBendShapes = function(edge, context){
+        var segpts = edge._private.rscratch.segpts;
+        var radius = $$.sbgn.getBendShapesLenght(edge);
+
+        for(var i = 0; segpts && i < segpts.length; i = i + 2){
+            var bendX = segpts[i];
+            var bendY = segpts[i + 1];
+
+            var oldStyle = context.fillStyle;
+            context.fillStyle = edge.css('line-color');
+            $$.sbgn.fillBendShape(bendX, bendY, radius, context);
+            context.fillStyle = oldStyle;
+        }
+    };
+
+    $$.sbgn.fillBendShape = function(bendX, bendY, length, context){
+        window.cyRenderer.drawPolygonPath(context,
+            bendX, bendY,
+            length, length,
+            window.cyNodeShapes['process'].points);
+        context.fill();
+    };
+
+    $$.sbgn.getBendShapesLenght = function(edge){
+        var factor = 6;
+        var length = parseFloat(edge.css('width')) * factor;
+        return length;
+    };
+
+    $$.sbgn.checkIfInsideBendShape = function(x, y, length, centerX, centerY){
+        return window.cyMath.pointInsidePolygon(x, y, window.cyNodeShapes['process'].points,
+            centerX, centerY, length, length, [0, -1], 0);
+    };
+
+    $$.sbgn.getContainingBendShapeIndex = function(x, y, edge) {
+        if(edge.data('weights') == null || edge.data('weights').lenght == 0){
+            return -1;
+        }
+
+        var segpts = edge._private.rscratch.segpts;
+        var length = cytoscape.sbgn.getBendShapesLenght(edge);
+
+        for(var i = 0; segpts && i < segpts.length; i = i + 2){
+            var bendX = segpts[i];
+            var bendY = segpts[i + 1];
+
+            var inside = cytoscape.sbgn.checkIfInsideBendShape(x, y, length, bendX, bendY);
+            if(inside){
+                return i / 2;
+            }
+        }
+
+        return -1;
+    };
+
     $$.sbgn.addPortReplacementIfAny = function (node, edgePort) {
         var posX = node.position().x;
         var posY = node.position().y;
@@ -349,6 +404,69 @@
         //context.stroke();
     };
 
+    $$.sbgn.drawExpandCollapseBoxes = function (node, context) {
+        var children = node.children();
+        var collapsedChildren = node._private.data.collapsedChildren;
+        var hasChildren = children != null && children.length > 0;
+        //check if the expand or collapse box is to be drawn
+        if (!hasChildren && collapsedChildren == null) {
+            return;
+        }
+
+        //If the compound node has no expanded-collapsed data property make it expanded
+        if (node.data()['expanded-collapsed'] == null) {
+            node.data('expanded-collapsed', 'expanded');
+        }
+
+        var expandedOrcollapsed = node.data('expanded-collapsed');
+
+        //expand or collapse boxes are to be drawn if the mouse is over the node or the node is collapsed
+        if (!node.mouseover && expandedOrcollapsed == 'expanded') {
+            return;
+        }
+
+        //Draw expand-collapse rectangles
+        var rectSize = 12;
+        var lineSize = 8;
+        var startOffset = 5;
+        var diff = (rectSize - lineSize) / 2;
+        var width = hasChildren ? node.outerWidth() : node.width();
+        var height = hasChildren ? node.outerHeight() : node.height();
+        node._private.data.expandcollapseStartX = node._private.position.x - width / 2 + startOffset;
+        node._private.data.expandcollapseStartY = node._private.position.y - height / 2 + startOffset;
+        node._private.data.expandcollapseEndX = node._private.data.expandcollapseStartX + rectSize;
+        node._private.data.expandcollapseEndY = node._private.data.expandcollapseStartY + rectSize;
+
+        var oldStyle = context.fillStyle;
+
+        context.fillStyle = "black";
+
+        context.fillRect(
+            node._private.data.expandcollapseStartX,
+            node._private.data.expandcollapseStartY,
+            rectSize,
+            rectSize);
+
+        context.fillStyle = oldStyle;
+
+        oldStyle = context.strokeStyle;
+
+        context.stroke();
+        context.beginPath();
+        context.strokeStyle = "white";
+
+        context.moveTo(node._private.data.expandcollapseStartX + diff, node._private.data.expandcollapseStartY + rectSize / 2);
+        context.lineTo(node._private.data.expandcollapseStartX + lineSize + diff, node._private.data.expandcollapseStartY + +rectSize / 2);
+
+        if (expandedOrcollapsed == 'collapsed') {
+            context.moveTo(node._private.data.expandcollapseStartX + rectSize / 2, node._private.data.expandcollapseStartY + diff);
+            context.lineTo(node._private.data.expandcollapseStartX + rectSize / 2, node._private.data.expandcollapseStartY + lineSize + diff);
+        }
+
+        context.stroke();
+        context.strokeStyle = oldStyle;
+    };
+
     window.cyMath.calculateDistance = function (point1, point2) {
         var distance = Math.pow(point1[0] - point2[0], 2) + Math.pow(point1[1] - point2[1], 2);
         return Math.sqrt(distance);
@@ -462,6 +580,7 @@
         if (parentOpacity === 0) {
             return;
         }
+
         context.fillStyle = "rgba("
             + node._private.style["background-color"].value[0] + ","
             + node._private.style["background-color"].value[1] + ","
@@ -594,7 +713,7 @@
 
     $$.sbgn.isMultimer = function (node) {
         var sbgnClass = node._private.data.sbgnclass;
-        if (sbgnClass && sbgnClass.indexOf("multimer") != -1)
+        if (sbgnClass.indexOf("multimer") != -1)
             return true;
         return false;
     };

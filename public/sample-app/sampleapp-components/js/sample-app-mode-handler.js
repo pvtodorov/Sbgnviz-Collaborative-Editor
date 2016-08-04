@@ -1,3 +1,4 @@
+
 var modeHandler = {
   mode: "selection-mode",
   selectedNodeType: "macromolecule",
@@ -115,7 +116,7 @@ var modeHandler = {
       $("#processes-of-selected").parent("li").removeClass("disabled");
       $("#remove-highlights").parent("li").removeClass("disabled");
     }
-    else{
+    else {
       $("#expand-selected").parent("li").addClass("disabled");
       $("#collapse-selected").parent("li").addClass("disabled");
       $("#expand-all").parent("li").addClass("disabled");
@@ -134,26 +135,27 @@ var modeHandler = {
     }
   },
   setSelectedIndexOfSelector: function (mode, value) {
-    if(mode == "add-node-mode"){
+    if (mode == "add-node-mode") {
       $(".selectedType").removeClass("selectedType");
       $("#node-list").addClass("selectedType");
-      $("#node-list li").removeClass("selectedDDItem");;
+      $("#node-list li").removeClass("selectedDDItem");
+      ;
       var ele = $("#node-list [value=" + value + "]");
       var text = $(ele).parent('a').text();
       var src = $(ele).attr('src');
-      $("#node-list-set-mode-btn").attr("title", "Create a new " + text);
+      $("#node-list-set-mode-btn").attr("title", text);
 //      $('#sbgn-selected-node-text').text(text);
       $('#sbgn-selected-node-img').attr('src', src);
       $(ele).parent('a').parent('li').addClass("selectedDDItem");
     }
-    else if(mode == "add-edge-mode"){
+    else if (mode == "add-edge-mode") {
       $(".selectedType").removeClass("selectedType");
       $("#edge-list").addClass("selectedType");
       $("#edge-list li").removeClass("selectedDDItem");
       var ele = $("#edge-list [value=" + value + "]");
       var text = $(ele).parent('a').text();
       var src = $(ele).attr('src');
-      $("#edge-list-set-mode-btn").attr("title", "Create a new " + text);
+      $("#edge-list-set-mode-btn").attr("title", text);
 //      $('#sbgn-selected-edge-text').text(text);
       $('#sbgn-selected-edge-img').attr('src', src);
       $(ele).parent('a').parent('li').addClass("selectedDDItem");
@@ -179,8 +181,6 @@ var modeHandler = {
     }
     else if (mode == "add-edge-mode") {
       $('#add-edge-menu-option').addClass('selectedMenuItem');
-      var menuItem = $("#add-edge-submenu [name=" + name + "]");
-      menuItem.addClass("selectedMenuItem");
     }
   }
 };

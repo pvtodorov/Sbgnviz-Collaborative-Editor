@@ -1,27 +1,399 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-menu-functions.js" line="772" />
-    <bookmark url="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-menu-functions.js" line="461" />
+    <bookmark url="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-menu-functions.js" line="770" />
+    <bookmark url="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-menu-functions.js" line="459" />
     <bookmark url="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/modelManager.js" line="456" />
     <bookmark url="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/modelManager.js" line="166" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="20ab80f0-2cb1-44ff-a133-bd87799f716d" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/add-remove-action-functions.js" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/.bin/cake" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/.bin/coffee" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/.bin/express" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffee-script/.npmignore" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffee-script/CNAME" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffee-script/CONTRIBUTING.md" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffee-script/LICENSE" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffee-script/README" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffee-script/bin/cake" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffee-script/bin/coffee" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffee-script/lib/coffee-script/browser.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffee-script/lib/coffee-script/cake.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffee-script/lib/coffee-script/coffee-script.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffee-script/lib/coffee-script/command.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffee-script/lib/coffee-script/grammar.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffee-script/lib/coffee-script/helpers.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffee-script/lib/coffee-script/index.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffee-script/lib/coffee-script/lexer.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffee-script/lib/coffee-script/nodes.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffee-script/lib/coffee-script/optparse.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffee-script/lib/coffee-script/parser.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffee-script/lib/coffee-script/register.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffee-script/lib/coffee-script/repl.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffee-script/lib/coffee-script/rewriter.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffee-script/lib/coffee-script/scope.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffee-script/lib/coffee-script/sourcemap.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffee-script/package.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffee-script/register.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffeeify/.npmignore" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffeeify/.travis.yml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffeeify/LICENSE" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffeeify/example/bar.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffeeify/example/bat.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffeeify/example/baz.coffee" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffeeify/example/baz.litcoffee" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffeeify/example/error.coffee" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffeeify/example/foo.coffee" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffeeify/example/foo.litcoffee" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffeeify/example/multiline_error.coffee" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffeeify/index.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffeeify/package.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffeeify/readme.markdown" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffeeify/test/bundle.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffeeify/test/error.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffeeify/test/transform.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/connect-mongo/.jshintrc" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/connect-mongo/.travis.yml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/connect-mongo/Gruntfile.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/connect-mongo/History.md" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/connect-mongo/Readme.md" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/connect-mongo/index.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/connect-mongo/lib/connect-mongo.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/connect-mongo/package.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/connect-redis/.gitmodules" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/connect-redis/.npmignore" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/connect-redis/.travis.yml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/connect-redis/History.md" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/connect-redis/Makefile" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/connect-redis/Readme.md" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/connect-redis/bm.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/connect-redis/index.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/connect-redis/index.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/connect-redis/lib/connect-redis.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/connect-redis/node_modules/redis/.npmignore" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/connect-redis/node_modules/redis/README.md" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/connect-redis/node_modules/redis/benches/buffer_bench.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/connect-redis/node_modules/redis/benches/hiredis_parser.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/connect-redis/node_modules/redis/benches/re_sub_test.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/connect-redis/node_modules/redis/benches/reconnect_test.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/connect-redis/node_modules/redis/benches/stress/codec.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/connect-redis/node_modules/redis/benches/stress/pubsub/pub.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/connect-redis/node_modules/redis/benches/stress/pubsub/run" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/connect-redis/node_modules/redis/benches/stress/pubsub/server.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/connect-redis/node_modules/redis/benches/stress/rpushblpop/pub.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/connect-redis/node_modules/redis/benches/stress/rpushblpop/run" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/connect-redis/node_modules/redis/benches/stress/rpushblpop/server.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/connect-redis/node_modules/redis/benches/stress/speed/00" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/connect-redis/node_modules/redis/benches/stress/speed/plot" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/connect-redis/node_modules/redis/benches/stress/speed/size-rate.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/connect-redis/node_modules/redis/benches/stress/speed/speed.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/connect-redis/node_modules/redis/benches/sub_quit_test.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/connect-redis/node_modules/redis/changelog.md" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/connect-redis/node_modules/redis/diff_multi_bench_output.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/connect-redis/node_modules/redis/examples/auth.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/connect-redis/node_modules/redis/examples/backpressure_drain.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/connect-redis/node_modules/redis/examples/eval.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/connect-redis/node_modules/redis/examples/extend.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/connect-redis/node_modules/redis/examples/file.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/connect-redis/node_modules/redis/examples/mget.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/connect-redis/node_modules/redis/examples/monitor.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/connect-redis/node_modules/redis/examples/multi.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/connect-redis/node_modules/redis/examples/multi2.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/connect-redis/node_modules/redis/examples/psubscribe.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/connect-redis/node_modules/redis/examples/pub_sub.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/connect-redis/node_modules/redis/examples/simple.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/connect-redis/node_modules/redis/examples/sort.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/connect-redis/node_modules/redis/examples/subqueries.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/connect-redis/node_modules/redis/examples/subquery.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/connect-redis/node_modules/redis/examples/unix_socket.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/connect-redis/node_modules/redis/examples/web_server.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/connect-redis/node_modules/redis/generate_commands.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/connect-redis/node_modules/redis/index.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/connect-redis/node_modules/redis/lib/commands.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/connect-redis/node_modules/redis/lib/parser/hiredis.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/connect-redis/node_modules/redis/lib/parser/javascript.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/connect-redis/node_modules/redis/lib/queue.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/connect-redis/node_modules/redis/lib/to_array.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/connect-redis/node_modules/redis/lib/util.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/connect-redis/node_modules/redis/multi_bench.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/connect-redis/node_modules/redis/package.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/connect-redis/node_modules/redis/test-unref.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/connect-redis/node_modules/redis/test.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/connect-redis/package.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/connect-redis/test.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/derby-stylus/.npmignore" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/derby-stylus/README.md" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/derby-stylus/example/index.jade" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/derby-stylus/example/index.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/derby-stylus/example/index.styl" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/derby-stylus/example/package.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/derby-stylus/example/server.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/derby-stylus/index.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/derby-stylus/package.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/derby/.jshintrc" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/derby/.npmignore" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/derby/.pre-commit-config.yaml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/derby/.travis.yml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/derby/History.md" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/derby/README.md" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/derby/docs/guides/components.md" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/derby/index.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/derby/lib/App.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/derby/lib/App.server.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/derby/lib/Controller.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/derby/lib/Derby.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/derby/lib/Derby.server.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/derby/lib/DerbyStandalone.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/derby/lib/Dom.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/derby/lib/Page.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/derby/lib/Page.server.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/derby/lib/_views.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/derby/lib/components.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/derby/lib/documentListeners.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/derby/lib/eventmodel.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/derby/lib/files.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/derby/lib/textDiff.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/derby/package.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/derby/test/.jshintrc" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/derby/test/all/eventmodel.mocha.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/derby/test/browser/as.mocha.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/derby/test/browser/bindings.mocha.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/derby/test/browser/dom-events.mocha.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/derby/test/browser/util.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/derby/test/mocha.opts" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/derby/test/public/index.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/derby/test/server.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/express/History.md" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/express/LICENSE" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/express/Readme.md" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/express/bin/express" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/express/index.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/express/lib/application.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/express/lib/express.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/express/lib/middleware.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/express/lib/request.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/express/lib/response.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/express/lib/router/index.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/express/lib/router/route.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/express/lib/utils.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/express/lib/view.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/express/node_modules/.bin/mkdirp" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/express/node_modules/commander/History.md" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/express/node_modules/commander/Readme.md" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/express/node_modules/commander/index.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/express/node_modules/commander/package.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/express/node_modules/depd/History.md" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/express/node_modules/depd/LICENSE" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/express/node_modules/depd/Readme.md" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/express/node_modules/depd/index.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/express/node_modules/depd/lib/compat/buffer-concat.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/express/node_modules/depd/lib/compat/callsite-tostring.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/express/node_modules/depd/lib/compat/index.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/express/node_modules/depd/package.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/express/node_modules/mkdirp/.travis.yml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/express/node_modules/mkdirp/LICENSE" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/express/node_modules/mkdirp/bin/cmd.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/express/node_modules/mkdirp/bin/usage.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/express/node_modules/mkdirp/examples/pow.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/express/node_modules/mkdirp/index.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/express/node_modules/mkdirp/package.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/express/node_modules/mkdirp/readme.markdown" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/express/node_modules/mkdirp/test/chmod.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/express/node_modules/mkdirp/test/clobber.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/express/node_modules/mkdirp/test/mkdirp.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/express/node_modules/mkdirp/test/opts_fs.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/express/node_modules/mkdirp/test/opts_fs_sync.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/express/node_modules/mkdirp/test/perm.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/express/node_modules/mkdirp/test/perm_sync.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/express/node_modules/mkdirp/test/race.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/express/node_modules/mkdirp/test/rel.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/express/node_modules/mkdirp/test/return.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/express/node_modules/mkdirp/test/return_sync.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/express/node_modules/mkdirp/test/root.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/express/node_modules/mkdirp/test/sync.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/express/node_modules/mkdirp/test/umask.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/express/node_modules/mkdirp/test/umask_sync.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/express/package.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/livedb-mongo/.npmignore" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/livedb-mongo/.travis.yml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/livedb-mongo/README.md" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/livedb-mongo/mongo.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/livedb-mongo/node_modules/async/LICENSE" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/livedb-mongo/node_modules/async/README.md" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/livedb-mongo/node_modules/async/component.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/livedb-mongo/node_modules/async/lib/async.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/livedb-mongo/node_modules/async/package.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/livedb-mongo/package.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/livedb-mongo/test.coffee" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/livedb/.npmignore" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/livedb/.travis.yml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/livedb/Changelog.md" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/livedb/LICENSE" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/livedb/README.md" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/livedb/dirtyData.md" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/livedb/example-backend.coffee" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/livedb/lib/bulksubscribe.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/livedb/lib/index.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/livedb/lib/inprocessdriver.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/livedb/lib/memory.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/livedb/lib/ot.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/livedb/lib/presence.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/livedb/lib/projections.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/livedb/lib/queries.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/livedb/lib/ratelimit.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/livedb/lib/redisdriver.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/livedb/lib/scripts/bulkGetOpsSince.lua" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/livedb/lib/scripts/getOps.lua" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/livedb/lib/scripts/setExpire.lua" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/livedb/lib/scripts/submit.lua" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/livedb/lib/util.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/livedb/node_modules/async/.travis.yml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/livedb/node_modules/async/LICENSE" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/livedb/node_modules/async/README.md" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/livedb/node_modules/async/bower.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/livedb/node_modules/async/component.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/livedb/node_modules/async/lib/async.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/livedb/node_modules/async/package.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/livedb/node_modules/async/support/sync-package-managers.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/livedb/package.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/livedb/test/driver.coffee" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/livedb/test/inprocessdriver.coffee" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/livedb/test/memory.coffee" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/livedb/test/mocha.opts" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/livedb/test/oplog.coffee" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/livedb/test/ot.coffee" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/livedb/test/presence.coffee" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/livedb/test/projections.coffee" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/livedb/test/propagation.coffee" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/livedb/test/queries.coffee" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/livedb/test/redisdriver.coffee" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/livedb/test/snapshotdb.coffee" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/livedb/test/test.coffee" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/livedb/test/util.coffee" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/onecolor/README.md" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/onecolor/one-color-all-debug.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/onecolor/one-color-all.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/onecolor/one-color-debug.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/onecolor/one-color-ieshim.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/onecolor/one-color.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/onecolor/package.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/racer-browserchannel/.npmignore" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/racer-browserchannel/README.md" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/racer-browserchannel/lib/browser.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/racer-browserchannel/lib/server.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/racer-browserchannel/package.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/racer-bundle/.jshintrc" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/racer-bundle/.npmignore" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/racer-bundle/LICENSE" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/racer-bundle/README.md" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/racer-bundle/index.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/racer-bundle/package.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/racer-bundle/test/.jshintrc" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/racer-bundle/test/mocha.opts" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/racer-bundle/test/test.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/racer-highway/.npmignore" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/racer-highway/README.md" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/racer-highway/lib/browser.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/racer-highway/lib/server.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/racer-highway/package.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/redis/.npmignore" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/redis/README.md" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/redis/connection_breaker.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/redis/index.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/redis/lib/commands.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/redis/lib/parser/hiredis.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/redis/lib/parser/javascript.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/redis/lib/queue.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/redis/lib/to_array.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/redis/lib/util.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/redis/package.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/request/.eslintrc" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/request/.npmignore" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/request/.travis.yml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/request/CHANGELOG.md" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/request/CONTRIBUTING.md" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/request/LICENSE" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/request/README.md" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/request/index.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/request/lib/auth.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/request/lib/cookies.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/request/lib/getProxyFromURI.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/request/lib/har.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/request/lib/helpers.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/request/lib/multipart.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/request/lib/oauth.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/request/lib/querystring.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/request/lib/redirect.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/request/lib/tunnel.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/request/package.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/request/request.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/socket.io/.npmignore" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/socket.io/.travis.yml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/socket.io/History.md" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/socket.io/LICENSE" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/socket.io/Makefile" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/socket.io/Readme.md" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/socket.io/lib/client.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/socket.io/lib/index.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/socket.io/lib/namespace.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/socket.io/lib/socket.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/socket.io/package.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/public/package.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/add-remove-action-functions.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/common-element-properties.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/general-action-functions.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/general-sample-app-functions.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/register-undo-redo-actions.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-stylesheet-helpers.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sbgn-action-functions.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/synchronizationManager.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-images/clone_bg.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-images/lock.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-images/open-lock.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/public/src/utilities/inspector-utilities.js" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/agent-interaction/add.png" afterPath="$PROJECT_DIR$/agent-interaction/add.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/agent-interaction/delete.png" afterPath="$PROJECT_DIR$/agent-interaction/delete.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/images/image00.png" afterPath="$PROJECT_DIR$/images/image00.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/images/image01.png" afterPath="$PROJECT_DIR$/images/image01.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/images/image02.png" afterPath="$PROJECT_DIR$/images/image02.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/images/image03.png" afterPath="$PROJECT_DIR$/images/image03.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/images/image04.png" afterPath="$PROJECT_DIR$/images/image04.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-images/drag-target.png" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-images/drag-target.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-images/interaction_legend_sbgn.png" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-images/interaction_legend_sbgn.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-images/node_legend_sbgn.png" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-images/node_legend_sbgn.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/agent-interaction/ContextAgent.js" afterPath="$PROJECT_DIR$/agent-interaction/ContextAgent.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/agent-interaction/HashMap.js" afterPath="$PROJECT_DIR$/agent-interaction/HashMap.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/agent-interaction/agentAPI.js" afterPath="$PROJECT_DIR$/agent-interaction/agentAPI.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/agent-interaction/computerAgent.html" afterPath="$PROJECT_DIR$/agent-interaction/computerAgent.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/agent-interaction/tinycolor.js" afterPath="$PROJECT_DIR$/agent-interaction/tinycolor.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index.js" afterPath="$PROJECT_DIR$/index.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/cancerDataOrganizer.js" afterPath="$PROJECT_DIR$/lib/cancerDataOrganizer.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/index.js" afterPath="$PROJECT_DIR$/lib/index.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/serverSideSocketListener.js" afterPath="$PROJECT_DIR$/lib/serverSideSocketListener.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/package.json" afterPath="$PROJECT_DIR$/package.json" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/lib/js/cytoscape-edgehandles.js" afterPath="$PROJECT_DIR$/public/lib/js/cytoscape-edgehandles.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/lib/js/cytoscape-noderesize.js" afterPath="$PROJECT_DIR$/public/lib/js/cytoscape-noderesize.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/general-action-functions.js" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/general-action-functions.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/lib/js/cytoscape.js" afterPath="$PROJECT_DIR$/public/lib/js/cytoscape.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/modelManager.js" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/modelManager.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/register-undo-redo-actions.js" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/register-undo-redo-actions.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-cytoscape-sbgn.js" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-cytoscape-sbgn.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-global-variables.js" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-global-variables.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-helper-functions.js" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-helper-functions.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-menu-functions.js" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-menu-functions.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/synchronizationManager.js" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/synchronizationManager.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-mode-handler.js" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-mode-handler.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/src/sbgn-extensions/cytoscape.renderer.canvas.sbgn-renderer.js" afterPath="$PROJECT_DIR$/public/src/sbgn-extensions/cytoscape.renderer.canvas.sbgn-renderer.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/src/utilities/add-remove-utilities.js" afterPath="$PROJECT_DIR$/public/src/utilities/add-remove-utilities.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/src/utilities/idxcardjson-to-json-converter.js" afterPath="$PROJECT_DIR$/public/src/utilities/idxcardjson-to-json-converter.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/src/utilities/json-corrector.js" afterPath="$PROJECT_DIR$/public/src/utilities/json-corrector.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/src/utilities/json-merger.js" afterPath="$PROJECT_DIR$/public/src/utilities/json-merger.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/src/utilities/sbgn-bend-point-utilities.js" afterPath="$PROJECT_DIR$/public/src/utilities/sbgn-bend-point-utilities.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/src/utilities/sbgn-element-utilities.js" afterPath="$PROJECT_DIR$/public/src/utilities/sbgn-element-utilities.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/src/utilities/sbgn-filtering.js" afterPath="$PROJECT_DIR$/public/src/utilities/sbgn-filtering.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/src/utilities/sbgn-style-rules.js" afterPath="$PROJECT_DIR$/public/src/utilities/sbgn-style-rules.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/test/testOptions.js" afterPath="$PROJECT_DIR$/public/test/testOptions.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/test/testsMenuFunctions.js" afterPath="$PROJECT_DIR$/public/test/testsMenuFunctions.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/test/testsModelManager.js" afterPath="$PROJECT_DIR$/public/test/testsModelManager.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/index.html" afterPath="$PROJECT_DIR$/views/index.html" />
     </list>
     <ignored path="CWC.iws" />
@@ -54,24 +426,11 @@
       <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="160">
-              <caret line="287" column="32" selection-start-line="287" selection-start-column="32" selection-end-line="287" selection-end-column="32" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="modelManager.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/modelManager.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="443">
-              <caret line="611" column="0" selection-start-line="611" selection-start-column="0" selection-end-line="611" selection-end-column="0" />
+            <state relative-caret-position="60">
+              <caret line="4" column="3" selection-start-line="4" selection-start-column="3" selection-end-line="4" selection-end-column="3" />
               <folding>
-                <element signature="e#8546#10442#0" expanded="false" />
-                <element signature="e#16699#17975#0" expanded="false" />
-                <element signature="e#17985#18021#0" expanded="false" />
-                <element signature="e#18163#19086#0" expanded="false" />
-                <element signature="e#19175#19890#0" expanded="false" />
+                <element signature="n#!!doc" expanded="true" />
+                <marker date="1469050234000" expanded="true" signature="21016:21312" ph="{...}" />
               </folding>
             </state>
           </provider>
@@ -80,81 +439,62 @@
       <file leaf-file-name="sample-app-cytoscape-sbgn.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-cytoscape-sbgn.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="165">
-              <caret line="111" column="22" selection-start-line="111" selection-start-column="22" selection-end-line="111" selection-end-column="22" />
+            <state relative-caret-position="3540">
+              <caret line="236" column="15" selection-start-line="236" selection-start-column="15" selection-end-line="236" selection-end-column="15" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="cytoscape-noderesize.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/public/lib/js/cytoscape-noderesize.js">
+      <file leaf-file-name="server.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/lib/server.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="150">
-              <caret line="545" column="17" selection-start-line="545" selection-start-column="17" selection-end-line="545" selection-end-column="17" />
+            <state relative-caret-position="210">
+              <caret line="14" column="0" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/views/index.html">
+      <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/lib/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="300">
-              <caret line="32" column="25" selection-start-line="32" selection-start-column="25" selection-end-line="32" selection-end-column="25" />
-              <folding />
+            <state relative-caret-position="371">
+              <caret line="50" column="32" selection-start-line="50" selection-start-column="32" selection-end-line="50" selection-end-column="32" />
+              <folding>
+                <marker date="1469050234000" expanded="true" signature="998:1001" ph="{...}" />
+                <marker date="1469050234000" expanded="true" signature="2682:2693" ph="{...}" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="general-action-functions.js" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/general-action-functions.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="283">
-              <caret line="93" column="55" selection-start-line="93" selection-start-column="55" selection-end-line="93" selection-end-column="55" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="synchronizationManager.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/synchronizationManager.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="81">
-              <caret line="577" column="25" selection-start-line="577" selection-start-column="15" selection-end-line="577" selection-end-column="25" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="register-undo-redo-actions.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/register-undo-redo-actions.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="525">
-              <caret line="35" column="44" selection-start-line="35" selection-start-column="44" selection-end-line="35" selection-end-column="44" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="add-remove-action-functions.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/add-remove-action-functions.js">
+      <file leaf-file-name="package.json" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/package.json">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="270">
-              <caret line="18" column="11" selection-start-line="18" selection-start-column="11" selection-end-line="18" selection-end-column="58" />
+              <caret line="18" column="19" selection-start-line="18" selection-start-column="19" selection-end-line="18" selection-end-column="19" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="sample-app-menu-functions.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-menu-functions.js">
+      <file leaf-file-name="serverSideSocketListener.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/lib/serverSideSocketListener.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="324">
-              <caret line="364" column="47" selection-start-line="364" selection-start-column="38" selection-end-line="364" selection-end-column="47" />
-              <folding>
-                <marker date="1469837224000" expanded="true" signature="42795:42904" ph="..." />
-              </folding>
+            <state relative-caret-position="45">
+              <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="modelManager.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/modelManager.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="15030">
+              <caret line="1006" column="0" selection-start-line="1006" selection-start-column="0" selection-end-line="1006" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -188,9 +528,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/public/src/utilities/json-to-sbgnml-converter.js" />
-        <option value="$PROJECT_DIR$/lib/agentSocketHandler" />
-        <option value="$PROJECT_DIR$/lib/agentSocketHandler.js" />
         <option value="$PROJECT_DIR$/lib/agentSocketListener.js" />
         <option value="$PROJECT_DIR$/agent-interaction/HashMap.js" />
         <option value="$PROJECT_DIR$/public/src/utilities/expand-collapse-utilities.js" />
@@ -204,14 +541,10 @@
         <option value="$PROJECT_DIR$/agent-interaction/ContextAgent.js" />
         <option value="$PROJECT_DIR$/public/src/utilities/idxcardjson-to-json-converter.js" />
         <option value="$PROJECT_DIR$/public/src/utilities/json-merger.js" />
-        <option value="$PROJECT_DIR$/public/src/utilities/sbgn-style-rules.js" />
         <option value="$PROJECT_DIR$/public/lib/js/cytoscape.js" />
-        <option value="$PROJECT_DIR$/lib/server.js" />
-        <option value="$PROJECT_DIR$/lib/index.js" />
         <option value="$PROJECT_DIR$/public/src/sbgn-extensions/cytoscape.renderer.canvas.sbgn-renderer.js" />
         <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/general-sample-app-functions.js" />
         <option value="$PROJECT_DIR$/public/package.json" />
-        <option value="$PROJECT_DIR$/public/src/utilities/sbgn-element-utilities.js" />
         <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-mode-handler.js" />
         <option value="$PROJECT_DIR$/public/node_modules/cytoscape-grid-guide/cytoscape-grid-guide.js" />
         <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/EditorActionsManager.js" />
@@ -222,23 +555,30 @@
         <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/editorActionsManager.js" />
         <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/cyUpdater.js" />
         <option value="chrome-extension://gighmmpiobklfepjocnamgkkbiglidom/adblock-uiscripts-rightclick_hook.js" />
-        <option value="$PROJECT_DIR$/package.json" />
         <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-inspector-functions.js" />
         <option value="$PROJECT_DIR$/public/node_modules/cytoscape-view-utilities/cytoscape-view-utilities.js" />
-        <option value="$PROJECT_DIR$/public/src/utilities/inspector-utilities.js" />
         <option value="$PROJECT_DIR$/agent-interaction/agentAPI.js" />
-        <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/register-undo-redo-actions.js" />
-        <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/add-remove-action-functions.js" />
-        <option value="$PROJECT_DIR$/public/src/utilities/add-remove-utilities.js" />
         <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/synchronizationManager.js" />
         <option value="$PROJECT_DIR$/public/src/utilities/sbgn-filtering.js" />
-        <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/modelManager.js" />
-        <option value="$PROJECT_DIR$/index.js" />
-        <option value="$PROJECT_DIR$/public/node_modules/cytoscape-undo-redo/cytoscape-undo-redo.js" />
-        <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-menu-functions.js" />
+        <option value="$PROJECT_DIR$/public/src/utilities/add-remove-utilities.js" />
+        <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/register-undo-redo-actions.js" />
+        <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/biogene-info.js" />
+        <option value="$PROJECT_DIR$/public/src/utilities/inspector-utilities.js" />
+        <option value="$PROJECT_DIR$/public/src/utilities/sbgn-style-rules.js" />
         <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/general-action-functions.js" />
-        <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-cytoscape-sbgn.js" />
         <option value="$PROJECT_DIR$/views/index.html" />
+        <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-menu-functions.js" />
+        <option value="$PROJECT_DIR$/public/src/utilities/sbgnml-to-json-converter.js" />
+        <option value="$PROJECT_DIR$/public/src/utilities/sbgn-element-utilities.js" />
+        <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/modelManager.js" />
+        <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/add-remove-action-functions.js" />
+        <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-cytoscape-sbgn.js" />
+        <option value="$PROJECT_DIR$/public/node_modules/cytoscape-undo-redo/cytoscape-undo-redo.js" />
+        <option value="$PROJECT_DIR$/index.js" />
+        <option value="$PROJECT_DIR$/lib/index.js" />
+        <option value="$PROJECT_DIR$/node_modules/share/lib/client/connection.js" />
+        <option value="$PROJECT_DIR$/package.json" />
+        <option value="$PROJECT_DIR$/lib/server.js" />
       </list>
     </option>
   </component>
@@ -266,10 +606,10 @@
     <treeState />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="250" />
-    <option name="y" value="23" />
-    <option name="width" value="2031" />
-    <option name="height" value="1412" />
+    <option name="x" value="268" />
+    <option name="y" value="40" />
+    <option name="width" value="2211" />
+    <option name="height" value="1400" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -312,9 +652,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
-      <pane id="Scratches" />
       <pane id="Scope" />
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -375,11 +714,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="utilities" />
+              <option name="myItemId" value="lib" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -390,138 +725,10 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="Sbgnviz-Collaborative-Editor" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="public" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="CWC" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Sbgnviz-Collaborative-Editor" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="public" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="sample-app" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="CWC" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Sbgnviz-Collaborative-Editor" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="public" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="sample-app" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="sampleapp-components" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="CWC" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Sbgnviz-Collaborative-Editor" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="public" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="sample-app" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="sampleapp-components" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="js" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="CWC" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Sbgnviz-Collaborative-Editor" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="public" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="node_modules" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="CWC" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Sbgnviz-Collaborative-Editor" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="public" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="lib" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="js" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="CWC" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Sbgnviz-Collaborative-Editor" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="public" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="lib" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -555,6 +762,7 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -575,16 +783,16 @@
     <property name="js.buildTools.gulp.gulp_package_dir" value="" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/public/lib/js" />
-      <recent name="$PROJECT_DIR$/public/sample-app/sampleapp-components/js" />
-      <recent name="$PROJECT_DIR$/public/sample-app/sampleapp-images" />
-      <recent name="$PROJECT_DIR$/public/src/utilities" />
-      <recent name="$PROJECT_DIR$/node_modules/dojox" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/public/src/utilities" />
       <recent name="$PROJECT_DIR$/public/sample-app/sampleapp-components/js" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/public/sample-app/sampleapp-components/js" />
+      <recent name="$PROJECT_DIR$/public/src/utilities" />
+      <recent name="$PROJECT_DIR$/public/src/sbgn-extensions" />
+      <recent name="$PROJECT_DIR$/public/lib/js" />
+      <recent name="$PROJECT_DIR$/public/sample-app/sampleapp-images" />
     </key>
   </component>
   <component name="RunManager" selected="Node.js.localhost:3000">
@@ -909,21 +1117,21 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="250" y="23" width="2031" height="1412" extended-state="0" />
+    <frame x="268" y="40" width="2211" height="1400" extended-state="0" />
     <editor active="false" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32830188" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.21136364" sideWeight="0.520362" order="9" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32970837" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
+      <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.19169852" sideWeight="0.5071507" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32830188" sideWeight="0.49236947" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21136364" sideWeight="0.479638" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.28363913" sideWeight="0.479638" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Gulp" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.20417371" sideWeight="0.503643" order="5" side_tool="true" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1764706" sideWeight="0.49468085" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16182573" sideWeight="0.4928493" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32998943" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.30530304" sideWeight="0.48366013" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.30504587" sideWeight="0.48366013" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24985899" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.15839493" sideWeight="0.5053192" order="4" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -935,7 +1143,7 @@
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="ConsoleMavenPlugin" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.31320754" sideWeight="0.4922161" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.31269112" sideWeight="0.4922161" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32981133" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -987,7 +1195,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="A sample pc2 query implemented." />
     <MESSAGE value="Multiple object inspection and editing." />
     <MESSAGE value="Can display BioPAX files by communicating with the PAXTools server." />
     <MESSAGE value="Issue with socket.io not loading before node.js fixed." />
@@ -1012,7 +1219,8 @@
     <MESSAGE value="highlight neighbors" />
     <MESSAGE value="listening to cy" />
     <MESSAGE value="Position, style, data, hide/show, highlight, selection, undo/redo working" />
-    <option name="LAST_COMMIT_MESSAGE" value="Position, style, data, hide/show, highlight, selection, undo/redo working" />
+    <MESSAGE value="Add/remove working. Resize problems." />
+    <option name="LAST_COMMIT_MESSAGE" value="Add/remove working. Resize problems." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1023,7 +1231,7 @@
           <option name="timeStamp" value="199" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="252" />
+      <option name="time" value="255" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="JavascriptDebugType">
@@ -1038,283 +1246,33 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/public/node_modules/cytoscape-view-utilities/src/hide-show.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="720">
-          <caret line="48" column="11" selection-start-line="48" selection-start-column="11" selection-end-line="48" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/node_modules/cytoscape/src/collection/class.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="917">
-          <caret line="63" column="24" selection-start-line="63" selection-start-column="19" selection-end-line="63" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/node_modules/cytoscape-edge-bend-editing/cytoscape.js-edge-bend-editing.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="13" column="20" selection-start-line="13" selection-start-column="20" selection-end-line="13" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/node_modules/cytoscape-grid-guide/cytoscape-grid-guide.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="403">
-          <caret line="105" column="47" selection-start-line="105" selection-start-column="47" selection-end-line="105" selection-end-column="47" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/test/testsMenuFunctions.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="613">
-          <caret line="58" column="117" selection-start-line="58" selection-start-column="117" selection-end-line="58" selection-end-column="117" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/synchronizationManager.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="732">
-          <caret line="977" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="977" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-mode-handler.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="287">
-          <caret line="41" column="2" selection-start-line="41" selection-start-column="2" selection-end-line="41" selection-end-column="2" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/collaboratorEditor.js" />
-    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/editorActionsManager.js" />
-    <entry file="file://$PROJECT_DIR$/lib/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="731">
-          <caret line="86" column="30" selection-start-line="86" selection-start-column="30" selection-end-line="86" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/src/utilities/idxcardjson-to-json-converter.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="122" selection-start-line="0" selection-start-column="61" selection-end-line="0" selection-end-column="122" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/node_modules/cytoscape-view-utilities/src/cytoscape-undo-redo.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-stylesheet-helpers.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="14" selection-start-line="0" selection-start-column="4" selection-end-line="0" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/node_modules/cytoscape-expand-collapse/src/cytoscape-undo-redo.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="339">
-          <caret line="341" column="16" selection-start-line="341" selection-start-column="16" selection-end-line="341" selection-end-column="16" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/cyUpdater.js" />
-    <entry file="file://$PROJECT_DIR$/node_modules/cytoscape/src/core/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="339">
-          <caret line="59" column="4" selection-start-line="59" selection-start-column="4" selection-end-line="59" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/node_modules/cytoscape-view-utilities/src/highlight.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="690">
-          <caret line="65" column="0" selection-start-line="65" selection-start-column="0" selection-end-line="65" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/node_modules/cytoscape-expand-collapse/cytoscape-expand-collapse.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="450">
-          <caret line="762" column="42" selection-start-line="761" selection-start-column="64" selection-end-line="762" selection-end-column="42" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/cytoscape/src/core/index.js" />
+    <entry file="file://$PROJECT_DIR$/public/node_modules/cytoscape-view-utilities/src/highlight.js" />
+    <entry file="file://$PROJECT_DIR$/public/node_modules/cytoscape-expand-collapse/cytoscape-expand-collapse.js" />
     <entry file="file://$PROJECT_DIR$/agent-interaction/ContextAgent.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3255">
           <caret line="217" column="60" selection-start-line="217" selection-start-column="58" selection-end-line="217" selection-end-column="60" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/node_modules/dojox/request/xhr.js" />
-    <entry file="file://$PROJECT_DIR$/public/package.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="405">
-          <caret line="27" column="0" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/package.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="630">
-          <caret line="42" column="25" selection-start-line="42" selection-start-column="25" selection-end-line="42" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-helper-functions.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="298">
           <caret line="158" column="103" selection-start-line="158" selection-start-column="103" selection-end-line="158" selection-end-column="103" />
-          <folding>
-            <marker date="1469230808000" expanded="true" signature="6289:6322" ph="..." />
-            <marker date="1469230808000" expanded="true" signature="7054:7087" ph="..." />
-            <marker date="1469230808000" expanded="true" signature="7433:7466" ph="..." />
-          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/node_modules/cytoscape-edge-bend-editing/cytoscape-undo-redo.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="519">
-          <caret line="146" column="8" selection-start-line="146" selection-start-column="8" selection-end-line="146" selection-end-column="8" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/node_modules/cytoscape-clipboard/cytoscape-clipboard.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="298">
-          <caret line="88" column="32" selection-start-line="88" selection-start-column="32" selection-end-line="88" selection-end-column="32" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/general-sample-app-functions.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="60" column="0" selection-start-line="60" selection-start-column="0" selection-end-line="60" selection-end-column="0" />
-          <folding>
-            <marker date="1469144807000" expanded="true" signature="3539:3572" ph="..." />
-            <marker date="1469144807000" expanded="true" signature="4202:4235" ph="..." />
-            <marker date="1469144807000" expanded="true" signature="4513:4546" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sbgn-action-functions.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="35" column="15" selection-start-line="35" selection-start-column="10" selection-end-line="35" selection-end-column="15" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/public/node_modules/cytoscape-edge-bend-editing/cytoscape-undo-redo.js" />
+    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sbgn-action-functions.js" />
     <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-inspector-functions.js" />
-    <entry file="file://$PROJECT_DIR$/public/src/sbgn-extensions/cytoscape.renderer.canvas.sbgn-renderer.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="802">
-          <caret line="2004" column="14" selection-start-line="2004" selection-start-column="14" selection-end-line="2004" selection-end-column="14" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/lib/js/cytoscape.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="333">
-          <caret line="2466" column="4" selection-start-line="2466" selection-start-column="4" selection-end-line="2466" selection-end-column="4" />
-          <folding>
-            <marker date="1469050234000" expanded="true" signature="848:851" ph="{...}" />
-            <marker date="1469050234000" expanded="true" signature="360446:360476" ph="{...}" />
-            <marker date="1469050234000" expanded="true" signature="742515:742582" ph="[...]" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/node_modules/cytoscape-view-utilities/cytoscape-view-utilities.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="438">
-          <caret line="152" column="23" selection-start-line="152" selection-start-column="13" selection-end-line="152" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/public/node_modules/cytoscape-view-utilities/cytoscape-view-utilities.js" />
     <entry file="file://$PROJECT_DIR$/public/derby/cwc-7c3af7750a4c2ec2d4dc55074ad36add.map.json" />
-    <entry file="file://$PROJECT_DIR$/public/src/utilities/inspector-utilities.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6285">
-          <caret line="419" column="6" selection-start-line="419" selection-start-column="6" selection-end-line="419" selection-end-column="6" />
-          <folding>
-            <marker date="1469746359000" expanded="true" signature="1511:1552" ph="..." />
-            <marker date="1469746359000" expanded="true" signature="1807:1850" ph="..." />
-            <marker date="1469746359000" expanded="true" signature="3173:3210" ph="..." />
-            <marker date="1469746359000" expanded="true" signature="6529:6601" ph="..." />
-            <marker date="1469746359000" expanded="true" signature="7535:7596" ph="..." />
-            <marker date="1469746359000" expanded="true" signature="7651:7669" ph="..." />
-            <marker date="1469746359000" expanded="true" signature="7765:7795" ph="..." />
-            <marker date="1469746359000" expanded="true" signature="7960:8021" ph="..." />
-            <marker date="1469746359000" expanded="true" signature="8076:8094" ph="..." />
-            <marker date="1469746359000" expanded="true" signature="8219:8248" ph="..." />
-            <marker date="1469746359000" expanded="true" signature="8407:8468" ph="..." />
-            <marker date="1469746359000" expanded="true" signature="8524:8542" ph="..." />
-            <marker date="1469746359000" expanded="true" signature="8668:8697" ph="..." />
-            <marker date="1469746359000" expanded="true" signature="9610:9671" ph="..." />
-            <marker date="1469746359000" expanded="true" signature="9733:9751" ph="..." />
-            <marker date="1469746359000" expanded="true" signature="9855:9884" ph="..." />
-            <marker date="1469746359000" expanded="true" signature="9977:10038" ph="..." />
-            <marker date="1469746359000" expanded="true" signature="10098:10116" ph="..." />
-            <marker date="1469746359000" expanded="true" signature="10218:10247" ph="..." />
-            <marker date="1469746359000" expanded="true" signature="10344:10405" ph="..." />
-            <marker date="1469746359000" expanded="true" signature="10467:10485" ph="..." />
-            <marker date="1469746359000" expanded="true" signature="10610:10639" ph="..." />
-            <marker date="1469746359000" expanded="true" signature="10820:10881" ph="..." />
-            <marker date="1469746359000" expanded="true" signature="10943:10961" ph="..." />
-            <marker date="1469746359000" expanded="true" signature="11099:11128" ph="..." />
-            <marker date="1469746359000" expanded="true" signature="11471:11521" ph="..." />
-            <marker date="1469746359000" expanded="true" signature="11615:11676" ph="..." />
-            <marker date="1469746359000" expanded="true" signature="11795:11821" ph="..." />
-            <marker date="1469746359000" expanded="true" signature="12015:12065" ph="..." />
-            <marker date="1469746359000" expanded="true" signature="12159:12220" ph="..." />
-            <marker date="1469746359000" expanded="true" signature="12349:12375" ph="..." />
-            <marker date="1469746359000" expanded="true" signature="13027:13077" ph="..." />
-            <marker date="1469746359000" expanded="true" signature="13205:13266" ph="..." />
-            <marker date="1469746359000" expanded="true" signature="13345:13371" ph="..." />
-            <marker date="1469746359000" expanded="true" signature="13516:13577" ph="..." />
-            <marker date="1469746359000" expanded="true" signature="13654:13680" ph="..." />
-            <marker date="1469746359000" expanded="true" signature="14051:14112" ph="..." />
-            <marker date="1469746359000" expanded="true" signature="14172:14190" ph="..." />
-            <marker date="1469746359000" expanded="true" signature="14292:14321" ph="..." />
-            <marker date="1469746359000" expanded="true" signature="14419:14480" ph="..." />
-            <marker date="1469746359000" expanded="true" signature="14535:14553" ph="..." />
-            <marker date="1469746359000" expanded="true" signature="14671:14700" ph="..." />
-            <marker date="1469746359000" expanded="true" signature="15141:15202" ph="..." />
-            <marker date="1469746359000" expanded="true" signature="15263:15281" ph="..." />
-            <marker date="1469746359000" expanded="true" signature="15404:15433" ph="..." />
-            <marker date="1469746359000" expanded="true" signature="15603:15639" ph="..." />
-            <marker date="1469746359000" expanded="true" signature="15656:15670" ph="..." />
-            <marker date="1469746359000" expanded="true" signature="15793:15843" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/agent-interaction/agentAPI.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2038">
           <caret line="218" column="27" selection-start-line="218" selection-start-column="20" selection-end-line="218" selection-end-column="27" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1322,30 +1280,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="320">
           <caret line="506" column="24" selection-start-line="506" selection-start-column="13" selection-end-line="506" selection-end-column="24" />
-          <folding>
-            <marker date="1469230996000" expanded="true" signature="31239:31249" ph="..." />
-            <marker date="1469230996000" expanded="true" signature="31403:31413" ph="..." />
-            <marker date="1469230996000" expanded="true" signature="31558:31581" ph="..." />
-            <marker date="1469230996000" expanded="true" signature="32566:32589" ph="..." />
-            <marker date="1469230996000" expanded="true" signature="33525:33548" ph="..." />
-            <marker date="1469230996000" expanded="true" signature="33650:33673" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/server.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="268">
-          <caret line="146" column="0" selection-start-line="146" selection-start-column="0" selection-end-line="146" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/serverSideSocketListener.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="583">
-          <caret line="277" column="61" selection-start-line="277" selection-start-column="61" selection-end-line="277" selection-end-column="61" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1353,33 +1287,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="529">
           <caret line="62" column="63" selection-start-line="62" selection-start-column="63" selection-end-line="62" selection-end-column="63" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/src/utilities/add-remove-utilities.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="715">
-          <caret line="111" column="0" selection-start-line="111" selection-start-column="0" selection-end-line="111" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/node_modules/cytoscape-undo-redo/cytoscape-undo-redo.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="594">
-          <caret line="179" column="96" selection-start-line="179" selection-start-column="96" selection-end-line="179" selection-end-column="96" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-menu-functions.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="324">
-          <caret line="364" column="47" selection-start-line="364" selection-start-column="38" selection-end-line="364" selection-end-column="47" />
-          <folding>
-            <marker date="1469837224000" expanded="true" signature="42795:42904" ph="..." />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1387,84 +1294,182 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/add-remove-action-functions.js">
+    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/synchronizationManager.js" />
+    <entry file="file://$PROJECT_DIR$/public/lib/js/cytoscape-noderesize.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="18" column="11" selection-start-line="18" selection-start-column="11" selection-end-line="18" selection-end-column="58" />
-          <folding />
+        <state relative-caret-position="971">
+          <caret line="545" column="17" selection-start-line="545" selection-start-column="17" selection-end-line="545" selection-end-column="17" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/index.js">
+    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/keyboard-shortcuts.js" />
+    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/general-sample-app-functions.js" />
+    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/easy-creation-action-functions.js" />
+    <entry file="file://$PROJECT_DIR$/public/src/sbgn-extensions/cytoscape.renderer.canvas.sbgn-renderer.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="160">
-          <caret line="287" column="32" selection-start-line="287" selection-start-column="32" selection-end-line="287" selection-end-column="32" />
+        <state relative-caret-position="866">
+          <caret line="2004" column="0" selection-start-line="2004" selection-start-column="0" selection-end-line="2004" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/common-element-properties.js" />
+    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/biogene-info.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="870">
+          <caret line="206" column="2" selection-start-line="164" selection-start-column="0" selection-end-line="206" selection-end-column="2" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/src/utilities/inspector-utilities.js" />
+    <entry file="file://$PROJECT_DIR$/public/src/utilities/sbgn-style-rules.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="16" column="2" selection-start-line="16" selection-start-column="2" selection-end-line="16" selection-end-column="2" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="543">
+          <caret line="59" column="61" selection-start-line="59" selection-start-column="61" selection-end-line="59" selection-end-column="61" />
           <folding />
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/public/node_modules/cytoscape-clipboard/cytoscape-clipboard.js" />
+    <entry file="file://$PROJECT_DIR$/public/src/utilities/sbgn-element-utilities.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="866">
+          <caret line="87" column="26" selection-start-line="87" selection-start-column="26" selection-end-line="87" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-menu-functions.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="350">
+          <caret line="997" column="27" selection-start-line="997" selection-start-column="27" selection-end-line="997" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/cytoscape/src/collection/dimensions.js" />
+    <entry file="file://$PROJECT_DIR$/public/lib/js/cytoscape.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="689">
+          <caret line="2913" column="9" selection-start-line="2913" selection-start-column="9" selection-end-line="2913" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/node_modules/cytoscape-expand-collapse/src/cytoscape-undo-redo.js" />
+    <entry file="file://$PROJECT_DIR$/public/src/utilities/sbgnml-to-json-converter.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-766">
+          <caret line="210" column="50" selection-start-line="210" selection-start-column="50" selection-end-line="210" selection-end-column="50" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/src/utilities/json-to-sbgnml-converter.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="254">
+          <caret line="53" column="51" selection-start-line="53" selection-start-column="51" selection-end-line="53" selection-end-column="51" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/src/utilities/add-remove-utilities.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="851">
+          <caret line="198" column="4" selection-start-line="198" selection-start-column="4" selection-end-line="198" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/add-remove-action-functions.js" />
+    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/register-undo-redo-actions.js" />
+    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/general-action-functions.js" />
     <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/modelManager.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="443">
-          <caret line="611" column="0" selection-start-line="611" selection-start-column="0" selection-end-line="611" selection-end-column="0" />
-          <folding>
-            <element signature="e#8546#10442#0" expanded="false" />
-            <element signature="e#16699#17975#0" expanded="false" />
-            <element signature="e#17985#18021#0" expanded="false" />
-            <element signature="e#18163#19086#0" expanded="false" />
-            <element signature="e#19175#19890#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/synchronizationManager.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="81">
-          <caret line="577" column="25" selection-start-line="577" selection-start-column="15" selection-end-line="577" selection-end-column="25" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/register-undo-redo-actions.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="525">
-          <caret line="35" column="44" selection-start-line="35" selection-start-column="44" selection-end-line="35" selection-end-column="44" />
+        <state relative-caret-position="15030">
+          <caret line="1006" column="0" selection-start-line="1006" selection-start-column="0" selection-end-line="1006" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-cytoscape-sbgn.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="111" column="22" selection-start-line="111" selection-start-column="22" selection-end-line="111" selection-end-column="22" />
+        <state relative-caret-position="3540">
+          <caret line="236" column="15" selection-start-line="236" selection-start-column="15" selection-end-line="236" selection-end-column="15" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/lib/js/cytoscape-noderesize.js">
+    <entry file="file://$PROJECT_DIR$/node_modules/coffee-script/lib/coffee-script/coffee-script.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="545" column="17" selection-start-line="545" selection-start-column="17" selection-end-line="545" selection-end-column="17" />
+        <state relative-caret-position="303">
+          <caret line="147" column="6" selection-start-line="147" selection-start-column="6" selection-end-line="147" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/derby/lib/Derby.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="21" column="0" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/node_modules/cytoscape-undo-redo/cytoscape-undo-redo.js" />
+    <entry file="file://$PROJECT_DIR$/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" column="3" selection-start-line="4" selection-start-column="3" selection-end-line="4" selection-end-column="3" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+            <marker date="1469050234000" expanded="true" signature="21016:21312" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/derby/lib/Derby.server.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="9" column="0" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/serverSideSocketListener.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="45">
+          <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/views/index.html">
+    <entry file="file://$PROJECT_DIR$/node_modules/share/lib/client/connection.js" />
+    <entry file="file://$PROJECT_DIR$/public/package.json" />
+    <entry file="file://$PROJECT_DIR$/package.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="32" column="25" selection-start-line="32" selection-start-column="25" selection-end-line="32" selection-end-column="25" />
+        <state relative-caret-position="270">
+          <caret line="18" column="19" selection-start-line="18" selection-start-column="19" selection-end-line="18" selection-end-column="19" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/general-action-functions.js">
+    <entry file="file://$PROJECT_DIR$/lib/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="283">
-          <caret line="93" column="55" selection-start-line="93" selection-start-column="55" selection-end-line="93" selection-end-column="55" />
+        <state relative-caret-position="371">
+          <caret line="50" column="32" selection-start-line="50" selection-start-column="32" selection-end-line="50" selection-end-column="32" />
+          <folding>
+            <marker date="1469050234000" expanded="true" signature="998:1001" ph="{...}" />
+            <marker date="1469050234000" expanded="true" signature="2682:2693" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/server.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="14" column="0" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
           <folding />
         </state>
       </provider>

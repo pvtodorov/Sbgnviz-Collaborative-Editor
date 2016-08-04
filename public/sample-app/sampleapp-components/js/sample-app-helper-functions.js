@@ -40,6 +40,7 @@ function loadXMLDoc(filename) {
 
 
 };
+
 function dynamicResize()
 {
 
@@ -79,7 +80,6 @@ function dynamicResize()
 }
 
 $(window).on('resize', dynamicResize);
-
 
 $(document).ready(function () {
     scrollToBottom('command-history-area');
@@ -164,12 +164,12 @@ $(document).keydown(function (e) {
     if (e.ctrlKey) {
         window.ctrlKeyDown = true;
         // if (e.which === 90) {
-        //   notificationActionsManager.undo();
+        //   editorActionsManager.undo();
         //refreshUndoRedoButtonsStatus();
 //    $(document.activeElement).attr("value");
     }
     // else if (e.which === 89) {
-    //  notificationActionsManager.redo();
+    //  editorActionsManager.redo();
     //  refreshUndoRedoButtonsStatus();
     //  }
     //}
@@ -181,6 +181,395 @@ $(document).keyup(function (e) {
     disableDragAndDropMode();
 });
 
+
+
+var canHaveUnitOfInformation = function(sbgnclass) {
+    if (sbgnclass == 'simple chemical'
+        || sbgnclass == 'macromolecule' || sbgnclass == 'nucleic acid feature'
+        || sbgnclass == 'complex' || sbgnclass == 'simple chemical multimer'
+        || sbgnclass == 'macromolecule multimer' || sbgnclass == 'nucleic acid feature multimer'
+        || sbgnclass == 'complex multimer') {
+        return true;
+    }
+    return false;
+};
+
+var canHaveStateVariable = function(sbgnclass) {
+    if (sbgnclass == 'macromolecule' || sbgnclass == 'nucleic acid feature'
+        || sbgnclass == 'complex'
+        || sbgnclass == 'macromolecule multimer' || sbgnclass == 'nucleic acid feature multimer'
+        || sbgnclass == 'complex multimer') {
+        return true;
+    }
+    return false;
+};
+
+//checks if a node with the given sbgnclass can be cloned
+var canBeCloned = function (sbgnclass) {
+    sbgnclass = sbgnclass.replace(" multimer", "");
+    var list = {
+        'unspecified entity': true,
+        'macromolecule': true,
+        'complex': true,
+        'nucleic acid feature': true,
+        'simple chemical': true,
+        'perturbing agent': true
+    };
+
+    return list[sbgnclass] ? true : false;
+};
+
+//checks if a node with the given sbgnclass can become a multimer
+var canBeMultimer = function (sbgnclass) {
+    sbgnclass = sbgnclass.replace(" multimer", "");
+    var list = {
+        'macromolecule': true,
+        'complex': true,
+        'nucleic acid feature': true,
+        'simple chemical': true
+    };
+
+    return list[sbgnclass] ? true : false;
+};
+
+
+var getCommonSBGNClass = function(elements){
+    if(elements.length < 1){
+        return "";
+    }
+
+    var SBGNClassOfFirstElement = elements[0].data('sbgnclass');
+    for(var i = 1; i < elements.length; i++){
+        if(elements[i].data('sbgnclass') != SBGNClassOfFirstElement){
+            return "";
+        }
+    }
+
+    return SBGNClassOfFirstElement;
+};
+
+var allAreNode = function(elements){
+    for(var i = 0; i <elements.length; i++){
+        var ele = elements[i];
+        if(!ele.isNode()){
+            return false;
+        }
+    }
+
+    return true;
+};
+
+var allAreEdge = function(elements){
+    for(var i = 0; i <elements.length; i++){
+        var ele = elements[i];
+        if(!ele.isEdge()){
+            return false;
+        }
+    }
+
+    return true;
+};
+
+var allCanHaveStateVariable = function(elements){
+    for(var i = 0; i <elements.length; i++){
+        var ele = elements[i];
+        if(!canHaveStateVariable(ele.data('sbgnclass'))){
+            return false;
+        }
+    }
+
+    return true;
+};
+
+var allCanHaveUnitOfInformation = function(elements){
+    for(var i = 0; i <elements.length; i++){
+        var ele = elements[i];
+        if(!canHaveUnitOfInformation(ele.data('sbgnclass'))){
+            return false;
+        }
+    }
+
+    return true;
+};
+
+var getCommonStateAndInfos = function(elements){
+    if(elements.length == 0){
+        return [];
+    }
+
+    var firstStateOrInfo = elements[0]._private.data.sbgnstatesandinfos;
+    for(var i = 1; i <elements.length; i++){
+        if(!_.isEqual(elements[i]._private.data.sbgnstatesandinfos, firstStateOrInfo)){
+            return null;
+        }
+    }
+
+    return firstStateOrInfo;
+};
+
+var allCanBeCloned = function(elements){
+    for(var i = 0; i <elements.length; i++){
+        var ele = elements[i];
+        if(!canBeCloned(ele.data('sbgnclass'))){
+            return false;
+        }
+    }
+
+    return true;
+};
+
+var allCanBeMultimer = function(elements){
+    for(var i = 0; i <elements.length; i++){
+        var ele = elements[i];
+        if(!canBeMultimer(ele.data('sbgnclass'))){
+            return false;
+        }
+    }
+
+    return true;
+};
+
+var getCommonIsCloned = function(elements){
+    if(elements.length == 0){
+        return null;
+    }
+
+    var firstElementIsCloned = elements[0].data('sbgnclonemarker');
+    for(var i = 1; i < elements.length; i++){
+        if(elements[i].data('sbgnclonemarker') != firstElementIsCloned){
+            return null;
+        }
+    }
+
+    return firstElementIsCloned;
+};
+
+var getCommonIsMultimer = function(elements){
+    if(elements.length == 0){
+        return null;
+    }
+
+    var firstElementIsMultimer = elements[0].data('sbgnclass').endsWith(' multimer');
+    for(var i = 1; i < elements.length; i++){
+        if(elements[i].data('sbgnclass').endsWith(' multimer') != firstElementIsMultimer){
+            return null;
+        }
+    }
+
+    return firstElementIsMultimer;
+};
+
+var getCommonLabel = function(elements){
+    if(elements.length == 0){
+        return null;
+    }
+
+    var labelOfFirstElement = elements[0].data('sbgnlabel');
+    for(var i = 1; i < elements.length; i++){
+        if(elements[i].data('sbgnlabel') != labelOfFirstElement){
+            return null;
+        }
+    }
+
+    return labelOfFirstElement;
+};
+
+var getCommonBorderColor = function(elements){
+    if(elements.length == 0){
+        return null;
+    }
+
+    var borderColorOfFirstElement = elements[0].data('borderColor');
+    for(var i = 1; i < elements.length; i++){
+        if(elements[i].data('borderColor') != borderColorOfFirstElement){
+            return null;
+        }
+    }
+
+    return borderColorOfFirstElement;
+};
+
+var getCommonFillColor = function(elements){
+    if(elements.length == 0){
+        return null;
+    }
+
+    var fillColorOfFirstElement = elements[0].css('background-color');
+    for(var i = 1; i < elements.length; i++){
+        if(elements[i].css('background-color') != fillColorOfFirstElement){
+            return null;
+        }
+    }
+
+    return fillColorOfFirstElement;
+};
+
+var getCommonBorderWidth = function(elements){
+    if(elements.length == 0){
+        return null;
+    }
+
+    var borderWidthOfFirstElement = elements[0].css('border-width');
+    for(var i = 1; i < elements.length; i++){
+        if(elements[i].css('border-width') != borderWidthOfFirstElement){
+            return null;
+        }
+    }
+
+    return borderWidthOfFirstElement;
+};
+
+var getCommonBackgroundOpacity = function(elements){
+    if(elements.length == 0){
+        return null;
+    }
+
+    var backgroundOpacityOfFirstElement = elements[0].data('backgroundOpacity');
+    for(var i = 1; i < elements.length; i++){
+        if(elements[i].data('backgroundOpacity') != backgroundOpacityOfFirstElement){
+            return null;
+        }
+    }
+
+    return backgroundOpacityOfFirstElement;
+};
+
+var getCommonLineColor = function(elements){
+    if(elements.length == 0){
+        return null;
+    }
+
+    var lineColorOfFirstElement = elements[0].data('lineColor');
+    for(var i = 1; i < elements.length; i++){
+        if(elements[i].data('lineColor') != lineColorOfFirstElement){
+            return null;
+        }
+    }
+
+    return lineColorOfFirstElement;
+};
+
+var getCommonLineWidth = function(elements){
+    if(elements.length == 0){
+        return null;
+    }
+
+    var lineWidthOfFirstElement = elements[0].css('width');
+    for(var i = 1; i < elements.length; i++){
+        if(elements[i].css('width') != lineWidthOfFirstElement){
+            return null;
+        }
+    }
+
+    return lineWidthOfFirstElement;
+};
+
+var getCommonSBGNCardinality = function(elements){
+    if(elements.length == 0){
+        return undefined;
+    }
+
+    var cardinalityOfFirstElement = elements[0].data('sbgncardinality');
+    for(var i = 1; i < elements.length; i++){
+        if(elements[i].data('sbgncardinality') != cardinalityOfFirstElement){
+            return undefined;
+        }
+    }
+
+    return cardinalityOfFirstElement;
+};
+
+var canHaveSBGNCardinality = function(ele) {
+    return ele.data('sbgnclass') == 'consumption' || ele.data('sbgnclass') == 'production';
+};
+
+var allCanHaveSBGNCardinality = function(elements){
+    for(var i = 0; i < elements.length; i++){
+        if(!canHaveSBGNCardinality(elements[i])){
+            return false;
+        }
+    }
+
+    return true;
+};
+
+var enableDragAndDropMode = function () {
+    window.dragAndDropModeEnabled = true;
+    $("#sbgn-network-container").addClass("target-cursor");
+    cy.autolock(true);
+    cy.autounselectify(true);
+};
+
+var disableDragAndDropMode = function () {
+    window.dragAndDropModeEnabled = null;
+    window.nodeToDragAndDrop = null;
+    $("#sbgn-network-container").removeClass("target-cursor");
+    cy.autolock(false);
+    cy.autounselectify(false);
+};
+
+var canHaveCloneMarker = function(sbgnclass) {
+    if (sbgnclass == 'simple chemical'
+        || sbgnclass == 'macromolecule' || sbgnclass == 'nucleic acid feature'
+        || sbgnclass == 'complex' || sbgnclass == 'simple chemical multimer'
+        || sbgnclass == 'macromolecule multimer' || sbgnclass == 'nucleic acid feature multimer'
+        || sbgnclass == 'complex multimer') {
+        return true;
+    }
+    return false;
+};
+
+var canHaveStateVariable = function(sbgnclass) {
+    if (sbgnclass == 'macromolecule' || sbgnclass == 'nucleic acid feature'
+        || sbgnclass == 'complex'
+        || sbgnclass == 'macromolecule multimer' || sbgnclass == 'nucleic acid feature multimer'
+        || sbgnclass == 'complex multimer') {
+        return true;
+    }
+    return false;
+};
+
+//checks if a node with the given sbgnclass can be cloned
+var canBeCloned = function (sbgnclass) {
+    sbgnclass = sbgnclass.replace(" multimer", "");
+    var list = {
+        'unspecified entity': true,
+        'macromolecule': true,
+        'complex': true,
+        'nucleic acid feature': true,
+        'simple chemical': true,
+        'perturbing agent': true
+    };
+
+    return list[sbgnclass] ? true : false;
+};
+
+//checks if a node with the given sbgnclass can become a multimer
+var canBeMultimer = function (sbgnclass) {
+    sbgnclass = sbgnclass.replace(" multimer", "");
+    var list = {
+        'macromolecule': true,
+        'complex': true,
+        'nucleic acid feature': true,
+        'simple chemical': true
+    };
+
+    return list[sbgnclass] ? true : false;
+};
+////Returns true for unspecified entity,
+////simple chemical, macromolecule, nucleic acid feature, and complexes
+////As they may have some specific node properties(state variables, units of information etc.)
+//var isSpecialSBGNNodeClass = function (sbgnclass) {
+//    if (sbgnclass == 'unspecified entity' || sbgnclass == 'simple chemical'
+//        || sbgnclass == 'macromolecule' || sbgnclass == 'nucleic acid feature'
+//        || sbgnclass == 'complex'
+//        || sbgnclass == 'unspecified entity multimer' || sbgnclass == 'simple chemical multimer'
+//        || sbgnclass == 'macromolecule multimer' || sbgnclass == 'nucleic acid feature multimer'
+//        || sbgnclass == 'complex multimer') {
+//        return true;
+//    }
+//    return false;
+//};
 
 
 var getNodesData = function () {
@@ -241,6 +630,47 @@ var relocateStateAndInfos = function (stateAndInfos) {
     }
 };
 
+/*
+ * This function obtains the info label of the given node by
+ * it's children info recursively
+ */
+function getInfoLabel(node) {
+    /*    * Info label of a collapsed node cannot be changed if
+     * the node is collapsed return the already existing info label of it
+     */
+    if (node._private.data.collapsedChildren != null) {
+        return node._private.data.infoLabel;
+    }
+
+    /*
+     * If the node is simple then it's infolabel is equal to it's sbgnlabel
+     */
+    if (node.children() == null || node.children().length == 0) {
+        return node._private.data.sbgnlabel;
+    }
+
+    var children = node.children();
+    var infoLabel = "";
+    /*
+     * Get the info label of the given node by it's children info recursively
+     */
+    for (var i = 0; i < children.length; i++) {
+        var child = children[i];
+        var childInfo = getInfoLabel(child);
+
+        if (childInfo == null || childInfo == "") {
+            continue;
+        }
+
+        if (infoLabel != "") {
+            infoLabel += ":";
+        }
+        infoLabel += childInfo;
+    }
+
+    //return info label
+    return infoLabel;
+}
 
 /*
  * This function create qtip for the given node
@@ -304,7 +734,29 @@ function nodeQtipFunction(node) {
     });
 }
 
+var isEPNClass = function (sbgnclass) {
+    return (sbgnclass == 'unspecified entity'
+    || sbgnclass == 'simple chemical'
+    || sbgnclass == 'macromolecule'
+    || sbgnclass == 'nucleic acid feature'
+    || sbgnclass == 'complex');
+};
 
+var isPNClass = function (sbgnclass) {
+    return (sbgnclass == 'process'
+    || sbgnclass == 'omitted process'
+    || sbgnclass == 'uncertain process'
+    || sbgnclass == 'association'
+    || sbgnclass == 'dissociation');
+};
+
+var isLogicalOperator = function (sbgnclass) {
+    return (sbgnclass == 'and' || sbgnclass == 'or' || sbgnclass == 'not');
+};
+
+var convenientToEquivalence = function (sbgnclass) {
+    return (sbgnclass == 'tag' || sbgnclass == 'terminal');
+};
 
 /*
  * This is a debugging function
@@ -324,7 +776,175 @@ var printNodeInfo = function () {
     }
 };
 
+//get the style properties for the given selector
+function getStyleRules(selector) {
+    for (var i = 0; i < sbgnStyleSheet.length; i++) {
+        var currentStyle = sbgnStyleSheet[i];
+        if (currentStyle.selector == selector) {
+            return currentStyle.properties;
+        }
+    }
+};
 
+
+var truncateText = function (textProp, font) {
+    var context = document.createElement('canvas').getContext("2d");
+    context.font = font;
+
+    var fitLabelsToNodes = (sbgnStyleRules['fit-labels-to-nodes'] == 'true');
+
+    var text = (typeof textProp.label === 'undefined') ? "" : textProp.label;
+    //If fit labels to nodes is false do not truncate
+    if (fitLabelsToNodes == false) {
+        return text;
+    }
+    var width;
+    var len = text.length;
+    var ellipsis = "..";
+
+    //if(context.measureText(text).width < textProp.width)
+    //	return text;
+    var textWidth = (textProp.width > 30) ? textProp.width - 10 : textProp.width;
+
+    while ((width = context.measureText(text).width) > textWidth) {
+        --len;
+        text = text.substring(0, len) + ellipsis;
+    }
+    return text;
+};
+
+var getElementContent = function (ele) {
+    var sbgnclass = ele.data('sbgnclass');
+    if (sbgnclass.endsWith(' multimer')) {
+        sbgnclass = sbgnclass.replace(' multimer', '');
+    }
+
+    var content = "";
+    if (sbgnclass == 'macromolecule' || sbgnclass == 'simple chemical'
+        || sbgnclass == 'phenotype' || sbgnclass == 'compartment'
+        || sbgnclass == 'unspecified entity' || sbgnclass == 'nucleic acid feature'
+        || sbgnclass == 'perturbing agent' || sbgnclass == 'tag') {
+        content = ele.data('sbgnlabel') ? ele.data('sbgnlabel') : "";
+    }
+    else if (sbgnclass == 'and') {
+        content = 'AND';
+    }
+    else if (sbgnclass == 'or') {
+        content = 'OR';
+    }
+    else if (sbgnclass == 'not') {
+        content = 'NOT';
+    }
+    else if (sbgnclass == 'omitted process') {
+        content = '\\\\';
+    }
+    else if (sbgnclass == 'uncertain process') {
+        content = '?';
+    }
+    else if (sbgnclass == 'dissociation') {
+        content = 'O';
+    }
+
+    var textProp = {
+        label: content,
+        width: ele.data('width') ? ele.data('width') : ele.data('sbgnbbox').w
+    };
+
+    var font = getLabelTextSize(ele) + "px Arial";
+    return truncateText(textProp, font);
+};
+
+var getLabelTextSize = function (ele) {
+    var sbgnclass = ele.data('sbgnclass');
+    if (sbgnclass.endsWith('process')) {
+        return 18;
+    }
+    return getDynamicLabelTextSize(ele);
+};
+
+var getCyShape = function (ele) {
+    var shape = ele.data('sbgnclass');
+    if (shape.endsWith(' multimer')) {
+        shape = shape.replace(' multimer', '');
+    }
+
+    if (shape == 'compartment') {
+        return 'roundrectangle';
+    }
+    if (shape == 'phenotype') {
+        return 'hexagon';
+    }
+    if (shape == 'perturbing agent' || shape == 'tag') {
+        return 'polygon';
+    }
+    if (shape == 'source and sink' || shape == 'nucleic acid feature' || shape == 'dissociation'
+        || shape == 'macromolecule' || shape == 'simple chemical' || shape == 'complex'
+        || shape == 'unspecified entity' || shape == 'process' || shape == 'omitted process'
+        || shape == 'uncertain process' || shape == 'association') {
+        return shape;
+    }
+    return 'ellipse';
+};
+var getCyArrowShape = function (ele) {
+    var sbgnclass = ele.data('sbgnclass');
+    if (sbgnclass == 'necessary stimulation') {
+        return 'necessary stimulation';
+//    return 'triangle-tee';
+    }
+    if (sbgnclass == 'inhibition') {
+        return 'tee';
+    }
+    if (sbgnclass == 'catalysis') {
+        return 'circle';
+    }
+    if (sbgnclass == 'stimulation' || sbgnclass == 'production') {
+        return 'triangle';
+    }
+    if (sbgnclass == 'modulation') {
+        return 'diamond';
+    }
+    return 'none';
+};
+
+/*
+ * calculates the dynamic label size for the given node
+ */
+var getDynamicLabelTextSize = function (ele) {
+    var dynamicLabelSize = sbgnStyleRules['dynamic-label-size'];
+    var dynamicLabelSizeCoefficient;
+
+    if (dynamicLabelSize == 'small') {
+        dynamicLabelSizeCoefficient = 0.75;
+    }
+    else if (dynamicLabelSize == 'regular') {
+        dynamicLabelSizeCoefficient = 1;
+    }
+    else if (dynamicLabelSize == 'large') {
+        dynamicLabelSizeCoefficient = 1.25;
+    }
+
+    //This line will be useless and is to be removed later
+//  dynamicLabelSizeCoefficient = dynamicLabelSizeCoefficient ? dynamicLabelSizeCoefficient : 1;
+
+    var h = ele.data('height') ? ele.data('height') : ele.data('sbgnbbox').h;
+    var textHeight = parseInt(h / 2.45) * dynamicLabelSizeCoefficient;
+
+    return textHeight;
+};
+/*
+ * get the style rules for .sbgn selector and fill them into sbgnStyleRules map
+ */
+//function getSBGNStyleRules(){
+//    if (window.sbgnStyleRules == null) {
+//        var styleRulesList = getStyleRules(".sbgn");
+//        window.sbgnStyleRules = {};
+//        for (var i = 0; i < styleRulesList.length; i++) {
+//            var rule = styleRulesList[i];
+//            window.sbgnStyleRules[rule.name] = rule.value;
+//        }
+//    }
+//    return sbgnStyleRules;
+//};
 
 
 //funda: changed #555 to #555555
@@ -332,13 +952,11 @@ var sbgnStyleSheet = cytoscape.stylesheet()
     .selector("node")
     .css({
         'border-width': 1.5,
-        'border-color': '#555',
+        'border-color': '#555555',
         'background-color': '#f6f6f6',
         'font-size': 11,
 //          'shape': 'data(sbgnclass)',
         'background-opacity': 0.5,
-        'text-opacity': 1,
-        'opacity': 1
     })
     .selector("node[?sbgnclonemarker][sbgnclass='perturbing agent']")
     .css({
@@ -349,9 +967,6 @@ var sbgnStyleSheet = cytoscape.stylesheet()
         'background-height': '25%',
         'background-fit': 'none',
         'background-image-opacity': function (ele) {
-            if(!ele.data('sbgnclonemarker')){
-                return 0;
-            }
             return ele._private.style['background-opacity'].value;
         }
     })
@@ -390,50 +1005,17 @@ var sbgnStyleSheet = cytoscape.stylesheet()
         'background-color': '#F4F3EE',
         'text-valign': 'bottom',
         'text-halign': 'center',
-        'font-size': function (ele) {
-            return getLabelTextSize(ele);
-        },
-        'width': function(ele){
-            if(ele.children() == null || ele.children().length == 0){
-                return '36';
-            }
-            return ele.data('width');
-        },
-        'height': function(ele){
-            if(ele.children() == null || ele.children().length == 0){
-                return '36';
-            }
-            return ele.data('height');
-        },
-        'content': function(ele){
-            return getElementContent(ele);
-        }
+        'font-size': '16'
     })
     .selector("node[sbgnclass='compartment']")
     .css({
         'border-width': 3.75,
         'background-opacity': 0,
         'background-color': '#FFFFFF',
-        'content': function(ele){
-            return getElementContent(ele);
-        },
-        'width': function(ele){
-            if(ele.children() == null || ele.children().length == 0){
-                return '36';
-            }
-            return ele.data('width');
-        },
-        'height': function(ele){
-            if(ele.children() == null || ele.children().length == 0){
-                return '36';
-            }
-            return ele.data('height');
-        },
+        'content': 'data(sbgnlabel)',
         'text-valign': 'bottom',
         'text-halign': 'center',
-        'font-size': function (ele) {
-            return getLabelTextSize(ele);
-        }
+        'font-size': '16'
     })
     .selector("node[sbgnclass][sbgnclass!='complex'][sbgnclass!='compartment'][sbgnclass!='submap']")
     .css({
@@ -443,8 +1025,8 @@ var sbgnStyleSheet = cytoscape.stylesheet()
     .selector("node:selected")
     .css({
         'border-color': '#d67614',
-        'target-arrow-color': '#000',
-        'text-outline-color': '#000'})
+        'target-arrow-color': '#000000',
+        'text-outline-color': '#000000'})
     .selector("node:active")
     .css({
         'background-opacity': 0.7, 'overlay-color': '#d67614',
@@ -453,20 +1035,29 @@ var sbgnStyleSheet = cytoscape.stylesheet()
     .selector("edge")
     .css({
         'curve-style': 'bezier',
-        'line-color': '#555',
+        'line-color': '#555555',
         'target-arrow-fill': 'hollow',
         'source-arrow-fill': 'hollow',
         'width': 1.5,
-        'target-arrow-color': '#555',
-        'source-arrow-color': '#555',
+        'target-arrow-color': '#555555',
+        'source-arrow-color': '#555555',
 //          'target-arrow-shape': 'data(sbgnclass)'
+    })
+    .selector("edge[distances][weights]")
+    .css({
+        'curve-style': 'segments',
+        'segment-distances': function(ele){
+            return sbgnBendPointUtilities.getSegmentDistancesString(ele);
+        },
+        'segment-weights': function(ele){
+            return sbgnBendPointUtilities.getSegmentWeightsString(ele);
+        }
     })
     .selector("edge[sbgnclass]")
     .css({
         'target-arrow-shape': function (ele) {
             return getCyArrowShape(ele);
-        },
-        'source-arrow-shape': 'none'
+        }
     })
     .selector("edge[sbgnclass='inhibition']")
     .css({
@@ -474,6 +1065,16 @@ var sbgnStyleSheet = cytoscape.stylesheet()
     })
     .selector("edge[sbgnclass='consumption']")
     .css({
+//      'text-background-opacity': 1,
+//      'text-background-color': 'white',
+//      'text-background-shape': 'roundrectangle',
+//      'text-border-color': '#000',
+//      'text-border-width': 1,
+//      'text-border-opacity': 1,
+//      'label': function (ele) {
+//        var cardinality = ele.data('sbgncardinality');
+//        return cardinality == null || cardinality == 0 ? '' : cardinality;
+//      }
         'line-style': 'consumption'
     })
     .selector("edge[sbgnclass='production']")
@@ -540,6 +1141,11 @@ var sbgnStyleSheet = cytoscape.stylesheet()
         'source-arrow-color': '#d67614',
         'target-arrow-color': '#d67614'
     })
+    .selector("node.collapsed")
+    .css({
+        'width': 60,
+        'height': 60
+    })
     .selector("node.changeBackgroundOpacity")
     .css({
         'background-opacity': 'data(backgroundOpacity)'
@@ -558,7 +1164,7 @@ var sbgnStyleSheet = cytoscape.stylesheet()
     })
     .selector("node.changeBorderColor")
     .css({
-        'border-color': 'data(borderColor)'
+        'border-color':'data(borderColor)'
     })
     .selector("node.changeBorderColor:selected")
     .css({
@@ -587,14 +1193,6 @@ var sbgnStyleSheet = cytoscape.stylesheet()
         'line-color': '#d67614',
         'source-arrow-color': '#d67614',
         'target-arrow-color': '#d67614'
-    }).selector("node.changeClonedStatus")
-    .css({
-        'background-image-opacity': function (ele) {
-            if(!ele.data('sbgnclonemarker')){
-                return 0;
-            }
-            return ele._private.style['background-opacity'].value;
-        }
     });
 // end of sbgnStyleSheet
 

@@ -33,8 +33,8 @@
      * // => logs the number of milliseconds it took for the deferred function to be invoked
      */
     var now = nativeNow || function() {
-      return new Date().getTime();
-    };
+          return new Date().getTime();
+        };
 
     /**
      * Creates a debounced function that delays invoking `func` until after `wait`
@@ -379,14 +379,14 @@
 
           var _sizeCanvas = debounce( function(){
             $canvas
-              .attr( 'height', $container.height() )
-              .attr( 'width', $container.width() )
-              .css( {
-                'position': 'absolute',
-                'top': 0,
-                'left': 0,
-                'z-index': opts.stackOrder
-              } )
+                .attr( 'height', $container.height() )
+                .attr( 'width', $container.width() )
+                .css( {
+                  'position': 'absolute',
+                  'top': 0,
+                  'left': 0,
+                  'z-index': opts.stackOrder
+                } )
             ;
 
             setTimeout(function(){
@@ -394,10 +394,10 @@
               var containerBb = $container.offset();
 
               $canvas
-                .css( {
-                  'top': -( canvasBb.top - containerBb.top ),
-                  'left': -( canvasBb.left - containerBb.left )
-                } )
+                  .css( {
+                    'top': -( canvasBb.top - containerBb.top ),
+                    'left': -( canvasBb.left - containerBb.left )
+                  } )
               ;
             }, 0);
           }, 250 );
@@ -480,16 +480,16 @@
             lastBoxSelectionEnabled = cy.boxSelectionEnabled();
 
             cy
-              .zoomingEnabled( false )
-              .panningEnabled( false )
-              .boxSelectionEnabled( false );
+                .zoomingEnabled( false )
+                .panningEnabled( false )
+                .boxSelectionEnabled( false );
           }
 
           function resetGestures() {
             cy
-              .zoomingEnabled( lastZoomingEnabled )
-              .panningEnabled( lastPanningEnabled )
-              .boxSelectionEnabled( lastBoxSelectionEnabled );
+                .zoomingEnabled( lastZoomingEnabled )
+                .panningEnabled( lastPanningEnabled )
+                .boxSelectionEnabled( lastBoxSelectionEnabled );
           }
 
           function resetToDefaultState() {
@@ -498,9 +498,9 @@
 
             //setTimeout(function(){
             cy.nodes()
-              .removeClass( 'edgehandles-hover' )
-              .removeClass( 'edgehandles-source' )
-              .removeClass( 'edgehandles-target' );
+                .removeClass( 'edgehandles-hover' )
+                .removeClass( 'edgehandles-source' )
+                .removeClass( 'edgehandles-target' );
 
             cy.$( '.edgehandles-ghost' ).remove();
             //}, 1);
@@ -523,9 +523,9 @@
             source.edgesWith( target ).filter( '.edgehandles-preview' ).remove();
 
             target
-              .neighborhood( 'node.edgehandles-preview' )
-              .closedNeighborhood( '.edgehandles-preview' )
-              .remove();
+                .neighborhood( 'node.edgehandles-preview' )
+                .closedNeighborhood( '.edgehandles-preview' )
+                .remove();
 
             target.trigger( 'cyedgehandles.removepreview' );
 
@@ -1229,29 +1229,29 @@
 
             data.unbind = function() {
               cy
-                .off( 'mouseover', 'node', startHandler )
-                .off( 'mouseover', 'node', hoverHandler )
-                .off( 'mouseout', 'node', leaveHandler )
-                .off( 'drag position', 'node', dragNodeHandler )
-                .off( 'grab', 'node', grabNodeHandler )
-                .off( 'free', 'node', freeNodeHandler )
-                .off( 'cyedgehandles.forcestart', 'node', forceStartHandler )
-                .off( 'remove', 'node', removeHandler )
-                .off( 'cxttapstart', 'node', cxtstartHandler )
-                .off( 'cxttapend', cxtendHandler )
-                .off( 'cxtdrag', cxtdragHandler )
-                .off( 'cxtdragover', 'node', cxtdragoverHandler )
-                .off( 'cxtdragout', 'node', cxtdragoutHandler )
-                .off( 'tap', 'node', tapToStartHandler );
+                  .off( 'mouseover', 'node', startHandler )
+                  .off( 'mouseover', 'node', hoverHandler )
+                  .off( 'mouseout', 'node', leaveHandler )
+                  .off( 'drag position', 'node', dragNodeHandler )
+                  .off( 'grab', 'node', grabNodeHandler )
+                  .off( 'free', 'node', freeNodeHandler )
+                  .off( 'cyedgehandles.forcestart', 'node', forceStartHandler )
+                  .off( 'remove', 'node', removeHandler )
+                  .off( 'cxttapstart', 'node', cxtstartHandler )
+                  .off( 'cxttapend', cxtendHandler )
+                  .off( 'cxtdrag', cxtdragHandler )
+                  .off( 'cxtdragover', 'node', cxtdragoverHandler )
+                  .off( 'cxtdragout', 'node', cxtdragoutHandler )
+                  .off( 'tap', 'node', tapToStartHandler );
 
               cy.unbind( 'zoom pan', transformHandler );
 
               $( window ).off( 'resize', winResizeHandler );
 
               $container
-                .off( 'cyedgehandles.resize', ctrResizeHandler )
-                .off( 'cyedgehandles.drawon', ctrDrawonHandler )
-                .off( 'cyedgehandles.drawoff', ctrDrawoffHandler );
+                  .off( 'cyedgehandles.resize', ctrResizeHandler )
+                  .off( 'cyedgehandles.drawon', ctrDrawonHandler )
+                  .off( 'cyedgehandles.drawoff', ctrDrawoffHandler );
             };
           } );
 

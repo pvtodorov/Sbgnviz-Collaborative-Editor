@@ -44,7 +44,6 @@
 
      //Parse
         var self = this;
-        var self = this;
         var sInd = url.search("3000/") + 5; //roomId index
         var serverIp = url.slice(0,sInd);
         this.room = url.slice(sInd, url.length);
