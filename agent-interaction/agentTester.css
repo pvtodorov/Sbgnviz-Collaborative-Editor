@@ -5,6 +5,7 @@ body {
     overflow-x: hidden;
     overflow-y: hidden;
     font-family: "Helvetica Neue Light", "Lucida Grande", "Calibri", "Arial", sans-serif;
+    font-size: small;
 
 }
 #serverIpForm {
@@ -74,12 +75,15 @@ body {
 #agentOperations button{
     margin: 5px;
 }
+
+
+
 #modelHistory{
     position: absolute;
     padding: 5px;
     margin: 5px;
     border: 2px groove #dddddd;
-    border-radius: 25px;
+    border-radius: 5px;
 
     left: 36%;
     width: 62%;
@@ -88,30 +92,94 @@ body {
 
 }
 
+
+
+
+#chat{
+    position: absolute;
+
+    /*width: 250px;*/
+    /*left: 550px;*/
+    /*height: 750px;*/
+    width: 650px;
+    /*line-height: 150%;*/
+
+    top: 800px;
+
+    height: 300px;
+
+    overflow-y: scroll;
+    line-height: 150%;
+    -webkit-overflow-scrolling: touch;
+    /*border: 1px solid #dddddd;*/
+
+}
+
+#userList{
+    position:absolute;
+
+    left: 700px;
+    top: 800px;
+    width: 500px;
+    height: 300px;
+
+
+    /*left: 850px;*/
+    /*width: 200px;*/
+    /*height: 750px;*/
+    overflow-y: scroll;
+    line-height: 150%;
+    -webkit-overflow-scrolling: touch;
+    /*border: 1px solid #dddddd;*/
+
+
+}
+
+
 #operationHistory {
 
     position: absolute;
 
+    left: 700px;
     width: 500px;
     line-height: 150%;
-    left: 5px;
+
     height: 750px;
     -webkit-overflow-scrolling: touch;
     overflow-y: scroll;
 }
 
+
 #contextInformation{
     position: absolute;
 
-    width: 500px;
-    /*line-height: 150%;*/
-    left: 5px;
-    top: 800px;
-    width: 1000px;
-    height: 200px;
-    /*should specify height to enable scrolling*/
+    top: 5px;
+
+    height: 750px;
+    width: 650px;
+
+    /*width: 500px;*/
+    /*!*line-height: 150%;*!*/
+    /*left: 5px;*/
+    /*top: 800px;*/
+    /*width: 1000px;*/
+    /*height: 300px;*/
+    /*!*should specify height to enable scrolling*!*/
     -webkit-overflow-scrolling: touch;
     overflow-y: scroll;
+}
+
+table, th, td {
+    font-family: arial, sans-serif;
+    font-size: small;
+    font-weight: normal;
+    border: 1px solid black;
+    border-collapse: collapse;
+    text-align: left;
+    padding: 5px;
+}
+tr:nth-child(even) {
+    background-color: #dddddd;
 }
 
 
@@ -130,32 +198,3 @@ img{
     /*height: 100px;*/
     width: 50px;
 }
-
-
-#chat{
-    position: absolute;
-
-    width: 250px;
-    left: 550px;
-    height: 750px;
-    overflow-y: scroll;
-    line-height: 150%;
-    -webkit-overflow-scrolling: touch;
-    /*border: 1px solid #dddddd;*/
-
-}
-
-#userList{
-    position:absolute;
-
-    left: 850px;
-    width: 200px;
-    height: 750px;
-    overflow-y: scroll;
-    line-height: 150%;
-    -webkit-overflow-scrolling: touch;
-    /*border: 1px solid #dddddd;*/
-
-
-}
-

@@ -344,8 +344,10 @@
             agent.loadModel(function() {
 
                 if(agent instanceof ContextAgent){
-                    agent.initContext();
-                    fillContextInformation(agent.contextList, agent.contextInd);
+                    agent.initContext(function(){
+                        fillContextInformation(agent.contextList, agent.contextInd);
+                    });
+
                 }
                 fillLayoutProperties();
                 agent.loadOperationHistory(function(){
@@ -524,7 +526,7 @@
                             writeMessage(agent.chatHistory[ind]);
 
                         }
-                        ;
+
                     }
 
                     fillNodeIds('nodeId');
@@ -832,15 +834,16 @@
 
         $('#contextInformation').empty();
         $('#contextInformation').append("<b>Context</b>")
+        $('#contextInformation').append("<table>");
+
 
         for(var i = 0; i < contextList.length; i++){
             var context = contextList[i];
-            if(i==contextInd)
-                $('#contextInformation').append("<li> <b>" + context.proteinName +  "\t" + context.contextName + "\t" + context.relevance.toFixed(2) + "\t"  + context.confidence +  "</b></li>");
-            else
-                $('#contextInformation').append("<li>" + context.proteinName +  "\t" + context.contextName + "\t" + context.relevance.toFixed(2) + "\t"  + context.confidence +  "</li>");
+                $('#contextInformation').append("<tr> <th>" + context.proteinName +  "</th><th>" + context.contextName + "</th><th>" + context.relevance.toFixed(2) + "</th><th>"  + context.confidence +  "</th></tr>");
+
 
         }
+        $('#contextInformation').append("</table>");
     }
 
     function writeMessage(msg){
