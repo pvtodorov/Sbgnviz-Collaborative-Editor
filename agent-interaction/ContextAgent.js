@@ -13,29 +13,99 @@
         this.agentId = id;
         
 
+        this.cancerTypes = [
+            {abbr: "ACC", longName:"Adrenocortical carcinoma"},
+            {abbr: "BLCA",longName:"Bladder Urothelial Carcinoma"},
+            {abbr:"BRCA",longName:"Breast invasive carcinoma"},
+            {abbr:"CESC",longName:"Cervical squamous cell carcinoma and endocervical adenocarcinoma"},
+            {abbr:"CHOL",longName:"Cholangiocarcinoma"},
+            {abbr:"COAD",longName:"Colon adenocarcinoma"},
+            {abbr:"COADREAD",longName:"Colorectal cancer"},
+            {abbr:"DLBC",longName:"Lymphoid Neoplasm Diffuse Large B-cell Lymphoma"},
+            {abbr:"GBM",longName:"Glioblastoma multiforme"},
+            {abbr:"GBMLGG",longName:"Glioblastoma multiforme/Brain Lower Grade Glioma"},
+            {abbr:"HNSC",longName:"Head and Neck squamous cell carcinoma"},
+            {abbr:"KICH",longName:"Kidney Chromophobe"},
+            {abbr:"KIPAN",longName:"Pan-Kidney"},
+            {abbr:"KIRC",longName:"Kidney renal clear cell carcinoma"},
+            {abbr:"KIRP",longName:"Kidney renal papillary cell carcinoma"},
+            {abbr:"LAML",longName:"	Acute Myeloid Leukemia"},
+            {abbr:"LGG",longName:"Brain Lower Grade Glioma"},
+            {abbr:"LIHC",longName:"Liver hepatocellular carcinoma"},
+            {abbr:"LUAD",longName:"Lung adenocarcinoma"},
+            {abbr:"LUSC",longName:"Lung squamous cell carcinoma"},
+            {abbr:"OV",longName:"Ovarian serous cystadenocarcinoma"},
+            {abbr:"PAAD",longName:"Pancreatic adenocarcinoma"},
+            {abbr:"PCPG",longName:"Pheochromocytoma and Paraganglioma"},
+            {abbr:"PRAD",longName:"Prostate adenocarcinoma"},
+            {abbr:"READ",longName:"Rectum adenocarcinoma"},
+            {abbr:"SARC", longName:"Sarcoma"},
+            {abbr:"SKCM", longName:"Skin Cutaneous Melanoma"},
+            {abbr:"STAD", longName:"Stomach adenocarcinoma"},
+            {abbr:"STES", longName:"Stomach and Esophageal carcinoma"},
+            {abbr:"TGCT", longName:"Testicular Germ Cell Tumors"},
+            {abbr:"THCA", longName:"Thyroid carcinoma"},
+            {abbr:"UCEC", longName:"Uterine Corpus Endometrial Carcinoma"},
+            {abbr:"UCS", longName:"Uterine Carcinosarcoma"},
+            {abbr:"UVM", longName:"Uveal Melanoma"}];
 
-        this.contextList = []; //contextName, proteinName, relevance, confidence
+
+        this.contextList = []; //cancerType, genes[{importance, interactionRate}], importance, confidence
 
 
-        this.RELEVANCE_THRESHOLD = 0.5; //over 50%
 
-        this.questionInd;
 
-        this.contextInd;
+        this.questionInd; //for communication through chat
+
+        this.contextInd; //most likely context
     }
+
+    /**
+     * Read mutsig analysis data into memory
+     */
+    ContextAgent.prototype.initCancerGeneInformation = function(cancerType,  fileContent){
+        var self = this;
+        var context = {cancerType: cancerType, genes:new Object(), relevance:0, confidence:1};
+
+
+        var genes = fileContent.split("\n").slice(1); //start from the second line
+
+
+        genes.forEach(function(gene){
+            geneInfo = gene.split("\t");
+            var pVal = Number(geneInfo[17]);
+            var importance = (pVal== 0) ? 100 : -Math.log10(pVal);
+
+
+            context.genes[geneInfo[1]] = {importance: importance, interactionRate:0};
+        });
+
+
+
+        self.contextList.push(context);
+
+    }
+
 
     ContextAgent.prototype.initContext = function(callback){
         var self = this;
-        if(this.pageDoc.context!=null) {
-            this.contextList = this.pageDoc.context;
-            if(callback) callback();
-        }
-        else{
-            var nodes = self.getNodeList();
-            for(var nodeId in nodes){
-                self.updateNodeContribution(nodes[nodeId], 1, callback);
-            }
-        }
+
+        self.cancerTypes.forEach(function(cancerType){
+            readTextFile("TCGA/" + cancerType.abbr +"/scores-mutsig.txt", function(fileContent){
+                agent.initCancerGeneInformation(cancerType, fileContent);
+            });
+        });
+
+        //update each node's contribution by 1
+        var nodes = self.getNodeList();
+        for(var nodeId in nodes){
+            self.updateNodeContribution(nodes[nodeId], 1);
+        };
+
+        //update cumulative contributions of nodes for each cancer type
+        self.updateContextRelevance(nodes);
+        if(callback) callback();
+
     }
 
 
@@ -47,18 +117,18 @@
         var nodes = self.getNodeList();
         var edges = self.getEdgeList();
 
-        //if op == delete reduce score
+        //if op == delete reduce relevance
 
         if(op.elId!=null) {
 
             if(op.elType == "node") {
                 var node = nodes[op.elId];
                 if(op.opName == "add")
-                    self.updateNodeContribution(node, 1, callback);
+                    self.updateNodeContribution(node, 1);
                 else if(op.opName == "delete")
-                    self.updateNodeContribution(node, -1, callback);
+                    self.updateNodeContribution(node, -1);
                 else
-                    self.updateNodeContribution(node, 1, callback);
+                    self.updateNodeContribution(node, 1);
 
             }
             else if(op.elType == "edge") {
@@ -68,15 +138,15 @@
                     var sourceNode = edges[op.param.source];
                     var targetNode = edges[op.param.target];
 
-                    self.updateNodeContribution(sourceNode, 1, callback);
-                    self.updateNodeContribution(targetNode, 1, callback);
+                    self.updateNodeContribution(sourceNode, 1);
+                    self.updateNodeContribution(targetNode, 1);
                 }
                 else if(op.opName == "delete"){
                     if(op.param != null && op.param.source!= null &&  op.param.target!= null) {
                         var sourceNode = edges[op.param.source];
                         var targetNode = edges[op.param.target];
-                        self.updateNodeContribution(sourceNode, -1, callback);
-                        self.updateNodeContribution(targetNode, -1, callback);
+                        self.updateNodeContribution(sourceNode, -1);
+                        self.updateNodeContribution(targetNode, -1);
                     }
                 }
             }
@@ -87,89 +157,83 @@
                 op.elId.forEach(function (el) {
 
                     if (el.isNode) {
-                        self.updateNodeContribution(nodes[el.id], 1, callback);
+                        self.updateNodeContribution(nodes[el.id], 1);
                     }
                     else{
-                        self.updateNodeContribution(edges[el.source], 1, callback);
-                        self.updateNodeContribution(edges[el.target], 1, callback);
+                        self.updateNodeContribution(edges[el.source], 1);
+                        self.updateNodeContribution(edges[el.target], 1);
                     }
                 });
                 
             }
 
 
+        self.updateContextRelevance(nodes);
+        if(callback) callback();
+
+
     }
 
 
     /**
-     * Increase the contribution of protein "node" in proteinList by relVal
+     * Increase the contribution of gene "node" in all the contexts by scoreContribution
      * @param node
      * TODO: contribution values to be tweaked
      * @param scoreContribution: User interest score contribution which can be + or -
      */
-    ContextAgent.prototype.updateNodeContribution = function(node, scoreContribution, callback){
-        if(node == null)
+    ContextAgent.prototype.updateNodeContribution = function(node, relevanceContribution) {
+        if (node == null)
             return;
         var self = this;
 
-
         //proteins
-        if(node.sbgnlabel && node.sbgnclass && ( (node.sbgnclass.indexOf("macromolecule")>-1 || node.sbgnclass.indexOf("nucleic")>-1 || node.sbgnclass.indexOf("chemical")>-1))){
-            var proteinName = node.sbgnlabel;
+        if (self.isGene(node)) {
+            var geneName = node.sbgnlabel;
 
+            self.contextList.forEach(function (context) {
+                if(context.genes[geneName]!=null) {
+                    context.genes[geneName].interactionRate += relevanceContribution;
+                    if (context.genes[geneName].interactionRate > 100)
+                        context.genes[geneName].interactionRate = 100;
 
-            var exists = false;
-            self.contextList.forEach(function(context) {
-                if (context.proteinName == proteinName) { //update this for each context associated with the protein
-                    exists = true;
-                    context.confidence += scoreContribution;
-                    if(context.confidence > 100)
-                        context.confidence = 100;
-
-                    if(context.confidence < 0)
-                        context.confidence = 0;
+                    if (context.genes[geneName].interactionRate < 0)
+                        context.genes[geneName].interactionRate = 0;
                 }
-
             });
-            if(exists){
-                if(callback) callback();
-            }
-
-            if(!exists){
-                //call portal query to update context related to the protein
-                //get all the context data
-                this.sendRequest("agentCBioPortalQueryRequest", {proteinName: proteinName, queryType:"context"} ,function(cancerData){
-                    //        self.printMutationData(cancerData);
-                    for(var ind = 0; ind < cancerData.length; ind++){
-                        var data = cancerData[ind];
-                        if(data.seqCaseCnt > 0) {
-
-                            var relevance = data.mutationCaseIds.length / data.seqCaseCnt;
-
-                          //  if (relevance >= self.RELEVANCE_THRESHOLD) { //no need to push the ones with smaller scores
-                                //   var endInd = data.name.indexOf("(") < 0 ? data.name.length: data.name.indexOf("(");
-                                //  var name = data.name.slice(0, endInd);
-                                self.contextList.push({
-                                    studyId: data.id,
-                                    proteinName: proteinName,
-                                    relevance: relevance, //relevance value returned by the portal query
-                                    confidence: scoreContribution,
-                                    contextName: data.name
-
-                                });
-
-                        //    }
-                        }
-
-                    };
-
-
-                    if(callback) callback();
-                });
-
-            }
         }
+
     }
+    ContextAgent.prototype.isGene = function(node){
+        if(node.sbgnlabel && node.sbgnclass && ( (node.sbgnclass.indexOf("macromolecule") > -1 || node.sbgnclass.indexOf("nucleic") > -1 || node.sbgnclass.indexOf("chemical") > -1)))
+            return true;
+        return false;
+    }
+    ContextAgent.prototype.updateContextRelevance = function (nodes) {
+
+        var self = this;
+
+        self.contextList.forEach(function (context) {
+            var cumRelevance = 0;
+            var geneCnt = 0;
+            for(var nodeId in nodes){
+                var node = nodes[nodeId];
+                if(self.isGene(node) && context.genes[node.sbgnlabel]){
+
+                    var gene = context.genes[node.sbgnlabel];
+                    cumRelevance += gene.interactionRate * gene.importance;
+
+
+                    geneCnt++;
+                }
+            }
+
+            context.relevance = cumRelevance/geneCnt;
+
+
+
+        });
+    }
+
     ContextAgent.prototype.evaluateMessage = function(callback){
         var self = this;
         self.socket.on('message', function(data){
@@ -182,12 +246,12 @@
                 var answer = data.comment;
 
                 if(answer.toLowerCase().search("ye") > -1 )  //yes
-                    self.contextList[self.contextInd].confidence = 100;
-                    //self.contextList[self.contextInd].confidence *= 2;
+                    //self.contextList[self.contextInd].confidence = 100;
+                    self.contextList[self.contextInd].confidence *= 2;
 
                 else if (answer.toLowerCase().search("no")> -1)
-                    self.contextList[self.contextInd].confidence = 0;
-                    //self.contextList[self.contextInd].confidence *= 0.5;
+                    //self.contextList[self.contextInd].confidence = 0;
+                    self.contextList[self.contextInd].confidence *= 0.5;
 
                 //else don't change confidence
 
@@ -205,25 +269,25 @@
     ContextAgent.prototype.updateContext = function(op, callback){
         var self = this;
 
-
         self.analyzeOperation(op, function(){ //requests a query call if necessary, hence the callback
 
             var prevContextInd = self.contextInd;
             self.contextInd = self.findBestContext();
 
 
-            if(self.contextInd>-1 && prevContextInd!=self.contextInd &&  self.contextList[self.contextInd]!= self.contextList[prevContextInd] ) { //only inform if the most likely context has changed
+            if(!prevContextInd  || (self.contextInd>-1 && prevContextInd!=self.contextInd &&  self.contextList[self.contextInd].cancerType!= self.contextList[prevContextInd].cancerType )) { //only inform if the most likely context has changed
 
                 var context = self.contextList[self.contextInd];
                 self.informAboutContext(context);
 
-                self.findNeighborhoodAlterations(context.proteinName, context.studyId, function(maxAlteration){
-                    console.log(maxAlteration);
-                });
+                // self.findNeighborhoodAlterations(context.proteinName, context.studyId, function(maxAlteration){
+                //     console.log(maxAlteration);
+                // });
             }
 
+
             //send updated contextlist to the server
-            self.sendRequest("agentContextUpdate", {param: self.contextList});
+            self.sendRequest("agentContextUpdate", {param: self.contextList[self.contextInd].cancerType}); //only send the name
 
             if (callback) callback();
         }); //updates node contribution
@@ -233,6 +297,11 @@
     }
 
 
+    ContextAgent.prototype.printContextList = function(){
+        this.contextList.forEach(function(context){
+            console.log(context);
+        })
+    }
     ContextAgent.prototype.printMutationData = function(cancerData){
         cancerData.forEach(function(study) {
             if(study.seqCaseCnt > 0){
@@ -252,7 +321,7 @@
         var ind = 0;
         self.contextList.forEach(function(context){
             var score = context.relevance * context.confidence;
-            if (score > maxScore) {
+            if (score> maxScore) {
                 maxScore = score;
                 maxContextInd = ind;
             }
@@ -266,7 +335,7 @@
 
         var self = this;
 
-        var agentComment = "The most likely context is  " + context.contextName + " with %" + (context.relevance.toFixed(2) * 100);
+        var agentComment = "The most likely cancer type is  " + context.cancerType.longName + " with a score of " + (context.relevance* context.confidence).toFixed(3);
         agentComment +=". Do you agree?"
         
         var targets = [];
@@ -300,20 +369,20 @@
             self.socket.emit('PCQuery',  pc2URL);
 
 
+
         self.socket.on('PCQueryResult', function(sifData) {
             var neighbors = self.findControllingNeighbors(proteinName, sifData.graph);
-        });
+            self.findAlterationFrequencies(neighbors, studyId, function (alterations, callback) {
 
-
-        //FIXME
-        self.findAlterationFrequencies(neighbors, studyId, function(alterations, callback){
-
-                alterations.sort(function(a, b ){
-                        return a.mutationCnt - b.mutationCnt;});
-                if(callback) callback(alterations[0]);
-
+                alterations.sort(function (a, b) {
+                    return a.mutationCnt - b.mutationCnt;
+                });
+                if (callback) callback(alterations[0]);
 
             });
+
+        });
+
 
 
 

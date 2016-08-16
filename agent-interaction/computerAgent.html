@@ -303,7 +303,7 @@
 
     function createAgent(){
 
-
+        var contextInitialized = false;
         //don't open a new socket unless it is a new agent
         var agentId = getCookie('userId');
         if(agentId == null || agentId == ''){
@@ -344,9 +344,13 @@
             agent.loadModel(function() {
 
                 if(agent instanceof ContextAgent){
-                    agent.initContext(function(){
-                        fillContextInformation(agent.contextList, agent.contextInd);
-                    });
+                   agent.initContext(function(){
+                       fillContextInformation(agent.contextList, agent.contextInd);
+                        contextInitialized = true;
+
+                   });
+
+
 
                 }
                 fillLayoutProperties();
@@ -392,9 +396,15 @@
                     writeOperation(op);
                     agent.loadModel(function() { //first make sure to get the latest model
                         if(agent instanceof ContextAgent) {
-                            agent.updateContext(op, function () {
-                                fillContextInformation(agent.contextList, agent.contextInd);
-                            });
+
+                            if(contextInitialized) {
+                                agent.updateContext(op, function () {
+
+
+                                    fillContextInformation(agent.contextList, agent.contextInd);
+                                    //agent.printContextList();
+                                });
+                            }
                         }
 
                     });
@@ -443,6 +453,32 @@
             $('#chatMessage')[0].value = "";
 
         });
+    };
+
+
+    function readTextFile(filePath, callback) {
+
+        var rawFile;
+        if (window.XMLHttpRequest)
+            rawFile = new XMLHttpRequest();
+        else
+            rawFile = new ActiveXObject("Microsoft.XMLHTTP");
+
+
+        rawFile.open("GET", filePath, false);
+
+
+        rawFile.onreadystatechange = function () {
+
+            if(rawFile.readyState === 4) {
+                if(rawFile.status === 200 || rawFile.status == 0) {
+                    var allText = rawFile.responseText;
+                    callback(allText);
+
+                }
+            }
+        }
+        rawFile.send(null);
     };
 
     function uploadFile(el){
@@ -836,10 +872,12 @@
         $('#contextInformation').append("<b>Context</b>")
         $('#contextInformation').append("<table>");
 
+        $('#contextInformation').append("<tr> <th>" + "Cancer type" +  "</th><th>" + "Relevance" + "</th><th>"   + "Confidence" +  "</th></tr>" + "Final score" );
 
         for(var i = 0; i < contextList.length; i++){
             var context = contextList[i];
-                $('#contextInformation').append("<tr> <th>" + context.proteinName +  "</th><th>" + context.contextName + "</th><th>" + context.relevance.toFixed(2) + "</th><th>"  + context.confidence +  "</th></tr>");
+//                $('#contextInformation').append("<tr> <th>" + context.proteinName +  "</th><th>" + context.cancerType + "</th><th>" + context.relevance.toFixed(2) + "</th><th>"  + context.confidence +  "</th></tr>");
+            $('#contextInformation').append("<tr> <th>" + context.cancerType.abbr +  "</th><th>" + context.relevance.toFixed(3) + "</th><th>"   + context.confidence +  "</th></tr>" + (context.confidence*context.relevance).toFixed(3) );
 
 
         }
