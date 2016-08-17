@@ -55,6 +55,7 @@
 
 
 
+
         this.questionInd; //for communication through chat
 
         this.contextInd; //most likely context
@@ -262,6 +263,26 @@
         });
     }
 
+    ContextAgent.prototype.findMostInterestingNodeInContext = function(context){
+        var self = this;
+        var maxScore = -100000;
+        var bestNode;
+        var nodes = self.getNodeList();
+        for(var nodeInd in nodes){
+            var node = nodes[nodeInd];
+            if(self.isGene(node)){
+                var gene = context.genes[node.sbgnlabel];
+                if(gene && gene.importance* gene.interactionRate > maxScore) {
+                    maxScore = gene.importance * gene.interactionRate;
+                    bestNode = node;
+                }
+
+            }
+        }
+
+        return bestNode;
+    }
+
     /**
      * Update context scores at each operation
      * @param op
@@ -280,9 +301,32 @@
                 var context = self.contextList[self.contextInd];
                 self.informAboutContext(context);
 
-                // self.findNeighborhoodAlterations(context.proteinName, context.studyId, function(maxAlteration){
-                //     console.log(maxAlteration);
-                // });
+                var node = self.findMostInterestingNodeInContext(context);
+                self.suggestGenesByNeighborhoodAlterations(node.sbgnlabel, context,  function(neighborName){
+
+
+                        var param = {x:100, y:100, sbgnclass:"macromolecule", sbgnlabel:neighborName}
+
+
+
+                        self.sendRequest("agentAddNodeRequest", {param:param}, function(newNodeId){
+
+
+                            var source = node.id;
+                            var target = newNodeId;
+                            var sbgnclass = "production"
+                            var edgeParam = {source:source, target:target, sbgnclass:sbgnclass}
+
+                            console.log(source);
+                            agent.sendRequest("agentAddEdgeRequest", {id: (source+ "-" + target + "-" + sbgnclass), param:edgeParam});
+
+
+                        });
+
+
+
+                    //console.log(significantNeighbors);
+                });
             }
 
 
@@ -353,33 +397,33 @@
     }
 
 
-    ContextAgent.prototype.findNeighborhoodAlterations = function(proteinName, studyId, callback){
+    ///////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////
+
+    ContextAgent.prototype.suggestGenesByNeighborhoodAlterations = function(geneName, context, callback){
         var self = this;
 
         var pc2URL = "http://www.pathwaycommons.org/pc2/";
         var format = "graph?format=BINARY_SIF";
         var kind = "&kind=NEIGHBORHOOD";
 
-        var sources = "&source=" + proteinName;
+        var sources = "&source=" +geneName;
 
         pc2URL = pc2URL + format + kind + sources;
 
 
-        if(proteinName)
+        if(geneName)
             self.socket.emit('PCQuery',  pc2URL);
 
 
 
         self.socket.on('PCQueryResult', function(sifData) {
-            var neighbors = self.findControllingNeighbors(proteinName, sifData.graph);
-            self.findAlterationFrequencies(neighbors, studyId, function (alterations, callback) {
+            var neighbors = self.findControllingNeighbors(geneName, sifData.graph);
+            var importantNeighbor = self.findMostImportantNeighborInContext(neighbors, context);
 
-                alterations.sort(function (a, b) {
-                    return a.mutationCnt - b.mutationCnt;
-                });
-                if (callback) callback(alterations[0]);
+            if(callback) callback(importantNeighbor);
 
-            });
 
         });
 
@@ -395,7 +439,7 @@
      * @param proteinName: find the molecule that is different from proteinName
      *
      */
-    ContextAgent.prototype.findControllingNeighbors = function(proteinName, sifGraph){
+    ContextAgent.prototype.findControllingNeighbors = function(geneName, sifGraph){
         var lines = sifGraph.split("\n");
         var neighbors = [];
 
@@ -403,36 +447,38 @@
         lines.forEach(function(line){
             var rel = line.split("\t");
             if(rel[1].indexOf("controls") >= 0){
-                if(rel[0] == proteinName && neighbors.indexOf(rel[2]) < 0)
+                if(rel[0] == geneName && neighbors.indexOf(rel[2]) < 0)
                     neighbors.push(rel[2]);
-                else if(rel[2] == proteinName && neighbors.indexOf(rel[0]) < 0)
+                else if(rel[2] == geneName && neighbors.indexOf(rel[0]) < 0)
                     neighbors.push(rel[0]);
             }
 
         });
 
+
+
         return neighbors;
     }
 
-    ContextAgent.prototype.findAlterationFrequencies =  function (neighbors, studyId, callback){
 
-        var alterations = [];
+    ContextAgent.prototype.findMostImportantNeighborInContext =  function (neighbors, context){
+
+        var importantNeighbor;
         var self = this;
 
+        const MIN_IMPORTANCE  = 2;
+        var maxScore = -100000;
+
         neighbors.forEach(function(neighborName) {
-            var queryInfo =  {proteinName: neighborName, studyId: studyId, queryType:"alterations"};
-            self.sendRequest("agentCBioPortalQueryRequest", queryInfo, function (mutationCnt) {
-
-
-                alterations.push({neighborName: neighborName, mutationCnt: mutationCnt});
-
-            });
-
-            if(callback) callback(alterations);
-
+            if (context.genes[neighborName] && context.genes[neighborName].importance > MIN_IMPORTANCE && context.genes[neighborName].importance > maxScore) {
+                maxScore = context.genes[neighborName].importance;
+                importantNeighbor = neighborName;
+            }
         });
 
 
+
+        return importantNeighbor;
     }
 
 
