@@ -12,7 +12,6 @@ var expandCollapseUtilities = require('../../../src/utilities/expand-collapse-ut
 var sbgnmlToJson =require('../../../src/utilities/sbgnml-to-json-converter.js')();
 var cytoscape = require('cytoscape');
 
-    var jsonCorrector = require('../../../src/utilities/json-corrector.js');
     var jsonMerger = require('../../../src/utilities/json-merger.js');
     var idxcardjson = require('../../../src/utilities/idxcardjson-to-json-converter.js');
 
@@ -101,6 +100,28 @@ module.exports = function(){
 
          refreshGlobalUndoRedoButtonsStatus: function(){
           editorActions.refreshGlobalUndoRedoButtonsStatus();
+         },
+
+         mergeSbgn: function(sbgnGraph){
+
+
+
+
+             var newJson = sbgnmlToJson.convert(sbgnGraph);
+             var currSbgnml = jsonToSbgnml.createSbgnml(cy.nodes(":visible"), cy.edges(":visible"));
+             var currJson = sbgnmlToJson.convert(currSbgnml);
+             var jsonObj = jsonMerger.merge(newJson, currJson); //Merge the two SBGN models.
+
+             //get another sbgncontainer and display the new SBGN model.
+             editorActions.modelManager.deleteAll(cy.nodes(), cy.edges(), "me");
+             sbgnContainer = new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, editorActions);
+             editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
+             editorActions.modelManager.setSampleInd(-1, "me"); //to notify other clients
+
+             $("#perform-layout").trigger('click');
+
+
+
          },
 
          loadFile:function(txtFile){
@@ -1748,7 +1769,7 @@ function PathsBetweenQuery(socket, userName){
 
 
 
-                socket.emit('PCQuery',  pc2URL);
+                socket.emit('PCQuery',  {url: pc2URL, type:"owl"});
 
                 socket.on('PCQueryResult', function(owlData){
 

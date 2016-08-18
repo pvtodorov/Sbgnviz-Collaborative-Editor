@@ -749,6 +749,10 @@ app.proto.create = function (model) {
         $("#perform-layout").trigger('click');
     });
 
+    socket.on("mergeSbgn", function(data){
+       menu.mergeSbgn(data);
+    });
+
 
     socket.on('addNode', function(data, callback){
         var nodeId = menu.addNode(null, data.x, data.y, data.sbgnclass, data.sbgnlabel, true);
@@ -963,3 +967,21 @@ app.proto.formatObj = function(obj){
 };
 
 
+app.proto.processReach = function(msg) {
+    var httpRequest;
+    if (window.XMLHttpRequest) {
+        httpRequest = new XMLHttpRequest();
+    } else {
+        httpRequest = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    httpRequest.open("POST", "http://agathon.sista.arizona.edu:8080/odinweb/api/text", true);
+    httpRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    httpRequest.send("text="+msg+"&output=indexcard");
+    //httpRequest.send("text="+msg);
+    httpRequest.onreadystatechange = function () {
+        if (httpRequest.readyState == 4 && httpRequest.status == 200) {
+            //alert(JSON.parse(httpRequest.responseText).cards[0].extracted_information.participant_a.entity_text);
+            alert(httpRequest.responseText);
+        }
+    }
+};

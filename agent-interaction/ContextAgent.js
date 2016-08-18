@@ -56,9 +56,15 @@
 
 
 
-        this.questionInd; //for communication through chat
+        this.contextQuestionInd; //for communication through chat
 
+        this.neighborhoodQuestionInd; //for communication through chat
         this.contextInd; //most likely context
+
+        this.importantNeighborName;
+        this.importantGeneName;
+
+        this.contextEstablished = false;
     }
 
     /**
@@ -114,7 +120,7 @@
     ContextAgent.prototype.analyzeOperation = function (op, callback) {
 
         var self = this;
-        
+
         var nodes = self.getNodeList();
         var edges = self.getEdgeList();
 
@@ -165,7 +171,7 @@
                         self.updateNodeContribution(edges[el.target], 1);
                     }
                 });
-                
+
             }
 
 
@@ -189,7 +195,7 @@
 
         //proteins
         if (self.isGene(node)) {
-            var geneName = node.sbgnlabel;
+            var geneName = node.sbgnlabel.toUpperCase();
 
             self.contextList.forEach(function (context) {
                 if(context.genes[geneName]!=null) {
@@ -218,10 +224,11 @@
             var geneCnt = 0;
             for(var nodeId in nodes){
                 var node = nodes[nodeId];
-                if(self.isGene(node) && context.genes[node.sbgnlabel]){
 
-                    var gene = context.genes[node.sbgnlabel];
+                if(self.isGene(node) && context.genes[node.sbgnlabel.toUpperCase()]){
+                    var gene = context.genes[node.sbgnlabel.toUpperCase()];
                     cumRelevance += gene.interactionRate * gene.importance;
+
 
 
                     geneCnt++;
@@ -229,6 +236,7 @@
             }
 
             context.relevance = cumRelevance/geneCnt;
+
 
 
 
@@ -241,24 +249,49 @@
 
 
             //FIXME: find a better solution to get human response
-            if(data.userId != self.userId && self.chatHistory.length  ==  self.questionInd + 2 ) //means human answered in response to agent's question
-            {
+            if(data.userId != self.userId) {
+                if(self.chatHistory.length  ==  self.contextQuestionInd + 2) {  //means human answered in response to agent's question about cancer type
 
-                var answer = data.comment;
+                    var answer = data.comment;
 
-                if(answer.toLowerCase().search("ye") > -1 )  //yes
-                    //self.contextList[self.contextInd].confidence = 100;
-                    self.contextList[self.contextInd].confidence *= 2;
+                    if (answer.toLowerCase().search("ye") > -1) {  //yes
+                        //self.contextList[self.contextInd].confidence = 100;
+                        self.contextList[self.contextInd].confidence *= 2;
 
-                else if (answer.toLowerCase().search("no")> -1)
-                    //self.contextList[self.contextInd].confidence = 0;
-                    self.contextList[self.contextInd].confidence *= 0.5;
+                        var node = self.findMostInterestingNodeInContext(self.contextList[self.contextInd]);
 
-                //else don't change confidence
+
+                        self.suggestGenesByNeighborhoodAlterations(node.sbgnlabel.toUpperCase(), self.contextList[self.contextInd], function (neighborName) {
+
+                            self.importantNeighborName = neighborName;
+                            self.importantGeneName = node.sbgnlabel.toUpperCase();
+
+                            self.informAboutNeighborhood(node.sbgnlabel.toUpperCase(), neighborName);
+                        });
+
+                    }
+
+                    else if (answer.toLowerCase().search("no") > -1) {
+                        //self.contextList[self.contextInd].confidence = 0;
+                        self.contextList[self.contextInd].confidence *= 0.5;
+
+                    }
+                    //else don't do anything
+
+
+                }
+                else if(self.chatHistory.length  ==  self.neighborhoodQuestionInd + 2) {
+                    var answer = data.comment;
+
+                    if (answer.toLowerCase().search("ye") > -1)  //yes
+                        self.suggestNewGraph(self.importantGeneName, self.importantNeighborName);
+
+                    //else if (answer.toLowerCase().search("no") > -1)
+                }
+
 
                 if(callback) callback();
             }
-
 
         });
     }
@@ -271,7 +304,7 @@
         for(var nodeInd in nodes){
             var node = nodes[nodeInd];
             if(self.isGene(node)){
-                var gene = context.genes[node.sbgnlabel];
+                var gene = context.genes[node.sbgnlabel.toUpperCase()];
                 if(gene && gene.importance* gene.interactionRate > maxScore) {
                     maxScore = gene.importance * gene.interactionRate;
                     bestNode = node;
@@ -296,36 +329,29 @@
             self.contextInd = self.findBestContext();
 
 
+            //if context changed
             if(!prevContextInd  || (self.contextInd>-1 && prevContextInd!=self.contextInd &&  self.contextList[self.contextInd].cancerType!= self.contextList[prevContextInd].cancerType )) { //only inform if the most likely context has changed
 
                 var context = self.contextList[self.contextInd];
                 self.informAboutContext(context);
 
-                var node = self.findMostInterestingNodeInContext(context);
-                self.suggestGenesByNeighborhoodAlterations(node.sbgnlabel, context,  function(neighborName){
+
+            }
 
 
-                        var param = {x:100, y:100, sbgnclass:"macromolecule", sbgnlabel:neighborName}
+            var node = self.findMostInterestingNodeInContext(self.contextList[self.contextInd]);
 
 
+            var prevNeighborName = self.importantNeighborName;
+            var prevGeneName = self.importantGeneName;
+            if(prevNeighborName!=self.importantNeighborName && prevGeneName!=self.importantGeneName){
+                self.suggestGenesByNeighborhoodAlterations(node.sbgnlabel.toUpperCase(), self.contextList[self.contextInd], function (neighborName) {
 
-                        self.sendRequest("agentAddNodeRequest", {param:param}, function(newNodeId){
-
-
-                            var source = node.id;
-                            var target = newNodeId;
-                            var sbgnclass = "production"
-                            var edgeParam = {source:source, target:target, sbgnclass:sbgnclass}
-
-                            console.log(source);
-                            agent.sendRequest("agentAddEdgeRequest", {id: (source+ "-" + target + "-" + sbgnclass), param:edgeParam});
+                    self.importantNeighborName = neighborName;
+                    self.importantGeneName = node.sbgnlabel.toUpperCase();
 
 
-                        });
-
-
-
-                    //console.log(significantNeighbors);
+                    self.informAboutNeighborhood(node.sbgnlabel.toUpperCase(), neighborName);
                 });
             }
 
@@ -381,7 +407,7 @@
 
         var agentComment = "The most likely cancer type is  " + context.cancerType.longName + " with a score of " + (context.relevance* context.confidence).toFixed(3);
         agentComment +=". Do you agree?"
-        
+
         var targets = [];
         for(var i = 0; i < self.userList.length; i++){ //FIXME: send to all the users for now
             targets.push({id: agent.userList[i].userId});
@@ -390,12 +416,30 @@
 
         self.sendMessage(agentComment, targets);
 
-        self.questionInd = self.chatHistory.length - 1; //last question ind in history
-
+        self.contextQuestionInd = self.chatHistory.length - 1; //last question ind in history
 
 
     }
 
+    ContextAgent.prototype.informAboutNeighborhood = function(geneName, neighborName){
+        var self = this;
+
+        var agentComment = "The most interesting gene for this cancer type is " + geneName +". " + neighborName + " is another important gene in its neighborhood." +
+            "Are you interested in seeing the neighborhood graph?";
+
+
+        var targets = [];
+        for(var i = 0; i < self.userList.length; i++){ //FIXME: send to all the users for now
+            targets.push({id: agent.userList[i].userId});
+        }
+
+
+        self.sendMessage(agentComment, targets);
+
+        self.neighborhoodQuestionInd = self.chatHistory.length - 1; //last question ind in history
+
+
+    }
 
     ///////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////
@@ -414,22 +458,50 @@
 
 
         if(geneName)
-            self.socket.emit('PCQuery',  pc2URL);
+            self.socket.emit('PCQuery',  {url: pc2URL, type:"sif"});
 
 
 
-        self.socket.on('PCQueryResult', function(sifData) {
-            var neighbors = self.findControllingNeighbors(geneName, sifData.graph);
-            var importantNeighbor = self.findMostImportantNeighborInContext(neighbors, context);
+        self.socket.on('PCQueryResult', function(data) {
+            if(data.type == "sif"){
+                var neighbors = self.findControllingNeighbors(geneName, data.graph);
 
-            if(callback) callback(importantNeighbor);
 
+                var importantNeighborName = self.findMostImportantNeighborInContext(neighbors, context);
+
+                if(callback) callback(importantNeighborName);
+
+
+
+            }
 
         });
 
+    }
+
+    ContextAgent.prototype.suggestNewGraph = function(geneName, importantNeighborName) {
+
+        var self = this;
+        var pc2URL = "http://www.pathwaycommons.org/pc2/";
+        var format = "graph?format=SBGN";
+        var kind = "&kind=PATHSBETWEEN";
+        var limit = "&limit=2";
+
+        var sources = "&source=" + geneName + "&source=" + importantNeighborName;
+
+        pc2URL = pc2URL + format + kind + limit + sources;
+        console.log(pc2URL);
+        self.socket.emit('PCQuery', {url: pc2URL, type: "sbgn"});
+
+
+        self.socket.on('PCQueryResult', function (data) {
+            if (data.type = "sbgn") {
+                self.sendRequest("agentMergeGraphRequest", {param: data.graph});
+            }
 
 
 
+        });
     }
 
 
@@ -445,7 +517,9 @@
 
 
         lines.forEach(function(line){
+
             var rel = line.split("\t");
+
             if(rel[1].indexOf("controls") >= 0){
                 if(rel[0] == geneName && neighbors.indexOf(rel[2]) < 0)
                     neighbors.push(rel[2]);
