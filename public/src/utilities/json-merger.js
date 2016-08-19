@@ -577,12 +577,9 @@ module.exports = {
 
 			//The target node is not in json1, then add it to the final json.
 			if(found1%(json1.edges.length + 1) != 0 && found2%(json1.edges.length + 1) == 0 && !found4 && !found5) {
-				jsn.nodes.push(json2.nodes[nodepositions2[json2.edges[i].data.target]]);
-				if(container2[json2.edges[i].data.target] !== undefined) {  //Create both the container and its content.
-					for(j=0; j<container2[json2.edges[i].data.target].length; j++) {
-						jsn.nodes.push(json2.nodes[nodepositions2[container2[json2.edges[i].data.target][j]]]);
-					}
-				}
+				//The node may be a container with multiple sub-levels  of containers in it.
+				this.addInnerNodes(json2, jsn, container2, nodepositions2, json2.edges[i].data.target);
+
 				jsn.edges.push(json2.edges[i]);
 				jsn.edges[jsn.edges.length - 1].data.source = json1.edges[found1 - 1].data.source;
 				jsn.edges[jsn.edges.length - 1].data.portsource = json1.edges[found1 - 1].data.portsource;
@@ -590,11 +587,9 @@ module.exports = {
 
 			//The source node is not in json1, then add it to the final json.
 			if(found1%(json1.edges.length + 1) == 0 && found2%(json1.edges.length + 1) != 0 && !found4 && !found5) {
-				jsn.nodes.push(json2.nodes[nodepositions2[json2.edges[i].data.source]]);
-				if(container2[json2.edges[i].data.source] !== undefined) {  //Create both the container and its content.
-					for(j=0; j<container2[json2.edges[i].data.source].length; j++)
-						jsn.nodes.push(json2.nodes[nodepositions2[container2[json2.edges[i].data.source][j]]]);
-				}
+				//The node may be a container with multiple sub-levels  of containers in it.
+				this.addInnerNodes(json2, jsn, container2, nodepositions2, json2.edges[i].data.source);
+
 				jsn.edges.push(json2.edges[i]);
 				jsn.edges[jsn.edges.length - 1].data.target = json1.edges[found2 - 1].data.target;
 				jsn.edges[jsn.edges.length - 1].data.porttarget = json1.edges[found2 - 1].data.porttarget;
@@ -602,12 +597,9 @@ module.exports = {
 
 			//The target node is not in json1, then add it to the final json.
 			if(found1%(json1.edges.length + 1) == 0 && found2%(json1.edges.length + 1) == 0 && found4 && !found5) {
-				jsn.nodes.push(json2.nodes[nodepositions2[json2.edges[i].data.target]]);
-				if(container2[json2.edges[i].data.target] !== undefined) {  //Create both the container and its content.
-					for(j=0; j<container2[json2.edges[i].data.target].length; j++) {
-						jsn.nodes.push(json2.nodes[nodepositions2[container2[json2.edges[i].data.target][j]]]);
-					}
-				}
+				//The node may be a container with multiple sub-levels  of containers in it.
+				this.addInnerNodes(json2, jsn, container2, nodepositions2, json2.edges[i].data.target);
+
 				jsn.edges.push(json2.edges[i]);
 				jsn.edges[jsn.edges.length - 1].data.source = json1.edges[found4 - 1].data.target;
 				jsn.edges[jsn.edges.length - 1].data.portsource = json1.edges[found4 - 1].data.porttarget;
@@ -615,11 +607,9 @@ module.exports = {
 
 			//The source node is not in json1, then add it to the final json.
 			if(found1%(json1.edges.length + 1) == 0 && found2%(json1.edges.length + 1) == 0 && !found4 && found5) {
-				jsn.nodes.push(json2.nodes[nodepositions2[json2.edges[i].data.source]]);
-				if(container2[json2.edges[i].data.source] !== undefined) {  //Create both the container and its content.
-					for(j=0; j<container2[json2.edges[i].data.source].length; j++)
-						jsn.nodes.push(json2.nodes[nodepositions2[container2[json2.edges[i].data.source][j]]]);
-				}
+				//The node may be a container with multiple sub-levels  of containers in it.
+				this.addInnerNodes(json2, jsn, container2, nodepositions2, json2.edges[i].data.source);
+
 				jsn.edges.push(json2.edges[i]);
 				jsn.edges[jsn.edges.length - 1].data.target = json1.edges[found5 - 1].data.source;
 				jsn.edges[jsn.edges.length - 1].data.porttarget = json1.edges[found5 - 1].data.portsource;
@@ -627,16 +617,12 @@ module.exports = {
 
 			//Neither the target node nor the source node are in json1, then add all the edge.
 			if(found1%(json1.edges.length + 1) == 0 && found2%(json1.edges.length + 1) == 0 && !found4 & !found5) {
-				jsn.nodes.push(json2.nodes[nodepositions2[json2.edges[i].data.source]]);
-				if(container2[json2.edges[i].data.source] !== undefined) {  //Create both the container and its content.
-					for(j=0; j<container2[json2.edges[i].data.source].length; j++)
-						jsn.nodes.push(json2.nodes[nodepositions2[container2[json2.edges[i].data.source][j]]]);
-				}
-				jsn.nodes.push(json2.nodes[nodepositions2[json2.edges[i].data.target]]);
-				if(container2[json2.edges[i].data.target] !== undefined) {  //Create both the container and its content.
-					for(j=0; j<container2[json2.edges[i].data.target].length; j++)
-						jsn.nodes.push(json2.nodes[nodepositions2[container2[json2.edges[i].data.target][j]]]);
-				}
+				//The node may be a container with multiple sub-levels  of containers in it.
+				this.addInnerNodes(json2, jsn, container2, nodepositions2, json2.edges[i].data.source);
+
+				//The node may be a container with multiple sub-levels  of containers in it.
+				this.addInnerNodes(json2, jsn, container2, nodepositions2, json2.edges[i].data.target);
+
 				jsn.edges.push(json2.edges[i]);
 			}
 
@@ -690,5 +676,16 @@ module.exports = {
 			jsn = json1;
 
 		return jsn;
+	},
+
+	//Add sub-levels nodes and containers into the final json.
+	addInnerNodes: function(primary, final, containerOf, positionOf, glyphId) {
+		if(containerOf[glyphId] !== undefined) {
+			var i;
+			for(i=0; i<containerOf[glyphId].length; i++)
+				this.addInnerNodes(primary, final, containerOf, positionOf, containerOf[glyphId][i]);
+		}
+
+		final.nodes.push(primary.nodes[positionOf[glyphId]]);
 	}
 }
