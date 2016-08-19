@@ -3,7 +3,7 @@
 
 //Author: David Servillo.
 
-//Date of the last change: 08/18/2016.
+//Date of the last change: 08/19/2016.
 
 module.exports = {
 
@@ -503,7 +503,7 @@ module.exports = {
 					}
 				//The target of the edge in the smallest json is a container and has no label.
 				} else if(container2[json2.edges[i].data.target] !== undefined && container1[json1.edges[j].data.source] !== undefined) {
-					if(container2[json2.edges[i].data.target].length == container1[json1.edges[j].data.target].length) {
+					if(container2[json2.edges[i].data.target].length == container1[json1.edges[j].data.source].length) {
 						for(k=0; k<container2[json2.edges[i].data.target].length; k++) {
 							for(l=0; l<container1[json1.edges[j].data.source].length; l++) {
 								if(JSON.stringify(json2.nodes[nodepositions2[container2[json2.edges[i].data.target][k]]]).replace(new RegExp('"id":"[^"]+"', 'g'), '').replace(new RegExp('"[sbgn]*bbox":{[^}]+}', 'g'), '').replace(new RegExp('"parent":"[^"]+"'), '').replace(new RegExp(',', 'g'), '').split("").sort().join("") == JSON.stringify(json1.nodes[nodepositions1[container1[json1.edges[j].data.source][l]]]).replace(new RegExp('"id":"[^"]+"', 'g'), '').replace(new RegExp('"[sbgn]*bbox":{[^}]+}', 'g'), '').replace(new RegExp('"parent":"[^"]+"'), '').replace(new RegExp(',', 'g'), '').split("").sort().join("")) {
