@@ -484,19 +484,23 @@ module.exports =  function(model, docId, userId, userName) {
             }
 
 
-            if(!noHistUpdate) {
 
-                this.updateHistory({
-                    opName: 'set',
-                    opTarget: 'element',
-                    elType: 'node',
-                    elId: nodeId,
-                    opAttr: attStr,
-                    param: attVal,
-                    prevParam: prevAttVal
-                });
+            if(attStr != 'interactionCount') {
+                model.increment('_page.doc.cy.nodes.' + nodeId + '.interactionCount', 1);
+
+                if (!noHistUpdate) {
+
+                    this.updateHistory({
+                        opName: 'set',
+                        opTarget: 'element',
+                        elType: 'node',
+                        elId: nodeId,
+                        opAttr: attStr,
+                        param: attVal,
+                        prevParam: prevAttVal
+                    });
+                }
             }
-
             status = "success";
 
 
@@ -510,21 +514,29 @@ module.exports =  function(model, docId, userId, userName) {
             edgePath.pass({user:user}).set(attStr, attVal);
 
 
-                if(!noHistUpdate) {
+            var sourceId = edgePath.get('source');
+            var targetId = edgePath.get('target');
+            if(sourceId)
+                model.increment('_page.doc.cy.nodes.'  + sourceId + '.interactionCount',1);
+            if(targetId)
+                model.increment('_page.doc.cy.nodes.'  + targetId + '.interactionCount',1);
 
-                    this.updateHistory({
-                        opName: 'set',
-                        opTarget: 'element',
-                        elType: 'edge',
-                        elId: edgeId,
-                        opAttr: attStr,
-                        param: attVal,
-                        prevParam: prevAttVal
-                    });
 
-                }
+            if(!noHistUpdate) {
 
-                status = "success";
+                this.updateHistory({
+                    opName: 'set',
+                    opTarget: 'element',
+                    elType: 'edge',
+                    elId: edgeId,
+                    opAttr: attStr,
+                    param: attVal,
+                    prevParam: prevAttVal
+                });
+
+            }
+
+            status = "success";
 
 
 
@@ -553,12 +565,13 @@ module.exports =  function(model, docId, userId, userName) {
                 var sbgnStatesAndInfos = nodePath.get('sbgnStatesAndInfos');
                 var highlightColor = nodePath.get('highlightColor');
                 var ports = nodePath.get('ports');
+                var interactionCount = nodePath.get('interactionCount');
 
 
                 prevParam = {x: pos.x , y: pos.y , sbgnclass:sbgnclass, width: width, height: height,
                              borderColor: borderColor, borderWidth: borderWidth, sbgnlabel: sbgnlabel,
                              sbgnStatesAndInfos:sbgnStatesAndInfos, parent:parent, isCloneMarker: isCloneMarker,
-                             isMultimer: isMultimer, highlightColor: highlightColor, ports: ports};
+                             isMultimer: isMultimer, highlightColor: highlightColor, ports: ports, interactionCount: interactionCount};
 
 
 
@@ -702,6 +715,7 @@ module.exports =  function(model, docId, userId, userName) {
             this.addModelNode(nodeId, param, user, noHistUpdate);
 
 
+            this.changeModelNodeAttribute('interactionCount', nodeId,param.interactionCount,user, noHistUpdate );
             this.changeModelNodeAttribute('ports', nodeId,param.ports,user, noHistUpdate );
             this.changeModelNodeAttribute('highlightColor', nodeId,param.highlightColor,user, noHistUpdate );
             this.changeModelNodeAttribute('sbgnclass', nodeId,param.sbgnclass,user, noHistUpdate );
@@ -851,6 +865,12 @@ module.exports =  function(model, docId, userId, userName) {
 
 
             nodePath.set('id', node.id());
+
+
+            var interactionCount = nodePath.get('interactionCount');
+
+            if (interactionCount == null) //this is not stored in cy
+                this.changeModelNodeAttribute('interactionCount', node.id(),0, user, true); //don't update history
 
 
             var backgroundOpacity= nodePath.get('backgroundOpacity');

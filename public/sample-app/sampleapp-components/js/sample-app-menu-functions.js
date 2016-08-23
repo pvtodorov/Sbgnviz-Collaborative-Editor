@@ -102,20 +102,34 @@ module.exports = function(){
           editorActions.refreshGlobalUndoRedoButtonsStatus();
          },
 
+
          mergeSbgn: function(sbgnGraph){
-
-
-
 
              var newJson = sbgnmlToJson.convert(sbgnGraph);
              var currSbgnml = jsonToSbgnml.createSbgnml(cy.nodes(":visible"), cy.edges(":visible"));
              var currJson = sbgnmlToJson.convert(currSbgnml);
+        //     var currJson = editorActions.modelManager.getJsonFromModel();
+
+
+              //console.log(editorActions.modelManager.getJsonFromModel());
+              //console.log("another");
+             // console.log(currJson);
+
+
              var jsonObj = jsonMerger.merge(newJson, currJson); //Merge the two SBGN models.
+
+
 
              //get another sbgncontainer and display the new SBGN model.
              editorActions.modelManager.deleteAll(cy.nodes(), cy.edges(), "me");
              sbgnContainer = new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, editorActions);
              editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
+
+             // //Make newjson's borders a different color
+             // newJson.nodes.forEach(function(node){
+             //     editorActions.modelManager.changeModelNodeAttribute('backgroundColor', node.data.id,'#42f3f0');
+             // });
+
              editorActions.modelManager.setSampleInd(-1, "me"); //to notify other clients
 
              $("#perform-layout").trigger('click');

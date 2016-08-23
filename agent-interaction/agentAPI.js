@@ -71,6 +71,8 @@
         this.socket.emit('agentPageDocRequest', {room: this.room}, function(data){
 
             self.pageDoc = data;
+
+
             if (callback != null) callback();
         });
 
@@ -266,7 +268,17 @@
      */
     Agent.prototype.sendMessage = function(comment, targets, callback){
 
+        var self = this;
+        if(targets == "*" || targets == "all"){ //add all users
+            targets = [];
+            for(var i = 0; i < self.userList.length; i++){ //FIXME: send to all the users for now
+                targets.push({id: self.userList[i].userId});
+            }
+
+        }
+
         var message = {room: this.room, comment: comment, userName:this.agentName, userId: this.agentId, time: 1, targets: targets}; //set time on the server
+
 
         this.socket.emit('agentMessage', message, function(data){
     

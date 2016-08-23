@@ -150,7 +150,12 @@ var jsonToSbgnml = {
         if (!arcTarget  ||  arcTarget.length === 0)
             arcTarget = edge._private.data.target;
 
-        var arcId = arcSource + "-" + arcTarget;
+        //FUNDA
+        var arcId;
+        if(edge._private.data.id != null)
+            arcId = edge._private.data.id;
+        else
+            arcId = arcSource + "-" + arcTarget;
 
         sbgnmlText = sbgnmlText + "<arc id='" + arcId +
             "' target='" + arcTarget +

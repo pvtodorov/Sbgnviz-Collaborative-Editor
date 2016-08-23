@@ -343,6 +343,7 @@
 
             agent.loadModel(function() {
 
+
                 if(agent instanceof ContextAgent){
                    agent.initContext(function(){
                        fillContextInformation(agent.contextList, agent.contextInd);
@@ -398,7 +399,7 @@
                         if(agent instanceof ContextAgent) {
 
                             if(contextInitialized) {
-                                agent.updateContext(op, function () {
+                                agent.updateContext(function () {
 
 
                                     fillContextInformation(agent.contextList, agent.contextInd);
