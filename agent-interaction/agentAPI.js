@@ -270,6 +270,7 @@
 
         var self = this;
         if(targets == "*" || targets == "all"){ //add all users
+            console.log("jere");
             targets = [];
             for(var i = 0; i < self.userList.length; i++){ //FIXME: send to all the users for now
                 targets.push({id: self.userList[i].userId});

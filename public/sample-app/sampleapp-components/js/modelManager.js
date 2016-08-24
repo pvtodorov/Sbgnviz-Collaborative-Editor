@@ -180,6 +180,9 @@ module.exports =  function(model, docId, userId, userName) {
                         this.addModelCompound(cmd.elId, cmd.prevParam.compoundAtts, cmd.prevParam.childrenList, cmd.param);
 
             }
+            else if(cmd.opName == "init"){
+                this.deleteAll()
+            }
 
 
             undoInd = undoInd > 0 ? undoInd - 1 : 0;
@@ -765,20 +768,27 @@ module.exports =  function(model, docId, userId, userName) {
 
 
         //should be called before loading a new graph to prevent id confusion
-        deleteAll: function(nodes, edges , user, noHistUpdate){
+        deleteAll: function(user, noHistUpdate){
 
             var self = this;
             if(!noHistUpdate)
                 this.updateHistory({opName:'new', opTarget:'model'});
 
+            var edges = model.get('_page.doc.cy.edges');
+            var nodes = model.get('_page.doc.cy.nodes');
 
-            edges.forEach(function(edge){
-                self.deleteModelEdge(edge.id(), user, noHistUpdate);
-            });
 
-            nodes.forEach(function(node){
-                self.deleteModelNode(node.id(), user, noHistUpdate);
-            });
+            for(var att in edges) {
+                if (edges.hasOwnProperty(att)) {
+                    self.deleteModelEdge(edges[att].id, user, noHistUpdate);
+                }
+            }
+
+            for(var att in nodes) {
+                if (nodes.hasOwnProperty(att)) {
+                    self.deleteModelNode(nodes[att].id, user, noHistUpdate);
+                }
+            }
 
 
         },

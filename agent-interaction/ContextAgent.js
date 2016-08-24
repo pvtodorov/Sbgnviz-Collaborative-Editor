@@ -79,12 +79,14 @@
 
 
         genes.forEach(function(gene){
-            geneInfo = gene.split("\t");
+            var geneInfo = gene.split("\t");
             var pVal = Number(geneInfo[17]);
             var importance = (pVal== 0) ? 100 : -Math.log10(pVal);
 
 
             context.genes[geneInfo[1]] = {importance: importance};
+
+
         });
 
 
@@ -106,6 +108,7 @@
 
         //update each node's contribution by 1
         var nodes = self.getNodeList();
+
 
 
         //update cumulative contributions of nodes for each cancer type
@@ -134,6 +137,7 @@
             for(var nodeId in nodes){
                 var node = nodes[nodeId];
 
+
                 if(self.isGene(node) && context.genes[node.sbgnlabel.toUpperCase()]){
                     var gene = context.genes[node.sbgnlabel.toUpperCase()];
                     cumRelevance += node.interactionCount * gene.importance;
@@ -144,7 +148,11 @@
                 }
             }
 
-            context.relevance = cumRelevance/geneCnt;
+            if(geneCnt > 0)
+                context.relevance = cumRelevance/geneCnt;
+            else
+                context.relevance = 0;
+
 
 
 
@@ -183,7 +191,7 @@
 
                     }
 
-                    else if (answer.toLowerCase().search("no") > -1) {
+                    else if (answer.toLowerCase().search("n") > -1) {
                         //self.contextList[self.contextInd].confidence = 0;
                         self.contextList[self.contextInd].confidence *= 0.5;
 
@@ -214,6 +222,8 @@
         var bestNode;
         for(var nodeInd in nodes){
             var node = nodes[nodeInd];
+
+            console.log(node.interactionCount);
             if(self.isGene(node)){
                 var gene = context.genes[node.sbgnlabel.toUpperCase()];
                 if(gene && gene.importance* node.interactionCount > maxScore) {
@@ -354,6 +364,20 @@
     ///////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////
+    ContextAgent.prototype.isInModel = function(geneName){
+        var self = this;
+
+        var nodes = self.getNodeList();
+
+        for(var nodeInd in nodes){
+            if(self.isGene(nodes[nodeInd]))
+            if(nodes[nodeInd].sbgnlabel.toUpperCase() == geneName.toUpperCase())
+                return true;
+        }
+
+        return false;
+    }
+
 
     ContextAgent.prototype.findMostImportantNeighborInContext = function(geneName, context, callback){
         var self = this;
@@ -384,7 +408,8 @@
                 var maxScore = -100000;
 
                 neighbors.forEach(function(neighborName) {
-                    if (context.genes[neighborName] && context.genes[neighborName].importance > MIN_IMPORTANCE && context.genes[neighborName].importance > maxScore) {
+                    if (!self.isInModel(neighborName) && context.genes[neighborName] && context.genes[neighborName].importance > MIN_IMPORTANCE && context.genes[neighborName].importance > maxScore) {
+
                         maxScore = context.genes[neighborName].importance;
                         importantNeighborName = neighborName;
                     }
@@ -421,14 +446,14 @@
         self.socket.on('PCQueryResult', function (data) {
             if (data.type = "sbgn") {
                 //if neighbor does not appear in the new graph, call the query with limit = 2
-                if(limit.indexOf("=1")>-1 && data.graph.indexOf(importantNeighborName)<0){
-                    limit = "&limit=2";
-                    pc2URL = "http://www.pathwaycommons.org/pc2/" + format + kind + limit + sources;
-                    self.socket.emit('PCQuery', {url: pc2URL, type: "sbgn"});
-                }
-                else {
+                // if(limit.indexOf("=1")>-1 && data.graph.indexOf(importantNeighborName)<0){
+                //     limit = "&limit=2";
+                //     pc2URL = "http://www.pathwaycommons.org/pc2/" + format + kind + limit + sources;
+                //     self.socket.emit('PCQuery', {url: pc2URL, type: "sbgn"});
+                // }
+                // else {
                     self.sendRequest("agentMergeGraphRequest", {param: data.graph});
-                }
+                // }
             }
 
         });
