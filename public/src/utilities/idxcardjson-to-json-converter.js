@@ -3,7 +3,7 @@
 
 // Author: David Servillo.
 
-//Date of the last change: 08/18/2016
+//Date of the last change: 08/23/2016
 
 module.exports = {
 
@@ -444,6 +444,8 @@ module.exports = {
 					jsonObj.nodes.splice(6*i+3, 1);
 					jsonObj.edges.splice(3*i, 1);
 				}
+
+				jsonObj.edges.splice(3*i+2, 1);
 			}
 		}
 		return jsonObj;

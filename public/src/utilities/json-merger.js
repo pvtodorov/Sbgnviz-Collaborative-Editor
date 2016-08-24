@@ -502,7 +502,7 @@ module.exports = {
 				//The node may be a container with multiple sub-levels  of containers in it.
 				this.addInnerNodes(json2, jsn, container2, nodepositions2, json2.edges[i].data.target);
 
-				jsn.edges.push(json2.edges[i]);
+				jsn.edges.push(JSON.parse(JSON.stringify(json2.edges[i])));
 				jsn.edges[jsn.edges.length - 1].data.source = json1.edges[found1 - 1].data.source;
 				jsn.edges[jsn.edges.length - 1].data.portsource = json1.edges[found1 - 1].data.portsource;
 			}
@@ -512,7 +512,7 @@ module.exports = {
 				//The node may be a container with multiple sub-levels  of containers in it.
 				this.addInnerNodes(json2, jsn, container2, nodepositions2, json2.edges[i].data.source);
 
-				jsn.edges.push(json2.edges[i]);
+				jsn.edges.push(JSON.parse(JSON.stringify(json2.edges[i])));
 				jsn.edges[jsn.edges.length - 1].data.target = json1.edges[found2 - 1].data.target;
 				jsn.edges[jsn.edges.length - 1].data.porttarget = json1.edges[found2 - 1].data.porttarget;
 			}
@@ -522,7 +522,7 @@ module.exports = {
 				//The node may be a container with multiple sub-levels  of containers in it.
 				this.addInnerNodes(json2, jsn, container2, nodepositions2, json2.edges[i].data.target);
 
-				jsn.edges.push(json2.edges[i]);
+				jsn.edges.push(JSON.parse(JSON.stringify(json2.edges[i])));
 				jsn.edges[jsn.edges.length - 1].data.source = json1.edges[found4 - 1].data.target;
 				jsn.edges[jsn.edges.length - 1].data.portsource = json1.edges[found4 - 1].data.porttarget;
 			}
@@ -532,7 +532,7 @@ module.exports = {
 				//The node may be a container with multiple sub-levels  of containers in it.
 				this.addInnerNodes(json2, jsn, container2, nodepositions2, json2.edges[i].data.source);
 
-				jsn.edges.push(json2.edges[i]);
+				jsn.edges.push(JSON.parse(JSON.stringify(json2.edges[i])));
 				jsn.edges[jsn.edges.length - 1].data.target = json1.edges[found5 - 1].data.source;
 				jsn.edges[jsn.edges.length - 1].data.porttarget = json1.edges[found5 - 1].data.portsource;
 			}
@@ -545,12 +545,12 @@ module.exports = {
 				//The node may be a container with multiple sub-levels  of containers in it.
 				this.addInnerNodes(json2, jsn, container2, nodepositions2, json2.edges[i].data.target);
 
-				jsn.edges.push(json2.edges[i]);
+				jsn.edges.push(JSON.parse(JSON.stringify(json2.edges[i])));
 			}
 
 			//Both the target node and the source node are in json1. Only add the interaction type of the edge.
 			if(found1%(json1.edges.length + 1) != 0 && found2%(json1.edges.length + 1) != 0) {
-				jsn.edges.push(json2.edges[i]);
+				jsn.edges.push(JSON.parse(JSON.stringify(json2.edges[i])));
 				jsn.edges[jsn.edges.length - 1].data.source = json1.edges[found1 - 1].data.source;
 				jsn.edges[jsn.edges.length - 1].data.portsource = json1.edges[found1 - 1].data.portsource;
 
@@ -559,7 +559,7 @@ module.exports = {
 
 			//Both the target node and the source node are in json1. Only add the interaction type of the edge.
 			} else if(found4 && found5) {
-				jsn.edges.push(json2.edges[i]);
+				jsn.edges.push(JSON.parse(JSON.stringify(json2.edges[i])));
 				jsn.edges[jsn.edges.length - 1].data.source = json1.edges[found4 - 1].data.target;
 				jsn.edges[jsn.edges.length - 1].data.portsource = json1.edges[found4 - 1].data.porttarget;
 
@@ -569,7 +569,7 @@ module.exports = {
 
 			//Both the target node and the source node are in json1. Only add the interaction type of the edge.
 			if(found1%(json1.edges.length + 1) != 0 && found2%(json1.edges.length + 1) == 0 && !found4 && found5) {
-				jsn.edges.push(json2.edges[i]);
+				jsn.edges.push(JSON.parse(JSON.stringify(json2.edges[i])));
 				jsn.edges[jsn.edges.length - 1].data.source = json1.edges[found1 - 1].data.source;
 				jsn.edges[jsn.edges.length - 1].data.portsource = json1.edges[found1 - 1].data.portsource;
 
@@ -579,7 +579,7 @@ module.exports = {
 
 			//Both the target node and the source node are in json1. Only add the interaction type of the edge.
 			if(found1%(json1.edges.length + 1) == 0 && found2%(json1.edges.length + 1) != 0 && found4 && !found5) {
-				jsn.edges.push(json2.edges[i]);
+				jsn.edges.push(JSON.parse(JSON.stringify(json2.edges[i])));
 				jsn.edges[jsn.edges.length - 1].data.source = json1.edges[found4 - 1].data.target;
 				jsn.edges[jsn.edges.length - 1].data.portsource = json1.edges[found4 - 1].data.porttarget;
 
@@ -590,6 +590,7 @@ module.exports = {
 			//The source, the target and the interaction type of the edge were all found.
 			if(match1 == match2 && jsn.edges[jsn.edges.length - 1].data.sbgnclass == json1.edges[match1 - 1].data.sbgnclass)
 					matches = matches + 1;
+
 		}
 
 		//Some edges were created for the comparision step. They are useless now.
@@ -623,6 +624,6 @@ module.exports = {
 				this.addInnerNodes(primary, final, containerOf, positionOf, containerOf[glyphId][i]);
 		}
 
-		final.nodes.push(primary.nodes[positionOf[glyphId]]);
+		final.nodes.push(JSON.parse(JSON.stringify(primary.nodes[positionOf[glyphId]])));
 	}
 }
