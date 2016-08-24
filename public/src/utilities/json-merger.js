@@ -3,7 +3,7 @@
 
 //Author: David Servillo.
 
-//Date of the last change: 08/19/2016.
+//Date of the last change: 08/23/2016.
 
 module.exports = {
 
@@ -66,6 +66,7 @@ module.exports = {
 				json2.edges[json2.edges.length - 1].data.target = json2.nodes[nodepositions2[outcompsource2[outcompsourcekeys[i]][j]]].data.id;
 				json2.edges[json2.edges.length - 1].data.portsource = json2.edges[json2.edges.length - 1].data.source;
 				json2.edges[json2.edges.length - 1].data.porttarget = json2.edges[json2.edges.length - 1].data.target;
+				json2.edges[json2.edges.length - 1].data.toBeRemoved = "";
 			}
 		}
 
@@ -85,6 +86,7 @@ module.exports = {
 				json2.edges[json2.edges.length - 1].data.target = json2.nodes[nodepositions2[outcomptargetkeys[i]]].data.parent;
 				json2.edges[json2.edges.length - 1].data.portsource = json2.edges[json2.edges.length - 1].data.source;
 				json2.edges[json2.edges.length - 1].data.porttarget = json2.edges[json2.edges.length - 1].data.target;
+				json2.edges[json2.edges.length - 1].data.toBeRemoved = "";
 			}
 		}
 
@@ -164,6 +166,7 @@ module.exports = {
 				json1.edges[json1.edges.length - 1].data.target = json1.nodes[nodepositions1[outcompsource1[outcompsourcekeys[i]][j]]].data.id;
 				json1.edges[json1.edges.length - 1].data.portsource = json1.edges[json1.edges.length - 1].data.source;
 				json1.edges[json1.edges.length - 1].data.porttarget = json1.edges[json1.edges.length - 1].data.target;
+				json1.edges[json1.edges.length - 1].data.toBeRemoved = "";
 			}
 		}
 
@@ -183,6 +186,7 @@ module.exports = {
 				json1.edges[json1.edges.length - 1].data.target = json1.nodes[nodepositions1[outcomptargetkeys[i]]].data.parent;
 				json1.edges[json1.edges.length - 1].data.portsource = json1.edges[json1.edges.length - 1].data.source;
 				json1.edges[json1.edges.length - 1].data.porttarget = json1.edges[json1.edges.length - 1].data.target;
+				json1.edges[json1.edges.length - 1].data.toBeRemoved = "";
 			}
 		}
 
@@ -588,9 +592,25 @@ module.exports = {
 					matches = matches + 1;
 		}
 
+		//Some edges were created for the comparision step. They are useless now.
+		for(i=0; i<jsn.edges.length; i++) {
+			if("toBeRemoved" in jsn.edges[i].data) {
+				jsn.edges.splice(i, 1);
+			 	i = i - 1;
+			}
+		}
+
 		//There were only matches. json2 is useless, only json1 becomes the final json.
-		if(matches == json2.edges.length)
+		if(matches == json2.edges.length) {
+			for(i=0; i<json1.edges.length; i++) {  //Remove the useless edges.
+				if("toBeRemoved" in json1.edges[i].data) {
+					json1.edges.splice(i, 1);
+				 	i = i - 1;
+				}
+			}
+
 			jsn = json1;
+		}
 
 		return jsn;
 	},
