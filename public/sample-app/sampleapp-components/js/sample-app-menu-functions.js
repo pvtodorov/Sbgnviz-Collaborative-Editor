@@ -108,11 +108,14 @@ module.exports = function(){
          //    var currSbgnml = jsonToSbgnml.createSbgnml(cy.nodes(":visible"), cy.edges(":visible"));
          //    var currJson = sbgnmlToJson.convert(currSbgnml);
 
+             var prevModelCy =  editorActions.modelManager.getModelCy(); //before merging
+
+             console.log(prevModelCy);
 
              var newJson = sbgnmlToJson.convert(sbgnGraph);
              var currJson = editorActions.modelManager.getJsonFromModel();
 
-             var prevModelCy =  editorActions.modelManager.getModelCy();
+
 
 
              var mergeResult = jsonMerger.merge(newJson, currJson); //Merge the two SBGN models.

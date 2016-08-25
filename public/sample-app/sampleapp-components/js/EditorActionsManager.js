@@ -209,7 +209,7 @@ module.exports.getNodePositionsAndSizes = function() {
 
 
 module.exports.performLayoutFunction = function(param) {
-    module.exports.modelManager.updateHistory("run layout");
+    //module.exports.modelManager.updateHistory({opName:"run layout", opTarget:"model"});
 
 //notify other clients
     cy.on('layoutstop', function() {

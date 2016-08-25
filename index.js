@@ -68,6 +68,15 @@ app.on('model', function (model) {
     });
 
 
+    model.fn('biggerThanCurrentTime', function (item) {
+
+        clickTime = model.get('_page.clickTime');
+
+
+        return item.date > clickTime;
+    });
+
+
 });
 
 app.get('/', function (page, model, params) {
@@ -132,10 +141,13 @@ app.get('/:docId', function (page, model, arg, next) {
     //chat related
     model.set('_page.room', room);
 
-    model.set('_page.durations', [{name: 'All', id: -1}, {name: 'One day', id: ONE_DAY}, {
-        name: 'One hour',
-        id: ONE_HOUR
-    }, {name: 'One minute', id: ONE_MINUTE}]);
+    model.set('_page.durations', [
+        {name: 'All', id: -1},
+        {name: 'One day', id: ONE_DAY},
+        {name: 'One hour',  id: ONE_HOUR},
+        {name: 'One minute', id: ONE_MINUTE}
+
+    ]);
 
 
     model.set('_sbgnviz.samples',
@@ -257,11 +269,17 @@ function playSound() {
 }
 
 
+app.proto.clearHistory = function(){
+
+    this.model.set('_page.clickTime', new Date);
+
+    return this.model.filter('messages', 'biggerThanCurrentTime').ref('_page.list');
+}
+
 
 app.proto.changeDuration = function () {
 
     return this.model.filter('messages', 'biggerTime').ref('_page.list');
-
 
 };
 

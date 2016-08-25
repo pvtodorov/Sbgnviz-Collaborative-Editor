@@ -891,6 +891,7 @@
                             <option value = "{{#pDur.id}}"  selected = "{{_page.durationId=== #pDur.id}}"> {{ #pDur.name}} </option>
                             {{/each}}
                         </select>
+                        <button id = "clearHistory" on-click ="clearHistory()">Clear chat </button>
                     </div>
                     <button id = "change-user-color" on-click ="changeColorCode()">New user color</button>
                 </div>

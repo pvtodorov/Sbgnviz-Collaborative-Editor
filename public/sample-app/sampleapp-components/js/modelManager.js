@@ -104,9 +104,12 @@ module.exports =  function(model, docId, userId, userName) {
             var command = {userName: userName, date: new Date, opName: cmd.opName, opTarget: cmd.opTarget, elType: cmd.elType, opAttr: cmd.opAttr, elId: cmd.elId, param: cmd.param, prevParam: cmd.prevParam};
 
 
-            var ind = model.push('_page.doc.history',command) - 1;
+            if(cmd!=null) {
 
-            model.set('_page.doc.undoIndex', ind);
+                var ind = model.push('_page.doc.history', command) - 1;
+
+                model.set('_page.doc.undoIndex', ind);
+            }
 
         },
 
@@ -118,6 +121,7 @@ module.exports =  function(model, docId, userId, userName) {
 
             var undoIndex = model.get('_page.doc.undoIndex');
             var cmd =  model.get('_page.doc.history.' + undoIndex);
+
 
             var cmdStr = cmd.opName + " " + cmd.opTarget;
 
@@ -187,7 +191,8 @@ module.exports =  function(model, docId, userId, userName) {
                 this.restoreModel(cmd.prevParam);
 
             }
-            else if(cmd.opName == "merge"){ //delete all
+            else if(cmd.opName == "merge"){
+                this.newModel("me", true);
                 this.restoreModel(cmd.prevParam);
 
             }
