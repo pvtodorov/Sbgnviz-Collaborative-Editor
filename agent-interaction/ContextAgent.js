@@ -223,7 +223,7 @@
         for(var nodeInd in nodes){
             var node = nodes[nodeInd];
 
-            console.log(node.interactionCount);
+           // console.log(node.interactionCount);
             if(self.isGene(node)){
                 var gene = context.genes[node.sbgnlabel.toUpperCase()];
                 if(gene && gene.importance* node.interactionCount > maxScore) {

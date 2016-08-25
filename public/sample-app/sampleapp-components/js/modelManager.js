@@ -181,7 +181,15 @@ module.exports =  function(model, docId, userId, userName) {
 
             }
             else if(cmd.opName == "init"){
-                this.deleteAll()
+                this.newModel();
+            }
+            else if(cmd.opName == "new"){ //delete all
+                this.restoreModel(cmd.prevParam);
+
+            }
+            else if(cmd.opName == "merge"){ //delete all
+                this.restoreModel(cmd.prevParam);
+
             }
 
 
@@ -224,8 +232,18 @@ module.exports =  function(model, docId, userId, userName) {
                 else if(cmd.opTarget == "compound")
                     this.removeModelCompound(cmd.elId, cmd.param.childrenList, cmd.param);
 
+            }
+            else if(cmd.opName == "init"){
+                this.restoreModel(cmd.param);
+            }
+            else if(cmd.opName == "new"){ //delete all
+                this.newModel();
+            }
+            else if(cmd.opName == "merge"){ //delete all
+                this.restoreModel(cmd.param);
 
             }
+
 
             undoInd = undoInd <  model.get('_page.doc.history').length -1 ? undoInd + 1  : model.get('_page.doc.history').length -1;
 
@@ -764,15 +782,38 @@ module.exports =  function(model, docId, userId, userName) {
                 this.restoreModelEdge(elId, param, user, noHistUpdate);
 
 
+
         },
 
 
+
+
+
+        /**
+         * This function is used to undo newModel and redo initModel
+         * @param modelCy : nodes and edges to be restored
+         * @param user
+         * @param noHistUpdate
+         */
+        restoreModel: function(modelCy, user, noHistUpdate){
+            var prevParam = model.get('_page.doc.cy');
+            model.set('_page.doc.cy', modelCy);
+
+            this.setSampleInd(-1,null, true); //to get a new container
+
+            if(!noHistUpdate)
+                this.updateHistory({opName:'restore', prevParam: prevParam, param: modelCy, opTarget:'model'});
+
+        },
+
         //should be called before loading a new graph to prevent id confusion
-        deleteAll: function(user, noHistUpdate){
+        newModel: function(user, noHistUpdate){
 
             var self = this;
+            var prevModelCy = model.get('_page.doc.cy');
+
             if(!noHistUpdate)
-                this.updateHistory({opName:'new', opTarget:'model'});
+                this.updateHistory({opName:'new', prevParam: prevModelCy, opTarget:'model'});
 
             var edges = model.get('_page.doc.cy.edges');
             var nodes = model.get('_page.doc.cy.nodes');
@@ -780,13 +821,13 @@ module.exports =  function(model, docId, userId, userName) {
 
             for(var att in edges) {
                 if (edges.hasOwnProperty(att)) {
-                    self.deleteModelEdge(edges[att].id, user, noHistUpdate);
+                    self.deleteModelEdge(edges[att].id, user, true);
                 }
             }
 
             for(var att in nodes) {
                 if (nodes.hasOwnProperty(att)) {
-                    self.deleteModelNode(nodes[att].id, user, noHistUpdate);
+                    self.deleteModelNode(nodes[att].id, user, true);
                 }
             }
 
@@ -1144,11 +1185,14 @@ module.exports =  function(model, docId, userId, userName) {
 
         },
 
+
         //nodes and edges are cytoscape objects. they have css and data properties
         initModel: function(jsonObj, nodes, edges, user, noHistUpdate){
 
             var elIds = "";
             var elTypes = [];
+
+
 
 
 //FUNDA??????ndoe.data.sbgnbbox????
@@ -1172,9 +1216,6 @@ module.exports =  function(model, docId, userId, userName) {
             var self = this;
 
 
-            if(!noHistUpdate){
-                this.updateHistory({opName:'init',  opTarget:'model'});
-            }
 
 
 
@@ -1189,6 +1230,27 @@ module.exports =  function(model, docId, userId, userName) {
 
 
 
+            var newModelCy = model.get('_page.doc.cy');
+
+            if(!noHistUpdate){
+                this.updateHistory({opName:'init',  param: newModelCy,  opTarget:'model'});
+            }
+
+
+        },
+
+
+        getModelCy: function(){
+            return model.get('_page.doc.cy');
+        },
+
+        //for undo/redo only
+        mergeJsons: function(prevModelCy, user, noHistUpdate){
+            var modelCy = model.get('_page.doc.cy');
+
+            if(!noHistUpdate){
+                this.updateHistory({opName:'merge',  prevParam: prevModelCy, param: modelCy, opTarget:'model'});
+            }
 
         }
     }

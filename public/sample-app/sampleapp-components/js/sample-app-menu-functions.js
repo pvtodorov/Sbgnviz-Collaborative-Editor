@@ -104,18 +104,15 @@ module.exports = function(){
 
 
          mergeSbgn: function(sbgnGraph){
-             var self = this;
+
+         //    var currSbgnml = jsonToSbgnml.createSbgnml(cy.nodes(":visible"), cy.edges(":visible"));
+         //    var currJson = sbgnmlToJson.convert(currSbgnml);
+
 
              var newJson = sbgnmlToJson.convert(sbgnGraph);
-             var currSbgnml = jsonToSbgnml.createSbgnml(cy.nodes(":visible"), cy.edges(":visible"));
-             var currJson = sbgnmlToJson.convert(currSbgnml);
-        //     var currJson = editorActions.modelManager.getJsonFromModel();
+             var currJson = editorActions.modelManager.getJsonFromModel();
 
-
-              //console.log(editorActions.modelManager.getJsonFromModel());
-              //console.log("another");
-             // console.log(currJson);
-
+             var prevModelCy =  editorActions.modelManager.getModelCy();
 
 
              var mergeResult = jsonMerger.merge(newJson, currJson); //Merge the two SBGN models.
@@ -123,8 +120,11 @@ module.exports = function(){
              var newJsonIds = mergeResult.jsonToMerge;
 
 
+
+
+
              //get another sbgncontainer and display the new SBGN model.
-             editorActions.modelManager.deleteAll( "me", true);
+             editorActions.modelManager.newModel( "me", true);
              sbgnContainer = new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, editorActions);
              editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", true);
 
@@ -132,7 +132,6 @@ module.exports = function(){
 
              //select the new graph
              newJsonIds.nodes.forEach(function(node){
-                 console.log(node.data.id)
                  var cyNode = cy.getElementById(node.data.id)[0];
 
 
@@ -140,7 +139,7 @@ module.exports = function(){
                     editorActions.selectNode(cyNode);
 
              });
-
+             editorActions.modelManager.mergeJsons(prevModelCy);
 
 
 
@@ -153,7 +152,7 @@ module.exports = function(){
 
          loadFile:function(txtFile){
 
-             editorActions.modelManager.deleteAll("me");
+             editorActions.modelManager.newModel("me");
              var jsonObj = sbgnmlToJson.convert(txtFile);
 
 
@@ -171,7 +170,7 @@ module.exports = function(){
          loadFileInNode: function(txtFile){
 
 
-            editorActions.modelManager.deleteAll("me");
+            editorActions.modelManager.newModel("me");
             var jsonObj = sbgnmlToJson.convert(txtFile);
 
             //initialize cytoscape
@@ -701,7 +700,7 @@ module.exports = function(){
                 var ind = e.target.id;
                 
                 if(sbgnContainer)
-                    editorActions.modelManager.deleteAll("me");
+                    editorActions.modelManager.newModel("me");
 
 
                 self.updateSample(ind, true);
@@ -719,7 +718,7 @@ module.exports = function(){
 
                 var jsonObj = {nodes: [], edges: []};
 
-                editorActions.modelManager.deleteAll( "me");
+                editorActions.modelManager.newModel( "me");
                 cy.remove(cy.elements());
                 sbgnContainer = new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, editorActions);
                 editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
