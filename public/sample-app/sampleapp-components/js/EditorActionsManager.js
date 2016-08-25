@@ -220,7 +220,7 @@ module.exports.performLayoutFunction = function(param) {
             paramList.push(node.position());
 
         });
-        module.exports.modelManager.changeModelElementGroupAttribute("position", modelElList, paramList, "me");
+        module.exports.modelManager.changeModelElementGroupAttribute("position", modelElList, paramList, "me", param.noHistUpdate);
     });
 
 }

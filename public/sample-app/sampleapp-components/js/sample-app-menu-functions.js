@@ -108,9 +108,10 @@ module.exports = function(){
          //    var currSbgnml = jsonToSbgnml.createSbgnml(cy.nodes(":visible"), cy.edges(":visible"));
          //    var currJson = sbgnmlToJson.convert(currSbgnml);
 
-             var prevModelCy =  editorActions.modelManager.getModelCy(); //before merging
+             //var prevModelCy =  editorActions.modelManager.getModelCy(); //before merging
 
-             console.log(prevModelCy);
+             editorActions.modelManager.setPrevModelCy(); //before merging
+
 
              var newJson = sbgnmlToJson.convert(sbgnGraph);
              var currJson = editorActions.modelManager.getJsonFromModel();
@@ -126,8 +127,10 @@ module.exports = function(){
 
 
 
+
              //get another sbgncontainer and display the new SBGN model.
              editorActions.modelManager.newModel( "me", true);
+
              sbgnContainer = new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, editorActions);
              editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", true);
 
@@ -142,12 +145,24 @@ module.exports = function(){
                     editorActions.selectNode(cyNode);
 
              });
-             editorActions.modelManager.mergeJsons(prevModelCy);
 
 
 
 
-             $("#perform-layout").trigger('click');
+             //Call Layout
+
+
+             beforePerformLayout();
+
+             sbgnLayout.applyLayout(editorActions.modelManager);
+
+
+             editorActions.performLayoutFunction({noHistUpdate:true});
+
+
+             editorActions.modelManager.mergeJsons();
+
+
 
 
 

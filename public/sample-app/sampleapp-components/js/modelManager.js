@@ -1245,15 +1245,21 @@ module.exports =  function(model, docId, userId, userName) {
         },
 
 
+        setPrevModelCy: function(){
+            var modelCy = this.getModelCy();
+            model.set('_page.doc.prevCy',modelCy);
+        },
         getModelCy: function(){
             return model.get('_page.doc.cy');
         },
 
         //for undo/redo only
-        mergeJsons: function(prevModelCy, user, noHistUpdate){
+        mergeJsons: function( user, noHistUpdate){
             var modelCy = model.get('_page.doc.cy');
+            var prevModelCy = model.get('_page.doc.prevCy');
 
             if(!noHistUpdate){
+
                 this.updateHistory({opName:'merge',  prevParam: prevModelCy, param: modelCy, opTarget:'model'});
             }
 
