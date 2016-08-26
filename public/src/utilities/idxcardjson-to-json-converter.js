@@ -3,7 +3,7 @@
 
 // Author: David Servillo.
 
-//Date of the last change: 08/23/2016
+//Date of the last change: 08/25/2016
 
 module.exports = {
 
@@ -126,6 +126,7 @@ module.exports = {
 			jsonObj.edges.push({});
 			jsonObj.edges[3*i+2].data = {};
 			jsonObj.edges[3*i+2].data.id = jsonObj.nodes[6*i].data.id + "-" + jsonObj.nodes[6*i+2].data.id;
+			jsonObj.edges[3*i+2].data.sbgnclass = "consumption";
 			jsonObj.edges[3*i+2].data.bendPointPositions = [];
 			jsonObj.edges[3*i+2].data.sbgncardinality = 0;
 			jsonObj.edges[3*i+2].data.source = jsonObj.nodes[6*i].data.id;
@@ -393,8 +394,6 @@ module.exports = {
 			}
 			if(idxcardjsonObj.cards[i].extracted_information.interaction_type == "translocates") {  //The interaction is a translocation
 
-				//jsonObj.edges[3*i+2].data.sbgnclass = "consumption";
-
 				//A second compartment
 				if(idxcardjsonObj.cards[i].extracted_information.to_location_text !== undefined) {
 					jsonObj.nodes.push({});
@@ -443,6 +442,7 @@ module.exports = {
 					jsonObj.nodes[6*i].data.sbgnlabel = idxcardjsonObj.cards[i].extracted_information.participant_b.entity_text;
 					jsonObj.nodes.splice(6*i+3, 1);
 					jsonObj.edges.splice(3*i, 1);
+
 				}
 
 				jsonObj.edges.splice(3*i+2, 1);

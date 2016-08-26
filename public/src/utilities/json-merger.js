@@ -3,7 +3,7 @@
 
 //Author: David Servillo.
 
-//Date of the last change: 08/24/2016.
+//Date of the last change: 08/25/2016.
 
 module.exports = {
 
@@ -238,10 +238,11 @@ module.exports = {
 		var match1;
 		var match2;
 		var matches = 0;
-		var backward1 = 1;
-		var backward2 = 1;
-		var goodmatch = 0;
+		var backward1;
+		var backward2;
+		var goodmatch;
 		for(i=0; i<json2.edges.length; i++) {
+			goodmatch = 0;
 			count1 = 0;
 			count2 = 0;
 			found1 = json1.edges.length + 1;
@@ -268,19 +269,10 @@ module.exports = {
                     }
 				//The source of the edge in the smallest json is a container and has no label.
 				} else if(container2[json2.edges[i].data.source] !== undefined && container1[json1.edges[j].data.source] !== undefined) {
-					if(container2[json2.edges[i].data.source].length == container1[json1.edges[j].data.source].length) {
-						for(k=0; k<container2[json2.edges[i].data.source].length; k++) {
-							for(l=0; l<container1[json1.edges[j].data.source].length; l++) {
-								if(JSON.stringify(json2.nodes[nodepositions2[container2[json2.edges[i].data.source][k]]]).replace(new RegExp('"id":"[^"]+"', 'g'), '').replace(new RegExp('"[sbgn]*bbox":{[^}]+}', 'g'), '').replace(new RegExp('"parent":"[^"]+"'), '').replace(new RegExp(',', 'g'), '').split("").sort().join("") == JSON.stringify(json1.nodes[nodepositions1[container1[json1.edges[j].data.source][l]]]).replace(new RegExp('"id":"[^"]+"', 'g'), '').replace(new RegExp('"[sbgn]*bbox":{[^}]+}', 'g'), '').replace(new RegExp('"parent":"[^"]+"'), '').replace(new RegExp(',', 'g'), '').split("").sort().join("")) {
-									count1 = count1 + 1;
-								}
-							}
-						}
-						if(count1 >= container2[json2.edges[i].data.source].length) {
-							found1 = j + 1;
-							match1 = found1;
-							backward1 = 0;
-						}
+					if(this.sameInnerNodes(json2, json1, json2.edges[i].data.source, json1.edges[j].data.source, nodepositions2, nodepositions1, container2, container1)) {
+						found1 = j + 1;
+						match1 = found1;
+						backward1 = 0;
 					}
 				//The container in which lies the source of the edge in the smallest json has a label.
 				} else if(container2[json2.nodes[nodepositions2[json2.edges[i].data.source]].data.parent] !== undefined && json2.nodes[nodepositions2[json2.nodes[nodepositions2[json2.edges[i].data.source]].data.parent]].data.sbgnlabel !== undefined && json2.nodes[nodepositions2[json2.nodes[nodepositions2[json2.edges[i].data.source]].data.parent]].data.sbgnlabel != "null" && json1.nodes[nodepositions1[json1.edges[j].data.source]].data.parent != "") {
@@ -293,20 +285,11 @@ module.exports = {
 						}
 					}
 				//The container in which lies the source of the edge in the smallest json and has no label.
-				} else if(container2[json2.nodes[nodepositions2[json2.edges[i].data.source]].data.parent] !== undefined && container1[json1.edges[j].data.source] !== undefined) {
-					if(container2[json2.nodes[nodepositions2[json2.edges[i].data.source]].data.parent].length == container1[json1.edges[j].data.source].length) {
-						for(k=0; k<container2[json2.nodes[nodepositions2[json2.edges[i].data.source]].data.parent].length; k++) {
-							for(l=0; l<container1[json1.edges[j].data.source].length; l++) {
-								if(JSON.stringify(json2.nodes[nodepositions2[container2[json2.nodes[nodepositions2[json2.edges[i].data.source]].data.parent][k]]]).replace(new RegExp('"id":"[^"]+"', 'g'), '').replace(new RegExp('"[sbgn]*bbox":{[^}]+}', 'g'), '').replace(new RegExp('"parent":"[^"]+"'), '').replace(new RegExp(',', 'g'), '').split("").sort().join("") == JSON.stringify(json1.nodes[nodepositions1[container1[json1.edges[j].data.source][l]]]).replace(new RegExp('"id":"[^"]+"', 'g'), '').replace(new RegExp('"[sbgn]*bbox":{[^}]+}', 'g'), '').replace(new RegExp('"parent":"[^"]+"'), '').replace(new RegExp(',', 'g'), '').split("").sort().join("")) {
-									count1 = count1 + 1;
-								}
-							}
-						}
-						if(count1 >= container2[json2.nodes[nodepositions2[json2.edges[i].data.source]].data.parent].length) {
-							found1 = edgepositions1[json1.edges[j].data.id] + 1;
-							match1 = found1;
-							backward1 = 0;
-						}
+				} else if(container2[json2.nodes[nodepositions2[json2.edges[i].data.source]].data.parent] !== undefined && container1[json1.nodes[nodepositions1[json1.edges[j].data.source]].data.parent] !== undefined) {
+					if(this.sameInnerNodes(json2, json1, json2.nodes[nodepositions2[json2.edges[i].data.source]].data.parent, json1.nodes[nodepositions1[json1.edges[j].data.source]].data.parent, nodepositions2, nodepositions1, container2, container1)) {
+						found1 = edgepositions1[json1.edges[j].data.id] + 1;
+						match1 = found1;
+						backward1 = 0;
 					}
 				//The node is a regular node, without a container.
 				} else {
@@ -333,19 +316,10 @@ module.exports = {
 					}
 				//The target of the edge in the smallest json is a container and has no label.
 				} else if(container2[json2.edges[i].data.target] !== undefined && container1[json1.edges[j].data.target] !== undefined) {
-					if(container2[json2.edges[i].data.target].length == container1[json1.edges[j].data.target].length) {
-						for(k=0; k<container2[json2.edges[i].data.target].length; k++) {
-							for(l=0; l<container1[json1.edges[j].data.target].length; l++) {
-								if(JSON.stringify(json2.nodes[nodepositions2[container2[json2.edges[i].data.target][k]]]).replace(new RegExp('"id":"[^"]+"', 'g'), '').replace(new RegExp('"[sbgn]*bbox":{[^}]+}', 'g'), '').replace(new RegExp('"parent":"[^"]+"'), '').replace(new RegExp(',', 'g'), '').split("").sort().join("") == JSON.stringify(json1.nodes[nodepositions1[container1[json1.edges[j].data.target][l]]]).replace(new RegExp('"id":"[^"]+"', 'g'), '').replace(new RegExp('"[sbgn]*bbox":{[^}]+}', 'g'), '').replace(new RegExp('"parent":"[^"]+"'), '').replace(new RegExp(',', 'g'), '').split("").sort().join("")) {
-									count2 = count2 + 1;
-								}
-							}
-						}
-						if(count2 >= container2[json2.edges[i].data.target].length) {
-							found2 = j + 1;
-							match2 = found2;
-							backward2 = 0;
-						}
+					if(this.sameInnerNodes(json2, json1, json2.edges[i].data.target, json1.edges[j].data.target, nodepositions2, nodepositions1, container2, container1)) {
+						found2 = j + 1;
+						match2 = found2;
+						backward2 = 0;
 					}
 				//The container in which lies the target of the edge in the smallest json has a label.
 				} else if(container2[json2.nodes[nodepositions2[json2.edges[i].data.target]].data.parent] !== undefined && json2.nodes[nodepositions2[json2.nodes[nodepositions2[json2.edges[i].data.target]].data.parent]].data.sbgnlabel !== undefined && json2.nodes[nodepositions2[json2.nodes[nodepositions2[json2.edges[i].data.target]].data.parent]].data.sbgnlabel != "null" && json1.nodes[nodepositions1[json1.edges[j].data.target]].data.parent != "") {
@@ -358,20 +332,11 @@ module.exports = {
 						}
 					}
 				//The container in which lies the target of the edge in the smallest json and has no label.
-				} else if(container2[json2.nodes[nodepositions2[json2.edges[i].data.target]].data.parent] !== undefined && container1[json1.edges[j].data.target] !== undefined) {
-					if(container2[json2.nodes[nodepositions2[json2.edges[i].data.target]].data.parent].length == container1[json1.edges[j].data.target].length) {
-						for(k=0; k<container2[json2.nodes[nodepositions2[json2.edges[i].data.target]].data.parent].length; k++) {
-							for(l=0; l<container1[json1.edges[j].data.target].length; l++) {
-								if(JSON.stringify(json2.nodes[nodepositions2[container2[json2.nodes[nodepositions2[json2.edges[i].data.target]].data.parent][k]]]).replace(new RegExp('"id":"[^"]+"', 'g'), '').replace(new RegExp('"[sbgn]*bbox":{[^}]+}', 'g'), '').replace(new RegExp('"parent":"[^"]+"'), '').replace(new RegExp(',', 'g'), '').split("").sort().join("") == JSON.stringify(json1.nodes[nodepositions1[container1[json1.edges[j].data.target][l]]]).replace(new RegExp('"id":"[^"]+"', 'g'), '').replace(new RegExp('"[sbgn]*bbox":{[^}]+}', 'g'), '').replace(new RegExp('"parent":"[^"]+"'), '').replace(new RegExp(',', 'g'), '').split("").sort().join("")) {
-									count2 = count2 + 1;
-								}
-							}
-						}
-						if(count2 >= container2[json2.nodes[nodepositions2[json2.edges[i].data.target]].data.parent].length) {
-							found2 = edgepositions1[json1.edges[j].data.id] + 1;
-							match2 = found2;
-							backward2 = 0;
-						}
+				} else if(container2[json2.nodes[nodepositions2[json2.edges[i].data.target]].data.parent] !== undefined && container1[json1.nodes[nodepositions1[json1.edges[j].data.target]].data.parent] !== undefined) {
+					if(this.sameInnerNodes(json2, json1, json2.nodes[nodepositions2[json2.edges[i].data.target]].data.parent, json1.nodes[nodepositions1[json1.edges[j].data.target]].data.parent, nodepositions2, nodepositions1, container2, container1)) {
+						found2 = edgepositions1[json1.edges[j].data.id] + 1;
+						match2 = found2;
+						backward2 = 0;
 					}
 				//The node is a regular node, without a container.
 				} else {
@@ -398,19 +363,10 @@ module.exports = {
                     }
 				//The source of the edge in the smallest json is a container and has no label.
 				} else if(container2[json2.edges[i].data.source] !== undefined && container1[json1.edges[j].data.target] !== undefined) {
-					if(container2[json2.edges[i].data.source].length == container1[json1.edges[j].data.target].length) {
-						for(k=0; k<container2[json2.edges[i].data.source].length; k++) {
-							for(l=0; l<container1[json1.edges[j].data.target].length; l++) {
-								if(JSON.stringify(json2.nodes[nodepositions2[container2[json2.edges[i].data.source][k]]]).replace(new RegExp('"id":"[^"]+"', 'g'), '').replace(new RegExp('"[sbgn]*bbox":{[^}]+}', 'g'), '').replace(new RegExp('"parent":"[^"]+"'), '').replace(new RegExp(',', 'g'), '').split("").sort().join("") == JSON.stringify(json1.nodes[nodepositions1[container1[json1.edges[j].data.target][l]]]).replace(new RegExp('"id":"[^"]+"', 'g'), '').replace(new RegExp('"[sbgn]*bbox":{[^}]+}', 'g'), '').replace(new RegExp('"parent":"[^"]+"'), '').replace(new RegExp(',', 'g'), '').split("").sort().join("")) {
-									count1 = count1 + 1;
-								}
-							}
-						}
-						if(count1 >= container2[json2.edges[i].data.source].length) {
-							found4 = j + 1;
-							match1 = found4;
-							backward1 = 1;
-						}
+					if(this.sameInnerNodes(json2, json1, json2.edges[i].data.source, json1.edges[j].data.target, nodepositions2, nodepositions1, container2, container1)) {
+						found4 = j + 1;
+						match1 = found4;
+						backward1 = 1;
 					}
 				//The container in which lies the source of the edge in the smallest json has a label.
 				} else if(container2[json2.nodes[nodepositions2[json2.edges[i].data.source]].data.parent] !== undefined && json2.nodes[nodepositions2[json2.nodes[nodepositions2[json2.edges[i].data.source]].data.parent]].data.sbgnlabel !== undefined && json2.nodes[nodepositions2[json2.nodes[nodepositions2[json2.edges[i].data.source]].data.parent]].data.sbgnlabel != "null" && json1.nodes[nodepositions1[json1.edges[j].data.target]].data.parent != "") {
@@ -423,20 +379,11 @@ module.exports = {
 						}
 					}
 				//The container in which lies the source of the edge in the smallest json and has no label.
-				} else if(container2[json2.nodes[nodepositions2[json2.edges[i].data.source]].data.parent] !== undefined && container1[json1.edges[j].data.target] !== undefined) {
-					if(container2[json2.nodes[nodepositions2[json2.edges[i].data.source]].data.parent].length == container1[json1.edges[j].data.target].length) {
-						for(k=0; k<container2[json2.nodes[nodepositions2[json2.edges[i].data.source]].data.parent].length; k++) {
-							for(l=0; l<container1[json1.edges[j].data.target].length; l++) {
-								if(JSON.stringify(json2.nodes[nodepositions2[container2[json2.nodes[nodepositions2[json2.edges[i].data.source]].data.parent][k]]]).replace(new RegExp('"id":"[^"]+"', 'g'), '').replace(new RegExp('"[sbgn]*bbox":{[^}]+}', 'g'), '').replace(new RegExp('"parent":"[^"]+"'), '').replace(new RegExp(',', 'g'), '').split("").sort().join("") == JSON.stringify(json1.nodes[nodepositions1[container1[json1.edges[j].data.target][l]]]).replace(new RegExp('"id":"[^"]+"', 'g'), '').replace(new RegExp('"[sbgn]*bbox":{[^}]+}', 'g'), '').replace(new RegExp('"parent":"[^"]+"'), '').replace(new RegExp(',', 'g'), '').split("").sort().join("")) {
-									count1 = count1 + 1;
-								}
-							}
-						}
-						if(count1 >= container2[json2.nodes[nodepositions2[json2.edges[i].data.source]].data.parent].length) {
-							found4 = edgepositions1[json1.edges[j].data.id] + 1;
-							match1 = found4;
-							backward1 = 1;
-						}
+				} else if(container2[json2.nodes[nodepositions2[json2.edges[i].data.source]].data.parent] !== undefined && container1[json1.nodes[nodepositions1[json1.edges[j].data.target]].data.parent] !== undefined) {
+					if(this.sameInnerNodes(json2, json1, json2.nodes[nodepositions2[json2.edges[i].data.source]].data.parent, json1.nodes[nodepositions1[json1.edges[j].data.target]].data.parent, nodepositions2, nodepositions1, container2, container1)) {
+						found4 = edgepositions1[json1.edges[j].data.id] + 1;
+						match1 = found4;
+						backward1 = 1;
 					}
 				//The node is a regular node, without a container.
 				} else {
@@ -463,19 +410,10 @@ module.exports = {
 					}
 				//The target of the edge in the smallest json is a container and has no label.
 				} else if(container2[json2.edges[i].data.target] !== undefined && container1[json1.edges[j].data.source] !== undefined) {
-					if(container2[json2.edges[i].data.target].length == container1[json1.edges[j].data.source].length) {
-						for(k=0; k<container2[json2.edges[i].data.target].length; k++) {
-							for(l=0; l<container1[json1.edges[j].data.source].length; l++) {
-								if(JSON.stringify(json2.nodes[nodepositions2[container2[json2.edges[i].data.target][k]]]).replace(new RegExp('"id":"[^"]+"', 'g'), '').replace(new RegExp('"[sbgn]*bbox":{[^}]+}', 'g'), '').replace(new RegExp('"parent":"[^"]+"'), '').replace(new RegExp(',', 'g'), '').split("").sort().join("") == JSON.stringify(json1.nodes[nodepositions1[container1[json1.edges[j].data.source][l]]]).replace(new RegExp('"id":"[^"]+"', 'g'), '').replace(new RegExp('"[sbgn]*bbox":{[^}]+}', 'g'), '').replace(new RegExp('"parent":"[^"]+"'), '').replace(new RegExp(',', 'g'), '').split("").sort().join("")) {
-									count2 = count2 + 1;
-								}
-							}
-						}
-						if(count2 >= container2[json2.edges[i].data.target].length) {
-							found5 = j + 1;
-							match2 = found5;
-							backward2 = 1;
-						}
+					if(this.sameInnerNodes(json2, json1, json2.edges[i].data.target, json1.edges[j].data.source, nodepositions2, nodepositions1, container2, container1)) {
+						found5 = j + 1;
+						match2 = found5;
+						backward2 = 1;
 					}
 				//The container in which lies the target of the edge in the smallest json has a label.
 				} else if(container2[json2.nodes[nodepositions2[json2.edges[i].data.target]].data.parent] !== undefined && json2.nodes[nodepositions2[json2.nodes[nodepositions2[json2.edges[i].data.target]].data.parent]].data.sbgnlabel !== undefined && json2.nodes[nodepositions2[json2.nodes[nodepositions2[json2.edges[i].data.target]].data.parent]].data.sbgnlabel != "null" && json1.nodes[nodepositions1[json1.edges[j].data.source]].data.parent != "") {
@@ -488,20 +426,11 @@ module.exports = {
 						}
 					}
 				//The container in which lies the target of the edge in the smallest json and has no label.
-				} else if(container2[json2.nodes[nodepositions2[json2.edges[i].data.target]].data.parent] !== undefined && container1[json1.edges[j].data.source] !== undefined) {
-					if(container2[json2.nodes[nodepositions2[json2.edges[i].data.target]].data.parent].length == container1[json1.edges[j].data.source].length) {
-						for(k=0; k<container2[json2.nodes[nodepositions2[json2.edges[i].data.target]].data.parent].length; k++) {
-							for(l=0; l<container1[json1.edges[j].data.source].length; l++) {
-								if(JSON.stringify(json2.nodes[nodepositions2[container2[json2.nodes[nodepositions2[json2.edges[i].data.target]].data.parent][k]]]).replace(new RegExp('"id":"[^"]+"', 'g'), '').replace(new RegExp('"[sbgn]*bbox":{[^}]+}', 'g'), '').replace(new RegExp('"parent":"[^"]+"'), '').replace(new RegExp(',', 'g'), '').split("").sort().join("") == JSON.stringify(json1.nodes[nodepositions1[container1[json1.edges[j].data.source][l]]]).replace(new RegExp('"id":"[^"]+"', 'g'), '').replace(new RegExp('"[sbgn]*bbox":{[^}]+}', 'g'), '').replace(new RegExp('"parent":"[^"]+"'), '').replace(new RegExp(',', 'g'), '').split("").sort().join("")) {
-									count2 = count2 + 1;
-								}
-							}
-						}
-						if(count2 >= container2[json2.nodes[nodepositions2[json2.edges[i].data.target]].data.parent].length) {
-							found5 = edgepositions1[json1.edges[j].data.id] + 1;
-							match2 = found5;
-							backward2 = 1;
-						}
+				} else if(container2[json2.nodes[nodepositions2[json2.edges[i].data.target]].data.parent] !== undefined && container1[json1.nodes[nodepositions1[json1.edges[j].data.source]].data.parent] !== undefined) {
+					if(this.sameInnerNodes(json2, json1, json2.nodes[nodepositions2[json2.edges[i].data.target]].data.parent, json1.nodes[nodepositions1[json1.edges[j].data.source]].data.parent, nodepositions2, nodepositions1, container2, container1)) {
+						found5 = edgepositions1[json1.edges[j].data.id] + 1;
+						match2 = found5;
+						backward2 = 1;
 					}
 				//The node is a regular node, without a container.
 				} else {
@@ -526,13 +455,15 @@ module.exports = {
 //******************************************************************************************
 
 			if(goodmatch) {
+				//console.log(JSON.stringify(json2));
+				//console.log(JSON.stringify(json1));
 				match1 = goodmatch;
 				match2 = match1;
 			}
 
 			//The target node is not in json1, then add it to the final json.
 			if(found1%(json1.edges.length + 1) != 0 && found2%(json1.edges.length + 1) == 0 && !found4 && !found5) {
-				//The node may be a container with multiple sub-levels  of containers in it.
+				//The node may be a container with multiple sub-levels of containers in it.
 				this.addInnerNodes(json2, jsn, container2, nodepositions2, json2.edges[i].data.target);
 
 				jsn.edges.push(JSON.parse(JSON.stringify(json2.edges[i])));
@@ -542,7 +473,7 @@ module.exports = {
 
 			//The source node is not in json1, then add it to the final json.
 			if(found1%(json1.edges.length + 1) == 0 && found2%(json1.edges.length + 1) != 0 && !found4 && !found5) {
-				//The node may be a container with multiple sub-levels  of containers in it.
+				//The node may be a container with multiple sub-levels of containers in it.
 				this.addInnerNodes(json2, jsn, container2, nodepositions2, json2.edges[i].data.source);
 
 				jsn.edges.push(JSON.parse(JSON.stringify(json2.edges[i])));
@@ -552,7 +483,7 @@ module.exports = {
 
 			//The target node is not in json1, then add it to the final json.
 			if(found1%(json1.edges.length + 1) == 0 && found2%(json1.edges.length + 1) == 0 && found4 && !found5) {
-				//The node may be a container with multiple sub-levels  of containers in it.
+				//The node may be a container with multiple sub-levels of containers in it.
 				this.addInnerNodes(json2, jsn, container2, nodepositions2, json2.edges[i].data.target);
 
 				jsn.edges.push(JSON.parse(JSON.stringify(json2.edges[i])));
@@ -562,7 +493,7 @@ module.exports = {
 
 			//The source node is not in json1, then add it to the final json.
 			if(found1%(json1.edges.length + 1) == 0 && found2%(json1.edges.length + 1) == 0 && !found4 && found5) {
-				//The node may be a container with multiple sub-levels  of containers in it.
+				//The node may be a container with multiple sub-levels of containers in it.
 				this.addInnerNodes(json2, jsn, container2, nodepositions2, json2.edges[i].data.source);
 
 				jsn.edges.push(JSON.parse(JSON.stringify(json2.edges[i])));
@@ -572,10 +503,10 @@ module.exports = {
 
 			//Neither the target node nor the source node are in json1, then add all the edge.
 			if(found1%(json1.edges.length + 1) == 0 && found2%(json1.edges.length + 1) == 0 && !found4 & !found5) {
-				//The node may be a container with multiple sub-levels  of containers in it.
+				//The node may be a container with multiple sub-levels of containers in it.
 				this.addInnerNodes(json2, jsn, container2, nodepositions2, json2.edges[i].data.source);
 
-				//The node may be a container with multiple sub-levels  of containers in it.
+				//The node may be a container with multiple sub-levels of containers in it.
 				this.addInnerNodes(json2, jsn, container2, nodepositions2, json2.edges[i].data.target);
 
 				jsn.edges.push(JSON.parse(JSON.stringify(json2.edges[i])));
@@ -657,5 +588,30 @@ module.exports = {
 		}
 
 		final.nodes.push(JSON.parse(JSON.stringify(primary.nodes[positionOf[glyphId]])));
+	},
+
+	sameInnerNodes: function(jsn1, jsn2, node1, node2, pos1, pos2, cont1, cont2) {
+		var count = 0;
+		var result = 0;
+		if(cont1[node1] !== undefined && cont2[node2] !== undefined) {
+			if(cont1[node1].length == cont2[node2].length) {
+				for(k=0; k<cont1[node1].length; k++) {
+					for(l=0; l<cont2[node2].length; l++) {
+						if(JSON.stringify(jsn1.nodes[pos1[cont1[node1][k]]]).replace(new RegExp('"id":"[^"]+"', 'g'), '').replace(new RegExp('"[sbgn]*bbox":{[^}]+}', 'g'), '').replace(new RegExp('"parent":"[^"]+"'), '').replace(new RegExp(',', 'g'), '').split("").sort().join("") == JSON.stringify(jsn2.nodes[pos2[cont2[node2][l]]]).replace(new RegExp('"id":"[^"]+"', 'g'), '').replace(new RegExp('"[sbgn]*bbox":{[^}]+}', 'g'), '').replace(new RegExp('"parent":"[^"]+"'), '').replace(new RegExp(',', 'g'), '').split("").sort().join("")) {
+							count = count + 1;
+						}
+					}
+				}
+
+				if(count >= cont1[node1].length) {
+					for(i=0; i<cont1[node1].length; i++)
+						result = this.sameInnerNodes(jsn1, jsn2, cont1[node1][i], cont2[node2][i], pos1, pos2, cont1, cont2);
+				}
+			}
+		} else {
+			if(JSON.stringify(jsn1.nodes[pos1[node1]]).replace(new RegExp('"id":"[^"]+"', 'g'), '').replace(new RegExp('"[sbgn]*bbox":{[^}]+}', 'g'), '').replace(new RegExp('"parent":"[^"]+"'), '').replace(new RegExp(',', 'g'), '').split("").sort().join("") == JSON.stringify(jsn2.nodes[pos2[node2]]).replace(new RegExp('"id":"[^"]+"', 'g'), '').replace(new RegExp('"[sbgn]*bbox":{[^}]+}', 'g'), '').replace(new RegExp('"parent":"[^"]+"'), '').replace(new RegExp(',', 'g'), '').split("").sort().join(""))
+				result = 1;
+		}
+		return result; 
 	}
 }
