@@ -269,6 +269,7 @@ module.exports = {
                     }
 				//The source of the edge in the smallest json is a container and has no label.
 				} else if(container2[json2.edges[i].data.source] !== undefined && container1[json1.edges[j].data.source] !== undefined) {
+					//Compare the two containers.
 					if(this.sameInnerNodes(json2, json1, json2.edges[i].data.source, json1.edges[j].data.source, nodepositions2, nodepositions1, container2, container1)) {
 						found1 = j + 1;
 						match1 = found1;
@@ -286,6 +287,7 @@ module.exports = {
 					}
 				//The container in which lies the source of the edge in the smallest json and has no label.
 				} else if(container2[json2.nodes[nodepositions2[json2.edges[i].data.source]].data.parent] !== undefined && container1[json1.nodes[nodepositions1[json1.edges[j].data.source]].data.parent] !== undefined) {
+					//Compare the two containers.
 					if(this.sameInnerNodes(json2, json1, json2.nodes[nodepositions2[json2.edges[i].data.source]].data.parent, json1.nodes[nodepositions1[json1.edges[j].data.source]].data.parent, nodepositions2, nodepositions1, container2, container1)) {
 						found1 = edgepositions1[json1.edges[j].data.id] + 1;
 						match1 = found1;
@@ -316,6 +318,7 @@ module.exports = {
 					}
 				//The target of the edge in the smallest json is a container and has no label.
 				} else if(container2[json2.edges[i].data.target] !== undefined && container1[json1.edges[j].data.target] !== undefined) {
+					//Compare the two containers.
 					if(this.sameInnerNodes(json2, json1, json2.edges[i].data.target, json1.edges[j].data.target, nodepositions2, nodepositions1, container2, container1)) {
 						found2 = j + 1;
 						match2 = found2;
@@ -333,6 +336,7 @@ module.exports = {
 					}
 				//The container in which lies the target of the edge in the smallest json and has no label.
 				} else if(container2[json2.nodes[nodepositions2[json2.edges[i].data.target]].data.parent] !== undefined && container1[json1.nodes[nodepositions1[json1.edges[j].data.target]].data.parent] !== undefined) {
+					//Compare the two containers.
 					if(this.sameInnerNodes(json2, json1, json2.nodes[nodepositions2[json2.edges[i].data.target]].data.parent, json1.nodes[nodepositions1[json1.edges[j].data.target]].data.parent, nodepositions2, nodepositions1, container2, container1)) {
 						found2 = edgepositions1[json1.edges[j].data.id] + 1;
 						match2 = found2;
@@ -363,6 +367,7 @@ module.exports = {
                     }
 				//The source of the edge in the smallest json is a container and has no label.
 				} else if(container2[json2.edges[i].data.source] !== undefined && container1[json1.edges[j].data.target] !== undefined) {
+					//Compare the two containers.
 					if(this.sameInnerNodes(json2, json1, json2.edges[i].data.source, json1.edges[j].data.target, nodepositions2, nodepositions1, container2, container1)) {
 						found4 = j + 1;
 						match1 = found4;
@@ -380,6 +385,7 @@ module.exports = {
 					}
 				//The container in which lies the source of the edge in the smallest json and has no label.
 				} else if(container2[json2.nodes[nodepositions2[json2.edges[i].data.source]].data.parent] !== undefined && container1[json1.nodes[nodepositions1[json1.edges[j].data.target]].data.parent] !== undefined) {
+					//Compare the two containers.
 					if(this.sameInnerNodes(json2, json1, json2.nodes[nodepositions2[json2.edges[i].data.source]].data.parent, json1.nodes[nodepositions1[json1.edges[j].data.target]].data.parent, nodepositions2, nodepositions1, container2, container1)) {
 						found4 = edgepositions1[json1.edges[j].data.id] + 1;
 						match1 = found4;
@@ -410,6 +416,7 @@ module.exports = {
 					}
 				//The target of the edge in the smallest json is a container and has no label.
 				} else if(container2[json2.edges[i].data.target] !== undefined && container1[json1.edges[j].data.source] !== undefined) {
+					//Compare the two containers.
 					if(this.sameInnerNodes(json2, json1, json2.edges[i].data.target, json1.edges[j].data.source, nodepositions2, nodepositions1, container2, container1)) {
 						found5 = j + 1;
 						match2 = found5;
@@ -427,6 +434,7 @@ module.exports = {
 					}
 				//The container in which lies the target of the edge in the smallest json and has no label.
 				} else if(container2[json2.nodes[nodepositions2[json2.edges[i].data.target]].data.parent] !== undefined && container1[json1.nodes[nodepositions1[json1.edges[j].data.source]].data.parent] !== undefined) {
+					//Compare the two containers.
 					if(this.sameInnerNodes(json2, json1, json2.nodes[nodepositions2[json2.edges[i].data.target]].data.parent, json1.nodes[nodepositions1[json1.edges[j].data.source]].data.parent, nodepositions2, nodepositions1, container2, container1)) {
 						found5 = edgepositions1[json1.edges[j].data.id] + 1;
 						match2 = found5;
@@ -590,6 +598,7 @@ module.exports = {
 		final.nodes.push(JSON.parse(JSON.stringify(primary.nodes[positionOf[glyphId]])));
 	},
 
+	//Compare sub-levels node in containers between the two jsons.
 	sameInnerNodes: function(jsn1, jsn2, node1, node2, pos1, pos2, cont1, cont2) {
 		var count = 0;
 		var result = 0;
