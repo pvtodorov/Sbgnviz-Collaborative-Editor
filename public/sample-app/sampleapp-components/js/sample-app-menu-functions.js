@@ -110,7 +110,7 @@ module.exports = function(){
 
              //var prevModelCy =  editorActions.modelManager.getModelCy(); //before merging
 
-             editorActions.modelManager.setPrevModelCy(); //before merging
+             editorActions.modelManager.setRollbackPoint(); //before merging
 
 
              var newJson = sbgnmlToJson.convert(sbgnGraph);
@@ -157,10 +157,14 @@ module.exports = function(){
              sbgnLayout.applyLayout(editorActions.modelManager);
 
 
-             editorActions.performLayoutFunction({noHistUpdate:true});
+             editorActions.performLayoutFunction(true, function(){
 
 
-             editorActions.modelManager.mergeJsons();
+                 editorActions.modelManager.mergeJsons();
+             }); //don't update history
+
+
+
 
 
 
@@ -1502,14 +1506,14 @@ module.exports = function(){
 
             $("#perform-layout").click(function (e) {
 
-                var nodesData = getNodesData();
+
 
                 beforePerformLayout();
 
                 sbgnLayout.applyLayout(editorActions.modelManager);
 
 
-                editorActions.performLayoutFunction({nodesData:nodesData});
+                editorActions.performLayoutFunction();
 
                 //       editorActions.manager._do(editorActions.ReturnToPositionsAndSizesCommand({nodesData: nodesData}));
 
@@ -1519,14 +1523,13 @@ module.exports = function(){
 
             $("#perform-incremental-layout").click(function (e) {
 
-                var nodesData = getNodesData();
 
                 beforePerformLayout();
 
                 sbgnLayout.applyIncrementalLayout();
 
                 //funda
-                editorActions.performLayoutFunction({nodesData:nodesData});
+                editorActions.performLayoutFunction();
                 
             });
 

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-menu-functions.js" line="835" />
-    <bookmark url="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-menu-functions.js" line="524" />
+    <bookmark url="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-menu-functions.js" line="839" />
+    <bookmark url="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-menu-functions.js" line="528" />
     <bookmark url="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/modelManager.js" line="482" />
     <bookmark url="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/modelManager.js" line="170" />
   </component>
@@ -78,8 +78,8 @@
       <file leaf-file-name="sample-app-menu-functions.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-menu-functions.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="818">
-              <caret line="162" column="46" selection-start-line="162" selection-start-column="46" selection-end-line="162" selection-end-column="46" />
+            <state relative-caret-position="889">
+              <caret line="159" column="42" selection-start-line="159" selection-start-column="42" selection-end-line="159" selection-end-column="42" />
               <folding />
             </state>
           </provider>
@@ -88,8 +88,8 @@
       <file leaf-file-name="EditorActionsManager.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/EditorActionsManager.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="687">
-              <caret line="232" column="38" selection-start-line="232" selection-start-column="38" selection-end-line="232" selection-end-column="38" />
+            <state relative-caret-position="582">
+              <caret line="225" column="7" selection-start-line="225" selection-start-column="7" selection-end-line="225" selection-end-column="7" />
               <folding />
             </state>
           </provider>
@@ -98,8 +98,8 @@
       <file leaf-file-name="modelManager.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/modelManager.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="517">
-              <caret line="193" column="40" selection-start-line="193" selection-start-column="35" selection-end-line="193" selection-end-column="40" />
+            <state relative-caret-position="352">
+              <caret line="817" column="26" selection-start-line="817" selection-start-column="16" selection-end-line="817" selection-end-column="26" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
               </folding>
@@ -275,8 +275,8 @@
         <option value="$PROJECT_DIR$/index.js" />
         <option value="$PROJECT_DIR$/views/index.html" />
         <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/modelManager.js" />
-        <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/EditorActionsManager.js" />
         <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-menu-functions.js" />
+        <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/EditorActionsManager.js" />
       </list>
     </option>
   </component>
@@ -1039,7 +1039,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Fixed a bug about initial clonemarker states." />
     <MESSAGE value="ContextAgent sends portal requests one at a time." />
     <MESSAGE value="ContextAgent returns the most likely context in a chat message." />
     <MESSAGE value="ContextAgent updates with context = &lt;relevance, confidence&gt;" />
@@ -1064,7 +1063,8 @@
     <MESSAGE value="-Coloring changes.&#10;-Json merger returns the ids of the new graph in addition to the merged graph.&#10;-New graph is highlighted.&#10;-New sbgn model in samples." />
     <MESSAGE value="-editorActionsManager included&#10;-undo/redo of initModel&#10;" />
     <MESSAGE value="Clear chat history button added." />
-    <option name="LAST_COMMIT_MESSAGE" value="Clear chat history button added." />
+    <MESSAGE value="Undo merge is working" />
+    <option name="LAST_COMMIT_MESSAGE" value="Undo merge is working" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1075,7 +1075,7 @@
           <option name="timeStamp" value="199" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="258" />
+      <option name="time" value="259" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -1406,24 +1406,24 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/EditorActionsManager.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="687">
-          <caret line="232" column="38" selection-start-line="232" selection-start-column="38" selection-end-line="232" selection-end-column="38" />
+        <state relative-caret-position="582">
+          <caret line="225" column="7" selection-start-line="225" selection-start-column="7" selection-end-line="225" selection-end-column="7" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-menu-functions.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="818">
-          <caret line="162" column="46" selection-start-line="162" selection-start-column="46" selection-end-line="162" selection-end-column="46" />
+        <state relative-caret-position="889">
+          <caret line="159" column="42" selection-start-line="159" selection-start-column="42" selection-end-line="159" selection-end-column="42" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/modelManager.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="517">
-          <caret line="193" column="40" selection-start-line="193" selection-start-column="35" selection-end-line="193" selection-end-column="40" />
+        <state relative-caret-position="352">
+          <caret line="817" column="26" selection-start-line="817" selection-start-column="16" selection-end-line="817" selection-end-column="26" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
           </folding>

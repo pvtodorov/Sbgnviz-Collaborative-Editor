@@ -1245,10 +1245,11 @@ module.exports =  function(model, docId, userId, userName) {
         },
 
 
-        setPrevModelCy: function(){
+        setRollbackPoint: function(){
             var modelCy = this.getModelCy();
             model.set('_page.doc.prevCy',modelCy);
         },
+
         getModelCy: function(){
             return model.get('_page.doc.cy');
         },

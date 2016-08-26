@@ -208,7 +208,7 @@ module.exports.getNodePositionsAndSizes = function() {
 
 
 
-module.exports.performLayoutFunction = function(param) {
+module.exports.performLayoutFunction = function(noHistUpdate, callback) {
     //module.exports.modelManager.updateHistory({opName:"run layout", opTarget:"model"});
 
 //notify other clients
@@ -220,7 +220,9 @@ module.exports.performLayoutFunction = function(param) {
             paramList.push(node.position());
 
         });
-        module.exports.modelManager.changeModelElementGroupAttribute("position", modelElList, paramList, "me", param.noHistUpdate);
+        module.exports.modelManager.changeModelElementGroupAttribute("position", modelElList, paramList, "me", noHistUpdate);
+
+        if(callback) callback();
     });
 
 }
