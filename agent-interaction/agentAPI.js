@@ -49,6 +49,7 @@
         this.room = url.slice(sInd, url.length);
         this.socket =  io(serverIp);
         this.socket.emit("subscribeAgent", {userName: self.agentName, room: self.room, userId: self.agentId}, function(data){
+
             self.userList = data;
 
             if (data == null)

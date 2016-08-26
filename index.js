@@ -157,8 +157,8 @@ app.get('/:docId', function (page, model, arg, next) {
             {name: 'PolyQ proteins interference', id: 3},
             {name: 'Insulin-like Growth Factor (IGF) signalling', id: 4},
             {name: 'ATM mediated phosphorylation of repair proteins', id: 5},
-            {name: 'Vitamins B6 activation to pyridoxal phosphate', id: 6},
-            {name: 'MTOR', id: 7}
+            {name: 'Vitamins B6 activation to pyridoxal phosphate', id: 6}
+
 
         ]);
 
@@ -725,12 +725,12 @@ app.proto.create = function (model) {
     docReady = true;
 
 
-
     socket = io();
 
     var id = model.get('_session.userId');
     var name = model.get('users.' + id +'.name');
    socket.emit("subscribeHuman", {userName:name,room:  model.get('_page.room'), userId: id}, function(userList){
+
 
         var userIds =[];
         userList.forEach(function(user){

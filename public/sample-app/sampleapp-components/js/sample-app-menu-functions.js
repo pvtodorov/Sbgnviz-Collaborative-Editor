@@ -72,11 +72,7 @@ function getXMLObject(itemId, loadXMLDoc) {
                 url: './sample-app/samples/vitamins_b6_activation_to_pyridoxal_phosphate.xml', success: loadXMLDoc
             });
             break;
-        case "7":
-            $.ajax({
-                url: './sample-app/samples/MTORSmall.sbgn', success: loadXMLDoc
-            });
-            break;
+
 
     }
 
@@ -105,21 +101,24 @@ module.exports = function(){
 
          mergeSbgn: function(sbgnGraph){
 
-         //    var currSbgnml = jsonToSbgnml.createSbgnml(cy.nodes(":visible"), cy.edges(":visible"));
-         //    var currJson = sbgnmlToJson.convert(currSbgnml);
+             var currSbgnml = jsonToSbgnml.createSbgnml(cy.nodes(":visible"), cy.edges(":visible"));
+             var currJson = sbgnmlToJson.convert(currSbgnml);
 
-             //var prevModelCy =  editorActions.modelManager.getModelCy(); //before merging
 
              editorActions.modelManager.setRollbackPoint(); //before merging
 
 
              var newJson = sbgnmlToJson.convert(sbgnGraph);
-             var currJson = editorActions.modelManager.getJsonFromModel();
 
+             //var currJson = editorActions.modelManager.getJsonFromModel();
 
+             //
+             // console.log(editorActions.modelManager.getJsonFromModel());
+             // console.log("different from");
+             // console.log(currJson);
+             //
 
-
-             var mergeResult = jsonMerger.merge(newJson, currJson); //Merge the two SBGN models.
+             var mergeResult = jsonMerger.merge(newJson, sbgnmlToJson.convert(currSbgnml)); //Merge the two SBGN models.
              var jsonObj = mergeResult.wholeJson;
              var newJsonIds = mergeResult.jsonToMerge;
 
@@ -1030,19 +1029,12 @@ module.exports = function(){
                     else {
 
                         //TODO
+
+                        //causing a disconnection from the socket
                         socket.emit('BioPAXRequest', this.result, "biopax"); //convert to biopax
 
                         self.loadFile(this.result);
-                        // var jsonObj = sbgnmlToJson.convert(this.result);
-                        //
-                        //
-                        // //get another sbgncontainer
-                        // sbgnContainer = (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, editorActions));
-                        //
-                        // editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
-                        //
-                        //
-                        // editorActions.modelManager.setSampleInd(-1, "me"); //to notify other clients
+
                     }
                     // sbgnContainer =  new cyMod.SBGNContainer('#sbgn-network-container', jsonObj ,  editorActions);
                 }
