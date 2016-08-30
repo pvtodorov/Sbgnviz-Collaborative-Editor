@@ -1,9 +1,9 @@
-/** The json-merger module merges two JSON models into one. Such a process requires the consistency of the node ids. The strategy of the action lies in the comparison only of the edges between the two jsons, such that nodes which do not take part in an edge are not considered and may or not appear in the result of the merge. This last point needs to be revised in a potential update. The implementation is below.
+/** The json-merger module merges two JSON models into one. Such a process requires the consistency of the node ids. The strategy of the action lies in the comparison of each pair of edges with their nodes at the ends between the two jsons. Nodes which do not take part in an edge are added last. The implementation is below.
 **/
 
 //Author: David Servillo.
 
-//Date of the last change: 08/25/2016.
+//Date of the last change: 08/29/2016.
 
 module.exports = {
 
@@ -11,11 +11,14 @@ module.exports = {
 	merge: function(json1, json2) {
 		var nodepositions2 = {};
 		var container2 = {};
+		var allnodes2 = [];
 		var i;
 		//Rename the identifiers under the form glyphN where N is an integer. The identifiers between the two jsons
 		//are consistent so no identifiers is repeated.
-		for(i=0; i<json2.nodes.length; i++)
+		for(i=0; i<json2.nodes.length; i++) {
 			nodepositions2[json2.nodes[i].data.id] = i;
+			allnodes2[i] = i;
+		}
 
 		//Identify and store the container nodes, which are nodes able to contain other nodes in it.
 		//Store the content of the containers as well.
@@ -93,6 +96,7 @@ module.exports = {
 		var jsnString1 = JSON.stringify(json1); 
 		var nodepositions1 = {};
 		var container1 = {};
+		var allnodes1 = [];
 		//Rename the identifiers under the form glyphN where N is an integer. The identifiers between the two jsons
 		//are consistent so no identifiers is repeated.
 		for(i=json2.nodes.length; i<json2.nodes.length+json1.nodes.length; i++) {
@@ -101,6 +105,7 @@ module.exports = {
 				j = j + 1;
 
 			nodepositions1["glyph"+(j+1)] = i-json2.nodes.length;
+			allnodes1[i-json2.nodes.length] = i-json2.nodes.length;
 
 			jsnString1 = jsnString1.replace(new RegExp('"glyph'+(j+1)+'"', "g"), '');
 			jsnString1 = jsnString1.replace(new RegExp('"'+json1.nodes[i-json2.nodes.length].data.id+'"', "g"), '"glyph'+(j+1)+'"');
@@ -212,6 +217,10 @@ module.exports = {
 			tmp = JSON.stringify(outcomptarget2);
 			outcomptarget2 = JSON.parse(JSON.stringify(outcomptarget2));
 			outcomptarget1 = JSON.parse(tmp);
+
+			tmp = allnodes2;
+			allnodes2 = allnodes1;
+			allnodes1 = tmp;
 		}
 
 		var jsn = {"nodes": [], "edges": []};
@@ -463,8 +472,6 @@ module.exports = {
 //******************************************************************************************
 
 			if(goodmatch) {
-				//console.log(JSON.stringify(json2));
-				//console.log(JSON.stringify(json1));
 				match1 = goodmatch;
 				match2 = match1;
 			}
@@ -559,12 +566,15 @@ module.exports = {
 				jsn.edges[jsn.edges.length - 1].data.porttarget = json1.edges[found2 - 1].data.porttarget;
 			}
 
+			allnodes2 = this.deleteInnerNodesFromListOfNodes(allnodes2, container2, nodepositions2, json2.edges[i].data.source);
+			allnodes2 = this.deleteInnerNodesFromListOfNodes(allnodes2, container2, nodepositions2, json2.edges[i].data.target);
+
 			//The source, the target and the interaction type of the edge were all found.
 			if(match1 == match2 && json1.edges[match1 - 1].data.sbgnclass == json2.edges[i].data.sbgnclass)
 					matches = matches + 1;
 		}
 
-		//Some edges were created for the comparision step. They are useless now.
+		//Some edges were created for the comparison step. They are useless now.
 		for(i=0; i<jsn.edges.length; i++) {
 			if("toBeRemoved" in jsn.edges[i].data) {
 				jsn.edges.splice(i, 1);
@@ -584,6 +594,12 @@ module.exports = {
 			jsn = json1;
 		}
 
+		//Add the lonely nodes from the samllest json to the final one. No comparison is made here.
+		for(i=0; i<allnodes2.length; i++) {
+			if(allnodes2[i] !== undefined)
+				this.addInnerNodes(json2, jsn, container2, nodepositions2, json2.nodes[allnodes2[i]].data.id);
+		}
+
 		return jsn;
 	},
 
@@ -596,6 +612,18 @@ module.exports = {
 		}
 
 		final.nodes.push(JSON.parse(JSON.stringify(primary.nodes[positionOf[glyphId]])));
+	},
+
+	//Delete sub-levels nodes and containers from the a list of node positions.
+	deleteInnerNodesFromListOfNodes: function(nodelist, containerOf, positionOf, glyphId) {
+		if(containerOf[glyphId] !== undefined) {
+			var i;
+			for(i=0; i<containerOf[glyphId].length; i++)
+				nodelist = this.deleteInnerNodesFromListOfNodes(nodelist, containerOf, positionOf, containerOf[glyphId][i]);
+		}
+
+		delete nodelist[positionOf[glyphId]];
+		return nodelist;
 	},
 
 	//Compare sub-levels node in containers between the two jsons.
