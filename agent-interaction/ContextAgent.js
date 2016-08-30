@@ -51,16 +51,18 @@
 
 
         this.cancerList = []; //cancerType, genes[{importance, interactionCount}], importance, confidence
+        this.cancerInd; //most likely cancer
 
-        this.speciesList = []; //species[] score
-        this.speciesInd; //most likely species
+        //Must be objects to send over socket.io -- cannot be arrays
+        this.speciesList = {}; //species types and their scores
+        this.organList = {}; //organ types and their scores
 
 
 
-        this.contextQuestionInd; //for communication through chat
+        this.cancerQuestionInd; //for communication through chat
 
         this.neighborhoodQuestionInd; //for communication through chat
-        this.cancerInd; //most likely cancer
+
 
         this.mostImportantNeighborName;
         this.mostImportantGeneName;
@@ -100,9 +102,18 @@
     ContextAgent.prototype.initContext = function(callback){
         var self = this;
 
+        var context = self.getContext();
+        if(context) {
+            if (context.speciesList)
+                self.speciesList = context.speciesList;
+            if (context.organList)
+                self.organList = context.organList;
+        }
 
-        self.cancerTypes.forEach(function(cancerType){
-            readTextFile("TCGA/" + cancerType.abbr +"/scores-mutsig.txt", function(fileContent){
+
+
+        self.cancerTypes.forEach(function (cancerType) {
+            readTextFile("TCGA/" + cancerType.abbr + "/scores-mutsig.txt", function (fileContent) {
                 self.initCancerGeneInformation(cancerType, fileContent);
             });
         });
@@ -111,14 +122,18 @@
         var nodes = self.getNodeList();
 
 
-
         //update cumulative contributions of nodes for each cancer type
-        self.updateContextRelevance(nodes);
+        self.updateCancerRelevance(nodes);
+
+
         if(callback) callback();
+
 
     }
 
-
+    Agent.prototype.getContext = function(){
+        return this.pageDoc.context;
+    }
 
 
     ContextAgent.prototype.isGene = function(node){
@@ -127,7 +142,7 @@
         return false;
     }
 
-    ContextAgent.prototype.updateContextRelevance = function (nodes) {
+    ContextAgent.prototype.updateCancerRelevance = function (nodes) {
 
         var self = this;
 
@@ -168,7 +183,7 @@
 
             //FIXME: find a better solution to get human response
             if(data.userId != self.userId) {
-                if(self.chatHistory.length  ==  self.contextQuestionInd + 2) {  //means human answered in response to agent's question about cancer type
+                if(self.chatHistory.length  ==  self.cancerQuestionInd + 2) {  //means human answered in response to agent's question about cancer type
 
                     var answer = data.comment;
 
@@ -241,23 +256,32 @@
     /**
      * Evaluates chat message outputs based on REACH response in fries format
      */
-    ContextAgent.prototype.updateContextSpecies = function(callback){
+    ContextAgent.prototype.updateContextSpeciesAndOrgans = function(callback){
         var self = this;
 
         self.socket.on("REACHResult", function(data){
             var friesObj = JSON.parse(data);
             if(friesObj.entities && friesObj.entities.frames){
-            friesObj.entities.frames.forEach(function(frame){
-                if(frame.type == "species") {
-                    if(self.speciesList[frame.text])
-                        self.speciesList[frame.text]++;
-                    else
-                        self.speciesList[frame.text] = 1;
-                }
-            });
+                friesObj.entities.frames.forEach(function(frame){
+                    if(frame.type == "species") {
+                        if(self.speciesList[frame.text])
+                            self.speciesList[frame.text]++;
+                        else
+                            self.speciesList[frame.text] = 1;
+                    }
 
-                var val = Math.max(self.speciesList);
-                self.speciesInd = self.speciesList.indexOf(val);
+                    else if(frame.type == "organ") {
+                        if(self.organList[frame.text])
+                            self.organList[frame.text]++;
+                        else
+                            self.organList[frame.text] = 1;
+                    }
+                });
+
+
+
+                self.sendRequest("agentContextUpdate", {param:{ speciesList:self.speciesList, organList:self.organList}});
+
                 if(callback) callback();
 
             }
@@ -265,21 +289,20 @@
     }
 
 
+
+
     /**
      * Update cancer scores at each operation
      * @param op
      */
-    ContextAgent.prototype.updateContext = function(callback){
+    ContextAgent.prototype.updateContextCancer = function(callback){
         var self = this;
         var nodes = self.getNodeList(); //this is called after nodes are updated
 
-        self.updateContextSpecies(function(){
-            console.log(self.speciesList);
-            if(self.speciesInd > -1)
-                console.log(self.speciesList[self.speciesInd]);
-        });
 
-        self.updateContextRelevance(nodes);
+
+
+        self.updateCancerRelevance(nodes);
 
         var prevcancerInd = self.cancerInd;
         self.cancerInd = self.findBestContext();
@@ -289,7 +312,7 @@
         if(!prevcancerInd  || (self.cancerInd>-1 && prevcancerInd!=self.cancerInd &&  self.cancerList[self.cancerInd].cancerType!= self.cancerList[prevcancerInd].cancerType )) { //only inform if the most likely cancer has changed
 
             var cancer = self.cancerList[self.cancerInd];
-            self.informAboutContext(cancer);
+            self.informAboutCancer(cancer);
 
 
         }
@@ -313,8 +336,8 @@
             }
         }
 
-        self.sendRequest("agentContextUpdate", {param: {cancerType: self.cancerList[self.cancerInd].cancerType, geneName: self.mostImportantGeneName,
-        neighborName: self.mostImportantNeighborName}}); //only send the names of most important values
+        // self.sendRequest("agentContextUpdate", {param: {cancerType: self.cancerList[self.cancerInd].cancerType, geneName: self.mostImportantGeneName,
+        // neighborName: self.mostImportantNeighborName}}); //only send the names of most important values
 
         if (callback) callback();
 
@@ -358,7 +381,7 @@
         return maxcancerInd;
     }
 
-    ContextAgent.prototype.informAboutContext = function(cancer){
+    ContextAgent.prototype.informAboutCancer = function(cancer){
 
         var self = this;
 
@@ -373,7 +396,7 @@
 
         self.sendMessage(agentComment, targets);
 
-        self.contextQuestionInd = self.chatHistory.length - 1; //last question ind in history
+        self.cancerQuestionInd = self.chatHistory.length - 1; //last question ind in history
 
 
     }
@@ -471,9 +494,15 @@
         var kind = "&kind=PATHSBETWEEN";
         var limit = "&limit=1";
 
+        //PC only supports homo sapiens???
+        // var species = "";
+        // if(self.speciesInd > -1)
+        //     species = "&organism=" + self.speciesList[self.speciesInd];
+
         var sources = "&source=" + geneName + "&source=" + importantNeighborName;
 
-        pc2URL = pc2URL + format + kind + limit + sources;
+        pc2URL = pc2URL + format + kind + limit   + sources;
+
 
         self.socket.emit('PCQuery', {url: pc2URL, type: "sbgn"});
 

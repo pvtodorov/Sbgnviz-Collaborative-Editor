@@ -346,7 +346,7 @@
 
                 if(agent instanceof ContextAgent){
                    agent.initContext(function(){
-                       fillContextInformation(agent.cancerList, agent.cancerInd);
+                       fillContextInformation(agent.cancerList,  agent.speciesList, agent.organList);
                         contextInitialized = true;
 
                    });
@@ -388,21 +388,21 @@
             //contextAgent
             if(agent instanceof ContextAgent)
                 agent.evaluateMessage( function(){
-                    fillContextInformation(agent.cancerList, agent.cancerInd);
+                    fillContextInformation(agent.cancerList,  agent.speciesList, agent.organList);
                 });
 
-            agent.listen(function(){
+          //  agent.listen(function(){
 
                 socket.on('operation', function(op){
+                    agent.opHistory.push(op);
                     writeOperation(op);
                     agent.loadModel(function() { //first make sure to get the latest model
                         if(agent instanceof ContextAgent) {
 
                             if(contextInitialized) {
-                                agent.updateContext(function () {
+                                agent.updateContextCancer(function () {
 
-
-                                    fillContextInformation(agent.cancerList, agent.cancerInd);
+                                    fillContextInformation(agent.cancerList, agent.speciesList, agent.organList);
                                     //agent.printcancerList();
                                 });
                             }
@@ -411,11 +411,23 @@
                     });
 
                 });
+
+                if(agent instanceof ContextAgent) {
+                        agent.updateContextSpeciesAndOrgans(function () {
+
+                            fillContextInformation(agent.cancerList, agent.speciesList, agent.organList);
+                    });
+
+
+                }
+
                 socket.on('message', function(data){
+                    agent.chatHistory.push(data);
                     writeMessage(data);
                 });
 
                 socket.on('userList', function(data){
+                    agent.userList = data;
                     writeUserList(data);
                 });
 
@@ -427,7 +439,7 @@
 
             });
 
-        });
+       // });
     }
 
 
@@ -866,22 +878,35 @@
 
     }
 
-    function fillContextInformation(cancerList, cancerInd){
+    function fillContextInformation(cancerList, speciesList, organList){
 
 
         $('#contextInformation').empty();
         $('#contextInformation').append("<b>Context</b>")
         $('#contextInformation').append("<table>");
 
-        $('#contextInformation').append("<tr> <th>" + "Cancer type" +  "</th><th>" + "Relevance" + "</th><th>"   + "Confidence" +  "</th></tr>" + "Final score" );
+        $('#contextInformation').append("<tr> <th>" + "Cancer type" +  "</th><th>" + "Relevance" + "</th><th>"   + "Confidence" +  "</th></tr>" );
 
         for(var i = 0; i < cancerList.length; i++){
             var cancer = cancerList[i];
-            $('#contextInformation').append("<tr> <th>" + cancer.cancerType.abbr +  "</th><th>" + cancer.relevance.toFixed(3) + "</th><th>"   + cancer.confidence +  "</th></tr>" + (cancer.confidence*cancer.relevance).toFixed(3) );
-
+            $('#contextInformation').append("<tr> <th>" + cancer.cancerType.abbr +  "</th><th>" + cancer.relevance.toFixed(3) + "</th><th>"   + cancer.confidence +  "</th></tr>" );
 
         }
+
+        $('#contextInformation').append("<tr> <th>" + "Species" +  "</th><th>" + "Score" +  "</th></tr>");
+        for(var att in speciesList)
+            $('#contextInformation').append("<tr> <th>" + att +  "</th><th>" +   speciesList[att]+"</th></tr>");
+
+
+        $('#contextInformation').append("<tr> <th>" + "Organs" +  "</th><th>" + "Score" +  "</th></tr>");
+        for(var att in organList)
+            $('#contextInformation').append("<tr> <th>" + att +  "</th><th>" +   organList[att]+"</th></tr>");
+
+
+
         $('#contextInformation').append("</table>");
+
+
     }
 
     function writeMessage(msg){
