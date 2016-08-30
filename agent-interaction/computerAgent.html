@@ -346,7 +346,7 @@
 
                 if(agent instanceof ContextAgent){
                    agent.initContext(function(){
-                       fillContextInformation(agent.contextList, agent.contextInd);
+                       fillContextInformation(agent.cancerList, agent.cancerInd);
                         contextInitialized = true;
 
                    });
@@ -388,7 +388,7 @@
             //contextAgent
             if(agent instanceof ContextAgent)
                 agent.evaluateMessage( function(){
-                    fillContextInformation(agent.contextList, agent.contextInd);
+                    fillContextInformation(agent.cancerList, agent.cancerInd);
                 });
 
             agent.listen(function(){
@@ -402,8 +402,8 @@
                                 agent.updateContext(function () {
 
 
-                                    fillContextInformation(agent.contextList, agent.contextInd);
-                                    //agent.printContextList();
+                                    fillContextInformation(agent.cancerList, agent.cancerInd);
+                                    //agent.printcancerList();
                                 });
                             }
                         }
@@ -866,7 +866,7 @@
 
     }
 
-    function fillContextInformation(contextList, contextInd){
+    function fillContextInformation(cancerList, cancerInd){
 
 
         $('#contextInformation').empty();
@@ -875,10 +875,9 @@
 
         $('#contextInformation').append("<tr> <th>" + "Cancer type" +  "</th><th>" + "Relevance" + "</th><th>"   + "Confidence" +  "</th></tr>" + "Final score" );
 
-        for(var i = 0; i < contextList.length; i++){
-            var context = contextList[i];
-//                $('#contextInformation').append("<tr> <th>" + context.proteinName +  "</th><th>" + context.cancerType + "</th><th>" + context.relevance.toFixed(2) + "</th><th>"  + context.confidence +  "</th></tr>");
-            $('#contextInformation').append("<tr> <th>" + context.cancerType.abbr +  "</th><th>" + context.relevance.toFixed(3) + "</th><th>"   + context.confidence +  "</th></tr>" + (context.confidence*context.relevance).toFixed(3) );
+        for(var i = 0; i < cancerList.length; i++){
+            var cancer = cancerList[i];
+            $('#contextInformation').append("<tr> <th>" + cancer.cancerType.abbr +  "</th><th>" + cancer.relevance.toFixed(3) + "</th><th>"   + cancer.confidence +  "</th></tr>" + (cancer.confidence*cancer.relevance).toFixed(3) );
 
 
         }

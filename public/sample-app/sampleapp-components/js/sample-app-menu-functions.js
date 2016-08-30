@@ -1684,42 +1684,31 @@ module.exports = function(){
 
 
             //TODO: Funda
-//Create a new model from REACH everytime a message is posted
- //           			// in the chat box.
+
             $("#send-message").click(function(evt) {
-                var httpRequest;
-                if (window.XMLHttpRequest)
-                    httpRequest = new XMLHttpRequest();
-                else
-                    httpRequest = new ActiveXObject("Microsoft.XMLHTTP");
-
-                //Let REACH process the message posted in the chat box.
-                httpRequest.open("POST", "http://agathon.sista.arizona.edu:8080/odinweb/api/text", true);
-                httpRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                httpRequest.send("text="+document.getElementById("inputs-comment").value+"&output=fries");
-
-                httpRequest.onreadystatechange = function () {
-                    if (httpRequest.readyState == 4 && httpRequest.status == 200) {
-                        var reachResponse = JSON.parse(httpRequest.responseText);
-                        console.log(reachResponse);/*
-                        var newJson = idxcardjson.createJson(reachResponse); //Translate the index card JSON data format into a valid JSON model for SBGNviz.
-                        var currSbgnml = jsonToSbgnml.createSbgnml(cy.nodes(":visible"), cy.edges(":visible"));
-                        var currJson = sbgnmlToJson.convert(currSbgnml);
-
-
-                        if(newJson!=null){
-                            var jsonObj = (jsonMerger.merge(newJson, currJson)).wholeJson; //Merge the two SBGN models.
-
-                            //get another sbgncontainer and display the new SBGN model.
-                            editorActions.modelManager.newModel("me");
-                            sbgnContainer = new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, editorActions);
-                            editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
-
-                            $("#perform-layout").trigger('click');
-                        }*/
-                    }
-                }
+                socket.emit("REACHQuery", document.getElementById("inputs-comment").value);
             });
+ //                var httpRequest;
+ //                if (window.XMLHttpRequest)
+ //                    httpRequest = new XMLHttpRequest();
+ //                else
+ //                    httpRequest = new ActiveXObject("Microsoft.XMLHTTP");
+ //
+ //                //Let REACH process the message posted in the chat box.
+ //                httpRequest.open("POST", "http://agathon.sista.arizona.edu:8080/odinweb/api/text", true);
+ //                httpRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+ //                httpRequest.send("text="+document.getElementById("inputs-comment").value+"&output=fries");
+ //
+ //                httpRequest.onreadystatechange = function () {
+ //                    if (httpRequest.readyState == 4 && httpRequest.status == 200) {
+ //                        var reachResponse = JSON.parse(httpRequest.responseText);
+ //
+ //                        socket.emit("REACH", reachResponse);
+ //
+ //
+ //                    }
+ //                }
+ //            });
 
 
 

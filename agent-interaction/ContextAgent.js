@@ -50,21 +50,22 @@
             {abbr:"UVM", longName:"Uveal Melanoma"}];
 
 
-        this.contextList = []; //cancerType, genes[{importance, interactionCount}], importance, confidence
+        this.cancerList = []; //cancerType, genes[{importance, interactionCount}], importance, confidence
 
-
+        this.speciesList = []; //species[] score
+        this.speciesInd; //most likely species
 
 
 
         this.contextQuestionInd; //for communication through chat
 
         this.neighborhoodQuestionInd; //for communication through chat
-        this.contextInd; //most likely context
+        this.cancerInd; //most likely cancer
 
         this.mostImportantNeighborName;
         this.mostImportantGeneName;
 
-        this.contextEstablished = false;
+
     }
 
     /**
@@ -72,7 +73,7 @@
      */
     ContextAgent.prototype.initCancerGeneInformation = function(cancerType,  fileContent){
         var self = this;
-        var context = {cancerType: cancerType, genes:new Object(), relevance:0, confidence:1};
+        var cancer = {cancerType: cancerType, genes:new Object(), relevance:0, confidence:1};
 
 
         var genes = fileContent.split("\n").slice(1); //start from the second line
@@ -84,14 +85,14 @@
             var importance = (pVal== 0) ? 100 : -Math.log10(pVal);
 
 
-            context.genes[geneInfo[1]] = {importance: importance};
+            cancer.genes[geneInfo[1]] = {importance: importance};
 
 
         });
 
 
 
-        self.contextList.push(context);
+        self.cancerList.push(cancer);
 
     }
 
@@ -131,15 +132,15 @@
         var self = this;
 
 
-        self.contextList.forEach(function (context) {
+        self.cancerList.forEach(function (cancer) {
             var cumRelevance = 0;
             var geneCnt = 0;
             for(var nodeId in nodes){
                 var node = nodes[nodeId];
 
 
-                if(self.isGene(node) && context.genes[node.sbgnlabel.toUpperCase()]){
-                    var gene = context.genes[node.sbgnlabel.toUpperCase()];
+                if(self.isGene(node) && cancer.genes[node.sbgnlabel.toUpperCase()]){
+                    var gene = cancer.genes[node.sbgnlabel.toUpperCase()];
                     cumRelevance += node.interactionCount * gene.importance;
 
 
@@ -149,9 +150,9 @@
             }
 
             if(geneCnt > 0)
-                context.relevance = cumRelevance/geneCnt;
+                cancer.relevance = cumRelevance/geneCnt;
             else
-                context.relevance = 0;
+                cancer.relevance = 0;
 
 
 
@@ -172,14 +173,14 @@
                     var answer = data.comment;
 
                     if (answer.toLowerCase().search("ye") > -1) {  //yes
-                        //self.contextList[self.contextInd].confidence = 100;
-                        self.contextList[self.contextInd].confidence *= 2;
+                        //self.cancerList[self.cancerInd].confidence = 100;
+                        self.cancerList[self.cancerInd].confidence *= 2;
 
-                        var node = self.findMostImportantNodeInContext(self.getNodeList(), self.contextList[self.contextInd]);
+                        var node = self.findMostImportantNodeInContext(self.getNodeList(), self.cancerList[self.cancerInd]);
 
 
                         if(node) {
-                            self.findMostImportantNeighborInContext(node.sbgnlabel.toUpperCase(), self.contextList[self.contextInd], function (neighborName) {
+                            self.findMostImportantNeighborInContext(node.sbgnlabel.toUpperCase(), self.cancerList[self.cancerInd], function (neighborName) {
 
 
                                 self.mostImportantNeighborName = neighborName;
@@ -192,8 +193,8 @@
                     }
 
                     else if (answer.toLowerCase().search("n") > -1) {
-                        //self.contextList[self.contextInd].confidence = 0;
-                        self.contextList[self.contextInd].confidence *= 0.5;
+                        //self.cancerList[self.cancerInd].confidence = 0;
+                        self.cancerList[self.cancerInd].confidence *= 0.5;
 
                     }
                     //else don't do anything
@@ -216,7 +217,7 @@
         });
     }
 
-    ContextAgent.prototype.findMostImportantNodeInContext = function(nodes, context){
+    ContextAgent.prototype.findMostImportantNodeInContext = function(nodes, cancer){
         var self = this;
         var maxScore = -100000;
         var bestNode;
@@ -225,7 +226,7 @@
 
            // console.log(node.interactionCount);
             if(self.isGene(node)){
-                var gene = context.genes[node.sbgnlabel.toUpperCase()];
+                var gene = cancer.genes[node.sbgnlabel.toUpperCase()];
                 if(gene && gene.importance* node.interactionCount > maxScore) {
                     maxScore = gene.importance * node.interactionCount;
                     bestNode = node;
@@ -238,37 +239,70 @@
     }
 
     /**
-     * Update context scores at each operation
+     * Evaluates chat message outputs based on REACH response in fries format
+     */
+    ContextAgent.prototype.updateContextSpecies = function(callback){
+        var self = this;
+
+        self.socket.on("REACHResult", function(data){
+            var friesObj = JSON.parse(data);
+            if(friesObj.entities && friesObj.entities.frames){
+            friesObj.entities.frames.forEach(function(frame){
+                if(frame.type == "species") {
+                    if(self.speciesList[frame.text])
+                        self.speciesList[frame.text]++;
+                    else
+                        self.speciesList[frame.text] = 1;
+                }
+            });
+
+                var val = Math.max(self.speciesList);
+                self.speciesInd = self.speciesList.indexOf(val);
+                if(callback) callback();
+
+            }
+        });
+    }
+
+
+    /**
+     * Update cancer scores at each operation
      * @param op
      */
-    ContextAgent.prototype.updateContext = function( callback){
+    ContextAgent.prototype.updateContext = function(callback){
         var self = this;
         var nodes = self.getNodeList(); //this is called after nodes are updated
 
+        self.updateContextSpecies(function(){
+            console.log(self.speciesList);
+            if(self.speciesInd > -1)
+                console.log(self.speciesList[self.speciesInd]);
+        });
+
         self.updateContextRelevance(nodes);
 
-        var prevContextInd = self.contextInd;
-        self.contextInd = self.findBestContext();
+        var prevcancerInd = self.cancerInd;
+        self.cancerInd = self.findBestContext();
 
 
-        //if context changed
-        if(!prevContextInd  || (self.contextInd>-1 && prevContextInd!=self.contextInd &&  self.contextList[self.contextInd].cancerType!= self.contextList[prevContextInd].cancerType )) { //only inform if the most likely context has changed
+        //if cancer changed
+        if(!prevcancerInd  || (self.cancerInd>-1 && prevcancerInd!=self.cancerInd &&  self.cancerList[self.cancerInd].cancerType!= self.cancerList[prevcancerInd].cancerType )) { //only inform if the most likely cancer has changed
 
-            var context = self.contextList[self.contextInd];
-            self.informAboutContext(context);
+            var cancer = self.cancerList[self.cancerInd];
+            self.informAboutContext(cancer);
 
 
         }
 
 
         //update most important node and its neighbor
-        var node = self.findMostImportantNodeInContext(nodes, self.contextList[self.contextInd]);
+        var node = self.findMostImportantNodeInContext(nodes, self.cancerList[self.cancerInd]);
         if(node) {
 
             var prevNeighborName = self.mostImportantNeighborName;
             var prevGeneName = self.mostImportantGeneName;
             if (prevNeighborName != self.mostImportantNeighborName && prevGeneName != self.mostImportantGeneName) {
-                self.findMostImportantNeighborInContext(node.sbgnlabel.toUpperCase(), self.contextList[self.contextInd], function (neighborName) {
+                self.findMostImportantNeighborInContext(node.sbgnlabel.toUpperCase(), self.cancerList[self.cancerInd], function (neighborName) {
 
                     self.mostImportantNeighborName = neighborName;
                     self.mostImportantGeneName = node.sbgnlabel.toUpperCase();
@@ -279,7 +313,7 @@
             }
         }
 
-        self.sendRequest("agentContextUpdate", {param: {cancerType: self.contextList[self.contextInd].cancerType, geneName: self.mostImportantGeneName,
+        self.sendRequest("agentContextUpdate", {param: {cancerType: self.cancerList[self.cancerInd].cancerType, geneName: self.mostImportantGeneName,
         neighborName: self.mostImportantNeighborName}}); //only send the names of most important values
 
         if (callback) callback();
@@ -290,9 +324,9 @@
     }
 
 
-    ContextAgent.prototype.printContextList = function(){
-        this.contextList.forEach(function(context){
-            console.log(context);
+    ContextAgent.prototype.printcancerList = function(){
+        this.cancerList.forEach(function(cancer){
+            console.log(cancer);
         })
     }
     ContextAgent.prototype.printMutationData = function(cancerData){
@@ -310,25 +344,25 @@
         var likelyContext;
 
         var maxScore = - 100000;
-        var maxContextInd = -1;
+        var maxcancerInd = -1;
         var ind = 0;
-        self.contextList.forEach(function(context){
-            var score = context.relevance * context.confidence;
+        self.cancerList.forEach(function(cancer){
+            var score = cancer.relevance * cancer.confidence;
             if (score> maxScore) {
                 maxScore = score;
-                maxContextInd = ind;
+                maxcancerInd = ind;
             }
             ind++;
         });
 
-        return maxContextInd;
+        return maxcancerInd;
     }
 
-    ContextAgent.prototype.informAboutContext = function(context){
+    ContextAgent.prototype.informAboutContext = function(cancer){
 
         var self = this;
 
-        var agentComment = "The most likely cancer type is  " + context.cancerType.longName + " with a score of " + (context.relevance* context.confidence).toFixed(3);
+        var agentComment = "The most likely cancer type is  " + cancer.cancerType.longName + " with a score of " + (cancer.relevance* cancer.confidence).toFixed(3);
         agentComment +=". Do you agree?"
 
         var targets = [];
@@ -379,7 +413,7 @@
     }
 
 
-    ContextAgent.prototype.findMostImportantNeighborInContext = function(geneName, context, callback){
+    ContextAgent.prototype.findMostImportantNeighborInContext = function(geneName, cancer, callback){
         var self = this;
 
         var pc2URL = "http://www.pathwaycommons.org/pc2/";
@@ -398,6 +432,7 @@
 
 
 
+
         self.socket.on('PCQueryResult', function(data) {
             if(data.type == "sif"){
                 var neighbors = self.findAllControllingNeighbors(geneName, data.graph);
@@ -408,9 +443,9 @@
                 var maxScore = -100000;
 
                 neighbors.forEach(function(neighborName) {
-                    if (!self.isInModel(neighborName) && context.genes[neighborName] && context.genes[neighborName].importance > MIN_IMPORTANCE && context.genes[neighborName].importance > maxScore) {
+                    if (!self.isInModel(neighborName) && cancer.genes[neighborName] && cancer.genes[neighborName].importance > MIN_IMPORTANCE && cancer.genes[neighborName].importance > maxScore) {
 
-                        maxScore = context.genes[neighborName].importance;
+                        maxScore = cancer.genes[neighborName].importance;
                         importantNeighborName = neighborName;
                     }
                 });
