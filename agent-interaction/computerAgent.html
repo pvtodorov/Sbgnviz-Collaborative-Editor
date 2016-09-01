@@ -34,6 +34,13 @@
     <button id = "updateModel" onclick = updateModel()>Request updated model</button>
 
     <input type="button" value="cBioPortal query" onclick=callQuery()>
+
+    <br>
+    <button id = "undoButton" onclick = undoOperation()>Undo</button>
+
+    <button id = "redoButton" onclick = redoOperation()>Redo</button>
+
+
 <br>
     <br>
     <form id = "layoutOperations">
@@ -322,9 +329,9 @@
             $('#serverIp')[0].value = ip;
         }
 
-      //  agent = new Agent($('#agentName')[0].value, agentId);
+        agent = new Agent($('#agentName')[0].value, agentId);
 
-       agent = new ContextAgent($('#agentName')[0].value, agentId);
+       //agent = new ContextAgent($('#agentName')[0].value, agentId);
 
         var socket = agent.connectToServer(serverIp, function(){
 
@@ -555,6 +562,8 @@
 
     }
 
+
+
     function updateModel(callback){
         agent.loadModel(function() {
 
@@ -622,6 +631,16 @@
 
       //  agent.sendRequest("agentLoadFileRequest",{param:txtFile});
     };
+
+    function undoOperation(){
+        agent.sendRequest("agentUndoRequest");
+
+    }
+
+    function redoOperation(){
+        agent.sendRequest("agentRedoRequest");
+    }
+
     function addNode(){
         var x = $('#posX')[0].value;
         var y = $('#posY')[0].value;

@@ -220,6 +220,9 @@
      */
     Agent.prototype.sendRequest = function(reqName, param, callback){ //model operations
 
+        if(param == null){
+            param = {};
+        }
         param.room = this.room;
         param.userId = this.agentId;
 
