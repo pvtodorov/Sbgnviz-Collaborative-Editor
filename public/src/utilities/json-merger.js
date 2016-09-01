@@ -3,7 +3,7 @@
 
 //Author: David Servillo.
 
-//Date of the last change: 08/29/2016.
+//Date of the last change: 08/31/2016.
 
 module.exports = {
 
@@ -250,7 +250,14 @@ module.exports = {
 		var backward1;
 		var backward2;
 		var goodmatch;
+		var neighbors1 = {};
+		var neighbors2 = {};
+		var json2tojson1 = {};
 		for(i=0; i<json2.edges.length; i++) {
+			if(neighbors2[json2.edges[i].data.source] === undefined)
+				neighbors2[json2.edges[i].data.source] = [json2.edges[i].data.target];
+			else
+				neighbors2[json2.edges[i].data.source].push(json2.edges[i].data.target);
 			goodmatch = 0;
 			count1 = 0;
 			count2 = 0;
@@ -570,8 +577,18 @@ module.exports = {
 			allnodes2 = this.deleteInnerNodesFromListOfNodes(allnodes2, container2, nodepositions2, json2.edges[i].data.target);
 
 			//The source, the target and the interaction type of the edge were all found.
-			if(match1 == match2 && json1.edges[match1 - 1].data.sbgnclass == json2.edges[i].data.sbgnclass)
-					matches = matches + 1;
+			if(match1 == match2 && json1.edges[match1 - 1].data.sbgnclass == json2.edges[i].data.sbgnclass) {
+				matches = matches + 1;
+				if(neighbors1[json1.edges[match1 - 1].data.source] === undefined)
+					neighbors1[json1.edges[match1 - 1].data.source] = [json1.edges[match1 - 1].data.target];
+				else
+					neighbors1[json1.edges[match1 - 1].data.source].push(json1.edges[match1 - 1].data.target);
+
+				if(json2tojson1[json2.edges[i].data.source] === undefined)
+					json2tojson1[json2.edges[i].data.source] = [json1.edges[match1 - 1].data.source];
+				else
+					json2tojson1[json2.edges[i].data.source].push(json1.edges[match1 - 1].data.source);
+			}
 		}
 
 		//Some edges were created for the comparison step. They are useless now.
@@ -584,17 +601,32 @@ module.exports = {
 
 		//There were only matches. json2 is useless, only json1 becomes the final json.
 		if(matches == json2.edges.length) {
-			for(i=0; i<json1.edges.length; i++) {  //Remove the useless edges.
-				if("toBeRemoved" in json1.edges[i].data) {
-					json1.edges.splice(i, 1);
-				 	i = i - 1;
-				}
+			i = 0;
+			j = 0;
+			var allkeys1 = Object.keys(neighbors1).concat(Object.keys(neighbors1));
+			var allkeys2 = Object.keys(neighbors2).concat(Object.keys(neighbors2));
+			//Make sure the nodes which matched follow each other in the same order in the two jsons.
+			if(JSON.stringify(json2.nodes) != JSON.stringify([]) && JSON.stringify(json2.edges) != JSON.stringify([])) {
+				while(allkeys2[j] != json2.edges[json2.edges.length - 1].data.source)
+					j = j + 1;
+
+				while(i<allkeys2.length/2 && this.trueMatch(neighbors2, neighbors1, allkeys2[j + i], json2tojson1[allkeys2[j + i]][0]))
+					i = i + 1;
 			}
 
-			jsn = json1;
+			if(i == allkeys2.length/2) {
+				for(i=0; i<json1.edges.length; i++) {  //Remove the useless edges.
+					if("toBeRemoved" in json1.edges[i].data) {
+						json1.edges.splice(i, 1);
+					 	i = i - 1;
+					}
+				}
+
+				jsn = json1;
+			}
 		}
 
-		//Add the lonely nodes from the samllest json to the final one. No comparison is made here.
+		//Add the lonely nodes from the smallest json to the final one. No comparison is made here.
 		for(i=0; i<allnodes2.length; i++) {
 			if(allnodes2[i] !== undefined)
 				this.addInnerNodes(json2, jsn, container2, nodepositions2, json2.nodes[allnodes2[i]].data.id);
@@ -650,5 +682,23 @@ module.exports = {
 				result = 1;
 		}
 		return result; 
+	},
+
+	//Make sure the nodes which matched follow each other in the same order in the two jsons.
+	trueMatch(neighbors1, neighbors2, key1, key2) {
+		var i;
+		var samegraph = 1;
+		if(neighbors1[key1] !== undefined && neighbors2[key2] !== undefined) {
+			if(neighbors1[key1].length == neighbors2[key2].length) {
+				while(i<neighbors1[key1].length && samegraph)
+					samegraph = this.trueMatch(neighbors1, neighbors2, neighbors1[key1][i], neighbors2[key2][i]);
+			} else
+				samegraph = 0;
+
+		//} else if(neighbors2[key2] !== undefined && neighbors1[key1] === undefined)
+		} else
+			samegraph = 0;
+
+		return samegraph;
 	}
 }
