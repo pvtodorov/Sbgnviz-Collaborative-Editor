@@ -311,7 +311,7 @@ module.exports = {
 					}
 				//The node is a regular node, without a container.
 				} else {
-					if(JSON.stringify(json2.nodes[nodepositions2[json2.edges[i].data.source]]).replace(new RegExp('"id":"[^"]+"', 'g'), '').replace(new RegExp('"[sbgn]*bbox":{[^}]+}', 'g'), '').replace(new RegExp(',', 'g'), '').split("").sort().join("") == JSON.stringify(json1.nodes[nodepositions1[json1.edges[j].data.source]]).replace(new RegExp('"id":"[^"]+"', 'g'), '').replace(new RegExp('"[sbgn]*bbox":{[^}]+}', 'g'), '').replace(new RegExp(',', 'g'), '').split("").sort().join("")) {
+					if(JSON.stringify(json2.nodes[nodepositions2[json2.edges[i].data.source]]).replace(new RegExp('"id":"[^"]+"', 'g'), '').replace(new RegExp('"[sbgn]*bbox":{[^}]+}', 'g'), '').replace(new RegExp('"null"', 'g'), '""').replace(new RegExp('"sbgnlabel":""', 'g'), '').replace(new RegExp(',', 'g'), '').split("").sort().join("") == JSON.stringify(json1.nodes[nodepositions1[json1.edges[j].data.source]]).replace(new RegExp('"id":"[^"]+"', 'g'), '').replace(new RegExp('"[sbgn]*bbox":{[^}]+}', 'g'), '').replace(new RegExp('"null"', 'g'), '""').replace(new RegExp('"sbgnlabel":""', 'g'), '').replace(new RegExp(',', 'g'), '').split("").sort().join("")) {
 						found1 = j + 1;
 						match1 = found1;
 						backward1 = 0;
@@ -360,7 +360,7 @@ module.exports = {
 					}
 				//The node is a regular node, without a container.
 				} else {
-					if(JSON.stringify(json2.nodes[nodepositions2[json2.edges[i].data.target]]).replace(new RegExp('"id":"[^"]+"', 'g'), '').replace(new RegExp('"[sbgn]*bbox":{[^}]+}', 'g'), '').replace(new RegExp(',', 'g'), '').split("").sort().join("") == JSON.stringify(json1.nodes[nodepositions1[json1.edges[j].data.target]]).replace(new RegExp('"id":"[^"]+"', 'g'), '').replace(new RegExp('"[sbgn]*bbox":{[^}]+}', 'g'), '').replace(new RegExp(',', 'g'), '').split("").sort().join("")) {
+					if(JSON.stringify(json2.nodes[nodepositions2[json2.edges[i].data.target]]).replace(new RegExp('"id":"[^"]+"', 'g'), '').replace(new RegExp('"[sbgn]*bbox":{[^}]+}', 'g'), '').replace(new RegExp('"null"', 'g'), '""').replace(new RegExp('"sbgnlabel":""', 'g'), '').replace(new RegExp(',', 'g'), '').split("").sort().join("") == JSON.stringify(json1.nodes[nodepositions1[json1.edges[j].data.target]]).replace(new RegExp('"id":"[^"]+"', 'g'), '').replace(new RegExp('"[sbgn]*bbox":{[^}]+}', 'g'), '').replace(new RegExp('"null"', 'g'), '""').replace(new RegExp('"sbgnlabel":""', 'g'), '').replace(new RegExp(',', 'g'), '').split("").sort().join("")) {
 						found2 = j + 1;
 						match2 = found2;
 						backward2 = 0;
@@ -409,7 +409,7 @@ module.exports = {
 					}
 				//The node is a regular node, without a container.
 				} else {
-					if(JSON.stringify(json2.nodes[nodepositions2[json2.edges[i].data.source]]).replace(new RegExp('"id":"[^"]+"', 'g'), '').replace(new RegExp('"[sbgn]*bbox":{[^}]+}', 'g'), '').replace(new RegExp(',', 'g'), '').split("").sort().join("") == JSON.stringify(json1.nodes[nodepositions1[json1.edges[j].data.target]]).replace(new RegExp('"id":"[^"]+"', 'g'), '').replace(new RegExp('"[sbgn]*bbox":{[^}]+}', 'g'), '').replace(new RegExp(',', 'g'), '').split("").sort().join("")) {
+					if(JSON.stringify(json2.nodes[nodepositions2[json2.edges[i].data.source]]).replace(new RegExp('"id":"[^"]+"', 'g'), '').replace(new RegExp('"[sbgn]*bbox":{[^}]+}', 'g'), '').replace(new RegExp('"null"', 'g'), '""').replace(new RegExp('"sbgnlabel":""', 'g'), '').replace(new RegExp(',', 'g'), '').split("").sort().join("") == JSON.stringify(json1.nodes[nodepositions1[json1.edges[j].data.target]]).replace(new RegExp('"id":"[^"]+"', 'g'), '').replace(new RegExp('"[sbgn]*bbox":{[^}]+}', 'g'), '').replace(new RegExp('"null"', 'g'), '""').replace(new RegExp('"sbgnlabel":""', 'g'), '').replace(new RegExp(',', 'g'), '').split("").sort().join("")) {
 						found4 = j + 1;
 						match1 = found4;
 						backward1 = 1;
@@ -458,7 +458,7 @@ module.exports = {
 					}
 				//The node is a regular node, without a container.
 				} else {
-					if(JSON.stringify(json2.nodes[nodepositions2[json2.edges[i].data.target]]).replace(new RegExp('"id":"[^"]+"', 'g'), '').replace(new RegExp('"[sbgn]*bbox":{[^}]+}', 'g'), '').replace(new RegExp(',', 'g'), '').split("").sort().join("") == JSON.stringify(json1.nodes[nodepositions1[json1.edges[j].data.source]]).replace(new RegExp('"id":"[^"]+"', 'g'), '').replace(new RegExp('"[sbgn]*bbox":{[^}]+}', 'g'), '').replace(new RegExp(',', 'g'), '').split("").sort().join("")) {
+					if(JSON.stringify(json2.nodes[nodepositions2[json2.edges[i].data.target]]).replace(new RegExp('"id":"[^"]+"', 'g'), '').replace(new RegExp('"[sbgn]*bbox":{[^}]+}', 'g'), '').replace(new RegExp('"null"', 'g'), '""').replace(new RegExp('"sbgnlabel":""', 'g'), '').replace(new RegExp(',', 'g'), '').split("").sort().join("") == JSON.stringify(json1.nodes[nodepositions1[json1.edges[j].data.source]]).replace(new RegExp('"id":"[^"]+"', 'g'), '').replace(new RegExp('"[sbgn]*bbox":{[^}]+}', 'g'), '').replace(new RegExp('"null"', 'g'), '""').replace(new RegExp('"sbgnlabel":""', 'g'), '').replace(new RegExp(',', 'g'), '').split("").sort().join("")) {
 						found5 = j + 1;
 						match2 = found5;
 						backward2 = 1;
@@ -666,7 +666,7 @@ module.exports = {
 			if(cont1[node1].length == cont2[node2].length) {
 				for(k=0; k<cont1[node1].length; k++) {
 					for(l=0; l<cont2[node2].length; l++) {
-						if(JSON.stringify(jsn1.nodes[pos1[cont1[node1][k]]]).replace(new RegExp('"id":"[^"]+"', 'g'), '').replace(new RegExp('"[sbgn]*bbox":{[^}]+}', 'g'), '').replace(new RegExp('"parent":"[^"]+"'), '').replace(new RegExp(',', 'g'), '').split("").sort().join("") == JSON.stringify(jsn2.nodes[pos2[cont2[node2][l]]]).replace(new RegExp('"id":"[^"]+"', 'g'), '').replace(new RegExp('"[sbgn]*bbox":{[^}]+}', 'g'), '').replace(new RegExp('"parent":"[^"]+"'), '').replace(new RegExp(',', 'g'), '').split("").sort().join("")) {
+						if(JSON.stringify(jsn1.nodes[pos1[cont1[node1][k]]]).replace(new RegExp('"id":"[^"]+"', 'g'), '').replace(new RegExp('"[sbgn]*bbox":{[^}]+}', 'g'), '').replace(new RegExp('"parent":"[^"]+"'), '').replace(new RegExp('"null"', 'g'), '""').replace(new RegExp('"sbgnlabel":""', 'g'), '').replace(new RegExp(',', 'g'), '').split("").sort().join("") == JSON.stringify(jsn2.nodes[pos2[cont2[node2][l]]]).replace(new RegExp('"id":"[^"]+"', 'g'), '').replace(new RegExp('"[sbgn]*bbox":{[^}]+}', 'g'), '').replace(new RegExp('"parent":"[^"]+"'), '').replace(new RegExp('"null"', 'g'), '""').replace(new RegExp('"sbgnlabel":""', 'g'), '').replace(new RegExp(',', 'g'), '').split("").sort().join("")) {
 							count = count + 1;
 						}
 					}
@@ -678,7 +678,7 @@ module.exports = {
 				}
 			}
 		} else {
-			if(JSON.stringify(jsn1.nodes[pos1[node1]]).replace(new RegExp('"id":"[^"]+"', 'g'), '').replace(new RegExp('"[sbgn]*bbox":{[^}]+}', 'g'), '').replace(new RegExp('"parent":"[^"]+"'), '').replace(new RegExp(',', 'g'), '').split("").sort().join("") == JSON.stringify(jsn2.nodes[pos2[node2]]).replace(new RegExp('"id":"[^"]+"', 'g'), '').replace(new RegExp('"[sbgn]*bbox":{[^}]+}', 'g'), '').replace(new RegExp('"parent":"[^"]+"'), '').replace(new RegExp(',', 'g'), '').split("").sort().join(""))
+			if(JSON.stringify(jsn1.nodes[pos1[node1]]).replace(new RegExp('"id":"[^"]+"', 'g'), '').replace(new RegExp('"[sbgn]*bbox":{[^}]+}', 'g'), '').replace(new RegExp('"parent":"[^"]+"'), '').replace(new RegExp('"null"', 'g'), '""').replace(new RegExp('"sbgnlabel":""', 'g'), '').replace(new RegExp(',', 'g'), '').split("").sort().join("") == JSON.stringify(jsn2.nodes[pos2[node2]]).replace(new RegExp('"id":"[^"]+"', 'g'), '').replace(new RegExp('"[sbgn]*bbox":{[^}]+}', 'g'), '').replace(new RegExp('"parent":"[^"]+"'), '').replace(new RegExp('"null"', 'g'), '""').replace(new RegExp('"sbgnlabel":""', 'g'), '').replace(new RegExp(',', 'g'), '').split("").sort().join(""))
 				result = 1;
 		}
 		return result; 
