@@ -103,7 +103,7 @@ operations. It has attributes such as position
 ={x:< posX >,y:< posY >}, width, height, borderWidth,
 borderHeight, backgroundColor, sbgnLabel, sbgnStatesAndInfos =
 {clazz:< className >, state =
-{value:< stateValue >,variable:<s tateVariable >}}.
+{value:< stateValue >,variable:< stateVariable >}}.
 
 **selectedEdge**: The edge object on which the agent is performing
 operations. It has attributes such as cardinality, lineColor and width.
