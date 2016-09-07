@@ -98,9 +98,7 @@ module.exports = function(){
           editorActions.refreshGlobalUndoRedoButtonsStatus();
          },
 
-
-         mergeSbgn: function(sbgnGraph){
-
+         mergeJson: function(jsonGraph){
              var currSbgnml = jsonToSbgnml.createSbgnml(cy.nodes(":visible"), cy.edges(":visible"));
              var currJson = sbgnmlToJson.convert(currSbgnml);
 
@@ -108,24 +106,10 @@ module.exports = function(){
              editorActions.modelManager.setRollbackPoint(); //before merging
 
 
-             var newJson = sbgnmlToJson.convert(sbgnGraph);
 
-             //var currJson = editorActions.modelManager.getJsonFromModel();
-
-             //
-             // console.log(editorActions.modelManager.getJsonFromModel());
-             // console.log("different from");
-             // console.log(currJson);
-             //
-
-             var mergeResult = jsonMerger.merge(newJson, currJson); //Merge the two SBGN models.
+             var mergeResult = jsonMerger.merge(jsonGraph, currJson); //Merge the two SBGN models.
              var jsonObj = mergeResult.wholeJson;
              var newJsonIds = mergeResult.jsonToMerge;
-
-
-
-
-
 
              //get another sbgncontainer and display the new SBGN model.
              editorActions.modelManager.newModel( "me", true);
@@ -140,13 +124,10 @@ module.exports = function(){
                  var cyNode = cy.getElementById(node.data.id)[0];
 
 
-                if(cyNode)
-                    editorActions.selectNode(cyNode);
+                 if(cyNode)
+                     editorActions.selectNode(cyNode);
 
              });
-
-
-
 
              //Call Layout
 
@@ -163,11 +144,68 @@ module.exports = function(){
              }); //don't update history
 
 
+         },
 
+         mergeSbgn: function(sbgnGraph){
 
-
-
-
+             var newJson = sbgnmlToJson.convert(sbgnGraph);
+             this.mergeJson(newJson);
+             //
+             // var currSbgnml = jsonToSbgnml.createSbgnml(cy.nodes(":visible"), cy.edges(":visible"));
+             // var currJson = sbgnmlToJson.convert(currSbgnml);
+             //
+             //
+             // editorActions.modelManager.setRollbackPoint(); //before merging
+             //
+             //
+             //
+             //
+             //
+             //
+             // //var currJson = editorActions.modelManager.getJsonFromModel();
+             //
+             // //
+             // // console.log(editorActions.modelManager.getJsonFromModel());
+             // // console.log("different from");
+             // // console.log(currJson);
+             // //
+             //
+             // var mergeResult = jsonMerger.merge(newJson, currJson); //Merge the two SBGN models.
+             // var jsonObj = mergeResult.wholeJson;
+             // var newJsonIds = mergeResult.jsonToMerge;
+             //
+             // //get another sbgncontainer and display the new SBGN model.
+             // editorActions.modelManager.newModel( "me", true);
+             //
+             // sbgnContainer = new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, editorActions);
+             // editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", true);
+             //
+             // editorActions.modelManager.setSampleInd(-1, "me", true); //to notify other clients
+             //
+             // //select the new graph
+             // newJsonIds.nodes.forEach(function(node){
+             //     var cyNode = cy.getElementById(node.data.id)[0];
+             //
+             //
+             //    if(cyNode)
+             //        editorActions.selectNode(cyNode);
+             //
+             // });
+             //
+             // //Call Layout
+             //
+             //
+             // beforePerformLayout();
+             //
+             // sbgnLayout.applyLayout(editorActions.modelManager);
+             //
+             //
+             // editorActions.performLayoutFunction(true, function(){
+             //
+             //
+             //     editorActions.modelManager.mergeJsons();
+             // }); //don't update history
+             //
 
          },
 

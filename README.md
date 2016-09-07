@@ -161,7 +161,7 @@ string after http:<ip>:3000/ in the server address.
 |**reqName**                          |  **param**                                                                         |
 | ----------------------------------- | ---------------------------------------------------- |
 | “agentAddImageRequest”              | {img: < image file >,                         |
-|                                     |filePath: < path of image file > }             |
+|                                     | filePath: < path of image file > }             |
 | "agentSetLayoutProperties"          | {name: < layout name >,                       |
 |                                     | nodeRepulsion: < node repulsion value > ,        |
 |                                     | nodeOverlap:< node overlap percentage >,          |
@@ -192,7 +192,7 @@ string after http:<ip>:3000/ in the server address.
 |                                     | pos: {x:< new position x >, y: <  new position y >}}                   |
 |  “agentAddCompoundRequest”          | {type: < compound type as “complex” or “compartment” >,              |
 |                                     | selectedNodeArr: < array of node ids >}                              |
-|  “agentMergeGraphRequest”           | {param: < graph to be added in sbgn format >}                        |
+|  “agentMergeGraphRequest”           |  {graph: < graph to be added >, type: < file type as "sbgn" or "json" > }                        |
 
 
 In order to set up and run an agent:

@@ -516,7 +516,7 @@
                 //     self.socket.emit('PCQuery', {url: pc2URL, type: "sbgn"});
                 // }
                 // else {
-                    self.sendRequest("agentMergeGraphRequest", {param: data.graph});
+                    self.sendRequest("agentMergeGraphRequest", {graph: data.graph, type:"sbgn"});
                 // }
             }
 

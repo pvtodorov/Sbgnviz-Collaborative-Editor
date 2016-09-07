@@ -771,6 +771,10 @@ app.proto.create = function (model) {
        menu.mergeSbgn(data);
     });
 
+    socket.on("mergeJson", function(data){
+        menu.mergeJson(data);
+    });
+
 
     socket.on('addNode', function(data, callback){
         var nodeId = menu.addNode(null, data.x, data.y, data.sbgnclass, data.sbgnlabel, true);
