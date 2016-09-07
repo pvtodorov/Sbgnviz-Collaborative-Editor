@@ -104,39 +104,6 @@
 
 <span>Enter “http://localhost:3000” to the address bar of your browser.</span>
 
-## <span>System Framework</span>
-
-<span></span>
-
-<span style="overflow: hidden; display: inline-block; margin: 0.00px 0.00px; border: 0.00px solid #000000; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px); width: 455.50px; height: 359.87px;">![](images/image00.png)</span>
-
-<span></span>
-
-<span></span>
-
-<span></span>
-
-<span></span>
-
-<span></span>
-
-<span></span>
-
-<span></span>
-
-<span></span>
-
-## <span>Framework Details</span>
-
-<span style="overflow: hidden; display: inline-block; margin: 0.00px 0.00px; border: 0.00px solid #000000; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px); width: 624.00px; height: 379.10px;">![](images/image02.png)</span><span> </span>
-
-<span></span>
-
-<span></span>
-
-<span></span>
-
-<span></span>
 
 ### <span>Computer Agent API</span>
 
@@ -1090,62 +1057,6 @@
 
 <span class="c5"></span>
 
-# <span>Framework with Biopax</span>
-
-## <span style="overflow: hidden; display: inline-block; margin: 0.00px 0.00px; border: 0.00px solid #000000; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px); width: 624.00px; height: 485.28px;">![](images/image03.png)</span>
-
-<span></span>
-
-<span></span>
-
-<span></span>
-
-<span></span>
-
-<span style="overflow: hidden; display: inline-block; margin: 0.00px 0.00px; border: 0.00px solid #000000; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px); width: 695.50px; height: 549.08px;">![](images/image04.png)</span>
-
-<span></span>
-
-<span></span>
-
-<span></span>
-
-# <span>In development</span>
-
-<span>                                   </span>
-
-<span>We’re trying to set up a pipeline to display an SBGN model on screen right from the plain text written in the chat box. Two possibilities:</span>
-
-*   <span>Fetch a BioPAX model directly from the REACH</span> <span>library</span><span>.</span>
-
-<span>OR:</span>
-
-*   <span>Fetch first the REACH output indexcard</span> <span>JSON</span><span> format then convert it in a BioPAX model.</span>
-
-<span>Then implement:</span>
-
-1.  <span>a naive “merger”, creating an SBGN model right from the indexcard JSON format. The new component appear separate from the other on screen and leave the duplicated entities as is if any.</span>
-2.  <span>a more sophisticated one trying to really merge both the old and new components on screen if necessary, and leave the duplicated entities as is if any.</span>
-3.  <span>a merger where all the SBGN models appear actually merged together when         possible and the entities are de-duplicated to guarantee the coherence of the resulting model.</span>
-4.  <span>a GUI giving the user the opportunity to choose between different possible         models before any validation.</span>
-
-<span></span>
-
-<span></span>
-
-<span></span>
-
-<span></span>
-
-<span></span>
-
-## <span>Data Alignment</span>
-
-<span style="overflow: hidden; display: inline-block; margin: 0.00px 0.00px; border: 0.00px solid #000000; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px); width: 623.50px; height: 583.53px;">![](images/image05.png)</span>
-
-<span></span>
-
-<span></span>
 
 # <span>Context Agent</span>
 
