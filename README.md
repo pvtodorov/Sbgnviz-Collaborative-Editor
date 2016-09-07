@@ -205,13 +205,13 @@ In order to set up and run an agent:
 
 });
 
-socket.on(**'connect'**, **function**(){
+socket.on('connect', function(){
 
-    ***agent***.loadModel(**function**() {
+  agent.loadModel(function() {
 
-        ***agent***.loadOperationHistory(**function**(){
+        agent.loadOperationHistory(function(){
 
-            ***agent***.loadChatHistory(**function**(){
+            agent.loadChatHistory(function(){
 
                 *//callback operations*
 
@@ -221,27 +221,27 @@ socket.on(**'connect'**, **function**(){
 
     });
 
-    ***agent***.listen(**function**(){
+    agent.listen(function(){
 
-        socket.on(**'operation'**, **function**(data){
-
-        *//callback operations*
-
-        });
-
-        socket.on(**'message'**, **function**(data){
+        socket.on('operation', function(data){
 
         *//callback operations*
 
         });
 
-        socket.on(**'userList'**, **function**(data){
+        socket.on('message', function(data){
 
         *//callback operations*
 
         });
 
-        socket.on(**'imageFile'**, **function**(data){
+        socket.on('userList', function(data){
+
+        *//callback operations*
+
+        });
+
+        socket.on('imageFile', function(data){
 
         *//callback operations*
 
