@@ -214,24 +214,24 @@ In order to set up and run an agent:
       - });
    - });
 
-***agent***.listen(**function**(){
-socket.on('operation', **function**(data){
-    *//callback operations*
-});
+  - ***agent***.listen(**function**(){
+    - socket.on('operation', **function**(data){
+      -    *//callback operations*
+    - });
 
-socket.on('message', **function**(data){
-    *//callback operations*
-});
+    - socket.on('message', **function**(data){
+      -    *//callback operations*
+    - });
 
-socket.on('userList', **function**(data){
-    *//callback operations*
-});
+    - socket.on('userList', **function**(data){
+      - *//callback operations*
+    - });
 
-socket.on('imageFile', **function**(data){
-    *//callback operations*
-});
-});
-});
+    - socket.on('imageFile', **function**(data){
+      - *//callback operations*
+    - });
+  - });
+- });
 
 An example web-based agent can be found in:
 
