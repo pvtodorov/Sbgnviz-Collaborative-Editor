@@ -1,1091 +1,1342 @@
-<div class="WordSection1">
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=macintosh">
+<meta name=Generator content="Microsoft Word 15 (filtered)">
+<style>
+<!--
+ /* Font Definitions */
+@font-face
+	{font-family:Arial;
+	panose-1:2 11 6 4 2 2 2 2 2 4;}
+@font-face
+	{font-family:"Cambria Math";
+	panose-1:0 0 0 0 0 0 0 0 0 0;}
+ /* Style Definitions */
+p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin:0in;
+	margin-bottom:.0001pt;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:Arial;
+	color:black;}
+h1
+	{margin-top:20.0pt;
+	margin-right:0in;
+	margin-bottom:6.0pt;
+	margin-left:0in;
+	line-height:115%;
+	font-size:20.0pt;
+	font-family:Arial;
+	color:black;
+	font-weight:normal;}
+h2
+	{margin-top:.25in;
+	margin-right:0in;
+	margin-bottom:6.0pt;
+	margin-left:0in;
+	line-height:115%;
+	font-size:16.0pt;
+	font-family:Arial;
+	color:black;
+	font-weight:normal;}
+h3
+	{margin-top:16.0pt;
+	margin-right:0in;
+	margin-bottom:4.0pt;
+	margin-left:0in;
+	line-height:115%;
+	font-size:14.0pt;
+	font-family:Arial;
+	color:#434343;
+	font-weight:normal;}
+h4
+	{margin-top:14.0pt;
+	margin-right:0in;
+	margin-bottom:4.0pt;
+	margin-left:0in;
+	line-height:115%;
+	font-size:12.0pt;
+	font-family:Arial;
+	color:#666666;
+	font-weight:normal;}
+h5
+	{margin-top:12.0pt;
+	margin-right:0in;
+	margin-bottom:4.0pt;
+	margin-left:0in;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:Arial;
+	color:#666666;
+	font-weight:normal;}
+h6
+	{margin-top:12.0pt;
+	margin-right:0in;
+	margin-bottom:4.0pt;
+	margin-left:0in;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:Arial;
+	color:#666666;
+	font-weight:normal;
+	font-style:italic;}
+p.MsoTitle, li.MsoTitle, div.MsoTitle
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:3.0pt;
+	margin-left:0in;
+	line-height:115%;
+	font-size:26.0pt;
+	font-family:Arial;
+	color:black;}
+p.MsoSubtitle, li.MsoSubtitle, div.MsoSubtitle
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:16.0pt;
+	margin-left:0in;
+	line-height:115%;
+	font-size:15.0pt;
+	font-family:Arial;
+	color:#666666;}
+.MsoChpDefault
+	{font-size:11.0pt;
+	font-family:Arial;
+	color:black;}
+.MsoPapDefault
+	{line-height:115%;}
+ /* Page Definitions */
+@page WordSection1
+	{size:8.5in 11.0in;
+	margin:1.0in 1.0in 1.0in 1.0in;}
+div.WordSection1
+	{page:WordSection1;}
+ /* List Definitions */
+ol
+	{margin-bottom:0in;}
+ul
+	{margin-bottom:0in;}
+-->
+</style>
 
-# <a name="_1wgjhs3i3ced"></a>SBGNViz Collaborative Editor User Guide
+</head>
 
-The editor allows human curators and computer agents to work on the same pathway model, and communicate through text and images. On the server side, we have an application server that keeps the model, handles communication across clients, and performs operational transformation. Model visualization and editing are handled on the client side. The editor visualizes information about cellular processes and pathways in SBGN (Systems Biology Graphical Notation) format. It allows for automatic graph layout, editing and highlighting facilities.
+<body bgcolor=white lang=EN-US>
 
-## <a name="_2up5xl2gx913"></a>Installation
+<div class=WordSection1>
 
-Install node.js, mongodb and redis servers first.
+<h1><a name="_1wgjhs3i3ced"></a>SBGNViz Collaborative Editor User Guide</h1>
 
-<span style="color:#222222;background:white">Node</span><span style="font-size:9.5pt;line-height:115%;color:#222222;background:white">:</span>
+<p class=MsoNormal style='text-align:justify'>The editor allows human curators
+and computer agents to work on the same pathway model, and communicate through
+text and images. On the server side, we have an application server that keeps
+the model, handles communication across clients, and performs operational
+transformation. Model visualization and editing are handled on the client side.
+The editor visualizes information about cellular processes and pathways in SBGN
+(Systems Biology Graphical Notation) format. It allows for automatic graph
+layout, editing and highlighting facilities. </p>
 
-<span style="font-size:9.5pt;line-height:115%;color:#222222;
-background:white">>curl -sL</span> [<span style="font-size:9.5pt;
-line-height:115%;color:#1155CC;background:white">https://deb.nodesource.com/setup_0.12</span>](https://deb.nodesource.com/setup_0.12) <span style="font-size:9.5pt;line-height:115%;color:#222222;background:white">| sudo -E bash -</span>
+<p class=MsoNormal>&nbsp;</p>
 
-<span style="font-size:9.5pt;line-height:115%;color:#222222;
-background:white">>sudo apt-get install -y nodejs</span>
+<h2><a name="_2up5xl2gx913"></a>Installation</h2>
 
-<span style="color:#222222;background:white">Redis</span><span style="font-size:9.5pt;line-height:115%;color:#222222;background:white">:</span>
+<p class=MsoNormal>Install node.js, mongodb and redis servers first.</p>
 
-<span style="font-size:9.5pt;line-height:115%;color:#222222;
-background:white">>sudo apt-get update</span>
+<p class=MsoNormal>&nbsp;</p>
 
-<span style="font-size:9.5pt;line-height:115%;color:#222222;
-background:white">>sudo apt-get install build-essential</span>
+<p class=MsoNormal><span style='color:#222222;background:white'>Node</span><span
+style='font-size:9.5pt;line-height:115%;color:#222222;background:white'>:</span></p>
 
-<span style="font-size:9.5pt;line-height:115%;color:#222222;
-background:white">>sudo apt-get install tcl8.5</span>
+<p class=MsoNormal>&nbsp;</p>
 
-<span style="font-size:9.5pt;line-height:115%;color:#222222;
-background:white">wget</span> [<span style="font-size:9.5pt;line-height:115%;color:#1155CC;background:white">http://download.redis.io/releases/redis-stable.tar.gz</span>](http://download.redis.io/releases/redis-stable.tar.gz)
+<p class=MsoNormal><span style='font-size:9.5pt;line-height:115%;color:#222222;
+background:white'>&gt;curl -sL </span><a
+href="https://deb.nodesource.com/setup_0.12"><span style='font-size:9.5pt;
+line-height:115%;color:#1155CC;background:white'>https://deb.nodesource.com/setup_0.12</span></a><span
+style='font-size:9.5pt;line-height:115%;color:#222222;background:white'> | sudo
+-E bash -</span></p>
 
-<span style="font-size:9.5pt;line-height:115%;color:#222222;
-background:white">>tar xzf redis-stable.tar.gz</span>
+<p class=MsoNormal><span style='font-size:9.5pt;line-height:115%;color:#222222;
+background:white'>&gt;sudo apt-get install -y nodejs</span></p>
 
-<span style="font-size:9.5pt;line-height:115%;color:#222222;
-background:white">>cd redis-stable</span>
+<p class=MsoNormal>&nbsp;</p>
 
-<span style="font-size:9.5pt;line-height:115%;color:#222222;
-background:white">>make</span>
+<p class=MsoNormal><span style='color:#222222;background:white'>Redis</span><span
+style='font-size:9.5pt;line-height:115%;color:#222222;background:white'>:</span></p>
 
-<span style="color:#222222;background:white">Mongo</span><span style="font-size:9.5pt;line-height:115%;color:#222222;background:white">:</span>
+<p class=MsoNormal>&nbsp;</p>
 
-<span style="font-size:9.5pt;line-height:115%;color:#222222;
-background:white">>sudo apt-key adv --keyserver hkp://</span>[<span style="font-size:9.5pt;line-height:
-115%;color:#1155CC;background:white">keyserver.ubuntu.com:80</span>](http://keyserver.ubuntu.com/) <span style="font-size:9.5pt;line-height:115%;color:#222222;background:white">--recv EA312927</span>
+<p class=MsoNormal><span style='font-size:9.5pt;line-height:115%;color:#222222;
+background:white'>&gt;sudo apt-get update</span></p>
 
-<span style="font-size:9.5pt;line-height:115%;color:#222222;
-background:white">>echo "deb</span> [<span style="font-size:9.5pt;
-line-height:115%;color:#1155CC;background:white">http://repo.mongodb.org/apt/ubuntu</span>](http://repo.mongodb.org/apt/ubuntu) <span style="font-size:9.5pt;line-height:115%;color:#222222;background:white">trusty/mongodb-org/3.2 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.2.list</span>
+<p class=MsoNormal><span style='font-size:9.5pt;line-height:115%;color:#222222;
+background:white'>&gt;sudo apt-get install build-essential</span></p>
 
-<span style="font-size:9.5pt;line-height:115%;color:#222222;
-background:white">>sudo apt-get update</span>
+<p class=MsoNormal><span style='font-size:9.5pt;line-height:115%;color:#222222;
+background:white'>&gt;sudo apt-get install tcl8.5</span></p>
 
-<span style="font-size:9.5pt;line-height:115%;color:#222222;
-background:white">>sudo apt-get install -y mongodb-org</span>
+<p class=MsoNormal><span style='font-size:9.5pt;line-height:115%;color:#222222;
+background:white'>wget </span><a
+href="http://download.redis.io/releases/redis-stable.tar.gz"><span
+style='font-size:9.5pt;line-height:115%;color:#1155CC;background:white'>http://download.redis.io/releases/redis-stable.tar.gz</span></a></p>
 
-<span style="color:#222222;background:white">If mongo does not work:</span>
+<p class=MsoNormal><span style='font-size:9.5pt;line-height:115%;color:#222222;
+background:white'>&gt;tar xzf redis-stable.tar.gz</span></p>
 
-<span style="font-size:9.5pt;line-height:115%;color:#222222;
-background:white">>sudo apt-get install upstart-sysv</span>
+<p class=MsoNormal><span style='font-size:9.5pt;line-height:115%;color:#222222;
+background:white'>&gt;cd redis-stable</span></p>
 
-<span style="font-size:9.5pt;line-height:115%;color:#222222;
-background:white">Get project from github:</span>
+<p class=MsoNormal><span style='font-size:9.5pt;line-height:115%;color:#222222;
+background:white'>&gt;make</span></p>
 
-<span style="font-size:9.5pt;line-height:115%;color:#222222;
-background:white">>git clone</span> [<span style="font-size:9.5pt;line-height:115%;color:#1155CC;background:white">https://github.com/fdurupinar/Sbgnviz-Collaborative-Editor.git</span>](https://github.com/fdurupinar/Sbgnviz-Collaborative-Editor.git)
+<p class=MsoNormal>&nbsp;</p>
 
-<span style="font-size:9.5pt;line-height:115%;color:#222222;
-background:white">>cd Sbgnviz-Collaborative-Editor</span>
+<p class=MsoNormal><span style='color:#222222;background:white'>Mongo</span><span
+style='font-size:9.5pt;line-height:115%;color:#222222;background:white'>:</span></p>
 
-<span style="font-size:9.5pt;line-height:115%;color:#222222;
-background:white">>sudo rm -rf node_modules</span>
+<p class=MsoNormal>&nbsp;</p>
 
-<span style="font-size:9.5pt;line-height:115%;color:#222222;
-background:white">>npm install</span>
+<p class=MsoNormal><span style='font-size:9.5pt;line-height:115%;color:#222222;
+background:white'>&gt;sudo apt-key adv --keyserver hkp://</span><a
+href="http://keyserver.ubuntu.com/"><span style='font-size:9.5pt;line-height:
+115%;color:#1155CC;background:white'>keyserver.ubuntu.com:80</span></a><span
+style='font-size:9.5pt;line-height:115%;color:#222222;background:white'> --recv
+EA312927</span></p>
 
-<span style="color:#222222;background:white">Run server:</span>
+<p class=MsoNormal><span style='font-size:9.5pt;line-height:115%;color:#222222;
+background:white'>&gt;echo &quot;deb </span><a
+href="http://repo.mongodb.org/apt/ubuntu"><span style='font-size:9.5pt;
+line-height:115%;color:#1155CC;background:white'>http://repo.mongodb.org/apt/ubuntu</span></a><span
+style='font-size:9.5pt;line-height:115%;color:#222222;background:white'>
+trusty/mongodb-org/3.2 multiverse&quot; | sudo tee
+/etc/apt/sources.list.d/mongodb-org-3.2.list</span></p>
 
-<span style="font-size:9.5pt;line-height:115%;color:#222222;
-background:white">>node server</span>
+<p class=MsoNormal><span style='font-size:9.5pt;line-height:115%;color:#222222;
+background:white'>&gt;sudo apt-get update</span></p>
 
-In order to open a client:
+<p class=MsoNormal><span style='font-size:9.5pt;line-height:115%;color:#222222;
+background:white'>&gt;sudo apt-get install -y mongodb-org</span></p>
 
-Enter “http://localhost:3000” to the address bar of your browser.<a name="_lzkutpoc5320"></a>
+<p class=MsoNormal>&nbsp;</p>
 
-### <a name="_ttz39lsxwuvx"></a>Computer Agent API
+<p class=MsoNormal><span style='color:#222222;background:white'>If mongo does
+not work:</span></p>
 
-Computer agents are connected to the node.js http server via websockets (socket.io.js). An agent is initialized with a _name (string)_  and a unique _ID (string)._
+<p class=MsoNormal>&nbsp;</p>
 
-**Constructor**: Agent (string name, string id)
+<p class=MsoNormal><span style='font-size:9.5pt;line-height:115%;color:#222222;
+background:white'>&gt;sudo apt-get install upstart-sysv</span></p>
 
-#### <a name="_1eu245k1egzd"></a>Public Attributes:
+<p class=MsoNormal>&nbsp;</p>
 
-**agentId**: (string) A unique id
+<p class=MsoNormal>&nbsp;</p>
 
-**agentName**: (string) Agent name
+<p class=MsoNormal><span style='font-size:9.5pt;line-height:115%;color:#222222;
+background:white'>Get project from github:</span></p>
 
-**colorCode**: A specific color to identify the agent operations. It should be a string in hsla format as: “hsla(_H_, _S_, _L_%, 1)”, where _H (integer)_, _S (float)_ and _L (float)_ are hue, saturation and lightness values.
+<p class=MsoNormal>&nbsp;</p>
 
-**selectedNode**: The node object on which the agent is performing operations. It has attributes such as position ={x:<posX>,y:<posY>}, width, height, borderWidth, borderHeight, backgroundColor, sbgnLabel, sbgnStatesAndInfos = {clazz:<className>, state = {value:<stateValue>,variable:<stateVariable>}}.
+<p class=MsoNormal><span style='font-size:9.5pt;line-height:115%;color:#222222;
+background:white'>&gt;git clone </span><a
+href="https://github.com/fdurupinar/Sbgnviz-Collaborative-Editor.git"><span
+style='font-size:9.5pt;line-height:115%;color:#1155CC;background:white'>https://github.com/fdurupinar/Sbgnviz-Collaborative-Editor.git</span></a></p>
 
-**selectedEdge**: The edge object on which the agent is performing operations. It has attributes such as cardinality, lineColor and width.
+<p class=MsoNormal><span style='font-size:9.5pt;line-height:115%;color:#222222;
+background:white'>&gt;cd Sbgnviz-Collaborative-Editor</span></p>
 
-**opHistory**: History of operations as an array of strings in the format: “_UserName_ (_date_): _Command_”.
+<p class=MsoNormal><span style='font-size:9.5pt;line-height:115%;color:#222222;
+background:white'>&gt;sudo rm -rf node_modules</span></p>
 
-**chatHistory**: Chat history as an array of messages.
+<p class=MsoNormal><span style='font-size:9.5pt;line-height:115%;color:#222222;
+background:white'>&gt;npm install</span></p>
 
-**userList**: List of connected user ids.
+<p class=MsoNormal>&nbsp;</p>
 
-#### <a name="_nt4u4u3mhl90"></a>Private Attributes:
+<p class=MsoNormal>&nbsp;</p>
 
-**room**: The document id that identifies the shared model. It is the string after http:<ip>:3000/ in the server address.
+<p class=MsoNormal><span style='color:#222222;background:white'>Run server:</span></p>
 
-**socket**: The web socket between the server and agent
+<p class=MsoNormal>&nbsp;</p>
 
-**pageDoc**: The document that the shared model is stored.
+<p class=MsoNormal><span style='font-size:9.5pt;line-height:115%;color:#222222;
+background:white'>&gt;node server</span></p>
 
-#### <a name="_l0c8z5l51rt3"></a>Methods:
+<p class=MsoNormal>&nbsp;</p>
 
-<table class="a" border="1" cellspacing="0" cellpadding="0" width="468" style="border-collapse:
- collapse;border:none">
+<p class=MsoNormal>In order to open a client:</p>
 
-<tbody>
+<p class=MsoNormal>Enter “http://localhost:3000” to the address bar of your
+browser. <a name="_lzkutpoc5320"></a></p>
 
-<tr>
+<p class=MsoNormal>&nbsp;</p>
 
-<td width="110" valign="top" style="width:110.25pt;border:solid black 1.0pt;
-  padding:4.3pt 4.3pt 4.3pt 4.3pt">
+<p class=MsoNormal>&nbsp;</p>
 
-**<span style="font-size:10.0pt">Name</span>**
+<h3><a name="_ttz39lsxwuvx"></a>Computer Agent API</h3>
 
-</td>
+<p class=MsoNormal>&nbsp;</p>
 
-<td width="117" valign="top" style="width:117.0pt;border:solid black 1.0pt;
-  border-left:none;padding:4.3pt 4.3pt 4.3pt 4.3pt">
+<p class=MsoNormal>Computer agents are connected to the node.js http server via
+websockets (socket.io.js). An agent is initialized with a <i>name (string) </i>&nbsp;and
+a unique <i>ID (string).</i></p>
 
-**<span style="font-size:10.0pt">Function</span>**
+<p class=MsoNormal>&nbsp;</p>
 
-</td>
+<p class=MsoNormal><b>Constructor</b>: Agent (string name, string id)</p>
 
-<td width="115" valign="top" style="width:114.75pt;border:solid black 1.0pt;
-  border-left:none;padding:4.3pt 4.3pt 4.3pt 4.3pt">
+<p class=MsoNormal>&nbsp;</p>
 
-**<span style="font-size:10.0pt">Parameters</span>**
+<h4><a name="_1eu245k1egzd"></a>Public Attributes:</h4>
 
-</td>
+<p class=MsoNormal>&nbsp;</p>
 
-<td width="126" valign="top" style="width:1.75in;border:solid black 1.0pt;
-  border-left:none;padding:4.3pt 4.3pt 4.3pt 4.3pt">
+<p class=MsoNormal><b>agentId</b>: (string) A unique id</p>
 
-**<span style="font-size:10.0pt">Returns</span>**
+<p class=MsoNormal>&nbsp;</p>
 
-</td>
+<p class=MsoNormal><b>agentName</b>: (string) Agent name</p>
 
-</tr>
+<p class=MsoNormal>&nbsp;</p>
 
-<tr>
+<p class=MsoNormal><b>colorCode</b>: A specific color to identify the agent
+operations. It should be a string in hsla format as: “hsla(<i>H</i>, <i>S</i>, <i>L</i>%,
+1)”, where <i>H (integer)</i>, <i>S (float)</i> and <i>L (float)</i> are hue,
+saturation and lightness values.</p>
 
-<td width="110" valign="top" style="width:110.25pt;border:solid black 1.0pt;
-  border-top:none;padding:4.3pt 4.3pt 4.3pt 4.3pt">
+<p class=MsoNormal>&nbsp;</p>
 
-<span style="font-size:9.0pt;line-height:115%">connectToServer</span>
+<p class=MsoNormal><b>selectedNode</b>: The node object on which the agent is
+performing operations. It has attributes such as position
+={x:&lt;posX&gt;,y:&lt;posY&gt;}, width, height, borderWidth, borderHeight,
+backgroundColor, sbgnLabel, sbgnStatesAndInfos = {clazz:&lt;className&gt;,
+state = {value:&lt;stateValue&gt;,variable:&lt;stateVariable&gt;}}.</p>
 
-</td>
+<p class=MsoNormal>&nbsp;</p>
 
-<td width="117" valign="top" style="width:117.0pt;border-top:none;border-left:
+<p class=MsoNormal><b>selectedEdge</b>: The edge object on which the agent is
+performing operations. It has attributes such as cardinality, lineColor and
+width.</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><b>opHistory</b>: History of operations as an array of
+strings in the format: “<i>UserName</i> (<i>date</i>):<i> Command</i>”.</p>
+
+<p class=MsoNormal><b>chatHistory</b>: Chat history as an array of messages.</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><b>userList</b>: List of connected user ids.</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<h4><a name="_nt4u4u3mhl90"></a>Private Attributes:</h4>
+
+<p class=MsoNormal><b>room</b>: The document id that identifies the shared
+model. It is the string after http:&lt;ip&gt;:3000/ in the server address.</p>
+
+<p class=MsoNormal><b>socket</b>: The web socket between the server and agent</p>
+
+<p class=MsoNormal><b>pageDoc</b>: The document that the shared model is
+stored.</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<h4><a name="_l0c8z5l51rt3"></a>Methods:</h4>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<table class=a border=1 cellspacing=0 cellpadding=0 width=468 style='border-collapse:
+ collapse;border:none'>
+ <tr>
+  <td width=110 valign=top style='width:110.25pt;border:solid black 1.0pt;
+  padding:4.3pt 4.3pt 4.3pt 4.3pt'>
+  <p class=MsoNormal style='line-height:normal'><b><span style='font-size:10.0pt'>Name</span></b></p>
+  </td>
+  <td width=117 valign=top style='width:117.0pt;border:solid black 1.0pt;
+  border-left:none;padding:4.3pt 4.3pt 4.3pt 4.3pt'>
+  <p class=MsoNormal style='line-height:normal'><b><span style='font-size:10.0pt'>Function</span></b></p>
+  </td>
+  <td width=115 valign=top style='width:114.75pt;border:solid black 1.0pt;
+  border-left:none;padding:4.3pt 4.3pt 4.3pt 4.3pt'>
+  <p class=MsoNormal style='line-height:normal'><b><span style='font-size:10.0pt'>Parameters</span></b></p>
+  </td>
+  <td width=126 valign=top style='width:1.75in;border:solid black 1.0pt;
+  border-left:none;padding:4.3pt 4.3pt 4.3pt 4.3pt'>
+  <p class=MsoNormal style='line-height:normal'><b><span style='font-size:10.0pt'>Returns</span></b></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=110 valign=top style='width:110.25pt;border:solid black 1.0pt;
+  border-top:none;padding:4.3pt 4.3pt 4.3pt 4.3pt'>
+  <p class=MsoNormal><span style='font-size:9.0pt;line-height:115%'>connectToServer</span></p>
+  </td>
+  <td width=117 valign=top style='width:117.0pt;border-top:none;border-left:
   none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:4.3pt 4.3pt 4.3pt 4.3pt">
-
-<span style="font-size:9.0pt">Connects the server and returns socket.io socket</span>
-
-</td>
-
-<td width="115" valign="top" style="width:114.75pt;border-top:none;border-left:
+  padding:4.3pt 4.3pt 4.3pt 4.3pt'>
+  <p class=MsoNormal style='line-height:normal'><span style='font-size:9.0pt'>Connects
+  the server and returns socket.io socket</span></p>
+  </td>
+  <td width=115 valign=top style='width:114.75pt;border-top:none;border-left:
   none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:4.3pt 4.3pt 4.3pt 4.3pt">
-
-<span style="font-size:9.0pt">url, callback</span>
-
-</td>
-
-<td width="126" valign="top" style="width:1.75in;border-top:none;border-left:
+  padding:4.3pt 4.3pt 4.3pt 4.3pt'>
+  <p class=MsoNormal style='line-height:normal'><span style='font-size:9.0pt'>url,
+  callback</span></p>
+  </td>
+  <td width=126 valign=top style='width:1.75in;border-top:none;border-left:
   none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:4.3pt 4.3pt 4.3pt 4.3pt">
-
-<span style="font-size:9.0pt">socket</span>
-
-</td>
-
-</tr>
-
-<tr>
-
-<td width="110" valign="top" style="width:110.25pt;border:solid black 1.0pt;
-  border-top:none;padding:4.3pt 4.3pt 4.3pt 4.3pt">
-
-<span style="font-size:9.0pt;line-height:115%">loadModel</span>
-
-</td>
-
-<td width="117" valign="top" style="width:117.0pt;border-top:none;border-left:
+  padding:4.3pt 4.3pt 4.3pt 4.3pt'>
+  <p class=MsoNormal style='line-height:normal'><span style='font-size:9.0pt'>socket</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=110 valign=top style='width:110.25pt;border:solid black 1.0pt;
+  border-top:none;padding:4.3pt 4.3pt 4.3pt 4.3pt'>
+  <p class=MsoNormal><span style='font-size:9.0pt;line-height:115%'>loadModel</span></p>
+  </td>
+  <td width=117 valign=top style='width:117.0pt;border-top:none;border-left:
   none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:4.3pt 4.3pt 4.3pt 4.3pt">
-
-<span style="font-size:9.0pt;line-height:115%">Gets the model for the current room</span>
-
-</td>
-
-<td width="115" valign="top" style="width:114.75pt;border-top:none;border-left:
+  padding:4.3pt 4.3pt 4.3pt 4.3pt'>
+  <p class=MsoNormal><span style='font-size:9.0pt;line-height:115%'>Gets the
+  model for the current room</span></p>
+  </td>
+  <td width=115 valign=top style='width:114.75pt;border-top:none;border-left:
   none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:4.3pt 4.3pt 4.3pt 4.3pt">
-
-<span style="font-size:9.0pt">callback</span>
-
-</td>
-
-</tr>
-
-<tr>
-
-<td width="110" valign="top" style="width:110.25pt;border:solid black 1.0pt;
-  border-top:none;padding:4.3pt 4.3pt 4.3pt 4.3pt">
-
-<span style="font-size:9.0pt;line-height:115%">loadOperationHistory</span>
-
-</td>
-
-<td width="117" valign="top" style="width:117.0pt;border-top:none;border-left:
+  padding:4.3pt 4.3pt 4.3pt 4.3pt'>
+  <p class=MsoNormal style='line-height:normal'><span style='font-size:9.0pt'>callback</span></p>
+  </td>
+  <td width=126 valign=top style='width:1.75in;border-top:none;border-left:
   none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:4.3pt 4.3pt 4.3pt 4.3pt">
-
-<span style="font-size:9.0pt;line-height:115%">Gets history of operations from the node.js server and assigns them to opHistory</span>
-
-</td>
-
-<td width="115" valign="top" style="width:114.75pt;border-top:none;border-left:
+  padding:4.3pt 4.3pt 4.3pt 4.3pt'>
+  <p class=MsoNormal style='line-height:normal'>&nbsp;</p>
+  </td>
+ </tr>
+ <tr>
+  <td width=110 valign=top style='width:110.25pt;border:solid black 1.0pt;
+  border-top:none;padding:4.3pt 4.3pt 4.3pt 4.3pt'>
+  <p class=MsoNormal><span style='font-size:9.0pt;line-height:115%'>loadOperationHistory</span></p>
+  </td>
+  <td width=117 valign=top style='width:117.0pt;border-top:none;border-left:
   none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:4.3pt 4.3pt 4.3pt 4.3pt">
-
-<span style="font-size:9.0pt;line-height:115%">callback</span>
-
-</td>
-
-</tr>
-
-<tr>
-
-<td width="110" valign="top" style="width:110.25pt;border:solid black 1.0pt;
-  border-top:none;padding:4.3pt 4.3pt 4.3pt 4.3pt">
-
-<span style="font-size:9.0pt;line-height:115%">loadUserList</span>
-
-</td>
-
-<td width="117" valign="top" style="width:117.0pt;border-top:none;border-left:
+  padding:4.3pt 4.3pt 4.3pt 4.3pt'>
+  <p class=MsoNormal><span style='font-size:9.0pt;line-height:115%'>Gets
+  history of operations from the node.js server and assigns them to opHistory</span></p>
+  <p class=MsoNormal style='line-height:normal'>&nbsp;</p>
+  </td>
+  <td width=115 valign=top style='width:114.75pt;border-top:none;border-left:
   none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:4.3pt 4.3pt 4.3pt 4.3pt">
-
-<span style="font-size:9.0pt;line-height:115%">Gets user list from the node.js server and assigns them to userList</span>
-
-</td>
-
-<td width="115" valign="top" style="width:114.75pt;border-top:none;border-left:
+  padding:4.3pt 4.3pt 4.3pt 4.3pt'>
+  <p class=MsoNormal><span style='font-size:9.0pt;line-height:115%'>callback</span></p>
+  </td>
+  <td width=126 valign=top style='width:1.75in;border-top:none;border-left:
   none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:4.3pt 4.3pt 4.3pt 4.3pt">
-
-<span style="font-size:9.0pt">callback</span>
-
-</td>
-
-</tr>
-
-<tr>
-
-<td width="110" valign="top" style="width:110.25pt;border:solid black 1.0pt;
-  border-top:none;padding:4.3pt 4.3pt 4.3pt 4.3pt">
-
-<span style="font-size:9.0pt;line-height:115%">loadChatHistory</span>
-
-</td>
-
-<td width="117" valign="top" style="width:117.0pt;border-top:none;border-left:
+  padding:4.3pt 4.3pt 4.3pt 4.3pt'>
+  <p class=MsoNormal style='line-height:normal'>&nbsp;</p>
+  </td>
+ </tr>
+ <tr>
+  <td width=110 valign=top style='width:110.25pt;border:solid black 1.0pt;
+  border-top:none;padding:4.3pt 4.3pt 4.3pt 4.3pt'>
+  <p class=MsoNormal><span style='font-size:9.0pt;line-height:115%'>loadUserList</span></p>
+  </td>
+  <td width=117 valign=top style='width:117.0pt;border-top:none;border-left:
   none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:4.3pt 4.3pt 4.3pt 4.3pt">
-
-<span style="font-size:9.0pt;line-height:115%">Gets history of chat messages from the node.js server and assigns them to chatHistory</span>
-
-</td>
-
-<td width="115" valign="top" style="width:114.75pt;border-top:none;border-left:
+  padding:4.3pt 4.3pt 4.3pt 4.3pt'>
+  <p class=MsoNormal><span style='font-size:9.0pt;line-height:115%'>Gets user
+  list from the node.js server and assigns them to userList</span></p>
+  </td>
+  <td width=115 valign=top style='width:114.75pt;border-top:none;border-left:
   none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:4.3pt 4.3pt 4.3pt 4.3pt">
-
-<span style="font-size:9.0pt">callback</span>
-
-</td>
-
-</tr>
-
-<tr>
-
-<td width="110" valign="top" style="width:110.25pt;border:solid black 1.0pt;
-  border-top:none;padding:4.3pt 4.3pt 4.3pt 4.3pt">
-
-<span style="font-size:9.0pt;line-height:115%">getNodeList</span>
-
-</td>
-
-<td width="115" valign="top" style="width:114.75pt;border-top:none;border-left:
+  padding:4.3pt 4.3pt 4.3pt 4.3pt'>
+  <p class=MsoNormal style='line-height:normal'><span style='font-size:9.0pt'>callback</span></p>
+  </td>
+  <td width=126 valign=top style='width:1.75in;border-top:none;border-left:
   none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:4.3pt 4.3pt 4.3pt 4.3pt">
-
-<span style="font-size:9.0pt">callback</span>
-
-</td>
-
-<td width="126" valign="top" style="width:1.75in;border-top:none;border-left:
+  padding:4.3pt 4.3pt 4.3pt 4.3pt'>
+  <p class=MsoNormal style='line-height:normal'>&nbsp;</p>
+  </td>
+ </tr>
+ <tr>
+  <td width=110 valign=top style='width:110.25pt;border:solid black 1.0pt;
+  border-top:none;padding:4.3pt 4.3pt 4.3pt 4.3pt'>
+  <p class=MsoNormal><span style='font-size:9.0pt;line-height:115%'>loadChatHistory</span></p>
+  </td>
+  <td width=117 valign=top style='width:117.0pt;border-top:none;border-left:
   none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:4.3pt 4.3pt 4.3pt 4.3pt">
-
-<span style="font-size:9.0pt;line-height:115%">The node list in the shared model as an object of node ids</span>
-
-</td>
-
-</tr>
-
-<tr style="height:139.0pt">
-
-<td width="110" valign="top" style="width:110.25pt;border:solid black 1.0pt;
-  border-top:none;padding:4.3pt 4.3pt 4.3pt 4.3pt;height:139.0pt">
-
-<span style="font-size:9.0pt;line-height:115%">getLayoutProperties</span>
-
-</td>
-
-<td width="115" valign="top" style="width:114.75pt;border-top:none;border-left:
+  padding:4.3pt 4.3pt 4.3pt 4.3pt'>
+  <p class=MsoNormal><span style='font-size:9.0pt;line-height:115%'>Gets
+  history of chat messages from the node.js server and assigns them to
+  chatHistory</span></p>
+  </td>
+  <td width=115 valign=top style='width:114.75pt;border-top:none;border-left:
   none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:4.3pt 4.3pt 4.3pt 4.3pt;height:139.0pt">
-
-<span style="font-size:9.0pt">callback</span>
-
-</td>
-
-<td width="126" valign="top" style="width:1.75in;border-top:none;border-left:
+  padding:4.3pt 4.3pt 4.3pt 4.3pt'>
+  <p class=MsoNormal style='line-height:normal'><span style='font-size:9.0pt'>callback</span></p>
+  </td>
+  <td width=126 valign=top style='width:1.75in;border-top:none;border-left:
   none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:4.3pt 4.3pt 4.3pt 4.3pt;height:139.0pt">
-
-<span style="font-size:9.0pt;line-height:115%">Layout properties of the shared model as an object with attributes as:</span>
-
-<span style="font-size:10.0pt;line-height:115%">{</span><span style="font-size:9.0pt;line-height:115%">name: <layout name>,</span>
-
-<span style="font-size:9.0pt;line-height:115%"> nodeRepulsion: <node repulsion value> ,</span>
-
-<span style="font-size:9.0pt;line-height:115%"> nodeOverlap:<node overlap percentage>,</span>
-
-<span style="font-size:9.0pt;line-height:115%">idealEdgeLength:<ideal edge length value>,</span>
-
-<span style="font-size:9.0pt;line-height:115%">edgeElasticity:<edge elasticity value>,</span>
-
-<span style="font-size:9.0pt;line-height:115%">nestingFactor:<nesting factor value>,</span>
-
-<span style="font-size:9.0pt;line-height:115%">gravity:<gravity value>,</span>
-
-<span style="font-size:9.0pt;line-height:115%">numIter:<number of iterations>,</span>
-
-<span style="font-size:9.0pt;line-height:115%">tile:<boolean value to tile disconnected>,</span>
-
-<span style="font-size:9.0pt;line-height:115%">animate:<boolean value>,</span>
-
-<span style="font-size:9.0pt;line-height:115%">randomize:<boolean value>}</span>
-
-</td>
-
-</tr>
-
-<tr style="height:44.0pt">
-
-<td width="110" valign="top" style="width:110.25pt;border:solid black 1.0pt;
-  border-top:none;padding:4.3pt 4.3pt 4.3pt 4.3pt;height:44.0pt">
-
-<span style="font-size:9.0pt;line-height:115%">changeName</span>
-
-</td>
-
-<td width="117" valign="top" style="width:117.0pt;border-top:none;border-left:
+  padding:4.3pt 4.3pt 4.3pt 4.3pt'>
+  <p class=MsoNormal style='line-height:normal'>&nbsp;</p>
+  </td>
+ </tr>
+ <tr>
+  <td width=110 valign=top style='width:110.25pt;border:solid black 1.0pt;
+  border-top:none;padding:4.3pt 4.3pt 4.3pt 4.3pt'>
+  <p class=MsoNormal><span style='font-size:9.0pt;line-height:115%'>getNodeList</span></p>
+  </td>
+  <td width=117 valign=top style='width:117.0pt;border-top:none;border-left:
   none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:4.3pt 4.3pt 4.3pt 4.3pt;height:44.0pt">
-
-<span style="font-size:9.0pt;line-height:115%">Sends request to the server to change agent's name</span>
-
-</td>
-
-<td width="115" valign="top" style="width:114.75pt;border-top:none;border-left:
+  padding:4.3pt 4.3pt 4.3pt 4.3pt'>
+  <p class=MsoNormal>&nbsp;</p>
+  </td>
+  <td width=115 valign=top style='width:114.75pt;border-top:none;border-left:
   none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:4.3pt 4.3pt 4.3pt 4.3pt;height:44.0pt">
-
-<span style="font-size:9.0pt">newName</span>
-
-</td>
-
-</tr>
-
-<tr>
-
-<td width="110" valign="top" style="width:110.25pt;border:solid black 1.0pt;
-  border-top:none;padding:4.3pt 4.3pt 4.3pt 4.3pt">
-
-<span style="font-size:9.0pt;line-height:115%">getNodeRequest</span>
-
-</td>
-
-<td width="117" valign="top" style="width:117.0pt;border-top:none;border-left:
+  padding:4.3pt 4.3pt 4.3pt 4.3pt'>
+  <p class=MsoNormal style='line-height:normal'><span style='font-size:9.0pt'>callback</span></p>
+  </td>
+  <td width=126 valign=top style='width:1.75in;border-top:none;border-left:
   none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:4.3pt 4.3pt 4.3pt 4.3pt">
-
-<span style="font-size:9.0pt;line-height:115%">Requests the node with <id> from the server</span>
-
-</td>
-
-<td width="115" valign="top" style="width:114.75pt;border-top:none;border-left:
+  padding:4.3pt 4.3pt 4.3pt 4.3pt'>
+  <p class=MsoNormal><span style='font-size:9.0pt;line-height:115%'>The node
+  list in the shared model as an object of node ids</span></p>
+  </td>
+ </tr>
+ <tr style='height:139.0pt'>
+  <td width=110 valign=top style='width:110.25pt;border:solid black 1.0pt;
+  border-top:none;padding:4.3pt 4.3pt 4.3pt 4.3pt;height:139.0pt'>
+  <p class=MsoNormal><span style='font-size:9.0pt;line-height:115%'>getLayoutProperties</span></p>
+  </td>
+  <td width=117 valign=top style='width:117.0pt;border-top:none;border-left:
   none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:4.3pt 4.3pt 4.3pt 4.3pt">
-
-<span style="font-size:9.0pt">id, callback</span>
-
-</td>
-
-<td width="126" valign="top" style="width:1.75in;border-top:none;border-left:
+  padding:4.3pt 4.3pt 4.3pt 4.3pt;height:139.0pt'>
+  <p class=MsoNormal>&nbsp;</p>
+  </td>
+  <td width=115 valign=top style='width:114.75pt;border-top:none;border-left:
   none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:4.3pt 4.3pt 4.3pt 4.3pt">
-
-<span style="font-size:9.0pt">Node with id</span>
-
-</td>
-
-</tr>
-
-<tr>
-
-<td width="110" valign="top" style="width:110.25pt;border:solid black 1.0pt;
-  border-top:none;padding:4.3pt 4.3pt 4.3pt 4.3pt">
-
-<span style="font-size:9.0pt;line-height:115%">getEdgeRequest</span>
-
-</td>
-
-<td width="117" valign="top" style="width:117.0pt;border-top:none;border-left:
+  padding:4.3pt 4.3pt 4.3pt 4.3pt;height:139.0pt'>
+  <p class=MsoNormal style='line-height:normal'><span style='font-size:9.0pt'>callback</span></p>
+  </td>
+  <td width=126 valign=top style='width:1.75in;border-top:none;border-left:
   none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:4.3pt 4.3pt 4.3pt 4.3pt">
-
-<span style="font-size:9.0pt;line-height:115%">Requests the edge with <id> from the server</span>
-
-</td>
-
-<td width="115" valign="top" style="width:114.75pt;border-top:none;border-left:
+  padding:4.3pt 4.3pt 4.3pt 4.3pt;height:139.0pt'>
+  <p class=MsoNormal><span style='font-size:9.0pt;line-height:115%'>Layout
+  properties of the shared model as an object with attributes as: </span></p>
+  <p class=MsoNormal><span style='font-size:10.0pt;line-height:115%'>{</span><span
+  style='font-size:9.0pt;line-height:115%'>name: &lt;layout name&gt;,</span></p>
+  <p class=MsoNormal><span style='font-size:9.0pt;line-height:115%'>&nbsp;nodeRepulsion:
+  &lt;node repulsion value&gt; ,</span></p>
+  <p class=MsoNormal><span style='font-size:9.0pt;line-height:115%'>&nbsp;nodeOverlap:&lt;node
+  overlap percentage&gt;, </span></p>
+  <p class=MsoNormal><span style='font-size:9.0pt;line-height:115%'>idealEdgeLength:&lt;ideal
+  edge length value&gt;, </span></p>
+  <p class=MsoNormal><span style='font-size:9.0pt;line-height:115%'>edgeElasticity:&lt;edge
+  elasticity value&gt;, </span></p>
+  <p class=MsoNormal><span style='font-size:9.0pt;line-height:115%'>nestingFactor:&lt;nesting
+  factor value&gt;, </span></p>
+  <p class=MsoNormal><span style='font-size:9.0pt;line-height:115%'>gravity:&lt;gravity
+  value&gt;, </span></p>
+  <p class=MsoNormal><span style='font-size:9.0pt;line-height:115%'>numIter:&lt;number
+  of iterations&gt;,</span></p>
+  <p class=MsoNormal><span style='font-size:9.0pt;line-height:115%'>tile:&lt;boolean
+  value to tile disconnected&gt;, </span></p>
+  <p class=MsoNormal><span style='font-size:9.0pt;line-height:115%'>animate:&lt;boolean
+  value&gt;, </span></p>
+  <p class=MsoNormal><span style='font-size:9.0pt;line-height:115%'>randomize:&lt;boolean
+  value&gt;} </span></p>
+  <p class=MsoNormal style='line-height:normal'>&nbsp;</p>
+  </td>
+ </tr>
+ <tr style='height:44.0pt'>
+  <td width=110 valign=top style='width:110.25pt;border:solid black 1.0pt;
+  border-top:none;padding:4.3pt 4.3pt 4.3pt 4.3pt;height:44.0pt'>
+  <p class=MsoNormal><span style='font-size:9.0pt;line-height:115%'>changeName</span></p>
+  </td>
+  <td width=117 valign=top style='width:117.0pt;border-top:none;border-left:
   none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:4.3pt 4.3pt 4.3pt 4.3pt">
-
-<span style="font-size:9.0pt">id, callback</span>
-
-</td>
-
-<td width="126" valign="top" style="width:1.75in;border-top:none;border-left:
+  padding:4.3pt 4.3pt 4.3pt 4.3pt;height:44.0pt'>
+  <p class=MsoNormal><span style='font-size:9.0pt;line-height:115%'>Sends
+  request to the server to change agent's name</span></p>
+  </td>
+  <td width=115 valign=top style='width:114.75pt;border-top:none;border-left:
   none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:4.3pt 4.3pt 4.3pt 4.3pt">
-
-<span style="font-size:9.0pt">Edge with id</span>
-
-</td>
-
-</tr>
-
-<tr>
-
-<td width="110" valign="top" style="width:110.25pt;border:solid black 1.0pt;
-  border-top:none;padding:4.3pt 4.3pt 4.3pt 4.3pt">
-
-<span style="font-size:9.0pt;line-height:115%">sendMessage</span>
-
-</td>
-
-<td width="117" valign="top" style="width:117.0pt;border-top:none;border-left:
+  padding:4.3pt 4.3pt 4.3pt 4.3pt;height:44.0pt'>
+  <p class=MsoNormal style='line-height:normal'><span style='font-size:9.0pt'>newName</span></p>
+  </td>
+  <td width=126 valign=top style='width:1.75in;border-top:none;border-left:
   none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:4.3pt 4.3pt 4.3pt 4.3pt">
-
-<span style="font-size:9.0pt;line-height:115%">Sends chat message <comments> as a string to <targetArr> as an array of targeted user ids [{id: <id1>},..., {id: <idn>}]</span>
-
-</td>
-
-<td width="115" valign="top" style="width:114.75pt;border-top:none;border-left:
+  padding:4.3pt 4.3pt 4.3pt 4.3pt;height:44.0pt'>
+  <p class=MsoNormal style='line-height:normal'>&nbsp;</p>
+  </td>
+ </tr>
+ <tr>
+  <td width=110 valign=top style='width:110.25pt;border:solid black 1.0pt;
+  border-top:none;padding:4.3pt 4.3pt 4.3pt 4.3pt'>
+  <p class=MsoNormal><span style='font-size:9.0pt;line-height:115%'>getNodeRequest</span></p>
+  </td>
+  <td width=117 valign=top style='width:117.0pt;border-top:none;border-left:
   none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:4.3pt 4.3pt 4.3pt 4.3pt">
-
-<span style="font-size:9.0pt">comment, targetArr, callback</span>
-
-</td>
-
-</tr>
-
-<tr>
-
-<td width="110" valign="top" style="width:110.25pt;border:solid black 1.0pt;
-  border-top:none;padding:4.3pt 4.3pt 4.3pt 4.3pt">
-
-<span style="font-size:9.0pt;line-height:115%">listen</span>
-
-</td>
-
-<td width="117" valign="top" style="width:117.0pt;border-top:none;border-left:
+  padding:4.3pt 4.3pt 4.3pt 4.3pt'>
+  <p class=MsoNormal><span style='font-size:9.0pt;line-height:115%'>Requests
+  the node with &lt;id&gt; from the server</span></p>
+  </td>
+  <td width=115 valign=top style='width:114.75pt;border-top:none;border-left:
   none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:4.3pt 4.3pt 4.3pt 4.3pt">
-
-<span style="font-size:9.0pt;line-height:115%">Socket listener for server requests. Can get “operation”, “message”, “userList” or “imageFile” from the server.</span>
-
-</td>
-
-<td width="115" valign="top" style="width:114.75pt;border-top:none;border-left:
+  padding:4.3pt 4.3pt 4.3pt 4.3pt'>
+  <p class=MsoNormal style='line-height:normal'><span style='font-size:9.0pt'>id,
+  callback</span></p>
+  </td>
+  <td width=126 valign=top style='width:1.75in;border-top:none;border-left:
   none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:4.3pt 4.3pt 4.3pt 4.3pt">
-
-<span style="font-size:9.0pt">callback</span>
-
-</td>
-
-</tr>
-
-<tr style="height:62.0pt">
-
-<td width="110" valign="top" style="width:110.25pt;border:solid black 1.0pt;
-  border-top:none;padding:4.3pt 4.3pt 4.3pt 4.3pt;height:62.0pt">
-
-<span style="font-size:9.0pt;line-height:115%">sendRequest</span>
-
-</td>
-
-<td width="117" valign="top" style="width:117.0pt;border-top:none;border-left:
+  padding:4.3pt 4.3pt 4.3pt 4.3pt'>
+  <p class=MsoNormal style='line-height:normal'><span style='font-size:9.0pt'>Node
+  with id</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=110 valign=top style='width:110.25pt;border:solid black 1.0pt;
+  border-top:none;padding:4.3pt 4.3pt 4.3pt 4.3pt'>
+  <p class=MsoNormal><span style='font-size:9.0pt;line-height:115%'>getEdgeRequest</span></p>
+  </td>
+  <td width=117 valign=top style='width:117.0pt;border-top:none;border-left:
   none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:4.3pt 4.3pt 4.3pt 4.3pt;height:62.0pt">
-
-<span style="font-size:9.0pt;line-height:115%">Sends an operation request to the node.js server.  Model update operations are done using this method.</span>
-
-</td>
-
-<td width="115" valign="top" style="width:114.75pt;border-top:none;border-left:
+  padding:4.3pt 4.3pt 4.3pt 4.3pt'>
+  <p class=MsoNormal><span style='font-size:9.0pt;line-height:115%'>Requests
+  the edge with &lt;id&gt; from the server</span></p>
+  </td>
+  <td width=115 valign=top style='width:114.75pt;border-top:none;border-left:
   none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:4.3pt 4.3pt 4.3pt 4.3pt;height:62.0pt">
-
-[<span style="font-size:9.0pt;color:#1155CC">reqName, param</span>](#_nhfdym5d0wpf)
-
-</td>
-
-</tr>
-
-</tbody>
-
+  padding:4.3pt 4.3pt 4.3pt 4.3pt'>
+  <p class=MsoNormal style='line-height:normal'><span style='font-size:9.0pt'>id,
+  callback</span></p>
+  </td>
+  <td width=126 valign=top style='width:1.75in;border-top:none;border-left:
+  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
+  padding:4.3pt 4.3pt 4.3pt 4.3pt'>
+  <p class=MsoNormal style='line-height:normal'><span style='font-size:9.0pt'>Edge
+  with id</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=110 valign=top style='width:110.25pt;border:solid black 1.0pt;
+  border-top:none;padding:4.3pt 4.3pt 4.3pt 4.3pt'>
+  <p class=MsoNormal><span style='font-size:9.0pt;line-height:115%'>sendMessage</span></p>
+  </td>
+  <td width=117 valign=top style='width:117.0pt;border-top:none;border-left:
+  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
+  padding:4.3pt 4.3pt 4.3pt 4.3pt'>
+  <p class=MsoNormal><span style='font-size:9.0pt;line-height:115%'>Sends chat
+  message &lt;comments&gt; as a string to &lt;targetArr&gt; as an array of
+  targeted user ids [{id: &lt;id1&gt;},..., {id: &lt;idn&gt;}]</span></p>
+  </td>
+  <td width=115 valign=top style='width:114.75pt;border-top:none;border-left:
+  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
+  padding:4.3pt 4.3pt 4.3pt 4.3pt'>
+  <p class=MsoNormal style='line-height:normal'><span style='font-size:9.0pt'>comment,
+  targetArr, callback</span></p>
+  </td>
+  <td width=126 valign=top style='width:1.75in;border-top:none;border-left:
+  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
+  padding:4.3pt 4.3pt 4.3pt 4.3pt'>
+  <p class=MsoNormal style='line-height:normal'>&nbsp;</p>
+  </td>
+ </tr>
+ <tr>
+  <td width=110 valign=top style='width:110.25pt;border:solid black 1.0pt;
+  border-top:none;padding:4.3pt 4.3pt 4.3pt 4.3pt'>
+  <p class=MsoNormal><span style='font-size:9.0pt;line-height:115%'>listen</span></p>
+  </td>
+  <td width=117 valign=top style='width:117.0pt;border-top:none;border-left:
+  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
+  padding:4.3pt 4.3pt 4.3pt 4.3pt'>
+  <p class=MsoNormal><span style='font-size:9.0pt;line-height:115%'>Socket
+  listener for server requests. Can get “operation”, “message”, “userList” or
+  “imageFile” from the server.</span></p>
+  </td>
+  <td width=115 valign=top style='width:114.75pt;border-top:none;border-left:
+  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
+  padding:4.3pt 4.3pt 4.3pt 4.3pt'>
+  <p class=MsoNormal style='line-height:normal'><span style='font-size:9.0pt'>callback</span></p>
+  </td>
+  <td width=126 valign=top style='width:1.75in;border-top:none;border-left:
+  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
+  padding:4.3pt 4.3pt 4.3pt 4.3pt'>
+  <p class=MsoNormal style='line-height:normal'>&nbsp;</p>
+  </td>
+ </tr>
+ <tr style='height:62.0pt'>
+  <td width=110 valign=top style='width:110.25pt;border:solid black 1.0pt;
+  border-top:none;padding:4.3pt 4.3pt 4.3pt 4.3pt;height:62.0pt'>
+  <p class=MsoNormal><span style='font-size:9.0pt;line-height:115%'>sendRequest</span></p>
+  </td>
+  <td width=117 valign=top style='width:117.0pt;border-top:none;border-left:
+  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
+  padding:4.3pt 4.3pt 4.3pt 4.3pt;height:62.0pt'>
+  <p class=MsoNormal><span style='font-size:9.0pt;line-height:115%'>Sends an
+  operation request to the node.js server.&nbsp; Model update operations are
+  done using this method.</span></p>
+  </td>
+  <td width=115 valign=top style='width:114.75pt;border-top:none;border-left:
+  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
+  padding:4.3pt 4.3pt 4.3pt 4.3pt;height:62.0pt'>
+  <p class=MsoNormal style='line-height:normal'><a href="#_nhfdym5d0wpf"><span
+  style='font-size:9.0pt;color:#1155CC'>reqName, param</span></a></p>
+  <p class=MsoNormal style='line-height:normal'>&nbsp;</p>
+  </td>
+  <td width=126 valign=top style='width:1.75in;border-top:none;border-left:
+  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
+  padding:4.3pt 4.3pt 4.3pt 4.3pt;height:62.0pt'>
+  <p class=MsoNormal style='line-height:normal'>&nbsp;</p>
+  </td>
+ </tr>
 </table>
 
-##### <a name="_nhfdym5d0wpf"></a>sendRequest:
+<p class=MsoNormal>&nbsp;</p>
 
-<table class="a0" border="1" cellspacing="0" cellpadding="0" width="461" style="margin-left:-.75pt;border-collapse:collapse;border:none">
+<p class=MsoNormal>&nbsp;</p>
 
-<tbody>
+<h5><a name="_nhfdym5d0wpf"></a>sendRequest:</h5>
 
-<tr>
+<p class=MsoNormal style='margin-left:.5in'>&nbsp;</p>
 
-<td width="177" valign="top" style="width:177.0pt;border:solid black 1.0pt;
-  padding:5.0pt 5.0pt 5.0pt 5.0pt">
-
-**<span style="font-size:9.0pt">reqName</span>**
-
-</td>
-
-<td width="284" valign="top" style="width:284.25pt;border:solid black 1.0pt;
-  border-left:none;padding:5.0pt 5.0pt 5.0pt 5.0pt">
-
-**<span style="font-size:9.0pt">param</span>**
-
-</td>
-
-</tr>
-
-<tr>
-
-<td width="177" valign="top" style="width:177.0pt;border:solid black 1.0pt;
-  border-top:none;padding:5.0pt 5.0pt 5.0pt 5.0pt">
-
-<span style="font-size:10.0pt">“agentAddImageRequest”</span>
-
-</td>
-
-<td width="284" valign="top" style="width:284.25pt;border-top:none;border-left:
+<table class=a0 border=1 cellspacing=0 cellpadding=0 width=461
+ style='margin-left:-.75pt;border-collapse:collapse;border:none'>
+ <tr>
+  <td width=177 valign=top style='width:177.0pt;border:solid black 1.0pt;
+  padding:5.0pt 5.0pt 5.0pt 5.0pt'>
+  <p class=MsoNormal style='line-height:normal'><b><span style='font-size:9.0pt'>reqName</span></b></p>
+  </td>
+  <td width=284 valign=top style='width:284.25pt;border:solid black 1.0pt;
+  border-left:none;padding:5.0pt 5.0pt 5.0pt 5.0pt'>
+  <p class=MsoNormal style='line-height:normal'><b><span style='font-size:9.0pt'>param</span></b></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=177 valign=top style='width:177.0pt;border:solid black 1.0pt;
+  border-top:none;padding:5.0pt 5.0pt 5.0pt 5.0pt'>
+  <p class=MsoNormal style='line-height:normal'><span style='font-size:10.0pt'>“agentAddImageRequest”</span></p>
+  </td>
+  <td width=284 valign=top style='width:284.25pt;border-top:none;border-left:
   none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:5.0pt 5.0pt 5.0pt 5.0pt">
-
-<span style="font-size:10.0pt;line-height:115%">{img: <image file>,</span>
-
-<span style="font-size:10.0pt;line-height:115%">filePath: <path of image file> }</span>
-
-</td>
-
-</tr>
-
-<tr>
-
-<td width="177" valign="top" style="width:177.0pt;border:solid black 1.0pt;
-  border-top:none;padding:5.0pt 5.0pt 5.0pt 5.0pt">
-
-<span style="font-size:10.0pt;line-height:115%">"agentSetLayoutProperties"</span>
-
-</td>
-
-<td width="284" valign="top" style="width:284.25pt;border-top:none;border-left:
+  padding:5.0pt 5.0pt 5.0pt 5.0pt'>
+  <p class=MsoNormal><span style='font-size:10.0pt;line-height:115%'>{img:
+  &lt;image file&gt;, </span></p>
+  <p class=MsoNormal><span style='font-size:10.0pt;line-height:115%'>filePath:
+  &lt;path of image file&gt; } </span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=177 valign=top style='width:177.0pt;border:solid black 1.0pt;
+  border-top:none;padding:5.0pt 5.0pt 5.0pt 5.0pt'>
+  <p class=MsoNormal><span style='font-size:10.0pt;line-height:115%'>&quot;agentSetLayoutProperties&quot;</span></p>
+  </td>
+  <td width=284 valign=top style='width:284.25pt;border-top:none;border-left:
   none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:5.0pt 5.0pt 5.0pt 5.0pt">
-
-<span style="font-size:10.0pt;line-height:115%">{name: <layout name>,</span>
-
-<span style="font-size:10.0pt;line-height:115%"> nodeRepulsion: <node repulsion value> ,</span>
-
-<span style="font-size:10.0pt;line-height:115%"> nodeOverlap:<node overlap percentage>,</span>
-
-<span style="font-size:10.0pt;line-height:115%">idealEdgeLength:<ideal edge length value>,</span>
-
-<span style="font-size:10.0pt;line-height:115%">edgeElasticity:<edge elasticity value>,</span>
-
-<span style="font-size:10.0pt;line-height:115%">nestingFactor:<nesting factor value>,</span>
-
-<span style="font-size:10.0pt;line-height:115%">gravity:<gravity value>,</span>
-
-<span style="font-size:10.0pt;line-height:115%">numIter:<number of iterations>,</span>
-
-<span style="font-size:10.0pt;line-height:115%">tile:<boolean value to tile disconnected>,</span>
-
-<span style="font-size:10.0pt;line-height:115%">animate:<boolean value>,</span>
-
-<span style="font-size:10.0pt;line-height:115%">randomize:<boolean value>}</span>
-
-</td>
-
-</tr>
-
-<tr>
-
-<td width="177" valign="top" style="width:177.0pt;border:solid black 1.0pt;
-  border-top:none;padding:5.0pt 5.0pt 5.0pt 5.0pt">
-
-<span style="font-size:10.0pt">“agentRunLayoutRequest”</span>
-
-</td>
-
-<td width="284" valign="top" style="width:284.25pt;border-top:none;border-left:
+  padding:5.0pt 5.0pt 5.0pt 5.0pt'>
+  <p class=MsoNormal><span style='font-size:10.0pt;line-height:115%'>{name:
+  &lt;layout name&gt;,</span></p>
+  <p class=MsoNormal><span style='font-size:10.0pt;line-height:115%'>&nbsp;nodeRepulsion:
+  &lt;node repulsion value&gt; ,</span></p>
+  <p class=MsoNormal><span style='font-size:10.0pt;line-height:115%'>&nbsp;nodeOverlap:&lt;node
+  overlap percentage&gt;, </span></p>
+  <p class=MsoNormal><span style='font-size:10.0pt;line-height:115%'>idealEdgeLength:&lt;ideal
+  edge length value&gt;, </span></p>
+  <p class=MsoNormal><span style='font-size:10.0pt;line-height:115%'>edgeElasticity:&lt;edge
+  elasticity value&gt;, </span></p>
+  <p class=MsoNormal><span style='font-size:10.0pt;line-height:115%'>nestingFactor:&lt;nesting
+  factor value&gt;, </span></p>
+  <p class=MsoNormal><span style='font-size:10.0pt;line-height:115%'>gravity:&lt;gravity
+  value&gt;, </span></p>
+  <p class=MsoNormal><span style='font-size:10.0pt;line-height:115%'>numIter:&lt;number
+  of iterations&gt;,</span></p>
+  <p class=MsoNormal><span style='font-size:10.0pt;line-height:115%'>tile:&lt;boolean
+  value to tile disconnected&gt;, </span></p>
+  <p class=MsoNormal><span style='font-size:10.0pt;line-height:115%'>animate:&lt;boolean
+  value&gt;, </span></p>
+  <p class=MsoNormal><span style='font-size:10.0pt;line-height:115%'>randomize:&lt;boolean
+  value&gt;} </span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=177 valign=top style='width:177.0pt;border:solid black 1.0pt;
+  border-top:none;padding:5.0pt 5.0pt 5.0pt 5.0pt'>
+  <p class=MsoNormal style='line-height:normal'><span style='font-size:10.0pt'>“agentRunLayoutRequest”</span></p>
+  </td>
+  <td width=284 valign=top style='width:284.25pt;border-top:none;border-left:
   none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:5.0pt 5.0pt 5.0pt 5.0pt">
-
-<span style="font-size:10.0pt">-</span>
-
-</td>
-
-</tr>
-
-<tr>
-
-<td width="177" valign="top" style="width:177.0pt;border:solid black 1.0pt;
-  border-top:none;padding:5.0pt 5.0pt 5.0pt 5.0pt">
-
-<span style="font-size:10.0pt">“agentAddNodeRequest”</span>
-
-</td>
-
-<td width="284" valign="top" style="width:284.25pt;border-top:none;border-left:
+  padding:5.0pt 5.0pt 5.0pt 5.0pt'>
+  <p class=MsoNormal style='line-height:normal'><span style='font-size:10.0pt'>-</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=177 valign=top style='width:177.0pt;border:solid black 1.0pt;
+  border-top:none;padding:5.0pt 5.0pt 5.0pt 5.0pt'>
+  <p class=MsoNormal style='line-height:normal'><span style='font-size:10.0pt'>“agentAddNodeRequest”</span></p>
+  </td>
+  <td width=284 valign=top style='width:284.25pt;border-top:none;border-left:
   none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:5.0pt 5.0pt 5.0pt 5.0pt">
-
-<span style="font-size:10.0pt">{x: <position x>,</span>
-
-<span style="font-size:10.0pt">y: <position y>,</span>
-
-<span style="font-size:10.0pt">sbgnclass: <sbgn class>}</span>
-
-</td>
-
-</tr>
-
-<tr>
-
-<td width="177" valign="top" style="width:177.0pt;border:solid black 1.0pt;
-  border-top:none;padding:5.0pt 5.0pt 5.0pt 5.0pt">
-
-<span style="font-size:10.0pt;line-height:115%">“agentAddEdgeRequest”</span>
-
-</td>
-
-<td width="284" valign="top" style="width:284.25pt;border-top:none;border-left:
+  padding:5.0pt 5.0pt 5.0pt 5.0pt'>
+  <p class=MsoNormal style='line-height:normal'><span style='font-size:10.0pt'>{x:
+  &lt;position x&gt;, </span></p>
+  <p class=MsoNormal style='line-height:normal'><span style='font-size:10.0pt'>y:
+  &lt;position y&gt;, </span></p>
+  <p class=MsoNormal style='line-height:normal'><span style='font-size:10.0pt'>sbgnclass:
+  &lt;sbgn class&gt;}</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=177 valign=top style='width:177.0pt;border:solid black 1.0pt;
+  border-top:none;padding:5.0pt 5.0pt 5.0pt 5.0pt'>
+  <p class=MsoNormal><span style='font-size:10.0pt;line-height:115%'>“agentAddEdgeRequest”</span></p>
+  </td>
+  <td width=284 valign=top style='width:284.25pt;border-top:none;border-left:
   none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:5.0pt 5.0pt 5.0pt 5.0pt">
-
-<span style="font-size:10.0pt;line-height:115%">{source: <source node id>,</span>
-
-<span style="font-size:10.0pt;line-height:115%">target: <target node id>,</span>
-
-<span style="font-size:10.0pt">sbgnclass: <sbgn class>}</span>
-
-</td>
-
-</tr>
-
-<tr>
-
-<td width="177" valign="top" style="width:177.0pt;border:solid black 1.0pt;
-  border-top:none;padding:5.0pt 5.0pt 5.0pt 5.0pt">
-
-<span style="font-size:10.0pt;line-height:115%">“agentChangeNodeAttributeRequest”</span>
-
-</td>
-
-<td width="284" valign="top" style="width:284.25pt;border-top:none;border-left:
+  padding:5.0pt 5.0pt 5.0pt 5.0pt'>
+  <p class=MsoNormal><span style='font-size:10.0pt;line-height:115%'>{source:
+  &lt;source node id&gt;, </span></p>
+  <p class=MsoNormal><span style='font-size:10.0pt;line-height:115%'>target:
+  &lt;target node id&gt;, </span></p>
+  <p class=MsoNormal style='line-height:normal'><span style='font-size:10.0pt'>sbgnclass:
+  &lt;sbgn class&gt;}</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=177 valign=top style='width:177.0pt;border:solid black 1.0pt;
+  border-top:none;padding:5.0pt 5.0pt 5.0pt 5.0pt'>
+  <p class=MsoNormal><span style='font-size:10.0pt;line-height:115%'>“agentChangeNodeAttributeRequest”</span></p>
+  </td>
+  <td width=284 valign=top style='width:284.25pt;border-top:none;border-left:
   none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:5.0pt 5.0pt 5.0pt 5.0pt">
-
-<span style="font-size:10.0pt;line-height:115%">{id: <node id>,</span>
-
-<span style="font-size:10.0pt;line-height:115%">attStr: <node attribute name in the model></span>
-
-<span style="font-size:10.0pt;line-height:115%">attVal:<node attribute value>}</span>
-
-<span style="font-size:10.0pt;line-height:115%">attStr takes the following values: “sbgnclass”, “highlightColor”, “backgroundColor”, “sbgnlabel”, “borderColor”, “borderWidth”, “isMultimer”, “isCloneMarker”, “parent”, “children”, “width”, “height”, “sbgnbboxW”, “sbgnbboxH”, “sbgnStatesAndInfos”</span>
-
-</td>
-
-</tr>
-
-<tr>
-
-<td width="177" valign="top" style="width:177.0pt;border:solid black 1.0pt;
-  border-top:none;padding:5.0pt 5.0pt 5.0pt 5.0pt">
-
-<span style="font-size:10.0pt;line-height:115%">“agentChangeEdgeAttributeRequest”</span>
-
-</td>
-
-<td width="284" valign="top" style="width:284.25pt;border-top:none;border-left:
+  padding:5.0pt 5.0pt 5.0pt 5.0pt'>
+  <p class=MsoNormal><span style='font-size:10.0pt;line-height:115%'>{id:
+  &lt;node id&gt;, </span></p>
+  <p class=MsoNormal><span style='font-size:10.0pt;line-height:115%'>attStr:
+  &lt;node attribute name in the model&gt;</span></p>
+  <p class=MsoNormal><span style='font-size:10.0pt;line-height:115%'>attVal:&lt;node
+  attribute value&gt;}</span></p>
+  <p class=MsoNormal>&nbsp;</p>
+  <p class=MsoNormal><span style='font-size:10.0pt;line-height:115%'>attStr
+  takes the following values: “sbgnclass”, “highlightColor”, “backgroundColor”,
+  “sbgnlabel”, “borderColor”, “borderWidth”, “isMultimer”, “isCloneMarker”,
+  “parent”, “children”, “width”, “height”, “sbgnbboxW”, “sbgnbboxH”,
+  “sbgnStatesAndInfos” </span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=177 valign=top style='width:177.0pt;border:solid black 1.0pt;
+  border-top:none;padding:5.0pt 5.0pt 5.0pt 5.0pt'>
+  <p class=MsoNormal><span style='font-size:10.0pt;line-height:115%'>“agentChangeEdgeAttributeRequest”</span></p>
+  </td>
+  <td width=284 valign=top style='width:284.25pt;border-top:none;border-left:
   none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:5.0pt 5.0pt 5.0pt 5.0pt">
-
-<span style="font-size:10.0pt;line-height:115%">{id: <node id>,</span>
-
-<span style="font-size:10.0pt;line-height:115%">attStr: <edge attribute name in the model></span>
-
-<span style="font-size:10.0pt;line-height:115%">attVal:<edge attribute value>}</span>
-
-<span style="font-size:10.0pt;line-height:115%">attStr takes the following values: “lineColor”, “highlightColor”, “width”, “cardinality” </span>
-
-</td>
-
-</tr>
-
-<tr>
-
-<td width="177" valign="top" style="width:177.0pt;border:solid black 1.0pt;
-  border-top:none;padding:5.0pt 5.0pt 5.0pt 5.0pt">
-
-<span style="font-size:10.0pt;line-height:115%">“agentMoveNodeRequest”</span>
-
-</td>
-
-<td width="284" valign="top" style="width:284.25pt;border-top:none;border-left:
+  padding:5.0pt 5.0pt 5.0pt 5.0pt'>
+  <p class=MsoNormal><span style='font-size:10.0pt;line-height:115%'>{id:
+  &lt;node id&gt;, </span></p>
+  <p class=MsoNormal><span style='font-size:10.0pt;line-height:115%'>attStr:
+  &lt;edge attribute name in the model&gt;</span></p>
+  <p class=MsoNormal><span style='font-size:10.0pt;line-height:115%'>attVal:&lt;edge
+  attribute value&gt;}</span></p>
+  <p class=MsoNormal>&nbsp;</p>
+  <p class=MsoNormal><span style='font-size:10.0pt;line-height:115%'>attStr
+  takes the following values: “lineColor”, “highlightColor”, “width”,
+  “cardinality”&nbsp; </span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=177 valign=top style='width:177.0pt;border:solid black 1.0pt;
+  border-top:none;padding:5.0pt 5.0pt 5.0pt 5.0pt'>
+  <p class=MsoNormal><span style='font-size:10.0pt;line-height:115%'>“agentMoveNodeRequest”</span></p>
+  </td>
+  <td width=284 valign=top style='width:284.25pt;border-top:none;border-left:
   none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:5.0pt 5.0pt 5.0pt 5.0pt">
-
-<span style="font-size:10.0pt;line-height:115%">{id: <node id>,</span>
-
-<span style="font-size:10.0pt;line-height:115%">pos: {x:<new position x>, y: < new position y>}}</span>
-
-</td>
-
-</tr>
-
-<tr>
-
-<td width="177" valign="top" style="width:177.0pt;border:solid black 1.0pt;
-  border-top:none;padding:5.0pt 5.0pt 5.0pt 5.0pt">
-
-<span style="font-size:10.0pt;line-height:115%">“agentAddCompoundRequest”</span>
-
-</td>
-
-<td width="284" valign="top" style="width:284.25pt;border-top:none;border-left:
+  padding:5.0pt 5.0pt 5.0pt 5.0pt'>
+  <p class=MsoNormal><span style='font-size:10.0pt;line-height:115%'>{id:
+  &lt;node id&gt;, </span></p>
+  <p class=MsoNormal><span style='font-size:10.0pt;line-height:115%'>pos:
+  {x:&lt;new position x&gt;, y: &lt; new position y&gt;}}</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=177 valign=top style='width:177.0pt;border:solid black 1.0pt;
+  border-top:none;padding:5.0pt 5.0pt 5.0pt 5.0pt'>
+  <p class=MsoNormal><span style='font-size:10.0pt;line-height:115%'>“agentAddCompoundRequest”</span></p>
+  </td>
+  <td width=284 valign=top style='width:284.25pt;border-top:none;border-left:
   none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:5.0pt 5.0pt 5.0pt 5.0pt">
-
-<span style="font-size:10.0pt;line-height:115%">{type: <compound type as “complex” or “compartment”>,</span>
-
-<span style="font-size:10.0pt;line-height:115%">selectedNodeArr: <array of node ids>}</span>
-
-</td>
-
-</tr>
-
-<tr>
-
-<td width="177" valign="top" style="width:177.0pt;border:solid black 1.0pt;
-  border-top:none;padding:5.0pt 5.0pt 5.0pt 5.0pt">
-
-<span style="font-size:10.0pt;line-height:115%">“agentMergeGraphRequest”</span>
-
-</td>
-
-<td width="284" valign="top" style="width:284.25pt;border-top:none;border-left:
+  padding:5.0pt 5.0pt 5.0pt 5.0pt'>
+  <p class=MsoNormal><span style='font-size:10.0pt;line-height:115%'>{type:
+  &lt;compound type as “complex” or “compartment”&gt;, </span></p>
+  <p class=MsoNormal><span style='font-size:10.0pt;line-height:115%'>selectedNodeArr:
+  &lt;array of node ids&gt;}</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=177 valign=top style='width:177.0pt;border:solid black 1.0pt;
+  border-top:none;padding:5.0pt 5.0pt 5.0pt 5.0pt'>
+  <p class=MsoNormal><span style='font-size:10.0pt;line-height:115%'>“agentMergeGraphRequest”</span></p>
+  </td>
+  <td width=284 valign=top style='width:284.25pt;border-top:none;border-left:
   none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:5.0pt 5.0pt 5.0pt 5.0pt">
-
-<span style="font-size:10.0pt;line-height:115%">{param: <graph to be added in sbgn format>}</span>
-
-</td>
-
-</tr>
-
-</tbody>
-
+  padding:5.0pt 5.0pt 5.0pt 5.0pt'>
+  <p class=MsoNormal><span style='font-size:10.0pt;line-height:115%'>{param:
+  &lt;graph to be added in sbgn format&gt;}</span></p>
+  </td>
+ </tr>
 </table>
 
-In order to set up and run an agent:
+<p class=MsoNormal style='margin-left:.5in'>&nbsp;</p>
 
-**_<span style="font-size:9.0pt;line-height:115%;
-color:#660E7A;background:white">agent</span> _**<span style="font-size:
-9.0pt;line-height:115%;background:white">= **<span style="color:navy">new</span> **_Agent_(<span style="color:#458383">agentName</span>, <span style="color:#458383">agentId</span>);</span>
+<p class=MsoNormal>&nbsp;</p>
 
-**<span style="font-size:9.0pt;line-height:115%;color:navy;
-background:white">var</span> **<span style="font-size:9.0pt;line-height:115%;
-color:#458383;background:white">socket</span> <span style="font-size:9.0pt;
-line-height:115%;background:white">= **_<span style="color:#660E7A">agent</span>_**.<span style="color:#7A7A43">connectToServer</span>(<span style="color:#458383">serverIp</span>, **<span style="color:navy">function</span>**(){</span>
+<p class=MsoNormal>&nbsp;</p>
 
-_<span style="font-size:9.0pt;
-line-height:115%;color:gray;background:white">//callback operations</span>_
+<p class=MsoNormal>In order to set up and run an agent:</p>
 
-<span style="font-size:9.0pt;line-height:115%;background:
-white">});</span>
+<p class=MsoNormal>&nbsp;</p>
 
-<span style="font-size:9.0pt;line-height:115%;color:#458383;
-background:white">socket</span><span style="font-size:9.0pt;line-height:115%;
-background:white">.<span style="color:#7A7A43">on</span>(**<span style="color:green">'connect'</span>**, **<span style="color:navy">function</span>**(){</span>
+<p class=MsoNormal><b><i><span style='font-size:9.0pt;line-height:115%;
+color:#660E7A;background:white'>agent </span></i></b><span style='font-size:
+9.0pt;line-height:115%;background:white'>= <b><span style='color:navy'>new </span></b><i>Agent</i>(<span
+style='color:#458383'>agentName</span>, <span style='color:#458383'>agentId</span>);</span></p>
 
-<span style="font-size:9.0pt;line-height:115%;background:
-white">   **_<span style="color:#660E7A">agent</span>_**.<span style="color:#7A7A43">loadModel</span>(**<span style="color:navy">function</span>**() {</span>
+<p class=MsoNormal><b><span style='font-size:9.0pt;line-height:115%;color:navy;
+background:white'>var </span></b><span style='font-size:9.0pt;line-height:115%;
+color:#458383;background:white'>socket </span><span style='font-size:9.0pt;
+line-height:115%;background:white'>= <b><i><span style='color:#660E7A'>agent</span></i></b>.<span
+style='color:#7A7A43'>connectToServer</span>(<span style='color:#458383'>serverIp</span>,
+<b><span style='color:navy'>function</span></b>(){</span></p>
 
-<span style="font-size:9.0pt;line-height:115%;background:
-white">       **_<span style="color:#660E7A">agent</span>_**.<span style="color:#7A7A43">loadOperationHistory</span>(**<span style="color:navy">function</span>**(){</span>
+<p class=MsoNormal style='text-indent:.5in'><i><span style='font-size:9.0pt;
+line-height:115%;color:gray;background:white'>//callback operations</span></i></p>
 
-<span style="font-size:9.0pt;line-height:115%;background:
-white">           **_<span style="color:#660E7A">agent</span>_**.<span style="color:#7A7A43">loadChatHistory</span>(**<span style="color:navy">function</span>**(){                  </span>
+<p class=MsoNormal><span style='font-size:9.0pt;line-height:115%;background:
+white'>});</span></p>
 
-_<span style="font-size:9.0pt;
-line-height:115%;color:gray;background:white">//callback operations</span>_<span style="font-size:9.0pt;line-height:115%;background:white">             </span>
+<p class=MsoNormal><span style='font-size:9.0pt;line-height:115%;color:#458383;
+background:white'>socket</span><span style='font-size:9.0pt;line-height:115%;
+background:white'>.<span style='color:#7A7A43'>on</span>(<b><span
+style='color:green'>'connect'</span></b>, <b><span style='color:navy'>function</span></b>(){</span></p>
 
-<span style="font-size:9.0pt;
-line-height:115%;background:white">});</span>
+<p class=MsoNormal><span style='font-size:9.0pt;line-height:115%;background:
+white'>&nbsp;&nbsp; <b><i><span style='color:#660E7A'>agent</span></i></b>.<span
+style='color:#7A7A43'>loadModel</span>(<b><span style='color:navy'>function</span></b>()
+{</span></p>
 
-<span style="font-size:9.0pt;line-height:115%;background:
-white">           });</span>
+<p class=MsoNormal><span style='font-size:9.0pt;line-height:115%;background:
+white'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b><i><span style='color:#660E7A'>agent</span></i></b>.<span
+style='color:#7A7A43'>loadOperationHistory</span>(<b><span style='color:navy'>function</span></b>(){</span></p>
 
-<span style="font-size:9.0pt;line-height:115%;background:
-white">       });</span>
+<p class=MsoNormal><span style='font-size:9.0pt;line-height:115%;background:
+white'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b><i><span
+style='color:#660E7A'>agent</span></i></b>.<span style='color:#7A7A43'>loadChatHistory</span>(<b><span
+style='color:navy'>function</span></b>(){&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></p>
 
-<span style="font-size:9.0pt;line-height:115%;background:
-white">   **_<span style="color:#660E7A">agent</span>_**.<span style="color:#7A7A43">listen</span>(**<span style="color:navy">function</span>**(){</span>
+<p class=MsoNormal style='text-indent:.5in'><i><span style='font-size:9.0pt;
+line-height:115%;color:gray;background:white'>//callback operations</span></i><span
+style='font-size:9.0pt;line-height:115%;background:white'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></p>
 
-<span style="font-size:9.0pt;line-height:115%;background:
-white">       <span style="color:#458383">socket</span>.<span style="color:#7A7A43">on</span>(**<span style="color:green">'operation'</span>**, **<span style="color:navy">function</span>**(data){</span>
+<p class=MsoNormal style='text-indent:.5in'><span style='font-size:9.0pt;
+line-height:115%;background:white'>});</span></p>
 
-<span style="font-size:9.0pt;line-height:115%;background:
-white">          _<span style="color:gray">//callback operations</span>_</span>
+<p class=MsoNormal><span style='font-size:9.0pt;line-height:115%;background:
+white'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; });</span></p>
 
-<span style="font-size:9.0pt;line-height:115%;background:
-white">       });</span>
+<p class=MsoNormal><span style='font-size:9.0pt;line-height:115%;background:
+white'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; });</span></p>
 
-<span style="font-size:9.0pt;line-height:115%;background:
-white">       <span style="color:#458383">socket</span>.<span style="color:#7A7A43">on</span>(**<span style="color:green">'message'</span>**, **<span style="color:navy">function</span>**(data){</span>
+<p class=MsoNormal><span style='font-size:9.0pt;line-height:115%;background:
+white'>&nbsp;&nbsp; <b><i><span style='color:#660E7A'>agent</span></i></b>.<span
+style='color:#7A7A43'>listen</span>(<b><span style='color:navy'>function</span></b>(){</span></p>
 
-<span style="font-size:9.0pt;line-height:115%;background:
-white">           _<span style="color:gray">//callback operations</span>_</span>
+<p class=MsoNormal><span style='font-size:9.0pt;line-height:115%;background:
+white'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style='color:#458383'>socket</span>.<span
+style='color:#7A7A43'>on</span>(<b><span style='color:green'>'operation'</span></b>,
+<b><span style='color:navy'>function</span></b>(data){</span></p>
 
-<span style="font-size:9.0pt;line-height:115%;background:
-white">       });</span>
+<p class=MsoNormal><span style='font-size:9.0pt;line-height:115%;background:
+white'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <i><span
+style='color:gray'>//callback operations</span></i></span></p>
 
-<span style="font-size:9.0pt;line-height:115%;background:
-white">       <span style="color:#458383">socket</span>.<span style="color:#7A7A43">on</span>(**<span style="color:green">'userList'</span>**, **<span style="color:navy">function</span>**(data){</span>
+<p class=MsoNormal><span style='font-size:9.0pt;line-height:115%;background:
+white'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; });</span></p>
 
-<span style="font-size:9.0pt;line-height:115%;background:
-white">           _<span style="color:gray">//callback operations</span>_</span>
+<p class=MsoNormal><span style='font-size:9.0pt;line-height:115%;background:
+white'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style='color:#458383'>socket</span>.<span
+style='color:#7A7A43'>on</span>(<b><span style='color:green'>'message'</span></b>,
+<b><span style='color:navy'>function</span></b>(data){</span></p>
 
-<span style="font-size:9.0pt;line-height:115%;background:
-white">       });</span>
+<p class=MsoNormal><span style='font-size:9.0pt;line-height:115%;background:
+white'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <i><span
+style='color:gray'>//callback operations</span></i></span></p>
 
-<span style="font-size:9.0pt;line-height:115%;background:
-white">       <span style="color:#458383">socket</span>.<span style="color:#7A7A43">on</span>(**<span style="color:green">'imageFile'</span>**, **<span style="color:navy">function</span>**(data){</span>
+<p class=MsoNormal><span style='font-size:9.0pt;line-height:115%;background:
+white'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; });</span></p>
 
-<span style="font-size:9.0pt;line-height:115%;background:
-white">           _<span style="color:gray">//callback operations</span>_</span>
+<p class=MsoNormal><span style='font-size:9.0pt;line-height:115%;background:
+white'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style='color:#458383'>socket</span>.<span
+style='color:#7A7A43'>on</span>(<b><span style='color:green'>'userList'</span></b>,
+<b><span style='color:navy'>function</span></b>(data){</span></p>
 
-<span style="font-size:9.0pt;line-height:115%;background:
-white">       });</span>
+<p class=MsoNormal><span style='font-size:9.0pt;line-height:115%;background:
+white'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <i><span
+style='color:gray'>//callback operations</span></i></span></p>
 
-<span style="font-size:9.0pt;line-height:115%;background:
-white">   });</span>
+<p class=MsoNormal><span style='font-size:9.0pt;line-height:115%;background:
+white'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; });</span></p>
 
-<span style="font-size:9.0pt;line-height:115%;background:
-white">});</span>
+<p class=MsoNormal><span style='font-size:9.0pt;line-height:115%;background:
+white'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style='color:#458383'>socket</span>.<span
+style='color:#7A7A43'>on</span>(<b><span style='color:green'>'imageFile'</span></b>,
+<b><span style='color:navy'>function</span></b>(data){</span></p>
 
-An example web-based agent can be found in:
+<p class=MsoNormal><span style='font-size:9.0pt;line-height:115%;background:
+white'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <i><span
+style='color:gray'>//callback operations</span></i></span></p>
 
-Sbgnviz-Collaborative-Editor/agent-interaction/computerAgent.html
+<p class=MsoNormal><span style='font-size:9.0pt;line-height:115%;background:
+white'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; });</span></p>
 
-Command History:
+<p class=MsoNormal><span style='font-size:9.0pt;line-height:115%;background:
+white'>&nbsp;&nbsp; });</span></p>
 
-JSON array as:
+<p class=MsoNormal><span style='font-size:9.0pt;line-height:115%;background:
+white'>});</span></p>
 
-[
+<p class=MsoNormal>&nbsp;</p>
 
-     {
+<p class=MsoNormal>An example web-based agent can be found in:</p>
 
-userName: //name of the user who gave the command
+<p class=MsoNormal>&nbsp;</p>
 
-name: //name of the command
+<p class=MsoNormal>Sbgnviz-Collaborative-Editor/agent-interaction/computerAgent.html</p>
 
-id: //id of the affected element
+<p class=MsoNormal>&nbsp;</p>
 
-param: //operation parameters
+<p class=MsoNormal>&nbsp;</p>
 
-            [
+<p class=MsoNormal>Command History:</p>
 
-               {
+<p class=MsoNormal>JSON array as: </p>
 
-                        x: //node position x
+<p class=MsoNormal>[</p>
 
-                        y: //node position y
+<p class=MsoNormal>&nbsp;&nbsp;&nbsp;&nbsp; {</p>
 
-                        sbgnclass: //node sbgnclass
+<p class=MsoNormal style='margin-left:.5in'>userName: //name of the user who
+gave the command</p>
 
-                        source:  //edge source
+<p class=MsoNormal style='margin-left:.5in'>name: //name of the command</p>
 
-                        target:  //edge target
+<p class=MsoNormal style='margin-left:.5in'>id: //id of the affected element</p>
 
-                        sbgnclass: //edge sbgnclass
+<p class=MsoNormal style='margin-left:.5in'>param: //operation parameters</p>
 
-               }
+<p class=MsoNormal>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [</p>
 
-]
+<p class=MsoNormal>&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;{</p>
 
-date: //date of the command
+<p class=MsoNormal>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; x:
+//node position x</p>
 
-   }
+<p class=MsoNormal>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; y:
+//node position y</p>
 
-]
+<p class=MsoNormal>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; sbgnclass:
+//node sbgnclass</p>
 
-## <a name="_3g1tmtehb2nc"></a>History Manager
+<p class=MsoNormal>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; source:&nbsp;
+//edge source</p>
 
-Each command is stored in the model as a part of command history. Command structure is as follows:
+<p class=MsoNormal>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; target:&nbsp;
+//edge target</p>
 
-opName: set | add | delete | init
+<p class=MsoNormal>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; sbgnclass:
+//edge sbgnclass</p>
 
-opTarget: node | edge | node group | edge group
+<p class=MsoNormal>&nbsp;</p>
 
-opAttr:  id| position | sbgnclass | sbgnlabel | width | height | backgroundColor |  borderColor | borderWidth | parent | isCloneMarker | isMultimer | sbgnStatesAndInfos| source| target |lineColor | lineWidth| sbgncardinality
+<p class=MsoNormal>&nbsp;</p>
 
-elId: id of the node or edge | id array of the node or edge group
+<p class=MsoNormal>&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;}
+</p>
 
-elType: “node” or “edge”
+<p class=MsoNormal style='text-indent:.5in'>]</p>
 
-param:
+<p class=MsoNormal style='text-indent:.5in'>date: //date of the command</p>
 
-prevParam:
+<p class=MsoNormal>&nbsp;&nbsp; }</p>
 
-### <a name="_cx5b1mdp3uj5"></a>JSON Model Structure
+<p class=MsoNormal>]</p>
 
-<span style="font-size:9.0pt;line-height:115%">_<span style="font:7.0pt &quot;Times New Roman&quot;">      </span> </span><span style="font-size:9.0pt;line-height:115%">users</span>
+<h2><a name="_3g1tmtehb2nc"></a>History Manager</h2>
 
-<span style="font-size:9.0pt;line-height:115%">_<span style="font:7.0pt &quot;Times New Roman&quot;">      </span> </span><span style="font-size:9.0pt;line-height:115%">name</span>
+<p class=MsoNormal>Each command is stored in the model as a part of command
+history. Command structure is as follows:</p>
 
-<span style="font-size:9.0pt;line-height:115%">_<span style="font:7.0pt &quot;Times New Roman&quot;">      </span> </span><span style="font-size:9.0pt;line-height:115%">page</span>
+<p class=MsoNormal>opName: set | add | delete | init</p>
 
-<span style="font-size:9.0pt;line-height:115%">_<span style="font:7.0pt &quot;Times New Roman&quot;">      </span> </span><span style="font-size:9.0pt;line-height:115%">list</span>
+<p class=MsoNormal>opTarget: node | edge | node group | edge group</p>
 
-<span style="font-size:9.0pt;line-height:115%">_<span style="font:7.0pt &quot;Times New Roman&quot;">      </span> </span><span style="font-size:9.0pt;line-height:115%">room</span>
+<p class=MsoNormal>opAttr:&nbsp; id| position | sbgnclass | sbgnlabel | width |
+height | backgroundColor |&nbsp; borderColor | borderWidth | parent |
+isCloneMarker | isMultimer | sbgnStatesAndInfos| source| target |lineColor |
+lineWidth| sbgncardinality</p>
 
-<span style="font-size:9.0pt;line-height:115%">_<span style="font:7.0pt &quot;Times New Roman&quot;">      </span> </span><span style="font-size:9.0pt;line-height:115%">doc</span>
+<p class=MsoNormal>elId: id of the node or edge | id array of the node or edge
+group</p>
 
-<span style="font-size:9.0pt;line-height:115%">_<span style="font:7.0pt &quot;Times New Roman&quot;">      </span> </span><span style="font-size:9.0pt;line-height:115%">userIds</span>
+<p class=MsoNormal>elType: “node” or “edge”</p>
 
-<span style="font-size:9.0pt;line-height:115%">_<span style="font:7.0pt &quot;Times New Roman&quot;">      </span> </span><span style="font-size:9.0pt;line-height:115%">history</span>
+<p class=MsoNormal>param:</p>
 
-<span style="font-size:9.0pt;line-height:115%">_<span style="font:7.0pt &quot;Times New Roman&quot;">      </span> </span><span style="font-size:9.0pt;line-height:115%">undoIndex</span>
+<p class=MsoNormal>prevParam:</p>
 
-<span style="font-size:9.0pt;line-height:115%">_<span style="font:7.0pt &quot;Times New Roman&quot;">      </span> </span><span style="font-size:9.0pt;line-height:115%">Images</span>
+<p class=MsoNormal>&nbsp;</p>
 
-<span style="font-size:9.0pt;line-height:115%">_<span style="font:7.0pt &quot;Times New Roman&quot;">      </span> </span><span style="font-size:9.0pt;line-height:115%">Context</span>
+<p class=MsoNormal>&nbsp;</p>
 
-<span style="font-size:9.0pt;line-height:115%">_<span style="font:7.0pt &quot;Times New Roman&quot;">      </span> </span><span style="font-size:9.0pt;line-height:115%">name</span>
+<h3><a name="_cx5b1mdp3uj5"></a>JSON Model Structure</h3>
 
-<span style="font-size:9.0pt;line-height:115%">_<span style="font:7.0pt &quot;Times New Roman&quot;">      </span> </span><span style="font-size:9.0pt;line-height:115%">relevance</span>
+<p class=MsoNormal style='margin-left:.5in;text-indent:-.25in'><span
+style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='font-size:9.0pt;line-height:115%'>users</span></p>
 
-<span style="font-size:9.0pt;line-height:115%">_<span style="font:7.0pt &quot;Times New Roman&quot;">      </span> </span><span style="font-size:9.0pt;line-height:115%">confidence</span>
+<p class=MsoNormal style='margin-left:1.0in;text-indent:-.25in'><span
+style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='font-size:9.0pt;line-height:115%'>name</span></p>
 
-<span style="font-size:9.0pt;line-height:115%">_<span style="font:7.0pt &quot;Times New Roman&quot;">      </span> </span><span style="font-size:9.0pt;line-height:115%">cy  //sbgn-related</span>
+<p class=MsoNormal style='margin-left:.5in;text-indent:-.25in'><span
+style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='font-size:9.0pt;line-height:115%'>page</span></p>
 
-<span style="font-size:9.0pt;line-height:115%">_<span style="font:7.0pt &quot;Times New Roman&quot;">      </span> </span><span style="font-size:9.0pt;line-height:115%">sampleInd //temporary</span>
+<p class=MsoNormal style='margin-left:1.0in;text-indent:-.25in'><span
+style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='font-size:9.0pt;line-height:115%'>list</span></p>
 
-<span style="font-size:9.0pt;line-height:115%">_<span style="font:7.0pt &quot;Times New Roman&quot;">      </span> </span><span style="font-size:9.0pt;line-height:115%">layoutProperties</span>
+<p class=MsoNormal style='margin-left:1.0in;text-indent:-.25in'><span
+style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='font-size:9.0pt;line-height:115%'>room</span></p>
 
-<span style="font-size:9.0pt;line-height:115%">_<span style="font:7.0pt &quot;Times New Roman&quot;">      </span> </span><span style="font-size:9.0pt;line-height:115%">nodes</span>
+<p class=MsoNormal style='margin-left:1.0in;text-indent:-.25in'><span
+style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='font-size:9.0pt;line-height:115%'>doc</span></p>
 
-<span style="font-size:9.0pt;line-height:115%">_<span style="font:7.0pt &quot;Times New Roman&quot;">      </span> </span><span style="font-size:9.0pt;line-height:115%">[nodeId]</span>
+<p class=MsoNormal style='margin-left:1.5in;text-indent:-.25in'><span
+style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='font-size:9.0pt;line-height:115%'>userIds</span></p>
 
-<span style="font-size:9.0pt;line-height:115%">_<span style="font:7.0pt &quot;Times New Roman&quot;">      </span> </span><span style="font-size:9.0pt;line-height:115%">id</span>
+<p class=MsoNormal style='margin-left:1.5in;text-indent:-.25in'><span
+style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='font-size:9.0pt;line-height:115%'>history</span></p>
 
-<span style="font-size:9.0pt;line-height:115%">_<span style="font:7.0pt &quot;Times New Roman&quot;">      </span> </span><span style="font-size:9.0pt;line-height:115%">addedLater //to sync. node addition</span>
+<p class=MsoNormal style='margin-left:1.5in;text-indent:-.25in'><span
+style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='font-size:9.0pt;line-height:115%'>undoIndex</span></p>
 
-<span style="font-size:9.0pt;line-height:115%">_<span style="font:7.0pt &quot;Times New Roman&quot;">      </span> </span><span style="font-size:9.0pt;line-height:115%">sbgnclass</span>
+<p class=MsoNormal style='margin-left:1.5in;text-indent:-.25in'><span
+style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='font-size:9.0pt;line-height:115%'>Images</span></p>
 
-<span style="font-size:9.0pt;line-height:115%">_<span style="font:7.0pt &quot;Times New Roman&quot;">      </span> </span><span style="font-size:9.0pt;line-height:115%">position</span>
+<p class=MsoNormal style='margin-left:1.5in;text-indent:-.25in'><span
+style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='font-size:9.0pt;line-height:115%'>Context</span></p>
 
-<span style="font-size:9.0pt;line-height:115%">_<span style="font:7.0pt &quot;Times New Roman&quot;">      </span> </span><span style="font-size:9.0pt;line-height:115%">highlightColor</span>
+<p class=MsoNormal style='margin-left:2.0in;text-indent:-.25in'><span
+style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='font-size:9.0pt;line-height:115%'>name</span></p>
 
-<span style="font-size:9.0pt;line-height:115%">_<span style="font:7.0pt &quot;Times New Roman&quot;">      </span> </span><span style="font-size:9.0pt;line-height:115%">sbgnlabel</span>
+<p class=MsoNormal style='margin-left:2.0in;text-indent:-.25in'><span
+style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='font-size:9.0pt;line-height:115%'>relevance</span></p>
 
-<span style="font-size:9.0pt;line-height:115%">_<span style="font:7.0pt &quot;Times New Roman&quot;">      </span> </span><span style="font-size:9.0pt;line-height:115%">borderColor</span>
+<p class=MsoNormal style='margin-left:2.0in;text-indent:-.25in'><span
+style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='font-size:9.0pt;line-height:115%'>confidence</span></p>
 
-<span style="font-size:9.0pt;line-height:115%">_<span style="font:7.0pt &quot;Times New Roman&quot;">      </span> </span><span style="font-size:9.0pt;line-height:115%">borderWidth</span>
+<p class=MsoNormal style='margin-left:1.5in;text-indent:-.25in'><span
+style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='font-size:9.0pt;line-height:115%'>cy&nbsp;
+//sbgn-related</span></p>
 
-<span style="font-size:9.0pt;line-height:115%">_<span style="font:7.0pt &quot;Times New Roman&quot;">      </span> </span><span style="font-size:9.0pt;line-height:115%">backgroundColor</span>
+<p class=MsoNormal style='margin-left:2.0in;text-indent:-.25in'><span
+style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='font-size:9.0pt;line-height:115%'>sampleInd
+//temporary</span></p>
 
-<span style="font-size:9.0pt;line-height:115%">_<span style="font:7.0pt &quot;Times New Roman&quot;">      </span> </span><span style="font-size:9.0pt;line-height:115%">backgroundOpacity</span>
+<p class=MsoNormal style='margin-left:2.0in;text-indent:-.25in'><span
+style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='font-size:9.0pt;line-height:115%'>layoutProperties </span></p>
 
-<span style="font-size:9.0pt;line-height:115%">_<span style="font:7.0pt &quot;Times New Roman&quot;">      </span> </span><span style="font-size:9.0pt;line-height:115%">isMultimer</span>
+<p class=MsoNormal style='margin-left:2.0in;text-indent:-.25in'><span
+style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='font-size:9.0pt;line-height:115%'>nodes</span></p>
 
-<span style="font-size:9.0pt;line-height:115%">_<span style="font:7.0pt &quot;Times New Roman&quot;">      </span> </span><span style="font-size:9.0pt;line-height:115%">isCloneMarker</span>
+<p class=MsoNormal style='margin-left:2.5in;text-indent:-.25in'><span
+style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='font-size:9.0pt;line-height:115%'>[nodeId]</span></p>
 
-<span style="font-size:9.0pt;line-height:115%">_<span style="font:7.0pt &quot;Times New Roman&quot;">      </span> </span><span style="font-size:9.0pt;line-height:115%">ports</span>
+<p class=MsoNormal style='margin-left:3.0in;text-indent:-.25in'><span
+style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='font-size:9.0pt;line-height:115%'>id</span></p>
 
-<span style="font-size:9.0pt;line-height:115%">_<span style="font:7.0pt &quot;Times New Roman&quot;">      </span> </span><span style="font-size:9.0pt;line-height:115%">width</span>
+<p class=MsoNormal style='margin-left:3.0in;text-indent:-.25in'><span
+style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='font-size:9.0pt;line-height:115%'>addedLater //to
+sync. node addition</span></p>
 
-<span style="font-size:9.0pt;line-height:115%">_<span style="font:7.0pt &quot;Times New Roman&quot;">      </span> </span><span style="font-size:9.0pt;line-height:115%">height</span>
+<p class=MsoNormal style='margin-left:3.0in;text-indent:-.25in'><span
+style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='font-size:9.0pt;line-height:115%'>sbgnclass</span></p>
 
-<span style="font-size:9.0pt;line-height:115%">_<span style="font:7.0pt &quot;Times New Roman&quot;">      </span> </span><span style="font-size:9.0pt;line-height:115%">sbgnStatesAndInfos</span>
+<p class=MsoNormal style='margin-left:3.0in;text-indent:-.25in'><span
+style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='font-size:9.0pt;line-height:115%'>position</span></p>
 
-<span style="font-size:9.0pt;line-height:115%">_<span style="font:7.0pt &quot;Times New Roman&quot;">      </span> </span><span style="font-size:9.0pt;line-height:115%">expandCollapseStatus</span>
+<p class=MsoNormal style='margin-left:3.0in;text-indent:-.25in'><span
+style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='font-size:9.0pt;line-height:115%'>highlightColor</span></p>
 
-<span style="font-size:9.0pt;line-height:115%">_<span style="font:7.0pt &quot;Times New Roman&quot;">      </span> </span><span style="font-size:9.0pt;line-height:115%">highlightStatus</span>
+<p class=MsoNormal style='margin-left:3.0in;text-indent:-.25in'><span
+style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='font-size:9.0pt;line-height:115%'>sbgnlabel</span></p>
 
-<span style="font-size:9.0pt;line-height:115%">_<span style="font:7.0pt &quot;Times New Roman&quot;">      </span> </span><span style="font-size:9.0pt;line-height:115%">visibilityStatus</span>
+<p class=MsoNormal style='margin-left:3.0in;text-indent:-.25in'><span
+style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='font-size:9.0pt;line-height:115%'>borderColor</span></p>
 
-<span style="font-size:9.0pt;line-height:115%">_<span style="font:7.0pt &quot;Times New Roman&quot;">      </span> </span><span style="font-size:9.0pt;line-height:115%">edges</span>
+<p class=MsoNormal style='margin-left:3.0in;text-indent:-.25in'><span
+style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='font-size:9.0pt;line-height:115%'>borderWidth</span></p>
 
-<span style="font-size:9.0pt;line-height:115%">_<span style="font:7.0pt &quot;Times New Roman&quot;">      </span> </span><span style="font-size:9.0pt;line-height:115%">[edgeId]</span>
+<p class=MsoNormal style='margin-left:3.0in;text-indent:-.25in'><span
+style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='font-size:9.0pt;line-height:115%'>backgroundColor</span></p>
 
-<span style="font-size:9.0pt;line-height:115%">_<span style="font:7.0pt &quot;Times New Roman&quot;">      </span> </span><span style="font-size:9.0pt;line-height:115%">id</span>
+<p class=MsoNormal style='margin-left:3.0in;text-indent:-.25in'><span
+style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='font-size:9.0pt;line-height:115%'>backgroundOpacity</span></p>
 
-<span style="font-size:9.0pt;line-height:115%">_<span style="font:7.0pt &quot;Times New Roman&quot;">      </span> </span><span style="font-size:9.0pt;line-height:115%">addedLater //to sync. edge addition</span>
+<p class=MsoNormal style='margin-left:3.0in;text-indent:-.25in'><span
+style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='font-size:9.0pt;line-height:115%'>isMultimer</span></p>
 
-<span style="font-size:9.0pt;line-height:115%">_<span style="font:7.0pt &quot;Times New Roman&quot;">      </span> </span><span style="font-size:9.0pt;line-height:115%">sbgnclass</span>
+<p class=MsoNormal style='margin-left:3.0in;text-indent:-.25in'><span
+style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='font-size:9.0pt;line-height:115%'>isCloneMarker</span></p>
 
-<span style="font-size:9.0pt;line-height:115%">_<span style="font:7.0pt &quot;Times New Roman&quot;">      </span> </span><span style="font-size:9.0pt;line-height:115%">source</span>
+<p class=MsoNormal style='margin-left:3.0in;text-indent:-.25in'><span
+style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='font-size:9.0pt;line-height:115%'>ports</span></p>
 
-<span style="font-size:9.0pt;line-height:115%">_<span style="font:7.0pt &quot;Times New Roman&quot;">      </span> </span><span style="font-size:9.0pt;line-height:115%">target</span>
+<p class=MsoNormal style='margin-left:3.0in;text-indent:-.25in'><span
+style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='font-size:9.0pt;line-height:115%'>width</span></p>
 
-<span style="font-size:9.0pt;line-height:115%">_<span style="font:7.0pt &quot;Times New Roman&quot;">      </span> </span><span style="font-size:9.0pt;line-height:115%">portsource</span>
+<p class=MsoNormal style='margin-left:3.0in;text-indent:-.25in'><span
+style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='font-size:9.0pt;line-height:115%'>height</span></p>
 
-<span style="font-size:9.0pt;line-height:115%">_<span style="font:7.0pt &quot;Times New Roman&quot;">      </span> </span><span style="font-size:9.0pt;line-height:115%">porttarget</span>
+<p class=MsoNormal style='margin-left:3.0in;text-indent:-.25in'><span
+style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='font-size:9.0pt;line-height:115%'>sbgnStatesAndInfos</span></p>
 
-<span style="font-size:9.0pt;line-height:115%">_<span style="font:7.0pt &quot;Times New Roman&quot;">      </span> </span><span style="font-size:9.0pt;line-height:115%">highlightColor</span>
+<p class=MsoNormal style='margin-left:3.0in;text-indent:-.25in'><span
+style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='font-size:9.0pt;line-height:115%'>expandCollapseStatus</span></p>
 
-<span style="font-size:9.0pt;line-height:115%">_<span style="font:7.0pt &quot;Times New Roman&quot;">      </span> </span><span style="font-size:9.0pt;line-height:115%">lineColor</span>
+<p class=MsoNormal style='margin-left:3.0in;text-indent:-.25in'><span
+style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='font-size:9.0pt;line-height:115%'>highlightStatus</span></p>
 
-<span style="font-size:9.0pt;line-height:115%">_<span style="font:7.0pt &quot;Times New Roman&quot;">      </span> </span><span style="font-size:9.0pt;line-height:115%">width</span>
+<p class=MsoNormal style='margin-left:3.0in;text-indent:-.25in'><span
+style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='font-size:9.0pt;line-height:115%'>visibilityStatus</span></p>
 
-<span style="font-size:9.0pt;line-height:115%">_<span style="font:7.0pt &quot;Times New Roman&quot;">      </span> </span><span style="font-size:9.0pt;line-height:115%">bendPointPositions</span>
+<p class=MsoNormal style='margin-left:2.0in;text-indent:-.25in'><span
+style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='font-size:9.0pt;line-height:115%'>edges</span></p>
 
-<span style="font-size:9.0pt;line-height:115%">_<span style="font:7.0pt &quot;Times New Roman&quot;">      </span> </span><span style="font-size:9.0pt;line-height:115%">highlightStatus</span>
+<p class=MsoNormal style='margin-left:2.5in;text-indent:-.25in'><span
+style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='font-size:9.0pt;line-height:115%'>[edgeId]</span></p>
 
-<span style="font-size:9.0pt;line-height:115%">_<span style="font:7.0pt &quot;Times New Roman&quot;">      </span> </span><span style="font-size:9.0pt;line-height:115%">visibilityStatus</span>
+<p class=MsoNormal style='margin-left:3.0in;text-indent:-.25in'><span
+style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='font-size:9.0pt;line-height:115%'>id</span></p>
 
-<span style="font-size:9.0pt;line-height:115%">_<span style="font:7.0pt &quot;Times New Roman&quot;">      </span> </span><span style="font-size:9.0pt;line-height:115%">sbgnCardinality</span>
+<p class=MsoNormal style='margin-left:3.0in;text-indent:-.25in'><span
+style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='font-size:9.0pt;line-height:115%'>addedLater //to
+sync. edge addition</span></p>
 
-<span style="font-size:9.0pt;line-height:115%">_<span style="font:7.0pt &quot;Times New Roman&quot;">      </span> </span><span style="font-size:9.0pt;line-height:115%">py // pysb-related</span>
+<p class=MsoNormal style='margin-left:3.0in;text-indent:-.25in'><span
+style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='font-size:9.0pt;line-height:115%'>sbgnclass</span></p>
 
-<span style="font-size:9.0pt;line-height:115%">_<span style="font:7.0pt &quot;Times New Roman&quot;">      </span> </span><span style="font-size:9.0pt;line-height:115%">//biopax-related</span>
+<p class=MsoNormal style='margin-left:3.0in;text-indent:-.25in'><span
+style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='font-size:9.0pt;line-height:115%'>source</span></p>
 
-## <a name="_obz6bh2z35gg"></a><a name="_6kwbiqf32gph"></a><a name="_w8hd3o33ow8k"></a> 
+<p class=MsoNormal style='margin-left:3.0in;text-indent:-.25in'><span
+style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='font-size:9.0pt;line-height:115%'>target</span></p>
+
+<p class=MsoNormal style='margin-left:3.0in;text-indent:-.25in'><span
+style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='font-size:9.0pt;line-height:115%'>portsource</span></p>
+
+<p class=MsoNormal style='margin-left:3.0in;text-indent:-.25in'><span
+style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='font-size:9.0pt;line-height:115%'>porttarget</span></p>
+
+<p class=MsoNormal style='margin-left:3.0in;text-indent:-.25in'><span
+style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='font-size:9.0pt;line-height:115%'>highlightColor</span></p>
+
+<p class=MsoNormal style='margin-left:3.0in;text-indent:-.25in'><span
+style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='font-size:9.0pt;line-height:115%'>lineColor</span></p>
+
+<p class=MsoNormal style='margin-left:3.0in;text-indent:-.25in'><span
+style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='font-size:9.0pt;line-height:115%'>width</span></p>
+
+<p class=MsoNormal style='margin-left:3.0in;text-indent:-.25in'><span
+style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='font-size:9.0pt;line-height:115%'>bendPointPositions</span></p>
+
+<p class=MsoNormal style='margin-left:3.0in;text-indent:-.25in'><span
+style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='font-size:9.0pt;line-height:115%'>highlightStatus</span></p>
+
+<p class=MsoNormal style='margin-left:3.0in;text-indent:-.25in'><span
+style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='font-size:9.0pt;line-height:115%'>visibilityStatus</span></p>
+
+<p class=MsoNormal style='margin-left:3.0in;text-indent:-.25in'><span
+style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='font-size:9.0pt;line-height:115%'>sbgnCardinality</span></p>
+
+<p class=MsoNormal style='margin-left:1.5in;text-indent:-.25in'><span
+style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='font-size:9.0pt;line-height:115%'>py // pysb-related</span></p>
+
+<p class=MsoNormal style='margin-left:1.5in;text-indent:-.25in'><span
+style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='font-size:9.0pt;line-height:115%'>//biopax-related</span></p>
+
+<p class=MsoNormal style='margin-left:1.0in'>&nbsp;</p>
+
+<h2><a name="_obz6bh2z35gg"></a><a name="_6kwbiqf32gph"></a><a
+name="_w8hd3o33ow8k"></a>&nbsp;</h2>
+
+<p class=MsoNormal style='line-height:normal'>&nbsp;</p>
+
+<p class=MsoNormal style='line-height:normal'>&nbsp;</p>
 
 </div>
+
+</body>
+
+</html>
