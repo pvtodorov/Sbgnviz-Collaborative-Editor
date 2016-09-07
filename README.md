@@ -128,7 +128,7 @@ string after http:<ip>:3000/ in the server address.
 
 
 | **Name**                | **Function**                                                                                                                     |      **Parameters**              |       **Returns**                                                             |
-| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ------------------------|----------------------------------------------------------------------------------------------------------------------------------|----------------------------------|------------------------------------------------------------------------------ |
 |  connectToServer        | Connects the server and returns socket.io socket                                                                                 |     url, callback                |      socket                                                                   |
 |  loadModel              | Gets the model for the current room                                                                                              |     callback                     |                                                                               |
 |  loadOperationHistory   | Gets history of operations from the node.js server and assigns them to opHistory                                                 |     callback                     |                                                                               |
