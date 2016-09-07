@@ -126,57 +126,33 @@ string after http:<ip>:3000/ in the server address.
 
 #### Methods:
 
-  ---------------------- ---------------------------------------------------------------------------------------------------------------------------------------------------- ---------------------------------- ------------------------------------------------------------------------
-  **Name**               **Function**                                                                                                                                         **Parameters**                     **Returns**
-
-  connectToServer        Connects the server and returns socket.io socket                                                                                                     url, callback                      socket
-
-  loadModel              Gets the model for the current room                                                                                                                  callback                           
-
-  loadOperationHistory   Gets history of operations from the node.js server and assigns them to opHistory                                                                     callback                           
-
-  loadUserList           Gets user list from the node.js server and assigns them to userList                                                                                  callback                           
-
-  loadChatHistory        Gets history of chat messages from the node.js server and assigns them to chatHistory                                                                callback                           
-
-  getNodeList                                                                                                                                                                 callback                           The node list in the shared model as an object of node ids
-
-  getLayoutProperties                                                                                                                                                         callback                           Layout properties of the shared model as an object with attributes as:
-                                                                                                                                                                                                                 
-                                                                                                                                                                                                                 {name: <layout name>,
-                                                                                                                                                                                                                 
-                                                                                                                                                                                                                 nodeRepulsion: <node repulsion value> ,
-                                                                                                                                                                                                                 
-                                                                                                                                                                                                                 nodeOverlap:<node overlap percentage>,
-                                                                                                                                                                                                                 
-                                                                                                                                                                                                                 idealEdgeLength:<ideal edge length value>,
-                                                                                                                                                                                                                 
-                                                                                                                                                                                                                 edgeElasticity:<edge elasticity value>,
-                                                                                                                                                                                                                 
-                                                                                                                                                                                                                 nestingFactor:<nesting factor value>,
-                                                                                                                                                                                                                 
-                                                                                                                                                                                                                 gravity:<gravity value>,
-                                                                                                                                                                                                                 
-                                                                                                                                                                                                                 numIter:<number of iterations>,
-                                                                                                                                                                                                                 
-                                                                                                                                                                                                                 tile:<boolean value to tile disconnected>,
-                                                                                                                                                                                                                 
-                                                                                                                                                                                                                 animate:<boolean value>,
-                                                                                                                                                                                                                 
-                                                                                                                                                                                                                 randomize:<boolean value>}
-
-  changeName             Sends request to the server to change agent's name                                                                                                   newName                            
-
-  getNodeRequest         Requests the node with <id> from the server                                                                                                    id, callback                       Node with id
-
-  getEdgeRequest         Requests the edge with <id> from the server                                                                                                    id, callback                       Edge with id
-
-  sendMessage            Sends chat message <comments> as a string to <targetArr> as an array of targeted user ids \[{id: <id1>},..., {id: <idn>}\]   comment, targetArr, callback       
-
-  listen                 Socket listener for server requests. Can get “operation”, “message”, “userList” or “imageFile” from the server.                                      callback                           
-
-  sendRequest            Sends an operation request to the node.js server. Model update operations are done using this method.                                                [*reqName, param*](#sendrequest)   
-  ---------------------- ---------------------------------------------------------------------------------------------------------------------------------------------------- ---------------------------------- ------------------------------------------------------------------------
+| ------------------------|----------------------------------------------------------------------------------------------------------------------------------|----------------------------------|-----------------------------------------------------------------------------|
+| **Name**                | **Function**                                                                                                                     |      **Parameters**              |       **Returns**                                                           |
+|  connectToServer        | Connects the server and returns socket.io socket                                                                                 |     url, callback                |      socket                                                                 |
+|  loadModel              | Gets the model for the current room                                                                                              |     callback                     |                                                                             |
+|  loadOperationHistory   | Gets history of operations from the node.js server and assigns them to opHistory                                                 |     callback                     |                                                                             |
+|  loadUserList           | Gets user list from the node.js server and assigns them to userList                                                              |     callback                     |                                                                             |
+|  loadChatHistory        | Gets history of chat messages from the node.js server and assigns them to chatHistory                                            |      callback                    |
+|  getNodeList            |                                                                                                                                  |      callback                    |   The node list in the shared model as an object of node ids
+|  getLayoutProperties    |                                                                                                                                  |     callback                     |  Layout properties of the shared model as an object with attributes as:
+|                                                                                                                                                            |                                  |   {name: <layout name>,
+|                                                                                                                                                            |                                  |   nodeRepulsion: <node repulsion value> ,
+|                                                                                                                                                            |                                  |   nodeOverlap:<node overlap percentage>,
+|                                                                                                                                                            |                                  |   idealEdgeLength:<ideal edge length value>,
+|                                                                                                                                                            |                                  |   edgeElasticity:<edge elasticity value>,
+|                                                                                                                                                            |                                  |   nestingFactor:<nesting factor value>,
+|                                                                                                                                                            |                                  |   gravity:<gravity value>,
+|                                                                                                                                                            |                                  |   numIter:<number of iterations>,
+|                                                                                                                                                            |                                  |     tile:<boolean value to tile disconnected>,
+|                                                                                                                                                            |                                  |   animate:<boolean value>,
+|                                                                                                                                                            |                                  |   randomize:<boolean value>}
+|  changeName             | Sends request to the server to change agent's name                                                                               |       newName                    |
+|  getNodeRequest         | Requests the node with <id> from the server                                                                                      |     id, callback                 |  Node with id
+|  getEdgeRequest         | Requests the edge with <id> from the server                                                                                      |      id, callback                |   Edge with id
+|  sendMessage            | Sends chat message <comments> as a string to <targetArr> as an array of targeted user ids \[{id: <id1>},..., {id: <idn>}\]       |    comment, targetArr, callback  |
+|  listen                 | Socket listener for server requests. Can get “operation”, “message”, “userList” or “imageFile” from the server.                  |   callback                       |
+|  sendRequest            | Sends an operation request to the node.js server. Model update operations are done using this method.                            |  [*reqName, param*](#sendrequest)|
+|-------------------------|----------------------------------------------------------------------------------------------------------------------------------|----------------------------------|--------------------------------------------------------------------------------------------
 
 ##### sendRequest:
 
