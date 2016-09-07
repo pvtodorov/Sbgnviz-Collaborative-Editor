@@ -197,13 +197,13 @@ string after http:<ip>:3000/ in the server address.
 
 In order to set up and run an agent:
 
-***agent*** = **new** *Agent*(agentName, agentId);
+* ***agent*** = **new** *Agent*(agentName, agentId);
 
-**var** socket = ***agent***.connectToServer(serverIp, **function**(){
+ * **var** socket = ***agent***.connectToServer(serverIp, **function**(){
 
-*//callback operations*
+ *  *//callback operations*
 
-});
+* });
 
 - socket.on('connect', **function**(){
    - ***agent***.loadModel(**function**() {
