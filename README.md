@@ -1,1 +1,1156 @@
-</style></head><body class="c6 c51"><div><p class="c3"><span></span></p><p class="c3"><span></span></p><p class="c3"><span></span></p><h2 class="c18 c32" id="h.y0xmlw4yqsib"><span></span></h2></div><h1 class="c18 c42" id="h.1wgjhs3i3ced"><span>SBGNViz Collaborative Editor User Guide</span></h1><p class="c18 c50"><span>The editor allows human curators and computer agents to work on the same pathway model, and communicate through text and images. On the server side, we have an application server that keeps the model, handles communication across clients, and performs operational transformation. Model visualization and editing are handled on the client side. The editor visualizes information about cellular processes and pathways in SBGN (Systems Biology Graphical Notation) format. It allows for automatic graph layout, editing and highlighting facilities. </span></p><p class="c3"><span></span></p><h2 class="c18 c42" id="h.2up5xl2gx913"><span>Installation</span></h2><p class="c18"><span>Install node.js, mongodb and redis servers first.</span></p><p class="c3"><span></span></p><p class="c18"><span class="c44 c6">Node</span><span class="c8 c6">:</span></p><p class="c3"><span class="c8 c6"></span></p><p class="c18"><span class="c8 c6">&gt;curl -sL </span><span class="c21 c34 c6"><a class="c31" href="https://www.google.com/url?q=https://deb.nodesource.com/setup_0.12&amp;sa=D&amp;ust=1465946914267000&amp;usg=AFQjCNH4tKp1hoR_giBLmDaaUeDV_QDw1w">https://deb.nodesource.com/setup_0.12</a></span><span class="c8 c6">&nbsp;| sudo -E bash -</span></p><p class="c18"><span class="c8 c6">&gt;sudo apt-get install -y nodejs</span></p><p class="c3"><span class="c8 c6"></span></p><p class="c18"><span class="c44 c6">Redis</span><span class="c8 c6">:</span></p><p class="c3"><span class="c8 c6"></span></p><p class="c18"><span class="c8 c6">&gt;sudo apt-get update</span></p><p class="c18"><span class="c8 c6">&gt;sudo apt-get install build-essential</span></p><p class="c18"><span class="c8 c6">&gt;sudo apt-get install tcl8.5</span></p><p class="c18"><span class="c8 c6">wget </span><span class="c21 c34 c6"><a class="c31" href="https://www.google.com/url?q=http://download.redis.io/releases/redis-stable.tar.gz&amp;sa=D&amp;ust=1465946914269000&amp;usg=AFQjCNE-rbqFkCvNsKXtiuNbfUvTe2JoRw">http://download.redis.io/releases/redis-stable.tar.gz</a></span></p><p class="c18"><span class="c8 c6">&gt;tar xzf redis-stable.tar.gz</span></p><p class="c18"><span class="c8 c6">&gt;cd redis-stable</span></p><p class="c18"><span class="c8 c6">&gt;make</span></p><p class="c3"><span class="c8 c6"></span></p><p class="c18"><span class="c6 c44">Mongo</span><span class="c8 c6">:</span></p><p class="c3"><span class="c8 c6"></span></p><p class="c18"><span class="c8 c6">&gt;sudo apt-key adv --keyserver hkp://</span><span class="c21 c34 c6"><a class="c31" href="https://www.google.com/url?q=http://keyserver.ubuntu.com/&amp;sa=D&amp;ust=1465946914271000&amp;usg=AFQjCNFveG8l66yfLSJzeXkUFEbT3-ddAg">keyserver.ubuntu.com:80</a></span><span class="c8 c6">&nbsp;--recv EA312927</span></p><p class="c18"><span class="c8 c6">&gt;echo &quot;deb </span><span class="c21 c34 c6"><a class="c31" href="https://www.google.com/url?q=http://repo.mongodb.org/apt/ubuntu&amp;sa=D&amp;ust=1465946914272000&amp;usg=AFQjCNHW2Hjj8m0Tfz_cTmyVtMi-ZX5ekQ">http://repo.mongodb.org/apt/ubuntu</a></span><span class="c8 c6">&nbsp;trusty/mongodb-org/3.2 multiverse&quot; | sudo tee /etc/apt/sources.list.d/mongodb-org-3.2.list</span></p><p class="c18"><span class="c8 c6">&gt;sudo apt-get update</span></p><p class="c18"><span class="c8 c6">&gt;sudo apt-get install -y mongodb-org</span></p><p class="c3"><span class="c44 c6"></span></p><p class="c18"><span class="c44 c6">If mongo does not work:</span></p><p class="c3"><span class="c8 c6"></span></p><p class="c18"><span class="c8 c6">&gt;sudo apt-get install upstart-sysv</span></p><p class="c3"><span class="c8 c6"></span></p><p class="c3"><span class="c8 c6"></span></p><p class="c18"><span class="c8 c6">Get project from github:</span></p><p class="c3"><span class="c8 c6"></span></p><p class="c18"><span class="c8 c6">&gt;git clone </span><span class="c21 c6 c34"><a class="c31" href="https://www.google.com/url?q=https://github.com/fdurupinar/Sbgnviz-Collaborative-Editor.git&amp;sa=D&amp;ust=1465946914274000&amp;usg=AFQjCNEikB-V4fCNQg3QXf7g_qIH6YVCEw">https://github.com/fdurupinar/Sbgnviz-Collaborative-Editor.git</a></span></p><p class="c18"><span class="c8 c6">&gt;cd Sbgnviz-Collaborative-Editor</span></p><p class="c18"><span class="c8 c6">&gt;sudo rm -rf node_modules</span></p><p class="c18"><span class="c8 c6">&gt;npm install</span></p><p class="c3"><span class="c6 c8"></span></p><p class="c3"><span class="c8 c6"></span></p><p class="c18"><span class="c44 c6">Run server:</span></p><p class="c3"><span class="c8 c6"></span></p><p class="c18"><span class="c8 c6">&gt;node server</span></p><p class="c3"><span></span></p><p class="c18"><span>In order to open a client:</span></p><p class="c18"><span>Enter &ldquo;http://localhost:3000&rdquo; to the address bar of your browser. </span></p><h2 class="c18 c42" id="h.lzkutpoc5320"><span>System Framework</span></h2><p class="c3"><span></span></p><p class="c18"><span style="overflow: hidden; display: inline-block; margin: 0.00px 0.00px; border: 0.00px solid #000000; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px); width: 455.50px; height: 359.87px;"><img alt="" src="images/image00.png" style="width: 455.50px; height: 359.87px; margin-left: 0.00px; margin-top: 0.00px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""></span></p><p class="c3"><span></span></p><p class="c3"><span></span></p><p class="c3"><span></span></p><p class="c3"><span></span></p><p class="c3"><span></span></p><p class="c3"><span></span></p><p class="c3"><span></span></p><p class="c3"><span></span></p><h2 class="c18 c42" id="h.55d0en95yatx"><span>Framework Details</span></h2><p class="c18"><span style="overflow: hidden; display: inline-block; margin: 0.00px 0.00px; border: 0.00px solid #000000; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px); width: 624.00px; height: 379.10px;"><img alt="" src="images/image01.png" style="width: 624.00px; height: 379.10px; margin-left: 0.00px; margin-top: 0.00px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""></span><span>&nbsp;</span></p><p class="c3"><span></span></p><p class="c3"><span></span></p><p class="c3"><span></span></p><p class="c3"><span></span></p><h3 class="c18 c42" id="h.ttz39lsxwuvx"><span>Computer Agent API</span></h3><p class="c3"><span></span></p><p class="c18"><span>Computer agents are connected to the node.js http server via websockets (socket.io.js). An agent is initialized with a </span><span class="c13">name (string) </span><span>&nbsp;and a unique </span><span class="c13">ID (string).</span></p><p class="c3"><span></span></p><p class="c18"><span class="c0">Constructor</span><span>: Agent (string name, string id)</span></p><p class="c3"><span></span></p><h4 class="c18 c42" id="h.1eu245k1egzd"><span>Public Attributes:</span></h4><p class="c3"><span></span></p><p class="c18"><span class="c0">agentId</span><span>: (string) A unique id</span></p><p class="c3"><span></span></p><p class="c18"><span class="c0">agentName</span><span>: (string) Agent name</span></p><p class="c3"><span></span></p><p class="c18"><span class="c0">colorCode</span><span>: A specific color to identify the agent operations. It should be a string in hsla format as: &ldquo;hsla(</span><span class="c13">H</span><span>, </span><span class="c13">S</span><span>, </span><span class="c13">L</span><span>%, 1)&rdquo;, where </span><span class="c13">H (integer)</span><span>, </span><span class="c13">S (float)</span><span>&nbsp;and </span><span class="c13">L (float)</span><span>&nbsp;are hue, saturation and lightness values.</span></p><p class="c3"><span></span></p><p class="c18"><span class="c0">selectedNode</span><span>: The node object on which the agent is performing operations. It has attributes such as position ={x:&lt;posX&gt;,y:&lt;posY&gt;}, width, height, borderWidth, borderHeight, backgroundColor, sbgnLabel, sbgnStatesAndInfos = {clazz:&lt;className&gt;, state = {value:&lt;stateValue&gt;,variable:&lt;stateVariable&gt;}}.</span></p><p class="c18"><span>&nbsp;</span></p><p class="c18"><span class="c0">selectedEdge</span><span>: The edge object on which the agent is performing operations. It has attributes such as cardinality, lineColor and width.</span></p><p class="c3"><span></span></p><p class="c18"><span class="c0">opHistory</span><span>: History of operations as an array of strings in the format: &ldquo;</span><span class="c13">UserName</span><span>&nbsp;(</span><span class="c13">date</span><span>):</span><span class="c13">&nbsp;Command</span><span>&rdquo;.</span></p><p class="c18"><span class="c0">chatHistory</span><span>: Chat history as an array of messages.</span></p><p class="c3"><span class="c0"></span></p><p class="c18"><span class="c0">userList</span><span>: List of connected user ids.</span></p><p class="c3"><span></span></p><h4 class="c18 c42" id="h.nt4u4u3mhl90"><span>Private Attributes:</span></h4><p class="c18"><span class="c0">room</span><span>: The document id that identifies the shared model. It is the string after http:&lt;ip&gt;:3000/ in the server address.</span></p><p class="c18"><span class="c0">socket</span><span>: The web socket between the server and agent</span></p><p class="c18"><span class="c0">pageDoc</span><span>: The document that the shared model is stored.</span></p><p class="c3"><span></span></p><h4 class="c18 c42" id="h.l0c8z5l51rt3"><span>Methods:</span></h4><p class="c3"><span></span></p><a id="t.a479165b3048e3a8701c4538bb9274ab90443c88"></a><a id="t.0"></a><table class="c49"><tbody><tr class="c14"><td class="c10" colspan="1" rowspan="1"><p class="c27 c19"><span class="c23 c0 c15">Name</span></p></td><td class="c36" colspan="1" rowspan="1"><p class="c27 c19"><span class="c23 c0 c15">Function</span></p></td><td class="c39" colspan="1" rowspan="1"><p class="c27 c19"><span class="c23 c0 c15">Parameters</span></p></td><td class="c29" colspan="1" rowspan="1"><p class="c27 c19"><span class="c23 c0 c15">Returns</span></p></td></tr><tr class="c14"><td class="c10" colspan="1" rowspan="1"><p class="c2"><span class="c4 c1">connectToServer</span></p></td><td class="c36" colspan="1" rowspan="1"><p class="c27 c19"><span class="c4 c1">Connects the server and returns socket.io socket</span></p></td><td class="c39" colspan="1" rowspan="1"><p class="c27 c19"><span class="c4 c1">url, callback</span></p></td><td class="c29" colspan="1" rowspan="1"><p class="c27 c19"><span class="c4 c1">socket</span></p></td></tr><tr class="c14"><td class="c10" colspan="1" rowspan="1"><p class="c2"><span class="c4 c1">loadModel</span></p></td><td class="c36" colspan="1" rowspan="1"><p class="c2"><span class="c4 c1">Gets the model for the current room</span></p></td><td class="c39" colspan="1" rowspan="1"><p class="c27 c19"><span class="c4 c1">callback</span></p></td><td class="c29" colspan="1" rowspan="1"><p class="c27 c28 c19"><span class="c4 c1"></span></p></td></tr><tr class="c14"><td class="c10" colspan="1" rowspan="1"><p class="c2"><span class="c4 c1">loadOperationHistory</span></p></td><td class="c36" colspan="1" rowspan="1"><p class="c2"><span class="c4 c1">Gets history of operations from the node.js server and assigns them to opHistory</span></p><p class="c27 c19 c28"><span class="c4 c1"></span></p></td><td class="c39" colspan="1" rowspan="1"><p class="c2"><span class="c4 c1">callback</span></p></td><td class="c29" colspan="1" rowspan="1"><p class="c27 c28 c19"><span class="c4 c1"></span></p></td></tr><tr class="c14"><td class="c10" colspan="1" rowspan="1"><p class="c2"><span class="c4 c1">loadUserList</span></p></td><td class="c36" colspan="1" rowspan="1"><p class="c2"><span class="c4 c1">Gets user list from the node.js server and assigns them to userList</span></p></td><td class="c39" colspan="1" rowspan="1"><p class="c27 c19"><span class="c4 c1">callback</span></p></td><td class="c29" colspan="1" rowspan="1"><p class="c27 c28 c19"><span class="c4 c1"></span></p></td></tr><tr class="c14"><td class="c10" colspan="1" rowspan="1"><p class="c2"><span class="c4 c1">loadChatHistory</span></p></td><td class="c36" colspan="1" rowspan="1"><p class="c2"><span class="c4 c1">Gets history of chat messages from the node.js server and assigns them to chatHistory</span></p></td><td class="c39" colspan="1" rowspan="1"><p class="c27 c19"><span class="c4 c1">callback</span></p></td><td class="c29" colspan="1" rowspan="1"><p class="c27 c28 c19"><span class="c4 c1"></span></p></td></tr><tr class="c14"><td class="c10" colspan="1" rowspan="1"><p class="c2"><span class="c4 c1">getNodeList</span></p></td><td class="c36" colspan="1" rowspan="1"><p class="c2 c28"><span class="c4 c1"></span></p></td><td class="c39" colspan="1" rowspan="1"><p class="c27 c19"><span class="c4 c1">callback</span></p></td><td class="c29" colspan="1" rowspan="1"><p class="c2"><span class="c4 c1">The node list in the shared model as an object of node ids</span></p></td></tr><tr class="c45"><td class="c10" colspan="1" rowspan="1"><p class="c2"><span class="c4 c1">getLayoutProperties</span></p></td><td class="c36" colspan="1" rowspan="1"><p class="c2 c28"><span class="c4 c1"></span></p></td><td class="c39" colspan="1" rowspan="1"><p class="c27 c19"><span class="c4 c1">callback</span></p></td><td class="c29" colspan="1" rowspan="1"><p class="c2"><span class="c4 c1">Layout properties of the shared model as an object with attributes as: </span></p><p class="c2"><span class="c15">{</span><span class="c4 c1">name: &lt;layout name&gt;,</span></p><p class="c2"><span class="c4 c1">&nbsp;nodeRepulsion: &lt;node repulsion value&gt; ,</span></p><p class="c2"><span class="c4 c1">&nbsp;nodeOverlap:&lt;node overlap percentage&gt;, </span></p><p class="c2"><span class="c4 c1">idealEdgeLength:&lt;ideal edge length value&gt;, </span></p><p class="c2"><span class="c4 c1">edgeElasticity:&lt;edge elasticity value&gt;, </span></p><p class="c2"><span class="c4 c1">nestingFactor:&lt;nesting factor value&gt;, </span></p><p class="c2"><span class="c4 c1">gravity:&lt;gravity value&gt;, </span></p><p class="c2"><span class="c4 c1">numIter:&lt;number of iterations&gt;,</span></p><p class="c2"><span class="c4 c1">tile:&lt;boolean value to tile disconnected&gt;, </span></p><p class="c2"><span class="c4 c1">animate:&lt;boolean value&gt;, </span></p><p class="c2"><span class="c4 c1">randomize:&lt;boolean value&gt;} </span></p><p class="c27 c28 c19"><span class="c4 c1"></span></p></td></tr><tr class="c48"><td class="c10" colspan="1" rowspan="1"><p class="c2"><span class="c4 c1">changeName</span></p></td><td class="c36" colspan="1" rowspan="1"><p class="c2"><span class="c4 c1">Sends request to the server to change agent&#39;s name</span></p></td><td class="c39" colspan="1" rowspan="1"><p class="c27 c19"><span class="c4 c1">newName</span></p></td><td class="c29" colspan="1" rowspan="1"><p class="c27 c28 c19"><span class="c4 c1"></span></p></td></tr><tr class="c14"><td class="c10" colspan="1" rowspan="1"><p class="c2"><span class="c4 c1">getNodeRequest</span></p></td><td class="c36" colspan="1" rowspan="1"><p class="c2"><span class="c4 c1">Requests the node with &lt;id&gt; from the server</span></p></td><td class="c39" colspan="1" rowspan="1"><p class="c27 c19"><span class="c4 c1">id, callback</span></p></td><td class="c29" colspan="1" rowspan="1"><p class="c19 c27"><span class="c4 c1">Node with id</span></p></td></tr><tr class="c14"><td class="c10" colspan="1" rowspan="1"><p class="c2"><span class="c4 c1">getEdgeRequest</span></p></td><td class="c36" colspan="1" rowspan="1"><p class="c2"><span class="c4 c1">Requests the edge with &lt;id&gt; from the server</span></p></td><td class="c39" colspan="1" rowspan="1"><p class="c27 c19"><span class="c4 c1">id, callback</span></p></td><td class="c29" colspan="1" rowspan="1"><p class="c27 c19"><span class="c4 c1">Edge with id</span></p></td></tr><tr class="c14"><td class="c10" colspan="1" rowspan="1"><p class="c2"><span class="c4 c1">sendMessage</span></p></td><td class="c36" colspan="1" rowspan="1"><p class="c2"><span class="c4 c1">Sends chat message &lt;comments&gt; as a string to &lt;targetArr&gt; as an array of targeted user ids [{id: &lt;id1&gt;},..., {id: &lt;idn&gt;}]</span></p></td><td class="c39" colspan="1" rowspan="1"><p class="c27 c19"><span class="c4 c1">comment, targetArr, callback</span></p></td><td class="c29" colspan="1" rowspan="1"><p class="c27 c28 c19"><span class="c4 c1"></span></p></td></tr><tr class="c14"><td class="c10" colspan="1" rowspan="1"><p class="c2"><span class="c4 c1">listen</span></p></td><td class="c36" colspan="1" rowspan="1"><p class="c2"><span class="c1 c4">Socket listener for server requests. Can get &ldquo;operation&rdquo;, &ldquo;message&rdquo;, &ldquo;userList&rdquo; or &ldquo;imageFile&rdquo; from the server.</span></p></td><td class="c39" colspan="1" rowspan="1"><p class="c27 c19"><span class="c4 c1">callback</span></p></td><td class="c29" colspan="1" rowspan="1"><p class="c27 c28 c19"><span class="c4 c1"></span></p></td></tr><tr class="c38"><td class="c10" colspan="1" rowspan="1"><p class="c2"><span class="c4 c1">sendRequest</span></p></td><td class="c36" colspan="1" rowspan="1"><p class="c2"><span class="c4 c1">Sends an operation request to the node.js server. &nbsp;Model update operations are done using this method.</span></p></td><td class="c39" colspan="1" rowspan="1"><p class="c27 c19"><span class="c1 c21"><a class="c31" href="#h.nhfdym5d0wpf">reqName, param</a></span></p><p class="c27 c28 c19"><span class="c4 c1"></span></p></td><td class="c29" colspan="1" rowspan="1"><p class="c27 c28 c19"><span class="c4 c1"></span></p></td></tr></tbody></table><p class="c3"><span></span></p><p class="c3"><span></span></p><h5 class="c18 c42" id="h.nhfdym5d0wpf"><span>sendRequest:</span></h5><p class="c3 c22"><span></span></p><a id="t.5ecfa19ea20fe9e9f35d0be094051c36548ef09b"></a><a id="t.1"></a><table class="c46"><tbody><tr class="c14"><td class="c37" colspan="1" rowspan="1"><p class="c27 c19"><span class="c0 c1 c23">reqName</span></p></td><td class="c20" colspan="1" rowspan="1"><p class="c27 c19"><span class="c23 c0 c1">param</span></p></td></tr><tr class="c14"><td class="c37" colspan="1" rowspan="1"><p class="c27 c19"><span class="c4 c15">&ldquo;agentAddImageRequest&rdquo;</span></p></td><td class="c20" colspan="1" rowspan="1"><p class="c2"><span class="c4 c15">{img: &lt;image file&gt;, </span></p><p class="c2"><span class="c4 c15">filePath: &lt;path of image file&gt; } </span></p></td></tr><tr class="c14"><td class="c37" colspan="1" rowspan="1"><p class="c2"><span class="c4 c15">&quot;agentSetLayoutProperties&quot;</span></p></td><td class="c20" colspan="1" rowspan="1"><p class="c2"><span class="c4 c15">{name: &lt;layout name&gt;,</span></p><p class="c2"><span class="c4 c15">&nbsp;nodeRepulsion: &lt;node repulsion value&gt; ,</span></p><p class="c2"><span class="c4 c15">&nbsp;nodeOverlap:&lt;node overlap percentage&gt;, </span></p><p class="c2"><span class="c4 c15">idealEdgeLength:&lt;ideal edge length value&gt;, </span></p><p class="c2"><span class="c4 c15">edgeElasticity:&lt;edge elasticity value&gt;, </span></p><p class="c2"><span class="c4 c15">nestingFactor:&lt;nesting factor value&gt;, </span></p><p class="c2"><span class="c4 c15">gravity:&lt;gravity value&gt;, </span></p><p class="c2"><span class="c4 c15">numIter:&lt;number of iterations&gt;,</span></p><p class="c2"><span class="c4 c15">tile:&lt;boolean value to tile disconnected&gt;, </span></p><p class="c2"><span class="c4 c15">animate:&lt;boolean value&gt;, </span></p><p class="c2"><span class="c4 c15">randomize:&lt;boolean value&gt;} </span></p></td></tr><tr class="c14"><td class="c37" colspan="1" rowspan="1"><p class="c27 c19"><span class="c4 c15">&ldquo;agentRunLayoutRequest&rdquo;</span></p></td><td class="c20" colspan="1" rowspan="1"><p class="c27 c19"><span class="c4 c15">-</span></p></td></tr><tr class="c14"><td class="c37" colspan="1" rowspan="1"><p class="c27 c19"><span class="c4 c15">&ldquo;agentAddNodeRequest&rdquo;</span></p></td><td class="c20" colspan="1" rowspan="1"><p class="c27 c19"><span class="c4 c15">{x: &lt;position x&gt;, </span></p><p class="c27 c19"><span class="c4 c15">y: &lt;position y&gt;, </span></p><p class="c27 c19"><span class="c4 c15">sbgnclass: &lt;sbgn class&gt;}</span></p></td></tr><tr class="c14"><td class="c37" colspan="1" rowspan="1"><p class="c2"><span class="c4 c15">&ldquo;agentAddEdgeRequest&rdquo;</span></p></td><td class="c20" colspan="1" rowspan="1"><p class="c2"><span class="c4 c15">{source: &lt;source node id&gt;, </span></p><p class="c2"><span class="c4 c15">target: &lt;target node id&gt;, </span></p><p class="c27 c19"><span class="c4 c15">sbgnclass: &lt;sbgn class&gt;}</span></p></td></tr><tr class="c14"><td class="c37" colspan="1" rowspan="1"><p class="c2"><span class="c4 c15">&ldquo;agentChangeNodeAttributeRequest&rdquo;</span></p></td><td class="c20" colspan="1" rowspan="1"><p class="c2"><span class="c4 c15">{id: &lt;node id&gt;, </span></p><p class="c2"><span class="c4 c15">attStr: &lt;node attribute name in the model&gt;</span></p><p class="c2"><span class="c4 c15">attVal:&lt;node attribute value&gt;}</span></p><p class="c2 c28"><span class="c4 c15"></span></p><p class="c2"><span class="c4 c15">attStr takes the following values: &ldquo;sbgnclass&rdquo;, &ldquo;highlightColor&rdquo;, &ldquo;backgroundColor&rdquo;, &ldquo;sbgnlabel&rdquo;, &ldquo;borderColor&rdquo;, &ldquo;borderWidth&rdquo;, &ldquo;isMultimer&rdquo;, &ldquo;isCloneMarker&rdquo;, &ldquo;parent&rdquo;, &ldquo;children&rdquo;, &ldquo;width&rdquo;, &ldquo;height&rdquo;, &ldquo;sbgnbboxW&rdquo;, &ldquo;sbgnbboxH&rdquo;, &ldquo;sbgnStatesAndInfos&rdquo; </span></p></td></tr><tr class="c14"><td class="c37" colspan="1" rowspan="1"><p class="c2"><span class="c4 c15">&ldquo;agentChangeEdgeAttributeRequest&rdquo;</span></p></td><td class="c20" colspan="1" rowspan="1"><p class="c2"><span class="c4 c15">{id: &lt;node id&gt;, </span></p><p class="c2"><span class="c4 c15">attStr: &lt;edge attribute name in the model&gt;</span></p><p class="c2"><span class="c4 c15">attVal:&lt;edge attribute value&gt;}</span></p><p class="c2 c28"><span class="c4 c15"></span></p><p class="c2"><span class="c4 c15">attStr takes the following values: &ldquo;lineColor&rdquo;, &ldquo;highlightColor&rdquo;, &ldquo;width&rdquo;, &ldquo;cardinality&rdquo; &nbsp;</span></p></td></tr><tr class="c14"><td class="c37" colspan="1" rowspan="1"><p class="c2"><span class="c4 c15">&ldquo;agentMoveNodeRequest&rdquo;</span></p></td><td class="c20" colspan="1" rowspan="1"><p class="c2"><span class="c4 c15">{id: &lt;node id&gt;, </span></p><p class="c2"><span class="c4 c15">pos: {x:&lt;new position x&gt;, y: &lt; new position y&gt;}}</span></p></td></tr><tr class="c14"><td class="c37" colspan="1" rowspan="1"><p class="c2"><span class="c4 c15">&ldquo;agentAddCompoundRequest&rdquo;</span></p></td><td class="c20" colspan="1" rowspan="1"><p class="c2"><span class="c4 c15">{type: &lt;compound type as &ldquo;complex&rdquo; or &ldquo;compartment&rdquo;&gt;, </span></p><p class="c2"><span class="c4 c15">selectedNodeArr: &lt;array of node ids&gt;}</span></p></td></tr></tbody></table><p class="c3 c22"><span></span></p><p class="c3"><span class="c17 c13 c1 c6"></span></p><p class="c3"><span class="c17 c13 c1 c6"></span></p><p class="c18"><span>In order to set up and run an agent:</span></p><p class="c3"><span></span></p><p class="c18"><span class="c30 c13 c0 c1 c6">agent </span><span class="c1 c6">= </span><span class="c11 c0 c1 c6">new </span><span class="c1 c6 c13">Agent</span><span class="c1 c6">(</span><span class="c5 c1">agentName</span><span class="c1 c6">, </span><span class="c5 c1">agentId</span><span class="c1 c6">);</span></p><p class="c18"><span class="c11 c0 c1 c6">var </span><span class="c5 c1">socket </span><span class="c1 c6">= </span><span class="c13 c0 c1 c6 c30">agent</span><span class="c1 c6">.</span><span class="c16 c1 c6">connectToServer</span><span class="c1 c6">(</span><span class="c5 c1">serverIp</span><span class="c1 c6">, </span><span class="c11 c0 c1 c6">function</span><span class="c1 c6">(){</span></p><p class="c18 c33"><span class="c17 c13 c1 c6">//callback operations</span></p><p class="c18"><span class="c1 c6">});</span></p><p class="c18"><span class="c5 c1">socket</span><span class="c1 c6">.</span><span class="c16 c1 c6">on</span><span class="c1 c6">(</span><span class="c24 c0 c1 c6">&#39;connect&#39;</span><span class="c1 c6">, </span><span class="c11 c0 c1 c6">function</span><span class="c1 c6">(){</span></p><p class="c18"><span class="c1 c6">&nbsp; &nbsp;</span><span class="c30 c13 c0 c1 c6">agent</span><span class="c1 c6">.</span><span class="c16 c1 c6">loadModel</span><span class="c1 c6">(</span><span class="c11 c0 c1 c6">function</span><span class="c1 c6">() {</span></p><p class="c18"><span class="c1 c6">&nbsp; &nbsp; &nbsp; &nbsp;</span><span class="c30 c13 c0 c1 c6">agent</span><span class="c1 c6">.</span><span class="c16 c1 c6">loadOperationHistory</span><span class="c1 c6">(</span><span class="c11 c0 c1 c6">function</span><span class="c1 c6">(){</span></p><p class="c18"><span class="c1 c6">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span><span class="c30 c13 c0 c1 c6">agent</span><span class="c1 c6">.</span><span class="c16 c1 c6">loadChatHistory</span><span class="c1 c6">(</span><span class="c11 c0 c1 c6">function</span><span class="c1 c6">(){ &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </span></p><p class="c18 c33"><span class="c13 c1 c6 c17">//callback operations</span><span class="c1 c6">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </span></p><p class="c18 c33"><span class="c1 c6">});</span></p><p class="c18"><span class="c1 c6">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;});</span></p><p class="c18"><span class="c1 c6">&nbsp; &nbsp; &nbsp; &nbsp;});</span></p><p class="c18"><span class="c1 c6">&nbsp; &nbsp;</span><span class="c30 c13 c0 c1 c6">agent</span><span class="c1 c6">.</span><span class="c16 c1 c6">listen</span><span class="c1 c6">(</span><span class="c11 c0 c1 c6">function</span><span class="c1 c6">(){</span></p><p class="c18"><span class="c1 c6">&nbsp; &nbsp; &nbsp; &nbsp;</span><span class="c5 c1">socket</span><span class="c1 c6">.</span><span class="c1 c6 c16">on</span><span class="c1 c6">(</span><span class="c24 c0 c1 c6">&#39;operation&#39;</span><span class="c1 c6">, </span><span class="c0 c1 c6 c11">function</span><span class="c1 c6">(data){</span></p><p class="c18"><span class="c1 c6">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </span><span class="c17 c13 c1 c6">//callback operations</span></p><p class="c18"><span class="c1 c6">&nbsp; &nbsp; &nbsp; &nbsp;});</span></p><p class="c18"><span class="c1 c6">&nbsp; &nbsp; &nbsp; &nbsp;</span><span class="c5 c1">socket</span><span class="c1 c6">.</span><span class="c16 c1 c6">on</span><span class="c1 c6">(</span><span class="c0 c1 c6 c24">&#39;message&#39;</span><span class="c1 c6">, </span><span class="c11 c0 c1 c6">function</span><span class="c1 c6">(data){</span></p><p class="c18"><span class="c1 c6">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span><span class="c17 c13 c1 c6">//callback operations</span></p><p class="c18"><span class="c1 c6">&nbsp; &nbsp; &nbsp; &nbsp;});</span></p><p class="c18"><span class="c1 c6">&nbsp; &nbsp; &nbsp; &nbsp;</span><span class="c1 c5">socket</span><span class="c1 c6">.</span><span class="c16 c1 c6">on</span><span class="c1 c6">(</span><span class="c24 c0 c1 c6">&#39;userList&#39;</span><span class="c1 c6">, </span><span class="c11 c0 c1 c6">function</span><span class="c1 c6">(data){</span></p><p class="c18"><span class="c1 c6">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span><span class="c17 c13 c1 c6">//callback operations</span></p><p class="c18"><span class="c1 c6">&nbsp; &nbsp; &nbsp; &nbsp;});</span></p><p class="c18"><span class="c1 c6">&nbsp; &nbsp; &nbsp; &nbsp;</span><span class="c5 c1">socket</span><span class="c1 c6">.</span><span class="c16 c1 c6">on</span><span class="c1 c6">(</span><span class="c24 c0 c1 c6">&#39;imageFile&#39;</span><span class="c1 c6">, </span><span class="c11 c0 c1 c6">function</span><span class="c1 c6">(data){</span></p><p class="c18"><span class="c1 c6">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span><span class="c17 c13 c1 c6">//callback operations</span></p><p class="c18"><span class="c1 c6">&nbsp; &nbsp; &nbsp; &nbsp;});</span></p><p class="c18"><span class="c1 c6">&nbsp; &nbsp;});</span></p><p class="c18"><span class="c1 c6">});</span></p><p class="c3"><span></span></p><p class="c18"><span>An example web-based agent can be found in:</span></p><p class="c3"><span></span></p><p class="c18"><span>Sbgnviz-Collaborative-Editor/agent-interaction/computerAgent.html</span></p><p class="c3"><span></span></p><p class="c3"><span></span></p><p class="c18"><span>Command History:</span></p><p class="c18"><span>JSON array as: </span></p><p class="c18"><span>[</span></p><p class="c18"><span>&nbsp; &nbsp; &nbsp;{</span></p><p class="c9"><span>userName: //name of the user who gave the command</span></p><p class="c9"><span>name: //name of the command</span></p><p class="c9"><span>id: //id of the affected element</span></p><p class="c9"><span>param: //operation parameters</span></p><p class="c18"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[</span></p><p class="c18"><span>&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; {</span></p><p class="c18"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x: //node position x</span></p><p class="c18"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;y: //node position y</span></p><p class="c18"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sbgnclass: //node sbgnclass</span></p><p class="c18"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;source: &nbsp;//edge source</span></p><p class="c18"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;target: &nbsp;//edge target</span></p><p class="c18"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sbgnclass: //edge sbgnclass</span></p><p class="c3"><span></span></p><p class="c3"><span></span></p><p class="c18"><span>&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; } </span></p><p class="c18 c33"><span>]</span></p><p class="c18 c33"><span>date: //date of the command</span></p><p class="c18"><span>&nbsp; &nbsp;}</span></p><p class="c18"><span>]</span></p><h2 class="c18 c42" id="h.3g1tmtehb2nc"><span>History Manager</span></h2><p class="c18"><span>Each command is stored in the model as a part of command history. Command structure is as follows:</span></p><p class="c18"><span>opName: set | add | delete | init</span></p><p class="c18"><span>opTarget: node | edge | node group | edge group</span></p><p class="c18"><span>opAttr: &nbsp;id| position | sbgnclass | sbgnlabel | width | height | backgroundColor | &nbsp;borderColor | borderWidth | parent | isCloneMarker | isMultimer | sbgnStatesAndInfos| source| target |lineColor | lineWidth| sbgncardinality</span></p><p class="c18"><span>elId: id of the node or edge | id array of the node or edge group</span></p><p class="c18"><span>elType: &ldquo;node&rdquo; or &ldquo;edge&rdquo;</span></p><p class="c18"><span>param:</span></p><p class="c18"><span>prevParam:</span></p><p class="c3"><span></span></p><p class="c3"><span></span></p><h3 class="c18 c42" id="h.cx5b1mdp3uj5"><span>JSON Model Structure</span></h3><ul class="c12 lst-kix_5fxf3kfj87n7-0 start"><li class="c9 c41"><span class="c1">users</span></li></ul><ul class="c12 lst-kix_5fxf3kfj87n7-1 start"><li class="c18 c35"><span class="c1">name</span></li></ul><ul class="c12 lst-kix_5fxf3kfj87n7-0"><li class="c9 c41"><span class="c1">page</span></li></ul><ul class="c12 lst-kix_5fxf3kfj87n7-1 start"><li class="c18 c35"><span class="c1">list</span></li><li class="c18 c35"><span class="c1">room</span></li><li class="c18 c35"><span class="c1">doc</span></li></ul><ul class="c12 lst-kix_5fxf3kfj87n7-2 start"><li class="c7"><span class="c1">userIds</span></li><li class="c7"><span class="c1">history</span></li><li class="c7"><span class="c1">undoIndex</span></li><li class="c7"><span class="c1">images</span></li><li class="c7"><span class="c1">c</span><span class="c1">y &nbsp;//sbgn-related</span></li></ul><ul class="c12 lst-kix_5fxf3kfj87n7-3 start"><li class="c40 c18"><span class="c1">sampleInd //temporary</span></li><li class="c40 c18"><span class="c1">layoutProperties </span></li><li class="c40 c18"><span class="c1">nodes</span></li></ul><ul class="c12 lst-kix_5fxf3kfj87n7-4 start"><li class="c18 c43 c41"><span class="c1">[nodeId]</span></li></ul><ul class="c12 lst-kix_5fxf3kfj87n7-5 start"><li class="c18 c26"><span class="c1">id</span></li><li class="c18 c26"><span class="c1">addedLater //to sync. node addition</span></li><li class="c18 c26"><span class="c1">sbgnclass</span></li><li class="c18 c26"><span class="c1">position</span></li><li class="c18 c26"><span class="c1">highlightColor</span></li><li class="c18 c26"><span class="c1">sbgnlabel</span></li><li class="c18 c26"><span class="c1">borderColor</span></li><li class="c18 c26"><span class="c1">borderWidth</span></li><li class="c18 c26"><span class="c1">backgroundColor</span></li><li class="c18 c26"><span class="c1">backgroundOpacity</span></li><li class="c18 c26"><span class="c1">isMultimer</span></li><li class="c18 c26"><span class="c1">isCloneMarker</span></li><li class="c18 c26"><span class="c1">ports</span></li><li class="c18 c26"><span class="c1">width</span></li><li class="c18 c26"><span class="c1">height</span></li><li class="c18 c26"><span class="c1">sbgnStatesAndInfos</span></li><li class="c18 c26"><span class="c1">expandCollapseStatus</span></li><li class="c18 c26"><span class="c1">highlightStatus</span></li><li class="c18 c26"><span class="c1">visibilityStatus</span></li></ul><ul class="c12 lst-kix_5fxf3kfj87n7-3"><li class="c18 c40"><span class="c1">edges</span></li></ul><ul class="c12 lst-kix_5fxf3kfj87n7-4 start"><li class="c18 c41 c43"><span class="c1">[edgeId]</span></li></ul><ul class="c12 lst-kix_5fxf3kfj87n7-5 start"><li class="c18 c26"><span class="c1">id</span></li><li class="c18 c26"><span class="c1">addedLater //to sync. edge addition</span></li><li class="c18 c26"><span class="c1">sbgnclass</span></li><li class="c18 c26"><span class="c1">source</span></li><li class="c18 c26"><span class="c1">target</span></li><li class="c18 c26"><span class="c1">portsource</span></li><li class="c18 c26"><span class="c1">porttarget</span></li><li class="c18 c26"><span class="c1">highlightColor</span></li><li class="c18 c26"><span class="c1">lineColor</span></li><li class="c18 c26"><span class="c1">width</span></li><li class="c18 c26"><span class="c1">bendPointPositions</span></li><li class="c18 c26"><span class="c1">highlightStatus</span></li><li class="c18 c26"><span class="c1">visibilityStatus</span></li><li class="c18 c26"><span class="c1">sbgnCardinality</span></li></ul><ul class="c12 lst-kix_5fxf3kfj87n7-2"><li class="c7"><span class="c1">py // pysb-related</span></li><li class="c7"><span class="c1">//biopax-related</span></li></ul><p class="c3 c47"><span class="c1"></span></p><h1 class="c18 c25" id="h.obz6bh2z35gg"><p class="c18 c19"><span style="overflow: hidden; display: inline-block; margin: 0.00px 0.00px; border: 0.00px solid #000000; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px); width: 623.50px; height: 583.53px;"></span></p></body></html>
+<div>
+
+<span></span>
+
+<span></span>
+
+<span></span>
+
+## <span></span>
+
+</div>
+
+# <span>SBGNViz Collaborative Editor User Guide</span>
+
+<span>The editor allows human curators and computer agents to work on the same pathway model, and communicate through text and images. On the server side, we have an application server that keeps the model, handles communication across clients, and performs operational transformation. Model visualization and editing are handled on the client side. The editor visualizes information about cellular processes and pathways in SBGN (Systems Biology Graphical Notation) format. It allows for automatic graph layout, editing and highlighting facilities.</span>
+
+<span></span>
+
+## <span>Installation</span>
+
+<span>Install node.js, mongodb and redis servers first.</span>
+
+<span></span>
+
+<span class="c14">Node</span><span class="c6">:</span>
+
+<span class="c6"></span>
+
+<span class="c6">>curl -sL</span> <span class="c39">[https://deb.nodesource.com/setup_0.12](https://www.google.com/url?q=https://deb.nodesource.com/setup_0.12&sa=D&ust=1473277272610000&usg=AFQjCNHvK51-MOEyt5XJM5ju9Xm8q9_1iA)</span><span class="c6"> | sudo -E bash -</span>
+
+<span class="c6">>sudo apt-get install -y nodejs</span>
+
+<span class="c6"></span>
+
+<span class="c14">Redis</span><span class="c6">:</span>
+
+<span class="c6"></span>
+
+<span class="c6">>sudo apt-get update</span>
+
+<span class="c6">>sudo apt-get install build-essential</span>
+
+<span class="c6">>sudo apt-get install tcl8.5</span>
+
+<span class="c6">wget</span> <span class="c39">[http://download.redis.io/releases/redis-stable.tar.gz](https://www.google.com/url?q=http://download.redis.io/releases/redis-stable.tar.gz&sa=D&ust=1473277272614000&usg=AFQjCNHuP87lkYspiCPdB4JXOsdpmw_AVw)</span>
+
+<span class="c6">>tar xzf redis-stable.tar.gz</span>
+
+<span class="c6">>cd redis-stable</span>
+
+<span class="c6">>make</span>
+
+<span class="c6"></span>
+
+<span class="c14">Mongo</span><span class="c6">:</span>
+
+<span class="c6"></span>
+
+<span class="c6">>sudo apt-key adv --keyserver hkp://</span><span class="c39">[keyserver.ubuntu.com:80](https://www.google.com/url?q=http://keyserver.ubuntu.com/&sa=D&ust=1473277272617000&usg=AFQjCNG3IFqlx2U7rG-24mbGlfK_UGeYgg)</span><span class="c6"> --recv EA312927</span>
+
+<span class="c6">>echo "deb</span> <span class="c39">[http://repo.mongodb.org/apt/ubuntu](https://www.google.com/url?q=http://repo.mongodb.org/apt/ubuntu&sa=D&ust=1473277272618000&usg=AFQjCNFgAwwqIdTGH6HUbgTZzuBYRFzS3A)</span><span class="c6"> trusty/mongodb-org/3.2 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.2.list</span>
+
+<span class="c6">>sudo apt-get update</span>
+
+<span class="c6">>sudo apt-get install -y mongodb-org</span>
+
+<span class="c14"></span>
+
+<span class="c14">If mongo does not work:</span>
+
+<span class="c6"></span>
+
+<span class="c6">>sudo apt-get install upstart-sysv</span>
+
+<span class="c6"></span>
+
+<span class="c6"></span>
+
+<span class="c6">Get project from github:</span>
+
+<span class="c6"></span>
+
+<span class="c6">>git clone</span> <span class="c39">[https://github.com/fdurupinar/Sbgnviz-Collaborative-Editor.git](https://www.google.com/url?q=https://github.com/fdurupinar/Sbgnviz-Collaborative-Editor.git&sa=D&ust=1473277272622000&usg=AFQjCNGnICkgfq6MDFNKA6YIsB_cSDmTKw)</span>
+
+<span class="c6">>cd Sbgnviz-Collaborative-Editor</span>
+
+<span class="c6">>sudo rm -rf node_modules</span>
+
+<span class="c6">>npm install</span>
+
+<span class="c6"></span>
+
+<span class="c6"></span>
+
+<span class="c14">Run server:</span>
+
+<span class="c6"></span>
+
+<span class="c6">>node server</span>
+
+<span></span>
+
+<span>In order to open a client:</span>
+
+<span>Enter “http://localhost:3000” to the address bar of your browser.</span>
+
+## <span>System Framework</span>
+
+<span></span>
+
+<span style="overflow: hidden; display: inline-block; margin: 0.00px 0.00px; border: 0.00px solid #000000; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px); width: 455.50px; height: 359.87px;">![](images/image00.png)</span>
+
+<span></span>
+
+<span></span>
+
+<span></span>
+
+<span></span>
+
+<span></span>
+
+<span></span>
+
+<span></span>
+
+<span></span>
+
+## <span>Framework Details</span>
+
+<span style="overflow: hidden; display: inline-block; margin: 0.00px 0.00px; border: 0.00px solid #000000; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px); width: 624.00px; height: 379.10px;">![](images/image02.png)</span><span> </span>
+
+<span></span>
+
+<span></span>
+
+<span></span>
+
+<span></span>
+
+### <span>Computer Agent API</span>
+
+<span></span>
+
+<span>Computer agents are connected to the node.js http server via websockets (socket.io.js). An agent is initialized with a</span> <span class="c29">name (string)</span> <span> and a unique</span> <span class="c29">ID (string).</span>
+
+<span></span>
+
+<span class="c26">Constructor</span><span>: Agent (string name, string id)</span>
+
+<span></span>
+
+#### <span>Public Attributes:</span>
+
+<span></span>
+
+<span class="c26">agentId</span><span>: (string) A unique id</span>
+
+<span></span>
+
+<span class="c26">agentName</span><span>: (string) Agent name</span>
+
+<span></span>
+
+<span class="c26">colorCode</span><span>: A specific color to identify the agent operations. It should be a string in hsla format as: “hsla(</span><span class="c29">H</span><span>,</span> <span class="c29">S</span><span>,</span> <span class="c29">L</span><span>%, 1)”, where</span> <span class="c29">H (integer)</span><span>,</span> <span class="c29">S (float)</span><span> and</span> <span class="c29">L (float)</span><span> are hue, saturation and lightness values.</span>
+
+<span></span>
+
+<span class="c26">selectedNode</span><span>: The node object on which the agent is performing operations. It has attributes such as position ={x:<posX>,y:<posY>}, width, height, borderWidth, borderHeight, backgroundColor, sbgnLabel, sbgnStatesAndInfos = {clazz:<className>, state = {value:<stateValue>,variable:<stateVariable>}}.</span>
+
+<span> </span>
+
+<span class="c26">selectedEdge</span><span>: The edge object on which the agent is performing operations. It has attributes such as cardinality, lineColor and width.</span>
+
+<span></span>
+
+<span class="c26">opHistory</span><span>: History of operations as an array of strings in the format: “</span><span class="c29">UserName</span><span> (</span><span class="c29">date</span><span>):</span><span class="c29"> Command</span><span>”.</span>
+
+<span class="c26">chatHistory</span><span>: Chat history as an array of messages.</span>
+
+<span class="c26"></span>
+
+<span class="c26">userList</span><span>: List of connected user ids.</span>
+
+<span></span>
+
+#### <span>Private Attributes:</span>
+
+<span class="c26">room</span><span>: The document id that identifies the shared model. It is the string after http:<ip>:3000/ in the server address.</span>
+
+<span class="c26">socket</span><span>: The web socket between the server and agent</span>
+
+<span class="c26">pageDoc</span><span>: The document that the shared model is stored.</span>
+
+<span></span>
+
+#### <span>Methods:</span>
+
+<span></span>
+
+<a id="t.a479165b3048e3a8701c4538bb9274ab90443c88"></a><a id="t.0"></a>
+
+<table class="c49">
+
+<tbody>
+
+<tr class="c3">
+
+<td class="c13" colspan="1" rowspan="1">
+
+<span class="c20">Name</span>
+
+</td>
+
+<td class="c8" colspan="1" rowspan="1">
+
+<span class="c20">Function</span>
+
+</td>
+
+<td class="c22" colspan="1" rowspan="1">
+
+<span class="c20">Parameters</span>
+
+</td>
+
+<td class="c38" colspan="1" rowspan="1">
+
+<span class="c20">Returns</span>
+
+</td>
+
+</tr>
+
+<tr class="c3">
+
+<td class="c13" colspan="1" rowspan="1">
+
+<span class="c7 c5">connectToServer</span>
+
+</td>
+
+<td class="c8" colspan="1" rowspan="1">
+
+<span class="c7 c5">Connects the server and returns socket.io socket</span>
+
+</td>
+
+<td class="c22" colspan="1" rowspan="1">
+
+<span class="c7 c5">url, callback</span>
+
+</td>
+
+<td class="c38" colspan="1" rowspan="1">
+
+<span class="c7 c5">socket</span>
+
+</td>
+
+</tr>
+
+<tr class="c3">
+
+<td class="c13" colspan="1" rowspan="1">
+
+<span class="c7 c5">loadModel</span>
+
+</td>
+
+<td class="c8" colspan="1" rowspan="1">
+
+<span class="c7 c5">Gets the model for the current room</span>
+
+</td>
+
+<td class="c22" colspan="1" rowspan="1">
+
+<span class="c7 c5">callback</span>
+
+</td>
+
+<td class="c38" colspan="1" rowspan="1">
+
+<span class="c7 c5"></span>
+
+</td>
+
+</tr>
+
+<tr class="c3">
+
+<td class="c13" colspan="1" rowspan="1">
+
+<span class="c7 c5">loadOperationHistory</span>
+
+</td>
+
+<td class="c8" colspan="1" rowspan="1">
+
+<span class="c7 c5">Gets history of operations from the node.js server and assigns them to opHistory</span>
+
+<span class="c7 c5"></span>
+
+</td>
+
+<td class="c22" colspan="1" rowspan="1">
+
+<span class="c7 c5">callback</span>
+
+</td>
+
+<td class="c38" colspan="1" rowspan="1">
+
+<span class="c7 c5"></span>
+
+</td>
+
+</tr>
+
+<tr class="c3">
+
+<td class="c13" colspan="1" rowspan="1">
+
+<span class="c7 c5">loadUserList</span>
+
+</td>
+
+<td class="c8" colspan="1" rowspan="1">
+
+<span class="c7 c5">Gets user list from the node.js server and assigns them to userList</span>
+
+</td>
+
+<td class="c22" colspan="1" rowspan="1">
+
+<span class="c7 c5">callback</span>
+
+</td>
+
+<td class="c38" colspan="1" rowspan="1">
+
+<span class="c7 c5"></span>
+
+</td>
+
+</tr>
+
+<tr class="c3">
+
+<td class="c13" colspan="1" rowspan="1">
+
+<span class="c7 c5">loadChatHistory</span>
+
+</td>
+
+<td class="c8" colspan="1" rowspan="1">
+
+<span class="c7 c5">Gets history of chat messages from the node.js server and assigns them to chatHistory</span>
+
+</td>
+
+<td class="c22" colspan="1" rowspan="1">
+
+<span class="c7 c5">callback</span>
+
+</td>
+
+<td class="c38" colspan="1" rowspan="1">
+
+<span class="c7 c5"></span>
+
+</td>
+
+</tr>
+
+<tr class="c3">
+
+<td class="c13" colspan="1" rowspan="1">
+
+<span class="c7 c5">getNodeList</span>
+
+</td>
+
+<td class="c8" colspan="1" rowspan="1">
+
+<span class="c7 c5"></span>
+
+</td>
+
+<td class="c22" colspan="1" rowspan="1">
+
+<span class="c7 c5">callback</span>
+
+</td>
+
+<td class="c38" colspan="1" rowspan="1">
+
+<span class="c7 c5">The node list in the shared model as an object of node ids</span>
+
+</td>
+
+</tr>
+
+<tr class="c42">
+
+<td class="c13" colspan="1" rowspan="1">
+
+<span class="c7 c5">getLayoutProperties</span>
+
+</td>
+
+<td class="c8" colspan="1" rowspan="1">
+
+<span class="c7 c5"></span>
+
+</td>
+
+<td class="c22" colspan="1" rowspan="1">
+
+<span class="c7 c5">callback</span>
+
+</td>
+
+<td class="c38" colspan="1" rowspan="1">
+
+<span class="c7 c5">Layout properties of the shared model as an object with attributes as:</span>
+
+<span class="c45">{</span><span class="c7 c5">name: <layout name>,</span>
+
+<span class="c7 c5"> nodeRepulsion: <node repulsion value> ,</span>
+
+<span class="c7 c5"> nodeOverlap:<node overlap percentage>,</span>
+
+<span class="c7 c5">idealEdgeLength:<ideal edge length value>,</span>
+
+<span class="c7 c5">edgeElasticity:<edge elasticity value>,</span>
+
+<span class="c7 c5">nestingFactor:<nesting factor value>,</span>
+
+<span class="c7 c5">gravity:<gravity value>,</span>
+
+<span class="c7 c5">numIter:<number of iterations>,</span>
+
+<span class="c7 c5">tile:<boolean value to tile disconnected>,</span>
+
+<span class="c7 c5">animate:<boolean value>,</span>
+
+<span class="c7 c5">randomize:<boolean value>}</span>
+
+<span class="c7 c5"></span>
+
+</td>
+
+</tr>
+
+<tr class="c32">
+
+<td class="c13" colspan="1" rowspan="1">
+
+<span class="c7 c5">changeName</span>
+
+</td>
+
+<td class="c8" colspan="1" rowspan="1">
+
+<span class="c7 c5">Sends request to the server to change agent's name</span>
+
+</td>
+
+<td class="c22" colspan="1" rowspan="1">
+
+<span class="c7 c5">newName</span>
+
+</td>
+
+<td class="c38" colspan="1" rowspan="1">
+
+<span class="c7 c5"></span>
+
+</td>
+
+</tr>
+
+<tr class="c3">
+
+<td class="c13" colspan="1" rowspan="1">
+
+<span class="c7 c5">getNodeRequest</span>
+
+</td>
+
+<td class="c8" colspan="1" rowspan="1">
+
+<span class="c7 c5">Requests the node with <id> from the server</span>
+
+</td>
+
+<td class="c22" colspan="1" rowspan="1">
+
+<span class="c7 c5">id, callback</span>
+
+</td>
+
+<td class="c38" colspan="1" rowspan="1">
+
+<span class="c7 c5">Node with id</span>
+
+</td>
+
+</tr>
+
+<tr class="c3">
+
+<td class="c13" colspan="1" rowspan="1">
+
+<span class="c7 c5">getEdgeRequest</span>
+
+</td>
+
+<td class="c8" colspan="1" rowspan="1">
+
+<span class="c7 c5">Requests the edge with <id> from the server</span>
+
+</td>
+
+<td class="c22" colspan="1" rowspan="1">
+
+<span class="c7 c5">id, callback</span>
+
+</td>
+
+<td class="c38" colspan="1" rowspan="1">
+
+<span class="c7 c5">Edge with id</span>
+
+</td>
+
+</tr>
+
+<tr class="c3">
+
+<td class="c13" colspan="1" rowspan="1">
+
+<span class="c7 c5">sendMessage</span>
+
+</td>
+
+<td class="c8" colspan="1" rowspan="1">
+
+<span class="c7 c5">Sends chat message <comments> as a string to <targetArr> as an array of targeted user ids [{id: <id1>},..., {id: <idn>}]</span>
+
+</td>
+
+<td class="c22" colspan="1" rowspan="1">
+
+<span class="c7 c5">comment, targetArr, callback</span>
+
+</td>
+
+<td class="c38" colspan="1" rowspan="1">
+
+<span class="c7 c5"></span>
+
+</td>
+
+</tr>
+
+<tr class="c3">
+
+<td class="c13" colspan="1" rowspan="1">
+
+<span class="c7 c5">listen</span>
+
+</td>
+
+<td class="c8" colspan="1" rowspan="1">
+
+<span class="c7 c5">Socket listener for server requests. Can get “operation”, “message”, “userList” or “imageFile” from the server.</span>
+
+</td>
+
+<td class="c22" colspan="1" rowspan="1">
+
+<span class="c5 c7">callback</span>
+
+</td>
+
+<td class="c38" colspan="1" rowspan="1">
+
+<span class="c7 c5"></span>
+
+</td>
+
+</tr>
+
+<tr class="c41">
+
+<td class="c13" colspan="1" rowspan="1">
+
+<span class="c7 c5">sendRequest</span>
+
+</td>
+
+<td class="c8" colspan="1" rowspan="1">
+
+<span class="c7 c5">Sends an operation request to the node.js server.  Model update operations are done using this method.</span>
+
+</td>
+
+<td class="c22" colspan="1" rowspan="1">
+
+<span class="c5 c50">[reqName, param](#h.nhfdym5d0wpf)</span>
+
+<span class="c7 c5"></span>
+
+</td>
+
+<td class="c38" colspan="1" rowspan="1">
+
+<span class="c7 c5"></span>
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+<span></span>
+
+<span></span>
+
+##### <span>sendRequest:</span>
+
+<span></span>
+
+<a id="t.c74557f80130c58c27f4c34ed1492ff11475d857"></a><a id="t.1"></a>
+
+<table class="c21">
+
+<tbody>
+
+<tr class="c3">
+
+<td class="c23" colspan="1" rowspan="1">
+
+<span class="c5 c26 c40">reqName</span>
+
+</td>
+
+<td class="c31" colspan="1" rowspan="1">
+
+<span class="c40 c5 c26">param</span>
+
+</td>
+
+</tr>
+
+<tr class="c3">
+
+<td class="c23" colspan="1" rowspan="1">
+
+<span class="c4">“agentAddImageRequest”</span>
+
+</td>
+
+<td class="c31" colspan="1" rowspan="1">
+
+<span class="c4">{img: <image file>,</span>
+
+<span class="c4">filePath: <path of image file> }</span>
+
+</td>
+
+</tr>
+
+<tr class="c3">
+
+<td class="c23" colspan="1" rowspan="1">
+
+<span class="c4">"agentSetLayoutProperties"</span>
+
+</td>
+
+<td class="c31" colspan="1" rowspan="1">
+
+<span class="c4">{name: <layout name>,</span>
+
+<span class="c4"> nodeRepulsion: <node repulsion value> ,</span>
+
+<span class="c4"> nodeOverlap:<node overlap percentage>,</span>
+
+<span class="c4">idealEdgeLength:<ideal edge length value>,</span>
+
+<span class="c4">edgeElasticity:<edge elasticity value>,</span>
+
+<span class="c4">nestingFactor:<nesting factor value>,</span>
+
+<span class="c4">gravity:<gravity value>,</span>
+
+<span class="c4">numIter:<number of iterations>,</span>
+
+<span class="c4">tile:<boolean value to tile disconnected>,</span>
+
+<span class="c4">animate:<boolean value>,</span>
+
+<span class="c4">randomize:<boolean value>}</span>
+
+</td>
+
+</tr>
+
+<tr class="c3">
+
+<td class="c23" colspan="1" rowspan="1">
+
+<span class="c4">“agentRunLayoutRequest”</span>
+
+</td>
+
+<td class="c31" colspan="1" rowspan="1">
+
+<span class="c4">-</span>
+
+</td>
+
+</tr>
+
+<tr class="c3">
+
+<td class="c23" colspan="1" rowspan="1">
+
+<span class="c4">“agentAddNodeRequest”</span>
+
+</td>
+
+<td class="c31" colspan="1" rowspan="1">
+
+<span class="c4">{x: <position x>,</span>
+
+<span class="c4">y: <position y>,</span>
+
+<span class="c4">sbgnclass: <sbgn class>}</span>
+
+</td>
+
+</tr>
+
+<tr class="c3">
+
+<td class="c23" colspan="1" rowspan="1">
+
+<span class="c4">“agentAddEdgeRequest”</span>
+
+</td>
+
+<td class="c31" colspan="1" rowspan="1">
+
+<span class="c4">{source: <source node id>,</span>
+
+<span class="c4">target: <target node id>,</span>
+
+<span class="c4">sbgnclass: <sbgn class>}</span>
+
+</td>
+
+</tr>
+
+<tr class="c3">
+
+<td class="c23" colspan="1" rowspan="1">
+
+<span class="c4">“agentChangeNodeAttributeRequest”</span>
+
+</td>
+
+<td class="c31" colspan="1" rowspan="1">
+
+<span class="c4">{id: <node id>,</span>
+
+<span class="c4">attStr: <node attribute name in the model></span>
+
+<span class="c4">attVal:<node attribute value>}</span>
+
+<span class="c4"></span>
+
+<span class="c4">attStr takes the following values: “sbgnclass”, “highlightColor”, “backgroundColor”, “sbgnlabel”, “borderColor”, “borderWidth”, “isMultimer”, “isCloneMarker”, “parent”, “children”, “width”, “height”, “sbgnbboxW”, “sbgnbboxH”, “sbgnStatesAndInfos”</span>
+
+</td>
+
+</tr>
+
+<tr class="c3">
+
+<td class="c23" colspan="1" rowspan="1">
+
+<span class="c4">“agentChangeEdgeAttributeRequest”</span>
+
+</td>
+
+<td class="c31" colspan="1" rowspan="1">
+
+<span class="c4">{id: <node id>,</span>
+
+<span class="c4">attStr: <edge attribute name in the model></span>
+
+<span class="c4">attVal:<edge attribute value>}</span>
+
+<span class="c4"></span>
+
+<span class="c4">attStr takes the following values: “lineColor”, “highlightColor”, “width”, “cardinality”  </span>
+
+</td>
+
+</tr>
+
+<tr class="c3">
+
+<td class="c23" colspan="1" rowspan="1">
+
+<span class="c4">“agentMoveNodeRequest”</span>
+
+</td>
+
+<td class="c31" colspan="1" rowspan="1">
+
+<span class="c4">{id: <node id>,</span>
+
+<span class="c4">pos: {x:<new position x>, y: < new position y>}}</span>
+
+</td>
+
+</tr>
+
+<tr class="c3">
+
+<td class="c23" colspan="1" rowspan="1">
+
+<span class="c4">“agentAddCompoundRequest”</span>
+
+</td>
+
+<td class="c31" colspan="1" rowspan="1">
+
+<span class="c4">{type: <compound type as “complex” or “compartment”>,</span>
+
+<span class="c4">selectedNodeArr: <array of node ids>}</span>
+
+</td>
+
+</tr>
+
+<tr class="c3">
+
+<td class="c23" colspan="1" rowspan="1">
+
+<span class="c4">“agentMergeGraphRequest”</span>
+
+</td>
+
+<td class="c31" colspan="1" rowspan="1">
+
+<span class="c4">{param: <graph to be added in sbgn format>}</span>
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+<span></span>
+
+<span class="c0 c16"></span>
+
+<span class="c16 c0"></span>
+
+<span>In order to set up and run an agent:</span>
+
+<span></span>
+
+<span class="c0 c27 c26">agent</span> <span class="c0">=</span> <span class="c0 c33 c26">new</span> <span class="c0 c29">Agent</span><span class="c0">(</span><span class="c0 c37">agentName</span><span class="c0">,</span> <span class="c0 c37">agentId</span><span class="c0">);</span>
+
+<span class="c0 c33 c26">var</span> <span class="c0 c37">socket</span> <span class="c0">=</span> <span class="c0 c27 c26">agent</span><span class="c0">.</span><span class="c0 c19">connectToServer</span><span class="c0">(</span><span class="c0 c37">serverIp</span><span class="c0">,</span> <span class="c0 c33 c26">function</span><span class="c0">(){</span>
+
+<span class="c16 c0">//callback operations</span>
+
+<span class="c0">});</span>
+
+<span class="c0 c37">socket</span><span class="c0">.</span><span class="c0 c19">on</span><span class="c0">(</span><span class="c0 c44 c26">'connect'</span><span class="c0">,</span> <span class="c0 c33 c26">function</span><span class="c0">(){</span>
+
+<span class="c0">   </span><span class="c0 c27 c26">agent</span><span class="c0">.</span><span class="c0 c19">loadModel</span><span class="c0">(</span><span class="c0 c33 c26">function</span><span class="c0">() {</span>
+
+<span class="c0">       </span><span class="c0 c27 c26">agent</span><span class="c0">.</span><span class="c0 c19">loadOperationHistory</span><span class="c0">(</span><span class="c0 c33 c26">function</span><span class="c0">(){</span>
+
+<span class="c0">           </span><span class="c0 c27 c26">agent</span><span class="c0">.</span><span class="c0 c19">loadChatHistory</span><span class="c0">(</span><span class="c0 c33 c26">function</span><span class="c0">(){                  </span>
+
+<span class="c16 c0">//callback operations</span><span class="c0">             </span>
+
+<span class="c0">});</span>
+
+<span class="c0">           });</span>
+
+<span class="c0">       });</span>
+
+<span class="c0">   </span><span class="c0 c26 c27">agent</span><span class="c0">.</span><span class="c0 c19">listen</span><span class="c0">(</span><span class="c0 c26 c33">function</span><span class="c0">(){</span>
+
+<span class="c0">       </span><span class="c0 c37">socket</span><span class="c0">.</span><span class="c0 c19">on</span><span class="c0">(</span><span class="c0 c26 c44">'operation'</span><span class="c0">,</span> <span class="c0 c33 c26">function</span><span class="c0">(data){</span>
+
+<span class="c0">         </span> <span class="c16 c0">//callback operations</span>
+
+<span class="c0">       });</span>
+
+<span class="c0">       </span><span class="c0 c37">socket</span><span class="c0">.</span><span class="c0 c19">on</span><span class="c0">(</span><span class="c0 c44 c26">'message'</span><span class="c0">,</span> <span class="c0 c33 c26">function</span><span class="c0">(data){</span>
+
+<span class="c0">           </span><span class="c16 c0">//callback operations</span>
+
+<span class="c0">       });</span>
+
+<span class="c0">       </span><span class="c0 c37">socket</span><span class="c0">.</span><span class="c0 c19">on</span><span class="c0">(</span><span class="c0 c44 c26">'userList'</span><span class="c0">,</span> <span class="c0 c33 c26">function</span><span class="c0">(data){</span>
+
+<span class="c0">           </span><span class="c16 c0">//callback operations</span>
+
+<span class="c0">       });</span>
+
+<span class="c0">       </span><span class="c0 c37">socket</span><span class="c0">.</span><span class="c0 c19">on</span><span class="c0">(</span><span class="c0 c44 c26">'imageFile'</span><span class="c0">,</span> <span class="c0 c33 c26">function</span><span class="c0">(data){</span>
+
+<span class="c0">           </span><span class="c16 c0">//callback operations</span>
+
+<span class="c0">       });</span>
+
+<span class="c0">   });</span>
+
+<span class="c0">});</span>
+
+<span></span>
+
+<span>An example web-based agent can be found in:</span>
+
+<span></span>
+
+<span>Sbgnviz-Collaborative-Editor/agent-interaction/computerAgent.html</span>
+
+<span></span>
+
+<span></span>
+
+<span>Command History:</span>
+
+<span>JSON array as:</span>
+
+<span>[</span>
+
+<span>     {</span>
+
+<span>userName: //name of the user who gave the command</span>
+
+<span>name: //name of the command</span>
+
+<span>id: //id of the affected element</span>
+
+<span>param: //operation parameters</span>
+
+<span>         [</span>
+
+<span>              {</span>
+
+<span>                x: //node position x</span>
+
+<span>                y: //node position y</span>
+
+<span>                sbgnclass: //node sbgnclass</span>
+
+<span>                source:  //edge source</span>
+
+<span>                target:  //edge target</span>
+
+<span>                sbgnclass: //edge sbgnclass</span>
+
+<span></span>
+
+<span></span>
+
+<span>              }</span>
+
+<span>]</span>
+
+<span>date: //date of the command</span>
+
+<span>   }</span>
+
+<span>]</span>
+
+## <span>History Manager</span>
+
+<span>Each command is stored in the model as a part of command history. Command structure is as follows:</span>
+
+<span>opName: set | add | delete | init</span>
+
+<span>opTarget: node | edge | node group | edge group</span>
+
+<span>opAttr:  id| position | sbgnclass | sbgnlabel | width | height | backgroundColor |  borderColor | borderWidth | parent | isCloneMarker | isMultimer | sbgnStatesAndInfos| source| target |lineColor | lineWidth| sbgncardinality</span>
+
+<span>elId: id of the node or edge | id array of the node or edge group</span>
+
+<span>elType: “node” or “edge”</span>
+
+<span>param:</span>
+
+<span>prevParam:</span>
+
+<span></span>
+
+<span></span>
+
+### <span>JSON Model Structure</span>
+
+*   <span class="c5">users</span>
+
+*   <span class="c5">name</span>
+
+*   <span class="c5">page</span>
+
+*   <span class="c5">list</span>
+*   <span class="c5">room</span>
+*   <span class="c5">doc</span>
+
+*   <span class="c5">userIds</span>
+*   <span class="c5">history</span>
+*   <span class="c5">undoIndex</span>
+*   <span class="c5">Images</span>
+*   <span class="c5">Context</span>
+
+*   <span class="c5">name</span>
+*   <span class="c5">relevance</span>
+*   <span class="c5">confidence</span>
+
+*   <span class="c5">c</span><span class="c5">y  //sbgn-related</span>
+
+*   <span class="c5">sampleInd //temporary</span>
+*   <span class="c5">layoutProperties</span>
+*   <span class="c5">nodes</span>
+
+*   <span class="c5">[nodeId]</span>
+
+*   <span class="c5">id</span>
+*   <span class="c5">addedLater //to sync. node addition</span>
+*   <span class="c5">sbgnclass</span>
+*   <span class="c5">position</span>
+*   <span class="c5">highlightColor</span>
+*   <span class="c5">sbgnlabel</span>
+*   <span class="c5">borderColor</span>
+*   <span class="c5">borderWidth</span>
+*   <span class="c5">backgroundColor</span>
+*   <span class="c5">backgroundOpacity</span>
+*   <span class="c5">isMultimer</span>
+*   <span class="c5">isCloneMarker</span>
+*   <span class="c5">ports</span>
+*   <span class="c5">width</span>
+*   <span class="c5">height</span>
+*   <span class="c5">sbgnStatesAndInfos</span>
+*   <span class="c5">expandCollapseStatus</span>
+*   <span class="c5">highlightStatus</span>
+*   <span class="c5">visibilityStatus</span>
+
+*   <span class="c5">edges</span>
+
+*   <span class="c5">[edgeId]</span>
+
+*   <span class="c5">id</span>
+*   <span class="c5">addedLater //to sync. edge addition</span>
+*   <span class="c5">sbgnclass</span>
+*   <span class="c5">source</span>
+*   <span class="c5">target</span>
+*   <span class="c5">portsource</span>
+*   <span class="c5">porttarget</span>
+*   <span class="c5">highlightColor</span>
+*   <span class="c5">lineColor</span>
+*   <span class="c5">width</span>
+*   <span class="c5">bendPointPositions</span>
+*   <span class="c5">highlightStatus</span>
+*   <span class="c5">visibilityStatus</span>
+*   <span class="c5">sbgnCardinality</span>
+
+*   <span class="c5">py // pysb-related</span>
+*   <span class="c5">//biopax-related</span>
+
+<span class="c5"></span>
+
+# <span>Framework with Biopax</span>
+
+## <span style="overflow: hidden; display: inline-block; margin: 0.00px 0.00px; border: 0.00px solid #000000; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px); width: 624.00px; height: 485.28px;">![](images/image03.png)</span>
+
+<span></span>
+
+<span></span>
+
+<span></span>
+
+<span></span>
+
+<span style="overflow: hidden; display: inline-block; margin: 0.00px 0.00px; border: 0.00px solid #000000; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px); width: 695.50px; height: 549.08px;">![](images/image04.png)</span>
+
+<span></span>
+
+<span></span>
+
+<span></span>
+
+# <span>In development</span>
+
+<span>                                   </span>
+
+<span>We’re trying to set up a pipeline to display an SBGN model on screen right from the plain text written in the chat box. Two possibilities:</span>
+
+*   <span>Fetch a BioPAX model directly from the REACH</span> <span>library</span><span>.</span>
+
+<span>OR:</span>
+
+*   <span>Fetch first the REACH output indexcard</span> <span>JSON</span><span> format then convert it in a BioPAX model.</span>
+
+<span>Then implement:</span>
+
+1.  <span>a naive “merger”, creating an SBGN model right from the indexcard JSON format. The new component appear separate from the other on screen and leave the duplicated entities as is if any.</span>
+2.  <span>a more sophisticated one trying to really merge both the old and new components on screen if necessary, and leave the duplicated entities as is if any.</span>
+3.  <span>a merger where all the SBGN models appear actually merged together when         possible and the entities are de-duplicated to guarantee the coherence of the resulting model.</span>
+4.  <span>a GUI giving the user the opportunity to choose between different possible         models before any validation.</span>
+
+<span></span>
+
+<span></span>
+
+<span></span>
+
+<span></span>
+
+<span></span>
+
+## <span>Data Alignment</span>
+
+<span style="overflow: hidden; display: inline-block; margin: 0.00px 0.00px; border: 0.00px solid #000000; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px); width: 623.50px; height: 583.53px;">![](images/image05.png)</span>
+
+<span></span>
+
+<span></span>
+
+# <span>Context Agent</span>
+
+## <span style="overflow: hidden; display: inline-block; margin: 0.00px 0.00px; border: 0.00px solid #000000; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px); width: 624.00px; height: 485.28px;">![](images/image01.png)</span>
+
+<span class="c26"></span>
+
+<span class="c26"></span>

@@ -329,9 +329,9 @@
             $('#serverIp')[0].value = ip;
         }
 
-        agent = new Agent($('#agentName')[0].value, agentId);
+       // agent = new Agent($('#agentName')[0].value, agentId);
 
-       //agent = new ContextAgent($('#agentName')[0].value, agentId);
+       agent = new ContextAgent($('#agentName')[0].value, agentId);
 
         var socket = agent.connectToServer(serverIp, function(){
 
