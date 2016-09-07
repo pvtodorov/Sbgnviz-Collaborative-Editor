@@ -1,1342 +1,493 @@
-<html>
-
-<head>
-<meta http-equiv=Content-Type content="text/html; charset=macintosh">
-<meta name=Generator content="Microsoft Word 15 (filtered)">
-<style>
-<!--
- /* Font Definitions */
-@font-face
-	{font-family:Arial;
-	panose-1:2 11 6 4 2 2 2 2 2 4;}
-@font-face
-	{font-family:"Cambria Math";
-	panose-1:0 0 0 0 0 0 0 0 0 0;}
- /* Style Definitions */
-p.MsoNormal, li.MsoNormal, div.MsoNormal
-	{margin:0in;
-	margin-bottom:.0001pt;
-	line-height:115%;
-	font-size:11.0pt;
-	font-family:Arial;
-	color:black;}
-h1
-	{margin-top:20.0pt;
-	margin-right:0in;
-	margin-bottom:6.0pt;
-	margin-left:0in;
-	line-height:115%;
-	font-size:20.0pt;
-	font-family:Arial;
-	color:black;
-	font-weight:normal;}
-h2
-	{margin-top:.25in;
-	margin-right:0in;
-	margin-bottom:6.0pt;
-	margin-left:0in;
-	line-height:115%;
-	font-size:16.0pt;
-	font-family:Arial;
-	color:black;
-	font-weight:normal;}
-h3
-	{margin-top:16.0pt;
-	margin-right:0in;
-	margin-bottom:4.0pt;
-	margin-left:0in;
-	line-height:115%;
-	font-size:14.0pt;
-	font-family:Arial;
-	color:#434343;
-	font-weight:normal;}
-h4
-	{margin-top:14.0pt;
-	margin-right:0in;
-	margin-bottom:4.0pt;
-	margin-left:0in;
-	line-height:115%;
-	font-size:12.0pt;
-	font-family:Arial;
-	color:#666666;
-	font-weight:normal;}
-h5
-	{margin-top:12.0pt;
-	margin-right:0in;
-	margin-bottom:4.0pt;
-	margin-left:0in;
-	line-height:115%;
-	font-size:11.0pt;
-	font-family:Arial;
-	color:#666666;
-	font-weight:normal;}
-h6
-	{margin-top:12.0pt;
-	margin-right:0in;
-	margin-bottom:4.0pt;
-	margin-left:0in;
-	line-height:115%;
-	font-size:11.0pt;
-	font-family:Arial;
-	color:#666666;
-	font-weight:normal;
-	font-style:italic;}
-p.MsoTitle, li.MsoTitle, div.MsoTitle
-	{margin-top:0in;
-	margin-right:0in;
-	margin-bottom:3.0pt;
-	margin-left:0in;
-	line-height:115%;
-	font-size:26.0pt;
-	font-family:Arial;
-	color:black;}
-p.MsoSubtitle, li.MsoSubtitle, div.MsoSubtitle
-	{margin-top:0in;
-	margin-right:0in;
-	margin-bottom:16.0pt;
-	margin-left:0in;
-	line-height:115%;
-	font-size:15.0pt;
-	font-family:Arial;
-	color:#666666;}
-.MsoChpDefault
-	{font-size:11.0pt;
-	font-family:Arial;
-	color:black;}
-.MsoPapDefault
-	{line-height:115%;}
- /* Page Definitions */
-@page WordSection1
-	{size:8.5in 11.0in;
-	margin:1.0in 1.0in 1.0in 1.0in;}
-div.WordSection1
-	{page:WordSection1;}
- /* List Definitions */
-ol
-	{margin-bottom:0in;}
-ul
-	{margin-bottom:0in;}
--->
-</style>
+SBGNViz Collaborative Editor User Guide
+=======================================
 
-</head>
+The editor allows human curators and computer agents to work on the same
+pathway model, and communicate through text and images. On the server
+side, we have an application server that keeps the model, handles
+communication across clients, and performs operational transformation.
+Model visualization and editing are handled on the client side. The
+editor visualizes information about cellular processes and pathways in
+SBGN (Systems Biology Graphical Notation) format. It allows for
+automatic graph layout, editing and highlighting facilities.
 
-<body bgcolor=white lang=EN-US>
+Installation
+------------
 
-<div class=WordSection1>
+Install node.js, mongodb and redis servers first.
 
-<h1><a name="_1wgjhs3i3ced"></a>SBGNViz Collaborative Editor User Guide</h1>
+Node:
 
-<p class=MsoNormal style='text-align:justify'>The editor allows human curators
-and computer agents to work on the same pathway model, and communicate through
-text and images. On the server side, we have an application server that keeps
-the model, handles communication across clients, and performs operational
-transformation. Model visualization and editing are handled on the client side.
-The editor visualizes information about cellular processes and pathways in SBGN
-(Systems Biology Graphical Notation) format. It allows for automatic graph
-layout, editing and highlighting facilities. </p>
+&gt;curl -sL
+[*https://deb.nodesource.com/setup\_0.12*](https://deb.nodesource.com/setup_0.12)
+| sudo -E bash -
 
-<p class=MsoNormal>&nbsp;</p>
+&gt;sudo apt-get install -y nodejs
 
-<h2><a name="_2up5xl2gx913"></a>Installation</h2>
+Redis:
 
-<p class=MsoNormal>Install node.js, mongodb and redis servers first.</p>
+&gt;sudo apt-get update
 
-<p class=MsoNormal>&nbsp;</p>
+&gt;sudo apt-get install build-essential
 
-<p class=MsoNormal><span style='color:#222222;background:white'>Node</span><span
-style='font-size:9.5pt;line-height:115%;color:#222222;background:white'>:</span></p>
+&gt;sudo apt-get install tcl8.5
 
-<p class=MsoNormal>&nbsp;</p>
+wget
+[*http://download.redis.io/releases/redis-stable.tar.gz*](http://download.redis.io/releases/redis-stable.tar.gz)
 
-<p class=MsoNormal><span style='font-size:9.5pt;line-height:115%;color:#222222;
-background:white'>&gt;curl -sL </span><a
-href="https://deb.nodesource.com/setup_0.12"><span style='font-size:9.5pt;
-line-height:115%;color:#1155CC;background:white'>https://deb.nodesource.com/setup_0.12</span></a><span
-style='font-size:9.5pt;line-height:115%;color:#222222;background:white'> | sudo
--E bash -</span></p>
+&gt;tar xzf redis-stable.tar.gz
 
-<p class=MsoNormal><span style='font-size:9.5pt;line-height:115%;color:#222222;
-background:white'>&gt;sudo apt-get install -y nodejs</span></p>
+&gt;cd redis-stable
 
-<p class=MsoNormal>&nbsp;</p>
+&gt;make
 
-<p class=MsoNormal><span style='color:#222222;background:white'>Redis</span><span
-style='font-size:9.5pt;line-height:115%;color:#222222;background:white'>:</span></p>
+Mongo:
 
-<p class=MsoNormal>&nbsp;</p>
+&gt;sudo apt-key adv --keyserver
+hkp://[*keyserver.ubuntu.com:80*](http://keyserver.ubuntu.com/) --recv
+EA312927
 
-<p class=MsoNormal><span style='font-size:9.5pt;line-height:115%;color:#222222;
-background:white'>&gt;sudo apt-get update</span></p>
+&gt;echo "deb
+[*http://repo.mongodb.org/apt/ubuntu*](http://repo.mongodb.org/apt/ubuntu)
+trusty/mongodb-org/3.2 multiverse" | sudo tee
+/etc/apt/sources.list.d/mongodb-org-3.2.list
 
-<p class=MsoNormal><span style='font-size:9.5pt;line-height:115%;color:#222222;
-background:white'>&gt;sudo apt-get install build-essential</span></p>
+&gt;sudo apt-get update
 
-<p class=MsoNormal><span style='font-size:9.5pt;line-height:115%;color:#222222;
-background:white'>&gt;sudo apt-get install tcl8.5</span></p>
+&gt;sudo apt-get install -y mongodb-org
 
-<p class=MsoNormal><span style='font-size:9.5pt;line-height:115%;color:#222222;
-background:white'>wget </span><a
-href="http://download.redis.io/releases/redis-stable.tar.gz"><span
-style='font-size:9.5pt;line-height:115%;color:#1155CC;background:white'>http://download.redis.io/releases/redis-stable.tar.gz</span></a></p>
+If mongo does not work:
 
-<p class=MsoNormal><span style='font-size:9.5pt;line-height:115%;color:#222222;
-background:white'>&gt;tar xzf redis-stable.tar.gz</span></p>
+&gt;sudo apt-get install upstart-sysv
 
-<p class=MsoNormal><span style='font-size:9.5pt;line-height:115%;color:#222222;
-background:white'>&gt;cd redis-stable</span></p>
+Get project from github:
 
-<p class=MsoNormal><span style='font-size:9.5pt;line-height:115%;color:#222222;
-background:white'>&gt;make</span></p>
+&gt;git clone
+[*https://github.com/fdurupinar/Sbgnviz-Collaborative-Editor.git*](https://github.com/fdurupinar/Sbgnviz-Collaborative-Editor.git)
 
-<p class=MsoNormal>&nbsp;</p>
+&gt;cd Sbgnviz-Collaborative-Editor
 
-<p class=MsoNormal><span style='color:#222222;background:white'>Mongo</span><span
-style='font-size:9.5pt;line-height:115%;color:#222222;background:white'>:</span></p>
+&gt;sudo rm -rf node\_modules
 
-<p class=MsoNormal>&nbsp;</p>
+&gt;npm install
 
-<p class=MsoNormal><span style='font-size:9.5pt;line-height:115%;color:#222222;
-background:white'>&gt;sudo apt-key adv --keyserver hkp://</span><a
-href="http://keyserver.ubuntu.com/"><span style='font-size:9.5pt;line-height:
-115%;color:#1155CC;background:white'>keyserver.ubuntu.com:80</span></a><span
-style='font-size:9.5pt;line-height:115%;color:#222222;background:white'> --recv
-EA312927</span></p>
+Run server:
 
-<p class=MsoNormal><span style='font-size:9.5pt;line-height:115%;color:#222222;
-background:white'>&gt;echo &quot;deb </span><a
-href="http://repo.mongodb.org/apt/ubuntu"><span style='font-size:9.5pt;
-line-height:115%;color:#1155CC;background:white'>http://repo.mongodb.org/apt/ubuntu</span></a><span
-style='font-size:9.5pt;line-height:115%;color:#222222;background:white'>
-trusty/mongodb-org/3.2 multiverse&quot; | sudo tee
-/etc/apt/sources.list.d/mongodb-org-3.2.list</span></p>
+&gt;node server
 
-<p class=MsoNormal><span style='font-size:9.5pt;line-height:115%;color:#222222;
-background:white'>&gt;sudo apt-get update</span></p>
+In order to open a client:
 
-<p class=MsoNormal><span style='font-size:9.5pt;line-height:115%;color:#222222;
-background:white'>&gt;sudo apt-get install -y mongodb-org</span></p>
+Enter “http://localhost:3000” to the address bar of your browser. <span
+id="_lzkutpoc5320" class="anchor"></span>
 
-<p class=MsoNormal>&nbsp;</p>
+### Computer Agent API
 
-<p class=MsoNormal><span style='color:#222222;background:white'>If mongo does
-not work:</span></p>
+Computer agents are connected to the node.js http server via websockets
+(socket.io.js). An agent is initialized with a *name (string)* and a
+unique *ID (string).*
 
-<p class=MsoNormal>&nbsp;</p>
+**Constructor**: Agent (string name, string id)
 
-<p class=MsoNormal><span style='font-size:9.5pt;line-height:115%;color:#222222;
-background:white'>&gt;sudo apt-get install upstart-sysv</span></p>
+#### Public Attributes:
 
-<p class=MsoNormal>&nbsp;</p>
+**agentId**: (string) A unique id
 
-<p class=MsoNormal>&nbsp;</p>
+**agentName**: (string) Agent name
 
-<p class=MsoNormal><span style='font-size:9.5pt;line-height:115%;color:#222222;
-background:white'>Get project from github:</span></p>
+**colorCode**: A specific color to identify the agent operations. It
+should be a string in hsla format as: “hsla(*H*, *S*, *L*%, 1)”, where
+*H (integer)*, *S (float)* and *L (float)* are hue, saturation and
+lightness values.
 
-<p class=MsoNormal>&nbsp;</p>
+**selectedNode**: The node object on which the agent is performing
+operations. It has attributes such as position
+={x:&lt;posX&gt;,y:&lt;posY&gt;}, width, height, borderWidth,
+borderHeight, backgroundColor, sbgnLabel, sbgnStatesAndInfos =
+{clazz:&lt;className&gt;, state =
+{value:&lt;stateValue&gt;,variable:&lt;stateVariable&gt;}}.
 
-<p class=MsoNormal><span style='font-size:9.5pt;line-height:115%;color:#222222;
-background:white'>&gt;git clone </span><a
-href="https://github.com/fdurupinar/Sbgnviz-Collaborative-Editor.git"><span
-style='font-size:9.5pt;line-height:115%;color:#1155CC;background:white'>https://github.com/fdurupinar/Sbgnviz-Collaborative-Editor.git</span></a></p>
+**selectedEdge**: The edge object on which the agent is performing
+operations. It has attributes such as cardinality, lineColor and width.
+
+**opHistory**: History of operations as an array of strings in the
+format: “*UserName* (*date*): *Command*”.
 
-<p class=MsoNormal><span style='font-size:9.5pt;line-height:115%;color:#222222;
-background:white'>&gt;cd Sbgnviz-Collaborative-Editor</span></p>
+**chatHistory**: Chat history as an array of messages.
 
-<p class=MsoNormal><span style='font-size:9.5pt;line-height:115%;color:#222222;
-background:white'>&gt;sudo rm -rf node_modules</span></p>
+**userList**: List of connected user ids.
 
-<p class=MsoNormal><span style='font-size:9.5pt;line-height:115%;color:#222222;
-background:white'>&gt;npm install</span></p>
+#### Private Attributes:
+
+**room**: The document id that identifies the shared model. It is the
+string after http:&lt;ip&gt;:3000/ in the server address.
+
+**socket**: The web socket between the server and agent
+
+**pageDoc**: The document that the shared model is stored.
+
+#### Methods:
+
+  ---------------------- ---------------------------------------------------------------------------------------------------------------------------------------------------- ---------------------------------- ------------------------------------------------------------------------
+  **Name**               **Function**                                                                                                                                         **Parameters**                     **Returns**
+
+  connectToServer        Connects the server and returns socket.io socket                                                                                                     url, callback                      socket
+
+  loadModel              Gets the model for the current room                                                                                                                  callback                           
+
+  loadOperationHistory   Gets history of operations from the node.js server and assigns them to opHistory                                                                     callback                           
+
+  loadUserList           Gets user list from the node.js server and assigns them to userList                                                                                  callback                           
+
+  loadChatHistory        Gets history of chat messages from the node.js server and assigns them to chatHistory                                                                callback                           
+
+  getNodeList                                                                                                                                                                 callback                           The node list in the shared model as an object of node ids
+
+  getLayoutProperties                                                                                                                                                         callback                           Layout properties of the shared model as an object with attributes as:
+                                                                                                                                                                                                                 
+                                                                                                                                                                                                                 {name: &lt;layout name&gt;,
+                                                                                                                                                                                                                 
+                                                                                                                                                                                                                 nodeRepulsion: &lt;node repulsion value&gt; ,
+                                                                                                                                                                                                                 
+                                                                                                                                                                                                                 nodeOverlap:&lt;node overlap percentage&gt;,
+                                                                                                                                                                                                                 
+                                                                                                                                                                                                                 idealEdgeLength:&lt;ideal edge length value&gt;,
+                                                                                                                                                                                                                 
+                                                                                                                                                                                                                 edgeElasticity:&lt;edge elasticity value&gt;,
+                                                                                                                                                                                                                 
+                                                                                                                                                                                                                 nestingFactor:&lt;nesting factor value&gt;,
+                                                                                                                                                                                                                 
+                                                                                                                                                                                                                 gravity:&lt;gravity value&gt;,
+                                                                                                                                                                                                                 
+                                                                                                                                                                                                                 numIter:&lt;number of iterations&gt;,
+                                                                                                                                                                                                                 
+                                                                                                                                                                                                                 tile:&lt;boolean value to tile disconnected&gt;,
+                                                                                                                                                                                                                 
+                                                                                                                                                                                                                 animate:&lt;boolean value&gt;,
+                                                                                                                                                                                                                 
+                                                                                                                                                                                                                 randomize:&lt;boolean value&gt;}
 
-<p class=MsoNormal>&nbsp;</p>
+  changeName             Sends request to the server to change agent's name                                                                                                   newName                            
 
-<p class=MsoNormal>&nbsp;</p>
+  getNodeRequest         Requests the node with &lt;id&gt; from the server                                                                                                    id, callback                       Node with id
 
-<p class=MsoNormal><span style='color:#222222;background:white'>Run server:</span></p>
+  getEdgeRequest         Requests the edge with &lt;id&gt; from the server                                                                                                    id, callback                       Edge with id
 
-<p class=MsoNormal>&nbsp;</p>
+  sendMessage            Sends chat message &lt;comments&gt; as a string to &lt;targetArr&gt; as an array of targeted user ids \[{id: &lt;id1&gt;},..., {id: &lt;idn&gt;}\]   comment, targetArr, callback       
 
-<p class=MsoNormal><span style='font-size:9.5pt;line-height:115%;color:#222222;
-background:white'>&gt;node server</span></p>
+  listen                 Socket listener for server requests. Can get “operation”, “message”, “userList” or “imageFile” from the server.                                      callback                           
 
-<p class=MsoNormal>&nbsp;</p>
+  sendRequest            Sends an operation request to the node.js server. Model update operations are done using this method.                                                [*reqName, param*](#sendrequest)   
+  ---------------------- ---------------------------------------------------------------------------------------------------------------------------------------------------- ---------------------------------- ------------------------------------------------------------------------
 
-<p class=MsoNormal>In order to open a client:</p>
+##### sendRequest:
 
-<p class=MsoNormal>Enter “http://localhost:3000” to the address bar of your
-browser. <a name="_lzkutpoc5320"></a></p>
+  ----------------------------------- --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  **reqName**                         **param**
 
-<p class=MsoNormal>&nbsp;</p>
+  “agentAddImageRequest”              {img: &lt;image file&gt;,
+                                      
+                                      filePath: &lt;path of image file&gt; }
 
-<p class=MsoNormal>&nbsp;</p>
+  "agentSetLayoutProperties"          {name: &lt;layout name&gt;,
+                                      
+                                      nodeRepulsion: &lt;node repulsion value&gt; ,
+                                      
+                                      nodeOverlap:&lt;node overlap percentage&gt;,
+                                      
+                                      idealEdgeLength:&lt;ideal edge length value&gt;,
+                                      
+                                      edgeElasticity:&lt;edge elasticity value&gt;,
+                                      
+                                      nestingFactor:&lt;nesting factor value&gt;,
+                                      
+                                      gravity:&lt;gravity value&gt;,
+                                      
+                                      numIter:&lt;number of iterations&gt;,
+                                      
+                                      tile:&lt;boolean value to tile disconnected&gt;,
+                                      
+                                      animate:&lt;boolean value&gt;,
+                                      
+                                      randomize:&lt;boolean value&gt;}
 
-<h3><a name="_ttz39lsxwuvx"></a>Computer Agent API</h3>
+  “agentRunLayoutRequest”             -
 
-<p class=MsoNormal>&nbsp;</p>
+  “agentAddNodeRequest”               {x: &lt;position x&gt;,
+                                      
+                                      y: &lt;position y&gt;,
+                                      
+                                      sbgnclass: &lt;sbgn class&gt;}
 
-<p class=MsoNormal>Computer agents are connected to the node.js http server via
-websockets (socket.io.js). An agent is initialized with a <i>name (string) </i>&nbsp;and
-a unique <i>ID (string).</i></p>
+  “agentAddEdgeRequest”               {source: &lt;source node id&gt;,
+                                      
+                                      target: &lt;target node id&gt;,
+                                      
+                                      sbgnclass: &lt;sbgn class&gt;}
 
-<p class=MsoNormal>&nbsp;</p>
+  “agentChangeNodeAttributeRequest”   {id: &lt;node id&gt;,
+                                      
+                                      attStr: &lt;node attribute name in the model&gt;
+                                      
+                                      attVal:&lt;node attribute value&gt;}
+                                      
+                                      attStr takes the following values: “sbgnclass”, “highlightColor”, “backgroundColor”, “sbgnlabel”, “borderColor”, “borderWidth”, “isMultimer”, “isCloneMarker”, “parent”, “children”, “width”, “height”, “sbgnbboxW”, “sbgnbboxH”, “sbgnStatesAndInfos”
 
-<p class=MsoNormal><b>Constructor</b>: Agent (string name, string id)</p>
+  “agentChangeEdgeAttributeRequest”   {id: &lt;node id&gt;,
+                                      
+                                      attStr: &lt;edge attribute name in the model&gt;
+                                      
+                                      attVal:&lt;edge attribute value&gt;}
+                                      
+                                      attStr takes the following values: “lineColor”, “highlightColor”, “width”, “cardinality”
 
-<p class=MsoNormal>&nbsp;</p>
+  “agentMoveNodeRequest”              {id: &lt;node id&gt;,
+                                      
+                                      pos: {x:&lt;new position x&gt;, y: &lt; new position y&gt;}}
 
-<h4><a name="_1eu245k1egzd"></a>Public Attributes:</h4>
+  “agentAddCompoundRequest”           {type: &lt;compound type as “complex” or “compartment”&gt;,
+                                      
+                                      selectedNodeArr: &lt;array of node ids&gt;}
 
-<p class=MsoNormal>&nbsp;</p>
+  “agentMergeGraphRequest”            {param: &lt;graph to be added in sbgn format&gt;}
+  ----------------------------------- --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-<p class=MsoNormal><b>agentId</b>: (string) A unique id</p>
+In order to set up and run an agent:
 
-<p class=MsoNormal>&nbsp;</p>
+***agent*** = **new** *Agent*(agentName, agentId);
 
-<p class=MsoNormal><b>agentName</b>: (string) Agent name</p>
+**var** socket = ***agent***.connectToServer(serverIp, **function**(){
 
-<p class=MsoNormal>&nbsp;</p>
+*//callback operations*
 
-<p class=MsoNormal><b>colorCode</b>: A specific color to identify the agent
-operations. It should be a string in hsla format as: “hsla(<i>H</i>, <i>S</i>, <i>L</i>%,
-1)”, where <i>H (integer)</i>, <i>S (float)</i> and <i>L (float)</i> are hue,
-saturation and lightness values.</p>
+});
 
-<p class=MsoNormal>&nbsp;</p>
+socket.on(**'connect'**, **function**(){
 
-<p class=MsoNormal><b>selectedNode</b>: The node object on which the agent is
-performing operations. It has attributes such as position
-={x:&lt;posX&gt;,y:&lt;posY&gt;}, width, height, borderWidth, borderHeight,
-backgroundColor, sbgnLabel, sbgnStatesAndInfos = {clazz:&lt;className&gt;,
-state = {value:&lt;stateValue&gt;,variable:&lt;stateVariable&gt;}}.</p>
+***agent***.loadModel(**function**() {
 
-<p class=MsoNormal>&nbsp;</p>
+***agent***.loadOperationHistory(**function**(){
 
-<p class=MsoNormal><b>selectedEdge</b>: The edge object on which the agent is
-performing operations. It has attributes such as cardinality, lineColor and
-width.</p>
+***agent***.loadChatHistory(**function**(){
 
-<p class=MsoNormal>&nbsp;</p>
+*//callback operations*
 
-<p class=MsoNormal><b>opHistory</b>: History of operations as an array of
-strings in the format: “<i>UserName</i> (<i>date</i>):<i> Command</i>”.</p>
+});
 
-<p class=MsoNormal><b>chatHistory</b>: Chat history as an array of messages.</p>
+});
 
-<p class=MsoNormal>&nbsp;</p>
+});
 
-<p class=MsoNormal><b>userList</b>: List of connected user ids.</p>
+***agent***.listen(**function**(){
 
-<p class=MsoNormal>&nbsp;</p>
+socket.on(**'operation'**, **function**(data){
 
-<h4><a name="_nt4u4u3mhl90"></a>Private Attributes:</h4>
-
-<p class=MsoNormal><b>room</b>: The document id that identifies the shared
-model. It is the string after http:&lt;ip&gt;:3000/ in the server address.</p>
-
-<p class=MsoNormal><b>socket</b>: The web socket between the server and agent</p>
-
-<p class=MsoNormal><b>pageDoc</b>: The document that the shared model is
-stored.</p>
-
-<p class=MsoNormal>&nbsp;</p>
-
-<h4><a name="_l0c8z5l51rt3"></a>Methods:</h4>
-
-<p class=MsoNormal>&nbsp;</p>
-
-<table class=a border=1 cellspacing=0 cellpadding=0 width=468 style='border-collapse:
- collapse;border:none'>
- <tr>
-  <td width=110 valign=top style='width:110.25pt;border:solid black 1.0pt;
-  padding:4.3pt 4.3pt 4.3pt 4.3pt'>
-  <p class=MsoNormal style='line-height:normal'><b><span style='font-size:10.0pt'>Name</span></b></p>
-  </td>
-  <td width=117 valign=top style='width:117.0pt;border:solid black 1.0pt;
-  border-left:none;padding:4.3pt 4.3pt 4.3pt 4.3pt'>
-  <p class=MsoNormal style='line-height:normal'><b><span style='font-size:10.0pt'>Function</span></b></p>
-  </td>
-  <td width=115 valign=top style='width:114.75pt;border:solid black 1.0pt;
-  border-left:none;padding:4.3pt 4.3pt 4.3pt 4.3pt'>
-  <p class=MsoNormal style='line-height:normal'><b><span style='font-size:10.0pt'>Parameters</span></b></p>
-  </td>
-  <td width=126 valign=top style='width:1.75in;border:solid black 1.0pt;
-  border-left:none;padding:4.3pt 4.3pt 4.3pt 4.3pt'>
-  <p class=MsoNormal style='line-height:normal'><b><span style='font-size:10.0pt'>Returns</span></b></p>
-  </td>
- </tr>
- <tr>
-  <td width=110 valign=top style='width:110.25pt;border:solid black 1.0pt;
-  border-top:none;padding:4.3pt 4.3pt 4.3pt 4.3pt'>
-  <p class=MsoNormal><span style='font-size:9.0pt;line-height:115%'>connectToServer</span></p>
-  </td>
-  <td width=117 valign=top style='width:117.0pt;border-top:none;border-left:
-  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:4.3pt 4.3pt 4.3pt 4.3pt'>
-  <p class=MsoNormal style='line-height:normal'><span style='font-size:9.0pt'>Connects
-  the server and returns socket.io socket</span></p>
-  </td>
-  <td width=115 valign=top style='width:114.75pt;border-top:none;border-left:
-  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:4.3pt 4.3pt 4.3pt 4.3pt'>
-  <p class=MsoNormal style='line-height:normal'><span style='font-size:9.0pt'>url,
-  callback</span></p>
-  </td>
-  <td width=126 valign=top style='width:1.75in;border-top:none;border-left:
-  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:4.3pt 4.3pt 4.3pt 4.3pt'>
-  <p class=MsoNormal style='line-height:normal'><span style='font-size:9.0pt'>socket</span></p>
-  </td>
- </tr>
- <tr>
-  <td width=110 valign=top style='width:110.25pt;border:solid black 1.0pt;
-  border-top:none;padding:4.3pt 4.3pt 4.3pt 4.3pt'>
-  <p class=MsoNormal><span style='font-size:9.0pt;line-height:115%'>loadModel</span></p>
-  </td>
-  <td width=117 valign=top style='width:117.0pt;border-top:none;border-left:
-  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:4.3pt 4.3pt 4.3pt 4.3pt'>
-  <p class=MsoNormal><span style='font-size:9.0pt;line-height:115%'>Gets the
-  model for the current room</span></p>
-  </td>
-  <td width=115 valign=top style='width:114.75pt;border-top:none;border-left:
-  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:4.3pt 4.3pt 4.3pt 4.3pt'>
-  <p class=MsoNormal style='line-height:normal'><span style='font-size:9.0pt'>callback</span></p>
-  </td>
-  <td width=126 valign=top style='width:1.75in;border-top:none;border-left:
-  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:4.3pt 4.3pt 4.3pt 4.3pt'>
-  <p class=MsoNormal style='line-height:normal'>&nbsp;</p>
-  </td>
- </tr>
- <tr>
-  <td width=110 valign=top style='width:110.25pt;border:solid black 1.0pt;
-  border-top:none;padding:4.3pt 4.3pt 4.3pt 4.3pt'>
-  <p class=MsoNormal><span style='font-size:9.0pt;line-height:115%'>loadOperationHistory</span></p>
-  </td>
-  <td width=117 valign=top style='width:117.0pt;border-top:none;border-left:
-  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:4.3pt 4.3pt 4.3pt 4.3pt'>
-  <p class=MsoNormal><span style='font-size:9.0pt;line-height:115%'>Gets
-  history of operations from the node.js server and assigns them to opHistory</span></p>
-  <p class=MsoNormal style='line-height:normal'>&nbsp;</p>
-  </td>
-  <td width=115 valign=top style='width:114.75pt;border-top:none;border-left:
-  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:4.3pt 4.3pt 4.3pt 4.3pt'>
-  <p class=MsoNormal><span style='font-size:9.0pt;line-height:115%'>callback</span></p>
-  </td>
-  <td width=126 valign=top style='width:1.75in;border-top:none;border-left:
-  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:4.3pt 4.3pt 4.3pt 4.3pt'>
-  <p class=MsoNormal style='line-height:normal'>&nbsp;</p>
-  </td>
- </tr>
- <tr>
-  <td width=110 valign=top style='width:110.25pt;border:solid black 1.0pt;
-  border-top:none;padding:4.3pt 4.3pt 4.3pt 4.3pt'>
-  <p class=MsoNormal><span style='font-size:9.0pt;line-height:115%'>loadUserList</span></p>
-  </td>
-  <td width=117 valign=top style='width:117.0pt;border-top:none;border-left:
-  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:4.3pt 4.3pt 4.3pt 4.3pt'>
-  <p class=MsoNormal><span style='font-size:9.0pt;line-height:115%'>Gets user
-  list from the node.js server and assigns them to userList</span></p>
-  </td>
-  <td width=115 valign=top style='width:114.75pt;border-top:none;border-left:
-  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:4.3pt 4.3pt 4.3pt 4.3pt'>
-  <p class=MsoNormal style='line-height:normal'><span style='font-size:9.0pt'>callback</span></p>
-  </td>
-  <td width=126 valign=top style='width:1.75in;border-top:none;border-left:
-  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:4.3pt 4.3pt 4.3pt 4.3pt'>
-  <p class=MsoNormal style='line-height:normal'>&nbsp;</p>
-  </td>
- </tr>
- <tr>
-  <td width=110 valign=top style='width:110.25pt;border:solid black 1.0pt;
-  border-top:none;padding:4.3pt 4.3pt 4.3pt 4.3pt'>
-  <p class=MsoNormal><span style='font-size:9.0pt;line-height:115%'>loadChatHistory</span></p>
-  </td>
-  <td width=117 valign=top style='width:117.0pt;border-top:none;border-left:
-  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:4.3pt 4.3pt 4.3pt 4.3pt'>
-  <p class=MsoNormal><span style='font-size:9.0pt;line-height:115%'>Gets
-  history of chat messages from the node.js server and assigns them to
-  chatHistory</span></p>
-  </td>
-  <td width=115 valign=top style='width:114.75pt;border-top:none;border-left:
-  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:4.3pt 4.3pt 4.3pt 4.3pt'>
-  <p class=MsoNormal style='line-height:normal'><span style='font-size:9.0pt'>callback</span></p>
-  </td>
-  <td width=126 valign=top style='width:1.75in;border-top:none;border-left:
-  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:4.3pt 4.3pt 4.3pt 4.3pt'>
-  <p class=MsoNormal style='line-height:normal'>&nbsp;</p>
-  </td>
- </tr>
- <tr>
-  <td width=110 valign=top style='width:110.25pt;border:solid black 1.0pt;
-  border-top:none;padding:4.3pt 4.3pt 4.3pt 4.3pt'>
-  <p class=MsoNormal><span style='font-size:9.0pt;line-height:115%'>getNodeList</span></p>
-  </td>
-  <td width=117 valign=top style='width:117.0pt;border-top:none;border-left:
-  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:4.3pt 4.3pt 4.3pt 4.3pt'>
-  <p class=MsoNormal>&nbsp;</p>
-  </td>
-  <td width=115 valign=top style='width:114.75pt;border-top:none;border-left:
-  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:4.3pt 4.3pt 4.3pt 4.3pt'>
-  <p class=MsoNormal style='line-height:normal'><span style='font-size:9.0pt'>callback</span></p>
-  </td>
-  <td width=126 valign=top style='width:1.75in;border-top:none;border-left:
-  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:4.3pt 4.3pt 4.3pt 4.3pt'>
-  <p class=MsoNormal><span style='font-size:9.0pt;line-height:115%'>The node
-  list in the shared model as an object of node ids</span></p>
-  </td>
- </tr>
- <tr style='height:139.0pt'>
-  <td width=110 valign=top style='width:110.25pt;border:solid black 1.0pt;
-  border-top:none;padding:4.3pt 4.3pt 4.3pt 4.3pt;height:139.0pt'>
-  <p class=MsoNormal><span style='font-size:9.0pt;line-height:115%'>getLayoutProperties</span></p>
-  </td>
-  <td width=117 valign=top style='width:117.0pt;border-top:none;border-left:
-  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:4.3pt 4.3pt 4.3pt 4.3pt;height:139.0pt'>
-  <p class=MsoNormal>&nbsp;</p>
-  </td>
-  <td width=115 valign=top style='width:114.75pt;border-top:none;border-left:
-  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:4.3pt 4.3pt 4.3pt 4.3pt;height:139.0pt'>
-  <p class=MsoNormal style='line-height:normal'><span style='font-size:9.0pt'>callback</span></p>
-  </td>
-  <td width=126 valign=top style='width:1.75in;border-top:none;border-left:
-  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:4.3pt 4.3pt 4.3pt 4.3pt;height:139.0pt'>
-  <p class=MsoNormal><span style='font-size:9.0pt;line-height:115%'>Layout
-  properties of the shared model as an object with attributes as: </span></p>
-  <p class=MsoNormal><span style='font-size:10.0pt;line-height:115%'>{</span><span
-  style='font-size:9.0pt;line-height:115%'>name: &lt;layout name&gt;,</span></p>
-  <p class=MsoNormal><span style='font-size:9.0pt;line-height:115%'>&nbsp;nodeRepulsion:
-  &lt;node repulsion value&gt; ,</span></p>
-  <p class=MsoNormal><span style='font-size:9.0pt;line-height:115%'>&nbsp;nodeOverlap:&lt;node
-  overlap percentage&gt;, </span></p>
-  <p class=MsoNormal><span style='font-size:9.0pt;line-height:115%'>idealEdgeLength:&lt;ideal
-  edge length value&gt;, </span></p>
-  <p class=MsoNormal><span style='font-size:9.0pt;line-height:115%'>edgeElasticity:&lt;edge
-  elasticity value&gt;, </span></p>
-  <p class=MsoNormal><span style='font-size:9.0pt;line-height:115%'>nestingFactor:&lt;nesting
-  factor value&gt;, </span></p>
-  <p class=MsoNormal><span style='font-size:9.0pt;line-height:115%'>gravity:&lt;gravity
-  value&gt;, </span></p>
-  <p class=MsoNormal><span style='font-size:9.0pt;line-height:115%'>numIter:&lt;number
-  of iterations&gt;,</span></p>
-  <p class=MsoNormal><span style='font-size:9.0pt;line-height:115%'>tile:&lt;boolean
-  value to tile disconnected&gt;, </span></p>
-  <p class=MsoNormal><span style='font-size:9.0pt;line-height:115%'>animate:&lt;boolean
-  value&gt;, </span></p>
-  <p class=MsoNormal><span style='font-size:9.0pt;line-height:115%'>randomize:&lt;boolean
-  value&gt;} </span></p>
-  <p class=MsoNormal style='line-height:normal'>&nbsp;</p>
-  </td>
- </tr>
- <tr style='height:44.0pt'>
-  <td width=110 valign=top style='width:110.25pt;border:solid black 1.0pt;
-  border-top:none;padding:4.3pt 4.3pt 4.3pt 4.3pt;height:44.0pt'>
-  <p class=MsoNormal><span style='font-size:9.0pt;line-height:115%'>changeName</span></p>
-  </td>
-  <td width=117 valign=top style='width:117.0pt;border-top:none;border-left:
-  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:4.3pt 4.3pt 4.3pt 4.3pt;height:44.0pt'>
-  <p class=MsoNormal><span style='font-size:9.0pt;line-height:115%'>Sends
-  request to the server to change agent's name</span></p>
-  </td>
-  <td width=115 valign=top style='width:114.75pt;border-top:none;border-left:
-  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:4.3pt 4.3pt 4.3pt 4.3pt;height:44.0pt'>
-  <p class=MsoNormal style='line-height:normal'><span style='font-size:9.0pt'>newName</span></p>
-  </td>
-  <td width=126 valign=top style='width:1.75in;border-top:none;border-left:
-  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:4.3pt 4.3pt 4.3pt 4.3pt;height:44.0pt'>
-  <p class=MsoNormal style='line-height:normal'>&nbsp;</p>
-  </td>
- </tr>
- <tr>
-  <td width=110 valign=top style='width:110.25pt;border:solid black 1.0pt;
-  border-top:none;padding:4.3pt 4.3pt 4.3pt 4.3pt'>
-  <p class=MsoNormal><span style='font-size:9.0pt;line-height:115%'>getNodeRequest</span></p>
-  </td>
-  <td width=117 valign=top style='width:117.0pt;border-top:none;border-left:
-  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:4.3pt 4.3pt 4.3pt 4.3pt'>
-  <p class=MsoNormal><span style='font-size:9.0pt;line-height:115%'>Requests
-  the node with &lt;id&gt; from the server</span></p>
-  </td>
-  <td width=115 valign=top style='width:114.75pt;border-top:none;border-left:
-  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:4.3pt 4.3pt 4.3pt 4.3pt'>
-  <p class=MsoNormal style='line-height:normal'><span style='font-size:9.0pt'>id,
-  callback</span></p>
-  </td>
-  <td width=126 valign=top style='width:1.75in;border-top:none;border-left:
-  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:4.3pt 4.3pt 4.3pt 4.3pt'>
-  <p class=MsoNormal style='line-height:normal'><span style='font-size:9.0pt'>Node
-  with id</span></p>
-  </td>
- </tr>
- <tr>
-  <td width=110 valign=top style='width:110.25pt;border:solid black 1.0pt;
-  border-top:none;padding:4.3pt 4.3pt 4.3pt 4.3pt'>
-  <p class=MsoNormal><span style='font-size:9.0pt;line-height:115%'>getEdgeRequest</span></p>
-  </td>
-  <td width=117 valign=top style='width:117.0pt;border-top:none;border-left:
-  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:4.3pt 4.3pt 4.3pt 4.3pt'>
-  <p class=MsoNormal><span style='font-size:9.0pt;line-height:115%'>Requests
-  the edge with &lt;id&gt; from the server</span></p>
-  </td>
-  <td width=115 valign=top style='width:114.75pt;border-top:none;border-left:
-  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:4.3pt 4.3pt 4.3pt 4.3pt'>
-  <p class=MsoNormal style='line-height:normal'><span style='font-size:9.0pt'>id,
-  callback</span></p>
-  </td>
-  <td width=126 valign=top style='width:1.75in;border-top:none;border-left:
-  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:4.3pt 4.3pt 4.3pt 4.3pt'>
-  <p class=MsoNormal style='line-height:normal'><span style='font-size:9.0pt'>Edge
-  with id</span></p>
-  </td>
- </tr>
- <tr>
-  <td width=110 valign=top style='width:110.25pt;border:solid black 1.0pt;
-  border-top:none;padding:4.3pt 4.3pt 4.3pt 4.3pt'>
-  <p class=MsoNormal><span style='font-size:9.0pt;line-height:115%'>sendMessage</span></p>
-  </td>
-  <td width=117 valign=top style='width:117.0pt;border-top:none;border-left:
-  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:4.3pt 4.3pt 4.3pt 4.3pt'>
-  <p class=MsoNormal><span style='font-size:9.0pt;line-height:115%'>Sends chat
-  message &lt;comments&gt; as a string to &lt;targetArr&gt; as an array of
-  targeted user ids [{id: &lt;id1&gt;},..., {id: &lt;idn&gt;}]</span></p>
-  </td>
-  <td width=115 valign=top style='width:114.75pt;border-top:none;border-left:
-  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:4.3pt 4.3pt 4.3pt 4.3pt'>
-  <p class=MsoNormal style='line-height:normal'><span style='font-size:9.0pt'>comment,
-  targetArr, callback</span></p>
-  </td>
-  <td width=126 valign=top style='width:1.75in;border-top:none;border-left:
-  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:4.3pt 4.3pt 4.3pt 4.3pt'>
-  <p class=MsoNormal style='line-height:normal'>&nbsp;</p>
-  </td>
- </tr>
- <tr>
-  <td width=110 valign=top style='width:110.25pt;border:solid black 1.0pt;
-  border-top:none;padding:4.3pt 4.3pt 4.3pt 4.3pt'>
-  <p class=MsoNormal><span style='font-size:9.0pt;line-height:115%'>listen</span></p>
-  </td>
-  <td width=117 valign=top style='width:117.0pt;border-top:none;border-left:
-  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:4.3pt 4.3pt 4.3pt 4.3pt'>
-  <p class=MsoNormal><span style='font-size:9.0pt;line-height:115%'>Socket
-  listener for server requests. Can get “operation”, “message”, “userList” or
-  “imageFile” from the server.</span></p>
-  </td>
-  <td width=115 valign=top style='width:114.75pt;border-top:none;border-left:
-  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:4.3pt 4.3pt 4.3pt 4.3pt'>
-  <p class=MsoNormal style='line-height:normal'><span style='font-size:9.0pt'>callback</span></p>
-  </td>
-  <td width=126 valign=top style='width:1.75in;border-top:none;border-left:
-  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:4.3pt 4.3pt 4.3pt 4.3pt'>
-  <p class=MsoNormal style='line-height:normal'>&nbsp;</p>
-  </td>
- </tr>
- <tr style='height:62.0pt'>
-  <td width=110 valign=top style='width:110.25pt;border:solid black 1.0pt;
-  border-top:none;padding:4.3pt 4.3pt 4.3pt 4.3pt;height:62.0pt'>
-  <p class=MsoNormal><span style='font-size:9.0pt;line-height:115%'>sendRequest</span></p>
-  </td>
-  <td width=117 valign=top style='width:117.0pt;border-top:none;border-left:
-  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:4.3pt 4.3pt 4.3pt 4.3pt;height:62.0pt'>
-  <p class=MsoNormal><span style='font-size:9.0pt;line-height:115%'>Sends an
-  operation request to the node.js server.&nbsp; Model update operations are
-  done using this method.</span></p>
-  </td>
-  <td width=115 valign=top style='width:114.75pt;border-top:none;border-left:
-  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:4.3pt 4.3pt 4.3pt 4.3pt;height:62.0pt'>
-  <p class=MsoNormal style='line-height:normal'><a href="#_nhfdym5d0wpf"><span
-  style='font-size:9.0pt;color:#1155CC'>reqName, param</span></a></p>
-  <p class=MsoNormal style='line-height:normal'>&nbsp;</p>
-  </td>
-  <td width=126 valign=top style='width:1.75in;border-top:none;border-left:
-  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:4.3pt 4.3pt 4.3pt 4.3pt;height:62.0pt'>
-  <p class=MsoNormal style='line-height:normal'>&nbsp;</p>
-  </td>
- </tr>
-</table>
-
-<p class=MsoNormal>&nbsp;</p>
-
-<p class=MsoNormal>&nbsp;</p>
-
-<h5><a name="_nhfdym5d0wpf"></a>sendRequest:</h5>
-
-<p class=MsoNormal style='margin-left:.5in'>&nbsp;</p>
-
-<table class=a0 border=1 cellspacing=0 cellpadding=0 width=461
- style='margin-left:-.75pt;border-collapse:collapse;border:none'>
- <tr>
-  <td width=177 valign=top style='width:177.0pt;border:solid black 1.0pt;
-  padding:5.0pt 5.0pt 5.0pt 5.0pt'>
-  <p class=MsoNormal style='line-height:normal'><b><span style='font-size:9.0pt'>reqName</span></b></p>
-  </td>
-  <td width=284 valign=top style='width:284.25pt;border:solid black 1.0pt;
-  border-left:none;padding:5.0pt 5.0pt 5.0pt 5.0pt'>
-  <p class=MsoNormal style='line-height:normal'><b><span style='font-size:9.0pt'>param</span></b></p>
-  </td>
- </tr>
- <tr>
-  <td width=177 valign=top style='width:177.0pt;border:solid black 1.0pt;
-  border-top:none;padding:5.0pt 5.0pt 5.0pt 5.0pt'>
-  <p class=MsoNormal style='line-height:normal'><span style='font-size:10.0pt'>“agentAddImageRequest”</span></p>
-  </td>
-  <td width=284 valign=top style='width:284.25pt;border-top:none;border-left:
-  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:5.0pt 5.0pt 5.0pt 5.0pt'>
-  <p class=MsoNormal><span style='font-size:10.0pt;line-height:115%'>{img:
-  &lt;image file&gt;, </span></p>
-  <p class=MsoNormal><span style='font-size:10.0pt;line-height:115%'>filePath:
-  &lt;path of image file&gt; } </span></p>
-  </td>
- </tr>
- <tr>
-  <td width=177 valign=top style='width:177.0pt;border:solid black 1.0pt;
-  border-top:none;padding:5.0pt 5.0pt 5.0pt 5.0pt'>
-  <p class=MsoNormal><span style='font-size:10.0pt;line-height:115%'>&quot;agentSetLayoutProperties&quot;</span></p>
-  </td>
-  <td width=284 valign=top style='width:284.25pt;border-top:none;border-left:
-  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:5.0pt 5.0pt 5.0pt 5.0pt'>
-  <p class=MsoNormal><span style='font-size:10.0pt;line-height:115%'>{name:
-  &lt;layout name&gt;,</span></p>
-  <p class=MsoNormal><span style='font-size:10.0pt;line-height:115%'>&nbsp;nodeRepulsion:
-  &lt;node repulsion value&gt; ,</span></p>
-  <p class=MsoNormal><span style='font-size:10.0pt;line-height:115%'>&nbsp;nodeOverlap:&lt;node
-  overlap percentage&gt;, </span></p>
-  <p class=MsoNormal><span style='font-size:10.0pt;line-height:115%'>idealEdgeLength:&lt;ideal
-  edge length value&gt;, </span></p>
-  <p class=MsoNormal><span style='font-size:10.0pt;line-height:115%'>edgeElasticity:&lt;edge
-  elasticity value&gt;, </span></p>
-  <p class=MsoNormal><span style='font-size:10.0pt;line-height:115%'>nestingFactor:&lt;nesting
-  factor value&gt;, </span></p>
-  <p class=MsoNormal><span style='font-size:10.0pt;line-height:115%'>gravity:&lt;gravity
-  value&gt;, </span></p>
-  <p class=MsoNormal><span style='font-size:10.0pt;line-height:115%'>numIter:&lt;number
-  of iterations&gt;,</span></p>
-  <p class=MsoNormal><span style='font-size:10.0pt;line-height:115%'>tile:&lt;boolean
-  value to tile disconnected&gt;, </span></p>
-  <p class=MsoNormal><span style='font-size:10.0pt;line-height:115%'>animate:&lt;boolean
-  value&gt;, </span></p>
-  <p class=MsoNormal><span style='font-size:10.0pt;line-height:115%'>randomize:&lt;boolean
-  value&gt;} </span></p>
-  </td>
- </tr>
- <tr>
-  <td width=177 valign=top style='width:177.0pt;border:solid black 1.0pt;
-  border-top:none;padding:5.0pt 5.0pt 5.0pt 5.0pt'>
-  <p class=MsoNormal style='line-height:normal'><span style='font-size:10.0pt'>“agentRunLayoutRequest”</span></p>
-  </td>
-  <td width=284 valign=top style='width:284.25pt;border-top:none;border-left:
-  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:5.0pt 5.0pt 5.0pt 5.0pt'>
-  <p class=MsoNormal style='line-height:normal'><span style='font-size:10.0pt'>-</span></p>
-  </td>
- </tr>
- <tr>
-  <td width=177 valign=top style='width:177.0pt;border:solid black 1.0pt;
-  border-top:none;padding:5.0pt 5.0pt 5.0pt 5.0pt'>
-  <p class=MsoNormal style='line-height:normal'><span style='font-size:10.0pt'>“agentAddNodeRequest”</span></p>
-  </td>
-  <td width=284 valign=top style='width:284.25pt;border-top:none;border-left:
-  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:5.0pt 5.0pt 5.0pt 5.0pt'>
-  <p class=MsoNormal style='line-height:normal'><span style='font-size:10.0pt'>{x:
-  &lt;position x&gt;, </span></p>
-  <p class=MsoNormal style='line-height:normal'><span style='font-size:10.0pt'>y:
-  &lt;position y&gt;, </span></p>
-  <p class=MsoNormal style='line-height:normal'><span style='font-size:10.0pt'>sbgnclass:
-  &lt;sbgn class&gt;}</span></p>
-  </td>
- </tr>
- <tr>
-  <td width=177 valign=top style='width:177.0pt;border:solid black 1.0pt;
-  border-top:none;padding:5.0pt 5.0pt 5.0pt 5.0pt'>
-  <p class=MsoNormal><span style='font-size:10.0pt;line-height:115%'>“agentAddEdgeRequest”</span></p>
-  </td>
-  <td width=284 valign=top style='width:284.25pt;border-top:none;border-left:
-  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:5.0pt 5.0pt 5.0pt 5.0pt'>
-  <p class=MsoNormal><span style='font-size:10.0pt;line-height:115%'>{source:
-  &lt;source node id&gt;, </span></p>
-  <p class=MsoNormal><span style='font-size:10.0pt;line-height:115%'>target:
-  &lt;target node id&gt;, </span></p>
-  <p class=MsoNormal style='line-height:normal'><span style='font-size:10.0pt'>sbgnclass:
-  &lt;sbgn class&gt;}</span></p>
-  </td>
- </tr>
- <tr>
-  <td width=177 valign=top style='width:177.0pt;border:solid black 1.0pt;
-  border-top:none;padding:5.0pt 5.0pt 5.0pt 5.0pt'>
-  <p class=MsoNormal><span style='font-size:10.0pt;line-height:115%'>“agentChangeNodeAttributeRequest”</span></p>
-  </td>
-  <td width=284 valign=top style='width:284.25pt;border-top:none;border-left:
-  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:5.0pt 5.0pt 5.0pt 5.0pt'>
-  <p class=MsoNormal><span style='font-size:10.0pt;line-height:115%'>{id:
-  &lt;node id&gt;, </span></p>
-  <p class=MsoNormal><span style='font-size:10.0pt;line-height:115%'>attStr:
-  &lt;node attribute name in the model&gt;</span></p>
-  <p class=MsoNormal><span style='font-size:10.0pt;line-height:115%'>attVal:&lt;node
-  attribute value&gt;}</span></p>
-  <p class=MsoNormal>&nbsp;</p>
-  <p class=MsoNormal><span style='font-size:10.0pt;line-height:115%'>attStr
-  takes the following values: “sbgnclass”, “highlightColor”, “backgroundColor”,
-  “sbgnlabel”, “borderColor”, “borderWidth”, “isMultimer”, “isCloneMarker”,
-  “parent”, “children”, “width”, “height”, “sbgnbboxW”, “sbgnbboxH”,
-  “sbgnStatesAndInfos” </span></p>
-  </td>
- </tr>
- <tr>
-  <td width=177 valign=top style='width:177.0pt;border:solid black 1.0pt;
-  border-top:none;padding:5.0pt 5.0pt 5.0pt 5.0pt'>
-  <p class=MsoNormal><span style='font-size:10.0pt;line-height:115%'>“agentChangeEdgeAttributeRequest”</span></p>
-  </td>
-  <td width=284 valign=top style='width:284.25pt;border-top:none;border-left:
-  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:5.0pt 5.0pt 5.0pt 5.0pt'>
-  <p class=MsoNormal><span style='font-size:10.0pt;line-height:115%'>{id:
-  &lt;node id&gt;, </span></p>
-  <p class=MsoNormal><span style='font-size:10.0pt;line-height:115%'>attStr:
-  &lt;edge attribute name in the model&gt;</span></p>
-  <p class=MsoNormal><span style='font-size:10.0pt;line-height:115%'>attVal:&lt;edge
-  attribute value&gt;}</span></p>
-  <p class=MsoNormal>&nbsp;</p>
-  <p class=MsoNormal><span style='font-size:10.0pt;line-height:115%'>attStr
-  takes the following values: “lineColor”, “highlightColor”, “width”,
-  “cardinality”&nbsp; </span></p>
-  </td>
- </tr>
- <tr>
-  <td width=177 valign=top style='width:177.0pt;border:solid black 1.0pt;
-  border-top:none;padding:5.0pt 5.0pt 5.0pt 5.0pt'>
-  <p class=MsoNormal><span style='font-size:10.0pt;line-height:115%'>“agentMoveNodeRequest”</span></p>
-  </td>
-  <td width=284 valign=top style='width:284.25pt;border-top:none;border-left:
-  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:5.0pt 5.0pt 5.0pt 5.0pt'>
-  <p class=MsoNormal><span style='font-size:10.0pt;line-height:115%'>{id:
-  &lt;node id&gt;, </span></p>
-  <p class=MsoNormal><span style='font-size:10.0pt;line-height:115%'>pos:
-  {x:&lt;new position x&gt;, y: &lt; new position y&gt;}}</span></p>
-  </td>
- </tr>
- <tr>
-  <td width=177 valign=top style='width:177.0pt;border:solid black 1.0pt;
-  border-top:none;padding:5.0pt 5.0pt 5.0pt 5.0pt'>
-  <p class=MsoNormal><span style='font-size:10.0pt;line-height:115%'>“agentAddCompoundRequest”</span></p>
-  </td>
-  <td width=284 valign=top style='width:284.25pt;border-top:none;border-left:
-  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:5.0pt 5.0pt 5.0pt 5.0pt'>
-  <p class=MsoNormal><span style='font-size:10.0pt;line-height:115%'>{type:
-  &lt;compound type as “complex” or “compartment”&gt;, </span></p>
-  <p class=MsoNormal><span style='font-size:10.0pt;line-height:115%'>selectedNodeArr:
-  &lt;array of node ids&gt;}</span></p>
-  </td>
- </tr>
- <tr>
-  <td width=177 valign=top style='width:177.0pt;border:solid black 1.0pt;
-  border-top:none;padding:5.0pt 5.0pt 5.0pt 5.0pt'>
-  <p class=MsoNormal><span style='font-size:10.0pt;line-height:115%'>“agentMergeGraphRequest”</span></p>
-  </td>
-  <td width=284 valign=top style='width:284.25pt;border-top:none;border-left:
-  none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
-  padding:5.0pt 5.0pt 5.0pt 5.0pt'>
-  <p class=MsoNormal><span style='font-size:10.0pt;line-height:115%'>{param:
-  &lt;graph to be added in sbgn format&gt;}</span></p>
-  </td>
- </tr>
-</table>
-
-<p class=MsoNormal style='margin-left:.5in'>&nbsp;</p>
-
-<p class=MsoNormal>&nbsp;</p>
-
-<p class=MsoNormal>&nbsp;</p>
-
-<p class=MsoNormal>In order to set up and run an agent:</p>
-
-<p class=MsoNormal>&nbsp;</p>
-
-<p class=MsoNormal><b><i><span style='font-size:9.0pt;line-height:115%;
-color:#660E7A;background:white'>agent </span></i></b><span style='font-size:
-9.0pt;line-height:115%;background:white'>= <b><span style='color:navy'>new </span></b><i>Agent</i>(<span
-style='color:#458383'>agentName</span>, <span style='color:#458383'>agentId</span>);</span></p>
-
-<p class=MsoNormal><b><span style='font-size:9.0pt;line-height:115%;color:navy;
-background:white'>var </span></b><span style='font-size:9.0pt;line-height:115%;
-color:#458383;background:white'>socket </span><span style='font-size:9.0pt;
-line-height:115%;background:white'>= <b><i><span style='color:#660E7A'>agent</span></i></b>.<span
-style='color:#7A7A43'>connectToServer</span>(<span style='color:#458383'>serverIp</span>,
-<b><span style='color:navy'>function</span></b>(){</span></p>
-
-<p class=MsoNormal style='text-indent:.5in'><i><span style='font-size:9.0pt;
-line-height:115%;color:gray;background:white'>//callback operations</span></i></p>
-
-<p class=MsoNormal><span style='font-size:9.0pt;line-height:115%;background:
-white'>});</span></p>
-
-<p class=MsoNormal><span style='font-size:9.0pt;line-height:115%;color:#458383;
-background:white'>socket</span><span style='font-size:9.0pt;line-height:115%;
-background:white'>.<span style='color:#7A7A43'>on</span>(<b><span
-style='color:green'>'connect'</span></b>, <b><span style='color:navy'>function</span></b>(){</span></p>
-
-<p class=MsoNormal><span style='font-size:9.0pt;line-height:115%;background:
-white'>&nbsp;&nbsp; <b><i><span style='color:#660E7A'>agent</span></i></b>.<span
-style='color:#7A7A43'>loadModel</span>(<b><span style='color:navy'>function</span></b>()
-{</span></p>
-
-<p class=MsoNormal><span style='font-size:9.0pt;line-height:115%;background:
-white'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b><i><span style='color:#660E7A'>agent</span></i></b>.<span
-style='color:#7A7A43'>loadOperationHistory</span>(<b><span style='color:navy'>function</span></b>(){</span></p>
-
-<p class=MsoNormal><span style='font-size:9.0pt;line-height:115%;background:
-white'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b><i><span
-style='color:#660E7A'>agent</span></i></b>.<span style='color:#7A7A43'>loadChatHistory</span>(<b><span
-style='color:navy'>function</span></b>(){&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></p>
-
-<p class=MsoNormal style='text-indent:.5in'><i><span style='font-size:9.0pt;
-line-height:115%;color:gray;background:white'>//callback operations</span></i><span
-style='font-size:9.0pt;line-height:115%;background:white'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></p>
-
-<p class=MsoNormal style='text-indent:.5in'><span style='font-size:9.0pt;
-line-height:115%;background:white'>});</span></p>
-
-<p class=MsoNormal><span style='font-size:9.0pt;line-height:115%;background:
-white'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; });</span></p>
-
-<p class=MsoNormal><span style='font-size:9.0pt;line-height:115%;background:
-white'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; });</span></p>
-
-<p class=MsoNormal><span style='font-size:9.0pt;line-height:115%;background:
-white'>&nbsp;&nbsp; <b><i><span style='color:#660E7A'>agent</span></i></b>.<span
-style='color:#7A7A43'>listen</span>(<b><span style='color:navy'>function</span></b>(){</span></p>
-
-<p class=MsoNormal><span style='font-size:9.0pt;line-height:115%;background:
-white'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style='color:#458383'>socket</span>.<span
-style='color:#7A7A43'>on</span>(<b><span style='color:green'>'operation'</span></b>,
-<b><span style='color:navy'>function</span></b>(data){</span></p>
-
-<p class=MsoNormal><span style='font-size:9.0pt;line-height:115%;background:
-white'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <i><span
-style='color:gray'>//callback operations</span></i></span></p>
-
-<p class=MsoNormal><span style='font-size:9.0pt;line-height:115%;background:
-white'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; });</span></p>
-
-<p class=MsoNormal><span style='font-size:9.0pt;line-height:115%;background:
-white'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style='color:#458383'>socket</span>.<span
-style='color:#7A7A43'>on</span>(<b><span style='color:green'>'message'</span></b>,
-<b><span style='color:navy'>function</span></b>(data){</span></p>
-
-<p class=MsoNormal><span style='font-size:9.0pt;line-height:115%;background:
-white'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <i><span
-style='color:gray'>//callback operations</span></i></span></p>
-
-<p class=MsoNormal><span style='font-size:9.0pt;line-height:115%;background:
-white'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; });</span></p>
-
-<p class=MsoNormal><span style='font-size:9.0pt;line-height:115%;background:
-white'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style='color:#458383'>socket</span>.<span
-style='color:#7A7A43'>on</span>(<b><span style='color:green'>'userList'</span></b>,
-<b><span style='color:navy'>function</span></b>(data){</span></p>
-
-<p class=MsoNormal><span style='font-size:9.0pt;line-height:115%;background:
-white'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <i><span
-style='color:gray'>//callback operations</span></i></span></p>
-
-<p class=MsoNormal><span style='font-size:9.0pt;line-height:115%;background:
-white'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; });</span></p>
-
-<p class=MsoNormal><span style='font-size:9.0pt;line-height:115%;background:
-white'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style='color:#458383'>socket</span>.<span
-style='color:#7A7A43'>on</span>(<b><span style='color:green'>'imageFile'</span></b>,
-<b><span style='color:navy'>function</span></b>(data){</span></p>
-
-<p class=MsoNormal><span style='font-size:9.0pt;line-height:115%;background:
-white'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <i><span
-style='color:gray'>//callback operations</span></i></span></p>
-
-<p class=MsoNormal><span style='font-size:9.0pt;line-height:115%;background:
-white'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; });</span></p>
-
-<p class=MsoNormal><span style='font-size:9.0pt;line-height:115%;background:
-white'>&nbsp;&nbsp; });</span></p>
-
-<p class=MsoNormal><span style='font-size:9.0pt;line-height:115%;background:
-white'>});</span></p>
-
-<p class=MsoNormal>&nbsp;</p>
-
-<p class=MsoNormal>An example web-based agent can be found in:</p>
-
-<p class=MsoNormal>&nbsp;</p>
-
-<p class=MsoNormal>Sbgnviz-Collaborative-Editor/agent-interaction/computerAgent.html</p>
-
-<p class=MsoNormal>&nbsp;</p>
-
-<p class=MsoNormal>&nbsp;</p>
-
-<p class=MsoNormal>Command History:</p>
-
-<p class=MsoNormal>JSON array as: </p>
-
-<p class=MsoNormal>[</p>
-
-<p class=MsoNormal>&nbsp;&nbsp;&nbsp;&nbsp; {</p>
-
-<p class=MsoNormal style='margin-left:.5in'>userName: //name of the user who
-gave the command</p>
-
-<p class=MsoNormal style='margin-left:.5in'>name: //name of the command</p>
-
-<p class=MsoNormal style='margin-left:.5in'>id: //id of the affected element</p>
-
-<p class=MsoNormal style='margin-left:.5in'>param: //operation parameters</p>
-
-<p class=MsoNormal>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [</p>
-
-<p class=MsoNormal>&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;{</p>
-
-<p class=MsoNormal>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; x:
-//node position x</p>
-
-<p class=MsoNormal>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; y:
-//node position y</p>
-
-<p class=MsoNormal>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; sbgnclass:
-//node sbgnclass</p>
-
-<p class=MsoNormal>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; source:&nbsp;
-//edge source</p>
-
-<p class=MsoNormal>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; target:&nbsp;
-//edge target</p>
-
-<p class=MsoNormal>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; sbgnclass:
-//edge sbgnclass</p>
-
-<p class=MsoNormal>&nbsp;</p>
-
-<p class=MsoNormal>&nbsp;</p>
-
-<p class=MsoNormal>&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;}
-</p>
-
-<p class=MsoNormal style='text-indent:.5in'>]</p>
-
-<p class=MsoNormal style='text-indent:.5in'>date: //date of the command</p>
-
-<p class=MsoNormal>&nbsp;&nbsp; }</p>
-
-<p class=MsoNormal>]</p>
-
-<h2><a name="_3g1tmtehb2nc"></a>History Manager</h2>
-
-<p class=MsoNormal>Each command is stored in the model as a part of command
-history. Command structure is as follows:</p>
-
-<p class=MsoNormal>opName: set | add | delete | init</p>
-
-<p class=MsoNormal>opTarget: node | edge | node group | edge group</p>
-
-<p class=MsoNormal>opAttr:&nbsp; id| position | sbgnclass | sbgnlabel | width |
-height | backgroundColor |&nbsp; borderColor | borderWidth | parent |
-isCloneMarker | isMultimer | sbgnStatesAndInfos| source| target |lineColor |
-lineWidth| sbgncardinality</p>
-
-<p class=MsoNormal>elId: id of the node or edge | id array of the node or edge
-group</p>
-
-<p class=MsoNormal>elType: “node” or “edge”</p>
-
-<p class=MsoNormal>param:</p>
-
-<p class=MsoNormal>prevParam:</p>
-
-<p class=MsoNormal>&nbsp;</p>
-
-<p class=MsoNormal>&nbsp;</p>
-
-<h3><a name="_cx5b1mdp3uj5"></a>JSON Model Structure</h3>
-
-<p class=MsoNormal style='margin-left:.5in;text-indent:-.25in'><span
-style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span><span style='font-size:9.0pt;line-height:115%'>users</span></p>
-
-<p class=MsoNormal style='margin-left:1.0in;text-indent:-.25in'><span
-style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span><span style='font-size:9.0pt;line-height:115%'>name</span></p>
-
-<p class=MsoNormal style='margin-left:.5in;text-indent:-.25in'><span
-style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span><span style='font-size:9.0pt;line-height:115%'>page</span></p>
-
-<p class=MsoNormal style='margin-left:1.0in;text-indent:-.25in'><span
-style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span><span style='font-size:9.0pt;line-height:115%'>list</span></p>
-
-<p class=MsoNormal style='margin-left:1.0in;text-indent:-.25in'><span
-style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span><span style='font-size:9.0pt;line-height:115%'>room</span></p>
-
-<p class=MsoNormal style='margin-left:1.0in;text-indent:-.25in'><span
-style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span><span style='font-size:9.0pt;line-height:115%'>doc</span></p>
-
-<p class=MsoNormal style='margin-left:1.5in;text-indent:-.25in'><span
-style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span><span style='font-size:9.0pt;line-height:115%'>userIds</span></p>
-
-<p class=MsoNormal style='margin-left:1.5in;text-indent:-.25in'><span
-style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span><span style='font-size:9.0pt;line-height:115%'>history</span></p>
-
-<p class=MsoNormal style='margin-left:1.5in;text-indent:-.25in'><span
-style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span><span style='font-size:9.0pt;line-height:115%'>undoIndex</span></p>
-
-<p class=MsoNormal style='margin-left:1.5in;text-indent:-.25in'><span
-style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span><span style='font-size:9.0pt;line-height:115%'>Images</span></p>
-
-<p class=MsoNormal style='margin-left:1.5in;text-indent:-.25in'><span
-style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span><span style='font-size:9.0pt;line-height:115%'>Context</span></p>
-
-<p class=MsoNormal style='margin-left:2.0in;text-indent:-.25in'><span
-style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span><span style='font-size:9.0pt;line-height:115%'>name</span></p>
-
-<p class=MsoNormal style='margin-left:2.0in;text-indent:-.25in'><span
-style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span><span style='font-size:9.0pt;line-height:115%'>relevance</span></p>
-
-<p class=MsoNormal style='margin-left:2.0in;text-indent:-.25in'><span
-style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span><span style='font-size:9.0pt;line-height:115%'>confidence</span></p>
-
-<p class=MsoNormal style='margin-left:1.5in;text-indent:-.25in'><span
-style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span><span style='font-size:9.0pt;line-height:115%'>cy&nbsp;
-//sbgn-related</span></p>
-
-<p class=MsoNormal style='margin-left:2.0in;text-indent:-.25in'><span
-style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span><span style='font-size:9.0pt;line-height:115%'>sampleInd
-//temporary</span></p>
-
-<p class=MsoNormal style='margin-left:2.0in;text-indent:-.25in'><span
-style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span><span style='font-size:9.0pt;line-height:115%'>layoutProperties </span></p>
-
-<p class=MsoNormal style='margin-left:2.0in;text-indent:-.25in'><span
-style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span><span style='font-size:9.0pt;line-height:115%'>nodes</span></p>
-
-<p class=MsoNormal style='margin-left:2.5in;text-indent:-.25in'><span
-style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span><span style='font-size:9.0pt;line-height:115%'>[nodeId]</span></p>
-
-<p class=MsoNormal style='margin-left:3.0in;text-indent:-.25in'><span
-style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span><span style='font-size:9.0pt;line-height:115%'>id</span></p>
-
-<p class=MsoNormal style='margin-left:3.0in;text-indent:-.25in'><span
-style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span><span style='font-size:9.0pt;line-height:115%'>addedLater //to
-sync. node addition</span></p>
-
-<p class=MsoNormal style='margin-left:3.0in;text-indent:-.25in'><span
-style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span><span style='font-size:9.0pt;line-height:115%'>sbgnclass</span></p>
-
-<p class=MsoNormal style='margin-left:3.0in;text-indent:-.25in'><span
-style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span><span style='font-size:9.0pt;line-height:115%'>position</span></p>
-
-<p class=MsoNormal style='margin-left:3.0in;text-indent:-.25in'><span
-style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span><span style='font-size:9.0pt;line-height:115%'>highlightColor</span></p>
-
-<p class=MsoNormal style='margin-left:3.0in;text-indent:-.25in'><span
-style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span><span style='font-size:9.0pt;line-height:115%'>sbgnlabel</span></p>
-
-<p class=MsoNormal style='margin-left:3.0in;text-indent:-.25in'><span
-style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span><span style='font-size:9.0pt;line-height:115%'>borderColor</span></p>
-
-<p class=MsoNormal style='margin-left:3.0in;text-indent:-.25in'><span
-style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span><span style='font-size:9.0pt;line-height:115%'>borderWidth</span></p>
-
-<p class=MsoNormal style='margin-left:3.0in;text-indent:-.25in'><span
-style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span><span style='font-size:9.0pt;line-height:115%'>backgroundColor</span></p>
-
-<p class=MsoNormal style='margin-left:3.0in;text-indent:-.25in'><span
-style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span><span style='font-size:9.0pt;line-height:115%'>backgroundOpacity</span></p>
-
-<p class=MsoNormal style='margin-left:3.0in;text-indent:-.25in'><span
-style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span><span style='font-size:9.0pt;line-height:115%'>isMultimer</span></p>
-
-<p class=MsoNormal style='margin-left:3.0in;text-indent:-.25in'><span
-style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span><span style='font-size:9.0pt;line-height:115%'>isCloneMarker</span></p>
-
-<p class=MsoNormal style='margin-left:3.0in;text-indent:-.25in'><span
-style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span><span style='font-size:9.0pt;line-height:115%'>ports</span></p>
-
-<p class=MsoNormal style='margin-left:3.0in;text-indent:-.25in'><span
-style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span><span style='font-size:9.0pt;line-height:115%'>width</span></p>
-
-<p class=MsoNormal style='margin-left:3.0in;text-indent:-.25in'><span
-style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span><span style='font-size:9.0pt;line-height:115%'>height</span></p>
-
-<p class=MsoNormal style='margin-left:3.0in;text-indent:-.25in'><span
-style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span><span style='font-size:9.0pt;line-height:115%'>sbgnStatesAndInfos</span></p>
-
-<p class=MsoNormal style='margin-left:3.0in;text-indent:-.25in'><span
-style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span><span style='font-size:9.0pt;line-height:115%'>expandCollapseStatus</span></p>
-
-<p class=MsoNormal style='margin-left:3.0in;text-indent:-.25in'><span
-style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span><span style='font-size:9.0pt;line-height:115%'>highlightStatus</span></p>
-
-<p class=MsoNormal style='margin-left:3.0in;text-indent:-.25in'><span
-style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span><span style='font-size:9.0pt;line-height:115%'>visibilityStatus</span></p>
-
-<p class=MsoNormal style='margin-left:2.0in;text-indent:-.25in'><span
-style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span><span style='font-size:9.0pt;line-height:115%'>edges</span></p>
-
-<p class=MsoNormal style='margin-left:2.5in;text-indent:-.25in'><span
-style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span><span style='font-size:9.0pt;line-height:115%'>[edgeId]</span></p>
-
-<p class=MsoNormal style='margin-left:3.0in;text-indent:-.25in'><span
-style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span><span style='font-size:9.0pt;line-height:115%'>id</span></p>
-
-<p class=MsoNormal style='margin-left:3.0in;text-indent:-.25in'><span
-style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span><span style='font-size:9.0pt;line-height:115%'>addedLater //to
-sync. edge addition</span></p>
-
-<p class=MsoNormal style='margin-left:3.0in;text-indent:-.25in'><span
-style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span><span style='font-size:9.0pt;line-height:115%'>sbgnclass</span></p>
-
-<p class=MsoNormal style='margin-left:3.0in;text-indent:-.25in'><span
-style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span><span style='font-size:9.0pt;line-height:115%'>source</span></p>
-
-<p class=MsoNormal style='margin-left:3.0in;text-indent:-.25in'><span
-style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span><span style='font-size:9.0pt;line-height:115%'>target</span></p>
-
-<p class=MsoNormal style='margin-left:3.0in;text-indent:-.25in'><span
-style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span><span style='font-size:9.0pt;line-height:115%'>portsource</span></p>
-
-<p class=MsoNormal style='margin-left:3.0in;text-indent:-.25in'><span
-style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span><span style='font-size:9.0pt;line-height:115%'>porttarget</span></p>
-
-<p class=MsoNormal style='margin-left:3.0in;text-indent:-.25in'><span
-style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span><span style='font-size:9.0pt;line-height:115%'>highlightColor</span></p>
-
-<p class=MsoNormal style='margin-left:3.0in;text-indent:-.25in'><span
-style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span><span style='font-size:9.0pt;line-height:115%'>lineColor</span></p>
-
-<p class=MsoNormal style='margin-left:3.0in;text-indent:-.25in'><span
-style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span><span style='font-size:9.0pt;line-height:115%'>width</span></p>
-
-<p class=MsoNormal style='margin-left:3.0in;text-indent:-.25in'><span
-style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span><span style='font-size:9.0pt;line-height:115%'>bendPointPositions</span></p>
-
-<p class=MsoNormal style='margin-left:3.0in;text-indent:-.25in'><span
-style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span><span style='font-size:9.0pt;line-height:115%'>highlightStatus</span></p>
-
-<p class=MsoNormal style='margin-left:3.0in;text-indent:-.25in'><span
-style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span><span style='font-size:9.0pt;line-height:115%'>visibilityStatus</span></p>
-
-<p class=MsoNormal style='margin-left:3.0in;text-indent:-.25in'><span
-style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span><span style='font-size:9.0pt;line-height:115%'>sbgnCardinality</span></p>
-
-<p class=MsoNormal style='margin-left:1.5in;text-indent:-.25in'><span
-style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span><span style='font-size:9.0pt;line-height:115%'>py // pysb-related</span></p>
-
-<p class=MsoNormal style='margin-left:1.5in;text-indent:-.25in'><span
-style='font-size:9.0pt;line-height:115%'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span><span style='font-size:9.0pt;line-height:115%'>//biopax-related</span></p>
-
-<p class=MsoNormal style='margin-left:1.0in'>&nbsp;</p>
-
-<h2><a name="_obz6bh2z35gg"></a><a name="_6kwbiqf32gph"></a><a
-name="_w8hd3o33ow8k"></a>&nbsp;</h2>
-
-<p class=MsoNormal style='line-height:normal'>&nbsp;</p>
-
-<p class=MsoNormal style='line-height:normal'>&nbsp;</p>
-
-</div>
-
-</body>
-
-</html>
+*//callback operations*
+
+});
+
+socket.on(**'message'**, **function**(data){
+
+*//callback operations*
+
+});
+
+socket.on(**'userList'**, **function**(data){
+
+*//callback operations*
+
+});
+
+socket.on(**'imageFile'**, **function**(data){
+
+*//callback operations*
+
+});
+
+});
+
+});
+
+An example web-based agent can be found in:
+
+Sbgnviz-Collaborative-Editor/agent-interaction/computerAgent.html
+
+Command History:
+
+JSON array as:
+
+\[
+
+{
+
+> userName: //name of the user who gave the command
+>
+> name: //name of the command
+>
+> id: //id of the affected element
+>
+> param: //operation parameters
+
+\[
+
+{
+
+x: //node position x
+
+y: //node position y
+
+sbgnclass: //node sbgnclass
+
+source: //edge source
+
+target: //edge target
+
+sbgnclass: //edge sbgnclass
+
+}
+
+\]
+
+date: //date of the command
+
+}
+
+\]
+
+History Manager
+---------------
+
+Each command is stored in the model as a part of command history.
+Command structure is as follows:
+
+opName: set | add | delete | init
+
+opTarget: node | edge | node group | edge group
+
+opAttr: id| position | sbgnclass | sbgnlabel | width | height |
+backgroundColor | borderColor | borderWidth | parent | isCloneMarker |
+isMultimer | sbgnStatesAndInfos| source| target |lineColor | lineWidth|
+sbgncardinality
+
+elId: id of the node or edge | id array of the node or edge group
+
+elType: “node” or “edge”
+
+param:
+
+prevParam:
+
+### JSON Model Structure
+
+-   users
+
+    -   name
+
+-   page
+
+    -   list
+
+    -   room
+
+    -   doc
+
+        -   userIds
+
+        -   history
+
+        -   undoIndex
+
+        -   Images
+
+        -   Context
+
+            -   name
+
+            -   relevance
+
+            -   confidence
+
+        -   cy //sbgn-related
+
+            -   sampleInd //temporary
+
+            -   layoutProperties
+
+            -   nodes
+
+                -   \[nodeId\]
+
+                    -   id
+
+                    -   addedLater //to sync. node addition
+
+                    -   sbgnclass
+
+                    -   position
+
+                    -   highlightColor
+
+                    -   sbgnlabel
+
+                    -   borderColor
+
+                    -   borderWidth
+
+                    -   backgroundColor
+
+                    -   backgroundOpacity
+
+                    -   isMultimer
+
+                    -   isCloneMarker
+
+                    -   ports
+
+                    -   width
+
+                    -   height
+
+                    -   sbgnStatesAndInfos
+
+                    -   expandCollapseStatus
+
+                    -   highlightStatus
+
+                    -   visibilityStatus
+
+            -   edges
+
+                -   \[edgeId\]
+
+                    -   id
+
+                    -   addedLater //to sync. edge addition
+
+                    -   sbgnclass
+
+                    -   source
+
+                    -   target
+
+                    -   portsource
+
+                    -   porttarget
+
+                    -   highlightColor
+
+                    -   lineColor
+
+                    -   width
+
+                    -   bendPointPositions
+
+                    -   highlightStatus
+
+                    -   visibilityStatus
+
+                    -   sbgnCardinality
+
+        -   py // pysb-related
+
+        -   //biopax-related
+
+<span id="_obz6bh2z35gg" class="anchor"><span id="_6kwbiqf32gph" class="anchor"><span id="_w8hd3o33ow8k" class="anchor"></span></span></span>
+---------------------------------------------------------------------------------------------------------------------------------------------
