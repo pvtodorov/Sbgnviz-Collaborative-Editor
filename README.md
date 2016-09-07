@@ -205,14 +205,14 @@ In order to set up and run an agent:
 
 });
 
-socket.on('connect', **function**(){
-***agent***.loadModel(**function**() {
-***agent***.loadOperationHistory(**function**(){
-    ***agent***.loadChatHistory(**function**(){
-        *//callback operations*
-    });
-});
-});
+- socket.on('connect', **function**(){
+   - ***agent***.loadModel(**function**() {
+      - ***agent***.loadOperationHistory(**function**(){
+         - ***agent***.loadChatHistory(**function**(){
+            - *//callback operations*
+         - });
+      - });
+   - });
 
 ***agent***.listen(**function**(){
 socket.on('operation', **function**(data){
