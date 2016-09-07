@@ -158,41 +158,41 @@ string after http:<ip>:3000/ in the server address.
 ##### sendRequest:
 
 
-  |**reqName**                       |  **param** |
-  | -------------------------------- | ----------------------------------------- |
-  “agentAddImageRequest”              |{img: <image file>,
-                                     |filePath: <path of image file> }
-  "agentSetLayoutProperties"         | {name: <layout name>,
-                                     | nodeRepulsion: <node repulsion value> ,
-                                     | nodeOverlap:<node overlap percentage>,
-                                     | idealEdgeLength:<ideal edge length value>,
-                                     | edgeElasticity:<edge elasticity value>,
-                                     | nestingFactor:<nesting factor value>,
-                                     | gravity:<gravity value>,
-                                     | numIter:<number of iterations>,
-                                     | tile:<boolean value to tile disconnected>,
-                                     | animate:<boolean value>,
-                                     | randomize:<boolean value>}
-  “agentRunLayoutRequest”            | -
-  “agentAddNodeRequest”              | {x: <position x>,
-                                     | y: <position y>,
-                                     | sbgnclass: <sbgn class>}
-  “agentAddEdgeRequest”              | {source: <source node id>,
-                                      |target: <target node id>,
-                                     | sbgnclass: <sbgn class>}
-  “agentChangeNodeAttributeRequest”  | {id: <node id>,
-                                     | attStr: <node attribute name in the model>
-                                     | attVal:<node attribute value>}
-                                     | attStr takes the following values: “sbgnclass”, “highlightColor”, “backgroundColor”, “sbgnlabel”, “borderColor”, “borderWidth”, “isMultimer”, “isCloneMarker”, “parent”, “children”, “width”, “height”, “sbgnbboxW”, “sbgnbboxH”, “sbgnStatesAndInfos”
-  “agentChangeEdgeAttributeRequest”   |{id: <node id>,
-                                     | attStr: <edge attribute name in the model>
-                                     | attVal:<edge attribute value>}
-                                     | attStr takes the following values: “lineColor”, “highlightColor”, “width”, “cardinality”
-  “agentMoveNodeRequest”             | {id: <node id>,
-                                     | pos: {x:<new position x>, y: < new position y>}}
-  “agentAddCompoundRequest”          | {type: <compound type as “complex” or “compartment”>,
-                                     | selectedNodeArr: <array of node ids>}
-  “agentMergeGraphRequest”           | {param: <graph to be added in sbgn format>}
+|**reqName**                       |  **param** |
+| -------------------------------- | ----------------------------------------- |
+| “agentAddImageRequest”              |{img: <image file>,                         |
+|                                    |filePath: <path of image file> }             |
+| "agentSetLayoutProperties"         | {name: <layout name>,                       |
+|                                    | nodeRepulsion: <node repulsion value> ,        |
+|                                    | nodeOverlap:<node overlap percentage>,          |
+|                                     | idealEdgeLength:<ideal edge length value>,      |
+|                                     | edgeElasticity:<edge elasticity value>,    |
+|                                     | nestingFactor:<nesting factor value>,      |
+|                                     | gravity:<gravity value>,   |
+|                                     | numIter:<number of iterations>,|
+|                                     | tile:<boolean value to tile disconnected>,|
+|                                     | animate:<boolean value>,    |
+|                                     | randomize:<boolean value>}  |
+|  “agentRunLayoutRequest”            | -                           |
+|  “agentAddNodeRequest”              | {x: <position x>,           |
+|                                     | y: <position y>,         |
+|                                     | sbgnclass: <sbgn class>}   |
+|  “agentAddEdgeRequest”              | {source: <source node id>,  |
+|                                      |target: <target node id>,   |
+|                                     | sbgnclass: <sbgn class>}    |
+|  “agentChangeNodeAttributeRequest”  | {id: <node id>,             |
+|                                     | attStr: <node attribute name in the model>             |
+|                                     | attVal:<node attribute value>}                          |
+|                                     | attStr takes the following values: “sbgnclass”, “highlightColor”, “backgroundColor”, “sbgnlabel”, “borderColor”, “borderWidth”, “isMultimer”, “isCloneMarker”, “parent”, “children”, “width”, “height”, “sbgnbboxW”, “sbgnbboxH”, “sbgnStatesAndInfos”   |
+|  “agentChangeEdgeAttributeRequest”   |{id: <node id>,                                   |
+|                                     | attStr: <edge attribute name in the model>        |
+|                                     | attVal:<edge attribute value>}                     |
+|                                     | attStr takes the following values: “lineColor”, “highlightColor”, “width”, “cardinality”    |
+|  “agentMoveNodeRequest”             | {id: <node id>,                                                    |
+|                                     | pos: {x:<new position x>, y: < new position y>}}                   |
+|  “agentAddCompoundRequest”          | {type: <compound type as “complex” or “compartment”>,              |
+|                                     | selectedNodeArr: <array of node ids>}                              |
+|  “agentMergeGraphRequest”           | {param: <graph to be added in sbgn format>}                        |
 
 
 In order to set up and run an agent:
