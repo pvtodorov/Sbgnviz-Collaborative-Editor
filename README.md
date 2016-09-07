@@ -17,67 +17,67 @@ Install node.js, mongodb and redis servers first.
 
 Node:
 
->curl -sL
+ >curl -sL
 [*https://deb.nodesource.com/setup\_0.12*](https://deb.nodesource.com/setup_0.12)
->| sudo -E bash -
+ >| sudo -E bash -
 
->sudo apt-get install -y nodejs
+ >sudo apt-get install -y nodejs
 
 Redis:
 
->sudo apt-get update
+ >sudo apt-get update
 
->sudo apt-get install build-essential
+ >sudo apt-get install build-essential
 
->sudo apt-get install tcl8.5
+ >sudo apt-get install tcl8.5
 
 wget
 [*http://download.redis.io/releases/redis-stable.tar.gz*](http://download.redis.io/releases/redis-stable.tar.gz)
 
->tar xzf redis-stable.tar.gz
+ >tar xzf redis-stable.tar.gz
 
->cd redis-stable
+ >cd redis-stable
 
->make
+ >make
 
 Mongo:
 
->sudo apt-key adv --keyserver
+ >sudo apt-key adv --keyserver
 hkp://[*keyserver.ubuntu.com:80*](http://keyserver.ubuntu.com/) --recv
 EA312927
 
->echo "deb
+ >echo "deb
 [*http://repo.mongodb.org/apt/ubuntu*](http://repo.mongodb.org/apt/ubuntu)
 trusty/mongodb-org/3.2 multiverse" | sudo tee
 /etc/apt/sources.list.d/mongodb-org-3.2.list
 
->sudo apt-get update
+ >sudo apt-get update
 
->sudo apt-get install -y mongodb-org
+ >sudo apt-get install -y mongodb-org
 
 If mongo does not work:
 
->sudo apt-get install upstart-sysv
+ >sudo apt-get install upstart-sysv
 
 Get project from github:
 
->git clone
+ >git clone
 [*https://github.com/fdurupinar/Sbgnviz-Collaborative-Editor.git*](https://github.com/fdurupinar/Sbgnviz-Collaborative-Editor.git)
 
->cd Sbgnviz-Collaborative-Editor
+ >cd Sbgnviz-Collaborative-Editor
 
->sudo rm -rf node\_modules
+ >sudo rm -rf node\_modules
 
->npm install
+ >npm install
 
 Run server:
 
->node server
+ >node server
 
 In order to open a client:
 
-Enter “http://localhost:3000” to the address bar of your browser. <span
-id="_lzkutpoc5320" class="anchor"></span>
+Enter “http://localhost:3000” to the address bar of your browser. < span
+id="_lzkutpoc5320" class="anchor" >< /span >
 
 ### Computer Agent API
 
@@ -100,10 +100,10 @@ lightness values.
 
 **selectedNode**: The node object on which the agent is performing
 operations. It has attributes such as position
-={x:<posX>,y:<posY>}, width, height, borderWidth,
+={x:< posX >,y:< posY >}, width, height, borderWidth,
 borderHeight, backgroundColor, sbgnLabel, sbgnStatesAndInfos =
-{clazz:<className>, state =
-{value:<stateValue>,variable:<stateVariable>}}.
+{clazz:< className >, state =
+{value:< stateValue >,variable:< stateVariable >}}.
 
 **selectedEdge**: The edge object on which the agent is performing
 operations. It has attributes such as cardinality, lineColor and width.
@@ -118,7 +118,7 @@ format: “*UserName* (*date*): *Command*”.
 #### Private Attributes:
 
 **room**: The document id that identifies the shared model. It is the
-string after http:<ip>:3000/ in the server address.
+string after http:< ip >:3000/ in the server address.
 
 **socket**: The web socket between the server and agent
 
@@ -136,21 +136,21 @@ string after http:<ip>:3000/ in the server address.
 |  loadChatHistory        | Gets history of chat messages from the node.js server and assigns them to chatHistory                                            |      callback                    |                                                                               |
 |  getNodeList            |                                                                                                                                  |      callback                    |   The node list in the shared model as an object of node ids                  |
 |  getLayoutProperties    |                                                                                                                                  |     callback                     |  Layout properties of the shared model as an object with attributes as:       |
-|                         |                                                                                                                                  |                                  |   {name: <layout name>,                                                       |
-|                         |                                                                                                                                  |                                  |   nodeRepulsion: <node repulsion value> ,                                     |
-|                         |                                                                                                                                  |                                  |   nodeOverlap:<node overlap percentage>,                                      |
-|                         |                                                                                                                                  |                                  |   idealEdgeLength:<ideal edge length value>,                                  |
-|                         |                                                                                                                                  |                                  |   edgeElasticity:<edge elasticity value>,                                     |
-|                         |                                                                                                                                  |                                  |   nestingFactor:<nesting factor value>,                                       |
-|                         |                                                                                                                                  |                                  |   gravity:<gravity value>,                                                    |
-|                         |                                                                                                                                  |                                  |   numIter:<number of iterations>,                                             |
-|                         |                                                                                                                                  |                                  |     tile:<boolean value to tile disconnected>,                                |
-|                         |                                                                                                                                  |                                  |   animate:<boolean value>,                                                    |
-|                         |                                                                                                                                  |                                  |   randomize:<boolean value>}                                                  |
+|                         |                                                                                                                                  |                                  |   {name: < layout name >,                                                       |
+|                         |                                                                                                                                  |                                  |   nodeRepulsion: < node repulsion value > ,                                     |
+|                         |                                                                                                                                  |                                  |   nodeOverlap:< node overlap percentage >,                                      |
+|                         |                                                                                                                                  |                                  |   idealEdgeLength:< ideal edge length value >,                                  |
+|                         |                                                                                                                                  |                                  |   edgeElasticity:< edge elasticity value >,                                     |
+|                         |                                                                                                                                  |                                  |   nestingFactor:< nesting factor value >,                                       |
+|                         |                                                                                                                                  |                                  |   gravity:< gravity value >,                                                    |
+|                         |                                                                                                                                  |                                  |   numIter:< number of iterations >,                                             |
+|                         |                                                                                                                                  |                                  |     tile:< boolean value to tile disconnected >,                                |
+|                         |                                                                                                                                  |                                  |   animate:< boolean value >,                                                    |
+|                         |                                                                                                                                  |                                  |   randomize:< boolean value >}                                                  |
 |  changeName             | Sends request to the server to change agent's name                                                                               |       newName                    |                                                                               |
-|  getNodeRequest         | Requests the node with <id> from the server                                                                                      |     id, callback                 |  Node with id                                                                 |
-|  getEdgeRequest         | Requests the edge with <id> from the server                                                                                      |      id, callback                |   Edge with id                                                                |
-|  sendMessage            | Sends chat message <comments> as a string to <targetArr> as an array of targeted user ids \[{id: <id1>},..., {id: <idn>}\]       |    comment, targetArr, callback  |                                                                               |
+|  getNodeRequest         | Requests the node with < id > from the server                                                                                      |     id, callback                 |  Node with id                                                                 |
+|  getEdgeRequest         | Requests the edge with < id > from the server                                                                                      |      id, callback                |   Edge with id                                                                |
+|  sendMessage            | Sends chat message < comments > as a string to < targetArr > as an array of targeted user ids \[{id: < id1 >},..., {id: < idn >}\]       |    comment, targetArr, callback  |                                                                               |
 |  listen                 | Socket listener for server requests. Can get “operation”, “message”, “userList” or “imageFile” from the server.                  |   callback                       |                                                                               |
 |  sendRequest            | Sends an operation request to the node.js server. Model update operations are done using this method.                            |  [*reqName, param*](#sendrequest)|                                                                               |
 
@@ -160,39 +160,39 @@ string after http:<ip>:3000/ in the server address.
 
 |**reqName**                          |  **param**                                                                         |
 | ----------------------------------- | ---------------------------------------------------- |
-| “agentAddImageRequest”              | {img: <image file>,                         |
-|                                     |filePath: <path of image file> }             |
-| "agentSetLayoutProperties"          | {name: <layout name>,                       |
-|                                     | nodeRepulsion: <node repulsion value> ,        |
-|                                     | nodeOverlap:<node overlap percentage>,          |
-|                                     | idealEdgeLength:<ideal edge length value>,      |
-|                                     | edgeElasticity:<edge elasticity value>,    |
-|                                     | nestingFactor:<nesting factor value>,      |
-|                                     | gravity:<gravity value>,   |
-|                                     | numIter:<number of iterations>,|
-|                                     | tile:<boolean value to tile disconnected>,|
-|                                     | animate:<boolean value>,    |
-|                                     | randomize:<boolean value>}  |
+| “agentAddImageRequest”              | {img: < image file >,                         |
+|                                     |filePath: < path of image file > }             |
+| "agentSetLayoutProperties"          | {name: < layout name >,                       |
+|                                     | nodeRepulsion: < node repulsion value > ,        |
+|                                     | nodeOverlap:< node overlap percentage >,          |
+|                                     | idealEdgeLength:< ideal edge length value >,      |
+|                                     | edgeElasticity:< edge elasticity value >,    |
+|                                     | nestingFactor:< nesting factor value >,      |
+|                                     | gravity:< gravity value >,   |
+|                                     | numIter:< number of iterations >,|
+|                                     | tile:< boolean value to tile disconnected >,|
+|                                     | animate:< boolean value >,    |
+|                                     | randomize:< boolean value >}  |
 |  “agentRunLayoutRequest”            | -                           |
-|  “agentAddNodeRequest”              | {x: <position x>,           |
-|                                     | y: <position y>,         |
-|                                     | sbgnclass: <sbgn class>}   |
-|  “agentAddEdgeRequest”              | {source: <source node id>,  |
-|                                     | target: <target node id>,   |
-|                                     | sbgnclass: <sbgn class>}    |
-|  “agentChangeNodeAttributeRequest”  | {id: <node id>,             |
-|                                     | attStr: <node attribute name in the model>             |
-|                                     | attVal:<node attribute value>}                          |
+|  “agentAddNodeRequest”              | {x: < position x >,           |
+|                                     | y: < position y >,         |
+|                                     | sbgnclass: < sbgn class >}   |
+|  “agentAddEdgeRequest”              | {source: < source node id >,  |
+|                                     | target: < target node id >,   |
+|                                     | sbgnclass: < sbgn class >}    |
+|  “agentChangeNodeAttributeRequest”  | {id: < node id >,             |
+|                                     | attStr: < node attribute name in the model >             |
+|                                     | attVal:< node attribute value >}                          |
 |                                     | attStr takes the following values: “sbgnclass”, “highlightColor”, “backgroundColor”, “sbgnlabel”, “borderColor”, “borderWidth”, “isMultimer”, “isCloneMarker”, “parent”, “children”, “width”, “height”, “sbgnbboxW”, “sbgnbboxH”, “sbgnStatesAndInfos”   |
-|  “agentChangeEdgeAttributeRequest”  | {id: <node id>,                                   |
-|                                     | attStr: <edge attribute name in the model>        |
-|                                     | attVal:<edge attribute value>}                     |
+|  “agentChangeEdgeAttributeRequest”  | {id: < node id >,                                   |
+|                                     | attStr: < edge attribute name in the model >        |
+|                                     | attVal:< edge attribute value >}                     |
 |                                     | attStr takes the following values: “lineColor”, “highlightColor”, “width”, “cardinality”    |
-|  “agentMoveNodeRequest”             | {id: <node id>,                                                    |
-|                                     | pos: {x:<new position x>, y: < new position y>}}                   |
-|  “agentAddCompoundRequest”          | {type: <compound type as “complex” or “compartment”>,              |
-|                                     | selectedNodeArr: <array of node ids>}                              |
-|  “agentMergeGraphRequest”           | {param: <graph to be added in sbgn format>}                        |
+|  “agentMoveNodeRequest”             | {id: < node id >,                                                    |
+|                                     | pos: {x:< new position x >, y: <  new position y >}}                   |
+|  “agentAddCompoundRequest”          | {type: < compound type as “complex” or “compartment” >,              |
+|                                     | selectedNodeArr: < array of node ids >}                              |
+|  “agentMergeGraphRequest”           | {param: < graph to be added in sbgn format >}                        |
 
 
 In order to set up and run an agent:
@@ -263,13 +263,13 @@ JSON array as:
 
 {
 
-> userName: //name of the user who gave the command
->
-> name: //name of the command
->
-> id: //id of the affected element
->
-> param: //operation parameters
+ > userName: //name of the user who gave the command
+ >
+ > name: //name of the command
+ >
+ > id: //id of the affected element
+ >
+ > param: //operation parameters
 
 \[
 
@@ -434,5 +434,5 @@ prevParam:
 
         -   //biopax-related
 
-<span id="_obz6bh2z35gg" class="anchor"><span id="_6kwbiqf32gph" class="anchor"><span id="_w8hd3o33ow8k" class="anchor"></span></span></span>
+< span id="_obz6bh2z35gg" class="anchor" >< span id="_6kwbiqf32gph" class="anchor" >< span id="_w8hd3o33ow8k" class="anchor" >< /span >< /span >< /span >
 ---------------------------------------------------------------------------------------------------------------------------------------------
