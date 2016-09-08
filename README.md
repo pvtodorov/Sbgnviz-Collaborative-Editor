@@ -230,6 +230,10 @@ In order to set up and run an agent:
     - socket.on('imageFile', **function**(data){
       - *//callback operations*
     - });
+
+    - socket.on('graphToMerge', **function**(data){
+          - *//callback operations*
+        - });
   - });
 - });
 

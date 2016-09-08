@@ -398,55 +398,58 @@
                     fillContextInformation(agent.cancerList,  agent.speciesList, agent.organList);
                 });
 
-          //  agent.listen(function(){
 
-                socket.on('operation', function(op){
-                    agent.opHistory.push(op);
-                    writeOperation(op);
-                    agent.loadModel(function() { //first make sure to get the latest model
-                        if(agent instanceof ContextAgent) {
 
-                            if(contextInitialized) {
-                                agent.updateContextCancer(function () {
+            socket.on('graphToMerge', function(graph){
+                console.log(graph);
+            })
 
-                                    fillContextInformation(agent.cancerList, agent.speciesList, agent.organList);
-                                    //agent.printcancerList();
-                                });
-                            }
+            socket.on('operation', function(op){
+                agent.opHistory.push(op);
+                writeOperation(op);
+                agent.loadModel(function() { //first make sure to get the latest model
+                    if(agent instanceof ContextAgent) {
+
+                        if(contextInitialized) {
+                            agent.updateContextCancer(function () {
+
+                                fillContextInformation(agent.cancerList, agent.speciesList, agent.organList);
+                                //agent.printcancerList();
+                            });
                         }
-
-                    });
+                    }
 
                 });
-
-                if(agent instanceof ContextAgent) {
-                        agent.updateContextSpeciesAndOrgans(function () {
-
-                            fillContextInformation(agent.cancerList, agent.speciesList, agent.organList);
-                    });
-
-
-                }
-
-                socket.on('message', function(data){
-                    agent.chatHistory.push(data);
-                    writeMessage(data);
-                });
-
-                socket.on('userList', function(data){
-                    agent.userList = data;
-                    writeUserList(data);
-                });
-
-                socket.on('imageFile', function(data){
-                    writeImage(data);
-                });
-
-
 
             });
 
-       // });
+            if(agent instanceof ContextAgent) {
+                    agent.updateContextSpeciesAndOrgans(function () {
+
+                        fillContextInformation(agent.cancerList, agent.speciesList, agent.organList);
+                });
+
+
+            }
+
+            socket.on('message', function(data){
+                agent.chatHistory.push(data);
+                writeMessage(data);
+            });
+
+            socket.on('userList', function(data){
+                agent.userList = data;
+                writeUserList(data);
+            });
+
+            socket.on('imageFile', function(data){
+                writeImage(data);
+            });
+
+
+
+        });
+
     }
 
 
