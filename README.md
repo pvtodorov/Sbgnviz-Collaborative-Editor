@@ -265,19 +265,17 @@ x: //node position x
 
 y: //node position y
 
-sbgnclass: //node sbgnclass
+> sbgnclass: //node or edge sbgnclass
 
-source: //edge source
+> source: //edge source
 
-target: //edge target
-
-sbgnclass: //edge sbgnclass
+> target: //edge target
 
 }
 
 \]
 
-date: //date of the command
+> date: //date of the command
 
 }
 
