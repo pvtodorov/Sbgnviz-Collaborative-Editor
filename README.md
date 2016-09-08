@@ -231,7 +231,7 @@ In order to set up and run an agent:
       - *//callback operations*
     - });
 
-    - socket.on('graphToMerge', **function**(data){
+    - socket.on('processToIntegrate', **function**(data){
           - *//callback operations*
         - });
   - });
