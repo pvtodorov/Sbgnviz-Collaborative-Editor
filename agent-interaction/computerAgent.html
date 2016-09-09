@@ -33,7 +33,7 @@
     <input id="fileInput" type="file" onchange = loadFile() />
     <button id = "updateModel" onclick = updateModel()>Request updated model</button>
 
-    <input type="button" value="cBioPortal query" onclick=callQuery()>
+    <!--<input type="button" value="cBioPortal query" onclick=callQuery()>-->
 
     <br>
     <button id = "undoButton" onclick = undoOperation()>Undo</button>
@@ -216,6 +216,10 @@
     var serverIp;
 
 
+    var sbgnContent = "<?xml version='1.0' encoding='UTF-8' standalone='yes'?> <sbgn xmlns='http://sbgn.org/libsbgn/0.2'> <map language='process description'> <glyph id='ele11' class='macromolecule' > <bbox y='190' x='207' w='50' h='50' /> </glyph> </map> </sbgn>"
+
+
+
     window.onload = function () {
 
 
@@ -348,46 +352,59 @@
 
             $('#createAgentButton').attr('disabled','disabled');
 
+
+
+
+
             agent.loadModel(function() {
 
 
-                if(agent instanceof ContextAgent){
-                   agent.initContext(function(){
-                       fillContextInformation(agent.cancerList,  agent.speciesList, agent.organList);
-                        contextInitialized = true;
 
-                   });
+                agent.sendRequest("agentMergeGraphRequest",{graph:sbgnContent, type:"sbgn"});
 
+           //     agent.sendRequest("agentNewFileRequest",{param:null});
+             //   agent.sendRequest("agentLoadFileRequest",{param:sbgnContent});
+                agent.sendRequest("agentRunLayoutRequest",{param:null});
 
-
-                }
-                fillLayoutProperties();
-                agent.loadOperationHistory(function(){
-
-                    agent.loadChatHistory(function(){
-
-                            //Write history
-                        if(agent.opHistory != null){
-                            agent.opHistory.forEach(function(op){
-                                writeOperation(op);
-                            });
-                        }
-
-                        if(agent.chatHistory != null){
-                            for(var ind in agent.chatHistory){
-                                writeMessage(agent.chatHistory[ind]);
-
-                            };
-                        }
-
-                        fillNodeIds('nodeId');
-                        fillEdgeIds('edgeId');
-
-
-
-
-                    });
-                });
+//
+//
+//                if(agent instanceof ContextAgent){
+//                   agent.initContext(function(){
+//                       fillContextInformation(agent.cancerList,  agent.speciesList, agent.organList);
+//                        contextInitialized = true;
+//
+//                   });
+//
+//
+//
+//                }
+//                fillLayoutProperties();
+//                agent.loadOperationHistory(function(){
+//
+//                    agent.loadChatHistory(function(){
+//
+//                            //Write history
+//                        if(agent.opHistory != null){
+//                            agent.opHistory.forEach(function(op){
+//                                writeOperation(op);
+//                            });
+//                        }
+//
+//                        if(agent.chatHistory != null){
+//                            for(var ind in agent.chatHistory){
+//                                writeMessage(agent.chatHistory[ind]);
+//
+//                            };
+//                        }
+//
+//                        fillNodeIds('nodeId');
+//                        fillEdgeIds('edgeId');
+//
+//
+//
+//
+//                    });
+//                });
             });
 
 

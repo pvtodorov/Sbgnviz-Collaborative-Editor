@@ -188,6 +188,8 @@ module.exports = function(){
                 }
             });
 
+             console.log(jsonObj)
+
             //no container is necessary
 
             editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);

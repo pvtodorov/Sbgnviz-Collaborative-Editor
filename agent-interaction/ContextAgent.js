@@ -454,8 +454,6 @@
         }
 
 
-
-
         self.socket.on('PCQueryResult', function(data) {
             if(data.type == "sif"){
                 var neighbors = self.findAllControllingNeighbors(geneName, data.graph);
