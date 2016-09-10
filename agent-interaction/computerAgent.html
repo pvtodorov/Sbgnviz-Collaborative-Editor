@@ -360,51 +360,43 @@
 
 
 
-                agent.sendRequest("agentMergeGraphRequest",{graph:sbgnContent, type:"sbgn"});
+                if(agent instanceof ContextAgent){
+                   agent.initContext(function(){
+                       fillContextInformation(agent.cancerList,  agent.speciesList, agent.organList);
+                        contextInitialized = true;
 
-           //     agent.sendRequest("agentNewFileRequest",{param:null});
-             //   agent.sendRequest("agentLoadFileRequest",{param:sbgnContent});
-                agent.sendRequest("agentRunLayoutRequest",{param:null});
+                   });
 
-//
-//
-//                if(agent instanceof ContextAgent){
-//                   agent.initContext(function(){
-//                       fillContextInformation(agent.cancerList,  agent.speciesList, agent.organList);
-//                        contextInitialized = true;
-//
-//                   });
-//
-//
-//
-//                }
-//                fillLayoutProperties();
-//                agent.loadOperationHistory(function(){
-//
-//                    agent.loadChatHistory(function(){
-//
-//                            //Write history
-//                        if(agent.opHistory != null){
-//                            agent.opHistory.forEach(function(op){
-//                                writeOperation(op);
-//                            });
-//                        }
-//
-//                        if(agent.chatHistory != null){
-//                            for(var ind in agent.chatHistory){
-//                                writeMessage(agent.chatHistory[ind]);
-//
-//                            };
-//                        }
-//
-//                        fillNodeIds('nodeId');
-//                        fillEdgeIds('edgeId');
-//
-//
-//
-//
-//                    });
-//                });
+
+
+                }
+                fillLayoutProperties();
+                agent.loadOperationHistory(function(){
+
+                    agent.loadChatHistory(function(){
+
+                            //Write history
+                        if(agent.opHistory != null){
+                            agent.opHistory.forEach(function(op){
+                                writeOperation(op);
+                            });
+                        }
+
+                        if(agent.chatHistory != null){
+                            for(var ind in agent.chatHistory){
+                                writeMessage(agent.chatHistory[ind]);
+
+                            };
+                        }
+
+                        fillNodeIds('nodeId');
+                        fillEdgeIds('edgeId');
+
+
+
+
+                    });
+                });
             });
 
 

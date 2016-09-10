@@ -66,6 +66,8 @@
 
         this.mostImportantNeighborName;
         this.mostImportantGeneName;
+        this.mostImportantNode;
+
 
 
     }
@@ -87,7 +89,7 @@
             var importance = (pVal== 0) ? 100 : -Math.log10(pVal);
 
 
-            cancer.genes[geneInfo[1]] = {importance: importance};
+            cancer.genes[geneInfo[1]] = {importance: importance, exclude:false};
 
 
         });
@@ -191,17 +193,16 @@
                         //self.cancerList[self.cancerInd].confidence = 100;
                         self.cancerList[self.cancerInd].confidence *= 2;
 
-                        var node = self.findMostImportantNodeInContext(self.getNodeList(), self.cancerList[self.cancerInd]);
+                        self.mostImportantNode = self.findMostImportantNodeInContext(self.getNodeList(), self.cancerList[self.cancerInd]);
 
 
-                        if(node) {
-                            self.findMostImportantNeighborInContext(node.sbgnlabel.toUpperCase(), self.cancerList[self.cancerInd], function (neighborName) {
+                        if( self.mostImportantNode ) {
+                            self.findMostImportantNeighborInContext(self.mostImportantNode.sbgnlabel.toUpperCase(), self.cancerList[self.cancerInd], function (neighborName) {
 
 
                                 self.mostImportantNeighborName = neighborName;
-                                self.mostImportantGeneName = node.sbgnlabel.toUpperCase();
 
-                                self.informAboutNeighborhood(node.sbgnlabel.toUpperCase(), neighborName);
+                                self.informAboutNeighborhood(self.mostImportantNode.sbgnlabel.toUpperCase(), neighborName);
                             });
                         }
 
@@ -220,9 +221,25 @@
                     var answer = data.comment;
 
                     if (answer.toLowerCase().search("ye") > -1)  //yes
-                        self.suggestNewGraph(self.mostImportantGeneName, self.mostImportantNeighborName);
+                        self.suggestNewGraph( self.mostImportantNode.sbgnlabel.toUpperCase(), self.mostImportantNeighborName);
 
-                    //else if (answer.toLowerCase().search("no") > -1)
+                    else if (answer.toLowerCase().search("no") > -1){
+
+                        self.cancerList[self.cancerInd].genes[self.mostImportantNeighborName].exclude = true;
+
+                        if( self.mostImportantNode ) {
+
+                            self.findMostImportantNeighborInContext( self.mostImportantNode.sbgnlabel.toUpperCase(), self.cancerList[self.cancerInd], function (neighborName) {
+
+
+                                self.mostImportantNeighborName = neighborName;
+
+
+                                self.informAboutNeighborhood(self.mostImportantNode.sbgnlabel.toUpperCase(), neighborName);
+                            });
+                        }
+
+                    }
                 }
 
 
@@ -436,8 +453,17 @@
     }
 
 
+    /**
+     *
+     * @param order
+     * @param geneName
+     * @param cancer
+     * @param callback
+     */
     ContextAgent.prototype.findMostImportantNeighborInContext = function(geneName, cancer, callback){
         var self = this;
+
+
 
         var pc2URL = "http://www.pathwaycommons.org/pc2/";
         var format = "graph?format=BINARY_SIF";
@@ -450,12 +476,14 @@
 
         if(geneName) {
             self.socket.emit('PCQuery', {url: pc2URL, type: "sif"});
-            self.sendMessage("The most important gene  in your network for this cancer type is " + geneName +". I'm looking up its neighborhood alterations...", "*");
+            self.sendMessage("The most important gene  in your network for this cancer type is " + geneName, +". I'm looking up its neighborhood alterations...", "*");
         }
 
 
         self.socket.on('PCQueryResult', function(data) {
             if(data.type == "sif"){
+
+
                 var neighbors = self.findAllControllingNeighbors(geneName, data.graph);
 
 
@@ -464,7 +492,7 @@
                 var maxScore = -100000;
 
                 neighbors.forEach(function(neighborName) {
-                    if (!self.isInModel(neighborName) && cancer.genes[neighborName] && cancer.genes[neighborName].importance > MIN_IMPORTANCE && cancer.genes[neighborName].importance > maxScore) {
+                    if (!self.isInModel(neighborName) && cancer.genes[neighborName] && !cancer.genes[neighborName].exclude && cancer.genes[neighborName].importance > MIN_IMPORTANCE && cancer.genes[neighborName].importance > maxScore) {
 
                         maxScore = cancer.genes[neighborName].importance;
                         importantNeighborName = neighborName;
@@ -491,6 +519,7 @@
         var format = "graph?format=SBGN";
         var kind = "&kind=PATHSBETWEEN";
         var limit = "&limit=1";
+
 
         //PC only supports homo sapiens???
         // var species = "";
@@ -531,7 +560,6 @@
     ContextAgent.prototype.findAllControllingNeighbors = function(geneName, sifGraph){
         var lines = sifGraph.split("\n");
         var neighbors = [];
-
 
         lines.forEach(function(line){
 

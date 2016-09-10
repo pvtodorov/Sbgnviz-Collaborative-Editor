@@ -188,7 +188,7 @@ module.exports = function(){
                 }
             });
 
-             console.log(jsonObj)
+
 
             //no container is necessary
 
@@ -988,7 +988,6 @@ module.exports = function(){
                         socket.emit('BioPAXRequest', this.result, "sbgn", function(sbgnData){ //convert to sbgn
                             //socket.on('SBGNResult', function(sbgnData){
 
-                            console.log(sbgnData);
                                 if(sbgnData.graph!= null){
 
 
