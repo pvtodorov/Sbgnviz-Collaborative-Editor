@@ -326,15 +326,50 @@ module.exports = function(){
             return result.id();
         },
 
-        addCompound: function(dataType){
+         makeCompoundComplex: function(){
 
-            if(dataType == "complex")
-                $("#make-compound-complex").trigger('click');
-            else
-                $("#make-compound-compartment").trigger('click');
+             var selected = cy.nodes(":selected").filter(function (i, element) {
+                 var sbgnclass = element.data("sbgnclass")
+                 if (sbgnclass == 'unspecified entity'
+                     || sbgnclass == 'simple chemical'
+                     || sbgnclass == 'macromolecule'
+                     || sbgnclass == 'nucleic acid feature'
+                     || sbgnclass == 'complex') {
+                     return true;
+                 }
+                 return false;
+             });
 
+             selected = sbgnElementUtilities.getRootsOfGivenNodes(selected);
+             if (selected.length == 0 || !sbgnElementUtilities.allHaveTheSameParent(selected)) {
+                 return;
+             }
+             var param = {
+                 firstTime: true,
+                 compoundType: "complex",
+                 nodesToMakeCompound: selected
+             };
 
-        },
+             cy.elements().unselect();
+             return editorActions.createCompoundForSelectedNodes(param);
+
+         },
+         makeCompoundCompartment: function(){
+             var selected = cy.nodes(":selected");
+             selected = sbgnElementUtilities.getRootsOfGivenNodes(selected);
+             if (selected.length == 0 || !sbgnElementUtilities.allHaveTheSameParent(selected)) {
+                 return;
+             }
+
+             var param = {
+                 compoundType: "compartment",
+                 nodesToMakeCompound: selected
+             };
+             cy.elements().unselect();
+             return editorActions.createCompoundForSelectedNodes(param);
+
+         },
+
 
         deleteElement: function(elId, syncVal){
             var el = cy.$(('#' + elId))[0];
@@ -1256,46 +1291,48 @@ module.exports = function(){
                 $('#remove-highlights').trigger("click");
             });
             $("#make-compound-complex").click(function (e) {
-                var selected = cy.nodes(":selected").filter(function (i, element) {
-                    var sbgnclass = element.data("sbgnclass")
-                    if (sbgnclass == 'unspecified entity'
-                        || sbgnclass == 'simple chemical'
-                        || sbgnclass == 'macromolecule'
-                        || sbgnclass == 'nucleic acid feature'
-                        || sbgnclass == 'complex') {
-                        return true;
-                    }
-                    return false;
-                });
-
-                selected = sbgnElementUtilities.getRootsOfGivenNodes(selected);
-                if (selected.length == 0 || !sbgnElementUtilities.allHaveTheSameParent(selected)) {
-                    return;
-                }
-                var param = {
-                    firstTime: true,
-                    compoundType: "complex",
-                    nodesToMakeCompound: selected
-                };
-
-                cy.elements().unselect();
-                editorActions.createCompoundForSelectedNodes(param);
+                self.makeCompoundComplex();
+                // var selected = cy.nodes(":selected").filter(function (i, element) {
+                //     var sbgnclass = element.data("sbgnclass")
+                //     if (sbgnclass == 'unspecified entity'
+                //         || sbgnclass == 'simple chemical'
+                //         || sbgnclass == 'macromolecule'
+                //         || sbgnclass == 'nucleic acid feature'
+                //         || sbgnclass == 'complex') {
+                //         return true;
+                //     }
+                //     return false;
+                // });
+                //
+                // selected = sbgnElementUtilities.getRootsOfGivenNodes(selected);
+                // if (selected.length == 0 || !sbgnElementUtilities.allHaveTheSameParent(selected)) {
+                //     return;
+                // }
+                // var param = {
+                //     firstTime: true,
+                //     compoundType: "complex",
+                //     nodesToMakeCompound: selected
+                // };
+                //
+                // cy.elements().unselect();
+                // editorActions.createCompoundForSelectedNodes(param);
                 
             });
 
             $("#make-compound-compartment").click(function (e) {
-                var selected = cy.nodes(":selected");
-                selected = sbgnElementUtilities.getRootsOfGivenNodes(selected);
-                if (selected.length == 0 || !sbgnElementUtilities.allHaveTheSameParent(selected)) {
-                    return;
-                }
-
-                var param = {
-                    compoundType: "compartment",
-                    nodesToMakeCompound: selected
-                };
-                cy.elements().unselect();
-                editorActions.createCompoundForSelectedNodes(param);
+                self.makeCompoundCompartment();
+                // var selected = cy.nodes(":selected");
+                // selected = sbgnElementUtilities.getRootsOfGivenNodes(selected);
+                // if (selected.length == 0 || !sbgnElementUtilities.allHaveTheSameParent(selected)) {
+                //     return;
+                // }
+                //
+                // var param = {
+                //     compoundType: "compartment",
+                //     nodesToMakeCompound: selected
+                // };
+                // cy.elements().unselect();
+                // editorActions.createCompoundForSelectedNodes(param);
                 
 
             });

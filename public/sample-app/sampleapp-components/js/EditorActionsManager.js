@@ -587,6 +587,8 @@ module.exports.createCompoundForSelectedNodes = function(param) {
     module.exports.modelManager.initModelNode(newCompound,"me", true);
     //
 
+    return newCompoundId;
+
 
 }
 

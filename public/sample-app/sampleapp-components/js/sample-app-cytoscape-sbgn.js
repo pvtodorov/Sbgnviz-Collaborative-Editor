@@ -229,7 +229,7 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
             var panProps = ({
                 fitPadding: 10,
             });
-            //funda container.cytoscapePanzoom(panProps);
+      //funda     container.cytoscapePanzoom(panProps);
 
 
 

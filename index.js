@@ -793,7 +793,7 @@ app.proto.create = function (model) {
     // });
 
     //TODO: make this a function in menu-functions
-    socket.on('addCompound', function(data){
+    socket.on('addCompound', function(data, callback){
 
         //unselect all others
         cy.nodes().unselect();
@@ -805,7 +805,13 @@ app.proto.create = function (model) {
 
 
 
-        menu.addCompound(data.type);
+        var compoundId = -1;
+        if(data.type == "complex")
+            compoundId = menu.makeCompoundComplex();
+        else
+            compoundId = menu.makeCompoundCompartment();
+
+        if(callback) callback(compoundId);
 
     });
 

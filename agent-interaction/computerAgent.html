@@ -747,7 +747,10 @@
         var nodes = $('#nodeId').val();
 
 
-        agent.sendRequest("agentAddCompoundRequest", {type:type, selectedNodeIds: nodes});
+        agent.sendRequest("agentAddCompoundRequest", {type:type, selectedNodeIds: nodes}, function(compoundId){
+
+            console.log(compoundId + " added.");
+        });
 
     }
 
