@@ -9,12 +9,8 @@
   <component name="ChangeListManager">
     <list default="true" id="20ab80f0-2cb1-44ff-a133-bd87799f716d" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/agent-interaction/ContextAgent.js" afterPath="$PROJECT_DIR$/agent-interaction/ContextAgent.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/agent-interaction/computerAgent.html" afterPath="$PROJECT_DIR$/agent-interaction/computerAgent.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index.js" afterPath="$PROJECT_DIR$/index.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/serverSideSocketListener.js" afterPath="$PROJECT_DIR$/lib/serverSideSocketListener.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/EditorActionsManager.js" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/EditorActionsManager.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-cytoscape-sbgn.js" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-cytoscape-sbgn.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-menu-functions.js" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-menu-functions.js" />
     </list>
     <ignored path="CWC.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -48,18 +44,18 @@
       <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="585">
-              <caret line="813" column="0" selection-start-line="813" selection-start-column="0" selection-end-line="813" selection-end-column="0" />
+            <state relative-caret-position="765">
+              <caret line="825" column="29" selection-start-line="825" selection-start-column="29" selection-end-line="825" selection-end-column="29" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="serverSideSocketListener.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="serverSideSocketListener.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/lib/serverSideSocketListener.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="480">
-              <caret line="230" column="0" selection-start-line="230" selection-start-column="0" selection-end-line="230" selection-end-column="0" />
+            <state relative-caret-position="753">
+              <caret line="536" column="44" selection-start-line="536" selection-start-column="44" selection-end-line="536" selection-end-column="44" />
               <folding />
             </state>
           </provider>
@@ -68,15 +64,15 @@
       <file leaf-file-name="computerAgent.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/agent-interaction/computerAgent.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="425">
-              <caret line="749" column="102" selection-start-line="749" selection-start-column="102" selection-end-line="749" selection-end-column="102" />
+            <state relative-caret-position="338">
+              <caret line="422" column="47" selection-start-line="422" selection-start-column="34" selection-end-line="422" selection-end-column="47" />
               <folding>
-                <marker date="1473705700000" expanded="true" signature="33745:33755" ph="..." />
-                <marker date="1473705700000" expanded="true" signature="33909:33919" ph="..." />
-                <marker date="1473705700000" expanded="true" signature="34064:34087" ph="..." />
-                <marker date="1473705700000" expanded="true" signature="35072:35095" ph="..." />
-                <marker date="1473705700000" expanded="true" signature="36013:36036" ph="..." />
-                <marker date="1473705700000" expanded="true" signature="36138:36161" ph="..." />
+                <marker date="1473716352000" expanded="true" signature="33747:33757" ph="..." />
+                <marker date="1473716352000" expanded="true" signature="33911:33921" ph="..." />
+                <marker date="1473716352000" expanded="true" signature="34066:34089" ph="..." />
+                <marker date="1473716352000" expanded="true" signature="35074:35097" ph="..." />
+                <marker date="1473716352000" expanded="true" signature="36015:36038" ph="..." />
+                <marker date="1473716352000" expanded="true" signature="36140:36163" ph="..." />
               </folding>
             </state>
           </provider>
@@ -85,18 +81,18 @@
       <file leaf-file-name="agentAPI.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/agent-interaction/agentAPI.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="315">
-              <caret line="216" column="41" selection-start-line="216" selection-start-column="30" selection-end-line="216" selection-end-column="41" />
+            <state relative-caret-position="351">
+              <caret line="50" column="93" selection-start-line="50" selection-start-column="87" selection-end-line="50" selection-end-column="93" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ContextAgent.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="ContextAgent.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/agent-interaction/ContextAgent.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="693">
-              <caret line="222" column="70" selection-start-line="222" selection-start-column="70" selection-end-line="222" selection-end-column="70" />
+            <state relative-caret-position="540">
+              <caret line="556" column="13" selection-start-line="556" selection-start-column="13" selection-end-line="556" selection-end-column="13" />
               <folding />
             </state>
           </provider>
@@ -257,14 +253,14 @@
         <option value="$PROJECT_DIR$/lib/index.js" />
         <option value="$PROJECT_DIR$/../indra/agent.py" />
         <option value="$PROJECT_DIR$/../indra/indra/agent.py" />
-        <option value="$PROJECT_DIR$/agent-interaction/ContextAgent.js" />
         <option value="$PROJECT_DIR$/public/src/sbgn-extensions/cytoscape-cose-bilkent.js" />
         <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-cytoscape-sbgn.js" />
         <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/EditorActionsManager.js" />
-        <option value="$PROJECT_DIR$/agent-interaction/computerAgent.html" />
         <option value="$PROJECT_DIR$/index.js" />
         <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-menu-functions.js" />
         <option value="$PROJECT_DIR$/lib/serverSideSocketListener.js" />
+        <option value="$PROJECT_DIR$/agent-interaction/computerAgent.html" />
+        <option value="$PROJECT_DIR$/agent-interaction/ContextAgent.js" />
       </list>
     </option>
   </component>
@@ -528,6 +524,20 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="lib" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="CWC" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Sbgnviz-Collaborative-Editor" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="agent-interaction" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -1103,8 +1113,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="neihborhood queries" />
-    <MESSAGE value="Context is updated according to mutSig data." />
     <MESSAGE value="New gene is suggested according to most significant neighbors." />
     <MESSAGE value="Contextagent merges suggested neighbors." />
     <MESSAGE value="Neighborhood 2 is tried if 1 does not return the desired neighbor" />
@@ -1128,7 +1136,9 @@
     <MESSAGE value="User selects the nodes and edges of processes that are complete and writes &quot;process ready&quot;. These are converted into biopax and emitted to agents with 'processToIntegrate' request." />
     <MESSAGE value="cbioportal queries disabled" />
     <MESSAGE value="ContextAgent asks to show the following most important neighbors until user accepts to see one" />
-    <option name="LAST_COMMIT_MESSAGE" value="ContextAgent asks to show the following most important neighbors until user accepts to see one" />
+    <MESSAGE value="server returns compoundId when agent requests a compound." />
+    <MESSAGE value="MutSig data" />
+    <option name="LAST_COMMIT_MESSAGE" value="MutSig data" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1369,14 +1379,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/agent-interaction/ContextAgent.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="693">
-          <caret line="222" column="70" selection-start-line="222" selection-start-column="70" selection-end-line="222" selection-end-column="70" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/modelManager.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="408">
@@ -1444,14 +1446,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/agent-interaction/agentAPI.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="216" column="41" selection-start-line="216" selection-start-column="30" selection-end-line="216" selection-end-column="41" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/EditorActionsManager.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="653">
@@ -1468,33 +1462,49 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/agent-interaction/computerAgent.html">
+    <entry file="file://$PROJECT_DIR$/agent-interaction/agentAPI.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="425">
-          <caret line="749" column="102" selection-start-line="749" selection-start-column="102" selection-end-line="749" selection-end-column="102" />
-          <folding>
-            <marker date="1473705700000" expanded="true" signature="33745:33755" ph="..." />
-            <marker date="1473705700000" expanded="true" signature="33909:33919" ph="..." />
-            <marker date="1473705700000" expanded="true" signature="34064:34087" ph="..." />
-            <marker date="1473705700000" expanded="true" signature="35072:35095" ph="..." />
-            <marker date="1473705700000" expanded="true" signature="36013:36036" ph="..." />
-            <marker date="1473705700000" expanded="true" signature="36138:36161" ph="..." />
-          </folding>
+        <state relative-caret-position="351">
+          <caret line="50" column="93" selection-start-line="50" selection-start-column="87" selection-end-line="50" selection-end-column="93" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="585">
-          <caret line="813" column="0" selection-start-line="813" selection-start-column="0" selection-end-line="813" selection-end-column="0" />
+        <state relative-caret-position="765">
+          <caret line="825" column="29" selection-start-line="825" selection-start-column="29" selection-end-line="825" selection-end-column="29" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/lib/serverSideSocketListener.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="480">
-          <caret line="230" column="0" selection-start-line="230" selection-start-column="0" selection-end-line="230" selection-end-column="0" />
+        <state relative-caret-position="753">
+          <caret line="536" column="44" selection-start-line="536" selection-start-column="44" selection-end-line="536" selection-end-column="44" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/agent-interaction/computerAgent.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="338">
+          <caret line="422" column="47" selection-start-line="422" selection-start-column="34" selection-end-line="422" selection-end-column="47" />
+          <folding>
+            <marker date="1473716352000" expanded="true" signature="33747:33757" ph="..." />
+            <marker date="1473716352000" expanded="true" signature="33911:33921" ph="..." />
+            <marker date="1473716352000" expanded="true" signature="34066:34089" ph="..." />
+            <marker date="1473716352000" expanded="true" signature="35074:35097" ph="..." />
+            <marker date="1473716352000" expanded="true" signature="36015:36038" ph="..." />
+            <marker date="1473716352000" expanded="true" signature="36140:36163" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/agent-interaction/ContextAgent.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="540">
+          <caret line="556" column="13" selection-start-line="556" selection-start-column="13" selection-end-line="556" selection-end-column="13" />
           <folding />
         </state>
       </provider>

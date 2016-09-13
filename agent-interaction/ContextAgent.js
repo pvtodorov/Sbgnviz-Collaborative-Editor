@@ -183,8 +183,13 @@
         self.socket.on('message', function(data){
 
 
+            console.log(data.userId == self.agentId);
+            console.log(self.chatHistory.length );
+            console.log(self.neighborhoodQuestionInd);
+
             //FIXME: find a better solution to get human response
-            if(data.userId != self.userId) {
+            if(data.userId != self.agentId) {
+                console.log(self.chatHistory.length + " " + data);
                 if(self.chatHistory.length  ==  self.cancerQuestionInd + 2) {  //means human answered in response to agent's question about cancer type
 
                     var answer = data.comment;
@@ -220,6 +225,8 @@
                 else if(self.chatHistory.length  ==  self.neighborhoodQuestionInd + 2) {
                     var answer = data.comment;
 
+
+
                     if (answer.toLowerCase().search("ye") > -1)  //yes
                         self.suggestNewGraph( self.mostImportantNode.sbgnlabel.toUpperCase(), self.mostImportantNeighborName);
 
@@ -229,7 +236,7 @@
 
                         if( self.mostImportantNode ) {
 
-                            self.findMostImportantNeighborInContext( self.mostImportantNode.sbgnlabel.toUpperCase(), self.cancerList[self.cancerInd], function (neighborName) {
+                            self.findMostImportantNeighborInContext(self.mostImportantNode.sbgnlabel.toUpperCase(), self.cancerList[self.cancerInd], function (neighborName) {
 
 
                                 self.mostImportantNeighborName = neighborName;
@@ -325,31 +332,34 @@
         self.cancerInd = self.findBestContext();
 
 
-        //if cancer changed
-        if(!prevcancerInd  || (self.cancerInd>-1 && prevcancerInd!=self.cancerInd &&  self.cancerList[self.cancerInd].cancerType!= self.cancerList[prevcancerInd].cancerType )) { //only inform if the most likely cancer has changed
+        if(self.cancerList[self.cancerInd].relevance *  self.cancerList[self.cancerInd].confidence >0){
 
-            var cancer = self.cancerList[self.cancerInd];
-            self.informAboutCancer(cancer);
+            //if cancer changed
+            if(!prevcancerInd  || (self.cancerInd>-1 && prevcancerInd!=self.cancerInd &&  self.cancerList[self.cancerInd].cancerType!= self.cancerList[prevcancerInd].cancerType )) { //only inform if the most likely cancer has changed
 
-
-        }
-
-
-        //update most important node and its neighbor
-        var node = self.findMostImportantNodeInContext(nodes, self.cancerList[self.cancerInd]);
-        if(node) {
-
-            var prevNeighborName = self.mostImportantNeighborName;
-            var prevGeneName = self.mostImportantGeneName;
-            if (prevNeighborName != self.mostImportantNeighborName && prevGeneName != self.mostImportantGeneName) {
-                self.findMostImportantNeighborInContext(node.sbgnlabel.toUpperCase(), self.cancerList[self.cancerInd], function (neighborName) {
-
-                    self.mostImportantNeighborName = neighborName;
-                    self.mostImportantGeneName = node.sbgnlabel.toUpperCase();
+                var cancer = self.cancerList[self.cancerInd];
+                self.informAboutCancer(cancer);
 
 
-                    self.informAboutNeighborhood(node.sbgnlabel.toUpperCase(), neighborName);
-                });
+            }
+
+
+            //update most important node and its neighbor
+            var node = self.findMostImportantNodeInContext(nodes, self.cancerList[self.cancerInd]);
+            if(node) {
+
+                var prevNeighborName = self.mostImportantNeighborName;
+                var prevGeneName = self.mostImportantGeneName;
+                if (prevNeighborName != self.mostImportantNeighborName && prevGeneName != self.mostImportantGeneName) {
+                    self.findMostImportantNeighborInContext(node.sbgnlabel.toUpperCase(), self.cancerList[self.cancerInd], function (neighborName) {
+
+                        self.mostImportantNeighborName = neighborName;
+                        self.mostImportantGeneName = node.sbgnlabel.toUpperCase();
+
+
+                        self.informAboutNeighborhood(node.sbgnlabel.toUpperCase(), neighborName);
+                    });
+                }
             }
         }
 
@@ -402,7 +412,7 @@
 
         var self = this;
 
-        var agentComment = "The most likely cancer type is  " + cancer.cancerType.longName + " with a score of " + (cancer.relevance* cancer.confidence).toFixed(3);
+        var agentComment = "The most likely cancer type is  " + cancer.cancerType.longName;
         agentComment +=". Do you agree?"
 
         var targets = [];
@@ -423,8 +433,6 @@
 
         var agentComment =   neighborName + " is another important gene in the neighborhood of " + geneName +
             ". Are you interested in seeing the neighborhood graph?";
-
-
 
 
 
@@ -475,8 +483,9 @@
 
 
         if(geneName) {
+
             self.socket.emit('PCQuery', {url: pc2URL, type: "sif"});
-            self.sendMessage("The most important gene  in your network for this cancer type is " + geneName, +". I'm looking up its neighborhood alterations...", "*");
+            self.sendMessage(("The most important gene  in your network for this cancer type is " + geneName +". I'm looking up its neighborhood alterations..."), "*");
         }
 
 
