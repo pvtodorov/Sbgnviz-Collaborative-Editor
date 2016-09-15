@@ -776,44 +776,44 @@ app.proto.create = function (model) {
     });
 
 
-    socket.on('addNode', function(data, callback){
-        var nodeId = menu.addNode(null, data.x, data.y, data.sbgnclass, data.sbgnlabel, true);
-
-        if(callback) callback(nodeId);
-
-    });
-
-    // socket.on('agentContextQuestion', function(socketId){
-    //     setTimeout(function() {
-    //         var answer = confirm("Do you agree with the context?");
-    //         socket.emit('contextAnswer', {socketId: socketId, value:answer});
-    //         //if (callback) callback(answer);
-    //     }, 1000); //wait for the human to read
+    // socket.on('addNode', function(data, callback){
+    //     var nodeId = menu.addNode(null, data.x, data.y, data.sbgnclass, data.sbgnlabel, true);
+    //
+    //     if(callback) callback(nodeId);
     //
     // });
-
-    //TODO: make this a function in menu-functions
-    socket.on('addCompound', function(data, callback){
-
-        //unselect all others
-        cy.nodes().unselect();
-
-        data.selectedNodeIds.forEach(function(nodeId){
-
-            cy.getElementById( nodeId).select();
-        });
-
-
-
-        var compoundId = -1;
-        if(data.type == "complex")
-            compoundId = menu.makeCompoundComplex();
-        else
-            compoundId = menu.makeCompoundCompartment();
-
-        if(callback) callback(compoundId);
-
-    });
+    //
+    // // socket.on('agentContextQuestion', function(socketId){
+    // //     setTimeout(function() {
+    // //         var answer = confirm("Do you agree with the context?");
+    // //         socket.emit('contextAnswer', {socketId: socketId, value:answer});
+    // //         //if (callback) callback(answer);
+    // //     }, 1000); //wait for the human to read
+    // //
+    // // });
+    //
+    // //TODO: make this a function in menu-functions
+    // socket.on('addCompound', function(data, callback){
+    //
+    //     //unselect all others
+    //     cy.nodes().unselect();
+    //
+    //     data.selectedNodeIds.forEach(function(nodeId){
+    //
+    //         cy.getElementById( nodeId).select();
+    //     });
+    //
+    //
+    //
+    //     var compoundId = -1;
+    //     if(data.type == "complex")
+    //         compoundId = menu.makeCompoundComplex();
+    //     else
+    //         compoundId = menu.makeCompoundCompartment();
+    //
+    //     if(callback) callback(compoundId);
+    //
+    // });
 
 
     modelManager = require('./public/sample-app/sampleapp-components/js/modelManager.js')(model, model.get('_page.room'), model.get('_session.userId'),name );

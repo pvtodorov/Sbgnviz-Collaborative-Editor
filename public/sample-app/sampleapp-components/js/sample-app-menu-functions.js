@@ -326,7 +326,18 @@ module.exports = function(){
             return result.id();
         },
 
-         makeCompoundComplex: function(){
+         makeCompoundComplex: function(data) {
+
+             if (data) {
+
+                 cy.nodes().unselect();
+
+                 data.selectedNodeIds.forEach(function (nodeId) {
+
+                     cy.getElementById(nodeId).select();
+                 });
+             }
+
 
              var selected = cy.nodes(":selected").filter(function (i, element) {
                  var sbgnclass = element.data("sbgnclass")
@@ -354,7 +365,19 @@ module.exports = function(){
              return editorActions.createCompoundForSelectedNodes(param);
 
          },
-         makeCompoundCompartment: function(){
+         makeCompoundCompartment: function(data ){
+
+
+             if(data){
+                 cy.nodes().unselect();
+
+                 data.selectedNodeIds.forEach(function(nodeId){
+
+                     cy.getElementById( nodeId).select();
+                 });
+             }
+
+
              var selected = cy.nodes(":selected");
              selected = sbgnElementUtilities.getRootsOfGivenNodes(selected);
              if (selected.length == 0 || !sbgnElementUtilities.allHaveTheSameParent(selected)) {

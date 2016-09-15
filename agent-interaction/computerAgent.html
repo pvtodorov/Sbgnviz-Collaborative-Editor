@@ -413,6 +413,7 @@
                 console.log(graph);
             })
 
+
             socket.on('operation', function(op){
                 agent.opHistory.push(op);
                 writeOperation(op);
@@ -748,6 +749,7 @@
 
 
         agent.sendRequest("agentAddCompoundRequest", {type:type, selectedNodeIds: nodes}, function(compoundId){
+
 
             console.log(compoundId + " added.");
         });

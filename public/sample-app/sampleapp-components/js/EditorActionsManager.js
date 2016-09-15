@@ -38,6 +38,7 @@ module.exports.addNode = function(param) {
   //  var socket = io();
   //  socket.emit("addNode", param, function(data){
       //  if(data == "ok") {
+
             var result = addRemoveUtilities.addNode(param.x, param.y, param.sbgnclass, param.id);
             if (param.sbgnlabel != null)
                 result.data('sbgnlabel', param.sbgnlabel); //funda
@@ -100,6 +101,7 @@ module.exports.addEdge = function(param)
 {
     var result;
     result = addRemoveUtilities.addEdge(param.source, param.target, param.sbgnclass, param.id);
+
 
     if(param.sync){
         module.exports.modelManager.addModelEdge(result.id(), param, "me");
@@ -575,7 +577,7 @@ module.exports.createCompoundForSelectedNodes = function(param) {
     addRemoveUtilities.changeParent(nodesToMakeCompound, oldParentId, newCompoundId);
 
 
-    expandCollapseUtilities.refreshPaddings();
+   //funda TODO: open expandCollapseUtilities.refreshPaddings();
 
     ////Notify other clients
 

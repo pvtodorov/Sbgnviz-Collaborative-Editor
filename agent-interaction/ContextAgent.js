@@ -183,10 +183,6 @@
         self.socket.on('message', function(data){
 
 
-            console.log(data.userId == self.agentId);
-            console.log(self.chatHistory.length );
-            console.log(self.neighborhoodQuestionInd);
-
             //FIXME: find a better solution to get human response
             if(data.userId != self.agentId) {
                 console.log(self.chatHistory.length + " " + data);
@@ -202,7 +198,7 @@
 
 
                         if( self.mostImportantNode ) {
-                            self.findMostImportantNeighborInContext(self.mostImportantNode.sbgnlabel.toUpperCase(), self.cancerList[self.cancerInd], function (neighborName) {
+                            self.findMostImportantNeighborInContext(true, self.mostImportantNode.sbgnlabel.toUpperCase(), self.cancerList[self.cancerInd], function (neighborName) {
 
 
                                 self.mostImportantNeighborName = neighborName;
@@ -236,7 +232,7 @@
 
                         if( self.mostImportantNode ) {
 
-                            self.findMostImportantNeighborInContext(self.mostImportantNode.sbgnlabel.toUpperCase(), self.cancerList[self.cancerInd], function (neighborName) {
+                            self.findMostImportantNeighborInContext(false, self.mostImportantNode.sbgnlabel.toUpperCase(), self.cancerList[self.cancerInd], function (neighborName) {
 
 
                                 self.mostImportantNeighborName = neighborName;
@@ -351,7 +347,7 @@
                 var prevNeighborName = self.mostImportantNeighborName;
                 var prevGeneName = self.mostImportantGeneName;
                 if (prevNeighborName != self.mostImportantNeighborName && prevGeneName != self.mostImportantGeneName) {
-                    self.findMostImportantNeighborInContext(node.sbgnlabel.toUpperCase(), self.cancerList[self.cancerInd], function (neighborName) {
+                    self.findMostImportantNeighborInContext(true, node.sbgnlabel.toUpperCase(), self.cancerList[self.cancerInd], function (neighborName) {
 
                         self.mostImportantNeighborName = neighborName;
                         self.mostImportantGeneName = node.sbgnlabel.toUpperCase();
@@ -468,7 +464,7 @@
      * @param cancer
      * @param callback
      */
-    ContextAgent.prototype.findMostImportantNeighborInContext = function(geneName, cancer, callback){
+    ContextAgent.prototype.findMostImportantNeighborInContext = function(tellGeneName, geneName, cancer, callback){
         var self = this;
 
 
@@ -485,7 +481,8 @@
         if(geneName) {
 
             self.socket.emit('PCQuery', {url: pc2URL, type: "sif"});
-            self.sendMessage(("The most important gene  in your network for this cancer type is " + geneName +". I'm looking up its neighborhood alterations..."), "*");
+            if(tellGeneName)
+                self.sendMessage(("The most important gene  in your network for this cancer type is " + geneName +". I'm looking up its neighborhood alterations..."), "*");
         }
 
 

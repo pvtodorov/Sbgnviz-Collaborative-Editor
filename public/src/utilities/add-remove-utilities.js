@@ -63,6 +63,12 @@ module.exports = function(){
                 newNode._private.data.sbgnclonemarker = defaults.sbgnclonemarker;
             }
             newNode.addClass('changeBorderColor');
+
+
+
+
+
+
             return newNode;
         },
         removeNodes: function (nodes) {
@@ -83,7 +89,13 @@ module.exports = function(){
             var css = defaults ? {
                 'width': defaults['width']
             } : {};
-            
+
+            console.log("????");
+            cy.nodes().forEach(function (el){
+                console.log(el.id());
+            });
+
+
             var newEdge = { group: "edges",
                 data: {
                     source: source,
