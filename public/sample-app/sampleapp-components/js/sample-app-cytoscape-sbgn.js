@@ -811,8 +811,6 @@ module.exports.handleSBGNInspector = function (editorActions) {
         var commonStateAndInfos;
         var commonSBGNCardinality;
 
-        //FUNDA: for debugging
-        html += "<p>"+ selectedEles[0].id() +"</p>";
 
         if (allNodes) {
             type = "node";
@@ -935,8 +933,13 @@ module.exports.handleSBGNInspector = function (editorActions) {
                 + ">Set as Default</button></div>";
         }
 
+
+        //FUNDA: for debugging
+        html += "<p><hr><div style='text-align: left; margin-top: 5px; margin-left:10px;'> Id: "+ selectedEles[0].id() +"</p>";
+
         html += "<hr style='padding: 0px; margin-top: 5px; margin-bottom: 5px;' width='" + $("#sbgn-inspector").width() + "'>";
-//    html += "<button type='button' style='display: block; margin: 0 auto;' class='btn btn-default' id='inspector-apply-button'>Apply Changes</button>";
+
+
         $("#sbgn-inspector").html(html);
 
         if (type == "node") {
