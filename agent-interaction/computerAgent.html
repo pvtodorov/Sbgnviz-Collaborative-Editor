@@ -186,7 +186,14 @@
 
 
         <input id="chatMessage" type = "text"> <button onclick = "sendMessage()">Send</button>
-        <div class="filebutton"><input type="file" id="imagefile" accept="image/*" onchange = "uploadFile(this)"></div>
+
+
+        <label for="file-upload" class="image-file">
+            <i class="fa fa-cloud-upload"></i> Upload Image
+        </label>
+        <input id="file-upload" type="file"/>
+
+    <div ><input type="file" id="file-upload" accept="image/*" onchange = "uploadFile(this)"></div>
 
 </ul>
 

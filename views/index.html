@@ -476,6 +476,7 @@
 
                 <ul class="nav nav-tabs">
                     <li class = "active tab-link"><a data-toggle="tab"  href="#chat-area">Chat</a></li>
+                    <li class = "tab-link"><a data-toggle="tab" href="#image-area">Image Share</a></li>
                     <li class = "tab-link"><a data-toggle="tab" href="#sbgn-inspector">Sbgn Inspector</a></li>
                     <li class = "tab-link"><a data-toggle="tab" href="#command-history-area">Operations</a></li>
                 </ul>
@@ -505,33 +506,42 @@
                         {{each _page.list as #message}}
                         <li><view name="chat-message"></view></li>
                         {{/each}}
-
-
-
                     </ul>
 
                     <button id = "clear-history" on-click ="clearHistory()">Clear chat </button>
 
                     <!--</div>-->
                     <div id="inputs">
-
-
                         User name: <input id="inputs-name" value="{{users[_session.userId].name}}">
-
                         <button id = "change-user-color" on-click ="changeColorCode()">New user color</button>
                         <form id="inputs-form" on-submit="add()">
-                            <!--<input id="inputs-comment"  value="{{_page.newComment}}" autofocus> <button id = "send-message">Send</button>-->
-                            <textarea id="inputs-comment" rows = "3", wrap = "soft" autofocus>{{_page.newComment}}</textarea> <button id = "send-message">Send</button>
-                            <div class="filebutton"><input type="file" id="imagefile" accept="image/*" on-change = "uploadFile($event)" value = {{_page.newFile}}></div>
+                            <textarea id="inputs-comment" rows = "3", wrap = "soft" autofocus>{{_page.newComment}}</textarea>
+                            <button  class = "btn btn-info" id = "send-message">Send</button>
 
                         </form>
                     </div>
-                    <div id = "receivedImages" >
+                </div>
+
+                <div id = "image-area" class="tab-pane">
+                    <div id = "receivedImages" class="tab-pane">
                         {{ each _page.doc.images as #imageFile}}
+                        <br>
                         {{#imageFile.filePath}}
                         <div class = image> <img src= "{{#imageFile.img}}" onclick ="openImage(this)" onmouseover ="showQTip(this)" /> </div>
                         {{/each}}
                     </div>
+
+
+
+                    <div id = "upload-image">
+                        <label for="file-upload" class="image-file">
+                            <i class="fa fa-cloud-upload"></i> Upload Image
+                        </label>
+
+                        <div><input type="file" id="file-upload" accept="image/*" on-change = "uploadFile($event)" value = {{_page.newFile}}></div>
+
+                    </div>
+
                 </div>
 
                 <ul id ="command-history-area" class="tab-pane" as = "list">
@@ -543,10 +553,7 @@
                     <!--</ul>-->
                 </ul>
 
-
-
-</div>
-
+             </div>
 
             </div>
 
@@ -955,7 +962,7 @@
 
 
             <unit-tests:>
-                <div id ="unitTestArea"> <button on-click = "runUnitTests()"> Test</button></div>
+                <div id ="unitTestArea"> <button class="btn btn-info btn-mini" on-click = "runUnitTests()"> Test</button></div>
 
             <chat-user:>
                 <div class="user" style = background:{{users[#pUserId].colorCode}}>

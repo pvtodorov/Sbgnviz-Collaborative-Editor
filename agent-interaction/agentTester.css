@@ -182,6 +182,15 @@ tr:nth-child(even) {
     background-color: #dddddd;
 }
 
+input[type="file"] {
+    display: none;
+}
+.image-file {
+    border: 1px solid #ccc;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+}
 
 #receivedImage{
     position: absolute;
