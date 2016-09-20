@@ -12,6 +12,7 @@
         <link href="lib/css/jquery.qtip.min.css" rel="stylesheet">
         <link href="sample-app/sampleapp-components/css/sbgn-viz.css" rel="stylesheet">
 
+
         <link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
 
         <Body:>
@@ -468,20 +469,25 @@
 
             <div id ="inspector-tab-area">
 
-                <div id ="inspector-tabs">
-                <ul class="w3-navbar grey-tab">
-                    <li><a href="#"  class="tablink  w3-blue-grey"  onclick="openTab(event, 'chat-area', ['command-history-area','sbgn-inspector'])">Chat</a></li>
-                    <li><a href="#"  class="tablink" onclick="openTab(event, 'sbgn-inspector', ['command-history-area','chat-area'])">Sbgn Inspector</a></li>
-                    <li><a href="#"  class="tablink" onclick="openTab(event, 'command-history-area', ['chat-area','sbgn-inspector'])">Operations</a></li>
 
+
+
+<div id="inspector-tabs">
+
+                <ul class="nav nav-tabs">
+                    <li class = "active tab-link"><a data-toggle="tab"  href="#chat-area">Chat</a></li>
+                    <li class = "tab-link"><a data-toggle="tab" href="#sbgn-inspector">Sbgn Inspector</a></li>
+                    <li class = "tab-link"><a data-toggle="tab" href="#command-history-area">Operations</a></li>
                 </ul>
+</div>
+                <div class="tab-content">
 
-                </div>
 
 
-            <div id="sbgn-inspector"></div>
 
-                <div id ="chat-area">
+                <div id="sbgn-inspector" class="tab-pane"></div>
+
+                <div id ="chat-area"  class="tab-pane fade in active">
                     <div id = "users" as="container"  on-change = "onScroll()">
                         <!--<ul id ="user-list" as = "list">-->
                         <form action=""">
@@ -493,22 +499,8 @@
                         </form>
                         <!--</ul>-->
 
-
-
-                        <!--<div id = "chat-history">-->
-                        <!---->
-                        <!--&lt;!&ndash;Show chat history&ndash;&gt;-->
-                        <!--&lt;!&ndash;<select  id = "durationSelect" on-change= "changeDuration()" >&ndash;&gt;-->
-                        <!--&lt;!&ndash;{{each _page.durations as #pDur}}&ndash;&gt;-->
-                        <!--&lt;!&ndash;<option value = "{{#pDur.id}}"  selected = "{{_page.durationId=== #pDur.id}}"> {{ #pDur.name}} </option>&ndash;&gt;-->
-                        <!--&lt;!&ndash;{{/each}}&ndash;&gt;-->
-                        <!--&lt;!&ndash;</select>&ndash;&gt;-->
-
-                        <!--</div>-->
-
                     </div>
-                    <!--<div id="messages" as  = "content">-->
-                    <!--<ul id="messages-list" as="list"  >-->
+
                     <ul id="messages" as="list"  >
                         {{each _page.list as #message}}
                         <li><view name="chat-message"></view></li>
@@ -541,7 +533,8 @@
                         {{/each}}
                     </div>
                 </div>
-                <ul id ="command-history-area" as = "list">
+
+                <ul id ="command-history-area" class="tab-pane" as = "list">
                     <!--<ul id ="command-list" as = "list" >-->
                     {{each _page.doc.history as #pCommand}}
                     <li> <b>{{#pCommand.userName}} {{_page.showTime && formatTime(#pCommand)}} > </b>{{#pCommand.opName}} {{#pCommand.opTarget}} {{formatObj(#pCommand.elId)}} {{#pCommand.opAttr}} {{formatObj(#pCommand.param)}}
@@ -549,12 +542,15 @@
                     {{/each}}
                     <!--</ul>-->
                 </ul>
-                <audio id="notificationAudio" src="http://www.talkingwav.com/various/beep_02.wav" preload="auto"></audio>
 
 
+
+</div>
 
 
             </div>
+
+            <audio id="notificationAudio" src="http://www.talkingwav.com/various/beep_02.wav" preload="auto"></audio>
 
             <div id="sbgn-layout-table" title="Layout Properties">
                 <!-- sbgn layout table will be shown here -->
@@ -584,27 +580,6 @@
             <!--<button id = "popupButton" on-click="runQuery()">BioPAXTest</button>-->
 
 
-            <script>
-                function openTab(evt, idToShow, hideArr){
-
-                    hideArr.forEach(function(id){
-                        document.getElementById(id).style.display = "none";
-                        document.getElementById(id).style.display = "none";
-
-                    });
-
-                    document.getElementById(idToShow).style.display = "block";
-
-                    var tablinks = document.getElementsByClassName("tablink");
-
-                    for (i = 0; i < hideArr.length + 1; i++) {
-                        tablinks[i].className = tablinks[i].className.replace(" w3-blue-grey", "");
-                    }
-
-                    evt.currentTarget.className += " w3-blue-grey";
-
-                }
-            </script>
 
             <!-- templates -->
             <script type="text/template" id="node-legend-template">

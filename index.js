@@ -991,7 +991,7 @@ app.proto.formatTime = function (message) {
 
 app.proto.formatObj = function(obj){
 
-    return JSON.stringify(obj);
+    return JSON.stringify(obj, null, '\t');
 };
 
 

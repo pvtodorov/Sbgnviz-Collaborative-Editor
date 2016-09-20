@@ -207,76 +207,7 @@ menu:not([title]):before{
 }
 
 
-#sbgn-network-container {
-    position: absolute;
-    /*margin: auto;*/
-    border: 1px solid #dddddd;
-    border-radius: 0.25em;
-    /*height: 680px;*/
-    bottom: 10px;
-    /*width: 800px;*/
-    top: 95px;
-    left: 40px;
-    /*right: 350px;*/
-    /*overflow: auto !important;*/
 
-    overflow-x: hidden;
-    /*float: left;*/
-}
-
-#inspector-tab-area{
-    /*width and height are updated dynamically*/
-    position: absolute;
-    right: 0px;
-}
-#inspector-tabs{
-    position: absolute;
-    height: 50px;
-    overflow-x: hidden;
-    bottom: 0px;
-    width: 100%;
-    padding-top: 2px;
-    right: 0px;
-    /*border-radius: 0.25em;*/
-
-}
-
-#sbgn-inspector {
-    position: absolute;
-    border: 1px solid #dddddd;
-    /*height is updated dynamically*/
-    overflow-x: hidden;
-    right: 0px;
-    width: 100%;
-    display: none;
-    padding: 5px;
-    /*width is updated dynamically*/
-    /*overflow: auto !important;*/
-    border-radius: 0.25em;
-    /*float: right;*/
-}
-
-#command-history-area{
-    position: absolute;
-    border: 1px solid #dddddd;
-    width: 100%;
-    /*height is updated dynamically/
-    /*width is updated dynamically*/
-    /*top: 21%;*/
-    right: 0px;
-    top: 0px;
-    font-size: small;
-    overflow: auto;
-    overflow-y: auto;
-    white-space: pre-wrap;
-    word-wrap: break-word;
-    padding: 5px;
-    -webkit-overflow-scrolling: touch;
-    border-radius: 0.25em;
-    display:none;
-    /*float: right;*/
-
-}
 
 .inside-menu {
     border: 1px solid #ddd;
@@ -463,6 +394,81 @@ img.sbgn-toolbar-element:hover {
 input, button {
     font-size: 12px !important;
 }
+#sbgn-network-container {
+    position: absolute;
+    /*margin: auto;*/
+    border: 1px solid #dddddd;
+    border-radius: 0.25em;
+    /*height: 680px;*/
+    bottom: 10px;
+    /*width: 800px;*/
+    top: 95px;
+    left: 40px;
+    /*right: 350px;*/
+    /*overflow: auto !important;*/
+
+    overflow-x: hidden;
+    /*float: left;*/
+}
+
+
+#inspector-tab-area{
+    /*width and height are updated dynamically*/
+    position: absolute;
+    right: 0px;
+    overlow: hidden;
+}
+#inspector-tabs{
+    position: absolute;
+
+    overflow-x: hidden;
+    bottom: 0px;
+    width: 100%;
+    padding-top: 2px;
+    right: 0px;
+
+    /*border-radius: 0.25em;*/
+}
+
+.tab-link{
+ color: #0e90d2;
+}
+.tab-content{
+    width: inherit;
+    height: inherit;
+}
+
+#sbgn-inspector {
+    position: absolute;
+    border: 1px solid #dddddd;
+    overflow-x: hidden;
+    right: 0px;
+    width: 100%;
+    height: 95%;
+    padding: 5px;
+    border-radius: 0.25em;
+}
+
+#command-history-area{
+    position: absolute;
+    border: 1px solid #dddddd;
+    width: 100%;
+    height: 95%;
+
+    right: 0px;
+    top: 0px;
+    font-size: small;
+    overflow: auto;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    padding: 5px;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 0.25em;
+    /*float: right;*/
+
+}
+
 
 #chat-area{
     position: absolute;
@@ -470,6 +476,7 @@ input, button {
     /*padding-top: 15px;*/
     /*padding-bottom: 5px;*/
     width: 100%;
+    height: 95%;
     padding: 5px;
     right: 0px;
     top: 0px;
@@ -482,10 +489,7 @@ input, button {
 
 }
 
-.grey-tab, .tablink{
-    background: #ececec;
-    border: 1px solid black;
-}
+
 #users{
     position: absolute;
     overflow-y: auto;
@@ -596,10 +600,9 @@ input, button {
     white-space: pre-wrap;
     word-wrap: break-word;
 
-
     background: #ececec;
     /*width: 100%;*/
-    height: 175px;
+    height: 180px;
     border-top: 1px solid #eeeeee;
     right: 0px;
     left: 0px;

@@ -78,9 +78,9 @@ function dynamicResize() {
 
     $("#inspector-tab-area").height(windowHeight);
 
-    $("#sbgn-inspector").height(windowHeight - 60); //account for tabs
-    $("#command-history-area").height(windowHeight - 60);
-    $("#chat-area").height(windowHeight - 60);
+    // $("#sbgn-inspector").height(windowHeight - 60); //account for tabs
+    // $("#command-history-area").height(windowHeight - 60);
+    // $("#chat-area").height(windowHeight - 60);
     //  }
 }
 
