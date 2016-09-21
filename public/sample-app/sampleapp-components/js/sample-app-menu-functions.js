@@ -659,12 +659,8 @@ module.exports = function(){
             //
             // //If we get a message om a separate window
             window.addEventListener('message', function(event) {
-
-
-
-                if(event.data.graph)
-                    self.loadFile(event.data.graph);
-
+                if(event.data)
+                    self.loadFile(event.data);
 
             }, false);
 
@@ -1798,8 +1794,8 @@ function PathsBetweenQuery(socket, userName){
                 self.currentQueryParameters.lengthLimit = Number(document.getElementById("query-pathsbetween-length-limit").value);
 
                 var pc2URL = "http://www.pathwaycommons.org/pc2/";
-                //var format = "graph?format=SBGN";
-                var format = "graph?format=BIOPAX";
+                var format = "graph?format=SBGN";
+                // var format = "graph?format=BIOPAX";
                 var kind = "&kind=PATHSBETWEEN";
                 var limit = "&limit=" + self.currentQueryParameters.lengthLimit;
                 var sources = "";
@@ -1820,21 +1816,17 @@ function PathsBetweenQuery(socket, userName){
 
 
 
-                socket.emit('PCQuery',  {url: pc2URL, type:"owl"});
+                socket.emit('PCQuery',  {url: pc2URL, type:"sbgn"}, function(sbgnData){
 
-                socket.on('PCQueryResult', function(owlData){
+                    if(sbgnData!=null) {
 
-                    if(owlData.graph!=null) {
-                        socket.emit('BioPAXRequest', owlData.graph, "sbgn", function(sbgnData){ //convert to sbgn
+                        var w = window.open(("query_" + userName), "width = 1600, height = 1200, left = " + window.left + " right = " + window.right);
 
-                            var w = window.open(("query_" + userName), "width = 1600, height = 1200, left = " + window.left + " right = " + window.right);
+                        // // //FIXME: find a more elegant solution
+                        setTimeout(function () {
+                            w.postMessage(sbgnData, "*");
+                        }, 1000);
 
-                            // // //FIXME: find a more elegant solution
-                            setTimeout(function () {
-                                w.postMessage(sbgnData, "*");
-                            }, 1000);
-
-                        });
                     }
                     else
                          alert("No results found!");
