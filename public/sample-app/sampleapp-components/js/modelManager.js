@@ -4,15 +4,26 @@
  *	Author: Funda Durupinar Babur<f.durupinar@gmail.com>
  */
 
-
+var CircularJSON = require('circular-json');
 module.exports =  function(model, docId, userId, userName) {
 
     var user = model.at('users.' + userId);
 
 
+    var isListeningCy = true;
+
     model.ref('_page.doc', 'documents.' + docId);
 
     return ModelManager = { //global reference for testing
+
+        getIsListeningCy: function(){
+
+            return isListeningCy;
+        },
+        setIsListeningCy: function(val){
+
+            isListeningCy = val;
+        },
 
 
 
@@ -149,20 +160,44 @@ module.exports =  function(model, docId, userId, userName) {
             return(model.get('_page.doc.undoIndex') + 1 < model.get('_page.doc.history').length)
         },
 
-        undoCommand: function(){
+        doCommand: function(type){
             var undoInd = model.get('_page.doc.undoIndex');
-            var cmd = model.get('_page.doc.history.' + undoInd); // cmd: opName, opTarget, opAttr, elId, param
-
-            if(cmd.opName == "set"){
-                if(cmd.opTarget == "element" && cmd.elType == "node")
-                    this.changeModelNodeAttribute(cmd.opAttr,cmd.elId, cmd.prevParam, null); //user is null to enable updating in the editor
-
-                else if(cmd.opTarget == "element" && cmd.elType == "edge")
-                    this.changeModelEdgeAttribute(cmd.opAttr,cmd.elId, cmd.prevParam, null);
-                else if(cmd.opTarget == "element group")
-                    this.changeModelElementGroupAttribute(cmd.opAttr, cmd.elId, cmd.prevParam, null);
-
+            var cmd;
+            var cmdVal;
+            if(type == "undo") {
+                cmd = model.get('_page.doc.history.' + undoInd); // cmd: opName, opTarget, opAttr, elId, param
+                cmdVal = cmd.prevParam;
             }
+            else {
+                cmd = model.get('_page.doc.history.' + (undoInd + 1)); // cmd: opName, opTarget, opAttr, elId, param
+                cmdVal = cmd.param;
+            }
+
+            if(cmd.opName == "set data") {
+                if (cmd.opTarget == "element" && cmd.elType == "node")
+                    this.updateModelElData(cmd.elId, true, cmdVal, cmd.opAttr, null);  //user is null to enable updating in the editor
+                else if (cmd.opTarget == "element" && cmd.elType == "edge")
+                    this.updateModelElData(cmd.elId, false, cmdVal, cmd.opAttr, null);  //user is null to enable updating in the editor
+            }
+
+            else if(cmd.opName == "set style") {
+                if (cmd.opTarget == "element" && cmd.elType == "node")
+                    this.updateModelElStyle(cmd.elId, true, cmdVal, cmd.opAttr, null);  //user is null to enable updating in the editor
+                else if (cmd.opTarget == "element" && cmd.elType == "edge")
+                    this.updateModelElStyle(cmd.elId, false, cmdVal, cmd.opAttr, null);  //user is null to enable updating in the editor
+            }
+            else if(cmd.opName == "move")
+                this.updateModelNodePosition(cmd.elId, cmd.prevParam, null);  //user is null to enable updating in the editor
+            else if(cmd.opName == "highlight" || cmd.opName == "highlight" || cmd.opName == "hide" || cmd.opName == "show") {
+                if (cmd.opTarget == "element" && cmd.elType == "node")
+                    this.updateModelElClasses(cmd.elId, true, cmdVal, cmd.opAttr, null);  //user is null to enable updating in the editor
+                else if (cmd.opTarget == "element" && cmd.elType == "edge")
+                    this.updateModelElClasses(cmd.elId, false, cmdVal, cmd.opAttr, null);  //user is null to enable updating in the editor
+            }
+
+
+/*
+
             else if(cmd.opName == "add"){
                 if(cmd.opTarget == "element" && cmd.elType == "node")
                     this.deleteModelNode(cmd.elId);
@@ -173,16 +208,20 @@ module.exports =  function(model, docId, userId, userName) {
             }
             else if(cmd.opName == "delete"){
                 if(cmd.opTarget == "element")
-                    this.restoreModelElement(cmd.elType, cmd.elId, cmd.prevParam);
+                    this.restoreModelElement(cmd.elType, cmd.elId, cmdVal);
                 else if(cmd.opTarget == "element group")
-                    this.restoreModelElementGroup(cmd.elId, cmd.prevParam);
+                    this.restoreModelElementGroup(cmd.elId, cmdVal);
                 else if(cmd.opTarget == "compound")
                         this.addModelCompound(cmd.elId, cmd.prevParam.compoundAtts, cmd.prevParam.childrenList, cmd.param);
+                        }
+*/
 
-            }
 
+            if(type == "undo")
+                undoInd = undoInd > 0 ? undoInd - 1 : 0;
+            else
+                undoInd = undoInd <  model.get('_page.doc.history').length -1 ? undoInd + 1  : model.get('_page.doc.history').length -1;
 
-            undoInd = undoInd > 0 ? undoInd - 1 : 0;
             model.set('_page.doc.undoIndex', undoInd);
 
         },
@@ -320,16 +359,16 @@ module.exports =  function(model, docId, userId, userName) {
 
             if(model.get("_page.doc.cy.nodes." + nodeId + '.id') != null)
                 return "Node cannot be duplicated";
-
-            model.pass({user:user}).set('_page.doc.cy.nodes.' +nodeId +'.id', nodeId);
-            model.pass({user:user}).set('_page.doc.cy.nodes.' +nodeId +'.position', {x: param.x, y: param.y});
-            model.pass({user:user}).set('_page.doc.cy.nodes.' + nodeId+'.sbgnclass', param.sbgnclass);
-            model.pass({user:user}).set('_page.doc.cy.nodes.' + nodeId+'.sbgnlabel', param.sbgnlabel);
+            //
+             model.pass({user:user}).set('_page.doc.cy.nodes.' +nodeId +'.id', nodeId);
+            // model.pass({user:user}).set('_page.doc.cy.nodes.' +nodeId +'.position', {x: param.x, y: param.y});
+            // model.pass({user:user}).set('_page.doc.cy.nodes.' + nodeId+'.sbgnclass', param.sbgnclass);
+            //
 
             //adding the node in cytoscape
-            model.pass({user:user}).set('_page.doc.cy.nodes.' +nodeId+'.addedLater', true);
+            model.pass({user:user}).set('_page.doc.cy.nodes.' +nodeId+'.addedLater', {x: param.x, y: param.y, sbgnclass: param.sbgnclass});
 
-            
+
 
             if(!noHistUpdate)
                 //We don't want all the attributes of the param to be printed
@@ -347,13 +386,9 @@ module.exports =  function(model, docId, userId, userName) {
                 return "Edge cannot be duplicated";
 
             model.pass({user:user}).set('_page.doc.cy.edges.' + edgeId +'.id', edgeId);
-            model.pass({user:user}).set('_page.doc.cy.edges.' + edgeId +'.sbgnclass', param.sbgnclass);
-
-            model.pass({user:user}).set('_page.doc.cy.edges.' + edgeId +'.source', param.source);
-            model.pass({user:user}).set('_page.doc.cy.edges.' + edgeId +'.target', param.target);
 
             //adding the edge...other operations should be called after this
-            model.pass({user:user}).set('_page.doc.cy.edges.' +edgeId+'.addedLater', true);
+            model.pass({user:user}).set('_page.doc.cy.edges.' +edgeId+'.addedLater', { source: param.source, target: param.target, sbgnclass: param.sbgnclass});
 
 
 
@@ -539,36 +574,11 @@ module.exports =  function(model, docId, userId, userName) {
                 return "Node id not found";
 
             if(!noHistUpdate){
-                var pos = nodePath.get('position');
-                var sbgnclass = nodePath.get('sbgnclass');
-                var borderColor = nodePath.get('borderColor');
-                var borderWidth = nodePath.get('borderWidth');
-                var backgroundColor = nodePath.get('backgroundColor');
-                var width = nodePath.get('width');
-                var height = nodePath.get('height');
-                var parent = nodePath.get('parent');
-                var sbgnlabel = nodePath.get('sbgnlabel');
-                var isCloneMarker = nodePath.get('isCloneMarker');
-                var isMultimer = nodePath.get('isMultimer');
-                var sbgnStatesAndInfos = nodePath.get('sbgnStatesAndInfos');
-                var highlightColor = nodePath.get('highlightColor');
-                var ports = nodePath.get('ports');
-
-
-                prevParam = {x: pos.x , y: pos.y , sbgnclass:sbgnclass, width: width, height: height,
-                             borderColor: borderColor, borderWidth: borderWidth, sbgnlabel: sbgnlabel,
-                             sbgnStatesAndInfos:sbgnStatesAndInfos, parent:parent, isCloneMarker: isCloneMarker,
-                             isMultimer: isMultimer, highlightColor: highlightColor, ports: ports};
-
-
-
+                var prevParam = model.get('_page.doc.nodes.' + nodeId);
                 this.updateHistory({opName:'delete',opTarget:'element', elType:'node', elId: nodeId, prevParam: prevParam});
-
             }
 
             model.pass({user: user}).del(('_page.doc.cy.nodes.' + nodeId));
-
-
 
             return "success";
 
@@ -578,30 +588,17 @@ module.exports =  function(model, docId, userId, userName) {
         deleteModelEdge: function(edgeId, user, noHistUpdate){
 
             var edgePath = model.at('_page.doc.cy.edges.'  + edgeId);
+
             if(edgePath.get() == null)
                 return "Edge id not found";
 
+            if(!noHistUpdate){
+                var prevParam = model.get('_page.doc.edges.' + edgeId);
+                this.updateHistory({opName:'delete',opTarget:'element', elType:'node', elId: edgeId, prevParam: prevParam});
+            }
 
-                if(!noHistUpdate) {
-                    var source = edgePath.get('source');
-                    var target = edgePath.get('target');
-                    var sbgnClass = edgePath.get('sbgnclass');
-                    var lineColor = edgePath.get('lineColor');
-                    var width = edgePath.get('width');
-                    var sbgncardinality = edgePath.get('sbgncardinality');
-                    var portsource = edgePath.get('portsource');
-                    var porttarget = edgePath.get('porttarget');
-                    var bendPointPositions= edgePath.get('bendPointPositions');
-                    var highlightColor = edgePath.get('highlightColor');
+            model.pass({user: user}).del(('_page.doc.cy.edges.' + edgeId));
 
-                    prevParam = {source: source , target:target , sbgnclass:sbgnClass, lineColor: lineColor,
-                    width: width, sbgncardinality: sbgncardinality, portsource: portsource, porttarget:porttarget, bendPointPositions: bendPointPositions, highlightColor:highlightColor};
-
-                    this.updateHistory({opName:'delete',opTarget:'element', elType:'edge', elId: edgeId, prevParam: prevParam});
-
-                }
-
-                model.pass({user:user}).del(('_page.doc.cy.edges.'  + edgeId));
 
             return "success";
 
@@ -609,64 +606,34 @@ module.exports =  function(model, docId, userId, userName) {
 
 
         deleteModelElementGroup: function(selectedEles, user, noHistUpdate){
-            var prevParamsNodes = [];
-            var prevParamsEdges = [];
             var self = this;
+            var prevNodes = [];
+            var prevEdges = [];
 
-            selectedEles.edges.forEach(function(edge){
-                var edgePath = model.at('_page.doc.cy.edges.' + edge.id);
 
-                var source = edgePath.get('source');
-                var target = edgePath.get('target');
-                var sbgnclass = edgePath.get('sbgnclass');
-                var lineColor = edgePath.get('lineColor');
-                var width = edgePath.get('width');
-                var sbgncardinality = edgePath.get('sbgncardinality');
-                var portsource = edgePath.get('portsource');
-                var porttarget = edgePath.get('porttarget');
-                var bendPointPositions= edgePath.get('bendPointPositions');
+            selectedEles.forEach(function(el){ //edges first
+                if (el.isEdge()){
 
-                prevParamsEdges.push( {source: source , target:target , sbgnclass:sbgnclass, lineColor: lineColor,
-                    width: width, sbgncardinality: sbgncardinality, portsource: portsource, porttarget:porttarget, bendPointPositions: bendPointPositions});
+                    var prevEdge = model.get('_page.doc.cy.edges.' + el.id());
+
+                    prevEdges.push(prevEdge);
+                    self.deleteModelEdge(el.id());
+                }
+            });
+
+            selectedEles.forEach(function(el){
+                if (el.isNode()){
+
+                    var prevNode = model.get('_page.doc.cy.nodes.' + el.id());
+
+                    prevNodes.push(prevNode);
+                    self.deleteModelNode(el.id());
+                }
             });
 
 
-            selectedEles.edges.forEach(function(edge){
-                self.deleteModelEdge(edge.id, user, true); //will not update children history
-            });
-
-            selectedEles.nodes.forEach(function(node){
-                var nodePath = model.at('_page.doc.cy.nodes.'  + node.id);
-
-                var pos = nodePath.get('position');
-                var sbgnclass = nodePath.get('sbgnclass');
-
-
-                var borderColor = nodePath.get('borderColor');
-                var borderWidth = nodePath.get('borderWidth');
-                var backgroundColor = nodePath.get('backgroundColor');
-                var width = nodePath.get('width');
-                var height = nodePath.get('height');
-                var parent = nodePath.get('parent');
-                var sbgnlabel = nodePath.get('sbgnlabel');
-                var isCloneMarker = nodePath.get('isCloneMarker');
-                var isMultimer = nodePath.get('isMultimer');
-                var sbgnStatesAndInfos = nodePath.get('sbgnStatesAndInfos');
-                var highlightColor = nodePath.get('highlightColor');
-                var ports = nodePath.get('ports');
-
-                prevParamsNodes.push({x: pos.x , y: pos.y , sbgnclass:sbgnclass, width: width, height: height,
-                    borderColor: borderColor, borderWidth: borderWidth, sbgnlabel: sbgnlabel,
-                    sbgnStatesAndInfos:sbgnStatesAndInfos, parent:parent, isCloneMarker: isCloneMarker,
-                    isMultimer: isMultimer,  highlightColor: highlightColor, backgroundColor: backgroundColor, ports:ports } );
-            });
-
-
-            selectedEles.nodes.forEach(function(node){
-                self.deleteModelNode(node.id, user, true); //will not update children history
-            });
             if(!noHistUpdate)
-                this.updateHistory({opName:'delete',opTarget:'element group',  elId: selectedEles, prevParam: {nodes: prevParamsNodes, edges: prevParamsEdges}});
+                this.updateHistory({opName:'delete',opTarget:'element group',  elId: null, prevParam: {nodes: prevNodes, edges: prevEdges}});
 
 
         },
@@ -724,7 +691,7 @@ module.exports =  function(model, docId, userId, userName) {
 
             this.addModelEdge(edgeId, param, user, noHistUpdate);
 
-            
+
             this.changeModelEdgeAttribute('lineColor', edgeId,param.lineColor,user, noHistUpdate );
             this.changeModelEdgeAttribute('width', edgeId,param.width,user, noHistUpdate );
             this.changeModelEdgeAttribute('sbgncardinality', edgeId,param.sbgncardinality,user , noHistUpdate);
@@ -787,22 +754,25 @@ module.exports =  function(model, docId, userId, userName) {
 
             for(var att in nodes){
 
+
                 if(nodes.hasOwnProperty(att)) {
                     var node = nodes[att];
+                    var circularData = CircularJSON.parse(node.data);
+
                     var jsonNode = {
                         data: {
-                            backgroundOpacity: node.backgroundOpacity,
-                            borderColor: node.borderColor,
-                            id: node.id,
-                            parent: node.parent,
-                            ports: node.ports,
-                            sbgnbbox: {x: node.position.x, y: node.position.y, w: node.width, h: node.height},
-                            sbgnclass: node.sbgnclass,
-                            sbgnclonemarker: node.isCloneMarker,
-                            sbgnlabel: node.sbgnlabel,
-                            sbgnstatesandinfos: node.sbgnStatesAndInfos,
-                            height: node.height,
-                            width: node.width
+                            backgroundOpacity: circularData.backgroundOpacity,
+                            borderColor: circularData.borderColor,
+                            id: circularData.id,
+                            parent: circularData.parent,
+                            ports: circularData.ports,
+                            sbgnbbox: circularData.sbgnbbox,
+                            sbgnclass: circularData.sbgnclass,
+                            sbgnclonemarker: circularData.isCloneMarker,
+                            sbgnlabel: circularData.sbgnlabel,
+                            sbgnstatesandinfos: circularData.sbgnstatesandinfos,
+                            height: circularData.height,
+                            width: circularData.width
                         }
                     };
 
@@ -814,19 +784,19 @@ module.exports =  function(model, docId, userId, userName) {
             for(var att in edges) {
                 if (edges.hasOwnProperty(att)) {
                     var edge = edges[att];
-
+                    var circularData = CircularJSON.parse(edge.data);
                     var jsonEdge = {
                         data: {
-                            bendPointPositions: edge.bendPointPositions,
-                            id: edge.id,
-                            lineColor: edge.lineColor,
-                            portsource: edge.portsource,
-                            porttarget: edge.porttarget,
-                            source: edge.source,
-                            target: edge.target,
-                            sbgncardinality: edge.sbgncardinality,
-                            sbgnclass: edge.sbgnclass,
-                            parent: edge.parent
+                            bendPointPositions: circularData.bendPointPositions,
+                            id: circularData.id,
+                            lineColor: circularData.lineColor,
+                            portsource: circularData.portsource,
+                            porttarget: circularData.porttarget,
+                            source: circularData.source,
+                            target: circularData.target,
+                            sbgncardinality: circularData.sbgncardinality,
+                            sbgnclass: circularData.sbgnclass,
+                            parent: circularData.parent
                         }
                     };
 
@@ -841,169 +811,15 @@ module.exports =  function(model, docId, userId, userName) {
 
 
         initModelNode: function(node, user, noHistUpdate){
-
-
             var nodePath = model.at('_page.doc.cy.nodes.' + node.id());
 
             if(!noHistUpdate)
                 this.updateHistory({opName:'init', opTarget:'element', elType:'node', elId: node.id()});
 
 
-
             nodePath.set('id', node.id());
-
-
-            var backgroundOpacity= nodePath.get('backgroundOpacity');
-
-            if (backgroundOpacity != null)
-                node.data('backgroundOpacity', backgroundOpacity );
-
-            else
-                this.changeModelNodeAttribute('backgroundOpacity', node.id(),node.data('backgroundOpacity'), user, noHistUpdate);
-
-
-
-            var ports= nodePath.get('ports');
-
-            if (ports != null)
-                node.data('ports', ports );
-
-            else
-                this.changeModelNodeAttribute('ports', node.id(),node.data('ports'), user, noHistUpdate);
-
-
-            
-            var sbgnclass = nodePath.get('sbgnclass');
-
-            if (sbgnclass != null)
-                node.data('sbgnclass', sbgnclass );
-
-            else
-                this.changeModelNodeAttribute('sbgnclass', node.id(),node.data('sbgnclass'), user, noHistUpdate);
-
-            var borderColor = nodePath.get('borderColor');
-
-            if (borderColor != null)
-                node.data('borderColor', borderColor);
-            else
-                this.changeModelNodeAttribute('borderColor', node.id(),node.css('border-color'), user, noHistUpdate); //initially css is active, it is then loaded to data('borderColor')
-
-            var borderWidth = nodePath.get('borderWidth');
-            if (borderWidth != null)
-                node.css('border-width', borderWidth);
-            else
-                this.changeModelNodeAttribute('borderWidth', node.id(),node.css('border-width'), user, noHistUpdate);
-
-
-
-
-            var backgroundColor = nodePath.get('backgroundColor');
-
-            if (backgroundColor != null)
-                node.css('background-color', backgroundColor);
-            else
-                this.changeModelNodeAttribute('backgroundColor', node.id(),node.css('background-color'), user, noHistUpdate);
-
-
-            //SBGN properties are stored in the data component
-
-
-            var sbgnlabel = nodePath.get('sbgnlabel');
-
-            if (sbgnlabel != null)
-                node.data('sbgnlabel', sbgnlabel );
-
-            else
-                this.changeModelNodeAttribute('sbgnlabel', node.id(),node.data('sbgnlabel'), user, noHistUpdate);
-
-
-
-            var isCloneMarker = nodePath.get('isCloneMarker');
-
-
-
-            if (isCloneMarker != null) {
-                node._private.data.sbgnclonemarker = isCloneMarker ? true : undefined;
-                node.data('sbgnclonemarker', isCloneMarker ? true : undefined);
-            }
-
-            else
-                this.changeModelNodeAttribute('isCloneMarker', node.id(),node._private.data.sbgnclonemarker, user, noHistUpdate);
-                   //this.changeModelNodeAttribute('isCloneMarker', node.id(),node.data('sbgnclonemarker'), user, noHistUpdate);
-
-            //todo: restore doesn't get correct
-
-            var isMultimer = nodePath.get('isMultimer');
-
-            if (isMultimer != null) {
-
-                var sbgnclass = node.data('sbgnclass');
-                if (isMultimer) {
-                    //if not multimer already
-                    if (sbgnclass.indexOf(' multimer') <= -1) //todo funda changed
-                        node.data('sbgnclass', sbgnclass + ' multimer');
-                }
-                else {
-                    node.data('sbgnclass', sbgnclass.replace(' multimer', ''));
-                }
-            }
-
-            else {
-                //nodePath.pass({user: user}).set('isMultimer', false);
-                var nodeIsMultimer = node.data('sbgnclass').indexOf(' multimer') > 0 ;
-                this.changeModelNodeAttribute('isMultimer', node.id(), nodeIsMultimer, user, noHistUpdate);
-            }
-
-
-            var sbgnStatesAndInfos = nodePath.get('sbgnStatesAndInfos');
-
-
-
-            if(sbgnStatesAndInfos != null)
-                node.data('sbgnstatesandinfos',sbgnStatesAndInfos);
-
-            else {
-
-                var si = node.data('sbgnstatesandinfos');
-                if(!si) si = [];
-                this.changeModelNodeAttribute('sbgnStatesAndInfos', node.id(), si, user, noHistUpdate);
-            }
-
-            var parent = nodePath.get('parent');
-
-            if (parent != null)
-                node.data('parent', parent);
-            else
-                this.changeModelNodeAttribute('parent', node.id(),node.data('parent'), user, noHistUpdate);
-
-
-
-            var height = nodePath.get('height');
-
-            if (height != null){
-                node.data('height', height);
-                node._private.data.sbgnbbox.h = height;
-            }
-            else {
-                this.changeModelNodeAttribute('height', node.id(), node._private.data.sbgnbbox.h , user, noHistUpdate);
-            }
-
-
-            var width = nodePath.get('width');
-
-            if (width != null) {
-                node.data('width', width);
-                node._private.data.sbgnbbox.w = width;
-            }
-            else
-                this.changeModelNodeAttribute('width', node.id(),node._private.data.sbgnbbox.w, user, noHistUpdate);
-
-
-
-
-            //IMPORTANT!!!!! Calling width height updates causes node moving errors
-
-
+            this.updateModelElData(node.id(), true,CircularJSON.stringify(node._private.data), "all", "me");
+            this.updateModelElStyle(node.id(), true, CircularJSON.stringify(node._private.style), "all", "me");
 
         },
         initModelEdge: function(edge, user, noHistUpdate){
@@ -1019,97 +835,8 @@ module.exports =  function(model, docId, userId, userName) {
 
 
             edgePath.set('id', edge.id());
-
-
-
-
-            // if (parent != null)
-            //     edge.data('parent', edge);
-            // else
-            //     this.changeModelEdgeAttribute('parent', edge.id(),edge.data('parent'), user, noHistUpdate);
-
-            var bendPointPositions = edgePath.get('bendPointPositions');
-
-
-            if (bendPointPositions != null)
-                edge.data('bendPointPositions', bendPointPositions);
-            else {
-                var bp = edge.data('bendPointPositions');
-                if(!bp) bp = [];
-
-                this.changeModelEdgeAttribute('bendPointPositions', edge.id(), bp, user, noHistUpdate);
-            }
-
-
-
-
-            var sbgnclass = edgePath.get('sbgnclass');
-
-            if (sbgnclass != null)
-                edge.data('sbgnclass', sbgnclass);
-            else
-                this.changeModelEdgeAttribute('sbgnclass', edge.id(),edge.data('sbgnclass'), user, noHistUpdate);
-
-            var sbgncardinality = edgePath.get('sbgncardinality');
-
-            if (sbgncardinality != null)
-                edge.data('sbgncardinality', sbgncardinality);
-            else {
-                var cardinality = edge.data('sbgncardinality');
-                if(!cardinality)
-                    cardinality = 0;
-
-                this.changeModelEdgeAttribute('sbgncardinality', edge.id(), cardinality, user, noHistUpdate);
-            }
-
-            var lineColor = edgePath.get('lineColor');
-
-            if (lineColor != null)
-                edge.data('lineColor', lineColor);
-            else
-                this.changeModelEdgeAttribute('lineColor', edge.id(),edge.css('line-color'), user, noHistUpdate);
-
-
-            var width = edgePath.get('width');
-
-            if (width != null)
-                edge.css('width', width);
-            else
-                this.changeModelEdgeAttribute('width', edge.id(),edge.css('width'), user, noHistUpdate);
-
-
-
-            var source = edgePath.get('source');
-
-            if(source != null)
-                edge.data('source', source);
-            else
-                this.changeModelEdgeAttribute('source', edge.id(),edge._private.data.source, user, noHistUpdate);
-
-
-            var target = edgePath.get('target');
-            if(target != null)
-                edge.data('target', target);
-            else
-                this.changeModelEdgeAttribute('target', edge.id(),edge._private.data.target, user, noHistUpdate);
-
-
-
-
-            var portsource = edgePath.get('portsource');
-
-            if(portsource != null)
-                edge.data('portsource', portsource);
-            else
-                this.changeModelEdgeAttribute('portsource', edge.id(),edge.data('portsource'), user, noHistUpdate);
-
-
-            var porttarget = edgePath.get('porttarget');
-            if(porttarget != null)
-                edge.data('porttarget', porttarget);
-            else
-                this.changeModelEdgeAttribute('porttarget', edge.id(),edge.data('porttarget'), user, noHistUpdate);
-
+            this.updateModelElData(edge.id(),false, CircularJSON.stringify(edge._private.data), "all", "me");
+            this.updateModelElStyle(edge.id(), false, CircularJSON.stringify(edge._private.style), "all", "me");
 
 
         },
@@ -1121,7 +848,6 @@ module.exports =  function(model, docId, userId, userName) {
             var elTypes = [];
 
 
-//FUNDA??????ndoe.data.sbgnbbox????
             jsonObj.nodes.forEach(function(node){
                 //do not set id here: it means node addition
                 model.pass({user:user}).set('_page.doc.cy.nodes.' + node.data.id + '.position', {x: node.data.sbgnbbox.x, y: node.data.sbgnbbox.y}); //initialize position
@@ -1162,63 +888,135 @@ module.exports =  function(model, docId, userId, userName) {
 
         },
 
-        /**
-         *
-         * @param node : cytoscape node
-         */
-        synchronizeNodeAttributes: function(node, noHistUpdate){
-            var nodePath = model.at('_page.doc.cy.nodes.' + node.id());
-            var user = "me";
-
-                this.changeModelNodeAttribute('backgroundOpacity', node.id(),node.data('backgroundOpacity'), user, noHistUpdate);
+        updateModelElData: function(id, isNode, data, dataType, user){
 
 
+            var prevData;
+
+            if(isNode) {
+                prevData = model.get('_page.doc.cy.nodes.' + id + '.data');
+                model.pass({user: user}).set('_page.doc.cy.nodes.' + id + '.data', data);
 
 
-                this.changeModelNodeAttribute('ports', node.id(),node.data('ports'), user, noHistUpdate);
+            }
+            else {
+                prevData = model.get('_page.doc.cy.edges.' + id + '.data');
+                model.pass({user: user}).set('_page.doc.cy.edges.' + id + '.data', data);
+            }
 
 
-
-                this.changeModelNodeAttribute('sbgnclass', node.id(),node.data('sbgnclass'), user, noHistUpdate);
-
-                this.changeModelNodeAttribute('borderColor', node.id(),node.css('border-color'), user, noHistUpdate); //initially css is active, it is then loaded to data('borderColor')
-
-                this.changeModelNodeAttribute('borderWidth', node.id(),node.css('border-width'), user, noHistUpdate);
-
-
-
-
-
-                this.changeModelNodeAttribute('backgroundColor', node.id(),node.css('background-color'), user, noHistUpdate);
-                this.changeModelNodeAttribute('sbgnlabel', node.id(),node.data('sbgnlabel'), user, noHistUpdate);
+            this.updateHistory({
+                opName: 'set data',
+                opTarget: 'element',
+                elType: isNode?'node':'edge',
+                elId: id,
+                opAttr: dataType,
+                param: data,
+                prevParam: prevData
+            });
 
 
 
-                this.changeModelNodeAttribute('isCloneMarker', node.id(),node._private.data.sbgnclonemarker, user, noHistUpdate);
-            //this.changeModelNodeAttribute('isCloneMarker', node.id(),node.data('sbgnclonemarker'), user, noHistUpdate);
 
-            //todo: restore doesn't get correct
+        },
 
-                //nodePath.pass({user: user}).set('isMultimer', false);
-                var nodeIsMultimer = node.data('sbgnclass').indexOf(' multimer') > 0 ;
-                this.changeModelNodeAttribute('isMultimer', node.id(), nodeIsMultimer, user, noHistUpdate);
+        updateModelElStyle: function(id,isNode, style, dataType, user){
+            var prevStyle;
+
+            if(isNode) {
+                prevStyle = model.get('_page.doc.cy.nodes.' + id + '.style');
+                model.pass({user: user}).set('_page.doc.cy.nodes.' + id + '.style', style);
+                if(dataType == "background-color" || dataType == "all") {
+                    var jsonStyle = CircularJSON.parse(style);
+                    model.set('_page.doc.cy.nodes.' + id + '.backgroundColor', jsonStyle["background-color"].strValue); //update background color for selection
+                }
+
+            }
+            else {
+                prevStyle = model.get('_page.doc.cy.edges.' + id + '.style');
+                model.pass({user: user}).set('_page.doc.cy.edges.' + id + '.style', style);
+
+            }
 
 
 
-                var si = node.data('sbgnstatesandinfos');
-                if(!si) si = [];
-                this.changeModelNodeAttribute('sbgnStatesAndInfos', node.id(), si, user, noHistUpdate);
-                this.changeModelNodeAttribute('parent', node.id(),node.data('parent'), user, noHistUpdate);
+            this.updateHistory({
+                opName: 'set style',
+                opTarget: 'element',
+                elType: isNode?'node':'edge',
+                elId: id,
+                opAttr: dataType,
+                param: style,
+                prevParam: prevStyle
+            });
 
 
 
-                this.changeModelNodeAttribute('height', node.id(), node._private.data.sbgnbbox.h , user, noHistUpdate);
-                this.changeModelNodeAttribute('width', node.id(),node._private.data.sbgnbbox.w, user, noHistUpdate);
+        },
+        updateModelElChildren: function(id, children, user){
+            prevChildren =  model.get('_page.doc.cy.nodes.' + id + '.children');
+
+            model.pass({user: user}).set('_page.doc.cy.nodes.' + id + '.children', children);
+
+            this.updateHistory({
+                opName: "change children",
+                opTarget: 'element',
+                elType: 'node',
+                elId: id,
+                opAttr: null,
+                param: children,
+                prevParam: prevChildren
+            });
 
 
-         //   cy.unbind("class");
+        },
+
+        updateModelElClasses: function(id, isNode, classes, opName, user){
+            var prevClasses;
+
+
+            if(isNode) {
+                prevClasses =  model.get('_page.doc.cy.nodes.' + id + '.classes');
+                model.pass({user: user}).set('_page.doc.cy.nodes.' + id + '.classes', classes);
+            }
+            else {
+                prevClasses =  model.get('_page.doc.cy.edges.' + id + '.classes');
+                model.pass({user: user}).set('_page.doc.cy.edges.' + id + '.classes', classes);
+            }
+
+            this.updateHistory({
+                opName: opName,
+                opTarget: 'element',
+                elType: isNode?'node':'edge',
+                elId: id,
+                opAttr: null,
+                param: classes,
+                prevParam: prevClasses
+            });
+
+        },
+
+
+        //Can only be node
+        updateModelNodePosition: function(id, position, user){
+
+
+            var prevPosition = model.get('_page.doc.cy.nodes.'+ id + '.position');
+            model.pass({user:user}).set('_page.doc.cy.nodes.' + id + '.position',  position);
+
+            this.updateHistory({
+                opName: 'move',
+                opTarget: 'element',
+                elType: 'node',
+                elId: id,
+                opAttr: null,
+                param: position,
+                prevParam: prevPosition
+            });
 
         }
+
+
     }
 
 

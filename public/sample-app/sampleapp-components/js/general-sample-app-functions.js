@@ -3,42 +3,41 @@ String.prototype.endsWith = function (suffix) {
   return this.indexOf(suffix, this.length - suffix.length) !== -1;
 };
 
-//FUNDA: this is in helper-functions
-// function dynamicResize()
-// {
-//
-//   var win = $(this); //this = window
-//
-//   var windowWidth = win.width();
-//   var windowHeight = win.height();
-//
-//   var canvasWidth = 1000;
-//   var canvasHeight = 680;
-//
-//   if (windowWidth > canvasWidth)
-//   {
-//     $("#sbgn-network-container").width(windowWidth * 0.9 * 0.8);
-//     $("#sbgn-inspector").width(windowWidth * 0.9 * 0.2);
-//     var w = $("#sbgn-inspector-and-canvas").width();
-//     $(".nav-menu").width(w);
-//     $(".navbar").width(w);
-// //    $("#sbgn-info-content").width(windowWidth * 0.85);
-//     $("#sbgn-toolbar").width(w);
-//   }
-//
-//   if (windowHeight > canvasHeight)
-//   {
-//     $("#sbgn-network-container").height(windowHeight * 0.85);
-//     $("#sbgn-inspector").height(windowHeight * 0.85);
-//   }
-// }
-//
-// $(window).on('resize', dynamicResize);
+function dynamicResize()
+{
 
-// $(document).ready(function ()
-// {
-//   dynamicResize();
-// });
+  var win = $(this); //this = window
+
+  var windowWidth = win.width();
+  var windowHeight = win.height();
+
+  var canvasWidth = 1000;
+  var canvasHeight = 680;
+
+  if (windowWidth > canvasWidth)
+  {
+    $("#sbgn-network-container").width(windowWidth * 0.9 * 0.8);
+    $("#sbgn-inspector").width(windowWidth * 0.9 * 0.2);
+    var w = $("#sbgn-inspector-and-canvas").width();
+    $(".nav-menu").width(w);
+    $(".navbar").width(w);
+//    $("#sbgn-info-content").width(windowWidth * 0.85);
+    $("#sbgn-toolbar").width(w);
+  }
+
+  if (windowHeight > canvasHeight)
+  {
+    $("#sbgn-network-container").height(windowHeight * 0.85);
+    $("#sbgn-inspector").height(windowHeight * 0.85);
+  }
+}
+
+$(window).on('resize', dynamicResize);
+
+$(document).ready(function ()
+{
+  dynamicResize();
+});
 
 var getNodesData = function () {
   var nodesData = {};
@@ -203,6 +202,11 @@ var refreshUndoRedoButtonsStatus = function () {
   else {
     $("#redo-last-action").parent("li").removeClass("disabled");
   }
+};
+
+var resetUndoRedoButtons = function() {
+  $("#undo-last-action").parent("li").addClass("disabled");
+  $("#redo-last-action").parent("li").addClass("disabled");
 };
 
 var calculatePaddings = function (paddingPercent) {

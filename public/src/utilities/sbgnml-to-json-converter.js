@@ -36,7 +36,7 @@
 //
 // };
 
-var sbgnElementUtilities = require('./sbgn-element-utilities.js')();
+var sbgnElementUtilities = require('./sbgn-element-utilities.js');
 
 
 //funda

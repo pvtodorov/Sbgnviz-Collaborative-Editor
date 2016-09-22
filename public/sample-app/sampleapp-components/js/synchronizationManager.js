@@ -6,9 +6,9 @@
 
 
 module.exports.modelManager;
-var addRemoveUtilities = require('../../../src/utilities/add-remove-utilities.js')();
+// var addRemoveUtilities = require('../../../src/utilities/add-remove-utilities.js')();
 //var expandCollapseUtilities = require('../../../src/utilities/expand-collapse-utilities.js')();
-var sbgnFiltering = require('../../../src/utilities/sbgn-filtering.js')();
+// var sbgnFiltering = require('../../../src/utilities/sbgn-filtering.js')();
 
 
 module.exports.selectNode = function (node) {
@@ -34,6 +34,7 @@ module.exports.unselectEdge = function(edge) {
     return edge;
 }
 
+/*
 module.exports.addNode = function(param) {
 
     var result = addRemoveUtilities.addNode(param.x, param.y, param.sbgnclass, param.id);
@@ -104,7 +105,7 @@ module.exports.addEdge = function(param)
     }
     return result;
 }
-
+ */
 
 
 module.exports.expandNode = function(param) {
@@ -385,78 +386,46 @@ module.exports.showAll = function(param) {
 
 }
 
+module.exports.highlightSelected = function(eles){
 
+    if(eles.highlighteds != null) {
+        var modelElList = [];
+        var paramList = [];
 
-//funda changed this to include selected nodes explicitly
-module.exports.highlightSelected = function(elesToHighlight) {
-/*    var elesToHighlight, elesToNotHighlight;
-    //If this is the first call of the function then call the original method
-        //find selected elements
-        var alreadyHighlighted = cy.elements("[highlighted='true']").filter(":visible");
-        if (param.highlightNeighboursofSelected) {
-
-            elesToHighlight = sbgnFiltering.highlightNeighborsOfSelected(param.selectedEles);
-
-
-        }
-        else if (param.highlightProcessesOfSelected) {
-            elesToHighlight = sbgnFiltering.highlightProcessesOfSelected(param.selectedEles);
-        }
-        elesToHighlight = elesToHighlight.not(alreadyHighlighted);
-        elesToNotHighlight = cy.elements().not(elesToHighlight);
-*/
-
-  //  if(param.sync){
-        if(elesToHighlight != null) {
-            var modelElList = [];
-            var paramList = [];
-            elesToHighlight.forEach(function (el) {
+        eles.highlighteds.each(function (i, el) {
                 modelElList.push({id: el.id(), isNode: el.isNode()});
                 paramList.push("highlighted");
-            });
-            module.exports.modelManager.changeModelElementGroupAttribute("highlightStatus", modelElList, paramList, "me");
-        }
 
-        if(elesToNotHighlight != null){
+        });
+        module.exports.modelManager.changeModelElementGroupAttribute("highlightStatus", modelElList, paramList, "me");
+    }
 
-            var modelElList = [];
-            var paramList = [];
-            elesToNotHighlight.forEach(function (el) {
-                modelElList.push({id: el.id(), isNode: el.isNode()});
-                paramList.push("notHighlighted");
-            });
-            module.exports.modelManager.changeModelElementGroupAttribute("highlightStatus", modelElList, paramList, "me");
-
-        }
-
-    //}
-
-}
-
-//Remove highlights actually means remove fadeouts
-module.exports.removeHighlights = function(param) {
-
-    sbgnFiltering.removeHighlights();
-
-    if(param.sync){
-        // cy.elements().forEach(function(el){
-        //     module.exports.modelManager.changeModelNodeAttribute('highlightStatus', el.id(), "highlighted", "me");
-        // });
+    if(eles.notHighlighteds != null){
 
         var modelElList = [];
         var paramList = [];
-        cy.elements().forEach(function (el) {
-            modelElList.push({id: el.id(), isNode: el.isNode()});
-            paramList.push("highlighted");
+        eles.notHighlighteds.each(function (i, el) {
+                modelElList.push({id: el.id(), isNode: el.isNode()});
+                paramList.push(null);
+
         });
         module.exports.modelManager.changeModelElementGroupAttribute("highlightStatus", modelElList, paramList, "me");
 
+    }
+
+    if(eles.unhighlighteds != null){
+
+        var modelElList = [];
+        var paramList = [];
+        eles.unhighlighteds.each(function (i, el) {
+                modelElList.push({id: el.id(), isNode: el.isNode()});
+                paramList.push("unhighlighted");
+        });
+        module.exports.modelManager.changeModelElementGroupAttribute("highlightStatus", modelElList, paramList, "me");
 
     }
 
-
 }
-
 
 module.exports.changeParent = function(param) {
 
@@ -801,7 +770,7 @@ module.exports.changeIsCloneMarkerStatus = function(param) {
 
 
 
-module.exports.changeVisibilityOrHighlightStatus = function(param){
+module.exports.changeVisibility = function(param){
 
     var ele = param.ele;
 
@@ -813,20 +782,11 @@ module.exports.changeVisibilityOrHighlightStatus = function(param){
         sbgnFiltering.applyFilter(ele);
     }
     else if(param.data == null){
-        if(param.propName == "visibilityStatus")
             sbgnFiltering.removeFilter(ele);
-        else
-            sbgnFiltering.highlightElements(ele);
-    }
-    else if(param.data == "highlighted"){
-        sbgnFiltering.highlightElements(ele);
-
-    }
-    else if(param.data == "notHighlighted"){
-        sbgnFiltering.notHighlightElements(ele);
     }
 
 }
+
 
 
 module.exports.changeStyleData = function( param) {
@@ -842,10 +802,10 @@ module.exports.changeStyleData = function( param) {
         ele.data(param.dataType, param.data);
 
 
-
-        if (cy.elements(":selected").length == 1 && cy.elements(":selected")[0] == param.ele) {
-            require('./sample-app-inspector-functions.js').handleSBGNInspector(module.exports);
-        }
+        //
+        // if (cy.elements(":selected").length == 1 && cy.elements(":selected")[0] == param.ele) {
+        //     require('./sample-app-inspector-functions.js').handleSBGNInspector(module.exports);
+        // }
 
 
         if(param.dataType == 'width'){
@@ -871,15 +831,7 @@ module.exports.changeStyleData = function( param) {
             ele._private.data.target = param.data;
             ele._private.target = cy.getElementById(param.data); //to take immediate effect on the graph
         }
-        else if(param.dataType == "highlightStatus"){
-            if(param.data == "highlighted"){
-                sbgnFiltering.highlightElements(ele);
 
-            }
-            else if(param.data == "notHighlighted"){
-                    sbgnFiltering.notHighlightElements(ele);
-            }
-        }
         else if(param.dataType == "visibilityStatus") {
             if (param.data == "visible") {
                 sbgnFiltering.removeFilter(ele);
@@ -924,9 +876,9 @@ module.exports.changeStyleCss = function(param) {
         ele.css(param.dataType, param.data);
 
 
-        if (cy.elements(":selected").length == 1 && cy.elements(":selected")[0] == ele) {
-            require('./sample-app-inspector-functions.js').handleSBGNInspector(module.exports);
-        }
+        //if (cy.elements(":selected").length == 1 && cy.elements(":selected")[0] == ele) {
+        //    require('./sample-app-inspector-functions.js').handleSBGNInspector(module.exports);
+       // }
     });
 
     if(param.sync) {

@@ -53,12 +53,17 @@ function dynamicResize()
 
     //if (windowWidth > canvasWidth) {
     $("#sbgn-network-container").width(windowWidth * 0.7 );
-    $("#sbgn-inspector").width(windowWidth * 0.28);
+
+    var inspectorCoef = 0.31;
+
+    $("#inspector-tab-area").width(windowWidth * inspectorCoef);
+
+    // $("#sbgn-inspector").width(windowWidth * 0.28);
     $(".nav-menu").width(windowWidth * 0.7);
     $(".navbar").width(windowWidth * 0.7);
     $("#sbgn-toolbar").width(windowWidth * 0.7);
-    $("#chat-area").width(windowWidth * 0.28);
-    $("#command-history-area").width(windowWidth * 0.28);
+    // $("#chat-area").width(windowWidth * 0.28);
+    // $("#command-history-area").width(windowWidth * 0.28);
 
 //    }
 
@@ -72,9 +77,11 @@ function dynamicResize()
 
 
     $("#sbgn-network-container").height(windowHeight * 0.9);
-    $("#sbgn-inspector").height(windowHeight * 0.20);
-    $("#command-history-area").height(windowHeight * 0.21);
-    $("#chat-area").height(windowHeight * 0.53);
+
+    $("#inspector-tab-area").height(windowHeight);
+    // $("#sbgn-inspector").height(windowHeight * 0.20);
+    // $("#command-history-area").height(windowHeight * 0.21);
+    // $("#chat-area").height(windowHeight * 0.53);
     //  }
 }
 

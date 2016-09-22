@@ -63,17 +63,19 @@ open > .dropdown-menu {
     margin: auto;
     /*width: 1000px;*/
     top: 50px;
-    left: 80px;
+    left: 40px;
     height: 25px;
 }
 .nav-menu {
     position:absolute;
-    background: #e7f8e7;
+    background: #ffffff;
     border: 1px solid #dddddd;
     border-radius: 0.25em;
+
     /*margin: auto;*/
     /*width: 500px;*/
-    left: 80px;
+
+    left: 40px;
     height: 40px;
 
 }
@@ -137,7 +139,7 @@ open > .dropdown-menu {
 
 .ui-dialog {
     z-index : 2000 !important;
-    border: 2px solid #0B9BCD !important;
+    border: 2px solid #0b9bcd !important;
 }
 
 .ui-widget-header .ui-icon {
@@ -205,34 +207,7 @@ menu:not([title]):before{
 }
 
 
-#sbgn-network-container {
-    position: absolute;
-    /*margin: auto;*/
-    border: 1px solid #dddddd;
-    border-radius: 0.25em;
-    /*height: 680px;*/
-    bottom: 10px;
-    /*width: 800px;*/
-    top: 95px;
-    left: 80px;
-    /*right: 350px;*/
-    /*overflow: auto !important;*/
 
-    overflow-x: hidden;
-    /*float: left;*/
-}
-
-#sbgn-inspector {
-    position: absolute;
-    border: 1px solid #dddddd;
-    height: 20%;
-    overflow-x: hidden;
-    right: 0px;
-    /*width is updated dynamically*/
-    /*overflow: auto !important;*/
-    border-radius: 0.25em;
-    /*float: right;*/
-}
 
 .inside-menu {
     border: 1px solid #ddd;
@@ -255,20 +230,7 @@ menu:not([title]):before{
     /*outline-color: #5AB2F6;*/
     outline: none;
 }
-#command-history-area{
-    position: absolute;
-    border: 1px solid #dddddd;
-    height: 21%;
-    /*width is updated dynamically*/
-    top: 21%;
-    right: 0px;
-    overflow: auto;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    border-radius: 0.25em;
-    /*float: right;*/
 
-}
 
 .sbgn-label{
     float:left;
@@ -288,7 +250,8 @@ menu:not([title]):before{
     margin: auto;
     width: 1000px;
     overflow: visible /*!important*/;
-    font-size: 12px !important;
+    font-size: 16px !important;
+
 }
 
 .sbgn-frame {
@@ -431,38 +394,165 @@ img.sbgn-toolbar-element:hover {
 input, button {
     font-size: 12px !important;
 }
+#sbgn-network-container {
+    position: absolute;
+    /*margin: auto;*/
+    border: 1px solid #dddddd;
+    border-radius: 0.25em;
+    /*height: 680px;*/
+    bottom: 10px;
+    /*width: 800px;*/
+    top: 95px;
+    left: 40px;
+    /*right: 350px;*/
+    /*overflow: auto !important;*/
+
+    overflow-x: hidden;
+    /*float: left;*/
+}
+
+
+#inspector-tab-area{
+    /*width and height are updated dynamically*/
+    position: absolute;
+    right: 0px;
+    overlow: hidden;
+}
+#inspector-tabs{
+    position: absolute;
+
+    overflow-x: hidden;
+    bottom: 0px;
+    width: 100%;
+    padding-top: 2px;
+    right: 0px;
+
+    /*border-radius: 0.25em;*/
+}
+
+.tab-link{
+    color: #15b3cd;
+}
+.tab-content{
+    width: inherit;
+    height: inherit;
+}
+
+
+#sbgn-inspector {
+    position: absolute;
+    border: 1px solid #dddddd;
+    overflow-x: hidden;
+    right: 0px;
+    width: 100%;
+    height: 95%;
+    padding: 5px;
+    border-radius: 0.25em;
+}
+
+#command-history-area{
+    position: absolute;
+    border: 1px solid #dddddd;
+    width: 100%;
+    height: 95%;
+    right: 0px;
+    top: 0px;
+    font-size: small;
+    overflow: auto;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    padding: 5px;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 0.25em;
+    /*float: right;*/
+}
+
+#image-area{
+    overflow: hidden;
+    position: absolute;
+    width: 100%;
+    height: 95%;
+    padding: 5px;
+    right: 0px;
+    top: 0px;
+    font-size: 12px;
+    border: 1px solid #dddddd;
+}
+
+#receivedImages{
+    position: inherit;
+    overflow-y: auto;
+    height: 95%;
+    width: 100%;
+    padding: 5px;
+}
+#upload-image{
+    position: absolute;
+    bottom: 5px;
+}
+
+input[type="file"] {
+    display: none;
+}
+.image-file {
+    border: 1px solid #ccc;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+    padding-top: 5px;
+    background-color: #0b9bcd;
+    color: white;
+    border-radius: 5px;
+
+}
+.image{
+    padding: 10px;
+    border: ridge;
+    margin: 10px;
+}
+
 
 #chat-area{
     position: absolute;
-    /*width is updated dynamically*/
-    padding-top: 15px;
-    /*padding-bottom: 5px;*/
 
+    /*padding-top: 15px;*/
+    /*padding-bottom: 5px;*/
+    width: 100%;
+    height: 95%;
+    padding: 5px;
     right: 0px;
-    top: 43%;
-    bottom: 10px;
+    top: 0px;
+    /*bottom: 10px;*/
     overflow: hidden;
-    background: #fefefe;
+    /*background: #fefefe;*/
+    background: #ececec;
+
     border: 1px solid #dddddd;
 
 }
+
 
 #users{
     position: absolute;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     left: 0;
-    width: 100px;
+    width: 90px;
     top: 5px;
-    bottom: 100px;
-    background-color: #e7f9e7;
+    height: 80%;
+    background: #ececec;
 
 
 }
 .user{
-    font-size:12px;
+    /*font-size:14px;*/
+    font-size: small;
     margin: 5px 5px 5px 5px;
     padding: 5px;
+    border-radius: 10%;
+    word-wrap: break-word;
+
 }
 
 #user-list {
@@ -472,17 +562,23 @@ input, button {
     left: 0px;
     right: 10px;
 
+}
+#clear-history{
+    position: absolute;
+    margin-left:2px;
+    bottom: 180px;
+    /*right: 5px;*/
+    /*bottom: 100px;*/
 
 }
-
 #change-user-color{
-    position: absolute;
-    margin-left: 2px;
-    bottom:5px;
+
+    margin-left: 5px;
+
 }
 #chat-history{
     position: absolute;
-    bottom:10%;
+    bottom:300px;
 }
 #durationSelect{
     overflow: hidden;
@@ -490,22 +586,7 @@ input, button {
 }
 
 
-#receivedImages{
-    position: absolute;
-    overflow-y: auto;
-    /*padding-top: 5px;*/
-    top: 5px;
-    right: 0px;
-    width: 100px;
-    bottom: 100px;
-    font-size: 12px;
 
-
-}
-.image{
-    border: ridge thin #818181;
-    margin-bottom: 5px;
-}
 
 #messages {
     position: absolute;
@@ -516,25 +597,15 @@ input, button {
     margin-bottom: 0px;
     padding-top: 10px;
     top: 5px;
-    background: #ececec;
+    background: #f4f4f4;
     /*left: 155px;*/
-    right:105px;
-    left: 105px;
-    bottom: 100px;
+    right:0px;
+    left: 95px;
+    bottom: 210px;
     font-size: small;
 
 }
 
-/*#messages-list {*/
-/*list-style: none;*/
-/*position: absolute;*/
-/*left: 0px;*/
-/*top:0px;*/
-/*/!*position: relative;*!/*/
-/*overflow: hidden;*/
-/*/!*right: 5px;*!/*/
-/*font-size: small*/
-/*}*/
 
 .message{
 
@@ -553,19 +624,16 @@ input, button {
 
 #inputs {
     position: absolute;
-
     white-space: pre-wrap;
     word-wrap: break-word;
-
-
-    background: #dddddd;
+    background: #ececec;
     /*width: 100%;*/
-    height: 75px;
+    height: 180px;
     border-top: 1px solid #eeeeee;
     right: 0px;
     left: 0px;
     bottom: 0px;
-
+    font-size: small;
     padding: 8px 0 12px 12px;
 }
 
@@ -577,13 +645,27 @@ input, button {
 }
 
 
-
 #inputs-form {
-    margin-top: 4px;
+    margin-top: 10px;
+    margin-right: 5px;
 
 }
 
+#send-message{
+    margin-top: 5px;
+}
+
 #inputs-comment{
+    width: 100%;
+    /*height: 40px;*/
+    font-size:small;
     margin-bottom: 1px;
 
+}
+
+
+/*Debug*/
+#run-unit-test{
+    position: absolute;
+    bottom: 10px;
 }

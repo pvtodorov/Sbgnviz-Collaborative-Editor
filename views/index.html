@@ -12,6 +12,7 @@
         <link href="lib/css/jquery.qtip.min.css" rel="stylesheet">
         <link href="sample-app/sampleapp-components/css/sbgn-viz.css" rel="stylesheet">
         <link href="../node_modules/cytoscape-edge-bend-editing/cytoscape.js-edge-bend-editing.css" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
 
         <Body:>
 
@@ -52,15 +53,24 @@
             <script src="src/sbgn-extensions/cytoscape.renderer.canvas.sbgn-renderer.js"></script>
             <script src="src/utilities/json-to-sbgnml-converter.js"></script>
 
+            <script src="src/utilities/add-remove-utilities.js"></script>
             <script src="src/utilities/sbgn-bend-point-utilities.js"></script>
             <script src="src/utilities/sbgn-style-rules.js"></script>
+            <script src="src/utilities/inspector-utilities.js"></script>
+            <script src="src/utilities/sbgn-filtering.js"></script>
+            <script src="src/utilities/sbgn-element-utilities.js"></script>
+
 
             <script src="sample-app/sampleapp-components/js/sample-app-mode-handler.js"></script>
             <script src="sample-app/sampleapp-components/js/general-sample-app-functions.js"></script>
             <script src="sample-app/sampleapp-components/js/sample-app-helper-functions.js"></script>
             <script src="sample-app/sampleapp-components/js/sample-app-stylesheet-helpers.js"></script>
             <script src="sample-app/sampleapp-components/js/common-element-properties.js"></script>
+            <script src="sample-app/sampleapp-components/js/easy-creation-action-functions.js"></script>
 
+            <script src="sample-app/sampleapp-components/js/general-action-functions.js"></script>
+            <script src="sample-app/sampleapp-components/js/add-remove-action-functions.js"></script>
+            <script src="sample-app/sampleapp-components/js/sbgn-action-functions.js"></script>
 
 
             <!--<div id = "sbgnviz">-->
@@ -482,7 +492,6 @@
 
             <div id="sbgn-network-container"></div>
 
-            <div id="sbgn-inspector"></div>
 
             <div id="sbgn-layout-table" title="Layout Properties">
                 <!-- sbgn layout table will be shown here -->
@@ -983,62 +992,97 @@
 
 
 
+            <div id ="inspector-tab-area">
+
+                <div id="inspector-tabs">
+
+                    <ul class="nav nav-tabs">
+                        <li class = "active tab-link"><a data-toggle="tab"  href="#chat-area">Chat</a></li>
+                        <li class = "tab-link"><a data-toggle="tab" href="#image-area">Image Share</a></li>
+                        <li class = "tab-link"><a data-toggle="tab" href="#sbgn-inspector">Sbgn Inspector</a></li>
+                        <li class = "tab-link"><a data-toggle="tab" href="#command-history-area">Operations</a></li>
+                    </ul>
+                </div>
+                <div class="tab-content">
 
 
-            <div id ="chat-area">
-                <div id = "users" as="container"  on-change = "onScroll()">
-                    <!--<ul id ="user-list" as = "list">-->
-                    <form action=""">
-                    {{each _page.doc.userIds as #pUserId}}
-                    <!--<li>-->
-                    <view name="chat-user"></view>
-                    <!--</li>-->
-                    {{/each}}
-                    </form>
-                    <!--</ul>-->
-                    <div id = "chat-history">Show chat history
-                        <select  id = "durationSelect" on-change= "changeDuration()" >
-                            {{each _page.durations as #pDur}}
-                            <option value = "{{#pDur.id}}"  selected = "{{_page.durationId=== #pDur.id}}"> {{ #pDur.name}} </option>
+
+                    <div id="sbgn-inspector" class="tab-pane"></div>
+
+                    <div id ="chat-area"  class="tab-pane fade in active">
+                        <div id = "users" as="container"  on-change = "onScroll()">
+                            <!--<ul id ="user-list" as = "list">-->
+                            <form action=""">
+                            {{each _page.doc.userIds as #pUserId}}
+                            <!--<li>-->
+                            <view name="chat-user"></view>
+                            <!--</li>-->
                             {{/each}}
-                        </select>
+                            </form>
+                            <!--</ul>-->
+
+                        </div>
+
+                        <ul id="messages" as="list"  >
+                            {{each _page.list as #message}}
+                            <li><view name="chat-message"></view></li>
+                            {{/each}}
+                        </ul>
+
+                        <button id = "clear-history" class = "btn  btn-mini" on-click ="clearHistory()">Clear chat </button>
+
+                        <!--</div>-->
+                        <div id="inputs">
+                            User name: <input id="inputs-name" value="{{users[_session.userId].name}}">
+                            <button id = "change-user-color" class = "btn btn-mini" on-click ="changeColorCode()">New user color</button>
+                            <form id="inputs-form" on-submit="add()">
+                                <textarea id="inputs-comment" rows = "3", wrap = "soft" autofocus>{{_page.newComment}}</textarea>
+                                <button  class = "btn btn-info" id = "send-message">Send</button>
+
+                            </form>
+                        </div>
                     </div>
-                    <button id = "change-user-color" on-click ="changeColorCode()">New user color</button>
+
+                    <div id = "image-area" class="tab-pane">
+                        <div id = "receivedImages" class="tab-pane">
+                            {{ each _page.doc.images as #imageFile}}
+                            <br>
+                            {{#imageFile.filePath}}
+                            <div class = image> <img src= "{{#imageFile.img}}" onclick ="openImage(this)" onmouseover ="showQTip(this)" /> </div>
+                            {{/each}}
+                        </div>
+
+
+
+                        <div id = "upload-image">
+                            <label for="file-upload" class="image-file">
+                                <i class="fa fa-cloud-upload"></i> Upload Image
+                            </label>
+
+                            <div><input type="file" id="file-upload" accept="image/*" on-change = "uploadFile($event)" value = {{_page.newFile}}></div>
+
+                        </div>
+
+                    </div>
+
+                    <ul id ="command-history-area" class="tab-pane" as = "list">
+                        <!--<ul id ="command-list" as = "list" >-->
+                        {{each _page.doc.history as #pCommand}}
+                        <li> <b>{{#pCommand.userName}} {{_page.showTime && formatTime(#pCommand)}} > </b>{{#pCommand.opName}} {{#pCommand.opTarget}} {{formatObj(#pCommand.elId)}} {{#pCommand.opAttr}} {{formatObj(#pCommand.param)}}
+                        </li>
+                        {{/each}}
+                        <!--</ul>-->
+                    </ul>
+
                 </div>
-                <!--<div id="messages" as  = "content">-->
-                <!--<ul id="messages-list" as="list"  >-->
-                <ul id="messages" as="list"  >
-                    {{each _page.list as #message}}
-                    <li><view name="chat-message"></view></li>
-                    {{/each}}
-                </ul>
-                <!--</div>-->
-                <div id="inputs">
-                    <input id="inputs-name" value="{{users[_session.userId].name}}">
-                    <form id="inputs-form" on-submit="add()">
-                        <input id="inputs-comment"  value="{{_page.newComment}}" autofocus> <button id = "send-message">Send</button>
-                        <!--<input id="inputs-comment"  value="{{_page.newComment}}" autofocus> <button on-click = "processReach(document.getElementById('inputs-comment').value)">Send</button>-->
-                        <div class="filebutton"><input type="file" id="imagefile" accept="image/*" on-change = "uploadFile($event)" value = {{_page.newFile}}></div>
-                    </form>
-                </div>
-                <div id = "receivedImages" >
-                    {{ each _page.doc.images as #imageFile}}
-                    {{#imageFile.filePath}}
-                    <div class = image> <img src= "{{#imageFile.img}}" onclick ="openImage(this)" onmouseover ="showQTip(this)" /> </div>
-                    {{/each}}
-                </div>
+
+
             </div>
-            <ul id ="command-history-area" as = "list">
-                <!--<ul id ="command-list" as = "list" >-->
-                {{each _page.doc.history as #pCommand}}
-                <li> <b>{{#pCommand.userName}} {{_page.showTime && formatTime(#pCommand)}} > </b>{{#pCommand.opName}} {{#pCommand.opTarget}} {{formatObj(#pCommand.elId)}} {{#pCommand.opAttr}} {{formatObj(#pCommand.param)}}
-                </li>
-                {{/each}}
-                <!--</ul>-->
-            </ul>
+
             <audio id="notificationAudio" src="http://www.talkingwav.com/various/beep_02.wav" preload="auto"></audio>
             <unit-tests:>
-                <div id ="unitTestArea"> <button on-click = "runUnitTests()"> Test</button></div>
+                <div id ="unitTestArea"> <button class="btn btn-info btn-mini" on-click = "runUnitTests()"> Test</button></div>
+
                 <chat-user:>
                     <div class="user" style = background:{{users[#pUserId].colorCode}}>
                         {{if _session.userId === #pUserId}}
