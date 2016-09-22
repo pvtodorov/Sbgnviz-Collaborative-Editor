@@ -2,106 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9a4da041-f7fe-4258-8b1b-f19f75831c76" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/.name" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/codeStyleSettings.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/copyright/profiles_settings.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/encodings.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/cwc_node_modules.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-inspector-functions.js" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-images/Thumbs.db" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-images/Thumbs.db" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-images/add.png" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-images/add.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-images/align/align-horizontal-bottom.png" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-images/align/align-horizontal-bottom.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-images/align/align-horizontal-middle.png" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-images/align/align-horizontal-middle.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-images/align/align-horizontal-top.png" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-images/align/align-horizontal-top.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-images/align/align-vertical-center.png" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-images/align/align-vertical-center.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-images/align/align-vertical-left.png" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-images/align/align-vertical-left.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-images/align/align-vertical-right.png" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-images/align/align-vertical-right.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-images/align/align.png" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-images/align/align.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-images/cbio.png" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-images/cbio.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-images/delete.png" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-images/delete.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-images/drag-target.cur" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-images/drag-target.cur" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-images/edges/catalysis.png" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-images/edges/catalysis.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-images/edges/consumption.png" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-images/edges/consumption.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-images/edges/inhibition.png" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-images/edges/inhibition.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-images/edges/logicarc.png" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-images/edges/logicarc.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-images/edges/modulation.png" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-images/edges/modulation.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-images/edges/necessarystimulation.png" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-images/edges/necessarystimulation.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-images/edges/production.png" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-images/edges/production.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-images/edges/stimulation.png" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-images/edges/stimulation.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-images/i-vis.png" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-images/i-vis.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-images/interaction_legend_sbgn.png" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-images/interaction_legend_sbgn.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-images/loading-small.gif" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-images/loading-small.gif" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-images/loading.gif" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-images/loading.gif" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-images/node_legend_sbgn.png" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-images/node_legend_sbgn.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-images/nodes/and.png" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-images/nodes/and.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-images/nodes/association.png" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-images/nodes/association.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-images/nodes/compartment.png" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-images/nodes/compartment.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-images/nodes/complex.png" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-images/nodes/complex.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-images/nodes/dissociation.png" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-images/nodes/dissociation.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-images/nodes/macromolecule.png" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-images/nodes/macromolecule.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-images/nodes/not.png" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-images/nodes/not.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-images/nodes/nucleicacidfeature.png" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-images/nodes/nucleicacidfeature.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-images/nodes/omittedprocess.png" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-images/nodes/omittedprocess.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-images/nodes/or.png" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-images/nodes/or.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-images/nodes/perturbingagent.png" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-images/nodes/perturbingagent.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-images/nodes/phenotype.png" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-images/nodes/phenotype.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-images/nodes/process.png" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-images/nodes/process.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-images/nodes/simplechemical.png" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-images/nodes/simplechemical.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-images/nodes/sourceandsink.png" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-images/nodes/sourceandsink.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-images/nodes/tag.png" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-images/nodes/tag.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-images/nodes/uncertainprocess.png" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-images/nodes/uncertainprocess.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-images/nodes/unspecifiedentity.png" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-images/nodes/unspecifiedentity.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-images/search.png" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-images/search.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-images/toolbar-icons/collapseselected.png" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-images/toolbar-icons/collapseselected.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-images/toolbar-icons/deletesimple.png" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-images/toolbar-icons/deletesimple.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-images/toolbar-icons/deletesmart.png" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-images/toolbar-icons/deletesmart.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-images/toolbar-icons/expandselected.png" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-images/toolbar-icons/expandselected.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-images/toolbar-icons/fitincanvas.png" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-images/toolbar-icons/fitincanvas.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-images/toolbar-icons/hideselected.png" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-images/toolbar-icons/hideselected.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-images/toolbar-icons/highlightneighborsofselected.png" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-images/toolbar-icons/highlightneighborsofselected.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-images/toolbar-icons/layout-cose.png" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-images/toolbar-icons/layout-cose.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-images/toolbar-icons/layoutproperties.png" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-images/toolbar-icons/layoutproperties.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-images/toolbar-icons/load.png" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-images/toolbar-icons/load.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-images/toolbar-icons/new.png" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-images/toolbar-icons/new.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-images/toolbar-icons/properties.png" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-images/toolbar-icons/properties.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-images/toolbar-icons/redo.png" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-images/toolbar-icons/redo.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-images/toolbar-icons/removehighlights.png" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-images/toolbar-icons/removehighlights.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-images/toolbar-icons/save.png" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-images/toolbar-icons/save.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-images/toolbar-icons/saveasimage.png" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-images/toolbar-icons/saveasimage.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-images/toolbar-icons/select.png" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-images/toolbar-icons/select.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-images/toolbar-icons/showselected.png" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-images/toolbar-icons/showselected.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-images/toolbar-icons/undo.png" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-images/toolbar-icons/undo.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" afterPath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/agent-interaction/agentAPI.js" afterPath="$PROJECT_DIR$/agent-interaction/agentAPI.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index.js" afterPath="$PROJECT_DIR$/index.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/index.js" afterPath="$PROJECT_DIR$/lib/index.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/server.js" afterPath="$PROJECT_DIR$/lib/server.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/request/CHANGELOG.md" afterPath="$PROJECT_DIR$/node_modules/request/CHANGELOG.md" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/request/package.json" afterPath="$PROJECT_DIR$/node_modules/request/package.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/package.json" afterPath="$PROJECT_DIR$/package.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/lib/js/cytoscape-edgehandles.js" afterPath="$PROJECT_DIR$/public/lib/js/cytoscape-edgehandles.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/lib/js/cytoscape-noderesize.js" afterPath="$PROJECT_DIR$/public/lib/js/cytoscape-noderesize.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/css/sbgn-viz.css" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-components/css/sbgn-viz.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/biogene-info.js" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/biogene-info.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/common-element-properties.js" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/common-element-properties.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/general-sample-app-functions.js" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/general-sample-app-functions.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/modelManager.js" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/modelManager.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/register-undo-redo-actions.js" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/register-undo-redo-actions.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-cytoscape-sbgn.js" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-cytoscape-sbgn.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-helper-functions.js" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-helper-functions.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-menu-functions.js" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-menu-functions.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/synchronizationManager.js" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/synchronizationManager.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/src/sbgn-extensions/cytoscape.renderer.canvas.sbgn-renderer.js" afterPath="$PROJECT_DIR$/public/src/sbgn-extensions/cytoscape.renderer.canvas.sbgn-renderer.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/src/utilities/add-remove-utilities.js" afterPath="$PROJECT_DIR$/public/src/utilities/add-remove-utilities.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/src/utilities/sbgn-element-utilities.js" afterPath="$PROJECT_DIR$/public/src/utilities/sbgn-element-utilities.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/src/utilities/sbgn-filtering.js" afterPath="$PROJECT_DIR$/public/src/utilities/sbgn-filtering.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/src/utilities/sbgn-style-rules.js" afterPath="$PROJECT_DIR$/public/src/utilities/sbgn-style-rules.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/src/utilities/sbgnml-to-json-converter.js" afterPath="$PROJECT_DIR$/public/src/utilities/sbgnml-to-json-converter.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/index.html" afterPath="$PROJECT_DIR$/views/index.html" />
     </list>
     <ignored path="Sbgnviz-Collaborative-Editor Chise Version.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -482,6 +385,8 @@
   <component name="PropertiesComponent">
     <property name="nodejs_interpreter_path" value="/usr/local/bin/node" />
     <property name="js-jscs-nodeInterpreter" value="/usr/local/bin/node" />
+    <property name="settings.editor.selected.configurable" value="vcs.Git" />
+    <property name="settings.editor.splitter.proportion" value="0.2" />
   </component>
   <component name="RunManager">
     <configuration default="true" type="Applet" factoryName="Applet">
@@ -796,6 +701,10 @@
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Initial commit" />
+    <option name="LAST_COMMIT_MESSAGE" value="Initial commit" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
