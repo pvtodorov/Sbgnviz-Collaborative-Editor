@@ -258,23 +258,98 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, modelManager) {
         var lastMouseDownNodeInfo = null;
 
 
+            function mapFromCyToModelName(cyName){
+                var modelName = cyName;
+
+                if(cyName == "border-width")
+                    modelName = "borderWidth";
+                else if(cyName == "background-color")
+                    modelName = "backgroundColor";
+                else if(cyName == "line-color")
+                    modelName = "lineColor";
+
+
+                else if(cyName == "sbgnstatesandinfos")
+                    modelName = "sbgnStatesAndInfos";
+                else if(cyName == "sbgnclonemarker")
+                    modelName = "isCloneMarker";
+
+
+                else if(cyName == "segment-weights")
+                    modelName = "segmentWeights";
+                else if(cyName == "curve-style")
+                    modelName = "curveStyle";
+                else if(cyName == "segment-distances")
+                    modelName = "segmentDistances";
+                else if(cyName == "edge-distances")
+                    modelName = "edgeDistances";
+
+
+                return modelName;
+            }
 
             cy.on("changeStyleData",  function (event, dataType, collection) {
 
+                var modelElList = [];
+                var paramList =[]
+                collection.forEach(function(ele) {
+                    //var ele = param.ele;
 
-                collection.forEach(function(el) {
-
-                    var nonCircularData = CircularJSON.stringify(el._private.data);
-                    modelManager.updateModelElData(el.id(), el.isNode(), nonCircularData, dataType, "me");
+                    modelElList.push({id: ele.id(), isNode: ele.isNode()});
+                    paramList.push(ele.data(dataType));
 
                 });
-            });
+
+
+                var name = mapFromCyToModelName(dataType);
+
+                modelManager.changeModelElementGroupAttribute(name, modelElList, paramList, "me");
+
+             });
 
             cy.on("changeStyleCss",  function (event, dataType, collection) {
-                collection.forEach(function(el){
-                    var nonCircularStyle = CircularJSON.stringify(el._private.style);
-                    modelManager.updateModelElStyle(el.id(), el.isNode(), nonCircularStyle, dataType, "me");
+                var modelElList = [];
+                var paramList =[];
+
+                collection.forEach(function(ele) {
+                    //var ele = param.ele;
+
+                    modelElList.push({id: ele.id(), isNode: ele.isNode()});
+                    paramList.push(ele.css(dataType));
                 });
+
+                var name = mapFromCyToModelName(dataType);
+                modelManager.changeModelElementGroupAttribute(name, modelElList, paramList, "me");
+            });
+
+            cy.on("changeStyleScratch",  function (event, dataType, collection) {
+                var modelElList = [];
+                var paramList =[];
+
+                collection.forEach(function(ele) {
+                    //var ele = param.ele;
+
+                    modelElList.push({id: ele.id(), isNode: ele.isNode()});
+                    paramList.push(ele.scratch(dataType));
+                });
+
+                var name = mapFromCyToModelName(dataType);
+                modelManager.changeModelElementGroupAttribute(name, modelElList, paramList, "me");
+            });
+
+
+
+            cy.on("changePosition",  function (event,  collection) {
+                var modelElList = [];
+                var paramList =[]
+                collection.forEach(function(ele) {
+                    //var ele = param.ele;
+
+                    modelElList.push({id: ele.id(), isNode: ele.isNode()});
+                    paramList.push(ele.position());
+                });
+
+                modelManager.changeModelElementGroupAttribute("position", modelElList, paramList, "me");
             });
 
             cy.on("changeChildren",  function (event, collection) {
@@ -284,56 +359,103 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, modelManager) {
                 });
             });
 
-            cy.on("changeClasses",  function (event, opName, collection) {
+            cy.on("changeClasses",  function (event,  collection) {
 
-                collection.forEach(function(el) {
-                    var nonCircularClasses = CircularJSON.stringify(el._private.classes);
-                    var nonCircularStyle = CircularJSON.stringify(el._private.style);
-                    var nonCircularData = CircularJSON.stringify(el._private.data);
+                var modelElList = [];
+                var paramListClasses = [];
+                var paramListBackground = [];
 
-                    modelManager.updateModelElClasses(el.id(), el.isNode(), nonCircularClasses, opName, "me");
-                    modelManager.updateModelElStyle(el.id(), el.isNode(), nonCircularStyle, "all", "me");  //these are updated as well
-                    modelManager.updateModelElData(el.id(), el.isNode(), nonCircularData, "all", "me");
+
+                //TODO: class operations usually affect the whole graph
+               // cy.elements().forEach(function (ele) {
+                collection.forEach(function (ele) {
+                    //var ele = param.ele;
+
+                    modelElList.push({id: ele.id(), isNode: ele.isNode()});
+                    paramListClasses.push(ele._private.classes);
+                    paramListBackground.push(ele.css("background-opacity"));
                 });
-            });
 
-            cy.on("changePosition",  function (event, collection) {
-                collection.forEach(function(el) {
-                    modelManager.updateModelNodePosition(el.id(),  el.position(), "me");
-                });
-            });
+                modelManager.changeModelElementGroupAttribute("classes", modelElList, paramListClasses, "me");
 
+
+
+                modelManager.changeModelElementGroupAttribute("backgroundOpacity", modelElList, paramListBackground, "me");
+
+            });
 
             cy.on("addNode", function(event, id, newNode){
-                modelManager.addModelNode(id,newNode,"me");
+
+                var param = {id: id, x: newNode.x, y:newNode.y, sbgnclass: newNode.sbgnclass};
+                modelManager.addModelNode(id,param,"me");
 
             });
             cy.on("addEdge", function(event, id, newEdge){
-                modelManager.addModelEdge(id,newEdge,"me");
+                var param = {id: id, source: newEdge.source, target:newEdge.target, sbgnclass: newEdge.sbgnclass};
+                modelManager.addModelEdge(id,param,"me");
 
             });
 
             cy.on("removeEles", function(event, collection){
 
-                modelManager.deleteModelElementGroup(collection,"me");
+                var nodeList = [];
+                var edgeList = [];
+                collection.forEach(function (el) {
+                    if(el.isNode())
+                        nodeList.push({id:el.id()});
+                    else
+                        edgeList.push({id:el.id()});
+                });
+
+                modelManager.deleteModelElementGroup({nodes:nodeList, edges:edgeList},"me");
             });
+
+            cy.on("changeHighlightStatus", function(event, current){
+
+                //
+                var modelElList = [];
+                var paramList =[];
+                //affects all the other elements, so  update all their classes
+                cy.elements.forEach(function(ele){
+                    modelElList.push({id: ele.id(), isNode: ele.isNode()});
+                    paramList.push(ele._private.classes);
+                });
+
+                current.highlighteds.forEach(function(ele) {
+                    modelElList.push({id: ele.id(), isNode: ele.isNode()});
+                    paramList.push("highlighted");
+                });
+
+                current.unhighlighteds.forEach(function(ele) {
+                    modelElList.push({id: ele.id(), isNode: ele.isNode()});
+                    paramList.push("unhighlighted");
+                });
+
+                current.notHighlighteds.forEach(function(ele) {
+                    modelElList.push({id: ele.id(), isNode: ele.isNode()});
+                    paramList.push("nothighlighted");
+                });
+
+               modelManager.changeModelElementGroupAttribute("highlightStatus", modelElList, paramList, "me");
+
+
+            });
+
             cy.on("createCompoundForSelectedNodes", function(event, compoundType, compoundNode, collection){
 
 
                 //modelManager.updateModelHistory(compoundType);
-                var newNode = {x: compoundNode.position().x, y: compoundNode.position().y, sbgnclass: compoundNode._private.data.sbgnclass};
-                modelManager.addModelNode(compoundNode.id(),newNode,"me");
-                modelManager.initModelNode(compoundNode,"me");
+                var compoundAtts = {x: compoundNode.position().x, y: compoundNode.position().y, sbgnclass: compoundNode._private.data.sbgnclass,
+                width:compoundNode.width(), height: compoundNode.height()};
 
-
-
-                //update parents and sbgnbboxes of children
-                collection.forEach(function(el) {
-                    var nonCircularData = CircularJSON.stringify(el._private.data);
-                    modelManager.updateModelElData(el.id(), true, nonCircularData, "all", "me");
-
+                var modelElList = [];
+                var paramList = [];
+                collection.forEach(function(node){
+                    modelElList.push({id: node.id(), isNode:true});
+                    paramList.push(node.data('parent'));  //before changing parents
                 });
 
+                modelManager.addModelCompound(compoundNode.id(), compoundAtts,modelElList, paramList, "me");
 
             });
 

@@ -195,6 +195,16 @@ module.exports = function(){
         showAll: function(){
             syncManager.showAll({sync:true});
         },
+//propName and modelDataName can be different: propName: name in cytoscape, modelDataName: name in nodejs model
+         //proptype is either data or css
+         // changeElementData: function(elId, propName, modelDataName,propValue, propType, syncVal) {
+         //     var el = cy.$(('#' + elId))[0];
+         //
+         //     if (el) {
+         //
+         //        el.data()
+         //     }
+         // },
 
 
          // //Here for agents
@@ -708,49 +718,31 @@ module.exports = function(){
                 var reader = new FileReader();
 
                 reader.onload = function (e) {
-
                     if(file.name.indexOf(".owl") > -1) {
-                        socket.emit('BioPAXRequest', this.result, "sbgn"); //convert to sbgn
-                        socket.on('SBGNResult', function(sbgnData){
+
+                        socket.emit('BioPAXRequest', this.result, "sbgn", function(sbgnData){ //convert to sbgn
+                            //socket.on('SBGNResult', function(sbgnData){
 
                             if(sbgnData.graph!= null){
 
+
                                 var jsonObj = sbgnmlToJson.convert(sbgnData.graph);
-
-
-
                                 //get another sbgncontainer
-                                sbgnContainer = (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, syncManager.modelManager));
-
-
-
-                                syncManager.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
-
-
-
-                                syncManager.modelManager.setSampleInd(-1, "me"); //to notify other clients
+                                sbgnContainer = (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, editorActions));
+                                editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
+                                editorActions.modelManager.setSampleInd(-1, "me"); //to notify other clients
 
                             }
                         });
-
-
                     }
                     else {
 
-                        //TODO
+                        //FIXME this is causing a disconnection from the socket
+
                         socket.emit('BioPAXRequest', this.result, "biopax"); //convert to biopax
 
                         self.loadFile(this.result);
-                        // var jsonObj = sbgnmlToJson.convert(this.result);
-                        //
-                        //
-                        // //get another sbgncontainer
-                        // sbgnContainer = (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, syncManager.modelManager));
-                        //
-                        // syncManager.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
-                        //
-                        //
-                        // syncManager.modelManager.setSampleInd(-1, "me"); //to notify other clients
+
                     }
                     // sbgnContainer =  new cyMod.SBGNContainer('#sbgn-network-container', jsonObj ,  syncManager.modelManager);
                 }
@@ -1581,24 +1573,25 @@ function PathsBetweenQuery(socket, userName){
 
 
 
-                socket.emit('PCQuery',  pc2URL);
+                socket.emit('PCQuery',  {url: pc2URL, type:"sbgn"}, function(sbgnData){
 
-                socket.on('PCQueryResult', function(owlData){
+                    if(sbgnData!=null) {
 
-                    if(owlData.graph!=null) {
-                        socket.emit('BioPAXRequest', owlData.graph, "sbgn"); //convert to sbgn
-                        socket.on('SBGNResult', function (sbgnData) {
-                            var w = window.open(("query_" + userName), "width = 1600, height = 1200, left = " + window.left + " right = " + window.right);
-
-                            // // //FIXME: find a more elegant solution
-                            setTimeout(function () {
-                                w.postMessage(sbgnData, "*");
-                            }, 1000);
+                        var w = window.open(("query_" + userName), "width = 1600, height = 1200, left = " + window.left + " right = " + window.right, function(){
+                            w.postMessage(sbgnData, "*");
 
                         });
+
+                        //
+                        // //because window opening takes a while
+                        // // // //FIXME: find a more elegant solution
+                        // setTimeout(function () {
+                        //     w.postMessage(sbgnData, "*");
+                        // }, 1000);
+
                     }
                     else
-                         alert("No results found!");
+                        alert("No results found!");
 
                 });
 

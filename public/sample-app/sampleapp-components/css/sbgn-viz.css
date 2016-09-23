@@ -406,11 +406,9 @@ input, button {
     left: 40px;
     /*right: 350px;*/
     /*overflow: auto !important;*/
-
     overflow-x: hidden;
     /*float: left;*/
 }
-
 
 #inspector-tab-area{
     /*width and height are updated dynamically*/
@@ -448,6 +446,8 @@ input, button {
     height: 95%;
     padding: 5px;
     border-radius: 0.25em;
+
+
 }
 
 #command-history-area{

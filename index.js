@@ -152,7 +152,7 @@ app.get('/:docId', function (page, model, arg, next) {
         ]);
 
 
-    
+
 
     //model.subscribe('messages');
     var userId = model.get('_session.userId');
@@ -274,10 +274,236 @@ function updateServerGraph(){
      },0);
 }
 
+// app.proto.init = function (model) {
+//     var timeSort;
+//
+//
+//
+//     model.on('all', '_page.doc.cy.nodes.*', function(id, op, val, prev, passed){
+//
+//         if(docReady &&  passed.user == null) {
+//             var node  = model.get('_page.doc.cy.nodes.' + id);
+//
+//             if(!node || !node.id){ //node is deleted
+//                 addRemoveUtilities.removeEles(cy.getElementById(id));
+//
+//             }
+//         }
+//
+//
+//     });
+//
+//     model.on('all', '_page.doc.cy.edges.*', function(id, op, val, prev, passed){
+//
+//
+//         if(docReady &&  passed.user == null) {
+//             var edge  = model.get('_page.doc.cy.edges.' + id); //check
+//
+//             if(!edge|| !edge.id){ //edge is deleted
+//                 addRemoveUtilities.removeEles(cy.getElementById(id));
+//
+//             }
+//             //else insertion
+//         }
+//
+//     });
+//
+//     model.on('all', '_page.doc.sampleInd', function(op, ind, prev, passed){
+//
+//
+//         if(docReady && passed.user == null) {
+//
+//             menu.updateSample(ind, false); //false = do not delete, sample changing client deleted them already
+//
+//         }
+//
+//     });
+//
+//
+//
+//     model.on('all', '_page.doc.layoutProperties', function(index){
+//
+//
+//         if(docReady && menu ){
+//             var layoutProps = model.get('_page.doc.layoutProperties');
+//
+//             menu.updateLayoutProperties(layoutProps);
+//
+//
+//         }
+//
+//     });
+//
+//
+//
+//
+//     model.on('change', '_page.doc.cy.nodes.*.position', function(id, pos, prev, passed){
+//
+//         if(docReady && passed.user == null){
+//             cy.getElementById(id).position(pos);
+//
+//            // console.log(pos);
+//             //cy.getElementById(id)._private.position = pos;
+//         }
+//
+//
+//     });
+//
+//
+//     model.on('all', '_page.doc.cy.nodes.*.data', function(id, op, val, prev, passed){
+//         if(docReady && passed.user == null) {
+//             cy.getElementById(id)._private.data = CircularJSON.parse(val);
+//             cy.getElementById(id).data(CircularJSON.parse(val));
+//             cy.nodes().updateCompoundBounds();
+//             //cy.forceRender();
+//         }
+//     });
+//
+//
+//     model.on('all', '_page.doc.cy.nodes.*.style', function(id, op, val, prev, passed){
+//         if(docReady && passed.user == null) {
+//
+//             cy.getElementById(id)._private.style =  CircularJSON.parse(val);
+//             //cy.forceRender();
+//
+//         }
+//     });
+//
+//     model.on('all', '_page.doc.cy.nodes.*.children', function(id, op, val, prev, passed){
+//         if(docReady && passed.user == null) {
+//             cy.getElementById(id)._private.children = CircularJSON.parse(val);
+//             cy.getElementById(id).children(CircularJSON.parse(val));
+//             //cy.nodes().updateCompoundBounds();
+//            // cy.forceRender();
+//         }
+//     });
+//
+//     model.on('all', '_page.doc.cy.nodes.*.classes', function(id, op, val, prev, passed){
+//         if(docReady && passed.user == null) {
+//
+//             cy.getElementById(id)._private.classes =  CircularJSON.parse(val);
+//             //cy.getElementById(id).classes( CircularJSON.parse(val));
+//        //     console.log(  cy.getElementById(id)._private.classes );
+//           //  cy.forceRender();
+//
+//         }
+//     });
+//
+//
+//
+//     model.on('all', '_page.doc.cy.edges.*.data', function(id, op, val, prev, passed){
+//         if(docReady && passed.user == null) {
+//             cy.getElementById(id)._private.data = CircularJSON.parse(val);
+//             cy.forceRender();
+//         }
+//     });
+//
+//
+//     model.on('all', '_page.doc.cy.edges.*.style', function(id, op, val, prev, passed){
+//         if(docReady && passed.user == null) {
+//
+//             cy.getElementById(id)._private.style =  CircularJSON.parse(val);
+//             cy.forceRender();
+//
+//         }
+//     });
+//
+//
+//     model.on('all', '_page.doc.cy.edges.*.classes', function(id, op, val, prev, passed){
+//         if(docReady && passed.user == null) {
+//
+//             cy.getElementById(id)._private.classes =  CircularJSON.parse(val);
+//             cy.forceRender();
+//
+//         }
+//     });
+//
+//     model.on('all', '_page.doc.cy.nodes.*.addedLater', function(id, op, value, prev, passed){ //this property must be something that is only changed during insertion
+//
+//         if(docReady && passed.user == null) {
+//             addRemoveUtilities.addNode(value.x, value.y, value.sbgnclass,null, null, id);
+//         }
+//
+//     });
+//
+//     model.on('all', '_page.doc.cy.edges.*.addedLater', function(id,op, value, prev, passed){//this property must be something that is only changed during insertion
+//
+//         if(docReady && passed.user == null) {
+//             addRemoveUtilities.addEdge(value.source, value.target, value.sbgnclass,null, id);
+//         }
+//
+//     });
+//
+//
+//
+//
+//
+//     model.on('change', '_page.doc.cy.nodes.*.highlightColor', function(id, highlightColor, prev,passed){
+//
+//         if(docReady && passed.user == null) {
+//
+//             var color;
+//
+//             if (highlightColor != null)
+//                 color =  highlightColor;
+//             else
+//                 color = model.get('_page.doc.cy.nodes.' + id + '.backgroundColor'); //default background color
+//
+//           backgr
+//
+//         }
+//
+//     });
+//
+//
+//
+//     model.on('all', '_page.doc.images', function() {
+//         if (docReady)
+//             triggerContentChange('receivedImages');
+//     });
+//
+//     model.on('all', '_page.doc.history', function(){
+//         if(docReady){
+//             triggerContentChange('command-history-area');
+//         }
+//     });
+//
+//
+//     model.on('all', '_page.doc.undoIndex', function(){
+//         menu.refreshGlobalUndoRedoButtonsStatus();
+//
+//     });
+//     model.on('insert', '_page.list', function (index) {
+//
+//
+//         var com = model.get('_page.list');
+//         var myId = model.get('_session.userId');
+//
+//
+//         if(docReady){
+//             triggerContentChange('messages');
+//
+//         }
+//
+//         if (com[com.length - 1].userId != myId) {
+//
+//             playSound();
+//
+//         }
+//     });
+//
+//
+//     timeSort = function (a, b) {
+//
+//         return (a != null ? a.date : void 0) - (b != null ? b.date : void 0);
+//     };
+//
+//
+//
+//     return model.sort('messages', timeSort).ref('_page.list');
+// };
 app.proto.init = function (model) {
     var timeSort;
-
-
 
     model.on('all', '_page.doc.cy.nodes.*', function(id, op, val, prev, passed){
 
@@ -286,7 +512,6 @@ app.proto.init = function (model) {
 
             if(!node || !node.id){ //node is deleted
                 addRemoveUtilities.removeEles(cy.getElementById(id));
-
             }
         }
 
@@ -294,7 +519,6 @@ app.proto.init = function (model) {
     });
 
     model.on('all', '_page.doc.cy.edges.*', function(id, op, val, prev, passed){
-
 
         if(docReady &&  passed.user == null) {
             var edge  = model.get('_page.doc.cy.edges.' + id); //check
@@ -329,11 +553,112 @@ app.proto.init = function (model) {
 
             menu.updateLayoutProperties(layoutProps);
 
+        }
+
+    });
+
+    model.on('all', '_page.doc.cy.nodes.*.classes', function(id, op, val, prev, passed){
+        if(docReady && passed.user == null) {
+
+            cy.getElementById(id)._private.classes =  val;
+            //cy.getElementById(id).classes( CircularJSON.parse(val));
+       //     console.log(  cy.getElementById(id)._private.classes );
+            cy.forceRender();
+
+        }
+    });
+
+    model.on('all', '_page.doc.cy.edges.*.classes', function(id, op, val, prev, passed){
+        if(docReady && passed.user == null) {
+
+            cy.getElementById(id)._private.classes =  val;
+            //cy.getElementById(id).classes( CircularJSON.parse(val));
+            //     console.log(  cy.getElementById(id)._private.classes );
+              cy.forceRender();
+
+        }
+    });
+
+
+    model.on('all', '_page.doc.cy.nodes.*.addedLater', function(id, op, idName, prev, passed){ //this property must be something that is only changed during insertion
+
+
+        if(docReady && passed.user == null) {
+
+
+            var pos = model.get('_page.doc.cy.nodes.'+ id + '.position');
+            var sbgnclass = model.get('_page.doc.cy.nodes.'+ id + '.sbgnclass');
+            addRemoveUtilities.addNode(pos.x, pos.y, sbgnclass,null, null, id);
 
         }
 
     });
 
+    model.on('all', '_page.doc.cy.edges.*.addedLater', function(id,op, idName, prev, passed){//this property must be something that is only changed during insertion
+
+
+        if(docReady && passed.user == null ){
+            //check if edge id exists in the current inspector graph
+            var source = model.get('_page.doc.cy.edges.'+ id + '.source');
+            var target = model.get('_page.doc.cy.edges.'+ id + '.target');
+            var sbgnclass = model.get('_page.doc.cy.edges.'+ id + '.sbgnclass');
+
+            addRemoveUtilities.addEdge(source, target, sbgnclass,null,  id);
+
+        }
+
+    });
+    model.on('all', '_page.doc.cy.nodes.*.sbgnclass', function(id, op, sbgnclass, prev, passed){ //this property must be something that is only changed during insertion
+
+
+        if(docReady && passed.user == null) {
+            cy.getElementById(id).data("sbgnclass", sbgnclass);
+
+        }
+
+
+
+    });
+
+    model.on('all', '_page.doc.cy.edges.*.sbgnclass', function(id,op, sbgnclass, prev, passed){//this property must be something that is only changed during insertion
+
+        if(docReady && passed.user == null ){
+            cy.getElementById(id).data("sbgnclass", sbgnclass);
+        }
+    });
+    model.on('all', '_page.doc.cy.edges.*.source', function(id,op, source, prev, passed){//this property must be something that is only changed during insertion
+
+        if(docReady && passed.user == null ){
+            cy.getElementById(id).data("source", source);
+        }
+
+    });
+
+    model.on('all', '_page.doc.cy.edges.*.target', function(id,op, target, prev, passed){//this property must be something that is only changed during insertion
+
+        if(docReady && passed.user == null ){
+            cy.getElementById(id).data("target", target);
+
+        }
+
+    });
+
+    model.on('all', '_page.doc.cy.edges.*.portsource', function(id,op, portsource, prev, passed){//this property must be something that is only changed during insertion
+
+        if(docReady && passed.user == null ){
+            cy.getElementById(id).data("portsource", portsource);
+
+        }
+
+    });
+
+    model.on('all', '_page.doc.cy.edges.*.porttarget', function(id,op, porttarget, prev, passed){//this property must be something that is only changed during insertion
+
+        if(docReady && passed.user == null ){
+            cy.getElementById(id).data("porttarget", porttarget);
+        }
+
+    });
 
 
 
@@ -342,101 +667,11 @@ app.proto.init = function (model) {
         if(docReady && passed.user == null){
             cy.getElementById(id).position(pos);
 
-           // console.log(pos);
-            //cy.getElementById(id)._private.position = pos;
+
         }
 
 
     });
-
-
-    model.on('all', '_page.doc.cy.nodes.*.data', function(id, op, val, prev, passed){
-        if(docReady && passed.user == null) {
-            cy.getElementById(id)._private.data = CircularJSON.parse(val);
-            cy.getElementById(id).data(CircularJSON.parse(val));
-            cy.nodes().updateCompoundBounds();
-            //cy.forceRender();
-        }
-    });
-
-
-    model.on('all', '_page.doc.cy.nodes.*.style', function(id, op, val, prev, passed){
-        if(docReady && passed.user == null) {
-
-            cy.getElementById(id)._private.style =  CircularJSON.parse(val);
-            //cy.forceRender();
-
-        }
-    });
-
-    model.on('all', '_page.doc.cy.nodes.*.children', function(id, op, val, prev, passed){
-        if(docReady && passed.user == null) {
-            cy.getElementById(id)._private.children = CircularJSON.parse(val);
-            cy.getElementById(id).children(CircularJSON.parse(val));
-            //cy.nodes().updateCompoundBounds();
-           // cy.forceRender();
-        }
-    });
-
-    model.on('all', '_page.doc.cy.nodes.*.classes', function(id, op, val, prev, passed){
-        if(docReady && passed.user == null) {
-
-            cy.getElementById(id)._private.classes =  CircularJSON.parse(val);
-            //cy.getElementById(id).classes( CircularJSON.parse(val));
-       //     console.log(  cy.getElementById(id)._private.classes );
-          //  cy.forceRender();
-
-        }
-    });
-
-
-
-    model.on('all', '_page.doc.cy.edges.*.data', function(id, op, val, prev, passed){
-        if(docReady && passed.user == null) {
-            cy.getElementById(id)._private.data = CircularJSON.parse(val);
-            cy.forceRender();
-        }
-    });
-
-
-    model.on('all', '_page.doc.cy.edges.*.style', function(id, op, val, prev, passed){
-        if(docReady && passed.user == null) {
-
-            cy.getElementById(id)._private.style =  CircularJSON.parse(val);
-            cy.forceRender();
-
-        }
-    });
-
-
-    model.on('all', '_page.doc.cy.edges.*.classes', function(id, op, val, prev, passed){
-        if(docReady && passed.user == null) {
-
-            cy.getElementById(id)._private.classes =  CircularJSON.parse(val);
-            cy.forceRender();
-
-        }
-    });
-
-    model.on('all', '_page.doc.cy.nodes.*.addedLater', function(id, op, value, prev, passed){ //this property must be something that is only changed during insertion
-
-        if(docReady && passed.user == null) {
-            addRemoveUtilities.addNode(value.x, value.y, value.sbgnclass,null, null, id);
-        }
-
-    });
-
-    model.on('all', '_page.doc.cy.edges.*.addedLater', function(id,op, value, prev, passed){//this property must be something that is only changed during insertion
-
-        if(docReady && passed.user == null) {
-            addRemoveUtilities.addEdge(value.source, value.target, value.sbgnclass,null, id);
-        }
-
-    });
-
-
-
-
 
     model.on('change', '_page.doc.cy.nodes.*.highlightColor', function(id, highlightColor, prev,passed){
 
@@ -447,7 +682,8 @@ app.proto.init = function (model) {
             if (highlightColor != null)
                 color =  highlightColor;
             else
-                color = model.get('_page.doc.cy.nodes.' + id + '.backgroundColor'); //default background color
+                color = model.get('_page.doc.cy.nodes.' + id + '.backgroundColor');
+
 
             cy.getElementById(id).css("background-color", color);
 
@@ -456,7 +692,199 @@ app.proto.init = function (model) {
 
     });
 
+    model.on('all', '_page.doc.cy.edges.*.highlightColor', function(id, op, highlightColor,prev, passed){
 
+        if(docReady && passed.user == null) {
+            var color;
+            if (highlightColor != null)
+                color = highlightColor;
+            else
+                color = model.get('_page.doc.cy.edges.' + id + '.lineColor');
+
+            cy.getElementById(id).css("line-color", color);
+
+        }
+
+    });
+    model.on('all', '_page.doc.cy.nodes.*.sbgnlabel', function(id, op, label,prev, passed){
+
+        if(docReady && passed.user == null) {
+            cy.getElementById(id).data("sbgnlabel", label);
+
+        }
+    });
+    model.on('all', '_page.doc.cy.nodes.*.borderColor', function(id, op, borderColor,prev, passed){
+
+        if(docReady && passed.user == null) {
+            cy.getElementById(id).data("borderColor", borderColor);
+
+        }
+    });
+
+    model.on('all', '_page.doc.cy.nodes.*.borderWidth', function(id,  op,borderWidth,prev, passed){
+
+        if(docReady && passed.user == null) {
+            cy.getElementById(id).css("border-width", borderWidth);
+
+
+        }
+    });
+
+    model.on('all', '_page.doc.cy.nodes.*.backgroundColor', function(id,  op, backgroundColor,prev, passed){
+
+        if(docReady && passed.user == null) {
+            cy.getElementById(id).css("background-color", backgroundColor);
+
+
+        }
+    });
+
+    model.on('all', '_page.doc.cy.nodes.*.backgroundOpacity', function(id,  op, backgroundOpacity,prev, passed){
+
+        if(docReady && passed.user == null) {
+            cy.getElementById(id).data("backgroundOpacity", backgroundOpacity);
+
+        }
+    });
+
+    model.on('all', '_page.doc.cy.edges.*.backgroundOpacity', function(id,  op, backgroundOpacity,prev, passed){
+
+        if(docReady && passed.user == null) {
+            cy.getElementById(id).data("backgroundOpacity", backgroundOpacity);
+
+        }
+    });
+
+
+
+    model.on('all', '_page.doc.cy.nodes.*.isCloneMarker', function(id,  op, isCloneMarker, prev, passed){
+
+        if(docReady && passed.user == null) {
+            cy.getElementById(id).data("sbgnclonemarker", isCloneMarker);
+
+        }
+    });
+
+    model.on('all', '_page.doc.cy.nodes.*.parent', function(id,  op,parent,prev, passed){
+
+
+        if(docReady && passed.user == null) {
+            cy.getElementById(id).data("parent", parent);
+
+
+
+        }
+    });
+
+
+    model.on('all', '_page.doc.cy.nodes.*.ports', function(id, op, ports, prev, passed){ //this property must be something that is only changed during insertion
+
+
+        if(docReady && passed.user == null) {
+            cy.getElementById(id).data("ports", ports);
+
+
+        }
+
+    });
+
+
+    model.on('all', '_page.doc.cy.nodes.*.width', function(id,  op, width ,prev, passed){
+
+        if(docReady && passed.user == null) {
+            var ele = cy.getElementById(id);
+            ele.data("width", width);
+
+            ele._private.data.sbgnbbox.w = width;
+
+
+        }
+    });
+
+    model.on('all', '_page.doc.cy.edges.*.width', function(id,  op, width ,prev, passed){
+
+        if(docReady && passed.user == null) {
+            cy.getElementById(id).css("width", width);
+
+
+
+        }
+    });
+
+
+    model.on('all', '_page.doc.cy.nodes.*.height', function(id,  op, height, prev, passed){
+
+        if(docReady && passed.user == null) {
+            cy.getElementById(id).data("height", height);
+
+        }
+    });
+
+
+
+    model.on('all', '_page.doc.cy.nodes.*.sbgnStatesAndInfos', function(id,  op, sbgnStatesAndInfos,prev, passed){
+
+
+        if(docReady && passed.user == null) {
+            cy.getElementById(id).data("sbgnstatesandinfos", sbgnStatesAndInfos);
+
+
+
+        }
+    });
+
+    model.on('all', '_page.doc.cy.edges.*.cyedgebendeditingWeights', function(id,  op, weights, prev, passed) {
+        cy.getElementById(id).scratch("cyedgebendeditingWeights", weights);
+    });
+
+    model.on('all', '_page.doc.cy.edges.*.cyedgebendeditingDistances', function(id,  op, distances, prev, passed) {
+        cy.getElementById(id).scratch("cyedgebendeditingDistances", distances);
+    });
+
+
+    model.on('all', '_page.doc.cy.edges.*.curveStyle', function(id,  op, curveStyle, prev, passed) {
+        cy.getElementById(id).css("curve-style", curveStyle);
+
+    });
+
+    model.on('all', '_page.doc.cy.edges.*.bendPointPositions', function(id,  op, bendPointPositions, prev, passed){
+
+        if(docReady && passed.user == null) {
+
+            cy.getElementById(id).data("bendPointPositions", bendPointPositions);
+        }
+    });
+    model.on('all', '_page.doc.cy.edges.*.lineColor', function(id,  op, lineColor,prev, passed){
+
+
+
+        if(docReady && passed.user == null) {
+            cy.getElementById(id).css("line-color", lineColor);
+
+        }
+    });
+
+    model.on('all', '_page.doc.cy.nodes.*.expandCollapseStatus', function(id,  op, expandCollapseStatus, prev, passed){
+
+        if(docReady && passed.user == null) {
+           ;// menu.changeExpandCollapseStatus(id, expandCollapseStatus, false);
+
+        }
+    });
+
+
+
+
+
+
+    model.on('all', '_page.doc.cy.edges.*.sbgncardinality', function(id, op,  sbgncardinality,prev, passed){
+
+        if(docReady && passed.user == null) {
+            cy.getElementById(id).data("sbgncardinality", sbgncardinality);
+
+
+        }
+    });
 
     model.on('all', '_page.doc.images', function() {
         if (docReady)
@@ -503,7 +931,6 @@ app.proto.init = function (model) {
 
     return model.sort('messages', timeSort).ref('_page.list');
 };
-
 
 app.proto.create = function (model) {
     model.set('_page.showTime', true);
@@ -765,7 +1192,7 @@ app.proto.formatTime = function (message) {
 
 app.proto.formatObj = function(obj){
 
-    return JSON.stringify(obj);
+    return JSON.stringify(obj, null, '\t');
 };
 
 

@@ -18,7 +18,7 @@
 </form>
 
 <form id = "serverIpForm" >
-    Agent name: <input type = "text" id = "agentName" name="agentName" value = "HAL">
+    Agent name: <input type = "text" id = "agentName" name="agentName" value = "Agent">
     Server IP: <input type = "text" id = "serverIp" name="serverIp" >
     <input type = "button" id = "createAgentButton" value="Create agent" onclick = getServerIp()>
 
@@ -26,15 +26,22 @@
 
 
 <div id = agentOperations>
-<br>   <b> Agent Operations</b> <br>
+    <br>   <b> Agent Operations</b> <br>
 
     <br>
     <button id = "newFile" onclick = newFile()>New model</button>
     <input id="fileInput" type="file" onchange = loadFile() />
     <button id = "updateModel" onclick = updateModel()>Request updated model</button>
 
-    <input type="button" value="cBioPortal query" onclick=callQuery()>
-<br>
+    <!--<input type="button" value="cBioPortal query" onclick=callQuery()>-->
+
+    <br>
+    <button id = "undoButton" onclick = undoOperation()>Undo</button>
+
+    <button id = "redoButton" onclick = redoOperation()>Redo</button>
+
+
+    <br>
     <br>
     <form id = "layoutOperations">
         Name: <input type = "text" id = "layoutName" value = "cose-bilkent"><br>
@@ -69,7 +76,7 @@
 
         <br>
         <b>Node Id </b>: <select multiple name="Id" id = "nodeId" >
-        </select>
+    </select>
         <br>
         <input type="button" value="Color selected node(s)" onclick=highlightNodes()>
         <input type="button" value="Remove coloring" onclick=unhighlightNodes()>
@@ -134,14 +141,14 @@
 
         <br>
         <table>
-        <tr style='border: 1px solid #dddddd;'><td style='width: 100px'> State Variables </td><td id='stateVariables'style='width: 10px'></td></tr>
+            <tr style='border: 1px solid #dddddd;'><td style='width: 100px'> State Variables </td><td id='stateVariables'style='width: 10px'></td></tr>
 
-        <br>
-        <tr style='border: 1px solid #dddddd;'><td style='width: 100px'> Unit Of Information</td><td id='unitsOfInformation' style='width: 10px'></td></tr>
+            <br>
+            <tr style='border: 1px solid #dddddd;'><td style='width: 100px'> Unit Of Information</td><td id='unitsOfInformation' style='width: 10px'></td></tr>
         </table>
 
     </form>
-<br>
+    <br>
 
     <!-- Edge operations-->
     <form id = "edgeOperations">
@@ -169,23 +176,30 @@
         <input id = "lineColor" type = color>
         <input type="button" value="Update edge color" onclick=changeEdgeAttribute("lineColor")>
 
-</form>
+    </form>
 </div>
 
 
 <div id = modelHistory>
-<ul id = 'operationHistory'  as="container" onchange = scrollToBottom('operationHistory')><b>Operations<br></b></ul>
-<ul id = 'chat' as="container" onchange = scrollToBottom('chat')><b>Chat Messages<br></b>
+    <ul id = 'operationHistory'  as="container" onchange = scrollToBottom('operationHistory')><b>Operations<br></b></ul>
+    <ul id = 'chat' as="container" onchange = scrollToBottom('chat')><b>Chat Messages<br></b>
 
 
         <input id="chatMessage" type = "text"> <button onclick = "sendMessage()">Send</button>
-        <div class="filebutton"><input type="file" id="imagefile" accept="image/*" onchange = "uploadFile(this)"></div>
-
-</ul>
 
 
+        <label for="file-upload" class="image-file">
+            <i class="fa fa-cloud-upload"></i> Upload Image
+        </label>
+        <input id="file-upload" type="file"/>
 
-<ul id = 'userList' as="container" onchange = scrollToBottom('userList')><b>Online Users<br></b></ul>
+        <div ><input type="file" id="file-upload" accept="image/*" onchange = "uploadFile(this)"></div>
+
+    </ul>
+
+
+
+    <ul id = 'userList' as="container" onchange = scrollToBottom('userList')><b>Online Users<br></b></ul>
 
 
     <br>
@@ -209,10 +223,14 @@
     var serverIp;
 
 
+    var sbgnContent = "<?xml version='1.0' encoding='UTF-8' standalone='yes'?> <sbgn xmlns='http://sbgn.org/libsbgn/0.2'> <map language='process description'> <glyph id='ele11' class='macromolecule' > <bbox y='190' x='207' w='50' h='50' /> </glyph> </map> </sbgn>"
+
+
+
     window.onload = function () {
 
 
-       // createAgent();
+        // createAgent();
 
 
         $('#agentName').change(function () {
@@ -232,8 +250,8 @@
         $('#serverIp').change(function () {
             //deleteCookie('docId'); //delete previous cookie
             $('#createAgentButton').removeAttr('disabled');
-           // serverIp = $('#serverIp')[0].value;  //change cookie
-           // document.cookie = 'docId=' + serverIp;  //add cookie docId
+            // serverIp = $('#serverIp')[0].value;  //change cookie
+            // document.cookie = 'docId=' + serverIp;  //add cookie docId
 
         });
 
@@ -303,7 +321,7 @@
 
     function createAgent(){
 
-
+        var contextInitialized = false;
         //don't open a new socket unless it is a new agent
         var agentId = getCookie('userId');
         if(agentId == null || agentId == ''){
@@ -322,9 +340,9 @@
             $('#serverIp')[0].value = ip;
         }
 
-      //  agent = new Agent($('#agentName')[0].value, agentId);
+        // agent = new Agent($('#agentName')[0].value, agentId);
 
-       agent = new ContextAgent($('#agentName')[0].value, agentId);
+        agent = new ContextAgent($('#agentName')[0].value, agentId);
 
         var socket = agent.connectToServer(serverIp, function(){
 
@@ -341,18 +359,30 @@
 
             $('#createAgentButton').attr('disabled','disabled');
 
+
+
+
+
             agent.loadModel(function() {
 
+
+
                 if(agent instanceof ContextAgent){
-                    agent.initContext();
-                    fillContextInformation(agent.contextList, agent.contextInd);
+                    agent.initContext(function(){
+                        fillContextInformation(agent.cancerList,  agent.speciesList, agent.organList);
+                        contextInitialized = true;
+
+                    });
+
+
+
                 }
                 fillLayoutProperties();
                 agent.loadOperationHistory(function(){
 
                     agent.loadChatHistory(function(){
 
-                            //Write history
+                        //Write history
                         if(agent.opHistory != null){
                             agent.opHistory.forEach(function(op){
                                 writeOperation(op);
@@ -381,40 +411,62 @@
             //contextAgent
             if(agent instanceof ContextAgent)
                 agent.evaluateMessage( function(){
-                    fillContextInformation(agent.contextList, agent.contextInd);
+                    fillContextInformation(agent.cancerList,  agent.speciesList, agent.organList);
                 });
 
-            agent.listen(function(){
 
-                socket.on('operation', function(op){
-                    writeOperation(op);
-                    agent.loadModel(function() { //first make sure to get the latest model
-                        if(agent instanceof ContextAgent) {
-                            agent.updateContext(op, function () {
-                                fillContextInformation(agent.contextList, agent.contextInd);
+
+            socket.on('processToIntegrate', function(graph){
+                console.log(graph);
+            })
+
+
+            socket.on('operation', function(op){
+                agent.opHistory.push(op);
+                writeOperation(op);
+                agent.loadModel(function() { //first make sure to get the latest model
+                    if(agent instanceof ContextAgent) {
+
+                        if(contextInitialized) {
+                            agent.updateContextCancer(function () {
+
+                                fillContextInformation(agent.cancerList, agent.speciesList, agent.organList);
+                                //agent.printcancerList();
                             });
                         }
-
-                    });
+                    }
 
                 });
-                socket.on('message', function(data){
-                    writeMessage(data);
-                });
-
-                socket.on('userList', function(data){
-                    writeUserList(data);
-                });
-
-                socket.on('imageFile', function(data){
-                    writeImage(data);
-                });
-
-
 
             });
 
+            if(agent instanceof ContextAgent) {
+                agent.updateContextSpeciesAndOrgans(function () {
+
+                    fillContextInformation(agent.cancerList, agent.speciesList, agent.organList);
+                });
+
+
+            }
+
+            socket.on('message', function(data){
+                agent.chatHistory.push(data);
+                writeMessage(data);
+            });
+
+            socket.on('userList', function(data){
+                agent.userList = data;
+                writeUserList(data);
+            });
+
+            socket.on('imageFile', function(data){
+                writeImage(data);
+            });
+
+
+
         });
+
     }
 
 
@@ -441,6 +493,32 @@
             $('#chatMessage')[0].value = "";
 
         });
+    };
+
+
+    function readTextFile(filePath, callback) {
+
+        var rawFile;
+        if (window.XMLHttpRequest)
+            rawFile = new XMLHttpRequest();
+        else
+            rawFile = new ActiveXObject("Microsoft.XMLHTTP");
+
+
+        rawFile.open("GET", filePath, false);
+
+
+        rawFile.onreadystatechange = function () {
+
+            if(rawFile.readyState === 4) {
+                if(rawFile.status === 200 || rawFile.status == 0) {
+                    var allText = rawFile.responseText;
+                    callback(allText);
+
+                }
+            }
+        }
+        rawFile.send(null);
     };
 
     function uploadFile(el){
@@ -504,6 +582,8 @@
 
     }
 
+
+
     function updateModel(callback){
         agent.loadModel(function() {
 
@@ -524,7 +604,7 @@
                             writeMessage(agent.chatHistory[ind]);
 
                         }
-                        ;
+
                     }
 
                     fillNodeIds('nodeId');
@@ -559,18 +639,28 @@
 
                 var fileType = "sbgn";
                 if(file.name.indexOf(".owl") > -1)
-                        fileType = "owl";
+                    fileType = "owl";
 
                 agent.sendRequest("agentLoadFileRequest",{param:txtContent, fileType:fileType});
             }
         }
 
-       reader.readAsText(file);
+        reader.readAsText(file);
 //        setFileContent(file.name);
         $("#fileInput").val("");
 
-      //  agent.sendRequest("agentLoadFileRequest",{param:txtFile});
+        //  agent.sendRequest("agentLoadFileRequest",{param:txtFile});
     };
+
+    function undoOperation(){
+        agent.sendRequest("agentUndoRequest");
+
+    }
+
+    function redoOperation(){
+        agent.sendRequest("agentRedoRequest");
+    }
+
     function addNode(){
         var x = $('#posX')[0].value;
         var y = $('#posY')[0].value;
@@ -665,7 +755,11 @@
         var nodes = $('#nodeId').val();
 
 
-        agent.sendRequest("agentAddCompoundRequest", {type:type, selectedNodeIds: nodes});
+        agent.sendRequest("agentAddCompoundRequest", {type:type, selectedNodeIds: nodes}, function(compoundId){
+
+
+            console.log(compoundId + " added.");
+        });
 
     }
 
@@ -686,7 +780,7 @@
                 val = $('#' + attDiv)[0].value;
 
             if(attDiv == "width" || attDiv == "height")
-                    val = Number(val);
+                val = Number(val);
             agent.sendRequest("agentChangeNodeAttributeRequest", {id: id, attStr: attStr, attVal: val});
         });
     }
@@ -827,20 +921,35 @@
 
     }
 
-    function fillContextInformation(contextList, contextInd){
+    function fillContextInformation(cancerList, speciesList, organList){
 
 
         $('#contextInformation').empty();
         $('#contextInformation').append("<b>Context</b>")
+        $('#contextInformation').append("<table>");
 
-        for(var i = 0; i < contextList.length; i++){
-            var context = contextList[i];
-            if(i==contextInd)
-                $('#contextInformation').append("<li> <b>" + context.proteinName +  "\t" + context.contextName + "\t" + context.relevance.toFixed(2) + "\t"  + context.confidence +  "</b></li>");
-            else
-                $('#contextInformation').append("<li>" + context.proteinName +  "\t" + context.contextName + "\t" + context.relevance.toFixed(2) + "\t"  + context.confidence +  "</li>");
+        $('#contextInformation').append("<tr> <th>" + "Cancer type" +  "</th><th>" + "Relevance" + "</th><th>"   + "Confidence" +  "</th></tr>" );
+
+        for(var i = 0; i < cancerList.length; i++){
+            var cancer = cancerList[i];
+            $('#contextInformation').append("<tr> <th>" + cancer.cancerType.abbr +  "</th><th>" + cancer.relevance.toFixed(3) + "</th><th>"   + cancer.confidence +  "</th></tr>" );
 
         }
+
+        $('#contextInformation').append("<tr> <th>" + "Species" +  "</th><th>" + "Score" +  "</th></tr>");
+        for(var att in speciesList)
+            $('#contextInformation').append("<tr> <th>" + att +  "</th><th>" +   speciesList[att]+"</th></tr>");
+
+
+        $('#contextInformation').append("<tr> <th>" + "Organs" +  "</th><th>" + "Score" +  "</th></tr>");
+        for(var att in organList)
+            $('#contextInformation').append("<tr> <th>" + att +  "</th><th>" +   organList[att]+"</th></tr>");
+
+
+
+        $('#contextInformation').append("</table>");
+
+
     }
 
     function writeMessage(msg){
@@ -1005,7 +1114,7 @@
                     ele: ele,
                     width: width
                 };
-            //todo    synchronizationManager.manager._do(synchronizationManager.RemoveStateAndInfoCommand(param));
+                //todo    editorActions.manager._do(editorActions.RemoveStateAndInfoCommand(param));
             });
 
             $(".justAddedStateVariablesInput").data("state", state);
@@ -1031,7 +1140,7 @@
                 ele: ele,
                 width: width
             };
-          //todo  synchronizationManager.manager._do(synchronizationManager.AddStateAndInfoCommand(param));
+            //todo  editorActions.manager._do(editorActions.AddStateAndInfoCommand(param));
         });
 
         $("#addUnitOfInformation").click(function () {
@@ -1049,7 +1158,7 @@
                 ele: ele,
                 width: width
             };
-            //todo synchronizationManager.manager._do(synchronizationManager.AddStateAndInfoCommand(param));
+            //todo editorActions.manager._do(editorActions.AddStateAndInfoCommand(param));
         });
     }
 

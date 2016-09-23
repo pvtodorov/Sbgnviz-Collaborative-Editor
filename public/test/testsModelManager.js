@@ -212,10 +212,6 @@ module.exports = function(){
             assert.equal(true, cy.getElementById(id).data('sbgnclonemarker'), "Node isCloneMarker is correct in cytoscape.");
             assert.equal(ModelManager.getModelNode(id).isCloneMarker, cy.getElementById(id).data('sbgnclonemarker'), "Node isCloneMarker is equal in model and cytoscape..");
 
-            ModelManager.changeModelNodeAttribute("isMultimer", id, true);
-            assert.equal(true, cy.getElementById(id).data('sbgnclass').indexOf(' multimer') > 0, "Node isMultimer is correct in cytoscape.");
-            assert.equal(ModelManager.getModelNode(id).isMultimer, cy.getElementById(id).data('sbgnclass').indexOf(' multimer') > 0, "Node isMultimer is equal in model and cytoscape..");
-
             ModelManager.changeModelNodeAttribute("sbgnStatesAndInfos", id, [{clazz:"unit of information", label:{text:"uoi"}}]);
             assert.equal("unit of information", cy.getElementById(id).data('sbgnstatesandinfos')[0].clazz, "Node sbgnStatesAndInfos are correct in cytoscape.");
             assert.equal(ModelManager.getModelNode(id).sbgnStatesAndInfos[0].clazz, cy.getElementById(id).data('sbgnstatesandinfos')[0].clazz, "Node sbgnStatesAndInfos are equal in model and cytoscape..");

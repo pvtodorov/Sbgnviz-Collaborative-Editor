@@ -58,7 +58,6 @@ module.exports = function(){
             assert.equal(modelNode.borderColor, node.css('border-color'), "Node borderColor correctly initialized.");
             assert.equal(modelNode.borderWidth, node.css('border-width'), "Node borderWidth correctly initialized.");
             assert.equal(modelNode.isCloneMarker, node.data('sbgnclonemarker'), "Node isCloneMarker correctly initialized.");
-            assert.equal(modelNode.isMultimer, node.data('sbgnclass').indexOf(' multimer') > 0, "Node isMultimer correctly initialized.");
             assert.equal(modelNode.sbgnStatesAndInfos.length, 0, "Node sbgnStatesAndInfos correctly initialized.");
             assert.equal(modelNode.parent, node.data('parent'), "Node parent correctly initialized.");
             assert.equal(modelNode.children, node.data('children'), "Node children correctly initialized.");
