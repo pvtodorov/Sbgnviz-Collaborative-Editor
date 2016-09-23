@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="JavaScriptLibraryMappings">
+    <file url="file://C:/I-Vis/cytoscape.js-undo-redo" libraries="{UndoRedoExtension node_modules}" />
+  </component>
+</project>
