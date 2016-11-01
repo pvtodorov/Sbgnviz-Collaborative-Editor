@@ -1018,12 +1018,12 @@ app.proto.create = function (model) {
 
 
 
-    menu =  require('./public/sample-app/sampleapp-components/js/sample-app-menu-functions.js')();
+    menu =  require('./public/sample-app/sampleapp-components/js/sample-app-menu-functions.js')(modelManager);
 
 
     //send modelManager to web client
     //make sure cytoscape is loaded
-    menu.start(modelManager);
+    menu.start();
 
 
 

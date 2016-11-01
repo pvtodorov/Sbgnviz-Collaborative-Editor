@@ -85,7 +85,11 @@ var addRemoveUtilities = {
                 y: y
             },
             sbgnstatesandinfos: [],
-            ports: []
+            ports: [],
+            labelsize: canHaveSBGNLabel(sbgnclass) ? ( defaults && defaults.labelsize ) || sbgnElementUtilities.getDefaultLabelSize(sbgnclass) : undefined,
+            fontfamily: canHaveSBGNLabel(sbgnclass) ? ( defaults && defaults.fontfamily ) || sbgnElementUtilities.defaultFontProperties.fontfamily : undefined,
+            fontweight: canHaveSBGNLabel(sbgnclass) ? ( defaults && defaults.fontweight ) || sbgnElementUtilities.defaultFontProperties.fontweight : undefined,
+            fontstyle: canHaveSBGNLabel(sbgnclass) ? ( defaults && defaults.fontstyle ) || sbgnElementUtilities.defaultFontProperties.fontstyle : undefined
         };
 
         if(parent){
@@ -123,6 +127,7 @@ var addRemoveUtilities = {
             newNode._private.data.sbgnclonemarker = defaults.sbgnclonemarker;
         }
         newNode.addClass('changeBorderColor');
+        newNode.addClass('changeBackgroundOpacity');
         refreshPaddings();
 
         return newNode;
@@ -196,27 +201,5 @@ var addRemoveUtilities = {
         removedEles = removedEles.union(this.removeNodes(nodes));
         return removedEles;
     },
-    changeParent: function (nodes, oldParentId, newParentId) {
-        var removedNodes = this.removeNodes(nodes);
 
-        for (var i = 0; i < removedNodes.length; i++) {
-            var removedNode = removedNodes[i];
-            var parentId = removedNode._private.data.parent;
-
-            //Just alter the parent id of the nodesToMakeCompound
-            if (parentId != oldParentId || removedNode._private.data.source) {
-                continue;
-            }
-
-            removedNode._private.data.parent = newParentId;
-            if(removedNode._private.parent){
-                delete removedNode._private.parent;
-            }
-        }
-
-        cy.add(removedNodes);
-        cy.nodes().updateCompoundBounds();
-        refreshPaddings();
-//    removedNodes.restore();
-        }
     };

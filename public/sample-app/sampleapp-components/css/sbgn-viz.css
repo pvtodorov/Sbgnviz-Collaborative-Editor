@@ -198,6 +198,58 @@ menu:not([title]):before{
     content:"\2630";
 }
 
+
+.inspector-input-box{
+    padding-bottom: 0.5px !important;
+    padding-top: 0.5px !important;
+    margin-bottom: 2px !important;
+}
+
+.dialog-table * {
+    margin-bottom: 0px !important;
+    padding-bottom: 2px !important;
+    margin-top: 0px !important;
+    padding-top: 2px !important;
+}
+
+.dialog-table td {
+    padding-bottom: 2px !important;
+    padding-top: 2px !important;
+}
+
+.customized-context-menus-menu-item {
+    padding: 5px;
+    width: 185px !important;
+}
+
+.accordion-toggle:after {
+    /* symbol for "opening" panels */
+    font-family: 'Glyphicons Halflings';  /* essential for enabling glyphicon */
+    content:"\25B3";
+    float: right;
+}
+
+.accordion-toggle.collapsed:after {
+    /* symbol for "collapsed" panels */
+    content:"\25BD";
+}
+
+hr.inspector-divider {
+    padding: 0px !important;
+    margin-top: 5px !important;
+    margin-bottom: 5px !important;
+    width: 100% !important;
+}
+
+.sbgn-label-font {
+    font-size: 11px !important;
+    /*font-weight: bold;*/
+}
+
+#biogene-template-div th {
+    text-align: right;
+}
+
 .ctx-bend-operation{
     display:none;
     z-index:1000;

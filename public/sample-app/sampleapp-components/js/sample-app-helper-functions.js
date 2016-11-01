@@ -95,30 +95,31 @@ $(document).ready(function () {
 
 
     dynamicResize();
-    $('#command-history-area').live('contentchanged', function(){
-        scrollToBottom('command-history-area');
-    });
-
-    $('#messages').live('contentchanged', function(){
-        /* 
-           FIXME This is triggered before the DOM is actually updated. Hack
-           around it by delaying for 100ms. This is of course not reliable but
-           will be good enough for demos.
-        */
-        setTimeout(function () {
-            scrollToBottom('messages');
-        }, 100);
-
-
-
-    });
-
-    $('#receivedImages').live('contentchanged', function(){
-        scrollToBottom('receivedImages');
-
-    });
-
-
+    //TODO
+    // $('#command-history-area').live('contentchanged', function(){
+    //     scrollToBottom('command-history-area');
+    // });
+    //
+    // $('#messages').live('contentchanged', function(){
+    //     /*
+    //        FIXME This is triggered before the DOM is actually updated. Hack
+    //        around it by delaying for 100ms. This is of course not reliable but
+    //        will be good enough for demos.
+    //     */
+    //     setTimeout(function () {
+    //         scrollToBottom('messages');
+    //     }, 100);
+    //
+    //
+    //
+    // });
+    //
+    // $('#receivedImages').live('contentchanged', function(){
+    //     scrollToBottom('receivedImages');
+    //
+    // });
+    //
+    //
 
 });
 function showQTip(el){
@@ -248,68 +249,68 @@ var relocateStateAndInfos = function (stateAndInfos) {
     }
 };
 
-
-/*
- * This function create qtip for the given node
- */
-function nodeQtipFunction(node) {
-    /*    * Check the sbgnlabel of the node if it is not valid
-     * then check the infolabel if it is also not valid do not show qtip
-     */
-    var label = node._private.data.sbgnlabel;
-
-    if (label == null || label == "")
-        label = getInfoLabel(node);
-
-    if (label == null || label == "")
-        return;
-
-    node.qtip({
-        content: function () {
-            var contentHtml =
-                "<b style='text-align:center;font-size:16px;'>" + label + "</b>";
-            var sbgnstatesandinfos = node._private.data.sbgnstatesandinfos;
-            for (var i = 0; i < sbgnstatesandinfos.length; i++) {
-                var sbgnstateandinfo = sbgnstatesandinfos[i];
-                if (sbgnstateandinfo.clazz == "state variable") {
-                    var value = sbgnstateandinfo.state.value;
-                    var variable = sbgnstateandinfo.state.variable;
-                    var stateLabel = (variable == null /*|| typeof stateVariable === undefined */) ? value :
-                    value + "@" + variable;
-                    if (stateLabel == null) {
-                        stateLabel = "";
-                    }
-                    contentHtml += "<div style='text-align:center;font-size:14px;'>" + stateLabel + "</div>";
-                }
-                else if (sbgnstateandinfo.clazz == "unit of information") {
-                    var stateLabel = sbgnstateandinfo.label.text;
-                    if (stateLabel == null) {
-                        stateLabel = "";
-                    }
-                    contentHtml += "<div style='text-align:center;font-size:14px;'>" + stateLabel + "</div>";
-                }
-            }
-            return contentHtml;
-        },
-        show: {
-            ready: true
-        },
-        position: {
-            my: 'top center',
-            at: 'bottom right',
-            adjust: {
-                cyViewport: true
-            }
-        },
-        style: {
-            classes: 'qtip-bootstrap',
-            tip: {
-                width: 16,
-                height: 8
-            }
-        }
-    });
-}
+//
+// /*
+//  * This function create qtip for the given node
+//  */
+// function nodeQtipFunction(node) {
+//     /*    * Check the sbgnlabel of the node if it is not valid
+//      * then check the infolabel if it is also not valid do not show qtip
+//      */
+//     var label = node._private.data.sbgnlabel;
+//
+//     if (label == null || label == "")
+//         label = getInfoLabel(node);
+//
+//     if (label == null || label == "")
+//         return;
+//
+//     node.qtip({
+//         content: function () {
+//             var contentHtml =
+//                 "<b style='text-align:center;font-size:16px;'>" + label + "</b>";
+//             var sbgnstatesandinfos = node._private.data.sbgnstatesandinfos;
+//             for (var i = 0; i < sbgnstatesandinfos.length; i++) {
+//                 var sbgnstateandinfo = sbgnstatesandinfos[i];
+//                 if (sbgnstateandinfo.clazz == "state variable") {
+//                     var value = sbgnstateandinfo.state.value;
+//                     var variable = sbgnstateandinfo.state.variable;
+//                     var stateLabel = (variable == null /*|| typeof stateVariable === undefined */) ? value :
+//                     value + "@" + variable;
+//                     if (stateLabel == null) {
+//                         stateLabel = "";
+//                     }
+//                     contentHtml += "<div style='text-align:center;font-size:14px;'>" + stateLabel + "</div>";
+//                 }
+//                 else if (sbgnstateandinfo.clazz == "unit of information") {
+//                     var stateLabel = sbgnstateandinfo.label.text;
+//                     if (stateLabel == null) {
+//                         stateLabel = "";
+//                     }
+//                     contentHtml += "<div style='text-align:center;font-size:14px;'>" + stateLabel + "</div>";
+//                 }
+//             }
+//             return contentHtml;
+//         },
+//         show: {
+//             ready: true
+//         },
+//         position: {
+//             my: 'top center',
+//             at: 'bottom right',
+//             adjust: {
+//                 cyViewport: true
+//             }
+//         },
+//         style: {
+//             classes: 'qtip-bootstrap',
+//             tip: {
+//                 width: 16,
+//                 height: 8
+//             }
+//         }
+//     });
+// }
 
 
 
@@ -338,14 +339,13 @@ var printNodeInfo = function () {
 var sbgnStyleSheet = cytoscape.stylesheet()
     .selector("node")
     .css({
-        'border-width': 1.5,
-        'border-color': '#555',
-        'background-color': '#f6f6f6',
-        'font-size': 11,
-//          'shape': 'data(sbgnclass)',
+        "border-color": "#555",
+        "border-width": "1.5px",
+        'background-color': '#FFFFFF',
         'background-opacity': 0.5,
         'text-opacity': 1,
-        'opacity': 1
+        'opacity': 1,
+        'font-size': 11
     })
     .selector("node[?sbgnclonemarker][sbgnclass='perturbing agent']")
     .css({
@@ -359,59 +359,57 @@ var sbgnStyleSheet = cytoscape.stylesheet()
             if(!ele.data('sbgnclonemarker')){
                 return 0;
             }
-            return ele._private.style['background-opacity'].value;
+            return ele.css('background-opacity');
         }
     })
     .selector("node[sbgnclass][sbgnclass!='complex'][sbgnclass!='process'][sbgnclass!='association'][sbgnclass!='dissociation'][sbgnclass!='compartment'][sbgnclass!='source and sink']")
     .css({
-//          'content': 'data(sbgnlabel)',
         'content': function (ele) {
             return getElementContent(ele);
         },
         'text-valign': 'center',
-        'text-halign': 'center',
-        'font-size': function (ele) {
-            return getLabelTextSize(ele);
-        }
+        'text-halign': 'center'
     })
     .selector("node[sbgnclass]")
     .css({
         'shape': function (ele) {
             return getCyShape(ele);
+        },
+        'font-weight': function(ele) {
+            return ele.data('fontweight') ? ele.data('fontweight') : sbgnElementUtilities.defaultFontProperties.fontweight;
+        },
+        'font-family': function(ele) {
+            return ele.data('fontfamily') ? ele.data('fontfamily') : sbgnElementUtilities.defaultFontProperties.fontfamily;
+        },
+        'font-style': function(ele) {
+            return ele.data('fontstyle') ? ele.data('fontstyle') : sbgnElementUtilities.defaultFontProperties.fontstyle;
+        },
+        'font-size': function (ele) {
+            var labelsize = getLabelTextSize(ele);
+            if(labelsize) {
+                return labelsize;
+            }
+
+            return ele.css('font-size');
         }
     })
     .selector("node[sbgnclass='perturbing agent']")
     .css({
         'shape-polygon-points': '-1, -1,   -0.5, 0,  -1, 1,   1, 1,   0.5, 0, 1, -1'
     })
-    .selector("node[sbgnclass='association']")
-    .css({
-        'background-color': '#6B6B6B'
-    })
+    //    .selector("node[sbgnclass='association']")
+    //    .css({
+    //      'background-color': '#6B6B6B'
+    //    })
     .selector("node[sbgnclass='tag']")
     .css({
         'shape-polygon-points': '-1, -1,   0.25, -1,   1, 0,    0.25, 1,    -1, 1'
     })
     .selector("node[sbgnclass='complex']")
     .css({
-        'background-color': '#F4F3EE',
+//      'background-color': '#F4F3EE',
         'text-valign': 'bottom',
         'text-halign': 'center',
-        'font-size': function (ele) {
-            return getLabelTextSize(ele);
-        },
-        'width': function(ele){
-            if(ele.children() == null || ele.children().length == 0){
-                return '36';
-            }
-            return ele.data('width');
-        },
-        'height': function(ele){
-            if(ele.children() == null || ele.children().length == 0){
-                return '36';
-            }
-            return ele.data('height');
-        },
         'content': function(ele){
             return getElementContent(ele);
         }
@@ -420,32 +418,22 @@ var sbgnStyleSheet = cytoscape.stylesheet()
     .css({
         'border-width': 3.75,
         'background-opacity': 0,
-        'background-color': '#FFFFFF',
+//      'background-color': '#FFFFFF',
         'content': function(ele){
             return getElementContent(ele);
         },
-        'width': function(ele){
-            if(ele.children() == null || ele.children().length == 0){
-                return '36';
-            }
-            return ele.data('width');
-        },
-        'height': function(ele){
-            if(ele.children() == null || ele.children().length == 0){
-                return '36';
-            }
-            return ele.data('height');
-        },
         'text-valign': 'bottom',
-        'text-halign': 'center',
-        'font-size': function (ele) {
-            return getLabelTextSize(ele);
-        }
+        'text-halign': 'center'
     })
-    .selector("node[sbgnclass][sbgnclass!='complex'][sbgnclass!='compartment'][sbgnclass!='submap']")
+    .selector("node[sbgnbbox]")
     .css({
         'width': 'data(sbgnbbox.w)',
         'height': 'data(sbgnbbox.h)'
+    })
+    .selector("node[expanded-collapsed='collapsed']")
+    .css({
+        'width': 36,
+        'height': 36
     })
     .selector("node:selected")
     .css({
@@ -466,7 +454,48 @@ var sbgnStyleSheet = cytoscape.stylesheet()
         'width': 1.5,
         'target-arrow-color': '#555',
         'source-arrow-color': '#555',
+        'text-border-color': function(ele){
+            if(ele.selected()) {
+                return '#d67614';
+            }
+            return ele.data('lineColor') || ele.css('line-color');
+        },
+        'color': function(ele){
+            if(ele.selected()) {
+                return '#d67614';
+            }
+            return ele.data('lineColor') || ele.css('line-color');
+        }
 //          'target-arrow-shape': 'data(sbgnclass)'
+    })
+    .selector("edge[sbgncardinality > 0]")
+    .css({
+        'text-rotation': 'autorotate',
+        'text-background-shape': 'rectangle',
+        'text-border-opacity': '1',
+        'text-border-width': '1',
+        'text-background-color': 'white',
+        'text-background-opacity': '1'
+    })
+    .selector("edge[sbgnclass='consumption'][sbgncardinality > 0]")
+    .css({
+        'source-label': function(ele) {
+            return '' + ele.data('sbgncardinality');
+        },
+        'source-text-margin-y': '-10',
+        'source-text-offset': function(ele) {
+            return getCardinalityDistance(ele);
+        }
+    })
+    .selector("edge[sbgnclass='production'][sbgncardinality > 0]")
+    .css({
+        'target-label': function(ele) {
+            return '' + ele.data('sbgncardinality');
+        },
+        'target-text-margin-y': '-10',
+        'target-text-offset': function(ele) {
+            return getCardinalityDistance(ele);
+        }
     })
     .selector("edge[sbgnclass]")
     .css({
@@ -481,12 +510,12 @@ var sbgnStyleSheet = cytoscape.stylesheet()
     })
     .selector("edge[sbgnclass='consumption']")
     .css({
-        'line-style': 'consumption'
+//      'line-style': 'consumption'
     })
     .selector("edge[sbgnclass='production']")
     .css({
         'target-arrow-fill': 'filled',
-        'line-style': 'production'
+//      'line-style': 'production'
     })
     .selector("edge:selected")
     .css({
@@ -523,18 +552,6 @@ var sbgnStyleSheet = cytoscape.stylesheet()
         'width': 15,
         'height': 15
     })
-    .selector('edge.not-highlighted')
-    .css({
-        'opacity': 0.3,
-        'text-opacity': 0.3,
-        'background-opacity': 0.3
-    })
-    .selector('node.not-highlighted')
-    .css({
-        'border-opacity': 0.3,
-        'text-opacity': 0.3,
-        'background-opacity': 0.3
-    })
     .selector('edge.meta')
     .css({
         'line-color': '#C4C4C4',
@@ -547,7 +564,7 @@ var sbgnStyleSheet = cytoscape.stylesheet()
         'source-arrow-color': '#d67614',
         'target-arrow-color': '#d67614'
     })
-    .selector("node.changeBackgroundOpacity")
+    .selector("node.changeBackgroundOpacity[backgroundOpacity]")
     .css({
         'background-opacity': 'data(backgroundOpacity)'
     })
@@ -600,11 +617,14 @@ var sbgnStyleSheet = cytoscape.stylesheet()
             if(!ele.data('sbgnclonemarker')){
                 return 0;
             }
-            return ele._private.style['background-opacity'].value;
+            return ele.css('background-opacity');
         }
+    }).selector("node.noderesized")
+    .css({
+        'width': 'data(sbgnbbox.w)',
+        'height': 'data(sbgnbbox.h)'
     });
 // end of sbgnStyleSheet
-
 //get the sbgn style rules
 //funda getSBGNStyleRules();
 
@@ -613,3 +633,341 @@ var sbgnStyleSheet = cytoscape.stylesheet()
 var stringAfterValueCheck = function (value) {
     return value ? value : '';
 };
+
+var ReactionTemplate = Backbone.View.extend({
+    defaultTemplateParameters: {
+        templateType: "association",
+        macromoleculeList: ["", ""],
+        templateReactionEnableComplexName: true,
+        templateReactionComplexName: "",
+        getMacromoleculesHtml: function(){
+            var html = "<table>";
+            for( var i = 0; i < this.macromoleculeList.length; i++){
+                html += "<tr><td>"
+                    + "<input type='text' class='template-reaction-textbox input-small layout-text' name='"
+                    + i + "'" + " value='" + this.macromoleculeList[i] + "'></input>"
+                    + "</td><td><img style='padding-bottom: 8px;' class='template-reaction-delete-button' width='12px' height='12px' name='" + i + "' src='sampleapp-images/delete.png'/></td></tr>";
+            }
+
+            html += "<tr><td><img id='template-reaction-add-button' src='sampleapp-images/add.png'/></td></tr></table>";
+            return html;
+        },
+        getComplexHtml: function(){
+            var html = "<table>"
+                + "<tr><td><input type='checkbox' class='input-small layout-text' id='template-reaction-enable-complex-name'";
+
+            if(this.templateReactionEnableComplexName){
+                html += " checked ";
+            }
+
+            html += "/>"
+                + "</td><td><input type='text' class='input-small layout-text' id='template-reaction-complex-name' value='"
+                + this.templateReactionComplexName + "'";
+
+            if(!this.templateReactionEnableComplexName){
+                html += " disabled ";
+            }
+
+            html += "></input>"
+                + "</td></tr></table>";
+
+            return html;
+        },
+        getInputHtml: function(){
+            if(this.templateType === 'association') {
+                return this.getMacromoleculesHtml();
+            }
+            else if(this.templateType === 'dissociation'){
+                return this.getComplexHtml();
+            }
+        },
+        getOutputHtml: function(){
+            if(this.templateType === 'association') {
+                return this.getComplexHtml();
+            }
+            else if(this.templateType === 'dissociation'){
+                return this.getMacromoleculesHtml();
+            }
+        }
+    },
+    currentTemplateParameters: undefined,
+    initialize: function () {
+        var self = this;
+        self.copyProperties();
+        self.template = _.template($("#reaction-template").html());
+        self.template = self.template(self.currentTemplateParameters);
+    },
+    copyProperties: function () {
+        this.currentTemplateParameters = jQuery.extend(true, [], this.defaultTemplateParameters);
+    },
+    render: function () {
+        var self = this;
+        self.template = _.template($("#reaction-template").html());
+        self.template = self.template(self.currentTemplateParameters);
+        $(self.el).html(self.template);
+
+        dialogUtilities.openDialog(self.el, {width:'auto'});
+
+        $(document).off('change', '#reaction-template-type-select').on('change', '#reaction-template-type-select', function (e) {
+            var optionSelected = $("option:selected", this);
+            var valueSelected = this.value;
+            self.currentTemplateParameters.templateType = valueSelected;
+
+            self.template = _.template($("#reaction-template").html());
+            self.template = self.template(self.currentTemplateParameters);
+            $(self.el).html(self.template);
+
+            $(self.el).dialog({width:'auto'});
+        });
+
+        $(document).off("change", "#template-reaction-enable-complex-name").on("change", "#template-reaction-enable-complex-name", function(e){
+            self.currentTemplateParameters.templateReactionEnableComplexName =
+                !self.currentTemplateParameters.templateReactionEnableComplexName;
+            self.template = _.template($("#reaction-template").html());
+            self.template = self.template(self.currentTemplateParameters);
+            $(self.el).html(self.template);
+
+            $(self.el).dialog({width:'auto'});
+        });
+
+        $(document).off("change", "#template-reaction-complex-name").on("change", "#template-reaction-complex-name", function(e){
+            self.currentTemplateParameters.templateReactionComplexName = $(this).val();
+            self.template = _.template($("#reaction-template").html());
+            self.template = self.template(self.currentTemplateParameters);
+            $(self.el).html(self.template);
+
+            $(self.el).dialog({width:'auto'});
+        });
+
+        $(document).off("click", "#template-reaction-add-button").on("click", "#template-reaction-add-button", function (event) {
+            self.currentTemplateParameters.macromoleculeList.push("");
+
+            self.template = _.template($("#reaction-template").html());
+            self.template = self.template(self.currentTemplateParameters);
+            $(self.el).html(self.template);
+
+            $(self.el).dialog({width:'auto'});
+        });
+
+        $(document).off("change", ".template-reaction-textbox").on('change', ".template-reaction-textbox", function () {
+            var index = parseInt($(this).attr('name'));
+            var value = $(this).val();
+            self.currentTemplateParameters.macromoleculeList[index] = value;
+
+            self.template = _.template($("#reaction-template").html());
+            self.template = self.template(self.currentTemplateParameters);
+            $(self.el).html(self.template);
+
+            $(self.el).dialog({width:'auto'});
+        });
+
+        $(document).off("click", ".template-reaction-delete-button").on("click", ".template-reaction-delete-button", function (event) {
+            if(self.currentTemplateParameters.macromoleculeList.length <= 2){
+                return;
+            }
+
+            var index = parseInt($(this).attr('name'));
+            self.currentTemplateParameters.macromoleculeList.splice(index, 1);
+
+            self.template = _.template($("#reaction-template").html());
+            self.template = self.template(self.currentTemplateParameters);
+            $(self.el).html(self.template);
+
+            $(self.el).dialog({width:'auto'});
+        });
+
+        $(document).off("click", "#create-template").on("click", "#create-template", function (evt) {
+            var param = {
+                firstTime: true,
+                templateType: self.currentTemplateParameters.templateType,
+                processPosition: sbgnElementUtilities.convertToModelPosition({x: cy.width() / 2, y: cy.height() / 2}),
+                macromoleculeList: jQuery.extend(true, [], self.currentTemplateParameters.macromoleculeList),
+                complexName: self.currentTemplateParameters.templateReactionEnableComplexName?self.currentTemplateParameters.templateReactionComplexName:undefined,
+                tilingPaddingVertical: calculateTilingPaddings(parseInt(sbgnStyleRules['tiling-padding-vertical'], 10)),
+                tilingPaddingHorizontal: calculateTilingPaddings(parseInt(sbgnStyleRules['tiling-padding-horizontal'], 10))
+            };
+
+            cy.undoRedo().do("createTemplateReaction", param);
+
+            self.copyProperties();
+            $(self.el).dialog('close');
+        });
+
+        $(document).off("click", "#cancel-template").on("click", "#cancel-template", function (evt) {
+            self.copyProperties();
+            $(self.el).dialog('close');
+        });
+
+        return this;
+    }
+});
+
+var FontProperties = Backbone.View.extend({
+    defaultFontProperties: {
+        fontFamily: "",
+        fontSize: "",
+        fontWeight: "",
+        fontStyle: ""
+    },
+    currentFontProperties: undefined,
+    copyProperties: function () {
+        this.currentFontProperties = _.clone(this.defaultFontProperties);
+    },
+    fontFamilies: ["", "Helvetica", "Arial", "Calibri", "Cambria", "Comic Sans MS", "Consolas", "Corsiva"
+        ,"Courier New" ,"Droid Sans", "Droid Serif", "Georgia", "Impact"
+        ,"Lato", "Roboto", "Source Sans Pro", "Syncopate", "Times New Roman"
+        ,"Trebuchet MS", "Ubuntu", "Verdana"],
+    getOptionIdByFontFamily: function(fontfamily) {
+        var id = "font-properties-font-family-" + fontfamily;
+        return id;
+    },
+    getFontFamilyByOptionId: function(id) {
+        var lastIndex = id.lastIndexOf("-");
+        var fontfamily = id.substr(lastIndex + 1);
+        return fontfamily;
+    },
+    getFontFamilyHtml: function(self) {
+        if(self == null){
+            self = this;
+        }
+
+        var fontFamilies = self.fontFamilies;
+
+        var html = "";
+        html += "<select id='font-properties-select-font-family' class='input-medium layout-text' name='font-family-select'>";
+
+        var optionsStr = "";
+
+        for ( var i = 0; i < fontFamilies.length; i++ ) {
+            var fontFamily = fontFamilies[i];
+            var optionId = self.getOptionIdByFontFamily(fontFamily);
+            var optionStr = "<option id='" + optionId + "'"
+                + " value='" + fontFamily + "' style='" + "font-family: " + fontFamily + "'";
+
+            if (fontFamily === self.currentFontProperties.fontFamily) {
+                optionStr += " selected";
+            }
+
+            optionStr += "> ";
+            optionStr += fontFamily;
+            optionStr += " </option>";
+
+            optionsStr += optionStr;
+        }
+
+        html += optionsStr;
+
+        html += "</select>";
+
+        return html;
+    },
+    initialize: function () {
+        var self = this;
+        self.defaultFontProperties.getFontFamilyHtml = function(){
+            return self.getFontFamilyHtml(self);
+        };
+        self.copyProperties();
+        self.template = _.template($("#font-properties-template").html());
+        self.template = self.template(self.defaultFontProperties);
+    },
+    extendProperties: function (eles) {
+        var self = this;
+        var commonProperties = {};
+
+        var commonFontSize = getCommonLabelFontSize(eles);
+        var commonFontWeight = getCommonLabelFontWeight(eles);
+        var commonFontFamily = getCommonLabelFontFamily(eles);
+        var commonFontStyle = getCommonLabelFontStyle(eles);
+
+        if( commonFontSize != null ) {
+            commonProperties.fontSize = commonFontSize;
+        }
+
+        if( commonFontWeight != null ) {
+            commonProperties.fontWeight = commonFontWeight;
+        }
+
+        if( commonFontFamily != null ) {
+            commonProperties.fontFamily = commonFontFamily;
+        }
+
+        if( commonFontStyle != null ) {
+            commonProperties.fontStyle = commonFontStyle;
+        }
+
+        self.currentFontProperties = $.extend({}, this.defaultFontProperties, commonProperties);
+    },
+    render: function (eles) {
+        var self = this;
+        self.extendProperties(eles);
+        self.template = _.template($("#font-properties-template").html());
+        self.template = self.template(self.currentFontProperties);
+        $(self.el).html(self.template);
+
+        dialogUtilities.openDialog(self.el);
+
+        $(document).off("click", "#set-font-properties").on("click", "#set-font-properties", function (evt) {
+            var data = {};
+
+            var labelsize = $('#font-properties-font-size').val();
+            var fontfamily = $('select[name="font-family-select"] option:selected').val();
+            var fontweight = $('select[name="font-weight-select"] option:selected').val();
+            var fontstyle = $('select[name="font-style-select"] option:selected').val();
+
+            if ( labelsize != '' ) {
+                data.labelsize = parseInt(labelsize);
+            }
+
+            if ( fontfamily != '' ) {
+                data.fontfamily = fontfamily;
+            }
+
+            if ( fontweight != '' ) {
+                data.fontweight = fontweight;
+            }
+
+            if ( fontstyle != '' ) {
+                data.fontstyle = fontstyle;
+            }
+
+            var keys = Object.keys(data);
+
+            if(keys.length === 0) {
+                return;
+            }
+
+            var validAction = false;
+
+            for ( var i = 0; i < eles.length; i++ ) {
+                var ele = eles[i];
+
+                keys.forEach(function(key, idx) {
+                    if ( data[key] != ele.data(key) ) {
+                        validAction = true;
+                    }
+                });
+
+                if ( validAction ) {
+                    break;
+                }
+            }
+
+            if ( validAction === false ) {
+                return;
+            }
+
+            var param = {
+                eles: eles,
+                data: data,
+                firstTime: true
+            };
+
+            cy.undoRedo().do("changeFontProperties", param);
+
+            self.copyProperties();
+//      $(self.el).dialog('close');
+        });
+
+        return this;
+    }
+});

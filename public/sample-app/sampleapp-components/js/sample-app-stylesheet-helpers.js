@@ -14,9 +14,9 @@ var getCyShape = function (ele) {
     return 'polygon';
   }
   if (shape == 'source and sink' || shape == 'nucleic acid feature' || shape == 'dissociation'
-          || shape == 'macromolecule' || shape == 'simple chemical' || shape == 'complex'
-          || shape == 'unspecified entity' || shape == 'process' || shape == 'omitted process'
-          || shape == 'uncertain process' || shape == 'association') {
+      || shape == 'macromolecule' || shape == 'simple chemical' || shape == 'complex'
+      || shape == 'unspecified entity' || shape == 'process' || shape == 'omitted process'
+      || shape == 'uncertain process' || shape == 'association') {
     return shape;
   }
   return 'ellipse';
@@ -71,16 +71,16 @@ var truncateText = function (textProp, font) {
 
 var getElementContent = function (ele) {
   var sbgnclass = ele.data('sbgnclass');
-  
+
   if (sbgnclass.endsWith(' multimer')) {
     sbgnclass = sbgnclass.replace(' multimer', '');
   }
 
   var content = "";
   if (sbgnclass == 'macromolecule' || sbgnclass == 'simple chemical'
-          || sbgnclass == 'phenotype'
-          || sbgnclass == 'unspecified entity' || sbgnclass == 'nucleic acid feature'
-          || sbgnclass == 'perturbing agent' || sbgnclass == 'tag') {
+      || sbgnclass == 'phenotype'
+      || sbgnclass == 'unspecified entity' || sbgnclass == 'nucleic acid feature'
+      || sbgnclass == 'perturbing agent' || sbgnclass == 'tag') {
     content = ele.data('sbgnlabel') ? ele.data('sbgnlabel') : "";
   }
   else if(sbgnclass == 'compartment'){
@@ -103,22 +103,22 @@ var getElementContent = function (ele) {
     }
   }
   else if (sbgnclass == 'and') {
-    content = 'AND';
+    return 'AND';
   }
   else if (sbgnclass == 'or') {
-    content = 'OR';
+    return 'OR';
   }
   else if (sbgnclass == 'not') {
-    content = 'NOT';
+    return 'NOT';
   }
   else if (sbgnclass == 'omitted process') {
-    content = '\\\\';
+    return '\\\\';
   }
   else if (sbgnclass == 'uncertain process') {
-    content = '?';
+    return '?';
   }
   else if (sbgnclass == 'dissociation') {
-    content = 'O';
+    return 'O';
   }
 
   var textWidth = ele.css('width') ? parseFloat(ele.css('width')) : ele.data('sbgnbbox').w;
@@ -134,30 +134,43 @@ var getElementContent = function (ele) {
 
 var getLabelTextSize = function (ele) {
   var sbgnclass = ele.data('sbgnclass');
-  if (sbgnclass.endsWith('process')) {
-    return 18;
+
+  // These types of nodes cannot have label but this is statement is needed as a workaround
+  if(sbgnclass === 'association' || sbgnclass === 'dissociation') {
+    return 20;
   }
-  else if(sbgnclass === 'complex' || sbgnclass === 'compartment') {
-    return 16;
+
+  if(sbgnclass === 'and' || sbgnclass === 'or' || sbgnclass === 'not') {
+    return getDynamicLabelTextSize(ele, 1);
   }
+
+  if(sbgnclass.endsWith('process')) {
+    return getDynamicLabelTextSize(ele, 1.5);
+  }
+
+  if(sbgnclass === 'complex' || sbgnclass === 'compartment' || !sbgnStyleRules['adjust-node-label-font-size-automatically']) {
+    return ele.data('labelsize');
+  }
+
   return getDynamicLabelTextSize(ele);
 };
 
 /*
  * calculates the dynamic label size for the given node
  */
-var getDynamicLabelTextSize = function (ele) {
+var getDynamicLabelTextSize = function (ele, dynamicLabelSizeCoefficient) {
   var dynamicLabelSize = sbgnStyleRules['dynamic-label-size'];
-  var dynamicLabelSizeCoefficient;
 
-  if (dynamicLabelSize == 'small') {
-    dynamicLabelSizeCoefficient = 0.75;
-  }
-  else if (dynamicLabelSize == 'regular') {
-    dynamicLabelSizeCoefficient = 1;
-  }
-  else if (dynamicLabelSize == 'large') {
-    dynamicLabelSizeCoefficient = 1.25;
+  if(dynamicLabelSizeCoefficient === undefined) {
+    if (dynamicLabelSize == 'small') {
+      dynamicLabelSizeCoefficient = 0.75;
+    }
+    else if (dynamicLabelSize == 'regular') {
+      dynamicLabelSizeCoefficient = 1;
+    }
+    else if (dynamicLabelSize == 'large') {
+      dynamicLabelSizeCoefficient = 1.25;
+    }
   }
 
   //This line will be useless and is to be removed later
@@ -168,4 +181,12 @@ var getDynamicLabelTextSize = function (ele) {
   var textHeight = parseInt(h / 2.45) * dynamicLabelSizeCoefficient;
 
   return textHeight;
+};
+
+var getCardinalityDistance = function(ele) {
+  var srcPos = ele.source().position();
+  var tgtPos = ele.target().position();
+
+  var distance = Math.sqrt( Math.pow( ( srcPos.x - tgtPos.x ), 2) + Math.pow( ( srcPos.y - tgtPos.y ), 2) );
+  return distance * 0.15;
 };

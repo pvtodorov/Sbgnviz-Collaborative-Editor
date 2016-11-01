@@ -2,14 +2,14 @@ var getCommonSBGNClass = function(elements){
   if(elements.length < 1){
     return "";
   }
-  
+
   var SBGNClassOfFirstElement = elements[0].data('sbgnclass');
   for(var i = 1; i < elements.length; i++){
     if(elements[i].data('sbgnclass') != SBGNClassOfFirstElement){
       return "";
     }
   }
-  
+
   return SBGNClassOfFirstElement;
 };
 
@@ -20,7 +20,7 @@ var allAreNode = function(elements){
       return false;
     }
   }
-  
+
   return true;
 };
 
@@ -31,7 +31,7 @@ var allAreEdge = function(elements){
       return false;
     }
   }
-  
+
   return true;
 };
 
@@ -42,7 +42,7 @@ var allCanHaveStateVariable = function(elements){
       return false;
     }
   }
-  
+
   return true;
 };
 
@@ -53,7 +53,7 @@ var allCanHaveUnitOfInformation = function(elements){
       return false;
     }
   }
-  
+
   return true;
 };
 
@@ -61,14 +61,14 @@ var getCommonStateAndInfos = function(elements){
   if(elements.length == 0){
     return [];
   }
-  
+
   var firstStateOrInfo = elements[0]._private.data.sbgnstatesandinfos;
   for(var i = 1; i <elements.length; i++){
     if(!_.isEqual(elements[i]._private.data.sbgnstatesandinfos, firstStateOrInfo)){
       return null;
     }
   }
-  
+
   return firstStateOrInfo;
 };
 
@@ -79,7 +79,7 @@ var allCanBeCloned = function(elements){
       return false;
     }
   }
-  
+
   return true;
 };
 
@@ -90,7 +90,7 @@ var allCanBeMultimer = function(elements){
       return false;
     }
   }
-  
+
   return true;
 };
 
@@ -98,14 +98,14 @@ var getCommonIsCloned = function(elements){
   if(elements.length == 0){
     return null;
   }
-  
+
   var firstElementIsCloned = elements[0].data('sbgnclonemarker');
   for(var i = 1; i < elements.length; i++){
     if(elements[i].data('sbgnclonemarker') != firstElementIsCloned){
       return null;
     }
   }
-  
+
   return firstElementIsCloned;
 };
 
@@ -113,14 +113,14 @@ var getCommonIsMultimer = function(elements){
   if(elements.length == 0){
     return null;
   }
-  
+
   var firstElementIsMultimer = elements[0].data('sbgnclass').endsWith(' multimer');
   for(var i = 1; i < elements.length; i++){
     if(elements[i].data('sbgnclass').endsWith(' multimer') != firstElementIsMultimer){
       return null;
     }
   }
-  
+
   return firstElementIsMultimer;
 };
 
@@ -128,14 +128,14 @@ var getCommonLabel = function(elements){
   if(elements.length == 0){
     return null;
   }
-  
+
   var labelOfFirstElement = elements[0].data('sbgnlabel');
   for(var i = 1; i < elements.length; i++){
     if(elements[i].data('sbgnlabel') != labelOfFirstElement){
       return null;
     }
   }
-  
+
   return labelOfFirstElement;
 };
 
@@ -143,14 +143,14 @@ var getCommonBorderColor = function(elements){
   if(elements.length == 0){
     return null;
   }
-  
+
   var borderColorOfFirstElement = elements[0].data('borderColor');
   for(var i = 1; i < elements.length; i++){
     if(elements[i].data('borderColor') != borderColorOfFirstElement){
       return null;
     }
   }
-  
+
   return borderColorOfFirstElement;
 };
 
@@ -158,14 +158,14 @@ var getCommonFillColor = function(elements){
   if(elements.length == 0){
     return null;
   }
-  
+
   var fillColorOfFirstElement = elements[0].css('background-color');
   for(var i = 1; i < elements.length; i++){
     if(elements[i].css('background-color') != fillColorOfFirstElement){
       return null;
     }
   }
-  
+
   return fillColorOfFirstElement;
 };
 
@@ -173,14 +173,14 @@ var getCommonBorderWidth = function(elements){
   if(elements.length == 0){
     return null;
   }
-  
+
   var borderWidthOfFirstElement = elements[0].css('border-width');
   for(var i = 1; i < elements.length; i++){
     if(elements[i].css('border-width') != borderWidthOfFirstElement){
       return null;
     }
   }
-  
+
   return borderWidthOfFirstElement;
 };
 
@@ -188,14 +188,14 @@ var getCommonBackgroundOpacity = function(elements){
   if(elements.length == 0){
     return null;
   }
-  
+
   var backgroundOpacityOfFirstElement = elements[0].data('backgroundOpacity');
   for(var i = 1; i < elements.length; i++){
     if(elements[i].data('backgroundOpacity') != backgroundOpacityOfFirstElement){
       return null;
     }
   }
-  
+
   return backgroundOpacityOfFirstElement;
 };
 
@@ -203,14 +203,14 @@ var getCommonLineColor = function(elements){
   if(elements.length == 0){
     return null;
   }
-  
+
   var lineColorOfFirstElement = elements[0].data('lineColor');
   for(var i = 1; i < elements.length; i++){
     if(elements[i].data('lineColor') != lineColorOfFirstElement){
       return null;
     }
   }
-  
+
   return lineColorOfFirstElement;
 };
 
@@ -218,14 +218,14 @@ var getCommonLineWidth = function(elements){
   if(elements.length == 0){
     return null;
   }
-  
+
   var lineWidthOfFirstElement = elements[0].css('width');
   for(var i = 1; i < elements.length; i++){
     if(elements[i].css('width') != lineWidthOfFirstElement){
       return null;
     }
   }
-  
+
   return lineWidthOfFirstElement;
 };
 
@@ -233,19 +233,26 @@ var getCommonSBGNCardinality = function(elements){
   if(elements.length == 0){
     return undefined;
   }
-  
+
   var cardinalityOfFirstElement = elements[0].data('sbgncardinality');
   for(var i = 1; i < elements.length; i++){
     if(elements[i].data('sbgncardinality') != cardinalityOfFirstElement){
       return undefined;
     }
   }
-  
+
   return cardinalityOfFirstElement;
 };
 
 var canHaveSBGNCardinality = function(ele) {
   return ele.data('sbgnclass') == 'consumption' || ele.data('sbgnclass') == 'production';
+};
+
+var canHaveSBGNLabel = function(ele) {
+  var sbgnclass = typeof ele === 'string' ? ele : ele.data('sbgnclass');
+
+  return sbgnclass != 'and' && sbgnclass != 'or' && sbgnclass != 'not'
+      && sbgnclass != 'association' && sbgnclass != 'dissociation' && !sbgnclass.endsWith('process');
 };
 
 var allCanHaveSBGNCardinality = function(elements){
@@ -254,7 +261,17 @@ var allCanHaveSBGNCardinality = function(elements){
       return false;
     }
   }
-  
+
+  return true;
+};
+
+var allCanHaveSBGNLabel = function(elements){
+  for(var i = 0; i < elements.length; i++){
+    if(!canHaveSBGNLabel(elements[i])){
+      return false;
+    }
+  }
+
   return true;
 };
 
@@ -262,14 +279,14 @@ var getCommonNodeWidth = function(elements){
   if(elements.length == 0){
     return null;
   }
-  
+
   var widthOfFirstElement = elements[0].width();
   for(var i = 1; i < elements.length; i++){
     if(elements[i].width() != widthOfFirstElement){
       return null;
     }
   }
-  
+
   return widthOfFirstElement;
 };
 
@@ -277,14 +294,14 @@ var getCommonNodeHeight = function(elements){
   if(elements.length == 0){
     return null;
   }
-  
+
   var heightOfFirstElement = elements[0].height();
   for(var i = 1; i < elements.length; i++){
-    if(elements[i].width() != heightOfFirstElement){
+    if(elements[i].height() != heightOfFirstElement){
       return null;
     }
   }
-  
+
   return heightOfFirstElement;
 };
 
@@ -301,28 +318,28 @@ var enableDragAndDropMode = function () {
 
 var disableDragAndDropMode = function () {
   window.dragAndDropModeEnabled = null;
-  window.nodeToDragAndDrop = null;
+  window.nodesToDragAndDrop = null;
   $("#sbgn-network-container canvas").removeClass("target-cursor");
   cy.autolock(false);
   cy.autounselectify(false);
 };
 
 var canHaveUnitOfInformation = function(sbgnclass) {
-   if (sbgnclass == 'simple chemical'
-          || sbgnclass == 'macromolecule' || sbgnclass == 'nucleic acid feature'
-          || sbgnclass == 'complex' || sbgnclass == 'simple chemical multimer'
-          || sbgnclass == 'macromolecule multimer' || sbgnclass == 'nucleic acid feature multimer'
-          || sbgnclass == 'complex multimer') {
+  if (sbgnclass == 'simple chemical'
+      || sbgnclass == 'macromolecule' || sbgnclass == 'nucleic acid feature'
+      || sbgnclass == 'complex' || sbgnclass == 'simple chemical multimer'
+      || sbgnclass == 'macromolecule multimer' || sbgnclass == 'nucleic acid feature multimer'
+      || sbgnclass == 'complex multimer') {
     return true;
   }
   return false;
 };
 
 var canHaveStateVariable = function(sbgnclass) {
-   if (sbgnclass == 'macromolecule' || sbgnclass == 'nucleic acid feature'
-          || sbgnclass == 'complex' 
-          || sbgnclass == 'macromolecule multimer' || sbgnclass == 'nucleic acid feature multimer'
-          || sbgnclass == 'complex multimer') {
+  if (sbgnclass == 'macromolecule' || sbgnclass == 'nucleic acid feature'
+      || sbgnclass == 'complex'
+      || sbgnclass == 'macromolecule multimer' || sbgnclass == 'nucleic acid feature multimer'
+      || sbgnclass == 'complex multimer') {
     return true;
   }
   return false;
@@ -330,8 +347,8 @@ var canHaveStateVariable = function(sbgnclass) {
 
 var mustBeSquare = function(sbgnclass) {
   return (sbgnclass.indexOf('process') != -1 || sbgnclass == 'source and sink'
-          || sbgnclass == 'and' || sbgnclass == 'or' || sbgnclass == 'not'
-          || sbgnclass == 'association' || sbgnclass == 'dissociation');
+  || sbgnclass == 'and' || sbgnclass == 'or' || sbgnclass == 'not'
+  || sbgnclass == 'association' || sbgnclass == 'dissociation');
 };
 
 var someMustNotBeSquare = function(nodes) {
@@ -341,22 +358,22 @@ var someMustNotBeSquare = function(nodes) {
       return true;
     }
   }
-  
+
   return false;
 };
 
-var isCollapsedOrParent = function(node) {
-  return (node.data('collapsedChildren') != null || ( node.children() && node.children().length > 0 ));
+var isParent = function(node) {
+  return ( node.children() && node.children().length > 0 );
 };
 
-var includesNotCollapsedNorParentElement = function(nodes) {
+var includesParentElement = function(nodes) {
   for (var i = 0; i < nodes.length; i++) {
     var node = nodes[i];
-    if ( !isCollapsedOrParent(node) ) {
+    if ( !isParent(node) ) {
       return true;
     }
   }
-  
+
   return false;
 };
 
@@ -391,18 +408,19 @@ var canBeMultimer = function (_sbgnclass) {
 var isEPNClass = function (_sbgnclass) {
   var sbgnclass = _sbgnclass.replace(" multimer", "");
   return (sbgnclass == 'unspecified entity'
-          || sbgnclass == 'simple chemical'
-          || sbgnclass == 'macromolecule'
-          || sbgnclass == 'nucleic acid feature'
-          || sbgnclass == 'complex');
+  || sbgnclass == 'simple chemical'
+  || sbgnclass == 'macromolecule'
+  || sbgnclass == 'nucleic acid feature'
+  || sbgnclass == 'complex');
 };
 
 var isPNClass = function (sbgnclass) {
   return (sbgnclass == 'process'
-          || sbgnclass == 'omitted process'
-          || sbgnclass == 'uncertain process'
-          || sbgnclass == 'association'
-          || sbgnclass == 'dissociation');
+  || sbgnclass == 'omitted process'
+  || sbgnclass == 'uncertain process'
+  || sbgnclass == 'association'
+  || sbgnclass == 'dissociation'
+  || sbgnclass == 'phenotype');
 };
 
 var isLogicalOperator = function (sbgnclass) {
@@ -411,4 +429,64 @@ var isLogicalOperator = function (sbgnclass) {
 
 var convenientToEquivalence = function (sbgnclass) {
   return (sbgnclass == 'tag' || sbgnclass == 'terminal');
+};
+
+var getCommonLabelFontSize = function(elements){
+  if(elements.length == 0){
+    return null;
+  }
+
+  var labelSizeOfFirstElement = elements[0].data('labelsize');
+  for(var i = 1; i < elements.length; i++){
+    if(elements[i].data('labelsize') != labelSizeOfFirstElement){
+      return null;
+    }
+  }
+
+  return labelSizeOfFirstElement;
+};
+
+var getCommonLabelFontFamily = function(elements){
+  if(elements.length == 0){
+    return null;
+  }
+
+  var fontFamilyOfFirstElement = elements[0].data('fontfamily');
+  for(var i = 1; i < elements.length; i++){
+    if(elements[i].data('fontfamily') != fontFamilyOfFirstElement){
+      return null;
+    }
+  }
+
+  return fontFamilyOfFirstElement;
+};
+
+var getCommonLabelFontWeight = function(elements){
+  if(elements.length == 0){
+    return null;
+  }
+
+  var fontWeightOfFirstElement = elements[0].data('fontweight');
+  for(var i = 1; i < elements.length; i++){
+    if(elements[i].data('fontweight') != fontWeightOfFirstElement){
+      return null;
+    }
+  }
+
+  return fontWeightOfFirstElement;
+};
+
+var getCommonLabelFontStyle = function(elements){
+  if(elements.length == 0){
+    return null;
+  }
+
+  var fontStyleOfFirstElement = elements[0].data('fontstyle');
+  for(var i = 1; i < elements.length; i++){
+    if(elements[i].data('fontstyle') != fontStyleOfFirstElement){
+      return null;
+    }
+  }
+
+  return fontStyleOfFirstElement;
 };

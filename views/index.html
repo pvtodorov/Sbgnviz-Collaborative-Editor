@@ -4,14 +4,24 @@
     <Head:>
         <meta name="viewport" content="width=device-width">
         <!--Css files-->
-        <link href="lib/css/jquery-ui-1.10.3.custom.css" rel="stylesheet">
+        <!-- jQuery UI -->
+        <link href="lib/css/jquery-ui.css" rel="stylesheet">
+        <!--<link href="../node_modules/jquery-ui-bundle/jquery-ui.css" rel="stylesheet">-->
         <link href="lib/css/jquery.fancybox-1.3.4.css" rel="stylesheet">
+
+        <!-- Loading Bootstrap -->
         <link href="lib/css/bootstrap.css" rel="stylesheet">
-        <link href="lib/css/cytoscape.js-panzoom.css" rel="stylesheet">
-        <link href="lib/css/font-awesome-4.0.3/css/font-awesome.css" rel="stylesheet">
-        <link href="lib/css/jquery.qtip.min.css" rel="stylesheet">
+
+        <!-- Loading cytoscape.js plugins -->
+        <link href="lib/css/cytoscape.js-panzoom.css" rel="stylesheet" type="text/css" />
+        <link href="lib/css/font-awesome-4.0.3/css/font-awesome.css" rel="stylesheet" type="text/css" />
+        <link href="lib/css/jquery.qtip.min.css" rel="stylesheet" type="text/css" />
+        <link href="node_modules/cytoscape-context-menus/cytoscape-context-menus.css" rel="stylesheet" type="text/css" />
+        <!--<link href="../node_modules/cytoscape-edge-bend-editing/cytoscape.js-edge-bend-editing.css" rel="stylesheet" type="text/css" />-->
+
+        <!-- Loading sample app css -->
         <link href="sample-app/sampleapp-components/css/sbgn-viz.css" rel="stylesheet">
-        <link href="../node_modules/cytoscape-edge-bend-editing/cytoscape.js-edge-bend-editing.css" rel="stylesheet" type="text/css" />
+        <!--Css for tabs-->
         <link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
 
         <Body:>
@@ -20,32 +30,92 @@
             <script src="sample-app/sampleapp-components/js/sample-app-global-variables.js"></script>
 
             <!-- External Libraries -->
-            <script src="lib/js/jquery-1.8.2.js"></script>
-            <script src="lib/js/jquery.fancybox-1.3.4.pack.js"></script>
-            <script src="lib/js/jquery.expander-min.js"></script>
-            <script src="lib/js/jquery.qtip.js"></script>
-            <script src="lib/js/bootstrap.min.js"></script>
-            <script src="lib/js/jquery-ui-1.10.3.custom.min.js"></script>
-            <script src="lib/js/underscore.js"></script>
+            <script src="node_modules/jquery/dist/jquery.js"></script>
+            <script src="node_modules/jquery.browser/dist/jquery.browser.js"></script>
+            <script src="lib/js/jquery.fancybox-1.3.4.js"></script>
+            <script src="node_modules/jquery-expander/jquery.expander.js"></script>
+            <script src="node_modules/qtip2/dist/jquery.qtip.js"></script>
+            <script src="node_modules/bootstrap/dist/js/bootstrap.js"></script>
+            <script src="node_modules/jquery-ui-bundle/jquery-ui.js"></script>
+            <script src="node_modules/underscore/underscore.js"></script>
+            <script src="node_modules/backbone/backbone.js"></script>
             <script src="lib/js/cytoscape.js"></script>
-            <script src="lib/js/cytoscape.js-panzoom.js"></script>
-            <script src="lib/js/cytoscape.js-qtip.js"></script>
+            <script src="node_modules/cytoscape-panzoom/cytoscape-panzoom.js"></script>
+            <script src="node_modules/cytoscape-qtip/cytoscape-qtip.js"></script>
             <script src="lib/js/cytoscape-edgehandles.js"></script>
-            <script src="lib/js/cytoscape-noderesize.js"></script>
-
-            <script src="lib/js/FileSaver.js"></script>
+            <script src="node_modules/filesaverjs/FileSaver.js"></script>
             <script src="lib/js/jquery.noty.packaged.min.js"></script>
-            <script src="lib/js/socket.io.js"></script>
-
-
+            <script src="node_modules/mousetrap/mousetrap.min.js"></script>
+            <script src="node_modules/ocanvas/build/dist/latest/ocanvas.min.js"></script>
             <script src="node_modules/cytoscape-cose-bilkent/cytoscape-cose-bilkent.js"></script>
             <script src="node_modules/cytoscape-undo-redo/cytoscape-undo-redo.js"></script>
             <script src="node_modules/cytoscape-clipboard/cytoscape-clipboard.js"></script>
+            <script src="node_modules/cytoscape-context-menus/cytoscape-context-menus.js"></script>
             <script src="node_modules/cytoscape-expand-collapse/cytoscape-expand-collapse.js"></script>
             <script src="node_modules/cytoscape-edge-bend-editing/cytoscape-edge-bend-editing.js"></script>
             <script src="node_modules/cytoscape-view-utilities/cytoscape-view-utilities.js"></script>
             <script src="node_modules/cytoscape-grid-guide/cytoscape-grid-guide.js"></script>
+            <script src="node_modules/cytoscape-node-resize/cytoscape-node-resize.js"></script>
+            <script src="node_modules/cytoscape-autopan-on-drag/cytoscape-autopan-on-drag.js"></script>
 
+            <script src="lib/js/socket.io.js"></script>
+
+            <!-- External Libraries -->
+            <!--<script src="lib/js/jquery-1.8.2.js"></script>-->
+
+
+            <!--<script src="lib/js/jquery.qtip.js"></script>-->
+            <!--<script src="lib/js/bootstrap.min.js"></script>-->
+            <!--<script src="lib/js/jquery-ui-1.10.3.custom.min.js"></script>-->
+            <!--<script src="node_modules/underscore/underscore.js"></script>-->
+
+            <!--<script src="lib/js/underscore.js"></script>-->
+
+            <!--<script src="../node_modules/jquery/dist/jquery.js"></script>-->
+            <!--<script src="../node_modules/jquery.browser/dist/jquery.browser.js"></script>-->
+            <!--<script src="../lib/js/jquery.fancybox-1.3.4.js"></script>-->
+            <!--<script src="../node_modules/jquery-expander/jquery.expander.js"></script>-->
+            <!--<script src="../node_modules/qtip2/dist/jquery.qtip.js"></script>-->
+            <!--<script src="../node_modules/bootstrap/dist/js/bootstrap.js"></script>-->
+            <!--<script src="../node_modules/jquery-ui-bundle/jquery-ui.js"></script>-->
+            <!--<script src="../node_modules/underscore/underscore.js"></script>-->
+            <!--<script src="../node_modules/backbone/backbone.js"></script>-->
+            <!---->
+            <!--<script src="lib/js/cytoscape.js"></script>-->
+            <!--&lt;!&ndash;<script src="lib/js/cytoscape.js-qtip.js"></script>&ndash;&gt;-->
+            <!--<script src="lib/js/cytoscape-edgehandles.js"></script>-->
+
+
+            <!--<script src="lib/js/jquery.noty.packaged.min.js"></script>-->
+            <!--<script src="lib/js/socket.io.js"></script>-->
+
+            <!--<script src="node_modules/jquery/dist/jquery.js"></script>-->
+            <!--<script src="node_modules/jquery.browser/dist/jquery.browser.js"></script>-->
+            <!--<script src="lib/js/jquery.fancybox-1.3.4.js"></script>-->
+            <!--<script src="node_modules/jquery-expander/jquery.expander.js"></script>-->
+            <!--<script src="node_modules/qtip2/dist/jquery.qtip.js"></script>-->
+            <!--<script src="node_modules/bootstrap/dist/js/bootstrap.js"></script>-->
+            <!--<script src="node_modules/jquery-ui-bundle/jquery-ui.js"></script>-->
+
+
+            <!--&lt;!&ndash;<script src="node_modules/backbone/backbone.js"></script>&ndash;&gt;-->
+            <!--<script src="node_modules/cytoscape-cose-bilkent/cytoscape-cose-bilkent.js"></script>-->
+            <!--<script src="node_modules/cytoscape-undo-redo/cytoscape-undo-redo.js"></script>-->
+            <!--<script src="node_modules/cytoscape-clipboard/cytoscape-clipboard.js"></script>-->
+            <!--<script src="node_modules/cytoscape-expand-collapse/cytoscape-expand-collapse.js"></script>-->
+            <!--<script src="node_modules/cytoscape-edge-bend-editing/cytoscape-edge-bend-editing.js"></script>-->
+            <!--<script src="node_modules/cytoscape-view-utilities/cytoscape-view-utilities.js"></script>-->
+            <!--<script src="node_modules/cytoscape-grid-guide/cytoscape-grid-guide.js"></script>-->
+            <!--<script src="node_modules/cytoscape-autopan-on-drag/cytoscape-autopan-on-drag.js"></script>-->
+            <!--<script src="node_modules/cytoscape-context-menus/cytoscape-context-menus.js"></script>-->
+
+            <!--<script src="node_modules/filesaverjs/FileSaver.js"></script>-->
+
+
+            <!--<script src="node_modules/mousetrap/mousetrap.min.js"></script>-->
+            <!--<script src="node_modules/ocanvas/build/dist/latest/ocanvas.min.js"></script>-->
+            <!--<script src="node_modules/cytoscape-cose-bilkent/cytoscape-cose-bilkent.js"></script>-->
+            <!--<script src="node_modules/cytoscape-node-resize/cytoscape-node-resize.js"></script>-->
 
 
             <!--Core SBGNViz components-->
@@ -58,8 +128,12 @@
             <script src="src/utilities/inspector-utilities.js"></script>
             <script src="src/utilities/sbgn-filtering.js"></script>
             <script src="src/utilities/sbgn-element-utilities.js"></script>
+            <script src="src/utilities/fancybox-utilities.js"></script>
+            <script src="src/utilities/dialog-utilities.js"></script>
+            <script src="src/utilities/number-input-utilities.js"></script>
 
 
+            <script src="sample-app/sampleapp-components/js/biogene-info.js"></script>
             <script src="sample-app/sampleapp-components/js/sample-app-mode-handler.js"></script>
             <script src="sample-app/sampleapp-components/js/general-sample-app-functions.js"></script>
             <script src="sample-app/sampleapp-components/js/sample-app-helper-functions.js"></script>
@@ -504,7 +578,21 @@
                 <!-- grid properties table will be shown here -->
             </div>
 
-            <div id="biogene-container" style="display: none">
+
+            <div id="font-properties-table" title="Font Properties" >
+                <!-- font properties table will be shown here -->
+            </div>
+
+            <!--<div id="biogene-container" style="display: none">-->
+            <!--</div>-->
+
+
+            <div id="reaction-template-table" title="Template">
+                <!-- paths between query table will be shown here -->
+            </div>
+
+            <div id="sbgn-prompt-save-table" title="Save">
+                <!-- sbgn layout table will be shown here -->
             </div>
 
             <div id="query-pathsbetween-table" title="Paths Between Query Parameters">
@@ -983,7 +1071,67 @@
                 Right click to a node to see its detailed information
             </script>
 
+            <script type="text/template" id="font-properties-template">
+                <table class="table-condensed layout-table">
 
+                    <tr>
+                        <td>
+                            <span class="add-on layout-text"> Font Family </span>
+                        </td>
+
+                        <td>
+                            <%= getFontFamilyHtml() %>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <span class="add-on layout-text"> Font Size </span>
+                        </td>
+                        <td>
+                            <input id="font-properties-font-size" type="text" min="1" class="input-small layout-text integer-input" value= <%= fontSize %> >
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <span class="add-on layout-text"> Font Weight </span>
+                        </td>
+
+                        <td>
+                            <select id="font-properties-select-font-weight" class='input-medium layout-text' name="font-weight-select">
+                                <option id="font-properties-font-weight-none" value="" <% if (fontWeight == ''){ %> selected<%}%> >  </option>
+                                <option id="font-properties-font-weight-lighter" value="lighter" <% if (fontWeight == 'lighter'){ %> selected<%}%> > Lighter </option>
+                                <option id="font-properties-font-weight-normal" value="normal" <% if (fontWeight == 'normal'){ %> selected<%}%> > Normal </option>
+                                <option id="font-properties-font-weight-bold" value="bold" <% if (fontWeight == 'bold'){ %> selected<%}%> > Bold </option>
+                                <option id="font-properties-font-weight-bolder" value="bolder" <% if (fontWeight == 'bolder'){ %> selected<%}%> > Bolder </option>
+                            </select>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <span class="add-on layout-text"> Font Type </span>
+                        </td>
+
+                        <td>
+                            <select id="font-properties-select-font-style" class='input-medium layout-text' name="font-style-select">
+                                <option id="font-properties-font-style-none" value="" <% if (fontStyle == ''){ %> selected<%}%> >  </option>
+                                <option id="font-properties-font-style-normal" value="normal" <% if (fontStyle == 'normal'){ %> selected<%}%> > Normal </option>
+                                <option id="font-properties-font-style-italic" value="italic" <% if (fontStyle == 'italic'){ %> selected<%}%> > Italic </option>
+                                <option id="font-properties-font-style-oblique" value="oblique" <% if (fontStyle == 'oblique'){ %> selected<%}%> > Oblique </option>
+                            </select>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td colspan=2 align="center">
+                            <button id="set-font-properties" class="btn btn-default" >Set</button>
+                        </td>
+                    </tr>
+
+                </table>
+            </script>
 
 
 

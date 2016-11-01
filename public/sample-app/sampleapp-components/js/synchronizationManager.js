@@ -908,23 +908,4 @@ module.exports.changeBendPoints = function(param){
 
 }
 
-module.exports.refreshGlobalUndoRedoButtonsStatus = function(){
-
-    if (!module.exports.modelManager.isUndoPossible()) {
-        $("#undo-last-action-global").parent("li").addClass("disabled");
-    }
-    else {
-        $("#undo-last-action-global").html("Undo " +  module.exports.modelManager.getUndoActionStr());
-        $("#undo-last-action-global").parent("li").removeClass("disabled");
-    }
-
-    if (!module.exports.modelManager.isRedoPossible()) {
-        $("#redo-last-action-global").parent("li").addClass("disabled");
-    }
-    else {
-        $("#redo-last-action-global").html("Redo " +  module.exports.modelManager.getRedoActionStr());
-        $("#redo-last-action-global").parent("li").removeClass("disabled");
-    }
-
-}
 

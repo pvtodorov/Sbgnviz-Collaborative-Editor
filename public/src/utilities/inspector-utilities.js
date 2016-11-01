@@ -1,4 +1,17 @@
+//FUNDA WARNING!
+//Add sample-app/ to folder links
+//Entrez-gene not collapsed: class "collapse in"
+//
+
 var inspectorUtilities = {};
+
+// Define inspectorUtilities.fontProperties on document ready
+$(document).ready(function () {
+  inspectorUtilities.fontProperties = new FontProperties({
+    el: '#font-properties-table'
+  });
+});
+
 inspectorUtilities.relocateStateAndInfos = function (stateAndInfos) {
   var length = stateAndInfos.length;
   if (length == 0) {
@@ -58,7 +71,7 @@ inspectorUtilities.fillInspectorStateAndInfos = function (nodes, stateAndInfos, 
       $(".inspector-state-variable-value").unbind('change').on('change', function () {
         var param = {
           state: $(this).data("state"),
-          valueOrVariable: $(this).attr('value'),
+          valueOrVariable: $(this).val(),
           type: 'value',
           nodes: nodes,
           stateAndInfos: stateAndInfos,
@@ -71,7 +84,7 @@ inspectorUtilities.fillInspectorStateAndInfos = function (nodes, stateAndInfos, 
       $(".inspector-state-variable-variable").unbind('change').on('change', function () {
         var param = {
           state: $(this).data("state"),
-          valueOrVariable: $(this).attr('value'),
+          valueOrVariable: $(this).val(),
           type: 'variable',
           nodes: nodes,
           stateAndInfos: stateAndInfos,
@@ -90,7 +103,7 @@ inspectorUtilities.fillInspectorStateAndInfos = function (nodes, stateAndInfos, 
       $(".inspector-unit-of-information-label").unbind('change').on('change', function () {
         var param = {
           state: $(this).data("state"),
-          text: $(this).attr('value'),
+          text: $(this).val(),
           stateAndInfos: stateAndInfos,
           nodes: nodes,
           width: width
@@ -126,8 +139,8 @@ inspectorUtilities.fillInspectorStateAndInfos = function (nodes, stateAndInfos, 
       variable: ""
     };
     obj.bbox = {
-      w: 69,
-      h: 28
+      w: 53,
+      h: 18
     };
     var param = {
       obj: obj,
@@ -193,14 +206,14 @@ inspectorUtilities.handleSBGNInspector = function () {
       classInfo = classInfo.replace(' Not ', ' not ');
     }
 
-    var title = classInfo=="" ? "Properties":classInfo + " Properties";
+    var title = classInfo=="" ? "Visual Properties":classInfo + " Visual Properties";
 
     var buttonwidth = width;
     if (buttonwidth > 50) {
       buttonwidth = 50;
     }
 
-    var html = "<div style='text-align: center; color: black; font-weight: bold; margin-bottom: 5px;'>" + title + "</div><table cellpadding='0' cellspacing='0'>";
+    var html = "<div width='100%' style='text-align: center; color: black; font-weight: bold; margin-bottom: 5px;'>" + title + "</div><table cellpadding='0' cellspacing='0' width='100%' align= 'center'>";
     var type;
     var fillStateAndInfos;
     var multimerCheck;
@@ -228,13 +241,15 @@ inspectorUtilities.handleSBGNInspector = function () {
 
       var nodeHeight = getCommonNodeHeight(selectedEles);
 
-      html += "<tr><td style='width: " + width + "px; text-align:right; padding-right: 5px;'>" + "<font size='2'>Label</font>" + "</td><td style='padding-left: 5px;'>"
-          + "<input id='inspector-label' class='inspector-input-box' type='text' style='width: " + width / 1.25 + "px;' value='" + sbgnlabel
-          + "'/>" + "</td></tr>";
+      if (allCanHaveSBGNLabel(selectedEles)) {
+        html += "<tr><td style='width: " + width + "px; text-align:right; padding-right: 5px;'>" + "<font class='sbgn-label-font'>Label</font>" + "</td><td style='padding-left: 5px;'>"
+            + "<input id='inspector-label' class='inspector-input-box' type='text' style='width: " + width / 1.25 + "px;' value='" + sbgnlabel
+            + "'/>" + "</td></tr>";
+      }
 
-      if( includesNotCollapsedNorParentElement(selectedEles) ) {
-        html += "<tr><td style='width: " + width + "px; text-align:right; padding-right: 5px;'>" + "<font size='2'>Width</font>" + "</td><td style='padding-left: 5px;'>"
-            + "<input id='inspector-node-width' class='inspector-input-box' type='number' step='0.01' min='0' style='width: " + buttonwidth + "px;'";
+      if( includesParentElement(selectedEles) ) {
+        html += "<tr><td style='width: " + width + "px; text-align:right; padding-right: 5px;'>" + "<font class='sbgn-label-font'>Width</font>" + "</td><td style='padding-left: 5px;'>"
+            + "<input id='inspector-node-width' class='inspector-input-box float-input' type='text' min='0' style='width: " + buttonwidth + "px;'";
 
         if (nodeWidth) {
           html += " value='" + nodeWidth + "'";
@@ -242,8 +257,8 @@ inspectorUtilities.handleSBGNInspector = function () {
 
         html += "/>" + "</td></tr>";
 
-        html += "<tr><td style='width: " + width + "px; text-align:right; padding-right: 5px;'>" + "<font size='2'>Height</font>" + "</td><td style='padding-left: 5px;'>"
-            + "<input id='inspector-node-height' class='inspector-input-box' type='number' step='0.01' min='0' style='width: " + buttonwidth + "px;'";
+        html += "<tr><td style='width: " + width + "px; text-align:right; padding-right: 5px;'>" + "<font class='sbgn-label-font'>Height</font>" + "</td><td style='padding-left: 5px;'>"
+            + "<input id='inspector-node-height' class='inspector-input-box float-input' type='text' min='0' style='width: " + buttonwidth + "px;'";
 
         if (nodeHeight) {
           html += " value='" + nodeHeight + "'";
@@ -254,13 +269,13 @@ inspectorUtilities.handleSBGNInspector = function () {
         if( someMustNotBeSquare(selectedEles) ) {
           var imageName;
           var title;
-          if(window.inspectorNodeSizeUseAspectRatio) {
+          if(window.nodeResizeUseAspectRatio) {
             imageName = "lock.png";
-            title = "lock aspect ratio";
+            title = "unlock aspect ratio";
           }
           else {
             imageName = "open-lock.png";
-            title = "unlock aspect ratio";
+            title = "lock aspect ratio";
           }
 
           html += "<img id='inspector-node-sizes-aspect-ratio' style='vertical-align: top; margin-left: 5px;' src='sample-app/sampleapp-images/";
@@ -278,14 +293,14 @@ inspectorUtilities.handleSBGNInspector = function () {
       }
 
 
-      html += "<tr><td style='width: " + width + "px; text-align:right; padding-right: 5px;'>" + "<font size='2'>Border Color</font>" + "</td><td style='padding-left: 5px;'>"
+      html += "<tr><td style='width: " + width + "px; text-align:right; padding-right: 5px;'>" + "<font class='sbgn-label-font'>Border Color</font>" + "</td><td style='padding-left: 5px;'>"
           + "<input id='inspector-border-color' class='inspector-input-box' type='color' style='width: " + buttonwidth + "px;' value='" + borderColor
           + "'/>" + "</td></tr>";
-      html += "<tr><td style='width: " + width + "px; text-align:right; padding-right: 5px;'>" + "<font size='2'>Fill Color</font>" + "</td><td style='padding-left: 5px;'>"
+      html += "<tr><td style='width: " + width + "px; text-align:right; padding-right: 5px;'>" + "<font class='sbgn-label-font'>Fill Color</font>" + "</td><td style='padding-left: 5px;'>"
           + "<input id='inspector-fill-color' class='inspector-input-box' type='color' style='width: " + buttonwidth + "px;' value='" + backgroundColor
           + "'/>" + "</td></tr>";
-      html += "<tr><td style='width: " + width + "px; text-align:right; padding-right: 5px;'>" + "<font size='2'>Border Width</font>" + "</td><td style='padding-left: 5px;'>"
-          + "<input id='inspector-border-width' class='inspector-input-box' type='number' step='0.01' min='0' style='width: " + buttonwidth + "px;'";
+      html += "<tr><td style='width: " + width + "px; text-align:right; padding-right: 5px;'>" + "<font class='sbgn-label-font'>Border Width</font>" + "</td><td style='padding-left: 5px;'>"
+          + "<input id='inspector-border-width' class='inspector-input-box float-input' type='text' min='0' style='width: " + buttonwidth + "px;'";
 
       if(borderWidth){
         html += " value='" + parseFloat(borderWidth) + "'";
@@ -293,9 +308,15 @@ inspectorUtilities.handleSBGNInspector = function () {
 
       html += "/>" + "</td></tr>";
 
-      html += "<tr><td style='width: " + width + "px; text-align:right; padding-right: 5px;'>" + "<font size='2'>Fill Opacity</font>" + "</td><td style='padding-left: 5px;'>"
+      html += "<tr><td style='width: " + width + "px; text-align:right; padding-right: 5px;'>" + "<font class='sbgn-label-font'>Fill Opacity</font>" + "</td><td style='padding-left: 5px;'>"
           + "<input id='inspector-background-opacity' class='inspector-input-box' type='range' step='0.01' min='0' max='1' style='width: " + buttonwidth + "px;' value='" + parseFloat(backgroundOpacity)
           + "'/>" + "</td></tr>";
+
+      if (allCanHaveSBGNLabel(selectedEles)) {
+        html += "<tr><td style='width: " + width + "px; text-align:right; padding-right: 5px;'>" + "<font class='sbgn-label-font'>Font</font>" + "</td><td style='padding-left: 5px;'>"
+            + "<label id='inspector-font' class='inspector-input-box' style='width: " + buttonwidth + "px;'>"
+            + "..." + "<label/>" + "</td></tr>";
+      }
 
       commonStateAndInfos = getCommonStateAndInfos(selectedEles);
 
@@ -303,16 +324,16 @@ inspectorUtilities.handleSBGNInspector = function () {
         if (allCanHaveStateVariable(selectedEles)) {
           fillStateAndInfos = true;
 
-          html += "<tr><td colspan='2'><hr style='padding: 0px; margin-top: 5px; margin-bottom: 5px;' width='" + $("#sbgn-inspector").width() + "'></td></tr>";
-          html += "<tr><td style='width: " + width + "px; text-align:right; padding-right: 5px;'>" + "<font size='2'>State Variables</font>" + "</td>"
+          html += "<tr><td colspan='2'><hr class='inspector-divider'></td></tr>";
+          html += "<tr><td style='width: " + width + "px; text-align:right; padding-right: 5px;'>" + "<font class='sbgn-label-font'>State Variables</font>" + "</td>"
               + "<td id='inspector-state-variables' style='padding-left: 5px; width: '" + width + "'></td></tr>";
         }
 
         if (allCanHaveUnitOfInformation(selectedEles)) {
           fillStateAndInfos = true;
 
-          html += "<tr><td colspan='2'><hr style='padding: 0px; margin-top: 5px; margin-bottom: 5px;' width='" + $("#sbgn-inspector").width() + "'></td></tr>";
-          html += "<tr><td style='width: " + width + "px; text-align:right; padding-right: 5px;'>" + "<font size='2'>Units of Information</font>" + "</td>"
+          html += "<tr><td colspan='2'><hr class='inspector-divider'></td></tr>";
+          html += "<tr><td style='width: " + width + "px; text-align:right; padding-right: 5px;'>" + "<font class='sbgn-label-font'>Units of Information</font>" + "</td>"
               + "<td id='inspector-unit-of-informations' style='padding-left: 5px; width: '" + width + "'></td></tr>";
         }
       }
@@ -328,16 +349,16 @@ inspectorUtilities.handleSBGNInspector = function () {
       clonedCheck = clonedCheck?clonedCheck:false;
 
       if (multimerCheck || clonedCheck) {
-        html += "<tr><td colspan='2'><hr style='padding: 0px; margin-top: 5px; margin-bottom: 5px;' width='" + $("#sbgn-inspector").width() + "'></td></tr>";
+        html += "<tr><td colspan='2'><hr class='inspector-divider'></td></tr>";
       }
 
       if (multimerCheck) {
-        html += "<tr><td style='width: " + width + "px; text-align:right; padding-right: 5px;'>" + "<font size='2'>Multimer</font>" + "</td>"
+        html += "<tr><td style='width: " + width + "px; text-align:right; padding-right: 5px;'>" + "<font class='sbgn-label-font'>Multimer</font>" + "</td>"
             + "<td style='padding-left: 5px; width: '" + width + "'><input type='checkbox' id='inspector-is-multimer'></td></tr>";
       }
 
       if (clonedCheck) {
-        html += "<tr><td style='width: " + width + "px; text-align:right; padding-right: 5px;'>" + "<font size='2'>Cloned</font>" + "</td>"
+        html += "<tr><td style='width: " + width + "px; text-align:right; padding-right: 5px;'>" + "<font class='sbgn-label-font'>Cloned</font>" + "</td>"
             + "<td style='padding-left: 5px; width: '" + width + "'><input type='checkbox' id='inspector-is-clone-marker'></td></tr>";
       }
     }
@@ -349,12 +370,12 @@ inspectorUtilities.handleSBGNInspector = function () {
 
       var commonLineWidth = getCommonLineWidth(selectedEles);
 
-      html += "<tr><td style='width: " + width + "px; text-align:right; padding-right: 5px;'>" + "<font size='2'>Fill Color</font>" + "</td><td style='padding-left: 5px;'>"
+      html += "<tr><td style='width: " + width + "px; text-align:right; padding-right: 5px;'>" + "<font class='sbgn-label-font'>Fill Color</font>" + "</td><td style='padding-left: 5px;'>"
           + "<input id='inspector-line-color' class='inspector-input-box' type='color' style='width: " + buttonwidth + "px;' value='" + commonLineColor
           + "'/>" + "</td></tr>";
 
-      html += "<tr><td style='width: " + width + "px; text-align:right; padding-right: 5px;'>" + "<font size='2'>Width</font>" + "</td><td style='padding-left: 5px;'>"
-          + "<input id='inspector-width' class='inspector-input-box' type='number' step='0.01' min='0' style='width: " + buttonwidth + "px;'";
+      html += "<tr><td style='width: " + width + "px; text-align:right; padding-right: 5px;'>" + "<font class='sbgn-label-font'>Width</font>" + "</td><td style='padding-left: 5px;'>"
+          + "<input id='inspector-width' class='inspector-input-box float-input' type='text' min='0' style='width: " + buttonwidth + "px;'";
 
       if(commonLineWidth){
         html += " value='" + parseFloat(commonLineWidth) + "'";
@@ -369,22 +390,47 @@ inspectorUtilities.handleSBGNInspector = function () {
         if (cardinality <= 0) {
           cardinality = undefined;
         }
-        html += "<tr><td style='width: " + width + "px; text-align:right; padding-right: 5px;'>" + "<font size='2'>Cardinality</font>" + "</td><td style='padding-left: 5px;'>"
-            + "<input id='inspector-cardinality' class='inspector-input-box' type='number' min='0' step='1' style='width: " + buttonwidth + "px;' value='" + cardinality
-            + "'/>" + "</td></tr>";
+        html += "<tr><td style='width: " + width + "px; text-align:right; padding-right: 5px;'>" + "<font class='sbgn-label-font'>Cardinality</font>" + "</td><td style='padding-left: 5px;'>"
+            + "<input id='inspector-cardinality' class='inspector-input-box integer-input' type='text' min='0' style='width: " + buttonwidth + "px;'";
+
+        if(cardinality != null) {
+          html += "value='" + cardinality + "'/>";
+        }
+
+        html += "</td></tr>";
       }
 
     }
     html += "</table>";
 
     if(selectedEles.length == 1){
+      var setAsDefaultTitle = "Set as Default for " + classInfo;
       html += "<div style='text-align: center; margin-top: 5px;'><button style='align: center;' id='inspector-set-as-default-button'"
-          + ">Set as Default</button></div>";
+          + ">" + setAsDefaultTitle + "</button></div>";
     }
 
-    html += "<hr style='padding: 0px; margin-top: 5px; margin-bottom: 5px;' width='" + $("#sbgn-inspector").width() + "'>";
-//    html += "<button type='button' style='display: block; margin: 0 auto;' class='btn btn-default' id='inspector-apply-button'>Apply Changes</button>";
+    html += "<hr class='inspector-divider' style='border-width: 3px;'>";
+
+    if (selectedEles.length === 1) {
+      var geneClass = selectedEles[0]._private.data.sbgnclass;
+
+      if (geneClass === 'macromolecule' || geneClass === 'nucleic acid feature' ||
+          geneClass === 'unspecified entity') {
+
+        html += "<div style='align: center;text-align: center;'><a style='color: black; font-weight: bold;' class='accordion-toggle collapsed' data-toggle='collapse' data-target='#biogene-collapsable'>Properties from EntrezGene</a></div>"
+
+        html += "<div style='margin-top: 5px;align: center;text-align: center;' id='biogene-collapsable' class='collapse in'>";
+        html += "<div style='padding-left: 3px;' id='biogene-title'></div>";
+        html += "<div id='biogene-container'></div>";
+        html += "</div>";
+        html += "<hr class='inspector-divider'>";
+      }
+    }
+
     $("#sbgn-inspector").html(html);
+    if(selectedEles.length === 1) {
+      fillBioGeneContainer(selectedEles[0]);
+    }
 
     if (type == "node") {
       if (fillStateAndInfos) {
@@ -418,13 +464,17 @@ inspectorUtilities.handleSBGNInspector = function () {
         defaults['border-width'] = selected.css('border-width');
         defaults['border-color'] = selected.data('borderColor');
         defaults['background-color'] = selected.css('background-color');
-        defaults['font-size'] = selected.css('font-size');
+//        defaults['font-size'] = selected.css('font-size');
         defaults['background-opacity'] = selected.css('background-opacity');
+        defaults.labelsize = selected.data('labelsize');
+        defaults.fontfamily = selected.data('fontfamily');
+        defaults.fontweight = selected.data('fontweight');
+        defaults.fontstyle = selected.data('fontstyle');
       });
 
-      $("#inspector-node-width, #inspector-node-height").bind('change').on('change', function () {
-        var w = parseFloat($("#inspector-node-width").attr("value"));
-        var h = parseFloat($("#inspector-node-height").attr("value"));
+      $("#inspector-node-width, #inspector-node-height").change( function () {
+        var w = parseFloat($("#inspector-node-width").val());
+        var h = parseFloat($("#inspector-node-height").val());
 
         if( $(this).attr('id') === 'inspector-node-width' ) {
           h = undefined;
@@ -433,7 +483,7 @@ inspectorUtilities.handleSBGNInspector = function () {
           w = undefined;
         }
 
-        var useAspectRatio = window.inspectorNodeSizeUseAspectRatio;
+        var useAspectRatio = window.nodeResizeUseAspectRatio;
 
         var param = {
           nodes: selectedEles,
@@ -447,29 +497,31 @@ inspectorUtilities.handleSBGNInspector = function () {
       });
 
       $('#inspector-node-sizes-aspect-ratio').on('click', function() {
-        if(window.inspectorNodeSizeUseAspectRatio == null) {
-          window.inspectorNodeSizeUseAspectRatio = false;
+        if(window.nodeResizeUseAspectRatio == null) {
+          window.nodeResizeUseAspectRatio = false;
         }
 
-        window.inspectorNodeSizeUseAspectRatio = !window.inspectorNodeSizeUseAspectRatio;
+        window.nodeResizeUseAspectRatio = !window.nodeResizeUseAspectRatio;
 
         // refresh image
-        if (window.inspectorNodeSizeUseAspectRatio) {
+        if (window.nodeResizeUseAspectRatio) {
           imageName = "lock.png";
-          title = "lock aspect ratio";
+          title = "unlock aspect ratio";
         }
         else {
           imageName = "open-lock.png";
-          title = "unlock aspect ratio";
+          title = "lock aspect ratio";
         }
 
         $(this).attr('src', 'sample-app/sampleapp-images/' + imageName);
         $(this).attr('title', title);
+
+        cy.style().update();
       });
 
       $('#inspector-is-multimer').on('click', function () {
         var param = {
-          makeMultimer: $('#inspector-is-multimer').attr('checked') == 'checked',
+          makeMultimer: $('#inspector-is-multimer').prop('checked'),
           nodes: selectedEles,
           firstTime: true
         };
@@ -479,7 +531,7 @@ inspectorUtilities.handleSBGNInspector = function () {
 
       $('#inspector-is-clone-marker').on('click', function () {
         var param = {
-          makeCloneMarker: $('#inspector-is-clone-marker').attr('checked') == 'checked',
+          makeCloneMarker: $('#inspector-is-clone-marker').prop('checked'),
           nodes: selectedEles,
           firstTime: true
         };
@@ -490,7 +542,7 @@ inspectorUtilities.handleSBGNInspector = function () {
       $("#inspector-border-color").on('change', function () {
         var param = {
           eles: selectedEles,
-          data: $("#inspector-border-color").attr("value"),
+          data: $("#inspector-border-color").val(),
           dataType: "borderColor",
           firstTime: true
         };
@@ -501,7 +553,7 @@ inspectorUtilities.handleSBGNInspector = function () {
       $("#inspector-label").on('change', function () {
         var param = {
           nodes: selectedEles,
-          sbgnlabel: $(this).attr('value'),
+          sbgnlabel: $(this).val(),
           firstTime: true
         };
 
@@ -511,7 +563,7 @@ inspectorUtilities.handleSBGNInspector = function () {
       $("#inspector-background-opacity").on('change', function () {
         var param = {
           eles: selectedEles,
-          data: $("#inspector-background-opacity").attr("value"),
+          data: $("#inspector-background-opacity").val(),
           dataType: "backgroundOpacity",
           firstTime: true
         };
@@ -522,7 +574,7 @@ inspectorUtilities.handleSBGNInspector = function () {
       $("#inspector-fill-color").on('change', function () {
         var param = {
           eles: selectedEles,
-          data: $("#inspector-fill-color").attr("value"),
+          data: $("#inspector-fill-color").val(),
           dataType: "background-color",
           firstTime: true
         };
@@ -530,15 +582,19 @@ inspectorUtilities.handleSBGNInspector = function () {
         cy.undoRedo().do("changeStyleCss", param);
       });
 
-      $("#inspector-border-width").bind('change').on('change', function () {
+      $("#inspector-border-width").change( function () {
         var param = {
           eles: selectedEles,
-          data: $("#inspector-border-width").attr("value"),
+          data: $("#inspector-border-width").val(),
           dataType: "border-width",
           firstTime: true
         };
 
         cy.undoRedo().do("changeStyleCss", param);
+      });
+
+      $("#inspector-font").on('click', function () {
+        inspectorUtilities.fontProperties.render(selectedEles);
       });
     }
     else {
@@ -554,7 +610,7 @@ inspectorUtilities.handleSBGNInspector = function () {
       $("#inspector-line-color").on('change', function () {
         var param = {
           eles: selectedEles,
-          data: $("#inspector-line-color").attr("value"),
+          data: $("#inspector-line-color").val(),
           dataType: "lineColor",
           firstTime: true
         };
@@ -562,8 +618,8 @@ inspectorUtilities.handleSBGNInspector = function () {
         cy.undoRedo().do("changeStyleData", param);
       });
 
-      $("#inspector-cardinality").bind('change').on('change', function () {
-        var data = Math.round($("#inspector-cardinality").attr("value"));
+      $("#inspector-cardinality").change( function () {
+        var data = Math.round($("#inspector-cardinality").val());
 
         if (data < 0) {
           if (commonSBGNCardinality == 0) {
@@ -582,10 +638,10 @@ inspectorUtilities.handleSBGNInspector = function () {
         cy.undoRedo().do("changeStyleData", param);
       });
 
-      $("#inspector-width").bind('change').on('change', function () {
+      $("#inspector-width").change( function () {
         var param = {
           eles: selectedEles,
-          data: $("#inspector-width").attr("value"),
+          data: $("#inspector-width").val(),
           dataType: "width",
           firstTime: true
         };

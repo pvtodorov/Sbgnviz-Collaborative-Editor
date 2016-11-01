@@ -10,9 +10,7 @@
 var sbgnmlToJson =require('../../../src/utilities/sbgnml-to-json-converter.js')();
 var cytoscape = require('cytoscape');
 
-    var jsonCorrector = require('../../../src/utilities/json-corrector.js');
-    var jsonMerger = require('../../../src/utilities/json-merger.js');
-    var idxcardjson = require('../../../src/utilities/idxcardjson-to-json-converter.js');
+var idxcardjson = require('../../../src/utilities/idxcardjson-to-json-converter.js');
 
 //Local functions
 var setFileContent = function (fileName) {
@@ -85,10 +83,14 @@ function getXMLObject(itemId, loadXMLDoc) {
 
 };
 
-module.exports = function(){
+
+
+
+module.exports = function(modelManager){
     var cyMod =  require('./sample-app-cytoscape-sbgn.js');
 
-    var syncManager = require('./synchronizationManager.js');
+
+    //var syncManager = require('./synchronizationManager.js');
 
     var sbgnContainer;
 
@@ -106,7 +108,22 @@ module.exports = function(){
 
 
          refreshGlobalUndoRedoButtonsStatus: function(){
-          syncManager.refreshGlobalUndoRedoButtonsStatus();
+             if (!modelManager.isUndoPossible()) {
+                 $("#undo-last-action-global").parent("li").addClass("disabled");
+             }
+             else {
+                 $("#undo-last-action-global").html("Undo " +  modelManager.getUndoActionStr());
+                 $("#undo-last-action-global").parent("li").removeClass("disabled");
+             }
+
+             if (!modelManager.isRedoPossible()) {
+                 $("#redo-last-action-global").parent("li").addClass("disabled");
+             }
+             else {
+                 $("#redo-last-action-global").html("Redo " +  modelManager.getRedoActionStr());
+                 $("#redo-last-action-global").parent("li").removeClass("disabled");
+             }
+
          },
 
          loadFile:function(txtFile){
@@ -117,10 +134,10 @@ module.exports = function(){
 
 
              //get another sbgncontainer
-             sbgnContainer = (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, syncManager.modelManager));
+             sbgnContainer = (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, modelManager));
 
-             syncManager.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
-             syncManager.modelManager.setSampleInd(-1, "me"); //to notify other clients
+             modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
+             modelManager.setSampleInd(-1, "me"); //to notify other clients
 
          },
      
@@ -129,7 +146,7 @@ module.exports = function(){
          loadFileInNode: function(txtFile){
 
 
-            syncManager.modelManager.deleteAll(cy.nodes(), cy.edges(), "me");
+            modelManager.deleteAll(cy.nodes(), cy.edges(), "me");
             var jsonObj = sbgnmlToJson.convert(txtFile);
 
             //initialize cytoscape
@@ -146,9 +163,9 @@ module.exports = function(){
 
             //no container is necessary
 
-            syncManager.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
+            modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
 
-            syncManager.modelManager.setSampleInd(-1, "me"); //to notify other clients
+            modelManager.setSampleInd(-1, "me"); //to notify other clients
 
          },
 
@@ -368,11 +385,11 @@ module.exports = function(){
 
             if(ind < 0){ //for notifying other users -- this part is called through the model
 
-                var jsonObj = syncManager.modelManager.getJsonFromModel();
+                var jsonObj = modelManager.getJsonFromModel();
 
-                sbgnContainer =  (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj,  syncManager.modelManager));
+                sbgnContainer =  (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj,  modelManager));
                 if(syncVal)
-                    syncManager.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me");
+                    modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me");
 
             }
             else{
@@ -384,11 +401,13 @@ module.exports = function(){
 
                     var jsonObj = sbgnmlToJson.convert(xmlText);
 
-                    sbgnContainer =  (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj,  syncManager.modelManager));
+
+
+                    sbgnContainer =  (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj,  modelManager));
 
                     if(syncVal) {
 
-                        syncManager.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me");
+                        modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me");
                     }
 
                 });
@@ -397,13 +416,7 @@ module.exports = function(){
 
         },
 
-        startInNode: function(modelManager){
-
-
-
-
-            
-            syncManager.modelManager = modelManager;
+        startInNode: function(){
 
             var jsonObj = modelManager.getJsonFromModel();
 
@@ -432,7 +445,7 @@ module.exports = function(){
 
 
 
-                    syncManager.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
+                    modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
 
 
                 });
@@ -454,12 +467,12 @@ module.exports = function(){
                 });
 
 
-                syncManager.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
+                modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
             }
 
         },
 
-        start: function (modelManager) {
+        start: function () {
 
 
             //
@@ -480,7 +493,7 @@ module.exports = function(){
 
             var socket = io();
 
-            syncManager.modelManager = modelManager;
+            //modelManager = modelManager;
 
 
 
@@ -494,7 +507,7 @@ module.exports = function(){
             sbgnProperties = new SBGNProperties();
             sbgnProperties.initialize();
 
-            pathsBetweenQuery = new PathsBetweenQuery(socket,  syncManager.modelManager.getName());
+            pathsBetweenQuery = new PathsBetweenQuery(socket,  modelManager.getName());
             pathsBetweenQuery.initialize();
 
             gridProperties = new GridProperties();
@@ -515,9 +528,9 @@ module.exports = function(){
             }
             else {//load from a previously loaded graph
 
-                sbgnContainer = (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, syncManager.modelManager));
+                sbgnContainer = (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, modelManager));
 
-                syncManager.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
+                modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
             }
 
 
@@ -526,12 +539,12 @@ module.exports = function(){
                 var ind = e.target.id;
                 
                 if(sbgnContainer)
-                    syncManager.modelManager.deleteAll(cy.nodes(), cy.edges(), "me");
+                    modelManager.deleteAll(cy.nodes(), cy.edges(), "me");
 
 
                 self.updateSample(ind, true);
 
-                syncManager.modelManager.setSampleInd(ind, "me"); //let others know
+                modelManager.setSampleInd(ind, "me"); //let others know
 
             });
 
@@ -544,10 +557,10 @@ module.exports = function(){
 
                 var jsonObj = {nodes: [], edges: []};
 
-                syncManager.modelManager.deleteAll(cy.nodes(), cy.edges(), "me");
+                modelManager.deleteAll(cy.nodes(), cy.edges(), "me");
                 cy.remove(cy.elements());
-                sbgnContainer = new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, syncManager.modelManager);
-                syncManager.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
+                sbgnContainer = new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, modelManager);
+                modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
 
                 //syncManager.manager.reset();
                 //TODO: why is this here?
@@ -744,7 +757,7 @@ module.exports = function(){
                         self.loadFile(this.result);
 
                     }
-                    // sbgnContainer =  new cyMod.SBGNContainer('#sbgn-network-container', jsonObj ,  syncManager.modelManager);
+                    // sbgnContainer =  new cyMod.SBGNContainer('#sbgn-network-container', jsonObj ,  modelManager);
                 }
                 reader.readAsText(file);
                 setFileContent(file.name);
@@ -1015,7 +1028,7 @@ module.exports = function(){
             });
 
             $("#layout-properties").click(function (e) { //funda
-                var lp = syncManager.modelManager.updateLayoutProperties(sbgnLayout.defaultLayoutProperties);
+                var lp = modelManager.updateLayoutProperties(sbgnLayout.defaultLayoutProperties);
                 sbgnLayout.render(lp);
             });
 
@@ -1343,15 +1356,15 @@ module.exports = function(){
             });
 
             $("#undo-last-action-global").click(function (e) {
-                if(syncManager.modelManager.isUndoPossible()){
-                    syncManager.modelManager.doCommand("undo");
+                if(modelManager.isUndoPossible()){
+                    modelManager.doCommand("undo");
                     
                 }
             });
 
             $("#redo-last-action-global").click(function (e) {
-                if(syncManager.modelManager.isRedoPossible()) {
-                    syncManager.modelManager.doCommand("redo");
+                if(modelManager.isRedoPossible()) {
+                    modelManager.doCommand("redo");
 
                 }
             });
@@ -1457,7 +1470,7 @@ module.exports = function(){
             });
 
             $("#save-command-history").click(function (evt) {
-                var cmdTxt = JSON.stringify(syncManager.modelManager.getHistory());
+                var cmdTxt = JSON.stringify(modelManager.getHistory());
 
                 var blob = new Blob([cmdTxt], {
                     type: "text/plain;charset=utf-8;",
@@ -1817,7 +1830,7 @@ function SBGNProperties(){
                     cy.nodes().addClass('changeLabelTextSize');
                 }
                 //Refresh truncations if needed
-                if (sbgnStyleRules['fit-labels-to-nodes'] != self.currentSBGNProperties.fitLabelsToNodes) {
+                if (sbgnStyleRules['fit-labels-to-nodes'] != self.currentSBGNProperties.fitLabels387ToNodes) {
                     sbgnStyleRules['fit-labels-to-nodes'] = self.currentSBGNProperties.fitLabelsToNodes;
                     cy.nodes().removeClass('changeContent');
                     cy.nodes().addClass('changeContent');

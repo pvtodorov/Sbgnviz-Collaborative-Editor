@@ -10,6 +10,12 @@ var sbgnElementUtilities = {
         'or operator': true, 'not operator': true, 'and': true, 'or': true, 'not': true,
         'nucleic acid feature multimer': true, 'macromolecule multimer': true,
         'simple chemical multimer': true, 'complex multimer': true, 'compartment': true},
+
+    defaultFontProperties: {
+        fontfamily: 'Helvetica',
+        fontweight: 'normal',
+        fontstyle: 'normal'
+    },
     //this method returns the nodes non of whose ancestors is not in given nodes
     getTopMostNodes: function (nodes) {
         var nodesMap = {};

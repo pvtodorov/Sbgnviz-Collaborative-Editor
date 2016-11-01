@@ -70,11 +70,11 @@ var initilizeUnselectedDataOfElements = function () {
     var edge = edges[i];
     edge.data("lineColor", edge.css('line-color'));
   }
-  
+
   nodes.addClass('changeBorderColor');
   nodes.addClass('changeBackgroundOpacity');
   edges.addClass('changeLineColor');
-  
+
   cy.endBatch();
 };
 
@@ -145,7 +145,7 @@ var nodeQtipFunction = function (node) {
           var value = sbgnstateandinfo.state.value;
           var variable = sbgnstateandinfo.state.variable;
           var stateLabel = (variable == null /*|| typeof stateVariable === undefined */) ? value :
-                  value + "@" + variable;
+          value + "@" + variable;
           if (stateLabel == null) {
             stateLabel = "";
           }
@@ -188,7 +188,7 @@ var nodeQtipFunction = function (node) {
  */
 var refreshUndoRedoButtonsStatus = function () {
   var ur = cy.undoRedo();
-  
+
   if (ur.isUndoStackEmpty()) {
     $("#undo-last-action").parent("li").addClass("disabled");
   }
@@ -255,4 +255,38 @@ var refreshPaddings = function () {
   compounds.css('padding-right', calc_padding);
   compounds.css('padding-top', calc_padding);
   compounds.css('padding-bottom', calc_padding);
+};
+
+// This function is to be called after nodes are resized throuh the node resize extension or through undo/redo actions
+var nodeResizeEndFunction = function (nodes) {
+  nodes.removeClass('changeLabelTextSize');
+  nodes.addClass('changeLabelTextSize');
+
+  for (var i = 0; i < nodes.length; i++) {
+    var node = nodes[i];
+    var w = node.width();
+    var h = node.height();
+
+    node.removeStyle('width');
+    node.removeStyle('height');
+
+    node.data('sbgnbbox').w = w;
+    node.data('sbgnbbox').h = h;
+  }
+
+  nodes.removeClass('noderesized');
+  nodes.addClass('noderesized');
+};
+
+var showHiddenNeighbors = function (eles) {
+  var hiddenNeighbours = sbgnFiltering.getProcessesOfGivenEles(eles).filter(':hidden');
+  if (hiddenNeighbours.length === 0) {
+    return;
+  }
+
+  var param = {
+    eles: hiddenNeighbours
+  };
+
+  cy.undoRedo().do("showAndPerformIncrementalLayout", param);
 };

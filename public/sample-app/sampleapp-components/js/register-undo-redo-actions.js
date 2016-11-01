@@ -1,11 +1,13 @@
-
-module.exports.registerUndoRedoActions = function() {
-
+module.exports.registerUndoRedoActions = function () {
+  // create undo-redo instance
   var ur = cy.undoRedo({
     keyboardShortcuts: {
       ctrl_z: false, // undo
       ctrl_y: false, // redo
       ctrl_shift_z: false // redo
+    },
+    undoableDrag: function() {
+      return window.ctrlKeyDown !== true;
     }
   });
 
@@ -15,7 +17,6 @@ module.exports.registerUndoRedoActions = function() {
   ur.action("addEdge", addRemoveActionFunctions.addEdge, addRemoveActionFunctions.removeEdges);
   ur.action("deleteSelected", addRemoveActionFunctions.deleteSelected, addRemoveActionFunctions.restoreSelected);
   ur.action("createCompoundForSelectedNodes", addRemoveActionFunctions.createCompoundForSelectedNodes, addRemoveActionFunctions.removeCompound);
-  ur.action("changeParent", addRemoveActionFunctions.changeParent, addRemoveActionFunctions.changeParent);
 
   // register general actions
   ur.action("resizeNode", generalActionFunctions.resizeNode, generalActionFunctions.resizeNode);
@@ -23,6 +24,8 @@ module.exports.registerUndoRedoActions = function() {
   ur.action("changeStyleData", generalActionFunctions.changeStyleData, generalActionFunctions.changeStyleData);
   ur.action("changeStyleCss", generalActionFunctions.changeStyleCss, generalActionFunctions.changeStyleCss);
   ur.action("changeBendPoints", generalActionFunctions.changeBendPoints, generalActionFunctions.changeBendPoints);
+  ur.action("changeFontProperties", generalActionFunctions.changeFontProperties, generalActionFunctions.changeFontProperties);
+  ur.action("showAndPerformIncrementalLayout", generalActionFunctions.showAndPerformIncrementalLayout, generalActionFunctions.undoShowAndPerformIncrementalLayout);
 
   // register SBGN actions
   ur.action("addStateAndInfo", SBGNActionFunctions.addStateAndInfo, SBGNActionFunctions.removeStateAndInfo);

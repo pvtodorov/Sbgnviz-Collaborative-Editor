@@ -110,7 +110,7 @@ module.exports = function () {
             var sbgnbbox = new Object();
 
             sbgnbbox.x = cheerio$(ele).find('bbox').attr('x');
-            sbgnbbox.y = cheerio$(ele).find('bbox').attr('y');
+            sbgnbbox.y = cheerio$(ele).find('bbox').attr('y');236
             sbgnbbox.w = cheerio$(ele).find('bbox').attr('w');
             sbgnbbox.h = cheerio$(ele).find('bbox').attr('h');
 
@@ -233,6 +233,7 @@ module.exports = function () {
             jsonArray.push(cytoscapeJsNode);
         },
         traverseNodes: function (ele, jsonArray, parent, compartments) {
+
             if (!sbgnElementUtilities.handledElements[cheerio$(ele).attr('class')]) {
                 return;
             }

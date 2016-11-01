@@ -30,19 +30,6 @@
   $$.sbgn = {
   };
 
-  $$.sbgn.cardinalityProperties = function () {
-    return {
-      boxLength: 13,
-      distanceToNode: 25,
-    };
-  };
-
-  $$.sbgn.drawCardinalityText = function (context, textProp) {
-    textProp.color = "#0f0f0f";
-    textProp.font = "9px Arial";
-    $$.sbgn.drawText(context, textProp, false);
-  };
-
   $$.sbgn.addPortReplacementIfAny = function (node, edgePort) {
     var posX = node.position().x;
     var posY = node.position().y;
@@ -65,14 +52,14 @@
     var height = node.height();
     var centerX = node._private.position.x;
     var centerY = node._private.position.y;
-    var padding = node._private.style['border-width'].pxValue / 2;
+    var padding = parseInt(node.css('border-width')) / 2;
 
     for (var i = 0; i < node._private.data.ports.length; i++) {
       var port = node._private.data.ports[i];
       var portX = port.x * width / 100 + centerX;
       var portY = port.y * height / 100 + centerY;
       var closestPoint = window.cyMath.polygonIntersectLine(portX, portY,
-              points, centerX, centerY, width / 2, height / 2, padding);
+          points, centerX, centerY, width / 2, height / 2, padding);
       context.beginPath();
       context.moveTo(portX, portY);
       context.lineTo(closestPoint[0], closestPoint[1]);
@@ -89,131 +76,10 @@
     }
   };
 
-  $$.sbgn.drawQuadraticLineCardinality = function (context, edge, pts, type) {
-    context.moveTo(pts[0], pts[1]);
-    context.quadraticCurveTo(pts[2], pts[3], pts[4], pts[5]);
-
-    //if cardinality is zero, return here.
-    var cardinality = edge._private.data.sbgncardinality;
-    if (cardinality == 0 || cardinality == null)
-      return;
-
-    var carProp = $$.sbgn.cardinalityProperties();
-
-    var totalLength = qBezierLength(pts);
-
-    var startLength = totalLength - 25;
-
-    var startPortion = startLength / totalLength;
-
-    if (type === "consumption") {
-      startPortion = carProp.distanceToSource / totalLength;
-    } else {
-      startPortion = (totalLength - carProp.distanceToTarget) / totalLength;
-    }
-
-    var t = startPortion;
-    var x1 = (1 - t) * (1 - t) * pts[0] + 2 * (1 - t) * t * pts[2] + t * t * pts[4];
-    var y1 = (1 - t) * (1 - t) * pts[1] + 2 * (1 - t) * t * pts[3] + t * t * pts[5];
-
-    //get a short line to determine tanget line
-    t = startPortion + 0.01;
-    var x2 = (1 - t) * (1 - t) * pts[0] + 2 * (1 - t) * t * pts[2] + t * t * pts[4];
-    var y2 = (1 - t) * (1 - t) * pts[1] + 2 * (1 - t) * t * pts[3] + t * t * pts[5];
-
-    var dispX = x1 - x2;
-    var dispY = y1 - y2;
-
-    var angle = Math.asin(dispY / (Math.sqrt(dispX * dispX + dispY * dispY)));
-
-    if (dispX < 0) {
-      angle = angle + Math.PI / 2;
-    } else {
-      angle = -(Math.PI / 2 + angle);
-    }
-
-
-    context.translate(x1, y1);
-    context.rotate(-angle);
-
-    context.rect(0, -13 / 2, 13, 13);
-
-    context.rotate(-Math.PI / 2);
-
-    var textProp = {'centerX': 0, 'centerY': 13 / 2,
-      'opacity': edge.css('text-opacity'),
-      'width': 13, 'label': cardinality};
-    $$.sbgn.drawCardinalityText(context, textProp);
-
-    context.rotate(Math.PI / 2);
-
-    context.rotate(angle);
-    context.translate(-x1, -y1);
-
-  };
-
-  $$.sbgn.drawStraightLineCardinality = function (context, edge, pts, type) {
-    context.moveTo(pts[0], pts[1]);
-    context.lineTo(pts[2], pts[3]);
-
-    //if cardinality is zero, return here.
-    var cardinality = edge._private.data.sbgncardinality;
-    if (cardinality <= 0 || cardinality == null)
-      return;
-
-    var carProp = $$.sbgn.cardinalityProperties();
-
-    var length = (Math.sqrt((pts[2] - pts[0]) * (pts[2] - pts[0]) +
-            (pts[3] - pts[1]) * (pts[3] - pts[1])));
-
-    var dispX, dispY, startX, startY;
-
-    //TODO : you may need to change here
-    if (type === "consumption") {
-      startX = edge._private.rscratch.arrowStartX;
-      startY = edge._private.rscratch.arrowStartY;
-    } else {
-      startX = edge._private.rscratch.arrowEndX;
-      startY = edge._private.rscratch.arrowEndY;
-    }
-    var srcPos = (type === "consumption") ? edge.source().position() : edge.target().position();
-    //var srcPos = edge.source().position();
-    dispX = startX - srcPos.x;
-    dispY = startY - srcPos.y;
-
-    var angle = Math.asin(dispY / (Math.sqrt(dispX * dispX + dispY * dispY)));
-
-    if (dispX < 0) {
-      angle = angle + Math.PI / 2;
-    } else {
-      angle = -(Math.PI / 2 + angle);
-    }
-
-    context.translate(startX, startY);
-    context.rotate(-angle);
-
-    if (length > carProp.distanceToNode) {
-      context.rect(0, -carProp.distanceToNode, carProp.boxLength, carProp.boxLength);
-
-      context.rotate(Math.PI / 2);
-
-      var textProp = {'centerX': -carProp.distanceToNode + carProp.boxLength / 2, 'centerY': -carProp.boxLength / 2,
-        'opacity': edge.css('text-opacity'),
-        'width': carProp.boxLength, 'label': cardinality};
-      $$.sbgn.drawCardinalityText(context, textProp);
-
-      context.rotate(-Math.PI / 2);
-    }
-
-    context.rotate(angle);
-    context.translate(-startX, -startY);
-  }
-  ;
-
   var unitOfInfoRadius = 4;
   var stateVarRadius = 15;
   $$.sbgn.drawComplexStateAndInfo = function (context, node, stateAndInfos,
-          centerX, centerY, width, height) {
+                                              centerX, centerY, width, height) {
 
     //This is a temporary workaround
     $$.sbgn.drawEllipse(context, centerX, centerY, 0, 0);
@@ -238,22 +104,22 @@
           stateCenterY = centerY - beginPosY;
 
           var textProp = {'centerX': stateCenterX, 'centerY': stateCenterY,
-            'opacity': node._private.style['text-opacity'].value,
+            'opacity': node.css('text-opacity') * node.css('opacity'),
             'width': stateWidth, 'height': stateHeight};
 
           if (state.clazz == "state variable") {//draw ellipse
             window.cyRenderer.drawRoundRectanglePath(context,
-                    stateCenterX, stateCenterY,
-                    stateWidth, stateHeight, Math.min(stateWidth / 2, stateHeight / 2, stateVarRadius));
+                stateCenterX, stateCenterY,
+                stateWidth, stateHeight, Math.min(stateWidth / 2, stateHeight / 2, stateVarRadius));
             context.fill();
 
             textProp.state = state.state;
             $$.sbgn.drawStateText(context, textProp);
           } else if (state.clazz == "unit of information") {//draw rectangle
             window.cyRenderer.drawRoundRectanglePath(context,
-                    stateCenterX, stateCenterY,
-                    stateWidth, stateHeight,
-                    Math.min(stateWidth / 2, stateHeight / 2, unitOfInfoRadius));
+                stateCenterX, stateCenterY,
+                stateWidth, stateHeight,
+                Math.min(stateWidth / 2, stateHeight / 2, unitOfInfoRadius));
             context.fill();
 
             textProp.label = state.label.text;
@@ -267,22 +133,22 @@
           stateCenterY = centerY + beginPosY;
 
           var textProp = {'centerX': stateCenterX, 'centerY': stateCenterY,
-            'opacity': node._private.style['text-opacity'].value,
+            'opacity': node.css('text-opacity') * node.css('opacity'),
             'width': stateWidth, 'height': stateHeight};
 
           if (state.clazz == "state variable") {//draw ellipse
             window.cyRenderer.drawRoundRectanglePath(context,
-                    stateCenterX, stateCenterY,
-                    stateWidth, stateHeight, Math.min(stateWidth / 2, stateHeight / 2, stateVarRadius));
+                stateCenterX, stateCenterY,
+                stateWidth, stateHeight, Math.min(stateWidth / 2, stateHeight / 2, stateVarRadius));
             context.fill();
 
             textProp.state = state.state;
             $$.sbgn.drawStateText(context, textProp);
           } else if (state.clazz == "unit of information") {//draw rectangle
             window.cyRenderer.drawRoundRectanglePath(context,
-                    stateCenterX, stateCenterY,
-                    stateWidth, stateHeight,
-                    Math.min(stateWidth / 2, stateHeight / 2, unitOfInfoRadius));
+                stateCenterX, stateCenterY,
+                stateWidth, stateHeight,
+                Math.min(stateWidth / 2, stateHeight / 2, unitOfInfoRadius));
             context.fill();
 
             textProp.label = state.label.text;
@@ -335,15 +201,15 @@
     var oldOpacity = context.globalAlpha;
     context.globalAlpha = textProp.opacity;
     var text;
-    
+
     textProp.label = stringAfterValueCheck(textProp.label);
-    
+
     if (truncate == false) {
       text = textProp.label;
     } else {
       text = truncateText(textProp, context.font);
     }
-    
+
     context.fillText(text, textProp.centerX, textProp.centerY);
     context.fillStyle = oldStyle;
     context.font = oldFont;
@@ -374,13 +240,13 @@
       var stateCenterY = state.bbox.y * node.height() / 100 + centerY;
 
       var textProp = {'centerX': stateCenterX, 'centerY': stateCenterY,
-        'opacity': node._private.style['text-opacity'].value,
+        'opacity': node.css('text-opacity') * node.css('opacity'),
         'width': stateWidth, 'height': stateHeight};
 
       if (state.clazz == "state variable") {//draw ellipse
         //var stateLabel = state.state.value;
         window.cyRenderer.drawRoundRectanglePath(context, stateCenterX, stateCenterY,
-                stateWidth, stateHeight, Math.min(stateWidth / 2, stateHeight / 2, stateVarRadius));
+            stateWidth, stateHeight, Math.min(stateWidth / 2, stateHeight / 2, stateVarRadius));
 
         context.fill();
         textProp.state = state.state;
@@ -390,9 +256,9 @@
 
       } else if (state.clazz == "unit of information") {//draw rectangle
         window.cyRenderer.drawRoundRectanglePath(context,
-                stateCenterX, stateCenterY,
-                stateWidth, stateHeight,
-                Math.min(stateWidth / 2, stateHeight / 2, unitOfInfoRadius));
+            stateCenterX, stateCenterY,
+            stateWidth, stateHeight,
+            Math.min(stateWidth / 2, stateHeight / 2, unitOfInfoRadius));
 
         context.fill();
 
@@ -409,7 +275,7 @@
   $$.sbgn.nucleicAcidCheckPoint = function (x, y, centerX, centerY, node, threshold, points, cornerRadius) {
     var width = node.width();
     var height = node.height();
-    var padding = node._private.style["border-width"].pxValue / 2;
+    var padding = parseInt(node.css('border-width')) / 2;
 
     //check rectangle at top
     if (window.cyMath.pointInsidePolygon(x, y, points,
@@ -466,14 +332,14 @@
     }
 
     context.fillStyle = "rgba("
-            + node._private.style["background-color"].value[0] + ","
-            + node._private.style["background-color"].value[1] + ","
-            + node._private.style["background-color"].value[2] + ","
-            + (1 * node._private.style["opacity"].value * parentOpacity) + ")";
+        + node._private.style["background-color"].value[0] + ","
+        + node._private.style["background-color"].value[1] + ","
+        + node._private.style["background-color"].value[2] + ","
+        + (1 * node.css('opacity') * parentOpacity) + ")";
   };
 
   $$.sbgn.drawSimpleChemicalPath = function (
-          context, x, y, width, height) {
+      context, x, y, width, height) {
 
     var halfWidth = width / 2;
     var halfHeight = height / 2;
@@ -502,13 +368,13 @@
   };
 
   $$.sbgn.drawSimpleChemical = function (
-          context, x, y, width, height) {
+      context, x, y, width, height) {
     $$.sbgn.drawSimpleChemicalPath(context, x, y, width, height);
     context.fill();
   };
 
   function simpleChemicalLeftClone(context, centerX, centerY,
-          width, height, cloneMarker, opacity) {
+                                   width, height, cloneMarker, opacity) {
     if (cloneMarker != null) {
       var oldGlobalAlpha = context.globalAlpha;
       context.globalAlpha = opacity;
@@ -540,7 +406,7 @@
   ;
 
   function simpleChemicalRightClone(context, centerX, centerY,
-          width, height, cloneMarker, opacity) {
+                                    width, height, cloneMarker, opacity) {
     if (cloneMarker != null) {
       var oldGlobalAlpha = context.globalAlpha;
       context.globalAlpha = opacity;
@@ -576,7 +442,7 @@
   };
 
   $$.sbgn.drawNucAcidFeature = function (context, width, height,
-          centerX, centerY, cornerRadius) {
+                                         centerX, centerY, cornerRadius) {
     var halfWidth = width / 2;
     var halfHeight = height / 2;
 
@@ -620,14 +486,14 @@
     var height = node.height();
     var centerX = node._private.position.x;
     var centerY = node._private.position.y;
-    var padding = node._private.style['border-width'].value / 2;
+    var padding = parseInt(node.css('border-width')) / 2;
 
     for (var i = 0; i < node._private.data.ports.length; i++) {
       var port = node._private.data.ports[i];
       var portX = port.x * width / 100 + centerX;
       var portY = port.y * height / 100 + centerY;
       var closestPoint = window.cyMath.intersectLineEllipse(
-              portX, portY, centerX, centerY, width / 2, height / 2);
+          portX, portY, centerX, centerY, width / 2, height / 2);
       context.moveTo(portX, portY);
       context.lineTo(closestPoint[0], closestPoint[1]);
       context.stroke();
@@ -653,9 +519,6 @@
   window.cyStyfn.types.nodeShape.enums.push('uncertain process');
   window.cyStyfn.types.nodeShape.enums.push('association');
 
-  window.cyStyfn.types.lineStyle.enums.push('consumption');
-  window.cyStyfn.types.lineStyle.enums.push('production');
-
   window.cyStyfn.types.arrowShape.enums.push('necessary stimulation');
 
   $$.sbgn.registerSbgnArrowShapes = function () {
@@ -677,12 +540,12 @@
         var height = node.height();
         var centerX = node._private.position.x;
         var centerY = node._private.position.y;
-        var padding = node._private.style['border-width'].pxValue / 2;
+        var padding = parseInt(node.css('border-width')) / 2;
 
         window.cyRenderer.drawPolygonPath(context,
-                centerX, centerY,
-                width, height,
-                window.cyNodeShapes['process'].points);
+            centerX, centerY,
+            width, height,
+            window.cyNodeShapes['process'].points);
         context.fill();
 
         context.stroke();
@@ -694,7 +557,7 @@
         var nodeY = node._private.position.y;
         var width = node.width();
         var height = node.height();
-        var padding = node._private.style['border-width'].pxValue / 2;
+        var padding = parseInt(node.css('border-width')) / 2;
 
         var portIntersection = $$.sbgn.intersectLinePorts(node, x, y, portId);
         if (portIntersection.length > 0) {
@@ -702,22 +565,22 @@
         }
 
         return window.cyMath.polygonIntersectLine(
-                x, y,
-                window.cyNodeShapes['process'].points,
-                nodeX,
-                nodeY,
-                width / 2, height / 2,
-                padding);
+            x, y,
+            window.cyNodeShapes['process'].points,
+            nodeX,
+            nodeY,
+            width / 2, height / 2,
+            padding);
       },
       checkPoint: function (x, y, node, threshold) {
         var centerX = node._private.position.x;
         var centerY = node._private.position.y;
         var width = node.width();
         var height = node.height();
-        var padding = node._private.style['border-width'].pxValue / 2;
+        var padding = parseInt(node.css('border-width')) / 2;
 
         return window.cyMath.pointInsidePolygon(x, y, window.cyNodeShapes['process'].points,
-                centerX, centerY, width, height, [0, -1], padding);
+            centerX, centerY, width, height, [0, -1], padding);
       }
     };
 
@@ -743,8 +606,8 @@
         context.stroke();
 
         $$.sbgn.cloneMarker.unspecifiedEntity(context, centerX, centerY,
-                width, height, cloneMarker,
-                node._private.style['background-opacity'].value);
+            width, height, cloneMarker,
+            node.css('background-opacity'));
 
         $$.sbgn.forceOpacityToOne(node, context);
         $$.sbgn.drawStateAndInfos(node, context, centerX, centerY);
@@ -755,7 +618,7 @@
 
         var width = node.width();
         var height = node.height();
-        var padding = node._private.style["border-width"].value / 2;
+        var padding = parseInt(node.css('border-width')) / 2;
 
         var portIntersection = $$.sbgn.intersectLinePorts(node, x, y, portId);
         if (portIntersection.length > 0) {
@@ -763,10 +626,10 @@
         }
 
         var stateAndInfoIntersectLines = $$.sbgn.intersectLineStateAndInfoBoxes(
-                node, x, y);
+            node, x, y);
 
         var nodeIntersectLines = window.cyNodeShapes["ellipse"].intersectLine(centerX, centerY, width,
-                height, x, y, padding);
+            height, x, y, padding);
 
         var intersections = stateAndInfoIntersectLines.concat(nodeIntersectLines);
         return $$.sbgn.closestIntersectionPoint([x, y], intersections);
@@ -778,14 +641,14 @@
 
         var width = node.width();
         var height = node.height();
-        var padding = node._private.style["border-width"].value / 2;
+        var padding = parseInt(node.css('border-width')) / 2;
 
         var nodeCheckPoint = window.cyNodeShapes["ellipse"].checkPoint(x, y,
-                padding, width, height,
-                centerX, centerY);
+            padding, width, height,
+            centerX, centerY);
 
         var stateAndInfoCheckPoint = $$.sbgn.checkPointStateAndInfoBoxes(x, y, node,
-                threshold);
+            threshold);
 
         return nodeCheckPoint || stateAndInfoCheckPoint;
       }
@@ -801,33 +664,33 @@
         var height = node.height();
         var multimerPadding = window.cyNodeShapes["simple chemical"].multimerPadding;
         var label = node._private.data.sbgnlabel;
-        var padding = node._private.style["border-width"].value;
+        var padding = parseInt(node.css('border-width'));
         var cloneMarker = node._private.data.sbgnclonemarker;
 
         if ($$.sbgn.isMultimer(node)) {
           //add multimer shape
           $$.sbgn.drawSimpleChemical(context, centerX + multimerPadding,
-                  centerY + multimerPadding, width, height);
+              centerY + multimerPadding, width, height);
 
           context.stroke();
 
           $$.sbgn.cloneMarker.simpleChemical(context,
-                  centerX + multimerPadding, centerY + multimerPadding,
-                  width - padding, height - padding, cloneMarker, true,
-                  node._private.style['background-opacity'].value);
+              centerX + multimerPadding, centerY + multimerPadding,
+              width - padding, height - padding, cloneMarker, true,
+              node.css('background-opacity'));
 
           //context.stroke();
         }
 
         $$.sbgn.drawSimpleChemical(context,
-                centerX, centerY,
-                width, height);
+            centerX, centerY,
+            width, height);
 
         context.stroke();
 
         $$.sbgn.cloneMarker.simpleChemical(context, centerX, centerY,
-                width - padding, height - padding, cloneMarker, false,
-                node._private.style['background-opacity'].value);
+            width - padding, height - padding, cloneMarker, false,
+            node.css('background-opacity'));
 
 //        var nodeProp = {'label': label, 'centerX': centerX, 'centerY': centerY,
 //          'opacity': node._private.style['text-opacity'].value, 'width': node.width(), 'height': node.height()};
@@ -844,7 +707,7 @@
 
         var width = node.width();
         var height = node.height();
-        var padding = node._private.style["border-width"].value / 2;
+        var padding = parseInt(node.css('border-width'));
         var multimerPadding = window.cyNodeShapes["simple chemical"].multimerPadding;
 
         var portIntersection = $$.sbgn.intersectLinePorts(node, x, y, portId);
@@ -853,17 +716,17 @@
         }
 
         var stateAndInfoIntersectLines = $$.sbgn.intersectLineStateAndInfoBoxes(
-                node, x, y);
+            node, x, y);
 
         var nodeIntersectLines = window.cyNodeShapes["ellipse"].intersectLine(
-                centerX, centerY, width, height, x, y, padding);
+            centerX, centerY, width, height, x, y, padding);
 
         //check whether sbgn class includes multimer substring or not
         var multimerIntersectionLines = [];
         if ($$.sbgn.isMultimer(node)) {
           multimerIntersectionLines = window.cyNodeShapes["ellipse"].intersectLine(
-                  centerX + multimerPadding, centerY + multimerPadding, width,
-                  height, x, y, padding);
+              centerX + multimerPadding, centerY + multimerPadding, width,
+              height, x, y, padding);
         }
 
         var intersections = stateAndInfoIntersectLines.concat(nodeIntersectLines, multimerIntersectionLines);
@@ -876,22 +739,22 @@
 
         var width = node.width();
         var height = node.height();
-        var padding = node._private.style["border-width"].value / 2;
+        var padding = parseInt(node.css('border-width')) / 2;
         var multimerPadding = window.cyNodeShapes["simple chemical"].multimerPadding;
 
         var nodeCheckPoint = window.cyNodeShapes["roundrectangle"].checkPoint(x, y,
-                padding, width, height,
-                centerX, centerY);
+            padding, width, height,
+            centerX, centerY);
 
         var stateAndInfoCheckPoint = $$.sbgn.checkPointStateAndInfoBoxes(x, y, node,
-                threshold);
+            threshold);
 
         //check whether sbgn class includes multimer substring or not
         var multimerCheckPoint = false;
         if ($$.sbgn.isMultimer(node)) {
           multimerCheckPoint = window.cyNodeShapes["ellipse"].checkPoint(x, y,
-                  padding, width, height,
-                  centerX + multimerPadding, centerY + multimerPadding);
+              padding, width, height,
+              centerX + multimerPadding, centerY + multimerPadding);
         }
 
         return nodeCheckPoint || stateAndInfoCheckPoint || multimerCheckPoint;
@@ -909,36 +772,36 @@
         var label = node._private.data.sbgnlabel;
         var multimerPadding = window.cyNodeShapes["macromolecule"].multimerPadding;
         var cloneMarker = node._private.data.sbgnclonemarker;
-        var padding = node._private.style["border-width"].value;
+        var padding = parseInt(node.css('border-width'));
 
         //check whether sbgn class includes multimer substring or not
         if ($$.sbgn.isMultimer(node)) {
           //add multimer shape
           window.cyRenderer.drawRoundRectanglePath(context,
-                  centerX + multimerPadding, centerY + multimerPadding,
-                  width, height);
+              centerX + multimerPadding, centerY + multimerPadding,
+              width, height);
 
           context.fill();
           context.stroke();
 
           $$.sbgn.cloneMarker.macromolecule(context,
-                  centerX + multimerPadding, centerY + multimerPadding,
-                  width, height, cloneMarker, true,
-                  node._private.style['background-opacity'].value);
+              centerX + multimerPadding, centerY + multimerPadding,
+              width, height, cloneMarker, true,
+              node.css('background-opacity'));
 
           //context.stroke();
         }
 
         window.cyRenderer.drawRoundRectanglePath(context,
-                centerX, centerY,
-                width, height);
+            centerX, centerY,
+            width, height);
         context.fill();
 
         context.stroke();
 
         $$.sbgn.cloneMarker.macromolecule(context, centerX, centerY,
-                width, height, cloneMarker, false,
-                node._private.style['background-opacity'].value);
+            width, height, cloneMarker, false,
+            node.css('background-opacity'));
 
         var oldStyle = context.fillStyle;
         $$.sbgn.forceOpacityToOne(node, context);
@@ -953,7 +816,7 @@
         var centerY = node._private.position.y;
         var width = node.width();
         var height = node.height();
-        var padding = node._private.style["border-width"].value / 2;
+        var padding = parseInt(node.css('border-width')) / 2;
         var multimerPadding = window.cyNodeShapes["macromolecule"].multimerPadding;
         var cornerRadius = window.cyMath.getRoundRectangleRadius(width, height);
 
@@ -963,24 +826,24 @@
         }
 
         var stateAndInfoIntersectLines = $$.sbgn.intersectLineStateAndInfoBoxes(
-                node, x, y);
+            node, x, y);
 
         var nodeIntersectLines = $$.sbgn.roundRectangleIntersectLine(
-                x, y,
-                centerX, centerY,
-                centerX, centerY,
-                width, height,
-                cornerRadius, padding);
+            x, y,
+            centerX, centerY,
+            centerX, centerY,
+            width, height,
+            cornerRadius, padding);
 
         //check whether sbgn class includes multimer substring or not
         var multimerIntersectionLines = [];
         if ($$.sbgn.isMultimer(node)) {
           multimerIntersectionLines = $$.sbgn.roundRectangleIntersectLine(
-                  x, y,
-                  centerX, centerY,
-                  centerX + multimerPadding, centerY + multimerPadding,
-                  width, height,
-                  cornerRadius, padding);
+              x, y,
+              centerX, centerY,
+              centerX + multimerPadding, centerY + multimerPadding,
+              width, height,
+              cornerRadius, padding);
         }
 
         var intersections = stateAndInfoIntersectLines.concat(nodeIntersectLines, multimerIntersectionLines);
@@ -992,19 +855,19 @@
         var centerY = node._private.position.y;
         var width = node.width() + threshold;
         var height = node.height() + threshold;
-        var padding = node._private.style["border-width"].pxValue / 2;
+        var padding = parseInt(node.css('border-width')) / 2;
         var multimerPadding = window.cyNodeShapes["macromolecule"].multimerPadding;
 
         var nodeCheckPoint = window.cyNodeShapes["roundrectangle"].checkPoint(x, y, padding,
-                width, height, centerX, centerY);
+            width, height, centerX, centerY);
         var stateAndInfoCheckPoint = $$.sbgn.checkPointStateAndInfoBoxes(x, y, node,
-                threshold);
+            threshold);
 
         //check whether sbgn class includes multimer substring or not
         var multimerCheckPoint = false;
         if ($$.sbgn.isMultimer(node)) {
           multimerCheckPoint = window.cyNodeShapes["roundrectangle"].checkPoint(x, y, padding,
-                  width, height, centerX + multimerPadding, centerY + multimerPadding);
+              width, height, centerX + multimerPadding, centerY + multimerPadding);
         }
 
         return nodeCheckPoint || stateAndInfoCheckPoint || multimerCheckPoint;
@@ -1017,7 +880,7 @@
         var centerY = node._private.position.y;
         var width = node.width();
         var height = node.height();
-        var padding = node._private.style["border-width"].pxValue;
+        var padding = parseInt(node.css('border-width'));
 
         window.cyNodeShapes['ellipse'].draw(context, centerX, centerY, width, height);
         context.fill();
@@ -1030,7 +893,7 @@
         var centerY = node._private.position.y;
         var width = node.width();
         var height = node.height();
-        var padding = node._private.style["border-width"].pfValue / 2;
+        var padding = parseInt(node.css('border-width')) / 2;
 
         var portIntersection = $$.sbgn.intersectLinePorts(node, x, y, portId);
         if (portIntersection.length > 0) {
@@ -1038,11 +901,11 @@
         }
 
         var intersect = window.cyMath.intersectLineEllipse(
-                x, y,
-                centerX,
-                centerY,
-                width / 2 + padding,
-                height / 2 + padding);
+            x, y,
+            centerX,
+            centerY,
+            width / 2 + padding,
+            height / 2 + padding);
 
         return intersect;
       },
@@ -1051,7 +914,7 @@
         var centerY = node._private.position.y;
         var width = node.width();
         var height = node.height();
-        var padding = node._private.style["border-width"].pfValue / 2;
+        var padding = parseInt(node.css('border-width')) / 2;
 
         x -= centerX;
         y -= centerY;
@@ -1100,7 +963,7 @@
         var nodeY = node._private.position.y;
         var width = node.width();
         var height = node.height();
-        var padding = node._private.style["border-width"].pfValue / 2;
+        var padding = parseInt(node.css('border-width')) / 2;
 
         var portIntersection = $$.sbgn.intersectLinePorts(node, x, y, portId);
         if (portIntersection.length > 0) {
@@ -1108,18 +971,18 @@
         }
 
         return window.cyMath.intersectLineEllipse(
-                x, y,
-                nodeX,
-                nodeY,
-                width / 2 + padding,
-                height / 2 + padding);
+            x, y,
+            nodeX,
+            nodeY,
+            width / 2 + padding,
+            height / 2 + padding);
       },
       checkPoint: function (x, y, node, threshold) {
         var centerX = node._private.position.x;
         var centerY = node._private.position.y;
         var width = node.width();
         var height = node.height();
-        var padding = node._private.style["border-width"].pfValue / 2;
+        var padding = parseInt(node.css('border-width')) / 2;
 
         x -= centerX;
         y -= centerY;
@@ -1148,36 +1011,36 @@
         var cloneMarker = node._private.data.sbgnclonemarker;
 
         window.cyNodeShapes["complex"].points = $$.sbgn.generateComplexShapePoints(cornerLength,
-                width, height);
+            width, height);
 
         //check whether sbgn class includes multimer substring or not
         if ($$.sbgn.isMultimer(node)) {
           //add multimer shape
           window.cyRenderer.drawPolygonPath(context,
-                  centerX + multimerPadding, centerY + multimerPadding,
-                  width, height, window.cyNodeShapes["complex"].points);
+              centerX + multimerPadding, centerY + multimerPadding,
+              width, height, window.cyNodeShapes["complex"].points);
           context.fill();
 
           context.stroke();
 
           $$.sbgn.cloneMarker.complex(context,
-                  centerX + multimerPadding, centerY + multimerPadding,
-                  width, height, cornerLength, cloneMarker, true,
-                  node._private.style['background-opacity'].value);
+              centerX + multimerPadding, centerY + multimerPadding,
+              width, height, cornerLength, cloneMarker, true,
+              node.css('background-opacity'));
 
           //context.stroke();
         }
 
         window.cyRenderer.drawPolygonPath(context,
-                centerX, centerY,
-                width, height, window.cyNodeShapes["complex"].points);
+            centerX, centerY,
+            width, height, window.cyNodeShapes["complex"].points);
         context.fill();
 
         context.stroke();
 
         $$.sbgn.cloneMarker.complex(context, centerX, centerY,
-                width, height, cornerLength, cloneMarker, false,
-                node._private.style['background-opacity'].value);
+            width, height, cornerLength, cloneMarker, false,
+            node.css('background-opacity'));
 
         var oldStyle = context.fillStyle;
         $$.sbgn.forceOpacityToOne(node, context);
@@ -1192,7 +1055,7 @@
         var hasChildren = node.children().length > 0;
         var width = hasChildren ? node.outerWidth() : node.width();
         var height = hasChildren ? node.outerHeight() : node.height();
-        var padding = node._private.style["border-width"].pxValue / 2;
+        var padding = parseInt(node.css('border-width')) / 2;
         var multimerPadding = window.cyNodeShapes["complex"].multimerPadding;
         var cornerLength = window.cyNodeShapes["complex"].cornerLength;
 
@@ -1202,29 +1065,29 @@
         }
 
         window.cyNodeShapes["complex"].points = $$.sbgn.generateComplexShapePoints(cornerLength,
-                width, height);
+            width, height);
 
         var stateAndInfoIntersectLines = $$.sbgn.intersectLineStateAndInfoBoxes(
-                node, x, y);
+            node, x, y);
 
         var nodeIntersectLines = window.cyMath.polygonIntersectLine(
-                x, y,
-                window.cyNodeShapes["complex"].points,
-                centerX,
-                centerY,
-                width / 2, height / 2,
-                padding);
+            x, y,
+            window.cyNodeShapes["complex"].points,
+            centerX,
+            centerY,
+            width / 2, height / 2,
+            padding);
 
         //check whether sbgn class includes multimer substring or not
         var multimerIntersectionLines = [];
         if ($$.sbgn.isMultimer(node)) {
           multimerIntersectionLines = window.cyMath.polygonIntersectLine(
-                  x, y,
-                  window.cyNodeShapes["complex"].points,
-                  centerX + multimerPadding,
-                  centerY + multimerPadding,
-                  width / 2, height / 2,
-                  padding);
+              x, y,
+              window.cyNodeShapes["complex"].points,
+              centerX + multimerPadding,
+              centerY + multimerPadding,
+              width / 2, height / 2,
+              padding);
         }
 
         var intersections = stateAndInfoIntersectLines.concat(nodeIntersectLines, multimerIntersectionLines);
@@ -1237,26 +1100,26 @@
         var hasChildren = node.children().length > 0;
         var width = (hasChildren ? node.outerWidth() : node.width()) + threshold;
         var height = (hasChildren ? node.outerHeight() : node.height()) + threshold;
-        var padding = node._private.style["border-width"].pxValue / 2;
+        var padding = parseInt(node.css('border-width')) / 2;
         var multimerPadding = window.cyNodeShapes["complex"].multimerPadding;
         var cornerLength = window.cyNodeShapes["complex"].cornerLength;
 
         window.cyNodeShapes["complex"].points = $$.sbgn.generateComplexShapePoints(cornerLength,
-                width, height);
+            width, height);
 
         var nodeCheckPoint = window.cyMath.pointInsidePolygon(x, y, window.cyNodeShapes["complex"].points,
-                centerX, centerY, width, height, [0, -1], padding);
+            centerX, centerY, width, height, [0, -1], padding);
 
         var stateAndInfoCheckPoint = $$.sbgn.checkPointStateAndInfoBoxes(x, y, node,
-                threshold);
+            threshold);
 
         //check whether sbgn class includes multimer substring or not
         var multimerCheckPoint = false;
         if ($$.sbgn.isMultimer(node)) {
           multimerCheckPoint = window.cyMath.pointInsidePolygon(x, y,
-                  window.cyNodeShapes["complex"].points,
-                  centerX + multimerPadding, centerY + multimerPadding,
-                  width, height, [0, -1], padding);
+              window.cyNodeShapes["complex"].points,
+              centerX + multimerPadding, centerY + multimerPadding,
+              width, height, [0, -1], padding);
 
         }
 
@@ -1282,27 +1145,27 @@
         if ($$.sbgn.isMultimer(node)) {
           //add multimer shape
           $$.sbgn.drawNucAcidFeature(context, width, height,
-                  centerX + multimerPadding,
-                  centerY + multimerPadding, cornerRadius);
+              centerX + multimerPadding,
+              centerY + multimerPadding, cornerRadius);
 
           context.stroke();
 
           $$.sbgn.cloneMarker.nucleicAcidFeature(context,
-                  centerX + multimerPadding, centerY + multimerPadding,
-                  width, height, cloneMarker, true,
-                  node._private.style['background-opacity'].value);
+              centerX + multimerPadding, centerY + multimerPadding,
+              width, height, cloneMarker, true,
+              node.css('background-opacity'));
 
           //context.stroke();
         }
 
         $$.sbgn.drawNucAcidFeature(context, width, height, centerX,
-                centerY, cornerRadius);
+            centerY, cornerRadius);
 
         context.stroke();
 
         $$.sbgn.cloneMarker.nucleicAcidFeature(context, centerX, centerY,
-                width, height, cloneMarker, false,
-                node._private.style['background-opacity'].value);
+            width, height, cloneMarker, false,
+            node.css('background-opacity'));
 
 //        var nodeProp = {'label': label, 'centerX': centerX, 'centerY': centerY,
 //          'opacity': node._private.style['text-opacity'].value, 'width': node.width(), 'height': node.height()};
@@ -1330,21 +1193,21 @@
         }
 
         var stateAndInfoIntersectLines = $$.sbgn.intersectLineStateAndInfoBoxes(
-                node, x, y);
+            node, x, y);
 
         var nodeIntersectLines = $$.sbgn.nucleicAcidIntersectionLine(node,
-                x, y, centerX, centerY, cornerRadius);
+            x, y, centerX, centerY, cornerRadius);
 
         //check whether sbgn class includes multimer substring or not
         var multimerIntersectionLines = [];
         if ($$.sbgn.isMultimer(node)) {
           multimerIntersectionLines = $$.sbgn.nucleicAcidIntersectionLine(node,
-                  x, y, centerX + multimerPadding, centerY + multimerPadding,
-                  cornerRadius);
+              x, y, centerX + multimerPadding, centerY + multimerPadding,
+              cornerRadius);
         }
 
         var intersections = stateAndInfoIntersectLines.concat(nodeIntersectLines,
-                multimerIntersectionLines);
+            multimerIntersectionLines);
 
         return $$.sbgn.closestIntersectionPoint([x, y], intersections);
       },
@@ -1357,16 +1220,16 @@
         var cornerRadius = window.cyMath.getRoundRectangleRadius(width, height);
 
         var nodeCheckPoint = $$.sbgn.nucleicAcidCheckPoint(x, y, centerX, centerY,
-                node, threshold, this.points, cornerRadius);
+            node, threshold, this.points, cornerRadius);
         var stateAndInfoCheckPoint = $$.sbgn.checkPointStateAndInfoBoxes(x, y, node,
-                threshold);
+            threshold);
 
         //check whether sbgn class includes multimer substring or not
         var multimerCheckPoint = false;
         if ($$.sbgn.isMultimer(node)) {
           multimerCheckPoint = $$.sbgn.nucleicAcidCheckPoint(x, y,
-                  centerX + multimerPadding, centerY + multimerPadding,
-                  node, threshold, this.points, cornerRadius);
+              centerX + multimerPadding, centerY + multimerPadding,
+              node, threshold, this.points, cornerRadius);
         }
 
         return nodeCheckPoint || stateAndInfoCheckPoint || multimerCheckPoint;
@@ -1385,7 +1248,7 @@
         var cloneMarker = node._private.data.sbgnclonemarker;
 
         $$.sbgn.drawEllipse(context, centerX, centerY,
-                width, height);
+            width, height);
 
         context.stroke();
 
@@ -1403,8 +1266,8 @@
         context.stroke();
 
         $$.sbgn.cloneMarker.sourceAndSink(context, centerX, centerY,
-                width, height, cloneMarker,
-                node._private.style['background-opacity'].value);
+            width, height, cloneMarker,
+            node.css('background-opacity'));
 
       },
       intersectLine: window.cyNodeShapes["ellipse"].intersectLine,
@@ -1420,7 +1283,7 @@
 
   $$.sbgn.cloneMarker = {
     unspecifiedEntity: function (context, centerX, centerY,
-            width, height, cloneMarker, opacity) {
+                                 width, height, cloneMarker, opacity) {
       if (cloneMarker != null) {
         var oldGlobalAlpha = context.globalAlpha;
         context.globalAlpha = opacity;
@@ -1450,12 +1313,12 @@
       }
     },
     sourceAndSink: function (context, centerX, centerY,
-            width, height, cloneMarker, opacity) {
+                             width, height, cloneMarker, opacity) {
       $$.sbgn.cloneMarker.unspecifiedEntity(context, centerX, centerY,
-              width, height, cloneMarker, opacity);
+          width, height, cloneMarker, opacity);
     },
     simpleChemical: function (context, centerX, centerY,
-            width, height, cloneMarker, isMultimer, opacity) {
+                              width, height, cloneMarker, isMultimer, opacity) {
       if (cloneMarker != null) {
         var cornerRadius = Math.min(width / 2, height / 2);
 
@@ -1465,10 +1328,10 @@
         var secondCircleCenterY = centerY;
 
         simpleChemicalLeftClone(context, firstCircleCenterX, firstCircleCenterY,
-                2 * cornerRadius, 2 * cornerRadius, cloneMarker, opacity);
+            2 * cornerRadius, 2 * cornerRadius, cloneMarker, opacity);
 
         simpleChemicalRightClone(context, secondCircleCenterX, secondCircleCenterY,
-                2 * cornerRadius, 2 * cornerRadius, cloneMarker, opacity);
+            2 * cornerRadius, 2 * cornerRadius, cloneMarker, opacity);
 
         var oldStyle = context.fillStyle;
         context.fillStyle = $$.sbgn.colors.clone;
@@ -1488,7 +1351,7 @@
       }
     },
     perturbingAgent: function (context, centerX, centerY,
-            width, height, cloneMarker, opacity) {
+                               width, height, cloneMarker, opacity) {
       if (cloneMarker != null) {
         var cloneWidth = width;
         var cloneHeight = height / 4;
@@ -1503,8 +1366,8 @@
         context.globalAlpha = opacity;
 
         renderer.drawPolygon(context,
-                cloneX, cloneY,
-                cloneWidth, cloneHeight, markerPoints);
+            cloneX, cloneY,
+            cloneWidth, cloneHeight, markerPoints);
 
         context.fill();
 
@@ -1514,7 +1377,7 @@
       }
     },
     nucleicAcidFeature: function (context, centerX, centerY,
-            width, height, cloneMarker, isMultimer, opacity) {
+                                  width, height, cloneMarker, isMultimer, opacity) {
       if (cloneMarker != null) {
         var cloneWidth = width;
         var cloneHeight = height / 4;
@@ -1529,7 +1392,7 @@
         var cornerRadius = window.cyMath.getRoundRectangleRadius(width, height);
 
         $$.sbgn.drawNucAcidFeature(context, cloneWidth, cloneHeight,
-                cloneX, cloneY, cornerRadius, opacity);
+            cloneX, cloneY, cornerRadius, opacity);
 
         context.fillStyle = oldStyle;
         context.globalAlpha = oldGlobalAlpha;
@@ -1537,12 +1400,12 @@
       }
     },
     macromolecule: function (context, centerX, centerY,
-            width, height, cloneMarker, isMultimer, opacity) {
+                             width, height, cloneMarker, isMultimer, opacity) {
       $$.sbgn.cloneMarker.nucleicAcidFeature(context, centerX, centerY,
-              width, height, cloneMarker, isMultimer, opacity);
+          width, height, cloneMarker, isMultimer, opacity);
     },
     complex: function (context, centerX, centerY,
-            width, height, cornerLength, cloneMarker, isMultimer, opacity) {
+                       width, height, cornerLength, cloneMarker, isMultimer, opacity) {
       if (cloneMarker != null) {
         var cpX = cornerLength / width;
         var cpY = cornerLength / height;
@@ -1559,8 +1422,8 @@
         context.globalAlpha = opacity;
 
         window.cyRenderer.drawPolygonPath(context,
-                cloneX, cloneY,
-                cloneWidth, cloneHeight, markerPoints);
+            cloneX, cloneY,
+            cloneWidth, cloneHeight, markerPoints);
         context.fill();
 
         context.fillStyle = oldStyle;
@@ -1580,13 +1443,13 @@
     var nodeY = node._private.position.y;
     var width = node.width();
     var height = node.height();
-    var padding = node._private.style['border-width'].value / 2;
+    var padding = parseInt(node.css('border-width')) / 2;
 
     for (var i = 0; i < node._private.data.ports.length; i++) {
       var port = node._private.data.ports[i];
       if (portId == port.id) {
         return window.cyMath.intersectLineEllipse(
-                x, y, port.x * width / 100 + nodeX, port.y * height / 100 + nodeY, 1, 1);
+            x, y, port.x * width / 100 + nodeX, port.y * height / 100 + nodeY, 1, 1);
       }
     }
     return [];
@@ -1617,7 +1480,7 @@
     var nodeY = node._private.position.y;
     var width = node.width();
     var height = node.height();
-    var padding = node._private.style["border-width"].value / 2;
+    var padding = parseInt(node.css('border-width')) / 2;
 
     var halfWidth = width / 2;
     var halfHeight = height / 2;
@@ -1632,7 +1495,7 @@
       var topEndY = topStartY;
 
       straightLineIntersections = window.cyMath.finiteLinesIntersect(
-              x, y, nodeX, nodeY, topStartX, topStartY, topEndX, topEndY, false);
+          x, y, nodeX, nodeY, topStartX, topStartY, topEndX, topEndY, false);
 
       if (straightLineIntersections.length > 0) {
         return straightLineIntersections;
@@ -1647,7 +1510,7 @@
       var rightEndY = nodeY + halfHeight - cornerRadius + padding;
 
       straightLineIntersections = window.cyMath.finiteLinesIntersect(
-              x, y, nodeX, nodeY, rightStartX, rightStartY, rightEndX, rightEndY, false);
+          x, y, nodeX, nodeY, rightStartX, rightStartY, rightEndX, rightEndY, false);
 
       if (straightLineIntersections.length > 0) {
         return straightLineIntersections;
@@ -1662,7 +1525,7 @@
       var bottomEndY = bottomStartY;
 
       straightLineIntersections = window.cyMath.finiteLinesIntersect(
-              x, y, nodeX, nodeY, bottomStartX, bottomStartY, bottomEndX, bottomEndY, false);
+          x, y, nodeX, nodeY, bottomStartX, bottomStartY, bottomEndX, bottomEndY, false);
 
       if (straightLineIntersections.length > 0) {
         return straightLineIntersections;
@@ -1677,7 +1540,7 @@
       var leftEndY = nodeY + halfHeight - cornerRadius + padding;
 
       straightLineIntersections = window.cyMath.finiteLinesIntersect(
-              x, y, nodeX, nodeY, leftStartX, leftStartY, leftEndX, leftEndY, false);
+          x, y, nodeX, nodeY, leftStartX, leftStartY, leftEndX, leftEndY, false);
 
       if (straightLineIntersections.length > 0) {
         return straightLineIntersections;
@@ -1693,13 +1556,13 @@
       var bottomRightCenterX = nodeX + halfWidth - cornerRadius;
       var bottomRightCenterY = nodeY + halfHeight - cornerRadius
       arcIntersections = window.cyMath.intersectLineCircle(
-              x, y, nodeX, nodeY,
-              bottomRightCenterX, bottomRightCenterY, cornerRadius + padding);
+          x, y, nodeX, nodeY,
+          bottomRightCenterX, bottomRightCenterY, cornerRadius + padding);
 
       // Ensure the intersection is on the desired quarter of the circle
       if (arcIntersections.length > 0
-              && arcIntersections[0] >= bottomRightCenterX
-              && arcIntersections[1] >= bottomRightCenterY) {
+          && arcIntersections[0] >= bottomRightCenterX
+          && arcIntersections[1] >= bottomRightCenterY) {
         return [arcIntersections[0], arcIntersections[1]];
       }
     }
@@ -1709,13 +1572,13 @@
       var bottomLeftCenterX = nodeX - halfWidth + cornerRadius;
       var bottomLeftCenterY = nodeY + halfHeight - cornerRadius
       arcIntersections = window.cyMath.intersectLineCircle(
-              x, y, nodeX, nodeY,
-              bottomLeftCenterX, bottomLeftCenterY, cornerRadius + padding);
+          x, y, nodeX, nodeY,
+          bottomLeftCenterX, bottomLeftCenterY, cornerRadius + padding);
 
       // Ensure the intersection is on the desired quarter of the circle
       if (arcIntersections.length > 0
-              && arcIntersections[0] <= bottomLeftCenterX
-              && arcIntersections[1] >= bottomLeftCenterY) {
+          && arcIntersections[0] <= bottomLeftCenterX
+          && arcIntersections[1] >= bottomLeftCenterY) {
         return [arcIntersections[0], arcIntersections[1]];
       }
     }
@@ -1724,7 +1587,7 @@
 
   //this function gives the intersections of any line with a round rectangle 
   $$.sbgn.roundRectangleIntersectLine = function (
-          x1, y1, x2, y2, nodeX, nodeY, width, height, cornerRadius, padding) {
+      x1, y1, x2, y2, nodeX, nodeY, width, height, cornerRadius, padding) {
 
     var halfWidth = width / 2;
     var halfHeight = height / 2;
@@ -1740,7 +1603,7 @@
       var topEndY = topStartY;
 
       var intersection = window.cyMath.finiteLinesIntersect(
-              x1, y1, x2, y2, topStartX, topStartY, topEndX, topEndY, false);
+          x1, y1, x2, y2, topStartX, topStartY, topEndX, topEndY, false);
 
       if (intersection.length > 0) {
         straightLineIntersections = straightLineIntersections.concat(intersection);
@@ -1755,7 +1618,7 @@
       var rightEndY = nodeY + halfHeight - cornerRadius + padding;
 
       var intersection = window.cyMath.finiteLinesIntersect(
-              x1, y1, x2, y2, rightStartX, rightStartY, rightEndX, rightEndY, false);
+          x1, y1, x2, y2, rightStartX, rightStartY, rightEndX, rightEndY, false);
 
       if (intersection.length > 0) {
         straightLineIntersections = straightLineIntersections.concat(intersection);
@@ -1770,7 +1633,7 @@
       var bottomEndY = bottomStartY;
 
       var intersection = window.cyMath.finiteLinesIntersect(
-              x1, y1, x2, y2, bottomStartX, bottomStartY, bottomEndX, bottomEndY, false);
+          x1, y1, x2, y2, bottomStartX, bottomStartY, bottomEndX, bottomEndY, false);
 
       if (intersection.length > 0) {
         straightLineIntersections = straightLineIntersections.concat(intersection);
@@ -1785,7 +1648,7 @@
       var leftEndY = nodeY + halfHeight - cornerRadius + padding;
 
       var intersection = window.cyMath.finiteLinesIntersect(
-              x1, y1, x2, y2, leftStartX, leftStartY, leftEndX, leftEndY, false);
+          x1, y1, x2, y2, leftStartX, leftStartY, leftEndX, leftEndY, false);
 
       if (intersection.length > 0) {
         straightLineIntersections = straightLineIntersections.concat(intersection);
@@ -1800,13 +1663,13 @@
       var topLeftCenterX = nodeX - halfWidth + cornerRadius;
       var topLeftCenterY = nodeY - halfHeight + cornerRadius
       arcIntersections = window.cyMath.intersectLineCircle(
-              x1, y1, x2, y2,
-              topLeftCenterX, topLeftCenterY, cornerRadius + padding);
+          x1, y1, x2, y2,
+          topLeftCenterX, topLeftCenterY, cornerRadius + padding);
 
       // Ensure the intersection is on the desired quarter of the circle
       if (arcIntersections.length > 0
-              && arcIntersections[0] <= topLeftCenterX
-              && arcIntersections[1] <= topLeftCenterY) {
+          && arcIntersections[0] <= topLeftCenterX
+          && arcIntersections[1] <= topLeftCenterY) {
         straightLineIntersections = straightLineIntersections.concat(arcIntersections);
       }
     }
@@ -1816,13 +1679,13 @@
       var topRightCenterX = nodeX + halfWidth - cornerRadius;
       var topRightCenterY = nodeY - halfHeight + cornerRadius
       arcIntersections = window.cyMath.intersectLineCircle(
-              x1, y1, x2, y2,
-              topRightCenterX, topRightCenterY, cornerRadius + padding);
+          x1, y1, x2, y2,
+          topRightCenterX, topRightCenterY, cornerRadius + padding);
 
       // Ensure the intersection is on the desired quarter of the circle
       if (arcIntersections.length > 0
-              && arcIntersections[0] >= topRightCenterX
-              && arcIntersections[1] <= topRightCenterY) {
+          && arcIntersections[0] >= topRightCenterX
+          && arcIntersections[1] <= topRightCenterY) {
         straightLineIntersections = straightLineIntersections.concat(arcIntersections);
       }
     }
@@ -1832,13 +1695,13 @@
       var bottomRightCenterX = nodeX + halfWidth - cornerRadius;
       var bottomRightCenterY = nodeY + halfHeight - cornerRadius
       arcIntersections = window.cyMath.intersectLineCircle(
-              x1, y1, x2, y2,
-              bottomRightCenterX, bottomRightCenterY, cornerRadius + padding);
+          x1, y1, x2, y2,
+          bottomRightCenterX, bottomRightCenterY, cornerRadius + padding);
 
       // Ensure the intersection is on the desired quarter of the circle
       if (arcIntersections.length > 0
-              && arcIntersections[0] >= bottomRightCenterX
-              && arcIntersections[1] >= bottomRightCenterY) {
+          && arcIntersections[0] >= bottomRightCenterX
+          && arcIntersections[1] >= bottomRightCenterY) {
         straightLineIntersections = straightLineIntersections.concat(arcIntersections);
       }
     }
@@ -1848,13 +1711,13 @@
       var bottomLeftCenterX = nodeX - halfWidth + cornerRadius;
       var bottomLeftCenterY = nodeY + halfHeight - cornerRadius
       arcIntersections = window.cyMath.intersectLineCircle(
-              x1, y1, x2, y2,
-              bottomLeftCenterX, bottomLeftCenterY, cornerRadius + padding);
+          x1, y1, x2, y2,
+          bottomLeftCenterX, bottomLeftCenterY, cornerRadius + padding);
 
       // Ensure the intersection is on the desired quarter of the circle
       if (arcIntersections.length > 0
-              && arcIntersections[0] <= bottomLeftCenterX
-              && arcIntersections[1] >= bottomLeftCenterY) {
+          && arcIntersections[0] <= bottomLeftCenterX
+          && arcIntersections[1] >= bottomLeftCenterY) {
         straightLineIntersections = straightLineIntersections.concat(arcIntersections);
       }
     }
@@ -1865,7 +1728,7 @@
   };
 
   $$.sbgn.intersectLineEllipse = function (
-          x1, y1, x2, y2, centerX, centerY, width, height, padding) {
+      x1, y1, x2, y2, centerX, centerY, width, height, padding) {
 
     var w = width / 2 + padding;
     var h = height / 2 + padding;
@@ -1879,7 +1742,7 @@
     var a = h * h + w * w * m * m;
     var b = -2 * an * h * h + 2 * m * n * w * w - 2 * bn * m * w * w;
     var c = an * an * h * h + n * n * w * w - 2 * bn * w * w * n +
-            bn * bn * w * w - h * h * w * w;
+        bn * bn * w * w - h * h * w * w;
 
     var discriminant = b * b - 4 * a * c;
 
@@ -1902,7 +1765,7 @@
   $$.sbgn.intersectLineStateAndInfoBoxes = function (node, x, y) {
     var centerX = node._private.position.x;
     var centerY = node._private.position.y;
-    var padding = node._private.style["border-width"].value / 2;
+    var padding = parseInt(node.css('border-width')) / 2;
 
     var stateAndInfos = node._private.data.sbgnstatesandinfos;
 
@@ -1919,7 +1782,7 @@
 
       if (state.clazz == "state variable" && stateCount < 2) {//draw ellipse
         var stateIntersectLines = $$.sbgn.intersectLineEllipse(x, y, centerX, centerY,
-                stateCenterX, stateCenterY, stateWidth, stateHeight, padding);
+            stateCenterX, stateCenterY, stateWidth, stateHeight, padding);
 
         if (stateIntersectLines.length > 0)
           intersections = intersections.concat(stateIntersectLines);
@@ -1927,7 +1790,7 @@
         stateCount++;
       } else if (state.clazz == "unit of information" && infoCount < 2) {//draw rectangle
         var infoIntersectLines = $$.sbgn.roundRectangleIntersectLine(x, y, centerX, centerY,
-                stateCenterX, stateCenterY, stateWidth, stateHeight, 5, padding);
+            stateCenterX, stateCenterY, stateWidth, stateHeight, 5, padding);
 
         if (infoIntersectLines.length > 0)
           intersections = intersections.concat(infoIntersectLines);
@@ -1944,7 +1807,7 @@
   $$.sbgn.checkPointStateAndInfoBoxes = function (x, y, node, threshold) {
     var centerX = node._private.position.x;
     var centerY = node._private.position.y;
-    var padding = node._private.style["border-width"].value / 2;
+    var padding =parseInt(node.css('border-width')) / 2;
     var stateAndInfos = node._private.data.sbgnstatesandinfos;
 
     var stateCount = 0, infoCount = 0;
@@ -1959,7 +1822,7 @@
 
       if (state.clazz == "state variable" && stateCount < 2) {//draw ellipse
         var stateCheckPoint = window.cyNodeShapes["ellipse"].checkPoint(
-                x, y, padding, stateWidth, stateHeight, stateCenterX, stateCenterY);
+            x, y, padding, stateWidth, stateHeight, stateCenterX, stateCenterY);
 
         if (stateCheckPoint == true)
           return true;
@@ -1967,7 +1830,7 @@
         stateCount++;
       } else if (state.clazz == "unit of information" && infoCount < 2) {//draw rectangle
         var infoCheckPoint = window.cyNodeShapes["roundrectangle"].checkPoint(
-                x, y, padding, stateWidth, stateHeight, stateCenterX, stateCenterY);
+            x, y, padding, stateWidth, stateHeight, stateCenterX, stateCenterY);
 
         if (infoCheckPoint == true)
           return true;
