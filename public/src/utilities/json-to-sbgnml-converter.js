@@ -1,7 +1,6 @@
+// if(node._private.data.sbgnclonemarker != 'undefined' &&  node._private.data.sbgnclonemarker != null)
 var jsonToSbgnml = {
-
-
-    createSbgnml : function(visibleNodes, visibleEdges){
+    createSbgnml : function(){
         var self = this;
         var sbgnmlText = "";
 
@@ -11,20 +10,13 @@ var jsonToSbgnml = {
         sbgnmlText = sbgnmlText + "<map language='process description'>\n";
 
         //adding glyph sbgnml
-
- 
-        
-        //funda cy.nodes(":visible").each(function(){
-        visibleNodes.each(function(){
-
-
+        cy.nodes(":visible").each(function(){
             if(!this.isChild())
                 sbgnmlText = sbgnmlText + self.getGlyphSbgnml(this);
         });
 
         //adding arc sbgnml
-       //funda  cy.edges(":visible").each(function(){
-       visibleEdges.each(function(){
+        cy.edges(":visible").each(function(){
             sbgnmlText = sbgnmlText + self.getArcSbgnml(this);
         });
 
@@ -115,9 +107,7 @@ var jsonToSbgnml = {
 
     addClone : function(node){
         var sbgnmlText = "";
-
-        //funda if(typeof node._private.data.sbgnclonemarker != 'undefined')
-        if(node._private.data.sbgnclonemarker != 'undefined' &&  node._private.data.sbgnclonemarker != null)
+        if(typeof node._private.data.sbgnclonemarker != 'undefined')
             sbgnmlText = sbgnmlText + "<clone/>\n";
         return sbgnmlText;
     },
@@ -144,10 +134,10 @@ var jsonToSbgnml = {
         var arcTarget = edge._private.data.porttarget;
         var arcSource = edge._private.data.portsource;
 
-        if (!arcSource  || arcSource.length === 0)
+        if (arcSource == null || arcSource.length === 0)
             arcSource = edge._private.data.source;
 
-        if (!arcTarget  ||  arcTarget.length === 0)
+        if (arcTarget == null || arcTarget.length === 0)
             arcTarget = edge._private.data.target;
 
         var arcId = arcSource + "-" + arcTarget;
@@ -160,6 +150,16 @@ var jsonToSbgnml = {
         sbgnmlText = sbgnmlText + "<start y='" + edge._private.rscratch.startY + "' x='" +
             edge._private.rscratch.startX + "'/>\n";
 
+        var segpts = cy.edgeBendEditing('get').getSegmentPoints(edge);
+        if(segpts){
+            for(var i = 0; segpts && i < segpts.length; i = i + 2){
+                var bendX = segpts[i];
+                var bendY = segpts[i + 1];
+
+                sbgnmlText = sbgnmlText + "<next y='" + bendY + "' x='" + bendX + "'/>\n";
+            }
+        }
+
         sbgnmlText = sbgnmlText + "<end y='" + edge._private.rscratch.endY + "' x='" +
             edge._private.rscratch.endX + "'/>\n";
 
@@ -169,11 +169,12 @@ var jsonToSbgnml = {
     },
 
     addGlyphBbox : function(node){
-        var bbox = node._private.data.sbgnbbox;
-        var x = node._private.position.x - bbox.w/2;
-        var y = node._private.position.y - bbox.h/2;
+        var width = node.width();
+        var height = node.height();
+        var x = node._private.position.x - width/2;
+        var y = node._private.position.y - height/2;
         return "<bbox y='" + y + "' x='" + x +
-            "' w='" + bbox.w + "' h='" + bbox.h + "' />\n";
+            "' w='" + width + "' h='" + height + "' />\n";
     },
 
     addStateAndInfoBbox : function(node, boxGlyph){
@@ -193,8 +194,8 @@ var jsonToSbgnml = {
 
         var ports = node._private.data.ports;
         for(var i = 0 ; i < ports.length ; i++){
-            var x = node._private.position.x + ports[i].x;
-            var y = node._private.position.y + ports[i].y;
+            var x = node._private.position.x + ports[i].x * node.width() / 100;
+            var y = node._private.position.y + ports[i].y * node.height() / 100;
 
             sbgnmlText = sbgnmlText + "<port id='" + ports[i].id +
                 "' y='" + y + "' x='" + x + "' />\n";

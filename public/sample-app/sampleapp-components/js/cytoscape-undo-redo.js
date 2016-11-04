@@ -145,6 +145,12 @@
                     cy.trigger("changeStyleData" ,["sbgnlabel", action.args.nodes]);
                 }
 
+                else if(action.name  == "changeFontProperties"){
+                    cy.trigger("changeStyleData" ,["labelsize", action.args.eles]);
+                    cy.trigger("changeStyleData" ,["fontstyle", action.args.eles]);
+                    cy.trigger("changeStyleData" ,["fontfamily", action.args.eles]);
+                    cy.trigger("changeStyleData" ,["fontweight", action.args.eles]);
+                }
                 else if(action.name  == "changeIsMultimerStatus"){
                     cy.trigger("changeStyleData" ,["sbgnclass", action.args.nodes]);
                 }
@@ -170,9 +176,21 @@
                 }
 
                 else if (action.name == "highlight" || action.name == "removeHighlights"){
-                    cy.trigger("changeClasses",  [res.current.highlighteds]);
-                    cy.trigger("changeClasses",  [res.current.unhighlighteds]);
-                    cy.trigger("changeClasses",  [res.current.notHighlighteds]);
+                    cy.trigger("changeHighlightStatus",["highlighted", res.current.highlighteds] );
+                    cy.trigger("changeHighlightStatus",["unhighlighted", res.current.unhighlighteds] );
+                    cy.trigger("changeHighlightStatus",["notHighlighted", res.current.notHighlighteds] );
+
+
+                    // cy.trigger("changeClasses",  [res.current.notHighlighteds]);
+                    // cy.trigger("changeClasses",  [res.current.highlighteds]);
+                    // cy.trigger("changeClasses",  [res.current.unhighlighteds]);
+                    //
+                    // // cy.trigger("changeScratch",  ["_viewUtilities", res.current.unhighlighteds]);
+                    //
+                    //
+                    // console.log(res.current.highlighteds);
+
+
                 }
 
                 else if (action.name == "hide" || action.name == "show"){

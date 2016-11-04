@@ -16,6 +16,17 @@ var sbgnElementUtilities = {
         fontweight: 'normal',
         fontstyle: 'normal'
     },
+    getDefaultLabelSize: function(sbgnclass) {
+        if(!canHaveSBGNLabel(sbgnclass)) {
+            return undefined;
+        }
+        else if(sbgnclass === 'complex' || sbgnclass === 'compartment') {
+            return 16;
+        }
+        else {
+            return 20;
+        }
+    },
     //this method returns the nodes non of whose ancestors is not in given nodes
     getTopMostNodes: function (nodes) {
         var nodesMap = {};

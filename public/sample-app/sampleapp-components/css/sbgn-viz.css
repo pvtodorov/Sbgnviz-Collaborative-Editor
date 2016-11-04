@@ -446,6 +446,38 @@ img.sbgn-toolbar-element:hover {
 input, button {
     font-size: 12px !important;
 }
+
+
+
+
+.ui-datepicker .ui-datepicker-title select {
+    font-size: 12px;
+}
+
+.ui-widget .ui-widget {
+    font-size: 12px;
+}
+
+.ui-widget button {
+    font-size: 12px;
+}
+
+option {
+    font-size: 12px;
+}
+
+#sbgn-properties-template td {
+    width: 100%;
+}
+
+td {
+    font-size: 12px;
+}
+
+#dynamic-label-size-select {
+    width: 100%;
+}
+
 #sbgn-network-container {
     position: absolute;
     /*margin: auto;*/

@@ -591,13 +591,23 @@ module.exports =  function(model, docId, userId, userName) {
                 var sbgnStatesAndInfos = nodePath.get('sbgnStatesAndInfos');
                 var highlightColor = nodePath.get('highlightColor');
                 var ports = nodePath.get('ports');
+
+                var labelsize = nodePath.get('labelsize');
+                var fontfamily = nodePath.get('fontfamily');
+                var fontweight = nodePath.get('fontweight');
+                var fontstyle = nodePath.get('fontstyle');
+                var opacity = nodePath.get('opacity');
+
+
                 var interactionCount = nodePath.get('interactionCount');
 
 
                 prevParam = {x: pos.x , y: pos.y , sbgnclass:sbgnclass, width: width, height: height,
                     borderColor: borderColor, borderWidth: borderWidth, sbgnlabel: sbgnlabel,
                     sbgnStatesAndInfos:sbgnStatesAndInfos, parent:parent, isCloneMarker: isCloneMarker,
-                    highlightColor: highlightColor, ports: ports, interactionCount: interactionCount};
+                    highlightColor: highlightColor, ports: ports, interactionCount: interactionCount, labelsize: labelsize,
+                    fontfamily:fontfamily, fontweight:fontweight, fontstyle:fontstyle            , opacity:opacity
+                };
 
 
 
@@ -632,9 +642,10 @@ module.exports =  function(model, docId, userId, userName) {
                 var porttarget = edgePath.get('porttarget');
                 var bendPointPositions= edgePath.get('bendPointPositions');
                 var highlightColor = edgePath.get('highlightColor');
+                var opacity = edgePath.get('opacity');
 
                 prevParam = {source: source , target:target , sbgnclass:sbgnClass, lineColor: lineColor,
-                    width: width, sbgncardinality: sbgncardinality, portsource: portsource, porttarget:porttarget, bendPointPositions: bendPointPositions, highlightColor:highlightColor};
+                    width: width, sbgncardinality: sbgncardinality, portsource: portsource, porttarget:porttarget, bendPointPositions: bendPointPositions, highlightColor:highlightColor, opacity:opacity};
 
                 this.updateHistory({opName:'delete',opTarget:'element', elType:'edge', elId: edgeId, prevParam: prevParam});
 
@@ -664,9 +675,11 @@ module.exports =  function(model, docId, userId, userName) {
                 var portsource = edgePath.get('portsource');
                 var porttarget = edgePath.get('porttarget');
                 var bendPointPositions= edgePath.get('bendPointPositions');
+                var opacity = edgePath.get('opacity');
+
 
                 prevParamsEdges.push( {source: source , target:target , sbgnclass:sbgnclass, lineColor: lineColor,
-                    width: width, sbgncardinality: sbgncardinality, portsource: portsource, porttarget:porttarget, bendPointPositions: bendPointPositions});
+                    width: width, sbgncardinality: sbgncardinality, portsource: portsource, porttarget:porttarget, bendPointPositions: bendPointPositions, opacity:opacity});
             });
 
 
@@ -692,11 +705,17 @@ module.exports =  function(model, docId, userId, userName) {
                 var sbgnStatesAndInfos = nodePath.get('sbgnStatesAndInfos');
                 var highlightColor = nodePath.get('highlightColor');
                 var ports = nodePath.get('ports');
+                var labelsize = nodePath.get('labelsize');
+                var fontfamily = nodePath.get('fontfamily');
+                var fontweight = nodePath.get('fontweight');
+                var fontstyle = nodePath.get('fontstyle');
+                var opacity = nodePath.get('opacity');
 
                 prevParamsNodes.push({x: pos.x , y: pos.y , sbgnclass:sbgnclass, width: width, height: height,
                     borderColor: borderColor, borderWidth: borderWidth, sbgnlabel: sbgnlabel,
                     sbgnStatesAndInfos:sbgnStatesAndInfos, parent:parent, isCloneMarker: isCloneMarker,
-                      highlightColor: highlightColor, backgroundColor: backgroundColor, ports:ports } );
+                      highlightColor: highlightColor, backgroundColor: backgroundColor, ports:ports, labelsize:labelsize,
+                fontweight:fontweight, fontfamily:fontfamily, fontstyle:fontstyle, opacity:opacity} );
             });
 
 
@@ -753,6 +772,11 @@ module.exports =  function(model, docId, userId, userName) {
             this.changeModelNodeAttribute('sbgnStatesAndInfos', nodeId, param.sbgnStatesAndInfos,user, noHistUpdate );
             this.changeModelNodeAttribute('parent', nodeId,param.parent,user, noHistUpdate );
             this.changeModelNodeAttribute('isCloneMarker', nodeId,param.isCloneMarker,user , noHistUpdate);
+            this.changeModelNodeAttribute('labelsize', nodeId,param.labelsize,user, noHistUpdate );
+            this.changeModelNodeAttribute('fontfamily', nodeId,param.fontfamily,user, noHistUpdate );
+            this.changeModelNodeAttribute('fontweight', nodeId,param.fontweight,user, noHistUpdate );
+            this.changeModelNodeAttribute('fontstyle', nodeId,param.fontstyle,user, noHistUpdate );
+            this.changeModelNodeAttribute('opacity', nodeId,param.opacity,user, noHistUpdate );
 
             if(!noHistUpdate)
                 this.updateHistory({opName:'restore', opTarget:'element', elType:'node',  elId:nodeId});
@@ -770,6 +794,7 @@ module.exports =  function(model, docId, userId, userName) {
             this.changeModelEdgeAttribute('porttarget', edgeId,param.porttarget,user , noHistUpdate);
             this.changeModelEdgeAttribute('bendPointPositions', edgeId,param.bendPointPositions,user , noHistUpdate);
             this.changeModelEdgeAttribute('highlightColor', edgeId,param.highlightColor,user, noHistUpdate );
+            this.changeModelEdgeAttribute('opacity', edgeId,param.opacity,user, noHistUpdate );
 
 
             if(!noHistUpdate)
@@ -837,6 +862,26 @@ module.exports =  function(model, docId, userId, userName) {
 
         },
 
+
+        //should be called before loading a new graph to prevent id confusion
+        deleteAll: function(nodes, edges , user, noHistUpdate){
+
+            var self = this;
+            if(!noHistUpdate)
+                this.updateHistory({opName:'new', opTarget:'model'});
+
+
+            edges.forEach(function(edge){
+                self.deleteModelEdge(edge.id(), user, noHistUpdate);
+            });
+
+            nodes.forEach(function(node){
+                self.deleteModelNode(node.id(), user, noHistUpdate);
+            });
+
+
+        },
+
         //convert model to json structure
         getJsonFromModel: function(){
 
@@ -870,7 +915,12 @@ module.exports =  function(model, docId, userId, userName) {
                             sbgnlabel: node.sbgnlabel,
                             sbgnstatesandinfos: node.sbgnStatesAndInfos,
                             height: node.height,
-                            width: node.width
+                            width: node.width,
+                            labelsize: node.labelsize,
+                            fontfamily: node.fontfamily,
+                            fontweight: node.fontweight,
+                            fontstyle: node.fontstyle
+
                         }
                     };
 
@@ -927,6 +977,26 @@ module.exports =  function(model, docId, userId, userName) {
                 this.changeModelNodeAttribute('interactionCount', node.id(),0, user, true); //don't update history
 
 
+            // var classes= nodePath.get('classes');
+            //
+            // if (classes != null)
+            //     node._private.classes = classes;
+            //
+            // else
+            //     this.changeModelNodeAttribute('classes', node.id(),node._private.classes, user, noHistUpdate);
+            //
+            //
+            //
+            // var viewUtilities = nodePath.get('viewUtilities');
+            //
+            // if (viewUtilities != null)
+            //     node._private.scratch._viewUtilities = viewUtilities;
+            //
+            // else
+            //     this.changeModelNodeAttribute('viewUtilities', node.id(),node._private.scratch._viewUtilities, user, noHistUpdate);
+
+
+
             var backgroundOpacity= nodePath.get('backgroundOpacity');
 
             if (backgroundOpacity != null)
@@ -934,6 +1004,17 @@ module.exports =  function(model, docId, userId, userName) {
 
             else
                 this.changeModelNodeAttribute('backgroundOpacity', node.id(),node.data('backgroundOpacity'), user, noHistUpdate);
+
+
+            //var opacity = nodePath.get('opacity');
+
+            // if (opacity != null)
+            //     //node.css('opacity', opacity );
+            //     node._private.style["opacity"].value = opacity;
+            //
+            // else
+            //     this.changeModelNodeAttribute('opacity', node.id(),node.css('opacity'), user, noHistUpdate);
+            //
 
 
 
@@ -963,8 +1044,12 @@ module.exports =  function(model, docId, userId, userName) {
                 this.changeModelNodeAttribute('borderColor', node.id(),node.css('border-color'), user, noHistUpdate); //initially css is active, it is then loaded to data('borderColor')
 
             var borderWidth = nodePath.get('borderWidth');
-            if (borderWidth != null)
-                node.css('border-width', borderWidth);
+            if (borderWidth != null){
+
+                node.css('border-width', borderWidth); //causes bypass
+                node._private.style["border-width"].bypass = null;
+               // node._private.style["border-width"].value = borderWidth;
+            }
             else
                 this.changeModelNodeAttribute('borderWidth', node.id(),node.css('border-width'), user, noHistUpdate);
 
@@ -975,6 +1060,7 @@ module.exports =  function(model, docId, userId, userName) {
 
             if (backgroundColor != null)
                 node.css('background-color', backgroundColor);
+              //  node._private.style["background-color"].strValue = backgroundColor;
             else
                 this.changeModelNodeAttribute('backgroundColor', node.id(),node.css('background-color'), user, noHistUpdate);
 
@@ -1051,10 +1137,45 @@ module.exports =  function(model, docId, userId, userName) {
 
 
 
+            var labelsize = nodePath.get('labelsize');
 
-            //IMPORTANT!!!!! Calling width height updates causes node moving errors
+            if (labelsize != null) {
+                node.data('labelsize', labelsize);
+                node._private.data.labelsize = labelsize;
+            }
+            else
+                this.changeModelNodeAttribute('labelsize', node.id(),node._private.data.labelsize, user, noHistUpdate);
 
 
+
+            var fontfamily = nodePath.get('fontfamily');
+
+            if (fontfamily != null) {
+                node.data('fontfamily', fontfamily);
+                node._private.data.fontfamily = fontfamily;
+            }
+            else
+                this.changeModelNodeAttribute('fontfamily', node.id(),node._private.data.fontfamily, user, noHistUpdate);
+
+
+            var fontweight = nodePath.get('fontweight');
+
+            if (fontweight != null) {
+                node.data('fontweight', fontweight);
+                node._private.data.fontweight = fontweight;
+            }
+            else
+                this.changeModelNodeAttribute('fontweight', node.id(),node._private.data.fontweight, user, noHistUpdate);
+
+
+            var fontstyle = nodePath.get('fontstyle');
+
+            if (fontstyle != null) {
+                node.data('fontstyle', fontstyle);
+                node._private.data.fontstyle = fontstyle;
+            }
+            else
+                this.changeModelNodeAttribute('fontstyle', node.id(),node._private.data.fontstyle, user, noHistUpdate);
 
         },
         initModelEdge: function(edge, user, noHistUpdate){
@@ -1070,6 +1191,24 @@ module.exports =  function(model, docId, userId, userName) {
 
 
             edgePath.set('id', edge.id());
+
+
+
+            var classes = edgePath.get('classes');
+            if (classes != null)
+                edge._private.classes = classes;
+
+            else
+                this.changeModelEdgeAttribute('classes', edge.id(),edge._private.classes, user, noHistUpdate);
+
+
+            var viewUtilities = edgePath.get('viewUtilities');
+
+            if (viewUtilities != null)
+                edge._private.scratch._viewUtilities = viewUtilities;
+
+            else
+                this.changeModelEdgeAttribute('viewUtilities', edge.id(),edge._private.scratch._viewUtilities, user, noHistUpdate);
 
 
 
@@ -1091,6 +1230,15 @@ module.exports =  function(model, docId, userId, userName) {
                 this.changeModelEdgeAttribute('bendPointPositions', edge.id(), bp, user, noHistUpdate);
             }
 
+
+            // var opacity = edgePath.get('opacity');
+            //
+            // if (opacity != null)
+            //     //edge.css('opacity', opacity );
+            //     edge._private.style["opacity"].value = opacity;
+            //
+            // else
+            //     this.changeModelEdgeAttribute('opacity', edge.id(),edge.css('opacity'), user, noHistUpdate);
 
 
 
@@ -1124,7 +1272,8 @@ module.exports =  function(model, docId, userId, userName) {
             var width = edgePath.get('width');
 
             if (width != null)
-                edge.css('width', width);
+                edge._private.style["width"].value = width;
+                //edge.css('width', width);
             else
                 this.changeModelEdgeAttribute('width', edge.id(),edge.css('width'), user, noHistUpdate);
 

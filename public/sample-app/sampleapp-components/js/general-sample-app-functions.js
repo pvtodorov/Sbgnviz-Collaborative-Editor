@@ -1,3 +1,7 @@
+//FUNDA WARNING
+//Changed dynamicResize
+////////////
+
 //Override String endsWith method for IE
 String.prototype.endsWith = function (suffix) {
   return this.indexOf(suffix, this.length - suffix.length) !== -1;
@@ -8,28 +12,44 @@ function dynamicResize()
 
   var win = $(this); //this = window
 
-  var windowWidth = win.width();
-  var windowHeight = win.height();
+  var windowWidth = win.width() - 80; //80px padding on the left
+  var windowHeight = win.height()  - 10; //10px padding at the bottom
 
   var canvasWidth = 1000;
   var canvasHeight = 680;
 
-  if (windowWidth > canvasWidth)
-  {
-    $("#sbgn-network-container").width(windowWidth * 0.9 * 0.8);
-    $("#sbgn-inspector").width(windowWidth * 0.9 * 0.2);
-    var w = $("#sbgn-inspector-and-canvas").width();
-    $(".nav-menu").width(w);
-    $(".navbar").width(w);
-//    $("#sbgn-info-content").width(windowWidth * 0.85);
-    $("#sbgn-toolbar").width(w);
-  }
+  //if (windowWidth > canvasWidth) {
+  $("#sbgn-network-container").width(windowWidth * 0.7 );
 
-  if (windowHeight > canvasHeight)
-  {
-    $("#sbgn-network-container").height(windowHeight * 0.85);
-    $("#sbgn-inspector").height(windowHeight * 0.85);
-  }
+  var inspectorCoef = 0.31;
+
+  $("#inspector-tab-area").width(windowWidth * inspectorCoef);
+
+  // $("#sbgn-inspector").width(windowWidth * 0.28);
+  $(".nav-menu").width(windowWidth * 0.7);
+  $(".navbar").width(windowWidth * 0.7);
+  $("#sbgn-toolbar").width(windowWidth * 0.7);
+  // $("#chat-area").width(windowWidth * 0.28);
+  // $("#command-history-area").width(windowWidth * 0.28);
+
+//    }
+
+  //    if (windowHeight > canvasHeight) {
+  if($("#sbgn-toolbar").width() < (444))
+    $("#sbgn-network-container").css('top', '190px');
+  else if($("#sbgn-toolbar").width() < (888))
+    $("#sbgn-network-container").css('top', '140px');
+  else
+    $("#sbgn-network-container").css('top', '95px');
+
+
+  $("#sbgn-network-container").height(windowHeight * 0.9);
+
+  $("#inspector-tab-area").height(windowHeight);
+  // $("#sbgn-inspector").height(windowHeight * 0.20);
+  // $("#command-history-area").height(windowHeight * 0.21);
+  // $("#chat-area").height(windowHeight * 0.53);
+  //  }
 }
 
 $(window).on('resize', dynamicResize);

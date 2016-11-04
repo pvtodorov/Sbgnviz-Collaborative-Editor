@@ -28,6 +28,7 @@ var BioGeneView = Backbone.View.extend({
 
     render: function() {
         // pass variables in using Underscore.js template
+
         var variables = {
             geneDescription: this.model.geneDescription,
             geneAliases: this.parseDelimitedInfo(this.model.geneAliases, ":", ",", null),
@@ -35,7 +36,7 @@ var BioGeneView = Backbone.View.extend({
             geneLocation: this.model.geneLocation,
             geneMim: this.model.geneMim,
             geneId: this.model.geneId,
-            geneUniprotId: this.extractFirstUniprotId(this.model.geneUniprotMapping),
+            geneUniprotId: (this.extractFirstUniprotId(this.model.geneUniprotMapping)),
             geneUniprotLinks: this.generateUniprotLinks(this.model.geneUniprotMapping),
             geneSummary: this.model.geneSummary
         };
@@ -75,6 +76,7 @@ var BioGeneView = Backbone.View.extend({
 
         if (this.model.geneId == undefined)
             this.$el.find(".biogene-id").hide();
+
 
         if (this.model.geneUniprotMapping == undefined)
             this.$el.find(".biogene-uniprot-links").hide();
@@ -126,13 +128,14 @@ var BioGeneView = Backbone.View.extend({
             return "";
         }
 
+
         var parts = mapping.split(":");
+
 
         if (parts.length > 0)
         {
             return parts[0];
         }
-
         return "";
     },
     parseDelimitedInfo: function(info, delimiter, separator, formatter) {

@@ -274,234 +274,6 @@ function updateServerGraph(){
      },0);
 }
 
-// app.proto.init = function (model) {
-//     var timeSort;
-//
-//
-//
-//     model.on('all', '_page.doc.cy.nodes.*', function(id, op, val, prev, passed){
-//
-//         if(docReady &&  passed.user == null) {
-//             var node  = model.get('_page.doc.cy.nodes.' + id);
-//
-//             if(!node || !node.id){ //node is deleted
-//                 addRemoveUtilities.removeEles(cy.getElementById(id));
-//
-//             }
-//         }
-//
-//
-//     });
-//
-//     model.on('all', '_page.doc.cy.edges.*', function(id, op, val, prev, passed){
-//
-//
-//         if(docReady &&  passed.user == null) {
-//             var edge  = model.get('_page.doc.cy.edges.' + id); //check
-//
-//             if(!edge|| !edge.id){ //edge is deleted
-//                 addRemoveUtilities.removeEles(cy.getElementById(id));
-//
-//             }
-//             //else insertion
-//         }
-//
-//     });
-//
-//     model.on('all', '_page.doc.sampleInd', function(op, ind, prev, passed){
-//
-//
-//         if(docReady && passed.user == null) {
-//
-//             menu.updateSample(ind, false); //false = do not delete, sample changing client deleted them already
-//
-//         }
-//
-//     });
-//
-//
-//
-//     model.on('all', '_page.doc.layoutProperties', function(index){
-//
-//
-//         if(docReady && menu ){
-//             var layoutProps = model.get('_page.doc.layoutProperties');
-//
-//             menu.updateLayoutProperties(layoutProps);
-//
-//
-//         }
-//
-//     });
-//
-//
-//
-//
-//     model.on('change', '_page.doc.cy.nodes.*.position', function(id, pos, prev, passed){
-//
-//         if(docReady && passed.user == null){
-//             cy.getElementById(id).position(pos);
-//
-//            // console.log(pos);
-//             //cy.getElementById(id)._private.position = pos;
-//         }
-//
-//
-//     });
-//
-//
-//     model.on('all', '_page.doc.cy.nodes.*.data', function(id, op, val, prev, passed){
-//         if(docReady && passed.user == null) {
-//             cy.getElementById(id)._private.data = CircularJSON.parse(val);
-//             cy.getElementById(id).data(CircularJSON.parse(val));
-//             cy.nodes().updateCompoundBounds();
-//             //cy.forceRender();
-//         }
-//     });
-//
-//
-//     model.on('all', '_page.doc.cy.nodes.*.style', function(id, op, val, prev, passed){
-//         if(docReady && passed.user == null) {
-//
-//             cy.getElementById(id)._private.style =  CircularJSON.parse(val);
-//             //cy.forceRender();
-//
-//         }
-//     });
-//
-//     model.on('all', '_page.doc.cy.nodes.*.children', function(id, op, val, prev, passed){
-//         if(docReady && passed.user == null) {
-//             cy.getElementById(id)._private.children = CircularJSON.parse(val);
-//             cy.getElementById(id).children(CircularJSON.parse(val));
-//             //cy.nodes().updateCompoundBounds();
-//            // cy.forceRender();
-//         }
-//     });
-//
-//     model.on('all', '_page.doc.cy.nodes.*.classes', function(id, op, val, prev, passed){
-//         if(docReady && passed.user == null) {
-//
-//             cy.getElementById(id)._private.classes =  CircularJSON.parse(val);
-//             //cy.getElementById(id).classes( CircularJSON.parse(val));
-//        //     console.log(  cy.getElementById(id)._private.classes );
-//           //  cy.forceRender();
-//
-//         }
-//     });
-//
-//
-//
-//     model.on('all', '_page.doc.cy.edges.*.data', function(id, op, val, prev, passed){
-//         if(docReady && passed.user == null) {
-//             cy.getElementById(id)._private.data = CircularJSON.parse(val);
-//             cy.forceRender();
-//         }
-//     });
-//
-//
-//     model.on('all', '_page.doc.cy.edges.*.style', function(id, op, val, prev, passed){
-//         if(docReady && passed.user == null) {
-//
-//             cy.getElementById(id)._private.style =  CircularJSON.parse(val);
-//             cy.forceRender();
-//
-//         }
-//     });
-//
-//
-//     model.on('all', '_page.doc.cy.edges.*.classes', function(id, op, val, prev, passed){
-//         if(docReady && passed.user == null) {
-//
-//             cy.getElementById(id)._private.classes =  CircularJSON.parse(val);
-//             cy.forceRender();
-//
-//         }
-//     });
-//
-//     model.on('all', '_page.doc.cy.nodes.*.addedLater', function(id, op, value, prev, passed){ //this property must be something that is only changed during insertion
-//
-//         if(docReady && passed.user == null) {
-//             addRemoveUtilities.addNode(value.x, value.y, value.sbgnclass,null, null, id);
-//         }
-//
-//     });
-//
-//     model.on('all', '_page.doc.cy.edges.*.addedLater', function(id,op, value, prev, passed){//this property must be something that is only changed during insertion
-//
-//         if(docReady && passed.user == null) {
-//             addRemoveUtilities.addEdge(value.source, value.target, value.sbgnclass,null, id);
-//         }
-//
-//     });
-//
-//
-//
-//
-//
-//     model.on('change', '_page.doc.cy.nodes.*.highlightColor', function(id, highlightColor, prev,passed){
-//
-//         if(docReady && passed.user == null) {
-//
-//             var color;
-//
-//             if (highlightColor != null)
-//                 color =  highlightColor;
-//             else
-//                 color = model.get('_page.doc.cy.nodes.' + id + '.backgroundColor'); //default background color
-//
-//           backgr
-//
-//         }
-//
-//     });
-//
-//
-//
-//     model.on('all', '_page.doc.images', function() {
-//         if (docReady)
-//             triggerContentChange('receivedImages');
-//     });
-//
-//     model.on('all', '_page.doc.history', function(){
-//         if(docReady){
-//             triggerContentChange('command-history-area');
-//         }
-//     });
-//
-//
-//     model.on('all', '_page.doc.undoIndex', function(){
-//         menu.refreshGlobalUndoRedoButtonsStatus();
-//
-//     });
-//     model.on('insert', '_page.list', function (index) {
-//
-//
-//         var com = model.get('_page.list');
-//         var myId = model.get('_session.userId');
-//
-//
-//         if(docReady){
-//             triggerContentChange('messages');
-//
-//         }
-//
-//         if (com[com.length - 1].userId != myId) {
-//
-//             playSound();
-//
-//         }
-//     });
-//
-//
-//     timeSort = function (a, b) {
-//
-//         return (a != null ? a.date : void 0) - (b != null ? b.date : void 0);
-//     };
-//
-//
-//
-//     return model.sort('messages', timeSort).ref('_page.list');
-// };
 app.proto.init = function (model) {
     var timeSort;
 
@@ -561,8 +333,6 @@ app.proto.init = function (model) {
         if(docReady && passed.user == null) {
 
             cy.getElementById(id)._private.classes =  val;
-            //cy.getElementById(id).classes( CircularJSON.parse(val));
-       //     console.log(  cy.getElementById(id)._private.classes );
             cy.forceRender();
 
         }
@@ -572,9 +342,29 @@ app.proto.init = function (model) {
         if(docReady && passed.user == null) {
 
             cy.getElementById(id)._private.classes =  val;
-            //cy.getElementById(id).classes( CircularJSON.parse(val));
-            //     console.log(  cy.getElementById(id)._private.classes );
+
               cy.forceRender();
+
+        }
+    });
+
+    model.on('all', '_page.doc.cy.nodes.*.viewUtilities', function(id, op, val, prev, passed){
+        if(docReady && passed.user == null) {
+
+            cy.getElementById(id)._private.scratch._viewUtilities =  val;
+            cy.forceRender();
+
+        }
+    });
+
+    model.on('all', '_page.doc.cy.edges.*.viewUtilities', function(id, op, val, prev, passed){
+        if(docReady && passed.user == null) {
+
+
+            cy.getElementById(id)._private.scratch._viewUtilities =  val;
+
+
+            cy.forceRender();
 
         }
     });
@@ -685,6 +475,7 @@ app.proto.init = function (model) {
                 color = model.get('_page.doc.cy.nodes.' + id + '.backgroundColor');
 
 
+           // cy.getElementById(id)._private.style["background-color"].value =  color;
             cy.getElementById(id).css("background-color", color);
 
 
@@ -703,8 +494,18 @@ app.proto.init = function (model) {
 
             cy.getElementById(id).css("line-color", color);
 
+            //cy.getElementById(id)._private.style["line-color"].value =  color;
+
         }
 
+    });
+
+    model.on('all', '_page.doc.cy.nodes.*.sbgnlabel', function(id, op, label,prev, passed){
+
+        if(docReady && passed.user == null) {
+            cy.getElementById(id).data("sbgnlabel", label);
+
+        }
     });
     model.on('all', '_page.doc.cy.nodes.*.sbgnlabel', function(id, op, label,prev, passed){
 
@@ -725,6 +526,7 @@ app.proto.init = function (model) {
 
         if(docReady && passed.user == null) {
             cy.getElementById(id).css("border-width", borderWidth);
+            cy.getElementById(id)._private.style["border-width"].bypass = null;
 
 
         }
@@ -734,7 +536,7 @@ app.proto.init = function (model) {
 
         if(docReady && passed.user == null) {
             cy.getElementById(id).css("background-color", backgroundColor);
-
+         //   cy.getElementById(id)._private.style["background-color"].strValue =  backgroundColor;
 
         }
     });
@@ -747,6 +549,7 @@ app.proto.init = function (model) {
         }
     });
 
+
     model.on('all', '_page.doc.cy.edges.*.backgroundOpacity', function(id,  op, backgroundOpacity,prev, passed){
 
         if(docReady && passed.user == null) {
@@ -756,6 +559,25 @@ app.proto.init = function (model) {
     });
 
 
+    // model.on('all', '_page.doc.cy.nodes.*.opacity', function(id,  op, opacity,prev, passed){
+    //
+    //     if(docReady && passed.user == null) {
+    //         //cy.getElementById(id).css("opacity", opacity);
+    //         cy.getElementById(id)._private.style["opacity"].value =  opacity;
+    //
+    //
+    //     }
+    // });
+    //
+    // model.on('all', '_page.doc.cy.edges.*.opacity', function(id,  op, opacity,prev, passed){
+    //
+    //     if(docReady && passed.user == null) {
+    //         //cy.getElementById(id).css("opacity", opacity);
+    //         cy.getElementById(id)._private.style["opacity"].value =  opacity;
+    //
+    //
+    //     }
+    // });
 
     model.on('all', '_page.doc.cy.nodes.*.isCloneMarker', function(id,  op, isCloneMarker, prev, passed){
 
@@ -770,22 +592,51 @@ app.proto.init = function (model) {
 
         if(docReady && passed.user == null) {
             cy.getElementById(id).data("parent", parent);
-
-
-
         }
     });
 
 
     model.on('all', '_page.doc.cy.nodes.*.ports', function(id, op, ports, prev, passed){ //this property must be something that is only changed during insertion
 
-
         if(docReady && passed.user == null) {
             cy.getElementById(id).data("ports", ports);
 
+        }
+    });
+    model.on('all', '_page.doc.cy.nodes.*.labelsize', function(id, op, labelsize, prev, passed){ //this property must be something that is only changed during insertion
+
+
+        if(docReady && passed.user == null) {
+            cy.getElementById(id).data("labelsize", labelsize);
 
         }
+    });
 
+    model.on('all', '_page.doc.cy.nodes.*.fontfamily', function(id, op, fontfamily, prev, passed){ //this property must be something that is only changed during insertion
+
+
+        if(docReady && passed.user == null) {
+            cy.getElementById(id).data("fontfamily", fontfamily);
+
+        }
+    });
+
+    model.on('all', '_page.doc.cy.nodes.*.fontweight', function(id, op, fontweight, prev, passed){ //this property must be something that is only changed during insertion
+
+
+        if(docReady && passed.user == null) {
+            cy.getElementById(id).data("fontweight", fontweight);
+
+        }
+    });
+
+    model.on('all', '_page.doc.cy.nodes.*.fontstyle', function(id, op, fontstyle, prev, passed){ //this property must be something that is only changed during insertion
+
+
+        if(docReady && passed.user == null) {
+            cy.getElementById(id).data("fontstyle", fontstyle);
+
+        }
     });
 
 
@@ -793,8 +644,12 @@ app.proto.init = function (model) {
 
         if(docReady && passed.user == null) {
             var ele = cy.getElementById(id);
+
+            console.log(width);
             ele.data("width", width);
 
+  //          ele._private.style.width.value = width;
+//            ele._private.style.width.pfValue = width;
             ele._private.data.sbgnbbox.w = width;
 
 
@@ -804,10 +659,8 @@ app.proto.init = function (model) {
     model.on('all', '_page.doc.cy.edges.*.width', function(id,  op, width ,prev, passed){
 
         if(docReady && passed.user == null) {
-            cy.getElementById(id).css("width", width);
-
-
-
+            cy.getElementById(id)._private.style["width"].value =  width;
+            //cy.getElementById(id).css("width", width);
         }
     });
 
@@ -815,7 +668,15 @@ app.proto.init = function (model) {
     model.on('all', '_page.doc.cy.nodes.*.height', function(id,  op, height, prev, passed){
 
         if(docReady && passed.user == null) {
-            cy.getElementById(id).data("height", height);
+            var ele = cy.getElementById(id);
+
+            console.log(height);
+
+            ele.data("height", height);
+
+      //      ele._private.style.height.value = height;
+      //      ele._private.style.height.pfValue = height;
+            ele._private.data.sbgnbbox.h = height;
 
         }
     });
@@ -833,6 +694,29 @@ app.proto.init = function (model) {
         }
     });
 
+
+    model.on('all', '_page.doc.cy.nodes.*.highlightStatus', function(id, op, highlightStatus, prev, passed){ //this property must be something that is only changed during insertion
+        if(docReady && passed.user == null) {
+            if(highlightStatus == "highlighted")
+                cy.getElementById(id).highlight();
+            else if(highlightStatus == "unhighlighted")
+                cy.getElementById(id).unhighlight();
+            else
+                cy.getElementById(id).removeHighlights();
+        }
+    });
+
+    model.on('all', '_page.doc.cy.edges.*.highlightStatus', function(id, op, highlightStatus, prev, passed){ //this property must be something that is only changed during insertion
+        if(docReady && passed.user == null) {
+            if(highlightStatus == "highlighted")
+                cy.getElementById(id).highlight();
+            else if(highlightStatus == "unhighlighted")
+                cy.getElementById(id).unhighlight();
+            else
+                cy.getElementById(id).removeHighlights();
+        }
+    });
+
     model.on('all', '_page.doc.cy.edges.*.cyedgebendeditingWeights', function(id,  op, weights, prev, passed) {
         cy.getElementById(id).scratch("cyedgebendeditingWeights", weights);
     });
@@ -843,7 +727,8 @@ app.proto.init = function (model) {
 
 
     model.on('all', '_page.doc.cy.edges.*.curveStyle', function(id,  op, curveStyle, prev, passed) {
-        cy.getElementById(id).css("curve-style", curveStyle);
+        //cy.getElementById(id).css("curve-style", curveStyle);
+        cy.getElementById(id)._private.style["curve-style"].value =  curveStyle;
 
     });
 
@@ -859,7 +744,8 @@ app.proto.init = function (model) {
 
 
         if(docReady && passed.user == null) {
-            cy.getElementById(id).css("line-color", lineColor);
+            cy.getElementById(id)._private.style["line-color"] =  lineColor;
+            //cy.getElementById(id).css("line-color", lineColor);
 
         }
     });
@@ -1063,7 +949,7 @@ app.proto.changeColorCode = function(){
 
 };
 app.proto.runUnitTests = function(){
-    require("./public/test/testsMenuFunctions.js")();
+    //require("./public/test/testsMenuFunctions.js")();
     require("./public/test/testsModelManager.js")();
 
     require("./public/test/testOptions.js")(); //to print out results

@@ -5,6 +5,7 @@
 
 var inspectorUtilities = {};
 
+
 // Define inspectorUtilities.fontProperties on document ready
 $(document).ready(function () {
   inspectorUtilities.fontProperties = new FontProperties({

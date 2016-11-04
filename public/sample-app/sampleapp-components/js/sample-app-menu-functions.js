@@ -20,6 +20,19 @@ var setFileContent = function (fileName) {
     }
     span.appendChild(document.createTextNode(fileName));
 };
+var startSpinner = function(id) {
+
+    if($('.' + id).length === 0){
+        var containerWidth = $('#sbgn-network-container').width();
+        var containerHeight = $('#sbgn-network-container').height();
+        $('#sbgn-network-container:parent').prepend('<i style="position: absolute; z-index: 9999999; left: ' + containerWidth / 2 + 'px; top: ' + containerHeight / 2 + 'px;" class="fa fa-spinner fa-spin fa-3x fa-fw layout-spinner"></i>');
+    }
+};
+var endSpinner = function(id) {
+    if ($('.' + id).length > 0) {
+        $('.' + id).remove();
+    }
+};
 
 var beforePerformLayout = function(){
     var nodes = cy.nodes();
@@ -90,7 +103,6 @@ module.exports = function(modelManager){
     var cyMod =  require('./sample-app-cytoscape-sbgn.js');
 
 
-    //var syncManager = require('./synchronizationManager.js');
 
     var sbgnContainer;
 
@@ -128,7 +140,7 @@ module.exports = function(modelManager){
 
          loadFile:function(txtFile){
 
-             syncManager.modelManager.deleteAll(cy.nodes(), cy.edges(), "me");
+             modelManager.deleteAll(cy.nodes(), cy.edges(), "me");
              var jsonObj = sbgnmlToJson.convert(txtFile);
 
 
@@ -369,10 +381,6 @@ module.exports = function(modelManager){
         },
 
 
-
-
-
-
         updateLayoutProperties: function(lp){
 
             if(sbgnLayout)
@@ -496,22 +504,48 @@ module.exports = function(modelManager){
             //modelManager = modelManager;
 
 
+            //
+            // sbgnLayout = new SBGNLayout(modelManager);
+            //
+            // var layoutProperties = modelManager.updateLayoutProperties(sbgnLayout.defaultLayoutProperties);
+            //
+            // sbgnLayout.initialize(layoutProperties);
+            //
+            //
+            // sbgnProperties = new SBGNProperties();
+            // sbgnProperties.initialize();
+            //
+            // pathsBetweenQuery = new PathsBetweenQuery(socket,  modelManager.getName());
+            // pathsBetweenQuery.initialize();
+            //
+            // gridProperties = new GridProperties();
+            // gridProperties.initialize();
 
-            sbgnLayout = new SBGNLayout(modelManager);
 
-            var layoutProperties = modelManager.updateLayoutProperties(sbgnLayout.defaultLayoutProperties);
+            var promptSave = new PromptSave({
+                el: '#sbgn-prompt-save-table'
+            });
 
-            sbgnLayout.initialize(layoutProperties);
+            var sbgnLayoutProp = new SBGNLayout({
+                el: '#sbgn-layout-table'
+            });
 
+            var sbgnProperties = new SBGNProperties({
+                el: '#sbgn-properties-table'
+            });
 
-            sbgnProperties = new SBGNProperties();
-            sbgnProperties.initialize();
+            var gridProperties = new GridProperties({
+                el: '#grid-properties-table'
+            });
 
-            pathsBetweenQuery = new PathsBetweenQuery(socket,  modelManager.getName());
-            pathsBetweenQuery.initialize();
+            var pathsBetweenQuery = new PathsBetweenQuery({
+                el: '#query-pathsbetween-table'
+            });
 
-            gridProperties = new GridProperties();
-            gridProperties.initialize();
+            var reactionTemplate = new ReactionTemplate({
+                el: '#reaction-template-table'
+            });
+
 
 
 
@@ -532,6 +566,36 @@ module.exports = function(modelManager){
 
                 modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
             }
+
+
+            //TODO: Funda closed for now
+            // triggerIncrementalLayout = function(){
+            //     beforePerformLayout();
+            //
+            //     var preferences = {
+            //         randomize: false,
+            //         animate: sbgnStyleRules['animate-on-drawing-changes']?'end':false,
+            //         fit: false
+            //     };
+            //
+            //     if(sbgnLayoutProp.currentLayoutProperties.animate === 'during'){
+            //         delete preferences.animate;
+            //     }
+            //
+            //     sbgnLayoutProp.applyLayout(preferences, false); // layout must not be undoable
+            // };
+            //
+            // triggerIncrementalLayoutAfterExpandCollapse = function(){
+            //     if(!sbgnStyleRules['rearrange-after-expand-collapse']) {
+            //         return;
+            //     }
+            //
+            //     triggerIncrementalLayout();
+            // };
+            //
+            // // set layoutBy option of expand collapse extension
+            // cy.setExpandCollapseOption('layoutBy', triggerIncrementalLayoutAfterExpandCollapse);
+            //
 
 
             $('#samples').click(function (e) {
@@ -786,7 +850,7 @@ module.exports = function(modelManager){
                 var node = $(this).data('node');
                 var param = {
                     nodes: cy.collection(node),
-                    sbgnlabel: $(this).attr('value'),
+                    sbgnlabel:  $(this).val(),
                     firstTime: true
                 };
 
@@ -1028,171 +1092,42 @@ module.exports = function(modelManager){
             });
 
             $("#layout-properties").click(function (e) { //funda
-                var lp = modelManager.updateLayoutProperties(sbgnLayout.defaultLayoutProperties);
-                sbgnLayout.render(lp);
+              //  var lp = modelManager.updateLayoutProperties(sbgnLayout.defaultLayoutProperties);
+                //sbgnLayout.render();
+                sbgnLayoutProp.render();
             });
 
             $("#layout-properties-icon").click(function (e) {
                 $("#layout-properties").trigger('click');
             });
 
-            $("#grid-properties").click(function (e) {
-                gridProperties.render();
-            });
+
+
+
+
+
+
+
             $("#sbgn-properties").click(function (e) {
                 sbgnProperties.render();
             });
 
+            $("#grid-properties").click(function (e) {
+                gridProperties.render();
+            });
+
             $("#query-pathsbetween").click(function (e) {
                 pathsBetweenQuery.render();
-        
+            });
+
+            $("#create-reaction-template").click(function (e) {
+                reactionTemplate.render();
             });
 
             $("#properties-icon").click(function (e) {
                 $("#sbgn-properties").trigger('click');
             });
 
-        /*    $("#collapse-selected").click(function (e) {
-                var nodes = cy.nodes(":selected").filter("[expanded-collapsed='expanded']");
-                var thereIs = expandCollapseUtilities.thereIsNodeToExpandOrCollapse(nodes, "collapse");
-
-                if (!thereIs) {
-                    return;
-                }
-
-                if (window.incrementalLayoutAfterExpandCollapse == null) {
-                    window.incrementalLayoutAfterExpandCollapse =
-                        (sbgnStyleRules['incremental-layout-after-expand-collapse'] == 'true');
-                }
-                if (incrementalLayoutAfterExpandCollapse)
-                    syncManager.collapseGivenNodes({
-                        nodes: nodes,
-                        sync: true
-                    });
-                else
-                    syncManager.simpleCollapseGivenNodes({nodes:nodes, sync: true});
-                
-            });
-            $("#collapse-complexes").click(function (e) {
-                var complexes = cy.nodes("[sbgnclass='complex'][expanded-collapsed='expanded']");
-                var thereIs = expandCollapseUtilities.thereIsNodeToExpandOrCollapse(complexes, "collapse");
-
-                if (!thereIs) {
-                    return;
-                }
-
-                if (window.incrementalLayoutAfterExpandCollapse == null) {
-                    window.incrementalLayoutAfterExpandCollapse =
-                        (sbgnStyleRules['incremental-layout-after-expand-collapse'] == 'true');
-                }
-                if (incrementalLayoutAfterExpandCollapse)
-                    syncManager.simpleCollapseGivenNodes({
-                        nodes: complexes,
-                        sync: true
-                    });
-                else
-                    syncManager.simpleCollapseGivenNodes({nodes:complexes, sync: true});
-            });
-            $("#collapse-selected-icon").click(function (e) {
-                if (modeHandler.mode == "selection-mode") {
-                    $("#collapse-selected").trigger('click');
-                }
-            });
-            $("#expand-selected").click(function (e) {
-                var nodes = cy.nodes(":selected").filter("[expanded-collapsed='collapsed']");
-                var thereIs = expandCollapseUtilities.thereIsNodeToExpandOrCollapse(nodes, "expand");
-
-                if (!thereIs) {
-                    return;
-                }
-
-                if (window.incrementalLayoutAfterExpandCollapse == null) {
-                    window.incrementalLayoutAfterExpandCollapse =
-                        (sbgnStyleRules['incremental-layout-after-expand-collapse'] == 'true');
-                }
-                if (incrementalLayoutAfterExpandCollapse)
-                    syncManager.expandGivenNodes({
-                        nodes: cy.nodes(":selected"),
-                        sync: true
-                    });
-                else
-                    syncManager.simpleExpandGivenNodes({nodes:nodes, sync: true});
-                
-            });
-
-
-            $("#expand-complexes").click(function (e) {
-                var complexes = cy.nodes("[sbgnclass='complex'][expanded-collapsed='collapsed']");
-                var thereIs = expandCollapseUtilities.thereIsNodeToExpandOrCollapse(complexes, "expand");
-
-                if (!thereIs) {
-                    return;
-                }
-
-                if (window.incrementalLayoutAfterExpandCollapse == null) {
-                    window.incrementalLayoutAfterExpandCollapse =
-                        (sbgnStyleRules['incremental-layout-after-expand-collapse'] == 'true');
-                }
-                if (incrementalLayoutAfterExpandCollapse)
-                    syncManager.expandAllNodes({
-                        nodes: complexes,
-                        sync: true,
-                        selector: "complex-parent"
-                    });
-                else
-                   syncManager.simpleExpandAllNodes({
-                        nodes: complexes,
-                        sync: true,
-                        selector: "complex-parent"
-                    });
-            });
-            $("#expand-selected-icon").click(function (e) {
-                if (modeHandler.mode == "selection-mode") {
-                    $("#expand-selected").trigger('click');
-                }
-            });
-
-            $("#collapse-all").click(function (e) {
-                var thereIs = expandCollapseUtilities.thereIsNodeToExpandOrCollapse(cy.nodes(":visible"), "collapse");
-
-                if (!thereIs) {
-                    return;
-                }
-
-                if (window.incrementalLayoutAfterExpandCollapse == null) {
-                    window.incrementalLayoutAfterExpandCollapse =
-                        (sbgnStyleRules['incremental-layout-after-expand-collapse'] == 'true');
-                }
-                if (incrementalLayoutAfterExpandCollapse)
-                    ditorActions.collapseGivenNodes({
-                        nodes: cy.nodes(),
-                        sync: true
-                    });
-                else
-                   syncManager.simpleCollapseGivenNodes({nodes: cy.nodes(), sync: true});
-                
-            });
-
-            $("#expand-all").click(function (e) {
-                var thereIs = expandCollapseUtilities.thereIsNodeToExpandOrCollapse(cy.nodes(":visible"), "expand");
-
-                if (!thereIs) {
-                    return;
-                }
-
-                if (window.incrementalLayoutAfterExpandCollapse == null) {
-                    window.incrementalLayoutAfterExpandCollapse =
-                        (sbgnStyleRules['incremental-layout-after-expand-collapse'] == 'true');
-                }
-                if (incrementalLayoutAfterExpandCollapse)
-                    syncManager.expandAllNodes({
-                        firstTime: true
-                    });
-                else
-                    syncManager.simpleExpandAllNodes();
-                
-            });
-*/
 
             $("#collapse-selected").click(function (e) {
                 var nodes = cy.nodes(":selected").filter("[expanded-collapsed='expanded']");
@@ -1300,30 +1235,20 @@ module.exports = function(modelManager){
             $("#perform-layout").click(function (e) {
 
                 var nodesData = getNodesData();
-
-                if($('.layout-spinner').length === 0){
-                    var containerWidth = cy.width();
-                    var containerHeight = cy.height();
-                    $('#sbgn-network-container').prepend('<i style="position: absolute; z-index: 9999999; left: ' + containerWidth / 2 + 'px; top: ' + containerHeight / 2 + 'px;" class="fa fa-spinner fa-spin fa-3x fa-fw layout-spinner"></i>');
-                }
+                startSpinner("layout-spinner");
 
                 beforePerformLayout();
-
                 var preferences = {
                     animate: sbgnStyleRules['animate-on-drawing-changes']?'end':false
                 };
 
-                if(sbgnLayout.currentLayoutProperties.animate == 'during'){
+                if(sbgnLayoutProp.currentLayoutProperties.animate == 'during'){
                     delete preferences.animate;
                 }
 
-                sbgnLayout.applyLayout(preferences);
+                sbgnLayoutProp.applyLayout(preferences);
 
-
-                syncManager.performLayoutFunction({nodesData:nodesData});
-
-                //       syncManager.manager._do(syncManager.ReturnToPositionsAndSizesCommand({nodesData: nodesData}));
-
+                nodesData.firstTime = true;
 
             });
 
@@ -1622,15 +1547,216 @@ function PathsBetweenQuery(socket, userName){
     }
 }
 
-function SBGNLayout(modelManager){
 
 
-    return {
+    var ReactionTemplate = Backbone.View.extend({
+        defaultTemplateParameters: {
+            templateType: "association",
+            macromoleculeList: ["", ""],
+            templateReactionEnableComplexName: true,
+            templateReactionComplexName: "",
+            getMacromoleculesHtml: function(){
+                var html = "<table>";
+                for( var i = 0; i < this.macromoleculeList.length; i++){
+                    html += "<tr><td>"
+                        + "<input type='text' class='template-reaction-textbox input-small layout-text' name='"
+                        + i + "'" + " value='" + this.macromoleculeList[i] + "'></input>"
+                        + "</td><td><img style='padding-bottom: 8px;' class='template-reaction-delete-button' width='12px' height='12px' name='" + i + "' src='sample-app/sampleapp-images/delete.png'/></td></tr>";
+                }
 
+                html += "<tr><td><img id='template-reaction-add-button' src='sample-app/sampleapp-images/add.png'/></td></tr></table>";
+                return html;
+            },
+            getComplexHtml: function(){
+                var html = "<table>"
+                    + "<tr><td><input type='checkbox' class='input-small layout-text' id='template-reaction-enable-complex-name'";
+
+                if(this.templateReactionEnableComplexName){
+                    html += " checked ";
+                }
+
+                html += "/>"
+                    + "</td><td><input type='text' class='input-small layout-text' id='template-reaction-complex-name' value='"
+                    + this.templateReactionComplexName + "'";
+
+                if(!this.templateReactionEnableComplexName){
+                    html += " disabled ";
+                }
+
+                html += "></input>"
+                    + "</td></tr></table>";
+
+                return html;
+            },
+            getInputHtml: function(){
+                if(this.templateType === 'association') {
+                    return this.getMacromoleculesHtml();
+                }
+                else if(this.templateType === 'dissociation'){
+                    return this.getComplexHtml();
+                }
+            },
+            getOutputHtml: function(){
+                if(this.templateType === 'association') {
+                    return this.getComplexHtml();
+                }
+                else if(this.templateType === 'dissociation'){
+                    return this.getMacromoleculesHtml();
+                }
+            }
+        },
+        currentTemplateParameters: undefined,
+        initialize: function () {
+            var self = this;
+            self.copyProperties();
+            self.template = _.template($("#reaction-template").html());
+
+
+            self.template = self.template(self.currentTemplateParameters);
+        },
+        copyProperties: function () {
+            this.currentTemplateParameters = jQuery.extend(true, [], this.defaultTemplateParameters);
+        },
+        render: function () {
+            var self = this;
+            self.template = _.template($("#reaction-template").html());
+            self.template = self.template(self.currentTemplateParameters);
+            $(self.el).html(self.template);
+
+            dialogUtilities.openDialog(self.el, {width:'auto'});
+
+            $(document).off('change', '#reaction-template-type-select').on('change', '#reaction-template-type-select', function (e) {
+                var optionSelected = $("option:selected", this);
+                var valueSelected = this.value;
+                self.currentTemplateParameters.templateType = valueSelected;
+
+                self.template = _.template($("#reaction-template").html());
+                self.template = self.template(self.currentTemplateParameters);
+                $(self.el).html(self.template);
+
+                $(self.el).dialog({width:'auto'});
+            });
+
+            $(document).off("change", "#template-reaction-enable-complex-name").on("change", "#template-reaction-enable-complex-name", function(e){
+                self.currentTemplateParameters.templateReactionEnableComplexName =
+                    !self.currentTemplateParameters.templateReactionEnableComplexName;
+                self.template = _.template($("#reaction-template").html());
+                self.template = self.template(self.currentTemplateParameters);
+                $(self.el).html(self.template);
+
+                $(self.el).dialog({width:'auto'});
+            });
+
+            $(document).off("change", "#template-reaction-complex-name").on("change", "#template-reaction-complex-name", function(e){
+                self.currentTemplateParameters.templateReactionComplexName = $(this).val();
+                self.template = _.template($("#reaction-template").html());
+                self.template = self.template(self.currentTemplateParameters);
+                $(self.el).html(self.template);
+
+                $(self.el).dialog({width:'auto'});
+            });
+
+            $(document).off("click", "#template-reaction-add-button").on("click", "#template-reaction-add-button", function (event) {
+                self.currentTemplateParameters.macromoleculeList.push("");
+
+                self.template = _.template($("#reaction-template").html());
+                self.template = self.template(self.currentTemplateParameters);
+                $(self.el).html(self.template);
+
+                $(self.el).dialog({width:'auto'});
+            });
+
+            $(document).off("change", ".template-reaction-textbox").on('change', ".template-reaction-textbox", function () {
+                var index = parseInt($(this).attr('name'));
+                var value = $(this).val();
+                self.currentTemplateParameters.macromoleculeList[index] = value;
+
+                self.template = _.template($("#reaction-template").html());
+                self.template = self.template(self.currentTemplateParameters);
+                $(self.el).html(self.template);
+
+                $(self.el).dialog({width:'auto'});
+            });
+
+            $(document).off("click", ".template-reaction-delete-button").on("click", ".template-reaction-delete-button", function (event) {
+                if(self.currentTemplateParameters.macromoleculeList.length <= 2){
+                    return;
+                }
+
+                var index = parseInt($(this).attr('name'));
+                self.currentTemplateParameters.macromoleculeList.splice(index, 1);
+
+                self.template = _.template($("#reaction-template").html());
+                self.template = self.template(self.currentTemplateParameters);
+                $(self.el).html(self.template);
+
+                $(self.el).dialog({width:'auto'});
+            });
+
+            $(document).off("click", "#create-template").on("click", "#create-template", function (evt) {
+                var param = {
+                    firstTime: true,
+                    templateType: self.currentTemplateParameters.templateType,
+                    processPosition: sbgnElementUtilities.convertToModelPosition({x: cy.width() / 2, y: cy.height() / 2}),
+                    macromoleculeList: jQuery.extend(true, [], self.currentTemplateParameters.macromoleculeList),
+                    complexName: self.currentTemplateParameters.templateReactionEnableComplexName?self.currentTemplateParameters.templateReactionComplexName:undefined,
+                    tilingPaddingVertical: calculateTilingPaddings(parseInt(sbgnStyleRules['tiling-padding-vertical'], 10)),
+                    tilingPaddingHorizontal: calculateTilingPaddings(parseInt(sbgnStyleRules['tiling-padding-horizontal'], 10))
+                };
+
+                cy.undoRedo().do("createTemplateReaction", param);
+
+                self.copyProperties();
+                $(self.el).dialog('close');
+            });
+
+            $(document).off("click", "#cancel-template").on("click", "#cancel-template", function (evt) {
+                self.copyProperties();
+                $(self.el).dialog('close');
+            });
+
+            return this;
+        }
+    });
+
+
+
+    var PromptSave = Backbone.View.extend({
+
+        initialize: function () {
+            var self = this;
+            self.template = _.template($("#prompt-save-template").html());
+        },
+        render: function (afterFunction) {
+            var self = this;
+            self.template = _.template($("#prompt-save-template").html());
+            $(self.el).html(self.template);
+
+            dialogUtilities.openDialog(self.el, {width: "auto", height: "auto", "minHeight": "none"});
+
+            $(document).off("click", "#prompt-save-accept").on("click", "#prompt-save-accept", function (evt) {
+                $("#save-as-sbgnml").trigger('click');
+                afterFunction();
+                $(self.el).dialog('close');
+            });
+
+            $(document).off("click", "#prompt-save-reject").on("click", "#prompt-save-reject", function (evt) {
+                afterFunction();
+                $(self.el).dialog('close');
+            });
+
+            $(document).off("click", "#prompt-save-cancel").on("click", "#prompt-save-cancel", function (evt) {
+                $(self.el).dialog('close');
+            });
+
+            return this;
+        }
+    });
+
+    var SBGNLayout = Backbone.View.extend({
         defaultLayoutProperties: {
             name: 'cose-bilkent',
             nodeRepulsion: 4500,
-            nodeOverlap: 10,
             idealEdgeLength: 50,
             edgeElasticity: 0.45,
             nestingFactor: 0.1,
@@ -1640,101 +1766,70 @@ function SBGNLayout(modelManager){
             animationEasing: 'cubic-bezier(0.19, 1, 0.22, 1)',
             animate: 'end',
             animationDuration: 1000,
-            randomize: true,
+            randomize: false,
             tilingPaddingVertical: function () {
                 return calculateTilingPaddings(parseInt(sbgnStyleRules['tiling-padding-vertical'], 10));
-                //return expandCollapseUtilities.calculatePaddings(parseInt(sbgnStyleRules['tiling-padding-vertical'], 10)); //funda changed name
             },
             tilingPaddingHorizontal: function () {
                 return calculateTilingPaddings(parseInt(sbgnStyleRules['tiling-padding-horizontal'], 10));
-                //return expandCollapseUtilities.calculatePaddings(parseInt(sbgnStyleRules['tiling-padding-horizontal'], 10));//funda changed name
+            },
+            gravityRangeCompound: 1.5,
+            gravityCompound: 1.0,
+            gravityRange: 3.8,
+            stop: function(){
+                if($('.layout-spinner').length > 0){
+                    $('.layout-spinner').remove();
+                }
             }
-
         },
-
-        el: '#sbgn-layout-table',
         currentLayoutProperties: null,
-
-
-        initialize: function (lp) {
+        initialize: function () {
             var self = this;
-
-            self.currentLayoutProperties = lp;
-
-
             self.copyProperties();
 
             var templateProperties = _.clone(self.currentLayoutProperties);
             templateProperties.tilingPaddingVertical = sbgnStyleRules['tiling-padding-vertical'];
             templateProperties.tilingPaddingHorizontal = sbgnStyleRules['tiling-padding-horizontal'];
 
+            self.template = _.template($("#layout-settings-template").html());
+            self.template = self.template(templateProperties);
 
-            // self.template = _.template($("#layout-settings-template").html()); //funda: using lodash
-            //  self.template(templateProperties);
 
 
         },
         copyProperties: function () {
             this.currentLayoutProperties = _.clone(this.defaultLayoutProperties);
         },
-        applyLayout: function (preferences) {
-            if (preferences === undefined) {
+        applyLayout: function (preferences, undoable) {
+            if(preferences === undefined){
                 preferences = {};
             }
             var options = $.extend({}, this.currentLayoutProperties, preferences);
-
-            cy.elements().filter(':visible').layout(options);
+            if(undoable === false) {
+                cy.elements().filter(':visible').layout(options);
+            }
+            else {
+                cy.undoRedo().do("layout", {
+                    options: options,
+                    eles: cy.elements().filter(':visible')
+                });
+            }
         },
-
-
-        // applyIncrementalLayout: function () {
-        //     var options = _.clone(this.currentLayoutProperties);
-        //     options.randomize = false;
-        //     options.animate = false;
-        //     options.fit = false;
-        //     cy.elements().filter(':visible').layout(options);
-        // },
-       updateLayoutProperties: function(layoutProps){ //funda added
-
-            this.currentLayoutProperties = _.clone(layoutProps);
-
-        },
-        render: function (lp) {
-
+        render: function () {
             var self = this;
 
             var templateProperties = _.clone(self.currentLayoutProperties);
             templateProperties.tilingPaddingVertical = sbgnStyleRules['tiling-padding-vertical'];
             templateProperties.tilingPaddingHorizontal = sbgnStyleRules['tiling-padding-horizontal'];
 
+            self.template = _.template($("#layout-settings-template").html());
+            self.template = self.template(templateProperties);
+            $(self.el).html(self.template);
 
-            self.template = _.template($("#layout-settings-template").html()); //funda
+            dialogUtilities.openDialog(self.el);
 
-            $(self.el).html(self.template(templateProperties)); //funda
-
-
-            $(self.el).dialog();
-
-
-            $("#node-repulsion")[0].value = lp.nodeRepulsion.toString();
-            $("#node-overlap")[0].value = lp.nodeOverlap.toString();
-            $("#ideal-edge-length")[0].value = lp.idealEdgeLength.toString();
-            $("#edge-elasticity")[0].value = lp.edgeElasticity.toString();
-            $("#nesting-factor")[0].value = lp.nestingFactor.toString();
-            $("#gravity")[0].value = lp.gravity.toString();
-            $("#num-iter")[0].value = lp.numIter.toString();
-            $("#tile")[0].checked = lp.tile;
-            $("#animate")[0].checked = lp.animate;
-            $("#gravity-range-compound")[0].value = lp.gravityRangeCompound.toString();
-            $("#gravity-compound")[0].value = lp.gravityCompound.toString();
-            $("#gravity-range")[0].value = lp.gravityRange.toString();
-
-
-            $("#save-layout").die("click").live("click", function (evt) {
-
-
+            $(document).off("click", "#save-layout").on("click", "#save-layout", function (evt) {
                 self.currentLayoutProperties.nodeRepulsion = Number(document.getElementById("node-repulsion").value);
-                self.currentLayoutProperties.nodeOverlap = Number(document.getElementById("node-overlap").value);
                 self.currentLayoutProperties.idealEdgeLength = Number(document.getElementById("ideal-edge-length").value);
                 self.currentLayoutProperties.edgeElasticity = Number(document.getElementById("edge-elasticity").value);
                 self.currentLayoutProperties.nestingFactor = Number(document.getElementById("nesting-factor").value);
@@ -1749,16 +1844,9 @@ function SBGNLayout(modelManager){
 
                 sbgnStyleRules['tiling-padding-vertical'] = Number(document.getElementById("tiling-padding-vertical").value);
                 sbgnStyleRules['tiling-padding-horizontal'] = Number(document.getElementById("tiling-padding-horizontal").value);
-
-                modelManager.setLayoutProperties(self.currentLayoutProperties);
-
-
-
-
-                $(self.el).dialog('close');
             });
 
-            $("#default-layout").die("click").live("click", function (evt) {
+            $(document).off("click", "#default-layout").on("click", "#default-layout", function (evt) {
                 self.copyProperties();
 
                 sbgnStyleRules['tiling-padding-vertical'] = defaultSbgnStyleRules['tiling-padding-vertical'];
@@ -1768,31 +1856,30 @@ function SBGNLayout(modelManager){
                 templateProperties.tilingPaddingVertical = sbgnStyleRules['tiling-padding-vertical'];
                 templateProperties.tilingPaddingHorizontal = sbgnStyleRules['tiling-padding-horizontal'];
 
-                self.template = _.template($("#layout-settings-template").html(), templateProperties);
+                self.template = _.template($("#layout-settings-template").html());
+                self.template = self.template(templateProperties);
                 $(self.el).html(self.template);
             });
 
-
             return this;
         }
+    });
 
-    }};
-
-function SBGNProperties(){
-
-    return {
-        el: '#sbgn-properties-table',
+    var SBGNProperties = Backbone.View.extend({
         defaultSBGNProperties: {
             compoundPadding: parseInt(sbgnStyleRules['compound-padding'], 10),
             dynamicLabelSize: sbgnStyleRules['dynamic-label-size'],
             fitLabelsToNodes: sbgnStyleRules['fit-labels-to-nodes'],
             rearrangeAfterExpandCollapse: sbgnStyleRules['rearrange-after-expand-collapse'],
-            animateOnDrawingChanges: sbgnStyleRules['animate-on-drawing-changes']
+            animateOnDrawingChanges: sbgnStyleRules['animate-on-drawing-changes'],
+            adjustNodeLabelFontSizeAutomatically: sbgnStyleRules['adjust-node-label-font-size-automatically']
         },
         currentSBGNProperties: null,
         initialize: function () {
             var self = this;
             self.copyProperties();
+            self.template = _.template($("#sbgn-properties-template").html());
+            self.template = self.template(self.currentSBGNProperties);
         },
         copyProperties: function () {
             this.currentSBGNProperties = _.clone(this.defaultSBGNProperties);
@@ -1800,11 +1887,12 @@ function SBGNProperties(){
         render: function () {
             var self = this;
             self.template = _.template($("#sbgn-properties-template").html());
-            $(self.el).html(self.template( self.currentSBGNProperties));
+            self.template = self.template(self.currentSBGNProperties);
+            $(self.el).html(self.template);
 
-            $(self.el).dialog();
+            dialogUtilities.openDialog(self.el);
 
-            $("#save-sbgn").die("click").live("click", function (evt) {
+            $(document).off("click", "#save-sbgn").on("click", "#save-sbgn", function (evt) {
 
                 var param = {};
                 param.firstTime = true;
@@ -1817,6 +1905,8 @@ function SBGNProperties(){
                     document.getElementById("rearrange-after-expand-collapse").checked;
                 self.currentSBGNProperties.animateOnDrawingChanges =
                     document.getElementById("animate-on-drawing-changes").checked;
+                self.currentSBGNProperties.adjustNodeLabelFontSizeAutomatically =
+                    document.getElementById("adjust-node-label-font-size-automatically").checked;
 
                 //Refresh paddings if needed
                 if (sbgnStyleRules['compound-padding'] != self.currentSBGNProperties.compoundPadding) {
@@ -1830,7 +1920,7 @@ function SBGNProperties(){
                     cy.nodes().addClass('changeLabelTextSize');
                 }
                 //Refresh truncations if needed
-                if (sbgnStyleRules['fit-labels-to-nodes'] != self.currentSBGNProperties.fitLabels387ToNodes) {
+                if (sbgnStyleRules['fit-labels-to-nodes'] != self.currentSBGNProperties.fitLabelsToNodes) {
                     sbgnStyleRules['fit-labels-to-nodes'] = self.currentSBGNProperties.fitLabelsToNodes;
                     cy.nodes().removeClass('changeContent');
                     cy.nodes().addClass('changeContent');
@@ -1842,99 +1932,204 @@ function SBGNProperties(){
                 sbgnStyleRules['animate-on-drawing-changes'] =
                     self.currentSBGNProperties.animateOnDrawingChanges;
 
-                $(self.el).dialog('close');
+                //Refresh node label sizes if needed
+                if (sbgnStyleRules['adjust-node-label-font-size-automatically'] != self.currentSBGNProperties.adjustNodeLabelFontSizeAutomatically) {
+                    sbgnStyleRules['adjust-node-label-font-size-automatically'] = self.currentSBGNProperties.adjustNodeLabelFontSizeAutomatically;
+                    cy.nodes().removeClass('changeLabelTextSize');
+                    cy.nodes().addClass('changeLabelTextSize');
+                }
             });
 
-            $("#default-sbgn").die("click").live("click", function (evt) {
+            $(document).off("click", "#default-sbgn").on("click", "#default-sbgn", function (evt) {
                 self.copyProperties();
-                self.template = _.template($("#sbgn-properties-template").html(), self.currentSBGNProperties);
+                self.template = _.template($("#sbgn-properties-template").html());
+                self.template = self.template(self.currentSBGNProperties);
                 $(self.el).html(self.template);
             });
 
             return this;
         }
-    }}
+    });
 
-    function GridProperties(){
+    var GridProperties = Backbone.View.extend({
+        defaultGridProperties: {
+            showGrid: sbgnStyleRules['show-grid'],
+            snapToGrid: sbgnStyleRules['snap-to-grid'],
+            discreteDrag: sbgnStyleRules['discrete-drag'],
+            gridSize: sbgnStyleRules['grid-size'],
+            autoResizeNodes: sbgnStyleRules['auto-resize-nodes'],
+            showAlignmentGuidelines: sbgnStyleRules['show-alignment-guidelines'],
+            guidelineTolerance: sbgnStyleRules['guideline-tolerance'],
+            guidelineColor: sbgnStyleRules['guideline-color']
+        },
+        currentGridProperties: null,
+        initialize: function () {
+            var self = this;
+            self.copyProperties();
+            self.template = _.template($("#grid-properties-template").html());
+            self.template = self.template(self.currentGridProperties);
+        },
+        copyProperties: function () {
+            this.currentGridProperties = _.clone(this.defaultGridProperties);
+        },
+        render: function () {
+            var self = this;
+            self.template = _.template($("#grid-properties-template").html());
+            self.template = self.template(self.currentGridProperties);
+            $(self.el).html(self.template);
 
-        return {
+            dialogUtilities.openDialog(self.el);
 
-            el: '#grid-properties-table',
+            $(document).off("click", "#save-grid").on("click", "#save-grid", function (evt) {
 
-            defaultGridProperties: {
-                showGrid: sbgnStyleRules['show-grid'],
-                snapToGrid: sbgnStyleRules['snap-to-grid'],
-                discreteDrag: sbgnStyleRules['discrete-drag'],
-                gridSize: sbgnStyleRules['grid-size'],
-                autoResizeNodes: sbgnStyleRules['auto-resize-nodes'],
-                showAlignmentGuidelines: sbgnStyleRules['show-alignment-guidelines'],
-                guidelineTolerance: sbgnStyleRules['guideline-tolerance'],
-                guidelineColor: sbgnStyleRules['guideline-color']
-            },
-            currentGridProperties: null,
-            initialize: function () {
-                var self = this;
+                var param = {};
+                param.firstTime = true;
+                param.previousGrid = _.clone(self.currentGridProperties);
+
+                self.currentGridProperties.showGrid = document.getElementById("show-grid").checked;
+                self.currentGridProperties.snapToGrid = document.getElementById("snap-to-grid").checked;
+                self.currentGridProperties.gridSize = Number(document.getElementById("grid-size").value);
+                self.currentGridProperties.discreteDrag = document.getElementById("discrete-drag").checked;
+                self.currentGridProperties.autoResizeNodes = document.getElementById("auto-resize-nodes").checked;
+                self.currentGridProperties.showAlignmentGuidelines = document.getElementById("show-alignment-guidelines").checked;
+                self.currentGridProperties.guidelineTolerance = Number(document.getElementById("guideline-tolerance").value);
+                self.currentGridProperties.guidelineColor = document.getElementById("guideline-color").value;
+
+                sbgnStyleRules["show-grid"] = document.getElementById("show-grid").checked;
+                sbgnStyleRules["snap-to-grid"] = document.getElementById("snap-to-grid").checked;
+                sbgnStyleRules["grid-size"] = Number(document.getElementById("grid-size").value);
+                sbgnStyleRules["discrete-drag"] = document.getElementById("discrete-drag").checked;
+                sbgnStyleRules["auto-resize-nodes"] = document.getElementById("auto-resize-nodes").checked;
+                sbgnStyleRules["show-alignment-guidelines"] = document.getElementById("show-alignment-guidelines").checked;
+                sbgnStyleRules["guideline-tolerance"] = Number(document.getElementById("guideline-tolerance").value);
+                sbgnStyleRules["guideline-color"] = document.getElementById("guideline-color").value;
+
+
+                cy.gridGuide({
+                    drawGrid: self.currentGridProperties.showGrid,
+                    snapToGrid: self.currentGridProperties.snapToGrid,
+                    gridSpacing: self.currentGridProperties.gridSize,
+                    discreteDrag: self.currentGridProperties.discreteDrag,
+                    resize: self.currentGridProperties.autoResizeNodes,
+                    guidelines: self.currentGridProperties.showAlignmentGuidelines,
+                    guidelinesTolerance: self.currentGridProperties.guidelineTolerance,
+                    guidelinesStyle: {
+                        strokeStyle: self.currentGridProperties.guidelineColor
+                    }
+                });
+            });
+
+            $(document).off("click", "#default-grid").on("click", "#default-grid", function (evt) {
                 self.copyProperties();
-                self.template = _.template($("#grid-properties-template").html()); //funda : format change
-                self.template(self.currentGridProperties);
+                self.template = _.template($("#grid-properties-template").html());
+                self.template = self.template(self.currentGridProperties);
+                $(self.el).html(self.template);
+            });
 
-            },
-            copyProperties: function () {
-                this.currentGridProperties = _.clone(this.defaultGridProperties);
-            },
-            render: function () {
-                var self = this;
+            return this;
+        }
+    });
 
+    var PathsBetweenQuery = Backbone.View.extend({
+        defaultQueryParameters: {
+            geneSymbols: "",
+            lengthLimit: 1
+//    shortestK: 0,
+//    enableShortestKAlteration: false,
+//    ignoreS2SandT2TTargets: false
+        },
+        currentQueryParameters: null,
+        initialize: function () {
+            var self = this;
+            self.copyProperties();
+            self.template = _.template($("#query-pathsbetween-template").html());
+            self.template = self.template(self.currentQueryParameters);
+        },
+        copyProperties: function () {
+            this.currentQueryParameters = _.clone(this.defaultQueryParameters);
+        },
+        render: function () {
+            var self = this;
+            self.template = _.template($("#query-pathsbetween-template").html());
+            self.template = self.template(self.currentQueryParameters);
+            $(self.el).html(self.template);
 
-                self.template = _.template($("#grid-properties-template").html()); //funda : format change
-                self.template(self.currentGridProperties);
-                $(self.el).html(self.template(self.currentGridProperties)); //funda
+            $("#query-pathsbetween-enable-shortest-k-alteration").change(function(e){
+                if(document.getElementById("query-pathsbetween-enable-shortest-k-alteration").checked){
+                    $( "#query-pathsbetween-shortest-k" ).prop( "disabled", false );
+                }
+                else {
+                    $( "#query-pathsbetween-shortest-k" ).prop( "disabled", true );
+                }
+            });
 
-                $(self.el).dialog();
+//    $(self.el).dialog({width:'auto'});
+            dialogUtilities.openDialog(self.el, {width:'auto'});
 
-                $("#save-grid").die("click").live("click", function (evt) {
-                    var self = this;
+            $(document).off("click", "#save-query-pathsbetween").on("click", "#save-query-pathsbetween", function (evt) {
 
-                    var param = {};
-                    param.firstTime = true;
-                    param.previousGrid = _.clone(self.currentGridProperties);
+                self.currentQueryParameters.geneSymbols = document.getElementById("query-pathsbetween-gene-symbols").value;
+                self.currentQueryParameters.lengthLimit = Number(document.getElementById("query-pathsbetween-length-limit").value);
+//      self.currentQueryParameters.shortestK = Number(document.getElementById("query-pathsbetween-shortest-k").value);
+//      self.currentQueryParameters.enableShortestKAlteration =
+//              document.getElementById("query-pathsbetween-enable-shortest-k-alteration").checked;
+//      self.currentQueryParameters.ignoreS2SandT2TTargets =
+//              document.getElementById("query-pathsbetween-ignore-s2s-t2t-targets").checked;
 
-                    self.currentGridProperties.showGrid = document.getElementById("show-grid").checked;
-                    self.currentGridProperties.snapToGrid = document.getElementById("snap-to-grid").checked;
-                    self.currentGridProperties.gridSize = Number(document.getElementById("grid-size").value);
-                    self.currentGridProperties.discreteDrag = document.getElementById("discrete-drag").checked;
-                    self.currentGridProperties.autoResizeNodes = document.getElementById("auto-resize-nodes").checked;
-                    self.currentGridProperties.showAlignmentGuidelines = document.getElementById("show-alignment-guidelines").checked;
-                    self.currentGridProperties.guidelineTolerance = Number(document.getElementById("guideline-tolerance").value);
-                    self.currentGridProperties.guidelineColor = document.getElementById("guideline-color").value;
+                var pc2URL = "http://www.pathwaycommons.org/pc2/";
+                var format = "graph?format=SBGN";
+                var kind = "&kind=PATHSBETWEEN";
+                var limit = "&limit=" + self.currentQueryParameters.lengthLimit;
+                var sources = "";
+                var newfilename = "";
 
+                var geneSymbolsArray = self.currentQueryParameters.geneSymbols.replace("\n"," ").replace("\t"," ").split(" ");
+                for(var i = 0; i < geneSymbolsArray.length; i++){
+                    var currentGeneSymbol = geneSymbolsArray[i];
+                    if(currentGeneSymbol.length == 0 || currentGeneSymbol == ' ' || currentGeneSymbol == '\n' || currentGeneSymbol == '\t'){
+                        continue;
+                    }
 
-                    cy.gridGuide({
-                        drawGrid: self.currentGridProperties.showGrid,
-                        snapToGrid: self.currentGridProperties.snapToGrid,
-                        gridSpacing: self.currentGridProperties.gridSize,
-                        discreteDrag: self.currentGridProperties.discreteDrag,
-                        resize: self.currentGridProperties.autoResizeNodes,
-                        guidelines: self.currentGridProperties.showAlignmentGuidelines,
-                        guidelinesTolerance: self.currentGridProperties.guidelineTolerance,
-                        guidelinesStyle: {
-                            strokeStyle: self.currentGridProperties.guidelineColor
+                    sources = sources + "&source=" + currentGeneSymbol;
+
+                    if(newfilename == ''){
+                        newfilename = currentGeneSymbol;
+                    }
+                    else{
+                        newfilename = newfilename + '_' + currentGeneSymbol;
+                    }
+                }
+
+                newfilename = newfilename + '_PBTWN.sbgnml';
+
+                setFileContent(newfilename);
+                pc2URL = pc2URL + format + kind + limit + sources;
+
+                var containerWidth = cy.width();
+                var containerHeight = cy.height();
+                $('#sbgn-network-container').html('<i style="position: absolute; z-index: 9999999; left: ' + containerWidth / 2 + 'px; top: ' + containerHeight / 2 + 'px;" class="fa fa-spinner fa-spin fa-3x fa-fw"></i>');
+
+                $.ajax(
+                    {
+                        url: pc2URL,
+                        type: 'GET',
+                        success: function(data)
+                        {
+                            (new SBGNContainer({
+                                el: '#sbgn-network-container',
+                                model: {cytoscapeJsGraph: sbgnmlToJson.convert(data)}
+                            })).render();
+                            inspectorUtilities.handleSBGNInspector();
                         }
                     });
 
-                    $(self.el).dialog('close');
-                });
+                $(self.el).dialog('close');
+            });
 
-                $("#default-grid").die("click").live("click", function (evt) {
-                    var self = this;
+            $(document).off("click", "#cancel-query-pathsbetween").on("click", "#cancel-query-pathsbetween", function (evt) {
+                $(self.el).dialog('close');
+            });
 
-                    self.copyProperties();
-                    self.template = _.template($("#grid-properties-template").html(), self.currentGridProperties);
-                    $(self.el).html(self.template);
-                });
-
-                return this;
-            }
-
+            return this;
         }
-    }
+    });
