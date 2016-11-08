@@ -1,4 +1,4 @@
-/** The sbgnml-merger module merges two SBGN models into one. Such a process requires the consistency of the node ids. Its implementation is below.
+/** The json-merger module merges two SBGN models into one. Such a process requires the consistency of the node ids. Its implementation is below.
 **/
 
 //Author: David Servillo

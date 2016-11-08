@@ -1,16 +1,16 @@
     /**
  * Menu class
- * Initializes sbgnContainer, syncManager modelManager, SBGNLayout properties and SBGN Properties,
+ * Initializes sbgnNetworkContainer, syncManager modelManager, SBGNLayout properties and SBGN Properties,
  * Listens to menu actions
  *
  * **/
 
 
 
-var sbgnmlToJson =require('../../../src/utilities/sbgnml-to-json-converter.js')();
+var sbgnmlToJson =require('../../src/utilities/sbgnml-to-json-converter.js')();
 var cytoscape = require('cytoscape');
 
-var idxcardjson = require('../../../src/utilities/idxcardjson-to-json-converter.js');
+var idxcardjson = require('../../src/reach-functions/idxcardjson-to-json-converter.js');
 
 //Local functions
 var setFileContent = function (fileName) {
@@ -100,11 +100,11 @@ function getXMLObject(itemId, loadXMLDoc) {
 
 
 module.exports = function(modelManager){
-    var cyMod =  require('./sample-app-cytoscape-sbgn.js');
+    var cyMod =  require('./app-cy.js');
 
 
 
-    var sbgnContainer;
+    var sbgnNetworkContainer;
 
     var sbgnLayout;
     var sbgnProperties;
@@ -145,8 +145,8 @@ module.exports = function(modelManager){
 
 
 
-             //get another sbgncontainer
-             sbgnContainer = (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, modelManager));
+             //get another sbgnNetworkContainer
+             sbgnNetworkContainer = (new cyMod.sbgnNetworkContainer('#sbgn-network-container', jsonObj, modelManager));
 
              modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
              modelManager.setSampleInd(-1, "me"); //to notify other clients
@@ -395,7 +395,7 @@ module.exports = function(modelManager){
 
                 var jsonObj = modelManager.getJsonFromModel();
 
-                sbgnContainer =  (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj,  modelManager));
+                sbgnNetworkContainer =  (new cyMod.sbgnNetworkContainer('#sbgn-network-container', jsonObj,  modelManager));
                 if(syncVal)
                     modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me");
 
@@ -411,7 +411,7 @@ module.exports = function(modelManager){
 
 
 
-                    sbgnContainer =  (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj,  modelManager));
+                    sbgnNetworkContainer =  (new cyMod.sbgnNetworkContainer('#sbgn-network-container', jsonObj,  modelManager));
 
                     if(syncVal) {
 
@@ -551,7 +551,7 @@ module.exports = function(modelManager){
 
             var jsonObj = modelManager.getJsonFromModel();
 
-
+            console.log(jsonObj);
 
             if (jsonObj == null) {//first time loading the graph-- load from the samples
 
@@ -562,7 +562,7 @@ module.exports = function(modelManager){
             }
             else {//load from a previously loaded graph
 
-                sbgnContainer = (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, modelManager));
+                sbgnNetworkContainer = (new cyMod.sbgnNetworkContainer('#sbgn-network-container', jsonObj, modelManager));
 
                 modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
             }
@@ -602,7 +602,7 @@ module.exports = function(modelManager){
 
                 var ind = e.target.id;
                 
-                if(sbgnContainer)
+                if(sbgnNetworkContainer)
                     modelManager.deleteAll(cy.nodes(), cy.edges(), "me");
 
 
@@ -623,7 +623,7 @@ module.exports = function(modelManager){
 
                 modelManager.deleteAll(cy.nodes(), cy.edges(), "me");
                 cy.remove(cy.elements());
-                sbgnContainer = new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, modelManager);
+                sbgnNetworkContainer = new cyMod.sbgnNetworkContainer('#sbgn-network-container', jsonObj, modelManager);
                 modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
 
                 //syncManager.manager.reset();
@@ -804,10 +804,10 @@ module.exports = function(modelManager){
 
 
                                 var jsonObj = sbgnmlToJson.convert(sbgnData.graph);
-                                //get another sbgncontainer
-                                sbgnContainer = (new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, editorActions));
-                                editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
-                                editorActions.modelManager.setSampleInd(-1, "me"); //to notify other clients
+                                //get another sbgnNetworkContainer
+                                sbgnNetworkContainer = (new cyMod.sbgnNetworkContainer('#sbgn-network-container', jsonObj, editorActions));
+                                modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
+                                modelManager.setSampleInd(-1, "me"); //to notify other clients
 
                             }
                         });
@@ -821,7 +821,7 @@ module.exports = function(modelManager){
                         self.loadFile(this.result);
 
                     }
-                    // sbgnContainer =  new cyMod.SBGNContainer('#sbgn-network-container', jsonObj ,  modelManager);
+                    // sbgnNetworkContainer =  new cyMod.sbgnNetworkContainer('#sbgn-network-container', jsonObj ,  modelManager);
                 }
                 reader.readAsText(file);
                 setFileContent(file.name);
@@ -830,15 +830,11 @@ module.exports = function(modelManager){
 
             $("#node-legend").click(function (e) {
                 e.preventDefault();
-                $.fancybox(
-                    _.template($("#node-legend-template").html(), {}),
-                    {
-                        'autoDimensions': false,
-                        'width': 504,
-                        'height': 325,
-                        'transitionIn': 'none',
-                        'transitionOut': 'none',
-                    });
+                dialogUtilities.openFancybox($("#node-legend-template"), {
+                    'autoDimensions': false,
+                    'width': 504,
+                    'height': 325
+                });
             });
 
             $("#node-label-textbox").blur(function () {
@@ -858,28 +854,20 @@ module.exports = function(modelManager){
             });
             $("#edge-legend").click(function (e) {
                 e.preventDefault();
-                $.fancybox(
-                    _.template($("#edge-legend-template").html(), {}),
-                    {
-                        'autoDimensions': false,
-                        'width': 325,
-                        'height': 285,
-                        'transitionIn': 'none',
-                        'transitionOut': 'none',
-                    });
+                dialogUtilities.openFancybox($("#edge-legend-template"), {
+                    'autoDimensions': false,
+                    'width': 325,
+                    'height': 285
+                });
             });
 
             $("#quick-help").click(function (e) {
                 e.preventDefault();
-                $.fancybox(
-                    _.template($("#quick-help-template").html(), {}),
-                    {
-                        'autoDimensions': false,
-                        'width': 420,
-                        'height': "auto",
-                        'transitionIn': 'none',
-                        'transitionOut': 'none'
-                    });
+                dialogUtilities.openFancybox($("#quick-help-template"), {
+                    'autoDimensions': false,
+                    'width': 420,
+                    'height': "auto"
+                });
             });
 
             $("#how-to-use").click(function (e) {
@@ -890,15 +878,11 @@ module.exports = function(modelManager){
 
             $("#about").click(function (e) {
                 e.preventDefault();
-                $.fancybox(
-                    _.template($("#about-template").html(), {}),
-                    {
-                        'autoDimensions': false,
-                        'width': 300,
-                        'height': 250,
-                        'transitionIn': 'none',
-                        'transitionOut': 'none',
-                    });
+                dialogUtilities.openFancybox($("#about-template"), {
+                    'autoDimensions': false,
+                    'width': 300,
+                    'height': 250
+                });
             });
 
             $("#hide-selected").click(function (e) {
@@ -973,7 +957,7 @@ module.exports = function(modelManager){
 
             $("#neighbors-of-selected").click(function (e) {
 
-                var elesToHighlight = sbgnFiltering.getNeighboursOfSelected();
+                var elesToHighlight = sbgnElementUtilities.getNeighboursOfSelected();
 
                 if(elesToHighlight.length === 0) {
                     return;
@@ -1013,7 +997,7 @@ module.exports = function(modelManager){
 
                 nodesToSelect.select();
 
-                var nodesToHighlight = sbgnFiltering.getProcessesOfSelected();
+                var nodesToHighlight = sbgnElementUtilities.getProcessesOfSelected();
                 cy.undoRedo().do("highlight", nodesToHighlight);
             });
 
@@ -1046,7 +1030,7 @@ module.exports = function(modelManager){
 
             $("#remove-highlights").click(function (e) {
 
-                if (sbgnFiltering.noneIsNotHighlighted()){
+                if (sbgnElementUtilities.noneIsNotHighlighted()){
                     return;
                 }
 
@@ -1060,7 +1044,7 @@ module.exports = function(modelManager){
             $("#make-compound-complex").click(function (e) {
                 var selected = cy.nodes(":selected").filter(function (i, element) {
                     var sbgnclass = element.data("sbgnclass")
-                    return isEPNClass(sbgnclass);
+                    return sbgnElementUtilities.isEPNClass(sbgnclass);
                 });
                 selected = sbgnElementUtilities.getTopMostNodes(selected);
                 if (selected.length == 0 || !sbgnElementUtilities.allHaveTheSameParent(selected)) {
@@ -1548,179 +1532,6 @@ function PathsBetweenQuery(socket, userName){
 }
 
 
-
-    var ReactionTemplate = Backbone.View.extend({
-        defaultTemplateParameters: {
-            templateType: "association",
-            macromoleculeList: ["", ""],
-            templateReactionEnableComplexName: true,
-            templateReactionComplexName: "",
-            getMacromoleculesHtml: function(){
-                var html = "<table>";
-                for( var i = 0; i < this.macromoleculeList.length; i++){
-                    html += "<tr><td>"
-                        + "<input type='text' class='template-reaction-textbox input-small layout-text' name='"
-                        + i + "'" + " value='" + this.macromoleculeList[i] + "'></input>"
-                        + "</td><td><img style='padding-bottom: 8px;' class='template-reaction-delete-button' width='12px' height='12px' name='" + i + "' src='sample-app/sampleapp-images/delete.png'/></td></tr>";
-                }
-
-                html += "<tr><td><img id='template-reaction-add-button' src='sample-app/sampleapp-images/add.png'/></td></tr></table>";
-                return html;
-            },
-            getComplexHtml: function(){
-                var html = "<table>"
-                    + "<tr><td><input type='checkbox' class='input-small layout-text' id='template-reaction-enable-complex-name'";
-
-                if(this.templateReactionEnableComplexName){
-                    html += " checked ";
-                }
-
-                html += "/>"
-                    + "</td><td><input type='text' class='input-small layout-text' id='template-reaction-complex-name' value='"
-                    + this.templateReactionComplexName + "'";
-
-                if(!this.templateReactionEnableComplexName){
-                    html += " disabled ";
-                }
-
-                html += "></input>"
-                    + "</td></tr></table>";
-
-                return html;
-            },
-            getInputHtml: function(){
-                if(this.templateType === 'association') {
-                    return this.getMacromoleculesHtml();
-                }
-                else if(this.templateType === 'dissociation'){
-                    return this.getComplexHtml();
-                }
-            },
-            getOutputHtml: function(){
-                if(this.templateType === 'association') {
-                    return this.getComplexHtml();
-                }
-                else if(this.templateType === 'dissociation'){
-                    return this.getMacromoleculesHtml();
-                }
-            }
-        },
-        currentTemplateParameters: undefined,
-        initialize: function () {
-            var self = this;
-            self.copyProperties();
-            self.template = _.template($("#reaction-template").html());
-
-
-            self.template = self.template(self.currentTemplateParameters);
-        },
-        copyProperties: function () {
-            this.currentTemplateParameters = jQuery.extend(true, [], this.defaultTemplateParameters);
-        },
-        render: function () {
-            var self = this;
-            self.template = _.template($("#reaction-template").html());
-            self.template = self.template(self.currentTemplateParameters);
-            $(self.el).html(self.template);
-
-            dialogUtilities.openDialog(self.el, {width:'auto'});
-
-            $(document).off('change', '#reaction-template-type-select').on('change', '#reaction-template-type-select', function (e) {
-                var optionSelected = $("option:selected", this);
-                var valueSelected = this.value;
-                self.currentTemplateParameters.templateType = valueSelected;
-
-                self.template = _.template($("#reaction-template").html());
-                self.template = self.template(self.currentTemplateParameters);
-                $(self.el).html(self.template);
-
-                $(self.el).dialog({width:'auto'});
-            });
-
-            $(document).off("change", "#template-reaction-enable-complex-name").on("change", "#template-reaction-enable-complex-name", function(e){
-                self.currentTemplateParameters.templateReactionEnableComplexName =
-                    !self.currentTemplateParameters.templateReactionEnableComplexName;
-                self.template = _.template($("#reaction-template").html());
-                self.template = self.template(self.currentTemplateParameters);
-                $(self.el).html(self.template);
-
-                $(self.el).dialog({width:'auto'});
-            });
-
-            $(document).off("change", "#template-reaction-complex-name").on("change", "#template-reaction-complex-name", function(e){
-                self.currentTemplateParameters.templateReactionComplexName = $(this).val();
-                self.template = _.template($("#reaction-template").html());
-                self.template = self.template(self.currentTemplateParameters);
-                $(self.el).html(self.template);
-
-                $(self.el).dialog({width:'auto'});
-            });
-
-            $(document).off("click", "#template-reaction-add-button").on("click", "#template-reaction-add-button", function (event) {
-                self.currentTemplateParameters.macromoleculeList.push("");
-
-                self.template = _.template($("#reaction-template").html());
-                self.template = self.template(self.currentTemplateParameters);
-                $(self.el).html(self.template);
-
-                $(self.el).dialog({width:'auto'});
-            });
-
-            $(document).off("change", ".template-reaction-textbox").on('change', ".template-reaction-textbox", function () {
-                var index = parseInt($(this).attr('name'));
-                var value = $(this).val();
-                self.currentTemplateParameters.macromoleculeList[index] = value;
-
-                self.template = _.template($("#reaction-template").html());
-                self.template = self.template(self.currentTemplateParameters);
-                $(self.el).html(self.template);
-
-                $(self.el).dialog({width:'auto'});
-            });
-
-            $(document).off("click", ".template-reaction-delete-button").on("click", ".template-reaction-delete-button", function (event) {
-                if(self.currentTemplateParameters.macromoleculeList.length <= 2){
-                    return;
-                }
-
-                var index = parseInt($(this).attr('name'));
-                self.currentTemplateParameters.macromoleculeList.splice(index, 1);
-
-                self.template = _.template($("#reaction-template").html());
-                self.template = self.template(self.currentTemplateParameters);
-                $(self.el).html(self.template);
-
-                $(self.el).dialog({width:'auto'});
-            });
-
-            $(document).off("click", "#create-template").on("click", "#create-template", function (evt) {
-                var param = {
-                    firstTime: true,
-                    templateType: self.currentTemplateParameters.templateType,
-                    processPosition: sbgnElementUtilities.convertToModelPosition({x: cy.width() / 2, y: cy.height() / 2}),
-                    macromoleculeList: jQuery.extend(true, [], self.currentTemplateParameters.macromoleculeList),
-                    complexName: self.currentTemplateParameters.templateReactionEnableComplexName?self.currentTemplateParameters.templateReactionComplexName:undefined,
-                    tilingPaddingVertical: calculateTilingPaddings(parseInt(sbgnStyleRules['tiling-padding-vertical'], 10)),
-                    tilingPaddingHorizontal: calculateTilingPaddings(parseInt(sbgnStyleRules['tiling-padding-horizontal'], 10))
-                };
-
-                cy.undoRedo().do("createTemplateReaction", param);
-
-                self.copyProperties();
-                $(self.el).dialog('close');
-            });
-
-            $(document).off("click", "#cancel-template").on("click", "#cancel-template", function (evt) {
-                self.copyProperties();
-                $(self.el).dialog('close');
-            });
-
-            return this;
-        }
-    });
-
-
-
     var PromptSave = Backbone.View.extend({
 
         initialize: function () {
@@ -1793,9 +1604,6 @@ function PathsBetweenQuery(socket, userName){
 
             self.template = _.template($("#layout-settings-template").html());
             self.template = self.template(templateProperties);
-
-
-
         },
         copyProperties: function () {
             this.currentLayoutProperties = _.clone(this.defaultLayoutProperties);
@@ -2029,7 +1837,7 @@ function PathsBetweenQuery(socket, userName){
             return this;
         }
     });
-
+/*FUNDA
     var PathsBetweenQuery = Backbone.View.extend({
         defaultQueryParameters: {
             geneSymbols: "",
@@ -2115,10 +1923,7 @@ function PathsBetweenQuery(socket, userName){
                         type: 'GET',
                         success: function(data)
                         {
-                            (new SBGNContainer({
-                                el: '#sbgn-network-container',
-                                model: {cytoscapeJsGraph: sbgnmlToJson.convert(data)}
-                            })).render();
+                            sbgnvizUpdate(sbgnmlToJson.convert(data));
                             inspectorUtilities.handleSBGNInspector();
                         }
                     });
@@ -2133,3 +1938,173 @@ function PathsBetweenQuery(socket, userName){
             return this;
         }
     });
+*/
+    var ReactionTemplate = Backbone.View.extend({
+        defaultTemplateParameters: {
+            templateType: "association",
+            macromoleculeList: ["", ""],
+            templateReactionEnableComplexName: true,
+            templateReactionComplexName: "",
+            getMacromoleculesHtml: function(){
+                var html = "<table>";
+                for( var i = 0; i < this.macromoleculeList.length; i++){
+                    html += "<tr><td>"
+                        + "<input type='text' class='template-reaction-textbox input-small layout-text' name='"
+                        + i + "'" + " value='" + this.macromoleculeList[i] + "'></input>"
+                        + "</td><td><img style='padding-bottom: 8px;' class='template-reaction-delete-button' width='12px' height='12px' name='" + i + "' src='sample-app/sampleapp-images/delete.png'/></td></tr>";
+                }
+
+                html += "<tr><td><img id='template-reaction-add-button' src='sample-app/sampleapp-images/add.png'/></td></tr></table>";
+                return html;
+            },
+            getComplexHtml: function(){
+                var html = "<table>"
+                    + "<tr><td><input type='checkbox' class='input-small layout-text' id='template-reaction-enable-complex-name'";
+
+                if(this.templateReactionEnableComplexName){
+                    html += " checked ";
+                }
+
+                html += "/>"
+                    + "</td><td><input type='text' class='input-small layout-text' id='template-reaction-complex-name' value='"
+                    + this.templateReactionComplexName + "'";
+
+                if(!this.templateReactionEnableComplexName){
+                    html += " disabled ";
+                }
+
+                html += "></input>"
+                    + "</td></tr></table>";
+
+                return html;
+            },
+            getInputHtml: function(){
+                if(this.templateType === 'association') {
+                    return this.getMacromoleculesHtml();
+                }
+                else if(this.templateType === 'dissociation'){
+                    return this.getComplexHtml();
+                }
+            },
+            getOutputHtml: function(){
+                if(this.templateType === 'association') {
+                    return this.getComplexHtml();
+                }
+                else if(this.templateType === 'dissociation'){
+                    return this.getMacromoleculesHtml();
+                }
+            }
+        },
+        currentTemplateParameters: undefined,
+        initialize: function () {
+            var self = this;
+            self.copyProperties();
+            self.template = _.template($("#reaction-template").html());
+            self.template = self.template(self.currentTemplateParameters);
+        },
+        copyProperties: function () {
+            this.currentTemplateParameters = jQuery.extend(true, [], this.defaultTemplateParameters);
+        },
+        render: function () {
+            var self = this;
+            self.template = _.template($("#reaction-template").html());
+            self.template = self.template(self.currentTemplateParameters);
+            $(self.el).html(self.template);
+
+            dialogUtilities.openDialog(self.el, {width:'auto'});
+
+            $(document).off('change', '#reaction-template-type-select').on('change', '#reaction-template-type-select', function (e) {
+                var optionSelected = $("option:selected", this);
+                var valueSelected = this.value;
+                self.currentTemplateParameters.templateType = valueSelected;
+
+                self.template = _.template($("#reaction-template").html());
+                self.template = self.template(self.currentTemplateParameters);
+                $(self.el).html(self.template);
+
+                $(self.el).dialog({width:'auto'});
+            });
+
+            $(document).off("change", "#template-reaction-enable-complex-name").on("change", "#template-reaction-enable-complex-name", function(e){
+                self.currentTemplateParameters.templateReactionEnableComplexName =
+                    !self.currentTemplateParameters.templateReactionEnableComplexName;
+                self.template = _.template($("#reaction-template").html());
+                self.template = self.template(self.currentTemplateParameters);
+                $(self.el).html(self.template);
+
+                $(self.el).dialog({width:'auto'});
+            });
+
+            $(document).off("change", "#template-reaction-complex-name").on("change", "#template-reaction-complex-name", function(e){
+                self.currentTemplateParameters.templateReactionComplexName = $(this).val();
+                self.template = _.template($("#reaction-template").html());
+                self.template = self.template(self.currentTemplateParameters);
+                $(self.el).html(self.template);
+
+                $(self.el).dialog({width:'auto'});
+            });
+
+            $(document).off("click", "#template-reaction-add-button").on("click", "#template-reaction-add-button", function (event) {
+                self.currentTemplateParameters.macromoleculeList.push("");
+
+                self.template = _.template($("#reaction-template").html());
+                self.template = self.template(self.currentTemplateParameters);
+                $(self.el).html(self.template);
+
+                $(self.el).dialog({width:'auto'});
+            });
+
+            $(document).off("change", ".template-reaction-textbox").on('change', ".template-reaction-textbox", function () {
+                var index = parseInt($(this).attr('name'));
+                var value = $(this).val();
+                self.currentTemplateParameters.macromoleculeList[index] = value;
+
+                self.template = _.template($("#reaction-template").html());
+                self.template = self.template(self.currentTemplateParameters);
+                $(self.el).html(self.template);
+
+                $(self.el).dialog({width:'auto'});
+            });
+
+            $(document).off("click", ".template-reaction-delete-button").on("click", ".template-reaction-delete-button", function (event) {
+                if(self.currentTemplateParameters.macromoleculeList.length <= 2){
+                    return;
+                }
+
+                var index = parseInt($(this).attr('name'));
+                self.currentTemplateParameters.macromoleculeList.splice(index, 1);
+
+                self.template = _.template($("#reaction-template").html());
+                self.template = self.template(self.currentTemplateParameters);
+                $(self.el).html(self.template);
+
+                $(self.el).dialog({width:'auto'});
+            });
+
+            $(document).off("click", "#create-template").on("click", "#create-template", function (evt) {
+                var param = {
+                    firstTime: true,
+                    templateType: self.currentTemplateParameters.templateType,
+                    processPosition: sbgnElementUtilities.convertToModelPosition({x: cy.width() / 2, y: cy.height() / 2}),
+                    macromoleculeList: jQuery.extend(true, [], self.currentTemplateParameters.macromoleculeList),
+                    complexName: self.currentTemplateParameters.templateReactionEnableComplexName?self.currentTemplateParameters.templateReactionComplexName:undefined,
+                    tilingPaddingVertical: calculateTilingPaddings(parseInt(sbgnStyleRules['tiling-padding-vertical'], 10)),
+                    tilingPaddingHorizontal: calculateTilingPaddings(parseInt(sbgnStyleRules['tiling-padding-horizontal'], 10))
+                };
+
+                cy.undoRedo().do("createTemplateReaction", param);
+
+                self.copyProperties();
+                $(self.el).dialog('close');
+            });
+
+            $(document).off("click", "#cancel-template").on("click", "#cancel-template", function (evt) {
+                self.copyProperties();
+                $(self.el).dialog('close');
+            });
+
+            return this;
+        }
+    });
+
+

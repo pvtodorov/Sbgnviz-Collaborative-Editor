@@ -1,4 +1,3 @@
-// if(node._private.data.sbgnclonemarker != 'undefined' &&  node._private.data.sbgnclonemarker != null)
 var jsonToSbgnml = {
     createSbgnml : function(){
         var self = this;

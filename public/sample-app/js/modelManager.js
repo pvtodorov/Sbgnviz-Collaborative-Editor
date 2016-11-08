@@ -350,7 +350,7 @@ module.exports =  function(model, docId, userId, userName) {
             model.pass({user:user}).set('_page.doc.cy.nodes.' +nodeId +'.id', nodeId);
             model.pass({user:user}).set('_page.doc.cy.nodes.' +nodeId +'.position', {x: param.x, y: param.y});
             model.pass({user:user}).set('_page.doc.cy.nodes.' + nodeId+'.sbgnclass', param.sbgnclass);
-            model.pass({user:user}).set('_page.doc.cy.nodes.' + nodeId+'.sbgnlabel', param.sbgnlabel);
+       //     model.pass({user:user}).set('_page.doc.cy.nodes.' + nodeId+'.sbgnlabel', param.sbgnlabel);
 
             //adding the node in cytoscape
             model.pass({user:user}).set('_page.doc.cy.nodes.' +nodeId+'.addedLater', true);
@@ -977,14 +977,14 @@ module.exports =  function(model, docId, userId, userName) {
                 this.changeModelNodeAttribute('interactionCount', node.id(),0, user, true); //don't update history
 
 
-            // var classes= nodePath.get('classes');
-            //
-            // if (classes != null)
-            //     node._private.classes = classes;
-            //
-            // else
-            //     this.changeModelNodeAttribute('classes', node.id(),node._private.classes, user, noHistUpdate);
-            //
+            var classes= nodePath.get('classes');
+
+            if (classes != null)
+                node._private.classes = classes;
+
+            else
+                this.changeModelNodeAttribute('classes', node.id(),node._private.classes, user, noHistUpdate);
+
             //
             //
             // var viewUtilities = nodePath.get('viewUtilities');
@@ -1052,7 +1052,6 @@ module.exports =  function(model, docId, userId, userName) {
             }
             else
                 this.changeModelNodeAttribute('borderWidth', node.id(),node.css('border-width'), user, noHistUpdate);
-
 
 
 
@@ -1201,14 +1200,14 @@ module.exports =  function(model, docId, userId, userName) {
             else
                 this.changeModelEdgeAttribute('classes', edge.id(),edge._private.classes, user, noHistUpdate);
 
-
-            var viewUtilities = edgePath.get('viewUtilities');
-
-            if (viewUtilities != null)
-                edge._private.scratch._viewUtilities = viewUtilities;
-
-            else
-                this.changeModelEdgeAttribute('viewUtilities', edge.id(),edge._private.scratch._viewUtilities, user, noHistUpdate);
+            //
+            // var viewUtilities = edgePath.get('viewUtilities');
+            //
+            // if (viewUtilities != null)
+            //     edge._private.scratch._viewUtilities = viewUtilities;
+            //
+            // else
+            //     this.changeModelEdgeAttribute('viewUtilities', edge.id(),edge._private.scratch._viewUtilities, user, noHistUpdate);
 
 
 
@@ -1271,9 +1270,11 @@ module.exports =  function(model, docId, userId, userName) {
 
             var width = edgePath.get('width');
 
-            if (width != null)
-                edge._private.style["width"].value = width;
-                //edge.css('width', width);
+            if (width != null) {
+                // edge._private.style["width"].value = width;
+                edge.css('width', width);
+                edge._private.style["width"].bypass = null;
+            }
             else
                 this.changeModelEdgeAttribute('width', edge.id(),edge.css('width'), user, noHistUpdate);
 

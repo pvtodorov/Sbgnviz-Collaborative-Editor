@@ -1,3 +1,7 @@
+//FUNDA WARNING
+//Moved the file here as it triggers cy functions
+////
+
 ;(function () {
     'use strict';
 
@@ -180,7 +184,6 @@
                     cy.trigger("changeHighlightStatus",["unhighlighted", res.current.unhighlighteds] );
                     cy.trigger("changeHighlightStatus",["notHighlighted", res.current.notHighlighteds] );
 
-
                     // cy.trigger("changeClasses",  [res.current.notHighlighteds]);
                     // cy.trigger("changeClasses",  [res.current.highlighteds]);
                     // cy.trigger("changeClasses",  [res.current.unhighlighteds]);
@@ -215,11 +218,11 @@
                 }
                 else if(action.name == "addNode"){
 
-                    cy.trigger("addNode", [res.id(), action.args.newNode]);
+                    cy.trigger("addNode", [res.eles, action.args.newNode]);
 
                 }
                 else if(action.name == "addEdge"){
-                    cy.trigger("addEdge", [res.id(), action.args.newEdge]);
+                    cy.trigger("addEdge", [res.eles, action.args.newEdge]);
                 }
 
                 else if(action.name == "removeEles" || action.name == "deleteSelected"){

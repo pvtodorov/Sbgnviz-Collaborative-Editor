@@ -283,7 +283,7 @@ app.proto.init = function (model) {
             var node  = model.get('_page.doc.cy.nodes.' + id);
 
             if(!node || !node.id){ //node is deleted
-                addRemoveUtilities.removeEles(cy.getElementById(id));
+                sbgnElementUtilities.removeEles(cy.getElementById(id));
             }
         }
 
@@ -296,7 +296,7 @@ app.proto.init = function (model) {
             var edge  = model.get('_page.doc.cy.edges.' + id); //check
 
             if(!edge|| !edge.id){ //edge is deleted
-                addRemoveUtilities.removeEles(cy.getElementById(id));
+                sbgnElementUtilities.removeEles(cy.getElementById(id));
 
             }
             //else insertion
@@ -348,26 +348,26 @@ app.proto.init = function (model) {
         }
     });
 
-    model.on('all', '_page.doc.cy.nodes.*.viewUtilities', function(id, op, val, prev, passed){
-        if(docReady && passed.user == null) {
-
-            cy.getElementById(id)._private.scratch._viewUtilities =  val;
-            cy.forceRender();
-
-        }
-    });
-
-    model.on('all', '_page.doc.cy.edges.*.viewUtilities', function(id, op, val, prev, passed){
-        if(docReady && passed.user == null) {
-
-
-            cy.getElementById(id)._private.scratch._viewUtilities =  val;
-
-
-            cy.forceRender();
-
-        }
-    });
+    // model.on('all', '_page.doc.cy.nodes.*.viewUtilities', function(id, op, val, prev, passed){
+    //     if(docReady && passed.user == null) {
+    //
+    //         cy.getElementById(id)._private.scratch._viewUtilities =  val;
+    //         cy.forceRender();
+    //
+    //     }
+    // });
+    //
+    // model.on('all', '_page.doc.cy.edges.*.viewUtilities', function(id, op, val, prev, passed){
+    //     if(docReady && passed.user == null) {
+    //
+    //
+    //         cy.getElementById(id)._private.scratch._viewUtilities =  val;
+    //
+    //
+    //         cy.forceRender();
+    //
+    //     }
+    // });
 
 
     model.on('all', '_page.doc.cy.nodes.*.addedLater', function(id, op, idName, prev, passed){ //this property must be something that is only changed during insertion
@@ -378,7 +378,8 @@ app.proto.init = function (model) {
 
             var pos = model.get('_page.doc.cy.nodes.'+ id + '.position');
             var sbgnclass = model.get('_page.doc.cy.nodes.'+ id + '.sbgnclass');
-            addRemoveUtilities.addNode(pos.x, pos.y, sbgnclass,null, null, id);
+            sbgnElementUtilities.addNode(pos.x, pos.y, sbgnclass,null, null, id);
+
 
         }
 
@@ -393,7 +394,7 @@ app.proto.init = function (model) {
             var target = model.get('_page.doc.cy.edges.'+ id + '.target');
             var sbgnclass = model.get('_page.doc.cy.edges.'+ id + '.sbgnclass');
 
-            addRemoveUtilities.addEdge(source, target, sbgnclass,null,  id);
+            sbgnElementUtilities.addEdge(source, target, sbgnclass,null,  id);
 
         }
 
@@ -478,6 +479,8 @@ app.proto.init = function (model) {
            // cy.getElementById(id)._private.style["background-color"].value =  color;
             cy.getElementById(id).css("background-color", color);
 
+            cy.getElementById(id)._private.style["background-color"].bypass = null;
+
 
         }
 
@@ -493,7 +496,7 @@ app.proto.init = function (model) {
                 color = model.get('_page.doc.cy.edges.' + id + '.lineColor');
 
             cy.getElementById(id).css("line-color", color);
-
+            cy.getElementById(id)._private.style["line-color"].bypass = null;
             //cy.getElementById(id)._private.style["line-color"].value =  color;
 
         }
@@ -536,6 +539,7 @@ app.proto.init = function (model) {
 
         if(docReady && passed.user == null) {
             cy.getElementById(id).css("background-color", backgroundColor);
+            cy.getElementById(id)._private.style["background-color"].bypass = null;
          //   cy.getElementById(id)._private.style["background-color"].strValue =  backgroundColor;
 
         }
@@ -659,8 +663,9 @@ app.proto.init = function (model) {
     model.on('all', '_page.doc.cy.edges.*.width', function(id,  op, width ,prev, passed){
 
         if(docReady && passed.user == null) {
-            cy.getElementById(id)._private.style["width"].value =  width;
-            //cy.getElementById(id).css("width", width);
+            //cy.getElementById(id)._private.style["width"].value =  width;
+            cy.getElementById(id).css("width", width);
+            cy.getElementById(id)._private.style["width"].bypass = null;
         }
     });
 
@@ -701,8 +706,13 @@ app.proto.init = function (model) {
                 cy.getElementById(id).highlight();
             else if(highlightStatus == "unhighlighted")
                 cy.getElementById(id).unhighlight();
-            else
+            else{
                 cy.getElementById(id).removeHighlights();
+                //In case border-width was different from default, set it back to its value in the model
+                var bw = model.get('_page.doc.cy.nodes.' + id + '.borderWidth');
+                cy.getElementById(id).css('border-width', bw);
+                cy.getElementById(id)._private.style['border-width'].bypass = null;
+            }
         }
     });
 
@@ -712,8 +722,13 @@ app.proto.init = function (model) {
                 cy.getElementById(id).highlight();
             else if(highlightStatus == "unhighlighted")
                 cy.getElementById(id).unhighlight();
-            else
+            else {
                 cy.getElementById(id).removeHighlights();
+                //In case border-width was different from default, set it back to its value in the model
+                var bw = model.get('_page.doc.cy.edges.' + id + '.width');
+                cy.getElementById(id).css('width', bw);
+                cy.getElementById(id)._private.style['width'].bypass = null;
+            }
         }
     });
 
@@ -900,11 +915,11 @@ app.proto.create = function (model) {
     });
 
 
-    modelManager = require('./public/sample-app/sampleapp-components/js/modelManager.js')(model, model.get('_page.room'), model.get('_session.userId'),name );
+    modelManager = require('./public/sample-app/js/modelManager.js')(model, model.get('_page.room'), model.get('_session.userId'),name );
 
 
 
-    menu =  require('./public/sample-app/sampleapp-components/js/sample-app-menu-functions.js')(modelManager);
+    menu =  require('./public/sample-app/js/app-menu.js')(modelManager);
 
 
     //send modelManager to web client
@@ -955,8 +970,6 @@ app.proto.runUnitTests = function(){
     require("./public/test/testOptions.js")(); //to print out results
 
 }
-
-
 
 app.proto.add = function (model, filePath) {
 

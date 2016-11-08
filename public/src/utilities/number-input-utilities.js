@@ -1,3 +1,4 @@
+//FUNDA WARNING : Node modules added
 var numberInputUtilities = {
   isNumberKey: function(e) {
     return ( e.keyCode >= 48 && e.keyCode <= 57 ) || ( e.keyCode >= 96 && e.keyCode <= 105 );
@@ -21,8 +22,8 @@ var numberInputUtilities = {
     return e.keyCode === 13;
   },
   isIntegerInput: function(value, e) {
-    return this.isCtrlOrCommandPressed(e) || this.isMinusSignKey(e) || this.isNumberKey(e) 
-            || this.isBackspaceKey(e) || this.isLeftKey(e) || this.isRightKey(e) || this.isEnterKey(e);
+    return this.isCtrlOrCommandPressed(e) || this.isMinusSignKey(e) || this.isNumberKey(e)
+        || this.isBackspaceKey(e) || this.isLeftKey(e) || this.isRightKey(e) || this.isEnterKey(e);
   },
   isFloatInput: function(value, e) {
     return this.isIntegerInput(value, e) || this.isDotKey(e);
@@ -37,32 +38,32 @@ $(document).ready(function () {
     var value = $(this).attr('value');
     return numberInputUtilities.isIntegerInput(value, e);
   });
-  
+
   $(document).on('keydown', '.float-input', function(e){
     var value = $(this).attr('value');
     return numberInputUtilities.isFloatInput(value, e);
   });
-  
+
   $(document).on('change', '.integer-input,.float-input', function(e){
     var min   = $(this).attr('min');
     var max   = $(this).attr('max');
     var value = parseFloat($(this).attr('value'));
-    
+
     if(min != null) {
       min = parseFloat(min);
     }
-    
+
     if(max != null) {
       max = parseFloat(max);
     }
-    
+
     if(min != null && value < min) {
       value = min;
     }
     else if(max != null && value > max) {
       value = max;
     }
-    
+
     if(isNaN(value)) {
       if(min != null) {
         value = min;
@@ -74,7 +75,13 @@ $(document).ready(function () {
         value = 0;
       }
     }
-    
+
     $(this).attr('value', "" + value);
   });
 });
+
+
+//FUNDA WARNING
+if( typeof module !== 'undefined' && module.exports ){ // expose as a nodejs module
+  module.exports = numberInputUtilities;
+}

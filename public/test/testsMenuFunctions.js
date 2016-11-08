@@ -34,7 +34,7 @@ module.exports = function(){
 
     QUnit.module( "Editor-actions tests to see if model is updated correctly." );
 
-    var synchronizationManager = require('../sample-app/sampleapp-components/js/synchronizationManager.js');
+    var synchronizationManager = require('./synchronizationManager.js');
     function addNodeFromEditorActionsTest() {
 
         QUnit.test('synchronizationManager.addNode()', function (assert) {

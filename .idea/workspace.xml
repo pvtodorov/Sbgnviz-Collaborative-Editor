@@ -2,36 +2,67 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9a4da041-f7fe-4258-8b1b-f19f75831c76" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/public/node_modules/cytoscape-undo-redo/.npmignore" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/synchronizationManager.js" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/public/node_modules/cytoscape-undo-redo/.gitattributes" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/cytoscape-undo-redo/.gitattributes" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/public/node_modules/cytoscape-undo-redo/README.md" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/cytoscape-undo-redo/README.md" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/public/node_modules/cytoscape-undo-redo/bower.json" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/cytoscape-undo-redo/bower.json" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/public/node_modules/cytoscape-undo-redo/cytoscape-undo-redo.js" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/cytoscape-undo-redo.js" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/public/node_modules/cytoscape-undo-redo/demo.html" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/cytoscape-undo-redo/demo.html" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/public/node_modules/cytoscape-undo-redo/gulpfile.js" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/cytoscape-undo-redo/gulpfile.js" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/public/node_modules/cytoscape-undo-redo/package.json" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/cytoscape-undo-redo/package.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/sample-app/css/w3.css" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/sample-app/js/undo-redo-action-functions.js" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/common-element-properties.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/cytoscape-undo-redo/.gitattributes" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/cytoscape-undo-redo/README.md" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/cytoscape-undo-redo/bower.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/cytoscape-undo-redo/demo.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/cytoscape-undo-redo/gulpfile.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/cytoscape-undo-redo/package.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/easy-creation-action-functions.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/general-action-functions.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-stylesheet-helpers.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sbgn-action-functions.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/public/src/utilities/add-remove-utilities.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/public/src/utilities/fancybox-utilities.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/public/src/utilities/json-corrector.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/public/src/utilities/sbgn-filtering.js" afterPath="" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/css/images/animated-overlay.gif" afterPath="$PROJECT_DIR$/public/sample-app/css/images/animated-overlay.gif" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/css/images/ui-bg_diagonals-thick_18_b81900_40x40.png" afterPath="$PROJECT_DIR$/public/sample-app/css/images/ui-bg_diagonals-thick_18_b81900_40x40.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/css/images/ui-bg_diagonals-thick_20_666666_40x40.png" afterPath="$PROJECT_DIR$/public/sample-app/css/images/ui-bg_diagonals-thick_20_666666_40x40.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/css/images/ui-bg_flat_10_000000_40x100.png" afterPath="$PROJECT_DIR$/public/sample-app/css/images/ui-bg_flat_10_000000_40x100.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/css/images/ui-bg_glass_100_f6f6f6_1x400.png" afterPath="$PROJECT_DIR$/public/sample-app/css/images/ui-bg_glass_100_f6f6f6_1x400.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/css/images/ui-bg_glass_100_fdf5ce_1x400.png" afterPath="$PROJECT_DIR$/public/sample-app/css/images/ui-bg_glass_100_fdf5ce_1x400.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/css/images/ui-bg_glass_65_ffffff_1x400.png" afterPath="$PROJECT_DIR$/public/sample-app/css/images/ui-bg_glass_65_ffffff_1x400.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/css/images/ui-bg_gloss-wave_35_f6a828_500x100.png" afterPath="$PROJECT_DIR$/public/sample-app/css/images/ui-bg_gloss-wave_35_f6a828_500x100.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/css/images/ui-bg_highlight-soft_100_eeeeee_1x100.png" afterPath="$PROJECT_DIR$/public/sample-app/css/images/ui-bg_highlight-soft_100_eeeeee_1x100.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/css/images/ui-bg_highlight-soft_75_ffe45c_1x100.png" afterPath="$PROJECT_DIR$/public/sample-app/css/images/ui-bg_highlight-soft_75_ffe45c_1x100.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/css/images/ui-icons_0B9BCD_256x240.png" afterPath="$PROJECT_DIR$/public/sample-app/css/images/ui-icons_0B9BCD_256x240.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/css/images/ui-icons_1ABC9C_256x240.png" afterPath="$PROJECT_DIR$/public/sample-app/css/images/ui-icons_1ABC9C_256x240.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/css/images/ui-icons_222222_256x240.png" afterPath="$PROJECT_DIR$/public/sample-app/css/images/ui-icons_222222_256x240.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/css/images/ui-icons_228ef1_256x240.png" afterPath="$PROJECT_DIR$/public/sample-app/css/images/ui-icons_228ef1_256x240.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/css/images/ui-icons_90B6CB_256x240.png" afterPath="$PROJECT_DIR$/public/sample-app/css/images/ui-icons_90B6CB_256x240.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/css/images/ui-icons_ef8c08_256x240.png" afterPath="$PROJECT_DIR$/public/sample-app/css/images/ui-icons_ef8c08_256x240.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/css/images/ui-icons_ffd27a_256x240.png" afterPath="$PROJECT_DIR$/public/sample-app/css/images/ui-icons_ffd27a_256x240.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/css/images/ui-icons_ffffff_256x240.png" afterPath="$PROJECT_DIR$/public/sample-app/css/images/ui-icons_ffffff_256x240.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/css/sbgn-viz.css" afterPath="$PROJECT_DIR$/public/sample-app/css/sbgnviz.css" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/add-remove-action-functions.js" afterPath="$PROJECT_DIR$/public/sample-app/js/add-remove-action-functions.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/biogene-info.js" afterPath="$PROJECT_DIR$/public/sample-app/js/biogene-info.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/cytoscape-undo-redo.js" afterPath="$PROJECT_DIR$/public/sample-app/js/cytoscape-undo-redo.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/general-sample-app-functions.js" afterPath="$PROJECT_DIR$/public/sample-app/js/common-app-utilities.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/keyboard-shortcuts.js" afterPath="$PROJECT_DIR$/public/sample-app/js/keyboard-shortcuts.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/modelManager.js" afterPath="$PROJECT_DIR$/public/sample-app/js/modelManager.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/register-undo-redo-actions.js" afterPath="$PROJECT_DIR$/public/sample-app/js/register-undo-redo-actions.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-cytoscape-sbgn.js" afterPath="$PROJECT_DIR$/public/sample-app/js/app-cy.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-global-variables.js" afterPath="$PROJECT_DIR$/public/src/sbgnviz-global.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-helper-functions.js" afterPath="$PROJECT_DIR$/public/sample-app/js/sample-app-helper-functions.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-menu-functions.js" afterPath="$PROJECT_DIR$/public/sample-app/js/app-menu.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-mode-handler.js" afterPath="$PROJECT_DIR$/public/sample-app/js/app-mode-handler.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/public/src/utilities/idxcardjson-to-json-converter.js" afterPath="$PROJECT_DIR$/public/src/reach-functions/idxcardjson-to-json-converter.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/public/src/utilities/json-merger.js" afterPath="$PROJECT_DIR$/public/src/reach-functions/json-merger.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index.js" afterPath="$PROJECT_DIR$/index.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/node_modules/ev-emitter/package.json" afterPath="$PROJECT_DIR$/public/node_modules/ev-emitter/package.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/node_modules/imagesloaded/README.md" afterPath="$PROJECT_DIR$/public/node_modules/imagesloaded/README.md" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/node_modules/imagesloaded/bower.json" afterPath="$PROJECT_DIR$/public/node_modules/imagesloaded/bower.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/node_modules/imagesloaded/imagesloaded.js" afterPath="$PROJECT_DIR$/public/node_modules/imagesloaded/imagesloaded.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/node_modules/imagesloaded/imagesloaded.pkgd.js" afterPath="$PROJECT_DIR$/public/node_modules/imagesloaded/imagesloaded.pkgd.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/node_modules/imagesloaded/imagesloaded.pkgd.min.js" afterPath="$PROJECT_DIR$/public/node_modules/imagesloaded/imagesloaded.pkgd.min.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/node_modules/imagesloaded/package.json" afterPath="$PROJECT_DIR$/public/node_modules/imagesloaded/package.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/css/sbgn-viz.css" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-components/css/sbgn-viz.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/biogene-info.js" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/biogene-info.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/general-sample-app-functions.js" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/general-sample-app-functions.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/modelManager.js" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/modelManager.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-cytoscape-sbgn.js" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-cytoscape-sbgn.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-helper-functions.js" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-helper-functions.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-menu-functions.js" afterPath="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-menu-functions.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/serverSideSocketListener.js" afterPath="$PROJECT_DIR$/lib/serverSideSocketListener.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/src/sbgn-extensions/cytoscape.renderer.canvas.sbgn-renderer.js" afterPath="$PROJECT_DIR$/public/src/sbgn-extensions/cytoscape.renderer.canvas.sbgn-renderer.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/src/utilities/dialog-utilities.js" afterPath="$PROJECT_DIR$/public/src/utilities/dialog-utilities.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/src/utilities/inspector-utilities.js" afterPath="$PROJECT_DIR$/public/src/utilities/inspector-utilities.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/src/utilities/json-to-sbgnml-converter.js" afterPath="$PROJECT_DIR$/public/src/utilities/json-to-sbgnml-converter.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/src/utilities/number-input-utilities.js" afterPath="$PROJECT_DIR$/public/src/utilities/number-input-utilities.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/src/utilities/sbgn-element-utilities.js" afterPath="$PROJECT_DIR$/public/src/utilities/sbgn-element-utilities.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/src/utilities/sbgnml-to-json-converter.js" afterPath="$PROJECT_DIR$/public/src/utilities/sbgnml-to-json-converter.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/test/testsMenuFunctions.js" afterPath="$PROJECT_DIR$/public/test/testsMenuFunctions.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/index.html" afterPath="$PROJECT_DIR$/views/index.html" />
     </list>
     <ignored path="Sbgnviz-Collaborative-Editor Chise Version.iws" />
@@ -54,146 +85,110 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/views/index.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="766">
-              <caret line="79" column="60" selection-start-line="79" selection-start-column="60" selection-end-line="79" selection-end-column="60" />
-              <folding>
-                <element signature="n#script#55;n#Body:#0;n#Head:#0;n#Title:#0;n#!!top" expanded="false" />
-                <element signature="n#script#57;n#Body:#0;n#Head:#0;n#Title:#0;n#!!top" expanded="false" />
-                <element signature="n#script#58;n#Body:#0;n#Head:#0;n#Title:#0;n#!!top" expanded="false" />
-                <element signature="n#script#59;n#Body:#0;n#Head:#0;n#Title:#0;n#!!top" expanded="false" />
-                <element signature="n#script#60;n#Body:#0;n#Head:#0;n#Title:#0;n#!!top" expanded="false" />
-                <element signature="n#script#62;n#Body:#0;n#Head:#0;n#Title:#0;n#!!top" expanded="false" />
-                <element signature="n#script#63;n#Body:#0;n#Head:#0;n#Title:#0;n#!!top" expanded="false" />
-                <marker date="1478284198000" expanded="false" signature="40494:40507" ph="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3572">
-              <caret line="538" column="99" selection-start-line="538" selection-start-column="99" selection-end-line="538" selection-end-column="99" />
+            <state relative-caret-position="457">
+              <caret line="381" column="0" selection-start-line="381" selection-start-column="0" selection-end-line="381" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
       <file leaf-file-name="cytoscape-undo-redo.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/cytoscape-undo-redo.js">
+        <entry file="file://$PROJECT_DIR$/public/sample-app/js/cytoscape-undo-redo.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="613">
-              <caret line="180" column="90" selection-start-line="180" selection-start-column="90" selection-end-line="180" selection-end-column="90" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="sample-app-cytoscape-sbgn.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-cytoscape-sbgn.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="331">
-              <caret line="1242" column="26" selection-start-line="1242" selection-start-column="15" selection-end-line="1242" selection-end-column="26" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="modelManager.js" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/modelManager.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="789">
-              <caret line="1066" column="0" selection-start-line="1066" selection-start-column="0" selection-end-line="1066" selection-end-column="0" />
+            <state relative-caret-position="165">
+              <caret line="220" column="70" selection-start-line="220" selection-start-column="70" selection-end-line="220" selection-end-column="70" />
               <folding>
-                <element signature="e#47867#49225#0" expanded="false" />
+                <element signature="n#!!doc" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="sbgn-action-functions.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sbgn-action-functions.js">
+      <file leaf-file-name="app-cy.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/public/sample-app/js/app-cy.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="641">
-              <caret line="153" column="7" selection-start-line="153" selection-start-column="7" selection-end-line="153" selection-end-column="7" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="inspector-utilities.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/public/src/utilities/inspector-utilities.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="522">
-              <caret line="598" column="9" selection-start-line="598" selection-start-column="9" selection-end-line="598" selection-end-column="9" />
+            <state relative-caret-position="487">
+              <caret line="1149" column="36" selection-start-line="1149" selection-start-column="36" selection-end-line="1149" selection-end-column="36" />
               <folding>
-                <marker date="1478122262000" expanded="true" signature="1812:1849" ph="..." />
-                <marker date="1478122262000" expanded="true" signature="2096:2135" ph="..." />
-                <marker date="1478122262000" expanded="true" signature="3422:3455" ph="..." />
-                <marker date="1478122262000" expanded="true" signature="6759:6831" ph="..." />
-                <marker date="1478122262000" expanded="true" signature="7803:7864" ph="..." />
-                <marker date="1478122262000" expanded="true" signature="7934:7952" ph="..." />
-                <marker date="1478122262000" expanded="true" signature="8046:8076" ph="..." />
-                <marker date="1478122262000" expanded="true" signature="8226:8287" ph="..." />
-                <marker date="1478122262000" expanded="true" signature="8357:8375" ph="..." />
-                <marker date="1478122262000" expanded="true" signature="8494:8523" ph="..." />
-                <marker date="1478122262000" expanded="true" signature="8682:8743" ph="..." />
-                <marker date="1478122262000" expanded="true" signature="8814:8832" ph="..." />
-                <marker date="1478122262000" expanded="true" signature="8952:8981" ph="..." />
-                <marker date="1478122262000" expanded="true" signature="9829:9890" ph="..." />
-                <marker date="1478122262000" expanded="true" signature="9967:9985" ph="..." />
-                <marker date="1478122262000" expanded="true" signature="10085:10114" ph="..." />
-                <marker date="1478122262000" expanded="true" signature="10203:10264" ph="..." />
-                <marker date="1478122262000" expanded="true" signature="10339:10357" ph="..." />
-                <marker date="1478122262000" expanded="true" signature="10455:10484" ph="..." />
-                <marker date="1478122262000" expanded="true" signature="10577:10638" ph="..." />
-                <marker date="1478122262000" expanded="true" signature="10715:10733" ph="..." />
-                <marker date="1478122262000" expanded="true" signature="10852:10881" ph="..." />
-                <marker date="1478122262000" expanded="true" signature="11044:11105" ph="..." />
-                <marker date="1478122262000" expanded="true" signature="11182:11200" ph="..." />
-                <marker date="1478122262000" expanded="true" signature="11334:11363" ph="..." />
-                <marker date="1478122262000" expanded="true" signature="11520:11581" ph="..." />
-                <marker date="1478122262000" expanded="true" signature="11650:11668" ph="..." />
-                <marker date="1478122262000" expanded="true" signature="11749:11778" ph="..." />
-                <marker date="1478122262000" expanded="true" signature="12144:12205" ph="..." />
-                <marker date="1478122262000" expanded="true" signature="12335:12361" ph="..." />
-                <marker date="1478122262000" expanded="true" signature="12611:12672" ph="..." />
-                <marker date="1478122262000" expanded="true" signature="12812:12838" ph="..." />
-                <marker date="1478122262000" expanded="true" signature="13578:13639" ph="..." />
-                <marker date="1478122262000" expanded="true" signature="13729:13755" ph="..." />
-                <marker date="1478122262000" expanded="true" signature="13900:13961" ph="..." />
-                <marker date="1478122262000" expanded="true" signature="14049:14075" ph="..." />
-                <marker date="1478122262000" expanded="true" signature="14428:14489" ph="..." />
-                <marker date="1478122262000" expanded="true" signature="14564:14582" ph="..." />
-                <marker date="1478122262000" expanded="true" signature="14680:14709" ph="..." />
-                <marker date="1478122262000" expanded="true" signature="14803:14864" ph="..." />
-                <marker date="1478122262000" expanded="true" signature="14934:14952" ph="..." />
-                <marker date="1478122262000" expanded="true" signature="15064:15093" ph="..." />
-                <marker date="1478122262000" expanded="true" signature="15508:15569" ph="..." />
-                <marker date="1478122262000" expanded="true" signature="15645:15663" ph="..." />
-                <marker date="1478122262000" expanded="true" signature="15785:15814" ph="..." />
-                <marker date="1478122262000" expanded="true" signature="16111:16147" ph="..." />
-                <marker date="1478122262000" expanded="true" signature="16164:16178" ph="..." />
-                <marker date="1478122262000" expanded="true" signature="16332:16350" ph="..." />
-                <marker date="1478122262000" expanded="true" signature="16618:16651" ph="..." />
-                <marker date="1478122262000" expanded="true" signature="16663:16695" ph="..." />
-                <marker date="1478122262000" expanded="true" signature="16858:16907" ph="..." />
-                <marker date="1478122262000" expanded="true" signature="16986:17004" ph="..." />
+                <element signature="n#!!block;n#cytoscapeExtensionsAndContextMenu#0" expanded="false" />
+                <element signature="n#!!block;n#removeQtip#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="cytoscape-view-utilities.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/public/node_modules/cytoscape-view-utilities/cytoscape-view-utilities.js">
+      <file leaf-file-name="common-app-utilities.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/public/sample-app/js/common-app-utilities.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="675">
-              <caret line="183" column="55" selection-start-line="183" selection-start-column="55" selection-end-line="183" selection-end-column="74" />
+            <state relative-caret-position="563">
+              <caret line="79" column="45" selection-start-line="79" selection-start-column="45" selection-end-line="79" selection-end-column="45" />
+              <folding>
+                <marker date="1478547178000" expanded="true" signature="7734:7767" ph="..." />
+                <marker date="1478547178000" expanded="true" signature="8397:8430" ph="..." />
+                <marker date="1478547178000" expanded="true" signature="8708:8741" ph="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="app-menu.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/public/sample-app/js/app-menu.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="579">
+              <caret line="564" column="62" selection-start-line="564" selection-start-column="62" selection-end-line="564" selection-end-column="62" />
+              <folding>
+                <element signature="e#49425#50553#0" expanded="false" />
+                <element signature="e#50599#56146#0" expanded="false" />
+                <element signature="e#56196#60898#0" expanded="false" />
+                <element signature="e#60948#65342#0" expanded="false" />
+                <element signature="e#69991#78010#0" expanded="false" />
+                <marker date="1478562286000" expanded="true" signature="898:1007" ph="..." />
+                <marker date="1478562286000" expanded="false" signature="65402:69937" ph="{...}" />
+                <marker date="1478562286000" expanded="true" signature="69101:69210" ph="..." />
+                <marker date="1478562286000" expanded="true" signature="70657:70677" ph="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="modelManager.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/public/sample-app/js/modelManager.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="327">
+              <caret line="960" column="8" selection-start-line="960" selection-start-column="8" selection-end-line="960" selection-end-column="8" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="sbgn-element-utilities.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/public/src/utilities/sbgn-element-utilities.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-885">
+              <caret line="17" column="4" selection-start-line="17" selection-start-column="4" selection-end-line="17" selection-end-column="4" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/views/index.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1230">
+              <caret line="82" column="59" selection-start-line="82" selection-start-column="59" selection-end-line="82" selection-end-column="59" />
+              <folding>
+                <element signature="n#script#48;n#Body:#0;n#Head:#0;n#Title:#0;n#!!top" expanded="false" />
+                <element signature="n#script#50;n#Body:#0;n#Head:#0;n#Title:#0;n#!!top" expanded="false" />
+                <element signature="n#script#51;n#Body:#0;n#Head:#0;n#Title:#0;n#!!top" expanded="false" />
+                <element signature="n#script#52;n#Body:#0;n#Head:#0;n#Title:#0;n#!!top" expanded="false" />
+                <element signature="n#script#53;n#Body:#0;n#Head:#0;n#Title:#0;n#!!top" expanded="false" />
+                <element signature="n#script#55;n#Body:#0;n#Head:#0;n#Title:#0;n#!!top" expanded="false" />
+                <element signature="n#script#56;n#Body:#0;n#Head:#0;n#Title:#0;n#!!top" expanded="false" />
+                <marker date="1478548534000" expanded="false" signature="39635:39648" ph="..." />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -209,12 +204,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/lib/server.js" />
-        <option value="$PROJECT_DIR$/agent-interaction/ContextAgent.js" />
-        <option value="$PROJECT_DIR$/agent-interaction/computerAgent.html" />
-        <option value="$PROJECT_DIR$/agent-interaction/agentAPI.js" />
-        <option value="$PROJECT_DIR$/agent-interaction/agentTester.css" />
-        <option value="$PROJECT_DIR$/lib/index.js" />
         <option value="$PROJECT_DIR$/public/test/testsMenuFunctions.js" />
         <option value="$PROJECT_DIR$/public/test/testsModelManager.js" />
         <option value="$PROJECT_DIR$/public/src/utilities/sbgn-bend-point-utilities.js" />
@@ -223,36 +212,49 @@
         <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/common-element-properties.js" />
         <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/easy-creation-action-functions.js" />
         <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/general-action-functions.js" />
-        <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/keyboard-shortcuts.js" />
         <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-global-variables.js" />
         <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-stylesheet-helpers.js" />
         <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sbgn-action-functions.js" />
         <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-mode-handler.js" />
         <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/register-undo-redo-actions.js" />
-        <option value="$PROJECT_DIR$/public/src/sbgn-extensions/cytoscape.renderer.canvas.sbgn-renderer.js" />
         <option value="$PROJECT_DIR$/public/package.json" />
         <option value="$PROJECT_DIR$/public/lib/js/cytoscape.js" />
-        <option value="$PROJECT_DIR$/public/src/utilities/add-remove-utilities.js" />
         <option value="$PROJECT_DIR$/public/src/utilities/sbgn-filtering.js" />
         <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/synchronizationManager.js" />
-        <option value="$PROJECT_DIR$/lib/serverSideSocketListener.js" />
         <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/css/sbgn-viz.css" />
-        <option value="$PROJECT_DIR$/public/src/utilities/json-to-sbgnml-converter.js" />
-        <option value="$PROJECT_DIR$/public/src/utilities/sbgnml-to-json-converter.js" />
         <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/general-sample-app-functions.js" />
-        <option value="$PROJECT_DIR$/public/src/utilities/inspector-utilities.js" />
         <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-helper-functions.js" />
-        <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/biogene-info.js" />
         <option value="$PROJECT_DIR$/public/src/utilities/sbgn-style-rules.js" />
-        <option value="$PROJECT_DIR$/public/src/utilities/sbgn-element-utilities.js" />
-        <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-menu-functions.js" />
         <option value="$PROJECT_DIR$/public/node_modules/cytoscape-undo-redo/cytoscape-undo-redo.js" />
-        <option value="$PROJECT_DIR$/views/index.html" />
-        <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/cytoscape-undo-redo.js" />
         <option value="$PROJECT_DIR$/public/node_modules/cytoscape-view-utilities/cytoscape-view-utilities.js" />
         <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-cytoscape-sbgn.js" />
-        <option value="$PROJECT_DIR$/index.js" />
         <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/modelManager.js" />
+        <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/css/w3.css" />
+        <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/biogene-info.js" />
+        <option value="$PROJECT_DIR$/public/src/utilities/add-remove-utilities.js" />
+        <option value="$PROJECT_DIR$/public/src/utilities/fancybox-utilities.js" />
+        <option value="$PROJECT_DIR$/public/src/utilities/dialog-utilities.js" />
+        <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-menu-functions.js" />
+        <option value="$PROJECT_DIR$/public/src/utilities/json-merger.js" />
+        <option value="$PROJECT_DIR$/public/src/utilities/json-to-sbgnml-converter.js" />
+        <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/keyboard-shortcuts.js" />
+        <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/common-app-utilities.js" />
+        <option value="$PROJECT_DIR$/public/sample-app/sampleapp-components/js/cytoscape-undo-redo.js" />
+        <option value="$PROJECT_DIR$/lib/serverSideSocketListener.js" />
+        <option value="$PROJECT_DIR$/views/index.html" />
+        <option value="$PROJECT_DIR$/public/src/utilities/sbgnml-to-json-converter.js" />
+        <option value="$PROJECT_DIR$/public/sample-app/js/sample-app-helper-functions.js" />
+        <option value="$PROJECT_DIR$/public/src/sbgn-extensions/cytoscape.renderer.canvas.sbgn-renderer.js" />
+        <option value="$PROJECT_DIR$/public/sample-app/js/register-undo-redo-actions.js" />
+        <option value="$PROJECT_DIR$/public/src/utilities/number-input-utilities.js" />
+        <option value="$PROJECT_DIR$/public/src/utilities/sbgn-element-utilities.js" />
+        <option value="$PROJECT_DIR$/public/sample-app/js/cytoscape-undo-redo.js" />
+        <option value="$PROJECT_DIR$/public/sample-app/js/biogene-info.js" />
+        <option value="$PROJECT_DIR$/public/src/utilities/inspector-utilities.js" />
+        <option value="$PROJECT_DIR$/public/sample-app/js/app-menu.js" />
+        <option value="$PROJECT_DIR$/index.js" />
+        <option value="$PROJECT_DIR$/public/sample-app/js/modelManager.js" />
+        <option value="$PROJECT_DIR$/public/sample-app/js/app-cy.js" />
       </list>
     </option>
   </component>
@@ -274,9 +276,9 @@
     <handled-path value="$PROJECT_DIR$/public/node_modules" />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="145" />
+    <option name="x" value="25" />
     <option name="y" value="23" />
-    <option name="width" value="2017" />
+    <option name="width" value="1818" />
     <option name="height" value="1417" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
@@ -304,36 +306,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
-      <pane id="Scratches" />
-      <pane id="Scope">
-        <subPane subId="Project Files">
-          <PATH>
-            <PATH_ELEMENT USER_OBJECT="Root">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT USER_OBJECT="Sbgnviz-Collaborative-Editor Chise Version">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT USER_OBJECT="Root">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT USER_OBJECT="Sbgnviz-Collaborative-Editor Chise Version">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT USER_OBJECT="public">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -416,6 +388,28 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="utilities" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Sbgnviz-Collaborative-Editor Chise Version" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Sbgnviz-Collaborative-Editor Chise Version" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="public" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="sbgn-extensions" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -434,7 +428,11 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="sample-app" />
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="reach-functions" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -455,8 +453,22 @@
               <option name="myItemId" value="sample-app" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
+          </PATH>
+          <PATH>
             <PATH_ELEMENT>
-              <option name="myItemId" value="sampleapp-components" />
+              <option name="myItemId" value="Sbgnviz-Collaborative-Editor Chise Version" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Sbgnviz-Collaborative-Editor Chise Version" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="public" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sample-app" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -474,20 +486,42 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="public" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="sample-app" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="sampleapp-components" />
+              <option name="myItemId" value="lib" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
+      <pane id="Scope">
+        <subPane subId="Project Files">
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="Sbgnviz-Collaborative-Editor Chise Version">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="Sbgnviz-Collaborative-Editor Chise Version">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="public">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -499,13 +533,16 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/public/sample-app" />
+      <recent name="$PROJECT_DIR$/public/src/reach-functions" />
       <recent name="$PROJECT_DIR$/public/sample-app/sampleapp-components/js" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/public/src" />
+      <recent name="$PROJECT_DIR$/public/sample-app/sampleapp-components/js" />
       <recent name="$PROJECT_DIR$/public/lib/css" />
       <recent name="$PROJECT_DIR$/public/sample-app/sampleapp-images" />
       <recent name="$PROJECT_DIR$/public/lib/js" />
-      <recent name="$PROJECT_DIR$/public/src/utilities" />
     </key>
   </component>
   <component name="RunManager" selected="Node.js.Node Server">
@@ -817,7 +854,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="145" y="23" width="2017" height="1417" extended-state="0" />
+    <frame x="25" y="23" width="1818" height="1417" extended-state="0" />
     <editor active="false" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32942098" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -826,22 +863,22 @@
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32981133" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20754717" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Gulp" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2172152" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24155405" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.28" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32942098" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -886,242 +923,24 @@
     <MESSAGE value="Most cy functionality working" />
     <MESSAGE value="Latest chise changes and some refactoring" />
     <MESSAGE value="undo-redo cy trigger updates" />
-    <option name="LAST_COMMIT_MESSAGE" value="undo-redo cy trigger updates" />
+    <MESSAGE value="Highlight is working" />
+    <option name="LAST_COMMIT_MESSAGE" value="Highlight is working" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="8" />
+      <option name="time" value="9" />
     </breakpoint-manager>
-    <watches-manager />
+    <watches-manager>
+      <configuration name="JavascriptDebugType">
+        <watch expression="sbgnElementUtilities" language="JavaScript" />
+      </configuration>
+    </watches-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/lib/server.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-600">
-          <caret line="33" column="16" selection-start-line="33" selection-start-column="16" selection-end-line="33" selection-end-column="16" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="947">
-          <caret line="74" column="36" selection-start-line="74" selection-start-column="36" selection-end-line="74" selection-end-column="36" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/php/BioGeneQuery.php" />
-    <entry file="file://$PROJECT_DIR$/node_modules/request/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="328">
-          <caret line="43" column="9" selection-start-line="43" selection-start-column="9" selection-end-line="43" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/lib/css/font-awesome-4.0.3/css/font-awesome.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/src/utilities/sbgn-filtering.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="927">
-          <caret line="90" column="2" selection-start-line="90" selection-start-column="2" selection-end-line="90" selection-end-column="2" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-global-variables.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="7" column="0" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/synchronizationManager.js" />
-    <entry file="file://$PROJECT_DIR$/lib/serverSideSocketListener.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="247">
-          <caret line="482" column="151" selection-start-line="482" selection-start-column="151" selection-end-line="482" selection-end-column="151" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/test/testOptions.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/derby/cwc-8d86c5fed9ed5039e636eb53a613d120.js" />
-    <entry file="file://$PROJECT_DIR$/public/test/testsMenuFunctions.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="277">
-          <caret line="34" column="79" selection-start-line="34" selection-start-column="79" selection-end-line="34" selection-end-column="79" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/lib/js/cytoscape-edgehandles.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/package.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/agent-interaction/computerAgent.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-52">
-          <caret line="1055" column="5" selection-start-line="1055" selection-start-column="5" selection-end-line="1055" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/src/utilities/json-to-sbgnml-converter.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="887">
-          <caret line="247" column="0" selection-start-line="247" selection-start-column="0" selection-end-line="247" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/src/utilities/sbgnml-to-json-converter.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="194" column="49" selection-start-line="194" selection-start-column="49" selection-end-line="194" selection-end-column="49" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/biogene-info.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="575">
-          <caret line="120" column="5" selection-start-line="120" selection-start-column="5" selection-end-line="120" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/css/sbgn-viz.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="312">
-          <caret line="476" column="1" selection-start-line="476" selection-start-column="1" selection-end-line="476" selection-end-column="1" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/src/utilities/add-remove-utilities.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="551">
-          <caret line="178" column="14" selection-start-line="178" selection-start-column="14" selection-end-line="178" selection-end-column="14" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/common-element-properties.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="320">
-          <caret line="433" column="18" selection-start-line="433" selection-start-column="18" selection-end-line="433" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-stylesheet-helpers.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="257">
-          <caret line="87" column="3" selection-start-line="87" selection-start-column="3" selection-end-line="87" selection-end-column="3" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/src/utilities/sbgn-element-utilities.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1185">
-          <caret line="79" column="26" selection-start-line="79" selection-start-column="26" selection-end-line="79" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/general-action-functions.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="320">
-          <caret line="114" column="2" selection-start-line="114" selection-start-column="2" selection-end-line="114" selection-end-column="2" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/lib/css/font-awesome-4.0.3/scss/_fixed-width.scss">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/agent-interaction/agentTester.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="512">
-          <caret line="184" column="20" selection-start-line="184" selection-start-column="20" selection-end-line="184" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/src/utilities/sbgn-style-rules.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="15" column="27" selection-start-line="15" selection-start-column="27" selection-end-line="15" selection-end-column="27" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/register-undo-redo-actions.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="540">
-          <caret line="36" column="0" selection-start-line="36" selection-start-column="0" selection-end-line="36" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/src/sbgn-extensions/cytoscape.renderer.canvas.sbgn-renderer.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="320">
-          <caret line="196" column="16" selection-start-line="196" selection-start-column="16" selection-end-line="196" selection-end-column="16" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../Sbgnviz-Collaborative-Editor Chise Version 2/public/node_modules/cytoscape-undo-redo/cytoscape-undo-redo.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1095">
-          <caret line="185" column="17" selection-start-line="0" selection-start-column="0" selection-end-line="576" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/package.json">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="555">
           <caret line="37" column="30" selection-start-line="37" selection-start-column="30" selection-end-line="37" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/general-sample-app-functions.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="19" column="0" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-menu-functions.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15195">
-          <caret line="1013" column="39" selection-start-line="1013" selection-start-column="39" selection-end-line="1013" selection-end-column="39" />
-          <folding>
-            <element signature="e#49910#57931#0" expanded="false" />
-            <element signature="e#59153#64703#0" expanded="false" />
-            <element signature="e#69505#73899#0" expanded="false" />
-            <element signature="e#73952#78656#0" expanded="false" />
-            <marker date="1478196043000" expanded="true" signature="891:1000" ph="..." />
-            <marker date="1478196043000" expanded="true" signature="50576:50596" ph="..." />
-            <marker date="1478196043000" expanded="true" signature="77651:77760" ph="..." />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1136,7 +955,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
           <caret line="4" column="12" selection-start-line="4" selection-start-column="12" selection-end-line="4" selection-end-column="12" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1144,32 +962,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="340">
           <caret line="37" column="27" selection-start-line="37" selection-start-column="27" selection-end-line="37" selection-end-column="27" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="766">
-          <caret line="79" column="60" selection-start-line="79" selection-start-column="60" selection-end-line="79" selection-end-column="60" />
-          <folding>
-            <element signature="n#script#55;n#Body:#0;n#Head:#0;n#Title:#0;n#!!top" expanded="false" />
-            <element signature="n#script#57;n#Body:#0;n#Head:#0;n#Title:#0;n#!!top" expanded="false" />
-            <element signature="n#script#58;n#Body:#0;n#Head:#0;n#Title:#0;n#!!top" expanded="false" />
-            <element signature="n#script#59;n#Body:#0;n#Head:#0;n#Title:#0;n#!!top" expanded="false" />
-            <element signature="n#script#60;n#Body:#0;n#Head:#0;n#Title:#0;n#!!top" expanded="false" />
-            <element signature="n#script#62;n#Body:#0;n#Head:#0;n#Title:#0;n#!!top" expanded="false" />
-            <element signature="n#script#63;n#Body:#0;n#Head:#0;n#Title:#0;n#!!top" expanded="false" />
-            <marker date="1478284198000" expanded="false" signature="40494:40507" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-helper-functions.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="331">
-          <caret line="268" column="51" selection-start-line="268" selection-start-column="47" selection-end-line="268" selection-end-column="51" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1177,7 +969,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="596">
           <caret line="155" column="14" selection-start-line="155" selection-start-column="14" selection-end-line="155" selection-end-column="14" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1185,7 +976,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="488">
           <caret line="109" column="20" selection-start-line="109" selection-start-column="20" selection-end-line="109" selection-end-column="20" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1193,6 +983,295 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="675">
           <caret line="45" column="0" selection-start-line="45" selection-start-column="0" selection-end-line="45" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/node_modules/cytoscape-node-resize/cytoscape-node-resize.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="308">
+          <caret line="482" column="20" selection-start-line="482" selection-start-column="20" selection-end-line="482" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/cytoscape/src/style/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="665">
+          <caret line="155" column="20" selection-start-line="155" selection-start-column="14" selection-end-line="155" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/node_modules/cytoscape-view-utilities/cytoscape-view-utilities.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="152" column="39" selection-start-line="152" selection-start-column="39" selection-end-line="152" selection-end-column="39" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/node_modules/cytoscape-view-utilities/src/hide-show.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/sample-app/css/w3.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="968">
+          <caret line="347" column="174" selection-start-line="347" selection-start-column="174" selection-end-line="347" selection-end-column="174" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/src/utilities/fancybox-utilities.js" />
+    <entry file="file://$PROJECT_DIR$/public/src/utilities/dialog-utilities.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1207">
+          <caret line="90" column="0" selection-start-line="90" selection-start-column="0" selection-end-line="90" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/src/utilities/json-to-sbgnml-converter.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="965">
+          <caret line="245" column="2" selection-start-line="245" selection-start-column="2" selection-end-line="245" selection-end-column="2" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/src/reach-functions/json-merger.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="585">
+          <caret line="39" column="33" selection-start-line="39" selection-start-column="33" selection-end-line="39" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/src/utilities/add-remove-utilities.js" />
+    <entry file="file://$PROJECT_DIR$/public/src/utilities/sbgn-filtering.js" />
+    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-stylesheet-helpers.js" />
+    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/common-element-properties.js" />
+    <entry file="file://$PROJECT_DIR$/public/sample-app/js/add-remove-action-functions.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" column="15" selection-start-line="5" selection-start-column="15" selection-end-line="5" selection-end-column="15" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sbgn-action-functions.js" />
+    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-global-variables.js" />
+    <entry file="file://$PROJECT_DIR$/public/sample-app/js/keyboard-shortcuts.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="465">
+          <caret line="31" column="5" selection-start-line="31" selection-start-column="5" selection-end-line="31" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/general-sample-app-functions.js" />
+    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/general-action-functions.js" />
+    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/easy-creation-action-functions.js" />
+    <entry file="file://$PROJECT_DIR$/public/src/sbgnviz-global.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/serverSideSocketListener.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="308">
+          <caret line="449" column="108" selection-start-line="449" selection-start-column="108" selection-end-line="449" selection-end-column="108" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1230">
+          <caret line="82" column="59" selection-start-line="82" selection-start-column="59" selection-end-line="82" selection-end-column="59" />
+          <folding>
+            <element signature="n#script#48;n#Body:#0;n#Head:#0;n#Title:#0;n#!!top" expanded="false" />
+            <element signature="n#script#50;n#Body:#0;n#Head:#0;n#Title:#0;n#!!top" expanded="false" />
+            <element signature="n#script#51;n#Body:#0;n#Head:#0;n#Title:#0;n#!!top" expanded="false" />
+            <element signature="n#script#52;n#Body:#0;n#Head:#0;n#Title:#0;n#!!top" expanded="false" />
+            <element signature="n#script#53;n#Body:#0;n#Head:#0;n#Title:#0;n#!!top" expanded="false" />
+            <element signature="n#script#55;n#Body:#0;n#Head:#0;n#Title:#0;n#!!top" expanded="false" />
+            <element signature="n#script#56;n#Body:#0;n#Head:#0;n#Title:#0;n#!!top" expanded="false" />
+            <marker date="1478548534000" expanded="false" signature="39635:39648" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/node_modules/cytoscape-edge-bend-editing/cytoscape-edge-bend-editing.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/node_modules/cytoscape-expand-collapse/cytoscape-expand-collapse.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="930">
+          <caret line="1494" column="15" selection-start-line="1494" selection-start-column="15" selection-end-line="1494" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/node_modules/cytoscape-context-menus/cytoscape-context-menus.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="435">
+          <caret line="29" column="24" selection-start-line="29" selection-start-column="24" selection-end-line="29" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/src/sbgn-extensions/cytoscape.renderer.canvas.sbgn-renderer.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="992">
+          <caret line="1897" column="1" selection-start-line="1897" selection-start-column="1" selection-end-line="1897" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/sample-app/js/register-undo-redo-actions.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="510">
+          <caret line="34" column="137" selection-start-line="34" selection-start-column="137" selection-end-line="34" selection-end-column="137" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/src/utilities/number-input-utilities.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="825">
+          <caret line="55" column="21" selection-start-line="55" selection-start-column="21" selection-end-line="55" selection-end-column="21" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/src/utilities/sbgnml-to-json-converter.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="658">
+          <caret line="273" column="13" selection-start-line="273" selection-start-column="13" selection-end-line="273" selection-end-column="13" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/sample-app/js/sample-app-helper-functions.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="137">
+          <caret line="181" column="27" selection-start-line="181" selection-start-column="27" selection-end-line="181" selection-end-column="27" />
+          <folding>
+            <element signature="e#5222#10609#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/sample-app/js/undo-redo-action-functions.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="915">
+          <caret line="61" column="32" selection-start-line="61" selection-start-column="32" selection-end-line="61" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/sample-app/js/app-mode-handler.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="660">
+          <caret line="44" column="37" selection-start-line="44" selection-start-column="37" selection-end-line="44" selection-end-column="37" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bundle.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/src/utilities/inspector-utilities.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="673">
+          <caret line="446" column="0" selection-start-line="446" selection-start-column="0" selection-end-line="446" selection-end-column="0" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+            <marker date="1478561053000" expanded="true" signature="1811:1848" ph="..." />
+            <marker date="1478561053000" expanded="true" signature="2080:2119" ph="..." />
+            <marker date="1478561053000" expanded="true" signature="3391:3424" ph="..." />
+            <marker date="1478561053000" expanded="true" signature="6797:6869" ph="..." />
+            <marker date="1478561053000" expanded="true" signature="7988:8049" ph="..." />
+            <marker date="1478561053000" expanded="true" signature="8119:8137" ph="..." />
+            <marker date="1478561053000" expanded="true" signature="8231:8261" ph="..." />
+            <marker date="1478561053000" expanded="true" signature="8432:8493" ph="..." />
+            <marker date="1478561053000" expanded="true" signature="8563:8581" ph="..." />
+            <marker date="1478561053000" expanded="true" signature="8700:8729" ph="..." />
+            <marker date="1478561053000" expanded="true" signature="8888:8949" ph="..." />
+            <marker date="1478561053000" expanded="true" signature="9020:9038" ph="..." />
+            <marker date="1478561053000" expanded="true" signature="9158:9187" ph="..." />
+            <marker date="1478561053000" expanded="true" signature="10056:10117" ph="..." />
+            <marker date="1478561053000" expanded="true" signature="10194:10212" ph="..." />
+            <marker date="1478561053000" expanded="true" signature="10312:10341" ph="..." />
+            <marker date="1478561053000" expanded="true" signature="10430:10491" ph="..." />
+            <marker date="1478561053000" expanded="true" signature="10566:10584" ph="..." />
+            <marker date="1478561053000" expanded="true" signature="10682:10711" ph="..." />
+            <marker date="1478561053000" expanded="true" signature="10804:10865" ph="..." />
+            <marker date="1478561053000" expanded="true" signature="10942:10960" ph="..." />
+            <marker date="1478561053000" expanded="true" signature="11079:11108" ph="..." />
+            <marker date="1478561053000" expanded="true" signature="11271:11332" ph="..." />
+            <marker date="1478561053000" expanded="true" signature="11409:11427" ph="..." />
+            <marker date="1478561053000" expanded="true" signature="11561:11590" ph="..." />
+            <marker date="1478561053000" expanded="true" signature="11768:11829" ph="..." />
+            <marker date="1478561053000" expanded="true" signature="11898:11916" ph="..." />
+            <marker date="1478561053000" expanded="true" signature="11997:12026" ph="..." />
+            <marker date="1478561053000" expanded="true" signature="12434:12495" ph="..." />
+            <marker date="1478561053000" expanded="true" signature="12625:12651" ph="..." />
+            <marker date="1478561053000" expanded="true" signature="12919:12980" ph="..." />
+            <marker date="1478561053000" expanded="true" signature="13120:13146" ph="..." />
+            <marker date="1478561053000" expanded="true" signature="14012:14073" ph="..." />
+            <marker date="1478561053000" expanded="true" signature="14163:14189" ph="..." />
+            <marker date="1478561053000" expanded="true" signature="14334:14395" ph="..." />
+            <marker date="1478561053000" expanded="true" signature="14483:14509" ph="..." />
+            <marker date="1478561053000" expanded="true" signature="14904:14965" ph="..." />
+            <marker date="1478561053000" expanded="true" signature="15040:15058" ph="..." />
+            <marker date="1478561053000" expanded="true" signature="15156:15185" ph="..." />
+            <marker date="1478561053000" expanded="true" signature="15279:15340" ph="..." />
+            <marker date="1478561053000" expanded="true" signature="15410:15428" ph="..." />
+            <marker date="1478561053000" expanded="true" signature="15540:15569" ph="..." />
+            <marker date="1478561053000" expanded="true" signature="16023:16084" ph="..." />
+            <marker date="1478561053000" expanded="true" signature="16160:16178" ph="..." />
+            <marker date="1478561053000" expanded="true" signature="16300:16329" ph="..." />
+            <marker date="1478561053000" expanded="true" signature="16626:16662" ph="..." />
+            <marker date="1478561053000" expanded="true" signature="16679:16693" ph="..." />
+            <marker date="1478561053000" expanded="true" signature="16847:16865" ph="..." />
+            <marker date="1478561053000" expanded="true" signature="17133:17166" ph="..." />
+            <marker date="1478561053000" expanded="true" signature="17178:17210" ph="..." />
+            <marker date="1478561053000" expanded="true" signature="17373:17422" ph="..." />
+            <marker date="1478561053000" expanded="true" signature="17501:17519" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/sample-app/js/biogene-info.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="532">
+          <caret line="207" column="21" selection-start-line="207" selection-start-column="21" selection-end-line="207" selection-end-column="21" />
+          <folding>
+            <element signature="e#67#813#0" expanded="false" />
+            <marker date="1478560956000" expanded="true" signature="6410:6428" ph="..." />
+            <marker date="1478560956000" expanded="true" signature="6466:6472" ph="..." />
+            <marker date="1478560956000" expanded="true" signature="7275:7293" ph="..." />
+            <marker date="1478560956000" expanded="true" signature="7331:7337" ph="..." />
+            <marker date="1478560956000" expanded="true" signature="7492:7510" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/src/utilities/sbgn-element-utilities.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-885">
+          <caret line="17" column="4" selection-start-line="17" selection-start-column="4" selection-end-line="17" selection-end-column="4" />
           <folding />
         </state>
       </provider>
@@ -1205,129 +1284,69 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sbgn-action-functions.js">
+    <entry file="file://$PROJECT_DIR$/public/sample-app/js/modelManager.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="641">
-          <caret line="153" column="7" selection-start-line="153" selection-start-column="7" selection-end-line="153" selection-end-column="7" />
+        <state relative-caret-position="327">
+          <caret line="960" column="8" selection-start-line="960" selection-start-column="8" selection-end-line="960" selection-end-column="8" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/node_modules/cytoscape-node-resize/cytoscape-node-resize.js">
+    <entry file="file://$PROJECT_DIR$/public/sample-app/js/common-app-utilities.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="308">
-          <caret line="482" column="20" selection-start-line="482" selection-start-column="20" selection-end-line="482" selection-end-column="20" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/node_modules/cytoscape/src/style/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="665">
-          <caret line="155" column="20" selection-start-line="155" selection-start-column="14" selection-end-line="155" selection-end-column="20" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/node_modules/cytoscape-view-utilities/cytoscape-view-utilities.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="675">
-          <caret line="183" column="55" selection-start-line="183" selection-start-column="55" selection-end-line="183" selection-end-column="74" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/sample-app-cytoscape-sbgn.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="331">
-          <caret line="1242" column="26" selection-start-line="1242" selection-start-column="15" selection-end-line="1242" selection-end-column="26" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/cytoscape-undo-redo.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="613">
-          <caret line="180" column="90" selection-start-line="180" selection-start-column="90" selection-end-line="180" selection-end-column="90" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/src/utilities/inspector-utilities.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="522">
-          <caret line="598" column="9" selection-start-line="598" selection-start-column="9" selection-end-line="598" selection-end-column="9" />
+        <state relative-caret-position="563">
+          <caret line="79" column="45" selection-start-line="79" selection-start-column="45" selection-end-line="79" selection-end-column="45" />
           <folding>
-            <marker date="1478122262000" expanded="true" signature="1812:1849" ph="..." />
-            <marker date="1478122262000" expanded="true" signature="2096:2135" ph="..." />
-            <marker date="1478122262000" expanded="true" signature="3422:3455" ph="..." />
-            <marker date="1478122262000" expanded="true" signature="6759:6831" ph="..." />
-            <marker date="1478122262000" expanded="true" signature="7803:7864" ph="..." />
-            <marker date="1478122262000" expanded="true" signature="7934:7952" ph="..." />
-            <marker date="1478122262000" expanded="true" signature="8046:8076" ph="..." />
-            <marker date="1478122262000" expanded="true" signature="8226:8287" ph="..." />
-            <marker date="1478122262000" expanded="true" signature="8357:8375" ph="..." />
-            <marker date="1478122262000" expanded="true" signature="8494:8523" ph="..." />
-            <marker date="1478122262000" expanded="true" signature="8682:8743" ph="..." />
-            <marker date="1478122262000" expanded="true" signature="8814:8832" ph="..." />
-            <marker date="1478122262000" expanded="true" signature="8952:8981" ph="..." />
-            <marker date="1478122262000" expanded="true" signature="9829:9890" ph="..." />
-            <marker date="1478122262000" expanded="true" signature="9967:9985" ph="..." />
-            <marker date="1478122262000" expanded="true" signature="10085:10114" ph="..." />
-            <marker date="1478122262000" expanded="true" signature="10203:10264" ph="..." />
-            <marker date="1478122262000" expanded="true" signature="10339:10357" ph="..." />
-            <marker date="1478122262000" expanded="true" signature="10455:10484" ph="..." />
-            <marker date="1478122262000" expanded="true" signature="10577:10638" ph="..." />
-            <marker date="1478122262000" expanded="true" signature="10715:10733" ph="..." />
-            <marker date="1478122262000" expanded="true" signature="10852:10881" ph="..." />
-            <marker date="1478122262000" expanded="true" signature="11044:11105" ph="..." />
-            <marker date="1478122262000" expanded="true" signature="11182:11200" ph="..." />
-            <marker date="1478122262000" expanded="true" signature="11334:11363" ph="..." />
-            <marker date="1478122262000" expanded="true" signature="11520:11581" ph="..." />
-            <marker date="1478122262000" expanded="true" signature="11650:11668" ph="..." />
-            <marker date="1478122262000" expanded="true" signature="11749:11778" ph="..." />
-            <marker date="1478122262000" expanded="true" signature="12144:12205" ph="..." />
-            <marker date="1478122262000" expanded="true" signature="12335:12361" ph="..." />
-            <marker date="1478122262000" expanded="true" signature="12611:12672" ph="..." />
-            <marker date="1478122262000" expanded="true" signature="12812:12838" ph="..." />
-            <marker date="1478122262000" expanded="true" signature="13578:13639" ph="..." />
-            <marker date="1478122262000" expanded="true" signature="13729:13755" ph="..." />
-            <marker date="1478122262000" expanded="true" signature="13900:13961" ph="..." />
-            <marker date="1478122262000" expanded="true" signature="14049:14075" ph="..." />
-            <marker date="1478122262000" expanded="true" signature="14428:14489" ph="..." />
-            <marker date="1478122262000" expanded="true" signature="14564:14582" ph="..." />
-            <marker date="1478122262000" expanded="true" signature="14680:14709" ph="..." />
-            <marker date="1478122262000" expanded="true" signature="14803:14864" ph="..." />
-            <marker date="1478122262000" expanded="true" signature="14934:14952" ph="..." />
-            <marker date="1478122262000" expanded="true" signature="15064:15093" ph="..." />
-            <marker date="1478122262000" expanded="true" signature="15508:15569" ph="..." />
-            <marker date="1478122262000" expanded="true" signature="15645:15663" ph="..." />
-            <marker date="1478122262000" expanded="true" signature="15785:15814" ph="..." />
-            <marker date="1478122262000" expanded="true" signature="16111:16147" ph="..." />
-            <marker date="1478122262000" expanded="true" signature="16164:16178" ph="..." />
-            <marker date="1478122262000" expanded="true" signature="16332:16350" ph="..." />
-            <marker date="1478122262000" expanded="true" signature="16618:16651" ph="..." />
-            <marker date="1478122262000" expanded="true" signature="16663:16695" ph="..." />
-            <marker date="1478122262000" expanded="true" signature="16858:16907" ph="..." />
-            <marker date="1478122262000" expanded="true" signature="16986:17004" ph="..." />
+            <marker date="1478547178000" expanded="true" signature="7734:7767" ph="..." />
+            <marker date="1478547178000" expanded="true" signature="8397:8430" ph="..." />
+            <marker date="1478547178000" expanded="true" signature="8708:8741" ph="..." />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3572">
-          <caret line="538" column="99" selection-start-line="538" selection-start-column="99" selection-end-line="538" selection-end-column="99" />
+        <state relative-caret-position="457">
+          <caret line="381" column="0" selection-start-line="381" selection-start-column="0" selection-end-line="381" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/sample-app/sampleapp-components/js/modelManager.js">
+    <entry file="file://$PROJECT_DIR$/public/sample-app/js/cytoscape-undo-redo.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="789">
-          <caret line="1066" column="0" selection-start-line="1066" selection-start-column="0" selection-end-line="1066" selection-end-column="0" />
+        <state relative-caret-position="165">
+          <caret line="220" column="70" selection-start-line="220" selection-start-column="70" selection-end-line="220" selection-end-column="70" />
           <folding>
-            <element signature="e#47867#49225#0" expanded="false" />
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/sample-app/js/app-menu.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="579">
+          <caret line="564" column="62" selection-start-line="564" selection-start-column="62" selection-end-line="564" selection-end-column="62" />
+          <folding>
+            <element signature="e#49425#50553#0" expanded="false" />
+            <element signature="e#50599#56146#0" expanded="false" />
+            <element signature="e#56196#60898#0" expanded="false" />
+            <element signature="e#60948#65342#0" expanded="false" />
+            <element signature="e#69991#78010#0" expanded="false" />
+            <marker date="1478562286000" expanded="true" signature="898:1007" ph="..." />
+            <marker date="1478562286000" expanded="false" signature="65402:69937" ph="{...}" />
+            <marker date="1478562286000" expanded="true" signature="69101:69210" ph="..." />
+            <marker date="1478562286000" expanded="true" signature="70657:70677" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/sample-app/js/app-cy.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="487">
+          <caret line="1149" column="36" selection-start-line="1149" selection-start-column="36" selection-end-line="1149" selection-end-column="36" />
+          <folding>
+            <element signature="n#!!block;n#cytoscapeExtensionsAndContextMenu#0" expanded="false" />
+            <element signature="n#!!block;n#removeQtip#0" expanded="false" />
           </folding>
         </state>
       </provider>

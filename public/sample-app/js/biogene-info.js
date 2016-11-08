@@ -189,24 +189,27 @@ var fillBioGeneContainer = function (node) {
         return;
     }
 
+
     var socket = io();
-    var queryScriptURL = "sample-app/sampleapp-components/php/BioGeneQuery.php";
     var geneName = node._private.data.sbgnlabel;
 
-    // // set the query parameters
-    // var queryParams =
-    // {
-    //     query: geneName,
-    //     org: "human",
-    //     format: "json",
-    // };
-    //
+    if(!geneName)
+        return;
 
     socket.emit('BioGeneQuery',  {
         query: geneName, //gene name
         org: "human",
         format: "json"}, function(content){
-        var queryResult = JSON.parse(content);
+
+
+        try{
+            var queryResult = JSON.parse(content);
+        }
+        catch (err) {
+            return err;
+        }
+
+
         if (queryResult.count > 0 )
         {
             var info = (new BioGeneView(

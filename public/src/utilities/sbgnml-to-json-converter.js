@@ -64,8 +64,8 @@ module.exports = function () {
             var compartments = [];
 
 //FUNDA????
-           // $(xmlObject).find("glyph[class='compartment']").each(function () {
-            $("glyph[class='compartment']").each(function () {
+            $(xmlObject).find("glyph[class='compartment']").each(function () {
+           // $("glyph[class='compartment']").each(function () {
                 compartments.push({
                     'x': parseFloat($(this).children('bbox').attr('x')),
                     'y': parseFloat($(this).children('bbox').attr('y')),
@@ -211,13 +211,13 @@ module.exports = function () {
             //add state and info box information
             nodeObj.sbgnstatesandinfos = self.stateAndInfoProp(ele, nodeObj.sbgnbbox);
             // add default label size information
-            nodeObj.labelsize = canHaveSBGNLabel(sbgnclass) ? sbgnElementUtilities.getDefaultLabelSize(sbgnclass) : undefined;
+            nodeObj.labelsize = sbgnElementUtilities.canHaveSBGNLabel(sbgnclass) ? sbgnElementUtilities.getDefaultLabelSize(sbgnclass) : undefined;
             // add default font family
-            nodeObj.fontfamily = canHaveSBGNLabel(sbgnclass) ? sbgnElementUtilities.defaultFontProperties.fontfamily : undefined;
+            nodeObj.fontfamily = sbgnElementUtilities.canHaveSBGNLabel(sbgnclass) ? sbgnElementUtilities.defaultFontProperties.fontfamily : undefined;
             // add default font weight
-            nodeObj.fontweight = canHaveSBGNLabel(sbgnclass) ? sbgnElementUtilities.defaultFontProperties.fontweight : undefined;
+            nodeObj.fontweight = sbgnElementUtilities.canHaveSBGNLabel(sbgnclass) ? sbgnElementUtilities.defaultFontProperties.fontweight : undefined;
             // add default font style
-            nodeObj.fontstyle = canHaveSBGNLabel(sbgnclass) ? sbgnElementUtilities.defaultFontProperties.fontstyle : undefined;
+            nodeObj.fontstyle = sbgnElementUtilities.canHaveSBGNLabel(sbgnclass) ? sbgnElementUtilities.defaultFontProperties.fontstyle : undefined;
             //adding parent information
             self.addParentInfoToNode(ele, nodeObj, parent, compartments);
 

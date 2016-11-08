@@ -20,14 +20,14 @@
         <!--<link href="../node_modules/cytoscape-edge-bend-editing/cytoscape.js-edge-bend-editing.css" rel="stylesheet" type="text/css" />-->
 
         <!-- Loading sample app css -->
-        <link href="sample-app/sampleapp-components/css/sbgn-viz.css" rel="stylesheet">
+        <link href="sample-app/css/sbgnviz.css" rel="stylesheet">
         <!--Css for tabs-->
-        <link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
+        <link rel="stylesheet" href="sample-app/css/w3.css">
 
         <Body:>
 
             <!--global variables-->
-            <script src="sample-app/sampleapp-components/js/sample-app-global-variables.js"></script>
+            <script src="src/sbgnviz-global.js"></script>
 
             <!-- External Libraries -->
             <script src="node_modules/jquery/dist/jquery.js"></script>
@@ -66,30 +66,24 @@
             <script src="src/sbgn-extensions/cytoscape.renderer.canvas.sbgn-renderer.js"></script>
             <script src="src/utilities/json-to-sbgnml-converter.js"></script>
 
-            <script src="src/utilities/add-remove-utilities.js"></script>
             <script src="src/utilities/sbgn-style-rules.js"></script>
             <script src="src/utilities/inspector-utilities.js"></script>
-            <script src="src/utilities/sbgn-filtering.js"></script>
+
             <script src="src/utilities/sbgn-element-utilities.js"></script>
-            <script src="src/utilities/fancybox-utilities.js"></script>
             <script src="src/utilities/dialog-utilities.js"></script>
             <script src="src/utilities/number-input-utilities.js"></script>
 
 
 
-            <script src="sample-app/sampleapp-components/js/cytoscape-undo-redo.js"></script>
+            <script src="sample-app/js/cytoscape-undo-redo.js"></script>
 
-            <script src="sample-app/sampleapp-components/js/biogene-info.js"></script>
-            <script src="sample-app/sampleapp-components/js/sample-app-mode-handler.js"></script>
-            <script src="sample-app/sampleapp-components/js/general-sample-app-functions.js"></script>
-            <script src="sample-app/sampleapp-components/js/sample-app-helper-functions.js"></script>
-            <script src="sample-app/sampleapp-components/js/sample-app-stylesheet-helpers.js"></script>
-            <script src="sample-app/sampleapp-components/js/common-element-properties.js"></script>
-            <script src="sample-app/sampleapp-components/js/easy-creation-action-functions.js"></script>
+            <script src="sample-app/js/biogene-info.js"></script>
+            <script src="sample-app/js/app-mode-handler.js"></script>
+            <script src="sample-app/js/sample-app-helper-functions.js"></script>
+            <script src="sample-app/js/common-app-utilities.js"></script>
 
-            <script src="sample-app/sampleapp-components/js/general-action-functions.js"></script>
-            <script src="sample-app/sampleapp-components/js/add-remove-action-functions.js"></script>
-            <script src="sample-app/sampleapp-components/js/sbgn-action-functions.js"></script>
+            <script src="sample-app/js/register-undo-redo-actions.js"></script>
+            <script src="sample-app/js/undo-redo-action-functions.js"></script>
 
 
             <!--<div id = "sbgnviz">-->

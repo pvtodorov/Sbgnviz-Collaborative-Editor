@@ -298,10 +298,10 @@ var FontProperties = Backbone.View.extend({
         var self = this;
         var commonProperties = {};
 
-        var commonFontSize = getCommonLabelFontSize(eles);
-        var commonFontWeight = getCommonLabelFontWeight(eles);
-        var commonFontFamily = getCommonLabelFontFamily(eles);
-        var commonFontStyle = getCommonLabelFontStyle(eles);
+        var commonFontSize = sbgnElementUtilities.getCommonLabelFontSize(eles);
+        var commonFontWeight = sbgnElementUtilities.getCommonLabelFontWeight(eles);
+        var commonFontFamily = sbgnElementUtilities.getCommonLabelFontFamily(eles);
+        var commonFontStyle = sbgnElementUtilities.getCommonLabelFontStyle(eles);
 
         if( commonFontSize != null ) {
             commonProperties.fontSize = commonFontSize;
