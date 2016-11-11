@@ -41,7 +41,32 @@ function loadXMLDoc(filename) {
 
 };
 
+//FUNDA moved this from app-menu
+var beforePerformLayout = function(){
+    var nodes = cy.nodes();
+    var edges = cy.edges();
 
+    nodes.removeData("ports");
+    edges.removeData("portsource");
+    edges.removeData("porttarget");
+
+    nodes.data("ports", []);
+    edges.data("portsource", []);
+    edges.data("porttarget", []);
+
+    // TODO do this by using extension API
+    cy.$('.edgebendediting-hasbendpoints').removeClass('edgebendediting-hasbendpoints');
+    edges.scratch('cyedgebendeditingWeights', []);
+    edges.scratch('cyedgebendeditingDistances', []);
+};
+
+jQuery.fn.extend({
+    live: function (event, callback) {
+        if (this.selector) {
+            jQuery(document).on(event, this.selector, callback);
+        }
+    }
+});
 
 $(document).ready(function () {
     scrollToBottom('command-history-area');
@@ -50,30 +75,33 @@ $(document).ready(function () {
 
 
  //   dynamicResize();
-    //TODO
-    // $('#command-history-area').live('contentchanged', function(){
-    //     scrollToBottom('command-history-area');
-    // });
-    //
-    // $('#messages').live('contentchanged', function(){
-    //     /*
-    //        FIXME This is triggered before the DOM is actually updated. Hack
-    //        around it by delaying for 100ms. This is of course not reliable but
-    //        will be good enough for demos.
-    //     */
-    //     setTimeout(function () {
-    //         scrollToBottom('messages');
-    //     }, 100);
-    //
-    //
-    //
-    // });
-    //
-    // $('#receivedImages').live('contentchanged', function(){
-    //     scrollToBottom('receivedImages');
-    //
-    // });
-    //
+   // TODO not working!!!!!
+
+     $('#command-messages').live('contentchanged', function(){
+         //console.log("here");
+         scrollToBottom('command-messages');
+     });
+
+    $('#messages').live('contentchanged', function(){
+
+        /*
+           FIXME This is triggered before the DOM is actually updated. Hack
+           around it by delaying for 100ms. This is of course not reliable but
+           will be good enough for demos.
+        */
+        setTimeout(function () {
+            scrollToBottom('messages');
+        }, 100);
+
+
+
+    });
+
+    $('#receivedImages').live('contentchanged', function(){
+        scrollToBottom('receivedImages');
+
+    });
+
     //
 
 });

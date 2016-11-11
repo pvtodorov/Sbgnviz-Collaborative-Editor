@@ -347,6 +347,18 @@ module.exports.sbgnNetworkContainer = function( el,  cytoscapeJsGraph, modelMana
             window.cy = this;
 
 
+
+            //FUNDA TODO: Do this somewhere else
+            cy.nodes().addClass('changeLabelTextSize');
+
+
+            refreshPaddings();
+            initializeUnselectedDataOfElements();
+            // cy.edgeBendEditing('get').initBendPoints(cy.edges());
+
+            window.firstSelectedNode = null;
+//FUNDA
+
             registerUndoRedoActions();
 
             //Call these first
@@ -1110,6 +1122,20 @@ function bindTriggeredEvents(modelManager){
 
         modelManager.changeModelElementGroupAttribute("highlightStatus", modelElList, paramList, "me");
     });
+
+
+    cy.on("changeVisibilityStatus", function (event,  visibilityStatus, collection) {
+        var modelElList = [];
+        var paramList =[]
+        collection.forEach(function(ele){
+
+            modelElList.push({id: ele.id(), isNode: ele.isNode()});
+            paramList.push(visibilityStatus);
+
+        });
+
+        modelManager.changeModelElementGroupAttribute("visibilityStatus", modelElList, paramList, "me");
+    });
     cy.on("changeClasses",  function (event,  collection) {
 
         var modelElList = [];
@@ -1152,7 +1178,7 @@ function bindTriggeredEvents(modelManager){
 
     });
 
-    cy.on("removeEles", function(event, collection){
+    cy.on("deleteEles", function(event, collection){
 
         var nodeList = [];
         var edgeList = [];
@@ -1184,6 +1210,20 @@ function bindTriggeredEvents(modelManager){
         modelManager.addModelCompound(compoundNode.id(), compoundAtts,modelElList, paramList, "me");
 
     });
+
+    cy.on('layoutstop', function() {
+        var modelElList = [];
+        var paramList = [];
+        cy.nodes().forEach(function(node){
+            modelElList.push({id: node.id(), isNode: true});
+            paramList.push(node.position());
+
+        });
+        modelManager.changeModelElementGroupAttribute("position", modelElList, paramList, "me");
+
+
+    });
+
 
     cy.on("mouseup", "node", function () {
         modelManager.unselectModelNode(this);

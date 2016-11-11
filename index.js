@@ -266,13 +266,6 @@ app.proto.changeDuration = function () {
 
 };
 
-//TODO: open this
-function updateServerGraph(){
-    //hack: setTimeout has its own stack  -- waits for the stack to clear
-     setTimeout(function(){
-         menu.updateServerGraph();
-     },0);
-}
 
 app.proto.init = function (model) {
     var timeSort;
@@ -283,7 +276,7 @@ app.proto.init = function (model) {
             var node  = model.get('_page.doc.cy.nodes.' + id);
 
             if(!node || !node.id){ //node is deleted
-                sbgnElementUtilities.removeEles(cy.getElementById(id));
+                sbgnElementUtilities.deleteElesSimple(cy.getElementById(id));
             }
         }
 
@@ -296,7 +289,7 @@ app.proto.init = function (model) {
             var edge  = model.get('_page.doc.cy.edges.' + id); //check
 
             if(!edge|| !edge.id){ //edge is deleted
-                sbgnElementUtilities.removeEles(cy.getElementById(id));
+                sbgnElementUtilities.deleteElesSimple(cy.getElementById(id));
 
             }
             //else insertion
@@ -333,6 +326,8 @@ app.proto.init = function (model) {
         if(docReady && passed.user == null) {
 
             cy.getElementById(id)._private.classes =  val;
+
+
             cy.forceRender();
 
         }
@@ -347,28 +342,6 @@ app.proto.init = function (model) {
 
         }
     });
-
-    // model.on('all', '_page.doc.cy.nodes.*.viewUtilities', function(id, op, val, prev, passed){
-    //     if(docReady && passed.user == null) {
-    //
-    //         cy.getElementById(id)._private.scratch._viewUtilities =  val;
-    //         cy.forceRender();
-    //
-    //     }
-    // });
-    //
-    // model.on('all', '_page.doc.cy.edges.*.viewUtilities', function(id, op, val, prev, passed){
-    //     if(docReady && passed.user == null) {
-    //
-    //
-    //         cy.getElementById(id)._private.scratch._viewUtilities =  val;
-    //
-    //
-    //         cy.forceRender();
-    //
-    //     }
-    // });
-
 
     model.on('all', '_page.doc.cy.nodes.*.addedLater', function(id, op, idName, prev, passed){ //this property must be something that is only changed during insertion
 
@@ -732,6 +705,32 @@ app.proto.init = function (model) {
         }
     });
 
+    model.on('all', '_page.doc.cy.nodes.*.visibilityStatus', function(id, op, visibilityStatus, prev, passed){ //this property must be something that is only changed during insertion
+        if(docReady && passed.user == null) {
+            if(visibilityStatus == "show"){
+                cy.getElementById(id).css('display', null);
+            }
+            else{
+                cy.getElementById(id).css('display', "none");
+                cy.getElementById(id)._private.style['display'].bypass = null;
+            }
+
+
+        }
+    });
+    model.on('all', '_page.doc.cy.edges.*.visibilityStatus', function(id, op, visibilityStatus, prev, passed){ //this property must be something that is only changed during insertion
+        if(docReady && passed.user == null) {
+            if(visibilityStatus == "show"){
+                cy.getElementById(id).css('display', null);
+            }
+            else{
+                cy.getElementById(id).css('display', "none");
+                cy.getElementById(id)._private.style['display'].bypass = null;
+            }
+
+
+        }
+    });
     model.on('all', '_page.doc.cy.edges.*.cyedgebendeditingWeights', function(id,  op, weights, prev, passed) {
         cy.getElementById(id).scratch("cyedgebendeditingWeights", weights);
     });

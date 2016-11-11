@@ -82,7 +82,7 @@ var sbgnvizUpdate = function (cyGraph) {
   cy.endBatch();
 
   refreshPaddings();
-  initilizeUnselectedDataOfElements();
+  initializeUnselectedDataOfElements();
   cy.edgeBendEditing('get').initBendPoints(cy.edges());
   
   window.firstSelectedNode = null;
@@ -214,7 +214,7 @@ var getNodesData = function () {
   return nodesData;
 };
 
-var initilizeUnselectedDataOfElements = function () {
+var initializeUnselectedDataOfElements = function () {
   var nodes = cy.nodes();
   var edges = cy.edges();
 

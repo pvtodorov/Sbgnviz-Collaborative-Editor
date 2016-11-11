@@ -197,7 +197,8 @@
                 }
 
                 else if (action.name == "hide" || action.name == "show"){
-                    cy.trigger("changeClasses", [action.args]);
+                    cy.trigger("changeClasses", [res]);
+                   // cy.trigger("changeVisibilityStatus", [action.name, res]);
 
                 }
 
@@ -225,8 +226,8 @@
                     cy.trigger("addEdge", [res.eles, action.args.newEdge]);
                 }
 
-                else if(action.name == "removeEles" || action.name == "deleteSelected"){
-                    cy.trigger("removeEles", [res]);
+                else if(action.name == "deleteElesSimple" || action.name == "deleteElesSmart"){
+                    cy.trigger("deleteEles", [res]);
                 }
 
                 else if(action.name == "createCompoundForSelectedNodes"){
