@@ -10,15 +10,15 @@
         <link href="lib/css/cytoscape.js-panzoom.css" rel="stylesheet">
         <link href="lib/css/font-awesome-4.0.3/css/font-awesome.css" rel="stylesheet">
         <link href="lib/css/jquery.qtip.min.css" rel="stylesheet">
-        <link href="sample-app/sampleapp-components/css/sbgn-viz.css" rel="stylesheet">
+        <link href="sample-app/css/sbgn-viz.css" rel="stylesheet">
 
 
-        <link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
+        <link rel="stylesheet" href="sample-app/css/w3.css">
 
         <Body:>
 
             <!--global variables-->
-            <script src="sample-app/sampleapp-components/js/sample-app-global-variables.js"></script>
+            <script src="sample-app/js/sample-app-global-variables.js"></script>
 
             <!-- External Libraries -->
             <script src="lib/js/jquery-1.8.2.js"></script>
@@ -47,8 +47,8 @@
             <script src="src/utilities/sbgn-bend-point-utilities.js"></script>
             <script src="src/utilities/sbgn-style-rules.js"></script>
 
-            <script src="sample-app/sampleapp-components/js/sample-app-mode-handler.js"></script>
-            <script src="sample-app/sampleapp-components/js/sample-app-helper-functions.js"></script>
+            <script src="sample-app/js/sample-app-mode-handler.js"></script>
+            <script src="sample-app/js/sample-app-helper-functions.js"></script>
 
 
 
@@ -512,6 +512,9 @@
 
                     <!--</div>-->
                     <div id="inputs">
+
+
+
                         User name: <input id="inputs-name" value="{{users[_session.userId].name}}">
                         <button id = "change-user-color" class = "btn btn-mini" on-click ="changeColorCode()">New user color</button>
                         <form id="inputs-form" on-submit="add()">

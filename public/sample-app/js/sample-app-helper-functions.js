@@ -56,15 +56,9 @@ function dynamicResize() {
     $("#inspector-tab-area").width(windowWidth * inspectorCoef);
     //if (windowWidth > canvasWidth) {
     $("#sbgn-network-container").width(windowWidth * 0.7 );
-    // $("#sbgn-inspector").width(windowWidth * inspectorCoef);
     $(".nav-menu").width(windowWidth * 0.7);
     $(".navbar").width(windowWidth * 0.7);
     $("#sbgn-toolbar").width(windowWidth * 0.7);
-    // $("#chat-area").width(windowWidth * inspectorCoef);
-    // $("#command-history-area").width(windowWidth * inspectorCoef);
-
-//    }
-
     //    if (windowHeight > canvasHeight) {
     if($("#sbgn-toolbar").width() < (444))
         $("#sbgn-network-container").css('top', '190px');
@@ -78,10 +72,6 @@ function dynamicResize() {
 
     $("#inspector-tab-area").height(windowHeight);
 
-    // $("#sbgn-inspector").height(windowHeight - 60); //account for tabs
-    // $("#command-history-area").height(windowHeight - 60);
-    // $("#chat-area").height(windowHeight - 60);
-    //  }
 }
 
 $(window).on('resize', dynamicResize);

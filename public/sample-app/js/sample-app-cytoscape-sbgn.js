@@ -1,8 +1,8 @@
 
 module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
 
-    var addRemoveUtilities = require('../../../src/utilities/add-remove-utilities.js');
-    var expandCollapseUtilities = require('../../../src/utilities/expand-collapse-utilities.js')();
+    var addRemoveUtilities = require('../../src/utilities/add-remove-utilities.js');
+    var expandCollapseUtilities = require('../../src/utilities/expand-collapse-utilities.js')();
     var bioGeneView = require('./biogene-info.js');
 
     var nodeLabelChanged = false;

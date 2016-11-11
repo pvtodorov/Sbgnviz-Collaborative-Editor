@@ -34,7 +34,7 @@ module.exports = function(){
 
     QUnit.module( "Editor-actions tests to see if model is updated correctly." );
 
-    var editorActions = require('../sample-app/sampleapp-components/js/EditorActionsManager.js');
+    var editorActions = require('../sample-app/js/EditorActionsManager.js');
     function addNodeFromEditorActionsTest() {
 
         QUnit.test('editorActions.addNode()', function (assert) {

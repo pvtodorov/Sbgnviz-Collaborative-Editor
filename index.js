@@ -816,10 +816,10 @@ app.proto.create = function (model) {
     // });
 
 
-    modelManager = require('./public/sample-app/sampleapp-components/js/modelManager.js')(model, model.get('_page.room'), model.get('_session.userId'),name );
+    modelManager = require('./public/sample-app/js/modelManager.js')(model, model.get('_page.room'), model.get('_session.userId'),name );
 
 
-    menu =  require('./public/sample-app/sampleapp-components/js/sample-app-menu-functions.js')();
+    menu =  require('./public/sample-app/js/sample-app-menu-functions.js')();
 
     //send modelManager to web client
     //make sure cytoscape is loaded

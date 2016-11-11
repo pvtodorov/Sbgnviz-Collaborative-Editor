@@ -6,14 +6,14 @@
  * **/
 
 
-var sbgnFiltering = require('../../../src/utilities/sbgn-filtering.js')();
-var sbgnElementUtilities = require('../../../src/utilities/sbgn-element-utilities.js')();
-var expandCollapseUtilities = require('../../../src/utilities/expand-collapse-utilities.js')();
-var sbgnmlToJson =require('../../../src/utilities/sbgnml-to-json-converter.js')();
+var sbgnFiltering = require('../../src/utilities/sbgn-filtering.js')();
+var sbgnElementUtilities = require('../../src/utilities/sbgn-element-utilities.js')();
+var expandCollapseUtilities = require('../../src/utilities/expand-collapse-utilities.js')();
+var sbgnmlToJson =require('../../src/utilities/sbgnml-to-json-converter.js')();
 var cytoscape = require('cytoscape');
 
-    var jsonMerger = require('../../../src/utilities/json-merger.js');
-    var idxcardjson = require('../../../src/utilities/idxcardjson-to-json-converter.js');
+    var jsonMerger = require('../../src/reach-functions/json-merger.js');
+    var idxcardjson = require('../../src/reach-functions/idxcardjson-to-json-converter.js');
 
 //Local functions
 var setFileContent = function (fileName) {
@@ -658,8 +658,9 @@ module.exports = function(){
 
             //
             // //If we get a message om a separate window
+            //TODO: find a better way
             window.addEventListener('message', function(event) {
-                if(event.data)
+                if(event.data  && event.data.indexOf("<sbgn xmlns") > -1) //check if this is an sbgn file, not some other message
                     self.loadFile(event.data);
 
             }, false);
@@ -671,8 +672,6 @@ module.exports = function(){
             var socket = io();
 
             editorActions.modelManager = modelManager;
-
-
 
             sbgnLayout = new SBGNLayout(modelManager);
 
@@ -690,6 +689,7 @@ module.exports = function(){
 
 
             var jsonObj = modelManager.getJsonFromModel();
+
 
 
 
@@ -715,6 +715,19 @@ module.exports = function(){
                 event.preventDefault();
             }, false);
 
+
+
+        // //Handle keyboard events
+        //  $(document).keydown(function (e) {
+        //          e = e || window.event;
+        //      if(e.ctrlKey){
+        //          var charCode = (typeof e.which == "number") ? e.which : e.keyCode;
+        //          if (charCode && String.fromCharCode(charCode) == "v" || String.fromCharCode(charCode) == "V") {
+        //              editorActions.cloneSelected("me");
+        //
+        //          }
+        //      }
+        //  });
 
             //Listen to menu actions
 
@@ -1748,7 +1761,7 @@ function PathsBetweenQuery(socket, userName){
         el: '#query-pathsbetween-table',
 
         defaultQueryParameters: {
-            geneSymbols: "CDK4 RB1",
+            geneSymbols: "MDM2 RB1",
             lengthLimit: 1
             //    shortestK: 0,
             //    enableShortestKAlteration: false,
@@ -1820,12 +1833,17 @@ function PathsBetweenQuery(socket, userName){
 
                     if(sbgnData!=null) {
 
-                        var w = window.open(("query_" + userName), "width = 1600, height = 1200, left = " + window.left + " right = " + window.right);
-
-                        // // //FIXME: find a more elegant solution
-                        setTimeout(function () {
+                        var w = window.open(("query_" + userName), "width = 1600, height = 1200, left = " + window.left + " right = " + window.right, function(){
                             w.postMessage(sbgnData, "*");
-                        }, 1000);
+
+                        });
+
+                        //
+                        // //because window opening takes a while
+                        // // // //FIXME: find a more elegant solution
+                        // setTimeout(function () {
+                        //     w.postMessage(sbgnData, "*");
+                        // }, 1000);
 
                     }
                     else
