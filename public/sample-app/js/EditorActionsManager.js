@@ -858,7 +858,7 @@ module.exports.changeStyleData = function( param) {
 
 
         if (cy.elements(":selected").length == 1 && cy.elements(":selected")[0] == param.ele) {
-            require('./sample-app-cytoscape-sbgn.js').handleSBGNInspector(module.exports);
+            require('./app-cy.js').handleSBGNInspector(module.exports);
         }
 
 
@@ -939,7 +939,7 @@ module.exports.changeStyleCss = function(param) {
 
 
         if (cy.elements(":selected").length == 1 && cy.elements(":selected")[0] == ele) {
-            require('./sample-app-cytoscape-sbgn.js').handleSBGNInspector(module.exports);
+            require('./app-cy.js').handleSBGNInspector(module.exports);
         }
     });
 

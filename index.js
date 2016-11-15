@@ -759,7 +759,8 @@ app.proto.create = function (model) {
     // });
 
     socket.on('newFile', function(){
-        $('#new-file').trigger("click");
+        menu.newFile();
+       // $('#new-file').trigger("click");
     });
 
     //better through sockets-- model operation causes complications
@@ -819,7 +820,7 @@ app.proto.create = function (model) {
     modelManager = require('./public/sample-app/js/modelManager.js')(model, model.get('_page.room'), model.get('_session.userId'),name );
 
 
-    menu =  require('./public/sample-app/js/sample-app-menu-functions.js')();
+    menu =  require('./public/sample-app/js/app-menu.js')();
 
     //send modelManager to web client
     //make sure cytoscape is loaded
@@ -910,21 +911,6 @@ app.proto.add = function (model, filePath) {
         });
 
 
-
-
-    //append image  after updating the message list on the page
-        //if(filePath!=null) {
-        //    var msgs = $("div[class='message']");
-        //    //append this to the message with the filepath as a thumbnail
-        //    $("div[class='message']").each(function (index, element) {
-        //        if ($(element).context.innerHTML.indexOf(filePath) > -1) {
-        //            $(element).append("<div class = 'receivedImage' ></div>");
-        //        //
-        //        }
-        //    });
-        //
-
-//s        }
 };
 
 

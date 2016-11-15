@@ -10,6 +10,9 @@ var sbgnFiltering = require('../../src/utilities/sbgn-filtering.js')();
 var sbgnElementUtilities = require('../../src/utilities/sbgn-element-utilities.js')();
 var expandCollapseUtilities = require('../../src/utilities/expand-collapse-utilities.js')();
 var sbgnmlToJson =require('../../src/utilities/sbgnml-to-json-converter.js')();
+var factoidHandler =  require('./factoid-handler.js');
+
+
 var cytoscape = require('cytoscape');
 
     var jsonMerger = require('../../src/reach-functions/json-merger.js');
@@ -80,7 +83,7 @@ function getXMLObject(itemId, loadXMLDoc) {
 };
 
 module.exports = function(){
-    var cyMod =  require('./sample-app-cytoscape-sbgn.js');
+    var cyMod =  require('./app-cy.js');
 
     var editorActions = require('./EditorActionsManager.js');
 
@@ -98,6 +101,17 @@ module.exports = function(){
           editorActions.refreshGlobalUndoRedoButtonsStatus();
          },
 
+         newFile: function(){
+             setFileContent("new_file.sbgnml");
+
+             var jsonObj = {nodes: [], edges: []};
+
+             editorActions.modelManager.newModel( "me");
+             cy.remove(cy.elements());
+             sbgnContainer = new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, editorActions);
+             editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
+
+         },
 
          mergeJson: function(jsonGraph){
              var currSbgnml = jsonToSbgnml.createSbgnml(cy.nodes(":visible"), cy.edges(":visible"));
@@ -686,7 +700,8 @@ module.exports = function(){
             pathsBetweenQuery = new PathsBetweenQuery(socket,  editorActions.modelManager.getName());
             pathsBetweenQuery.initialize();
 
-
+            //var factoidInput = new FactoidInput();
+            factoidHandler.initialize(self);
 
             var jsonObj = modelManager.getJsonFromModel();
 
@@ -786,15 +801,7 @@ module.exports = function(){
             });
 
             $('#new-file').click(function () {
-                setFileContent("new_file.sbgnml");
-
-                var jsonObj = {nodes: [], edges: []};
-
-                editorActions.modelManager.newModel( "me");
-                cy.remove(cy.elements());
-                sbgnContainer = new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, editorActions);
-                editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
-
+                self.newFile();
                 //editorActions.manager.reset();
                 //TODO: why is this here?
                 //funda?????   cyMod.handleSBGNInspector(editorActions);
@@ -1044,8 +1051,8 @@ module.exports = function(){
 
 
                 //first clear everything
-                $('#new-file').trigger("click");
-
+              //  $('#new-file').trigger("click");
+                self.newFile();
 
                 var reader = new FileReader();
 
@@ -1730,7 +1737,7 @@ module.exports = function(){
             $("#send-message").click(function(evt) {
 
                 var msg = document.getElementById("inputs-comment").value;
-                socket.emit("REACHQuery", msg); //for agent
+                socket.emit("REACHQuery", "fries", msg); //for agent
 
 
                 if(msg.toUpperCase().indexOf("PROCESS READY") > -1) {

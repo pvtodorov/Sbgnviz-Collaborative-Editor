@@ -33,6 +33,7 @@
             <script src="lib/js/cytoscape.js-qtip.js"></script>
             <script src="lib/js/cytoscape-edgehandles.js"></script>
             <script src="lib/js/cytoscape-noderesize.js"></script>
+            <script src="lib/js/backbone-min.js"></script>
 
             <script src="lib/js/FileSaver.js"></script>
             <script src="lib/js/jquery.noty.packaged.min.js"></script>
@@ -49,6 +50,8 @@
 
             <script src="sample-app/js/sample-app-mode-handler.js"></script>
             <script src="sample-app/js/sample-app-helper-functions.js"></script>
+
+
 
 
 
@@ -476,9 +479,10 @@
 
                 <ul class="nav nav-tabs">
                     <li class = "active tab-link"><a data-toggle="tab"  href="#chat-area">Chat</a></li>
-                    <li class = "tab-link"><a data-toggle="tab" href="#image-area">Image Share</a></li>
-                    <li class = "tab-link"><a data-toggle="tab" href="#sbgn-inspector">Sbgn Inspector</a></li>
+                    <li class = "tab-link"><a data-toggle="tab" href="#image-area">Images</a></li>
+                    <li class = "tab-link"><a data-toggle="tab" href="#sbgn-inspector">Inspector</a></li>
                     <li class = "tab-link"><a data-toggle="tab" href="#command-history-area">Operations</a></li>
+                    <li class = "tab-link"><a data-toggle="tab" href="#factoid-area">Factoid</a></li>
                 </ul>
 </div>
                 <div class="tab-content">
@@ -486,7 +490,20 @@
 
 
 
-                <div id="sbgn-inspector" class="tab-pane"></div>
+                <div id="sbgn-inspector" class="tab-pane">
+                    <!--Filled dynamically-->
+                </div>
+
+
+                <div id = "factoid-area" class = "tab-pane">
+
+                    <div id= "factoid-input-container">
+                    Input
+                    </div>
+
+                </div>
+
+
 
                 <div id ="chat-area"  class="tab-pane fade in active">
                     <div id = "users" as="container"  on-change = "onScroll()">
@@ -959,6 +976,60 @@
 
             <script type="text/template" id="noty-info">
                 Right click to a node to see its detailed information
+            </script>
+
+
+            <script type="text/template" id= "factoid-input-loading-template">
+                <div id="divUpload" class="tabcontent">
+
+                    <table  border="0" cellpadding="2" width="100%" align="top" >
+                        <tr>
+                            <td  class = "instructions"  align="left" height="15">
+                                A: Paste a Manuscript
+                            </td>
+                        </tr>
+                        <tr>
+                            <td  valign="top" align="left" >
+                                <textarea rows="50" id="factoidBox"><%= factoidText %></textarea>
+                            </td>
+
+
+                        </tr>
+
+
+                        <tr>
+                            <td><input type="button" id = "factoid-text-clear-button"  value="Clear"> &nbsp;&nbsp;&nbsp;
+
+                                <input type="button" id = "factoid-text-submit-button"  value="Submit"  class='upload'></td>
+                        </tr>
+
+
+
+
+                        <tr> <td> </td></tr>
+                        <tr>
+                            <td align="left" height="8">
+                                <b><font color=white  face="Verdana" size="2">Or&nbsp;</font></b>
+                            </td>
+                        </tr>
+                        <tr> <td> </td> </tr>
+                        <tr><td class='instructions'>B:Load From a File </td>
+                        </tr>
+                        <tr>
+                            <!--<td  align="left" height="25">-->
+                            <td>
+                                <input  type="file" id = "factoid-file-input"  accept="txt">
+                            </td>
+                            <!--</td>-->
+                        </tr>
+
+
+
+
+
+                    </table>
+                </div>
+
             </script>
 
             <!--</div>-->

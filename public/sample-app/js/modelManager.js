@@ -1267,3 +1267,4 @@ module.exports =  function(model, docId, userId, userName) {
         }
     }
 }
+

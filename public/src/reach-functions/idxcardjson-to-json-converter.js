@@ -9,40 +9,64 @@ module.exports = {
 
     //Create the SBGNviz-compatible JSON
     createJson: function(idxcardjsonObj) {
+
         var jsonObj = {};
         jsonObj.nodes = [];
         jsonObj.edges = [];
 
+        if(!idxcardjsonObj)
+            return jsonObj;
+
         var i;
         for(i=0; i<idxcardjsonObj.cards.length; i++) {
 
-            //Create the first glyph
-            jsonObj.nodes.push({});
-            jsonObj.nodes[6*i].data = {};
-            jsonObj.nodes[6*i].data.id = "ele"+i+1;
-            jsonObj.nodes[6*i].data.sbgnclass = "macromolecule";
-            jsonObj.nodes[6*i].data.sbgnbbox = {};
-            jsonObj.nodes[6*i].data.sbgnbbox.x = 585.7398209991329;
-            jsonObj.nodes[6*i].data.sbgnbbox.y = 585.7398209991329;
-            jsonObj.nodes[6*i].data.sbgnbbox.w = "60.0";
-            jsonObj.nodes[6*i].data.sbgnbbox.h = "60.0";
-            jsonObj.nodes[6*i].data.sbgnstatesandinfos = [{}];
-            jsonObj.nodes[6*i].data.sbgnstatesandinfos[0].bbox = {};
-            jsonObj.nodes[6*i].data.sbgnstatesandinfos[0].bbox.x = -27.916666666666668;
-            jsonObj.nodes[6*i].data.sbgnstatesandinfos[0].bbox.y = -27.916666666666668;
-            jsonObj.nodes[6*i].data.sbgnstatesandinfos[0].bbox.w = "53.0";
-            jsonObj.nodes[6*i].data.sbgnstatesandinfos[0].bbox.h = "18.0";
-            jsonObj.nodes[6*i].data.sbgnstatesandinfos[0].id = "ele"+i+2;
-            jsonObj.nodes[6*i].data.sbgnstatesandinfos[0].clazz = "unit of information";
-            jsonObj.nodes[6*i].data.sbgnstatesandinfos[0].label = {};
-            jsonObj.nodes[6*i].data.sbgnstatesandinfos[0].label.text = "mt:prot";
-            jsonObj.nodes[6*i].data.parent = "";
-            jsonObj.nodes[6*i].data.ports = [];
 
+            //Create the first glyph
+            var newNode0 = {
+                data:{
+                    id: "ele"+i+1,
+                    sbgnclass: "macromolecule",
+                    sbgnbbox:{ x: 585.74, y: 585.74, w:"60.0", h: "60.0" },
+                    sbgnstatesandinfos: [{bbox:{x: -27.92, y:-27.92, w:"53.0", h:"18.0"},
+                                          id:("ele" + i + 2), clazz:"unit of information", label:{text:"mt:prot"}}],
+                    parent: "",
+                    ports:[]
+                },
+            };
             if('participant_a' in idxcardjsonObj.cards[i].extracted_information)
-                jsonObj.nodes[6*i].data.sbgnlabel = idxcardjsonObj.cards[i].extracted_information.participant_a.entity_text;
+                newNode0.data.sbgnlabel = idxcardjsonObj.cards[i].extracted_information.participant_a.entity_text;
             else
-                jsonObj.nodes[6*i].data.sbgnlabel = "";
+                newNode0.data.sbgnlabel = "";
+
+            jsonObj.nodes.push(newNode0);
+
+            // jsonObj.nodes.push({});
+            //
+            // jsonObj.nodes[6*i].data = {};
+            // jsonObj.nodes[6*i].data.id = "ele"+i+1;
+            // jsonObj.nodes[6*i].data.sbgnclass = "macromolecule";
+            // jsonObj.nodes[6*i].data.sbgnbbox = {};
+            // jsonObj.nodes[6*i].data.sbgnbbox.x = 585.7398209991329;
+            // jsonObj.nodes[6*i].data.sbgnbbox.y = 585.7398209991329;
+            // jsonObj.nodes[6*i].data.sbgnbbox.w = "60.0";
+            // jsonObj.nodes[6*i].data.sbgnbbox.h = "60.0";
+            // jsonObj.nodes[6*i].data.sbgnstatesandinfos = [{}];
+            // jsonObj.nodes[6*i].data.sbgnstatesandinfos[0].bbox = {};
+            // jsonObj.nodes[6*i].data.sbgnstatesandinfos[0].bbox.x = -27.916666666666668;
+            // jsonObj.nodes[6*i].data.sbgnstatesandinfos[0].bbox.y = -27.916666666666668;
+            // jsonObj.nodes[6*i].data.sbgnstatesandinfos[0].bbox.w = "53.0";
+            // jsonObj.nodes[6*i].data.sbgnstatesandinfos[0].bbox.h = "18.0";
+            // jsonObj.nodes[6*i].data.sbgnstatesandinfos[0].id = "ele"+i+2;
+            // jsonObj.nodes[6*i].data.sbgnstatesandinfos[0].clazz = "unit of information";
+            // jsonObj.nodes[6*i].data.sbgnstatesandinfos[0].label = {};
+            // jsonObj.nodes[6*i].data.sbgnstatesandinfos[0].label.text = "mt:prot";
+            // jsonObj.nodes[6*i].data.parent = "";
+            // jsonObj.nodes[6*i].data.ports = [];
+
+            // if('participant_a' in idxcardjsonObj.cards[i].extracted_information)
+            //  jsonObj.nodes[6*i].data.sbgnlabel = idxcardjsonObj.cards[i].extracted_information.participant_a.entity_text;
+            // else
+            //     jsonObj.nodes[6*i].data.sbgnlabel = "";
 
             //Create the second glyph
             jsonObj.nodes.push({});
