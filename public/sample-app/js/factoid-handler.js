@@ -22,13 +22,13 @@ var loadFactoidModel = function(inputStr, menuFunctions){
 
     var lengthRequirement = lines.length - 1;
     var p = new Promise(function (resolve) {
+        console.log("here");
         lines.forEach(function (line) {
 
+            console.log(line);
                 socket.emit("REACHQuery", "indexcard", line, function (data) {
-                    console.log(line);
-
+              //      console.log(line);
                     console.log(data);
-
 
                     try{
                         var jsonData = idxcardjson.createJson(JSON.parse(data));
@@ -50,7 +50,7 @@ var loadFactoidModel = function(inputStr, menuFunctions){
     p.then(function(content){
 
         jsonGraphs.forEach(function(jsonData){
-            console.log(jsonData);
+            //console.log(jsonData);
             menuFunctions.mergeJson(jsonData);
         });
 

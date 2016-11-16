@@ -980,7 +980,7 @@
 
 
             <script type="text/template" id= "factoid-input-loading-template">
-                <div id="divUpload" class="tabcontent">
+
 
                     <table  border="0" cellpadding="2" width="100%" align="top" >
                         <tr>
@@ -990,7 +990,7 @@
                         </tr>
                         <tr>
                             <td  valign="top" align="left" >
-                                <textarea rows="50" id="factoidBox"><%= factoidText %></textarea>
+                                <textarea rows="30" id="factoidBox"><%= factoidText %></textarea>
                             </td>
 
 
@@ -1005,7 +1005,6 @@
 
 
 
-
                         <tr> <td> </td></tr>
                         <tr>
                             <td align="left" height="8">
@@ -1016,19 +1015,22 @@
                         <tr><td class='instructions'>B:Load From a File </td>
                         </tr>
                         <tr>
-                            <!--<td  align="left" height="25">-->
                             <td>
-                                <input  type="file" id = "factoid-file-input"  accept="txt">
-                            </td>
-                            <!--</td>-->
+                            <label for="factoid-file-input" class="image-file">
+                                <i class="fa fa-file-text-o"></i> Open File
+                            </label>
+
+                            <input type="file" id="factoid-file-input" accept=".txt,.pdf"></td>
+                            <!--<td><input type="file" id ="factoid-file-input" value = "open"></td>-->
                         </tr>
 
 
 
 
 
+
                     </table>
-                </div>
+
 
             </script>
 

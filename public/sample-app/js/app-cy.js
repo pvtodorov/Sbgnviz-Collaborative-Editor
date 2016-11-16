@@ -13,9 +13,9 @@ module.exports.SBGNContainer = function( el,  cytoscapeJsGraph, editorActions) {
 
 
     //notifications
-    var notyModel = {layout: "bottomLeft", timeout: 8000, text: "Right click on a gene to see its details!"};
-
-    noty(notyModel);
+    // var notyModel = {layout: "bottomLeft", timeout: 8000, text: "Right click on a gene to see its details!"};
+    //
+    // noty(notyModel);
 
 
     var container = $(el);
