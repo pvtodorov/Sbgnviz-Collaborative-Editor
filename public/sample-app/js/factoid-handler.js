@@ -5,6 +5,7 @@
 var idxcardjson = require('../../src/reach-functions/idxcardjson-to-json-converter.js');
 
 
+
 var loadFactoidModel = function(inputStr, menuFunctions){
 
     var socket = io();
@@ -16,32 +17,46 @@ var loadFactoidModel = function(inputStr, menuFunctions){
 
     var lines = inputStr.split(".");
 
-    console.log(lines);
+    lines.pop(); //pop the empty last line
+
+    // console.log(lines);
+
+    var n = noty({layout: "bottom",text: "Sending REACH queries"});
 
 
-
-    var lengthRequirement = lines.length - 1;
+    var lengthRequirement = lines.length;
     var p = new Promise(function (resolve) {
-        console.log("here");
+
         lines.forEach(function (line) {
 
             console.log(line);
                 socket.emit("REACHQuery", "indexcard", line, function (data) {
               //      console.log(line);
-                    console.log(data);
+              //       console.log(data);
 
                     try{
+
+                    //    n.setText("REACH result #" + (jsonGraphs.length + 1) + " of " +lengthRequirement + " sent to JSON conversion.");
                         var jsonData = idxcardjson.createJson(JSON.parse(data));
+
                         jsonGraphs.push(jsonData);
+
+                      //  n.setText("REACH result #" + (jsonGraphs.length) + " of " + lengthRequirement + " converted to JSON.");
+
+                        if(jsonGraphs.length >= lengthRequirement)
+                            resolve("success");
+
                     }
                     catch (error){ //incorrect json -- don't add to the graphs to be merged
                         console.log(error);
+//                        n.setText("REACH result #" + (jsonGraphs.length+ 1) + " of " +lengthRequirement + " has a conversion error.");
                         lengthRequirement--;
-                    }
 
-                    //menuFunctions.mergeJson(jsonData);
-                    if(jsonGraphs.length >= lengthRequirement)
-                        resolve("success");
+                        if(jsonGraphs.length >= lengthRequirement)
+                            resolve("success");
+
+                    }
+                    n.setText("REACH query #" + (jsonGraphs.length+ 1) + " of " +lengthRequirement + " returned.");
 
                 });
         });
@@ -49,14 +64,14 @@ var loadFactoidModel = function(inputStr, menuFunctions){
 
     p.then(function(content){
 
-        jsonGraphs.forEach(function(jsonData){
-            //console.log(jsonData);
-            menuFunctions.mergeJson(jsonData);
-        });
-
+        n.setText( "Merging graphs...");
+        // console.log(jsonGraphs);
+        menuFunctions.mergeJsons(jsonGraphs);
+        n.close();
     }),
     function (xhr, status, error) {
         console.log(error);
+        n.setText( error);
     }
 }
 
@@ -101,21 +116,38 @@ var FactoidInput = Backbone.View.extend({
     },
 
     getFactoidData: function(e) {
-        //clear the canvas first
-        self.menuFunctions.newFile();
+
 
         loadFactoidModel($('#factoidBox').val(), self.menuFunctions);
     },
 
     loadFactoidFile: function(e){
 
-        var reader = new FileReader();
 
-        reader.onload = function (e) {
+        var extension = $("#factoid-file-input")[0].files[0].name.split('.').pop().toLowerCase();
 
-            loadFactoidModel(this.result, self.menuFunctions);
-        };
-        reader.readAsText($("#factoid-file-input")[0].files[0]);
+
+        if(extension == "pdf")
+            extract(("../../"+ $("#factoid-file-input")[0].files[0].name), function(err, pages) {
+                if(err)
+                    console.log(err);
+                else
+                    $('#factoidBox')[0].value =  pages[0]; //change text
+
+            });
+
+        else{
+            var reader = new FileReader();
+            reader.onload = function (e) {
+
+                $('#factoidBox')[0].value =  this.result; //change text
+
+            };
+            reader.readAsText($("#factoid-file-input")[0].files[0]);
+
+
+
+        }
 
     },
 

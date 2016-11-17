@@ -113,7 +113,45 @@ module.exports = function(){
 
          },
 
-         mergeJson: function(jsonGraph){
+         mergeJsons:function(jsonGraphs){
+
+             if(jsonGraphs.length == 0 )
+                 return;
+
+             editorActions.modelManager.setRollbackPoint(); //before merging everything
+
+             //clear the canvas first
+             this.newFile();
+
+             var jsonObj = jsonGraphs[0];
+
+             for(var i = 0; i  < jsonGraphs.length - 1; i++){
+                 var mergeResult = jsonMerger.merge(jsonObj, jsonGraphs[i+1]);
+                 jsonObj = mergeResult.wholeJson;
+             }
+
+
+
+             //get another sbgncontainer and display the new SBGN model.
+             editorActions.modelManager.newModel( "me", true);
+
+             sbgnContainer = new cyMod.SBGNContainer('#sbgn-network-container', jsonObj, editorActions);
+             editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", true);
+
+             editorActions.modelManager.setSampleInd(-1, "me", true); //to notify other clients
+
+             beforePerformLayout();
+
+             sbgnLayout.applyLayout(editorActions.modelManager);
+
+            //Call merge notification after the layout
+             editorActions.performLayoutFunction(true, function(){
+
+                     editorActions.modelManager.mergeJsons();
+             }); //don't update history
+
+         },
+         mergeJsonWithCurrent: function(jsonGraph){
              var currSbgnml = jsonToSbgnml.createSbgnml(cy.nodes(":visible"), cy.edges(":visible"));
              var currJson = sbgnmlToJson.convert(currSbgnml);
 
@@ -152,6 +190,7 @@ module.exports = function(){
              sbgnLayout.applyLayout(editorActions.modelManager);
 
 
+             //Call merge notification after the layout
              editorActions.performLayoutFunction(true, function(){
 
 
@@ -164,7 +203,7 @@ module.exports = function(){
          mergeSbgn: function(sbgnGraph){
 
              var newJson = sbgnmlToJson.convert(sbgnGraph);
-             this.mergeJson(newJson);
+             this.mergeJsonWithCurrent(newJson);
          },
 
          loadFile:function(txtFile){

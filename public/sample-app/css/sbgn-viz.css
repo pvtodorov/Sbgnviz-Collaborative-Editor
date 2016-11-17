@@ -469,7 +469,10 @@ input, button {
 
     font-size:medium;
 }
-
+.instructions{
+    font-size:medium;
+    color: #2c3e50;
+}
 #factoid-input-container{
 
     position: absolute;

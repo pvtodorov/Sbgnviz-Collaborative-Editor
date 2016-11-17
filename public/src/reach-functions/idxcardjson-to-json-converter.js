@@ -1,5 +1,5 @@
 /** The idxcardjson-to-json-converter module translates an indexcard JSON from the Reach API into a JSON valid for SBGNviz. Its implementation is below.
- **/
+**/
 
 // Author: David Servillo.
 
@@ -88,59 +88,59 @@ module.exports = {
 
             //Create the first arc
             var newEdge0 = {
-                    data: {
-                        id: newNode3.data.id + "-" + newNode2.data.id,
-                        sbgnclass: "consumption",
-                        bendPointPositions: [],
-                        sbgncardinality: 0,
-                        source : newNode3.data.id,
-                    target : newNode2.data.id,
-                portsource : newNode3.data.id,
-                porttarget : newNode2.data.id
-        }
-        };
+                data: {
+                    id: newNode3.data.id + "-" + newNode2.data.id,
+                    sbgnclass: "consumption",
+                    bendPointPositions: [],
+                    sbgncardinality: 0,
+                    source: newNode3.data.id,
+                    target: newNode2.data.id,
+                    portsource: newNode3.data.id,
+                    porttarget: newNode2.data.id
+                }
+            };
 
             jsonObj.edges.push(newEdge0);
 
             //Create the second arc
             var newEdge1 = {
-                    data: {
-                        id: newNode2.data.id + "-" + newNode1.data.id,
-                        sbgnclass: "consumption",
-                        bendPointPositions: [],
-                        sbgncardinality: 0,
-                        source : newNode2.data.id,
-                    target : newNode1.data.id,
-                portsource : newNode2.data.id,
-                porttarget : newNode1.data.id
-        }
-        };
+                data: {
+                    id: newNode2.data.id + "-" + newNode1.data.id,
+                    sbgnclass: "consumption",
+                    bendPointPositions: [],
+                    sbgncardinality: 0,
+                    source: newNode2.data.id,
+                    target: newNode1.data.id,
+                    portsource: newNode2.data.id,
+                    porttarget: newNode1.data.id
+                }
+            };
 
             jsonObj.edges.push(newEdge1);
 
             //Create the third arc
             var newEdge2 = {
-                    data: {
-                        id: newNode0.data.id + "-" + newNode2.data.id,
-                        sbgnclass: "consumption",
-                        bendPointPositions: [],
-                        sbgncardinality: 0,
-                        source : newNode0.data.id,
-                    target : newNode2.data.id,
-                portsource : newNode0.data.id,
-                porttarget : newNode2.data.id
-        }
-        };
+                data: {
+                    id: newNode0.data.id + "-" + newNode2.data.id,
+                    sbgnclass: "consumption",
+                    bendPointPositions: [],
+                    sbgncardinality: 0,
+                    source: newNode0.data.id,
+                    target: newNode2.data.id,
+                    portsource: newNode0.data.id,
+                    porttarget: newNode2.data.id
+                }
+            };
 
             jsonObj.edges.push(newEdge2);
 
             if(idxcardjsonObj.cards[i].extracted_information.interaction_type == "increases_activity")  //The interaction is a type of stimulation.
                 newEdge2.data.sbgnclass = "stimulation";
 
-            if(idxcardjsonObj.cards[i].extracted_information.interaction_type == "decreases_activity")  //The interaction is a type of inhibition.
+            else if(idxcardjsonObj.cards[i].extracted_information.interaction_type == "decreases_activity")  //The interaction is a type of inhibition.
                 newEdge2.data.sbgnclass = "inhibition";
 
-            if(idxcardjsonObj.cards[i].extracted_information.interaction_type == "binds") {  //The interaction is a binding.
+            else if(idxcardjsonObj.cards[i].extracted_information.interaction_type == "binds") {  //The interaction is a binding.
 
                 //The "source and sink" glyph is transformed into a macromolecular glyph
                 newNode3.data.sbgnclass = "macromolecule";
@@ -175,7 +175,7 @@ module.exports = {
                         sbgnclass: "macromolecule",
                         sbgnbbox: {x:585.7398209991329, y:585.7398209991329, w:"60.0", h:"60.0"},
                         sbgnlabel: idxcardjsonObj.cards[i].extracted_information.participant_b.entity_text,
-                        sbgnstatesandinfos: [{bbox:{x:-27.916666666666668, y:-27.916666666666668, w:"53.0", h:"53.0"},
+                        sbgnstatesandinfos: [{bbox:{x:-27.916666666666668, y:-27.916666666666668, w:"53.0", h:"18.0"},
                             id:"ele"+i+4,
                             clazz: "unit of information",
                             label: {text:"mt:prot"}}],
@@ -209,7 +209,7 @@ module.exports = {
                 newEdge2.data.sbgnclass = "consumption";
             }
 
-            if(idxcardjsonObj.cards[i].extracted_information.interaction_type == "adds_modification") { //The interaction is a chemical modification
+            else if(idxcardjsonObj.cards[i].extracted_information.interaction_type == "adds_modification") { //The interaction is a chemical modification
                 newEdge2.data.sbgnclass = "stimulation";
 
                 //That glyph is not a "source and sink" glyph anymore, but a macromolecule
@@ -242,43 +242,43 @@ module.exports = {
                     if(idxcardjsonObj.cards[i].extracted_information.modifications[j].modification_type == "acetylation") //The interaction is an acetylation
                         newStateInfos.state = {value: "Ac"};
 
-                    if(idxcardjsonObj.cards[i].extracted_information.modifications[j].modification_type == "glycosylation") //The interaction is a glycosylation
+                    else if(idxcardjsonObj.cards[i].extracted_information.modifications[j].modification_type == "glycosylation") //The interaction is a glycosylation
                         newStateInfos.state = {value: "G"};
 
-                    if(idxcardjsonObj.cards[i].extracted_information.modifications[j].modification_type == "hydroxylation") //The interaction is a hydroxylation
+                    else if(idxcardjsonObj.cards[i].extracted_information.modifications[j].modification_type == "hydroxylation") //The interaction is a hydroxylation
                         newStateInfos.state = {value: "OH"};
 
-                    if(idxcardjsonObj.cards[i].extracted_information.modifications[j].modification_type == "methylation") //The interaction is a methylation
+                    else if(idxcardjsonObj.cards[i].extracted_information.modifications[j].modification_type == "methylation") //The interaction is a methylation
                         newStateInfos.state = {value: "Me"};
 
-                    if(idxcardjsonObj.cards[i].extracted_information.modifications[j].modification_type == "myristoylation") //The interaction is a myristoylation
+                    else if(idxcardjsonObj.cards[i].extracted_information.modifications[j].modification_type == "myristoylation") //The interaction is a myristoylation
                         newStateInfos.state = {value: "My"};
 
-                    if(idxcardjsonObj.cards[i].extracted_information.modifications[j].modification_type == "palmytoylation") //The interaction is a palmytoylation
+                    else if(idxcardjsonObj.cards[i].extracted_information.modifications[j].modification_type == "palmytoylation") //The interaction is a palmytoylation
                         newStateInfos.state = {value: "Pa"};
 
-                    if(idxcardjsonObj.cards[i].extracted_information.modifications[j].modification_type == "phosphorylation") //The interaction is a phosphorylation
+                    else if(idxcardjsonObj.cards[i].extracted_information.modifications[j].modification_type == "phosphorylation") //The interaction is a phosphorylation
                         newStateInfos.state = {value: "P"};
 
-                    if(idxcardjsonObj.cards[i].extracted_information.modifications[j].modification_type == "prenylation") //The interaction is a prenylation
+                    else if(idxcardjsonObj.cards[i].extracted_information.modifications[j].modification_type == "prenylation") //The interaction is a prenylation
                         newStateInfos.state = {value: "Pr"};
 
-                    if(idxcardjsonObj.cards[i].extracted_information.modifications[j].modification_type == "protonation") //The interaction is a protonation
+                    else if(idxcardjsonObj.cards[i].extracted_information.modifications[j].modification_type == "protonation") //The interaction is a protonation
                         newStateInfos.state = {value: "H"};
 
-                    if(idxcardjsonObj.cards[i].extracted_information.modifications[j].modification_type == "sulfation") //The interaction is a sulfation
+                    else if(idxcardjsonObj.cards[i].extracted_information.modifications[j].modification_type == "sulfation") //The interaction is a sulfation
                         newStateInfos.state = {value: "S"};
 
-                    if(idxcardjsonObj.cards[i].extracted_information.modifications[j].modification_type == "sumoylation") //The interaction is a sumoylation
+                    else if(idxcardjsonObj.cards[i].extracted_information.modifications[j].modification_type == "sumoylation") //The interaction is a sumoylation
                         newStateInfos.state = {value: "Su"};
 
-                    if(idxcardjsonObj.cards[i].extracted_information.modifications[j].modification_type == "ubiquitination") //The interaction is a ubiquitination
+                    else if(idxcardjsonObj.cards[i].extracted_information.modifications[j].modification_type == "ubiquitination") //The interaction is a ubiquitination
                         newStateInfos.state = {value: "Ub"};
 
                     newNode1.data.sbgnstatesandinfos.push(newStateInfos);
                 }
             }
-            if(idxcardjsonObj.cards[i].extracted_information.interaction_type == "translocates") {  //The interaction is a translocation
+            else if(idxcardjsonObj.cards[i].extracted_information.interaction_type == "translocates") {  //The interaction is a translocation
 
                 //jsonObj.edges[3*i+2].data.sbgnclass = "consumption";
 
@@ -291,10 +291,10 @@ module.exports = {
                             sbgnbbox: {x:585.7398209991329, y:585.7398209991329, w:"120.0", h:"120.0"},
                             sbgnlabel: idxcardjsonObj.cards[i].extracted_information.to_location_text,
                             sbgnstatesandinfos: [],
-                    parent: "",
-                        ports: []
-                }
-                };
+                            parent: "",
+                            ports: []
+                        }
+                    };
 
                     jsonObj.nodes.push(newNode4);
 

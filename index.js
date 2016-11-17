@@ -772,8 +772,8 @@ app.proto.create = function (model) {
        menu.mergeSbgn(data);
     });
 
-    socket.on("mergeJson", function(data){
-        menu.mergeJson(data);
+    socket.on("mergeJsonWithCurrent", function(data){
+        menu.mergeJsonWithCurrent(data);
     });
 
 
