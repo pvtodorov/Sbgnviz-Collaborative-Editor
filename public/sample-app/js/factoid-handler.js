@@ -4,6 +4,39 @@
 
 var idxcardjson = require('../../src/reach-functions/idxcardjson-to-json-converter.js');
 
+var menu =  require('./app-menu.js');
+
+function getSelectionText() {
+    var text = "";
+    var activeEl = document.activeElement;
+    var activeElTagName = activeEl ? activeEl.tagName.toLowerCase() : null;
+    if (
+        (activeElTagName == "textarea" || activeElTagName == "input") &&
+        /^(?:text|search|password|tel|url)$/i.test(activeEl.type) &&
+        (typeof activeEl.selectionStart == "number")
+    ) {
+        text = activeEl.value.slice(activeEl.selectionStart, activeEl.selectionEnd);
+    } else if (window.getSelection) {
+        text = window.getSelection().toString();
+    }
+    return text;
+}
+
+document.onmouseup = document.onkeyup =  function() {
+    var txt = getSelectionText();
+
+    if((/^\s*$/).test(txt)) {
+        menu.removeHighlights();
+    }
+    else {
+            menu.removeHighlights();
+            menu.highlightWords(txt);
+        }
+
+
+
+
+};
 
 
 var loadFactoidModel = function(inputStr, menuFunctions){
@@ -12,10 +45,11 @@ var loadFactoidModel = function(inputStr, menuFunctions){
 
     //parse each input sentence one by one
 
+    menu = menuFunctions;
 
     var jsonGraphs = [];
 
-    var lines = inputStr.split(".");
+    var lines = inputStr.split(/[.;]+/m);
 
     lines.pop(); //pop the empty last line
 
@@ -41,7 +75,7 @@ var loadFactoidModel = function(inputStr, menuFunctions){
 
                         jsonGraphs.push(jsonData);
 
-                      //  n.setText("REACH result #" + (jsonGraphs.length) + " of " + lengthRequirement + " converted to JSON.");
+                        n.setText("REACH result #" + (jsonGraphs.length) + " of " + lengthRequirement + " converted to JSON.");
 
                         if(jsonGraphs.length >= lengthRequirement)
                             resolve("success");
@@ -49,14 +83,13 @@ var loadFactoidModel = function(inputStr, menuFunctions){
                     }
                     catch (error){ //incorrect json -- don't add to the graphs to be merged
                         console.log(error);
-//                        n.setText("REACH result #" + (jsonGraphs.length+ 1) + " of " +lengthRequirement + " has a conversion error.");
+                        n.setText("REACH result #" + (jsonGraphs.length+ 1) + " of " +lengthRequirement + " has a conversion error.");
                         lengthRequirement--;
 
                         if(jsonGraphs.length >= lengthRequirement)
                             resolve("success");
 
                     }
-                    n.setText("REACH query #" + (jsonGraphs.length+ 1) + " of " +lengthRequirement + " returned.");
 
                 });
         });
@@ -65,8 +98,7 @@ var loadFactoidModel = function(inputStr, menuFunctions){
     p.then(function(content){
 
         n.setText( "Merging graphs...");
-        // console.log(jsonGraphs);
-        menuFunctions.mergeJsons(jsonGraphs);
+        menu.mergeJsons(jsonGraphs);
         n.close();
     }),
     function (xhr, status, error) {
@@ -79,7 +111,7 @@ var FactoidInput = Backbone.View.extend({
     el: '#factoid-input-container',
 
     tagName: 'textarea',
-    menuFunctions: require('./app-menu.js'),
+
     self:this,
 
     events: {
@@ -97,7 +129,7 @@ var FactoidInput = Backbone.View.extend({
 
     initialize : function(menuFunctions) { //These handle file merging
 
-        self.menuFunctions = menuFunctions;
+        menu = menuFunctions;
 
 
         this.render();
@@ -118,7 +150,7 @@ var FactoidInput = Backbone.View.extend({
     getFactoidData: function(e) {
 
 
-        loadFactoidModel($('#factoidBox').val(), self.menuFunctions);
+        loadFactoidModel($('#factoidBox').val(), menu);
     },
 
     loadFactoidFile: function(e){

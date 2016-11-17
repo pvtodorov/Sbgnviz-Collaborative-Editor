@@ -603,6 +603,49 @@ module.exports = function(){
          },
 
 
+
+         //highlights the text without changing others
+         highlightWords: function(text){
+             cy.nodes().unselect();
+
+//             var nodesToSelect = [];
+             var words = text.split(/[\s.;-]/m);
+             words.forEach(function(word){
+                     cy.nodes().forEach(function(node){
+                         for(var i = 0; i < words.length; i++){
+                             if(node.data("sbgnlabel") && node.data("sbgnlabel").toLowerCase().indexOf(words[i].toLowerCase()) >= 0) {
+                                 node.select();
+                                 break; //break loop at first word match
+                             }
+
+                         }
+
+                             //nodesToSelect.push(node);
+                     });
+             });
+
+
+
+             // var nodesToSelect = cy.nodes().filter(function (i, ele) {
+             //     if (ele.data("sbgnlabel") && ele.data("sbgnlabel").toLowerCase().indexOf(text.toLowerCase()) >= 0) {
+             //         return true;
+             //     }
+             //     return false;
+             // });
+
+
+             var param = {
+                 firstTime: true,
+                 sync: true,
+                 selectedEles : cy.$(":selected"),
+                 highlightProcessesOfSelected: true
+             };
+
+             editorActions.highlightSelected(param);
+
+
+         },
+
         updateLayoutProperties: function(lp){
 
             if(sbgnLayout)
@@ -1311,7 +1354,7 @@ module.exports = function(){
                 cy.nodes().unselect();
 
                 var nodesToSelect = cy.nodes(":visible").filter(function (i, ele) {
-                    if (ele.data("sbgnlabel") && ele.data("sbgnlabel").toLowerCase().indexOf(text) >= 0) {
+                    if (ele.data("sbgnlabel") && ele.data("sbgnlabel").toLowerCase().indexOf(text.toLowerCase()) >= 0) {
                         return true;
                     }
                     return false;
@@ -1330,7 +1373,6 @@ module.exports = function(){
                 };
 
                 editorActions.highlightSelected(param);
-                
             });
 
             $("#search-by-label-text-box").keydown(function (e) {
