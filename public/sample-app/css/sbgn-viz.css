@@ -465,6 +465,11 @@ input, button {
     -webkit-overflow-scrolling: touch;
     border-radius: 0.25em;
 }
+
+#pmcBox{
+    width: 120px;
+    margin: 10px;
+}
 #factoid-file-input{
 
     font-size:medium;

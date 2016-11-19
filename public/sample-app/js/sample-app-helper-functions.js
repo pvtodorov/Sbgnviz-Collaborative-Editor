@@ -36,6 +36,7 @@ function loadXMLDoc(filename) {
     xhttp.open("GET",filename,true);
 
 
+    console.log(xhttp);
     xhttp.send();
 
 
