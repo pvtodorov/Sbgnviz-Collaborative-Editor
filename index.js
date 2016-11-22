@@ -27,7 +27,10 @@ var userCount;
 var socket;
 
 var modelManager;
+
+var factoidHandler;
 var oneColor = require('onecolor');
+
 app.on('model', function (model) {
 
 
@@ -458,6 +461,10 @@ app.proto.init = function (model) {
 
             menu.changeHighlightColor(id, color);
 
+            //node is selected
+            if(factoidHandler)
+                //factoidHandler.highlightSentenceInText(id, highlightColor);
+                factoidHandler.highlightSentenceInText(model.get('_page.doc.cy.nodes.' + id + '.sbgnlabel'), highlightColor);
         }
 
     });
@@ -821,6 +828,8 @@ app.proto.create = function (model) {
 
 
     menu =  require('./public/sample-app/js/app-menu.js')();
+
+    factoidHandler = require('./public/sample-app/js/factoid-handler.js');
 
     //send modelManager to web client
     //make sure cytoscape is loaded

@@ -123,12 +123,40 @@ module.exports = function(){
              //clear the canvas first
              this.newFile();
 
-             var jsonObj = jsonGraphs[0];
+
+             var labelMap = {}; //keeps label names in association with jsons -- an object of arrays
+             var jsonObj = jsonGraphs[0].json;
+
+
+             jsonObj.nodes.forEach(function(node){ //do for the first graph before any changes
+                 if(node.data.sbgnlabel!=null && node.data.sbgnlabel!="null"){  //TODO: "null"?
+                     if(labelMap[node.data.sbgnlabel]!== undefined )
+                         labelMap[node.data.sbgnlabel].push(jsonGraphs[0].sentence); //belongs to the
+                     else
+                         labelMap[node.data.sbgnlabel] = [jsonGraphs[0].sentence];
+                 }
+             });
+
 
              for(var i = 0; i  < jsonGraphs.length - 1; i++){
-                 var mergeResult = jsonMerger.merge(jsonObj, jsonGraphs[i+1]);
+
+                 jsonGraphs[i+1].json.nodes.forEach(function(node){
+                     if(node.data.sbgnlabel!=null && node.data.sbgnlabel!="null"){  //TODO: "null"?
+                         if(labelMap[node.data.sbgnlabel]!== undefined)
+                            labelMap[node.data.sbgnlabel].push( jsonGraphs[i+1].sentence); //belongs to the
+                         else
+                             labelMap[node.data.sbgnlabel] = [jsonGraphs[i+1].sentence];
+                     }
+                 });
+
+
+                 var mergeResult = jsonMerger.merge(jsonGraphs[i+1].json, jsonObj); //jsonobj's ids remain the same
+
                  jsonObj = mergeResult.wholeJson;
+
              }
+
+
 
 
 
@@ -150,6 +178,9 @@ module.exports = function(){
                      editorActions.modelManager.mergeJsons();
              }); //don't update history
 
+
+
+             return labelMap;
          },
          mergeJsonWithCurrent: function(jsonGraph){
              var currSbgnml = jsonToSbgnml.createSbgnml(cy.nodes(":visible"), cy.edges(":visible"));

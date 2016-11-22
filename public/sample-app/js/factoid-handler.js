@@ -10,35 +10,38 @@ var menu =  require('./app-menu.js');
 
 var socket = io();
 
-function getSelectionText() {
-    var text = "";
-    var activeEl = document.activeElement;
-    var activeElTagName = activeEl ? activeEl.tagName.toLowerCase() : null;
-    if (
-        (activeElTagName == "textarea" || activeElTagName == "input") &&
-        /^(?:text|search|password|tel|url)$/i.test(activeEl.type) &&
-        (typeof activeEl.selectionStart == "number")
-    ) {
-        text = activeEl.value.slice(activeEl.selectionStart, activeEl.selectionEnd);
-    } else if (window.getSelection) {
-        text = window.getSelection().toString();
-    }
-    return text;
-}
+// function getSelectionText() {
+//     var text = "";
+//     var activeEl = document.activeElement;
+//     var activeElTagName = activeEl ? activeEl.tagName.toLowerCase() : null;
+//     if (
+//         (activeElTagName == "textarea" || activeElTagName == "input") &&
+//         /^(?:text|search|password|tel|url)$/i.test(activeEl.type) &&
+//         (typeof activeEl.selectionStart == "number")
+//     ) {
+//         text = activeEl.value.slice(activeEl.selectionStart, activeEl.selectionEnd);
+//     } else if (window.getSelection) {
+//         text = window.getSelection().toString();
+//     }
+//     return text;
+// }
+//
+// document.onmouseup = document.onkeyup =  function() {
+//     var txt = getSelectionText();
+//
+//     if((/^\s*$/).test(txt)) {
+//         menu.removeHighlights();
+//     }
+//     else {
+//             menu.removeHighlights();
+//             menu.highlightWords(txt);
+//         }
+//
+//
+// };
 
-document.onmouseup = document.onkeyup =  function() {
-    var txt = getSelectionText();
 
-    if((/^\s*$/).test(txt)) {
-        menu.removeHighlights();
-    }
-    else {
-            menu.removeHighlights();
-            menu.highlightWords(txt);
-        }
-
-
-};
+//
 
 
 var loadFactoidModel = function(inputStr, menuFunctions){
@@ -74,8 +77,9 @@ var loadFactoidModel = function(inputStr, menuFunctions){
                     //    n.setText("REACH result #" + (jsonGraphs.length + 1) + " of " +lengthRequirement + " sent to JSON conversion.");
                         var jsonData = idxcardjson.createJson(JSON.parse(data));
 
-                        jsonGraphs.push(jsonData);
+                        jsonGraphs.push({sentence: line, json: jsonData});
 
+                        console.log(jsonGraphs);
                         n.setText("REACH result #" + (jsonGraphs.length) + " of " + lengthRequirement + " converted to JSON.");
 
                         if(jsonGraphs.length >= lengthRequirement)
@@ -99,7 +103,11 @@ var loadFactoidModel = function(inputStr, menuFunctions){
     p.then(function(content){
 
         n.setText( "Merging graphs...");
-        menu.mergeJsons(jsonGraphs);
+        self.labelMap = menu.mergeJsons(jsonGraphs); //mapping between sentences and node labels
+
+
+        console.log(jsonGraphs);
+
         n.close();
     }),
     function (xhr, status, error) {
@@ -123,12 +131,13 @@ var FactoidInput = Backbone.View.extend({
     },
 
     variables: {
-        factoidText: 'We introduce a new method. MDM2 phosphorylates TP53. A Sos-1-E3b1 complex directs Rac activation by entering into a tricomplex with Eps8.',
+        factoidText: 'We introduce a new method. MDM2 phosphorylates TP53. A Sos-1-E3b1 complex directs Rac activation by entering into a tricomplex with Eps8. MDM2 deactivates RAF.',
         pmcID: "PMC2797771"
     },
 
 
 
+    labelMap:null,
     initialize : function(menuFunctions) { //These handle file merging
 
         menu = menuFunctions;
@@ -153,6 +162,41 @@ var FactoidInput = Backbone.View.extend({
         loadFactoidModel($('#factoidBox').val(), menu);
     },
 
+
+    highlightSentenceInText(nodeLabel, highlightColor){
+
+        var el  = $('#factoidBox');
+
+        console.log(highlightColor);
+
+        if(highlightColor == null){
+            el.highlightTextarea('destroy');
+            return;
+        }
+
+        var sentences = self.labelMap[nodeLabel];
+
+
+        if(sentences) {
+
+            for(var i = 0; i < sentences.length; i++) {
+                var sentence = sentences[i];
+
+                var startInd = el[0].value.indexOf(sentence);
+                var endInd = startInd + sentence.length;
+
+                el.highlightTextarea({
+                    ranges: [{
+                        color: ('#FFFF0'),
+                        ranges: [[startInd,endInd]]
+                    }]
+                });
+
+            }
+
+
+        }
+    },
 
     loadFactoidPMC: function() {
 

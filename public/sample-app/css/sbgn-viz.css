@@ -496,6 +496,8 @@ input, button {
 #factoidBox{
     width: 100%;
 }
+
+
 #command-history-area{
     position: absolute;
     border: 1px solid #dddddd;
