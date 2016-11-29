@@ -28,7 +28,6 @@ var socket;
 
 var modelManager;
 
-var factoidHandler;
 var oneColor = require('onecolor');
 
 app.on('model', function (model) {
@@ -132,6 +131,7 @@ app.get('/:docId', function (page, model, arg, next) {
             model.subscribe(docPath, 'history');
             model.subscribe(docPath, 'undoIndex');
             model.subscribe(docPath, 'context');
+            model.subscribe(docPath, 'factoid');
 
 
         }
@@ -298,7 +298,14 @@ app.proto.init = function (model) {
     var timeSort;
 
 
+    model.on('all', '_page.doc.factoid.*', function(id, op, val, prev, passed){
 
+        if(docReady &&  passed.user == null) {
+            menu.factoidHandler.setFactoidModel(val);
+        }
+
+
+    });
     model.on('all', '_page.doc.cy.nodes.*', function(id, op, val, prev, passed){
 
         if(docReady &&  passed.user == null) {
@@ -462,9 +469,9 @@ app.proto.init = function (model) {
             menu.changeHighlightColor(id, color);
 
             //node is selected
-            if(factoidHandler)
-                //factoidHandler.highlightSentenceInText(id, highlightColor);
-                factoidHandler.highlightSentenceInText(model.get('_page.doc.cy.nodes.' + id + '.sbgnlabel'), highlightColor);
+            if(menu.factoidHandler && model.get('_page.doc.factoid'))
+                menu.factoidHandler.highlightSentenceInText(id, highlightColor);
+                //factoidHandler.highlightSentenceInText(model.get('_page.doc.cy.nodes.' + id + '.sbgnlabel'), highlightColor);
         }
 
     });
@@ -829,7 +836,7 @@ app.proto.create = function (model) {
 
     menu =  require('./public/sample-app/js/app-menu.js')();
 
-    factoidHandler = require('./public/sample-app/js/factoid-handler.js');
+
 
     //send modelManager to web client
     //make sure cytoscape is loaded

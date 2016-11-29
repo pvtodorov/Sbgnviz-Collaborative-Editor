@@ -113,6 +113,7 @@ module.exports = function(){
 
          },
 
+
          mergeJsons:function(jsonGraphs){
 
              if(jsonGraphs.length == 0 )
@@ -124,41 +125,54 @@ module.exports = function(){
              this.newFile();
 
 
-             var labelMap = {}; //keeps label names in association with jsons -- an object of arrays
+             //var labelMap = {}; //keeps label names in association with jsons -- an object of arrays
              var jsonObj = jsonGraphs[0].json;
 
 
-             jsonObj.nodes.forEach(function(node){ //do for the first graph before any changes
-                 if(node.data.sbgnlabel!=null && node.data.sbgnlabel!="null"){  //TODO: "null"?
-                     if(labelMap[node.data.sbgnlabel]!== undefined )
-                         labelMap[node.data.sbgnlabel].push(jsonGraphs[0].sentence); //belongs to the
-                     else
-                         labelMap[node.data.sbgnlabel] = [jsonGraphs[0].sentence];
-                 }
+             var nodeMap = {};
+
+
+
+             jsonGraphs[0].json.nodes.forEach(function(node){ //do for the first graph before any changes
+                 console.log(node.data.id);
+                     nodeMap[node.data.id] = [jsonGraphs[0].sentence];
              });
+
 
 
              for(var i = 0; i  < jsonGraphs.length - 1; i++){
 
-                 jsonGraphs[i+1].json.nodes.forEach(function(node){
-                     if(node.data.sbgnlabel!=null && node.data.sbgnlabel!="null"){  //TODO: "null"?
-                         if(labelMap[node.data.sbgnlabel]!== undefined)
-                            labelMap[node.data.sbgnlabel].push( jsonGraphs[i+1].sentence); //belongs to the
-                         else
-                             labelMap[node.data.sbgnlabel] = [jsonGraphs[i+1].sentence];
-                     }
+
+                 var mergeResult = jsonMerger.merge(jsonGraphs[i+1].json, jsonObj); //jsonobj's ids remain the same
+
+
+                 mergeResult.whichJsn.jsn1.forEach(function(nd){
+                     console.log("jsn1" + nd);
+                 });
+
+                 mergeResult.whichJsn.jsn2.forEach(function(nd){
+                     console.log("jsn2" + nd);
+                 });
+
+                 mergeResult.jsonToMerge.nodes.forEach(function(node){
+                     var nodeId = node.data.id;
+                     console.log((i+1) + " " + node.data.id);
+                     if(nodeMap[nodeId] !== undefined)
+                        nodeMap[nodeId].push(jsonGraphs[i+1].sentence);
+                     else
+                         nodeMap[nodeId] = [jsonGraphs[i+1].sentence];
                  });
 
 
-                 var mergeResult = jsonMerger.merge(jsonGraphs[i+1].json, jsonObj); //jsonobj's ids remain the same
 
                  jsonObj = mergeResult.wholeJson;
 
              }
 
+             console.log(mergeResult.wholeJson);
+             console.log(nodeMap);
 
-
-
+             //Map
 
              //get another sbgncontainer and display the new SBGN model.
              editorActions.modelManager.newModel( "me", true);
@@ -180,7 +194,7 @@ module.exports = function(){
 
 
 
-             return labelMap;
+             return nodeMap;
          },
          mergeJsonWithCurrent: function(jsonGraph){
              var currSbgnml = jsonToSbgnml.createSbgnml(cy.nodes(":visible"), cy.edges(":visible"));
@@ -813,8 +827,7 @@ module.exports = function(){
             pathsBetweenQuery = new PathsBetweenQuery(socket,  editorActions.modelManager.getName());
             pathsBetweenQuery.initialize();
 
-            //var factoidInput = new FactoidInput();
-            factoidHandler.initialize(self);
+
 
             var jsonObj = modelManager.getJsonFromModel();
 
@@ -834,6 +847,14 @@ module.exports = function(){
 
                 editorActions.modelManager.initModel(jsonObj, cy.nodes(), cy.edges(), "me", false);
             }
+
+
+            //Initialize factoid model from the json data
+            //var factoidInput = new FactoidInput();
+            this.factoidHandler = require('./factoid-handler')(this, modelManager) ;
+            this.factoidHandler.initialize();
+
+
 
             document.getElementById("ctx-add-bend-point").addEventListener("contextmenu", function (event) {
                 event.preventDefault();

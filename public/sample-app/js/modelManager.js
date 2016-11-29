@@ -1264,7 +1264,23 @@ module.exports =  function(model, docId, userId, userName) {
                 this.updateHistory({opName:'merge',  prevParam: prevModelCy, param: modelCy, opTarget:'model'});
             }
 
+        },
+
+        updateFactoidModel: function(factoidModel, user, noHistUpdate){
+            model.pass({user:user}).set('_page.doc.factoid', factoidModel);
+
+            if(!noHistUpdate){
+                var prevFactoidModel = model.get('_page.doc.factoid');
+                this.updateHistory({opName:'factoid',  prevParam: prevFactoidModel, param: factoidModel, opTarget:'model'});
+            }
+
+        },
+
+        getFactoidModel: function(){
+            return model.get('_page.doc.factoid');
         }
+
+
     }
 }
 

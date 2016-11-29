@@ -3,125 +3,22 @@
 
 //Author: David Servillo.
 
-//Date of the last change: 08/25/2016.
+//Date of the last change: 11/28/2016.
 
 module.exports = {
 
     //Merge two JSON models.
     merge: function(json1, json2) {
         var jsonToMerge;
-        var nodepositions2 = {};
-        var container2 = {};
+        var nodepositions1 = {};
+        var container1 = {};
         var i;
         //Rename the identifiers under the form glyphN where N is an integer. The identifiers between the two jsons
         //are consistent so no identifiers is repeated.
-        for(i=0; i<json2.nodes.length; i++)
-            nodepositions2[json2.nodes[i].data.id] = i;
+        for(i=0; i<json1.nodes.length; i++)
+            nodepositions1[json1.nodes[i].data.id] = i;
 
-        //Identify and store the container nodes, which are nodes able to contain other nodes in it.
-        //Store the content of the containers as well.
-        for(i=0; i<json2.nodes.length; i++) {
-            if(json2.nodes[i].data.parent != "") {
-                if(container2[json2.nodes[i].data.parent] === undefined)
-                    container2[json2.nodes[i].data.parent] = [json2.nodes[i].data.id];
-                else
-                    container2[json2.nodes[i].data.parent].push(json2.nodes[i].data.id);
-            }
-        }
-
-        var j = -1;
-        var edgepositions2 = {};
-        var outcompsource2 = {};
-        var outcomptarget2 = {};
-        //Identify the nodes in containers and which connect to other nodes out of the containers.
-        //Store their neighbors as well.
-        for(i=0; i< json2.edges.length; i++) {
-            edgepositions2[json2.edges[i].data.id] = i;
-            if(json2.nodes[nodepositions2[json2.edges[i].data.source]].data.parent != "" && json2.nodes[nodepositions2[json2.edges[i].data.target]].data.parent == "") {
-                if(outcompsource2[json2.edges[i].data.source] === undefined)
-                    outcompsource2[json2.edges[i].data.source] = [json2.edges[i].data.target];
-                else
-                    outcompsource2[json2.edges[i].data.source].push(json2.edges[i].data.target);
-            }
-            if(json2.nodes[nodepositions2[json2.edges[i].data.target]].data.parent != "" && json2.nodes[nodepositions2[json2.edges[i].data.source]].data.parent == "") {
-                if(outcomptarget2[json2.edges[i].data.target] === undefined)
-                    outcomptarget2[json2.edges[i].data.target] = [json2.edges[i].data.source];
-                else
-                    outcomptarget2[json2.edges[i].data.target].push(json2.edges[i].data.source);
-            }
-        }
-
-        //Create an edge between the container and its content's neighbors lying outside of the container.
-        //This will be useful in the comparison step, as it only compares edges
-        //and thus can't compare lonely nodes not involved in an edge (like a compartment).
-        //Here, the source is the container and the target the neighbors.
-        outcompsourcekeys = Object.keys(outcompsource2);
-        for(i=0; i<outcompsourcekeys.length; i++) {
-            for(j=0; j<outcompsource2[outcompsourcekeys[i]].length; j++) {
-                json2.edges.push({});
-                json2.edges[json2.edges.length - 1].data = {};
-                json2.edges[json2.edges.length - 1].data.id = json2.nodes[nodepositions2[outcompsourcekeys[i]]].data.parent+'-'+json2.nodes[nodepositions2[outcompsource2[outcompsourcekeys[i]][j]]].data.id;
-                json2.edges[json2.edges.length - 1].data.bendPointPositions = [];
-                json2.edges[json2.edges.length - 1].data.sbgncardinality = 0;
-                json2.edges[json2.edges.length - 1].data.source = json2.nodes[nodepositions2[outcompsourcekeys[i]]].data.parent;
-                json2.edges[json2.edges.length - 1].data.target = json2.nodes[nodepositions2[outcompsource2[outcompsourcekeys[i]][j]]].data.id;
-                json2.edges[json2.edges.length - 1].data.portsource = json2.edges[json2.edges.length - 1].data.source;
-                json2.edges[json2.edges.length - 1].data.porttarget = json2.edges[json2.edges.length - 1].data.target;
-                json2.edges[json2.edges.length - 1].data.toBeRemoved = "";
-            }
-        }
-
-        //Create an edge between the container and its content's neighbors lying outside of the container.
-        //This will be useful in the comparison step, as it only compares edges
-        //and thus can't compare lonely nodes not involved in an edge (like a compartment).
-        //Here, the target is the container and the source the neighbors.
-        outcomptargetkeys = Object.keys(outcomptarget2);
-        for(i=0; i<outcomptargetkeys.length; i++) {
-            for(j=0; j<outcomptarget2[outcomptargetkeys[i]].length; j++) {
-                json2.edges.push({});
-                json2.edges[json2.edges.length - 1].data = {};
-                json2.edges[json2.edges.length - 1].data.id = json2.nodes[nodepositions2[outcomptarget2[outcomptargetkeys[i]][j]]].data.id+'-'+json2.nodes[nodepositions2[outcomptargetkeys[i]]].data.parent;
-                json2.edges[json2.edges.length - 1].data.bendPointPositions = [];
-                json2.edges[json2.edges.length - 1].data.sbgncardinality = 0;
-                json2.edges[json2.edges.length - 1].data.source = json2.nodes[nodepositions2[outcomptarget2[outcomptargetkeys[i]][j]]].data.id;
-                json2.edges[json2.edges.length - 1].data.target = json2.nodes[nodepositions2[outcomptargetkeys[i]]].data.parent;
-                json2.edges[json2.edges.length - 1].data.portsource = json2.edges[json2.edges.length - 1].data.source;
-                json2.edges[json2.edges.length - 1].data.porttarget = json2.edges[json2.edges.length - 1].data.target;
-                json2.edges[json2.edges.length - 1].data.toBeRemoved = "";
-            }
-        }
-
-
-
-        var jsnString1 = JSON.stringify(json1);
-        var nodepositions1 = {};
-        var container1 = {};
-        //Rename the identifiers under the form glyphN where N is an integer. The identifiers between the two jsons
-        //are consistent so no identifiers is repeated.
-        for(i=json2.nodes.length; i<json2.nodes.length+json1.nodes.length; i++) {
-            j = j + 1;
-            while(JSON.stringify(nodepositions2).indexOf("glyph"+(j+1)) != -1)
-                j = j + 1;
-
-            nodepositions1["glyph"+(j+1)] = i-json2.nodes.length;
-
-            jsnString1 = jsnString1.replace(new RegExp('"glyph'+(j+1)+'"', "g"), '');
-            jsnString1 = jsnString1.replace(new RegExp('"'+json1.nodes[i-json2.nodes.length].data.id+'"', "g"), '"glyph'+(j+1)+'"');
-            jsnString1 = jsnString1.replace(new RegExp(':,"', "g"), ':"'+json1.nodes[i-json2.nodes.length].data.id+'","');
-            jsnString1 = jsnString1.replace(new RegExp(':}', "g"), ':"'+json1.nodes[i-json2.nodes.length].data.id+'"}');
-
-            jsnString1 = jsnString1.replace(new RegExp('"glyph'+(j+1)+'-', "g"), '"-');
-            jsnString1 = jsnString1.replace(new RegExp('"'+json1.nodes[i-json2.nodes.length].data.id+'-', "g"), '"glyph'+(j+1)+'-');
-            jsnString1 = jsnString1.replace(new RegExp(':"-', "g"), ':"'+json1.nodes[i-json2.nodes.length].data.id+'-');
-
-            jsnString1 = jsnString1.replace(new RegExp('-glyph'+(j+1)+'"', "g"), '-');
-            jsnString1 = jsnString1.replace(new RegExp('-'+json1.nodes[i-json2.nodes.length].data.id+'"', "g"), '-glyph'+(j+1)+'"');
-            jsnString1 = jsnString1.replace(new RegExp('-,"', "g"), '-'+json1.nodes[i-json2.nodes.length].data.id+'","');
-
-            json1 = JSON.parse(jsnString1);
-        }
-
-        jsonToMerge = json1;
+        jsonToMerge = JSON.parse(JSON.stringify(json1));
 
         //Identify and store the container nodes, which are nodes able to contain other nodes in it.
         //Store the content of the containers as well.
@@ -134,6 +31,7 @@ module.exports = {
             }
         }
 
+        var j = -1;
         var edgepositions1 = {};
         var outcompsource1 = {};
         var outcomptarget1 = {};
@@ -195,29 +93,132 @@ module.exports = {
             }
         }
 
-        var tmp;
-        //json1 has too be the bigger than json2.
-        if(json2.nodes.length > json1.nodes.length) {
-            tmp = JSON.stringify(json2);
-            json2 = JSON.parse(JSON.stringify(json1));
-            json1 = JSON.parse(tmp);
 
-            tmp = JSON.stringify(nodepositions2);
-            nodepositions2 = JSON.parse(JSON.stringify(nodepositions1));
-            nodepositions1 = JSON.parse(tmp);
+        var jsnString2 = JSON.stringify(json2);
+        var nodepositions2 = {};
+        var container2 = {};
+        //Rename the identifiers under the form glyphN where N is an integer. The identifiers between the two jsons
+        //are consistent so no identifiers is repeated.
+        for(i=json1.nodes.length; i<json1.nodes.length+json2.nodes.length; i++) {
+            j = j + 1;
+            while(JSON.stringify(nodepositions1).indexOf("glyph"+(j+1)) != -1)
+                j = j + 1;
 
-            tmp = JSON.stringify(container2);
-            container2 = JSON.parse(JSON.stringify(container1));
-            container1 = JSON.parse(tmp);
+            nodepositions2["glyph"+(j+1)] = i-json1.nodes.length;
 
-            tmp = JSON.stringify(outcompsource2);
-            outcompsource2 = JSON.parse(JSON.stringify(outcompsource2));
-            outcompsource1 = JSON.parse(tmp);
+            jsnString2 = jsnString2.replace(new RegExp('"glyph'+(j+1)+'"', "g"), '');
+            jsnString2 = jsnString2.replace(new RegExp('"'+json2.nodes[i-json1.nodes.length].data.id+'"', "g"), '"glyph'+(j+1)+'"');
+            jsnString2 = jsnString2.replace(new RegExp(':,"', "g"), ':"'+json2.nodes[i-json1.nodes.length].data.id+'","');
+            jsnString2 = jsnString2.replace(new RegExp(':}', "g"), ':"'+json2.nodes[i-json1.nodes.length].data.id+'"}');
 
-            tmp = JSON.stringify(outcomptarget2);
-            outcomptarget2 = JSON.parse(JSON.stringify(outcomptarget2));
-            outcomptarget1 = JSON.parse(tmp);
+            jsnString2 = jsnString2.replace(new RegExp('"glyph'+(j+1)+'-', "g"), '"-');
+            jsnString2 = jsnString2.replace(new RegExp('"'+json2.nodes[i-json1.nodes.length].data.id+'-', "g"), '"glyph'+(j+1)+'-');
+            jsnString2 = jsnString2.replace(new RegExp(':"-', "g"), ':"'+json2.nodes[i-json1.nodes.length].data.id+'-');
+
+            jsnString2 = jsnString2.replace(new RegExp('-glyph'+(j+1)+'"', "g"), '-');
+            jsnString2 = jsnString2.replace(new RegExp('-'+json2.nodes[i-json1.nodes.length].data.id+'"', "g"), '-glyph'+(j+1)+'"');
+            jsnString2 = jsnString2.replace(new RegExp('-,"', "g"), '-'+json2.nodes[i-json1.nodes.length].data.id+'","');
+
+            json2 = JSON.parse(jsnString2);
         }
+
+
+
+        //Identify and store the container nodes, which are nodes able to contain other nodes in it.
+        //Store the content of the containers as well.
+        for(i=0; i<json2.nodes.length; i++) {
+            if(json2.nodes[i].data.parent != "") {
+                if(container2[json2.nodes[i].data.parent] === undefined)
+                    container2[json2.nodes[i].data.parent] = [json2.nodes[i].data.id];
+                else
+                    container2[json2.nodes[i].data.parent].push(json2.nodes[i].data.id);
+            }
+        }
+
+        var edgepositions2 = {};
+        var outcompsource2 = {};
+        var outcomptarget2 = {};
+        //Identify the nodes in containers and which connect to other nodes out of the containers.
+        //Store their neighbors as well.
+        for(i=0; i< json2.edges.length; i++) {
+            edgepositions2[json2.edges[i].data.id] = i;
+            if(json2.nodes[nodepositions2[json2.edges[i].data.source]].data.parent != "" && json2.nodes[nodepositions2[json2.edges[i].data.target]].data.parent == "") {
+                if(outcompsource2[json2.edges[i].data.source] === undefined)
+                    outcompsource2[json2.edges[i].data.source] = [json2.edges[i].data.target];
+                else
+                    outcompsource2[json2.edges[i].data.source].push(json2.edges[i].data.target);
+            }
+            if(json2.nodes[nodepositions2[json2.edges[i].data.target]].data.parent != "" && json2.nodes[nodepositions2[json2.edges[i].data.source]].data.parent == "") {
+                if(outcomptarget2[json2.edges[i].data.target] === undefined)
+                    outcomptarget2[json2.edges[i].data.target] = [json2.edges[i].data.source];
+                else
+                    outcomptarget2[json2.edges[i].data.target].push(json2.edges[i].data.source);
+            }
+        }
+
+        //Create an edge between the container and its content's neighbors lying outside of the container.
+        //This will be useful in the comparison step, as it only compares edges
+        //and thus can't compare lonely nodes not involved in an edge (like a compartment).
+        //Here, the source is the container and the target the neighbors.
+        outcompsourcekeys = Object.keys(outcompsource2);
+        for(i=0; i<outcompsourcekeys.length; i++) {
+            for(j=0; j<outcompsource2[outcompsourcekeys[i]].length; j++) {
+                json2.edges.push({});
+                json2.edges[json2.edges.length - 1].data = {};
+                json2.edges[json2.edges.length - 1].data.id = json2.nodes[nodepositions2[outcompsourcekeys[i]]].data.parent+'-'+json2.nodes[nodepositions2[outcompsource2[outcompsourcekeys[i]][j]]].data.id;
+                json2.edges[json2.edges.length - 1].data.bendPointPositions = [];
+                json2.edges[json2.edges.length - 1].data.sbgncardinality = 0;
+                json2.edges[json2.edges.length - 1].data.source = json2.nodes[nodepositions2[outcompsourcekeys[i]]].data.parent;
+                json2.edges[json2.edges.length - 1].data.target = json2.nodes[nodepositions2[outcompsource2[outcompsourcekeys[i]][j]]].data.id;
+                json2.edges[json2.edges.length - 1].data.portsource = json2.edges[json2.edges.length - 1].data.source;
+                json2.edges[json2.edges.length - 1].data.porttarget = json2.edges[json2.edges.length - 1].data.target;
+                json2.edges[json2.edges.length - 1].data.toBeRemoved = "";
+            }
+        }
+
+        //Create an edge between the container and its content's neighbors lying outside of the container.
+        //This will be useful in the comparison step, as it only compares edges
+        //and thus can't compare lonely nodes not involved in an edge (like a compartment).
+        //Here, the target is the container and the source the neighbors.
+        outcomptargetkeys = Object.keys(outcomptarget2);
+        for(i=0; i<outcomptargetkeys.length; i++) {
+            for(j=0; j<outcomptarget2[outcomptargetkeys[i]].length; j++) {
+                json2.edges.push({});
+                json2.edges[json2.edges.length - 1].data = {};
+                json2.edges[json2.edges.length - 1].data.id = json2.nodes[nodepositions2[outcomptarget2[outcomptargetkeys[i]][j]]].data.id+'-'+json2.nodes[nodepositions2[outcomptargetkeys[i]]].data.parent;
+                json2.edges[json2.edges.length - 1].data.bendPointPositions = [];
+                json2.edges[json2.edges.length - 1].data.sbgncardinality = 0;
+                json2.edges[json2.edges.length - 1].data.source = json2.nodes[nodepositions2[outcomptarget2[outcomptargetkeys[i]][j]]].data.id;
+                json2.edges[json2.edges.length - 1].data.target = json2.nodes[nodepositions2[outcomptargetkeys[i]]].data.parent;
+                json2.edges[json2.edges.length - 1].data.portsource = json2.edges[json2.edges.length - 1].data.source;
+                json2.edges[json2.edges.length - 1].data.porttarget = json2.edges[json2.edges.length - 1].data.target;
+                json2.edges[json2.edges.length - 1].data.toBeRemoved = "";
+            }
+        }
+
+        //var tmp;
+        ////json1 has too be the bigger than json2.
+        //if(json2.nodes.length > json1.nodes.length) {
+        //    tmp = JSON.stringify(json2);
+        //    json2 = JSON.parse(JSON.stringify(json1));
+        //    json1 = JSON.parse(tmp);
+
+        //  tmp = JSON.stringify(nodepositions2);
+        //  nodepositions2 = JSON.parse(JSON.stringify(nodepositions1));
+        //  nodepositions1 = JSON.parse(tmp);
+
+        //tmp = JSON.stringify(container2);
+        //container2 = JSON.parse(JSON.stringify(container1));
+        //container1 = JSON.parse(tmp);
+
+        //tmp = JSON.stringify(outcompsource2);
+        //outcompsource2 = JSON.parse(JSON.stringify(outcompsource2));
+        //outcompsource1 = JSON.parse(tmp);
+
+        //tmp = JSON.stringify(outcomptarget2);
+        //outcomptarget2 = JSON.parse(JSON.stringify(outcomptarget2));
+        //outcomptarget1 = JSON.parse(tmp);
+        // }
 
         var jsn = {"nodes": [], "edges": []};
 
@@ -569,7 +570,7 @@ module.exports = {
                 matches = matches + 1;
         }
 
-        //Some edges were created for the comparision step. They are useless now.
+        //Some edges were created for the comparison step. They are useless now.
         for(i=0; i<jsn.edges.length; i++) {
             if("toBeRemoved" in jsn.edges[i].data) {
                 jsn.edges.splice(i, 1);
@@ -577,19 +578,34 @@ module.exports = {
             }
         }
 
-        //There were only matches. json2 is useless, only json1 becomes the final json.
-        if(matches == json2.edges.length) {
-            for(i=0; i<json1.edges.length; i++) {  //Remove the useless edges.
-                if("toBeRemoved" in json1.edges[i].data) {
-                    json1.edges.splice(i, 1);
-                    i = i - 1;
-                }
+        for(i=0; i<json1.edges.length; i++) {  //Remove the useless edges.
+            if("toBeRemoved" in json1.edges[i].data) {
+                json1.edges.splice(i, 1);
+                i = i - 1;
             }
-
-            jsn = json1;
         }
 
-        return {wholeJson: jsn, jsonToMerge: jsonToMerge};
+        var whichJsn = {jsn1:[], jsn2:[]};
+        for(i=0; i<json1.nodes.length; i++)
+            whichJsn.jsn1.push(json1.nodes[i].data.id);
+
+        if(json1.nodes.length < jsn.nodes.length) {
+            for(i=json1.nodes.length; i<jsn.nodes.length; i++) {
+                json1.nodes.push(jsn.nodes[i]);
+                whichJsn.jsn2.push(jsn.nodes[i].data.id);
+            }
+        }
+
+        if(json1.edges.length < jsn.edges.length) {
+            for(i=json1.edges.length; i<jsn.edges.length; i++)
+                json1.edges.push(jsn.edges[i]);
+        }
+
+        //There were only matches. json2 is useless, only json1 becomes the final json.
+        if(matches == json2.edges.length)
+            jsn = json1;
+
+        return {wholeJson: jsn, jsonToMerge: jsonToMerge, whichJsn: whichJsn};
     },
 
     //Add sub-levels nodes and containers into the final json.

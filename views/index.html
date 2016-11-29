@@ -500,7 +500,61 @@
                 <div id = "factoid-area" class = "tab-pane">
 
                     <div id= "factoid-input-container">
-                    Input
+
+
+                        <table  border="0" cellpadding="2" width="100%" align="top">
+                            <tbody>
+
+
+                            <tr>
+                                <td class='instructions'>Load a manuscript from file </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label for="factoid-file-input" class="image-file">
+                                        <i class="fa fa-file-text-o"></i> Select File
+                                    </label>
+
+                                    <input type="file" id="factoid-file-input" accept=".txt,.pdf">
+                                </td>
+
+                            </tr>
+
+                            <tr>
+                                <td align="left" height="8">
+                                    <b><font color=white  face="Verdana" size="2">Or&nbsp;</font></b>
+                                </td>
+                            </tr>
+
+                            <!--<tr>-->
+                            <!--<td  class = "instructions"  align="left" height="15">-->
+                            <!--Enter PMC ID: <input id="pmcBox" type = "text" value = <%= pmcID %>></input>-->
+                            <!--<input type="button" id = "pmc-id-submit-button"  value="Load">-->
+
+
+                            <tr>
+                                <td  class = "instructions"  align="left" height="15">
+                                    Write/paste directly into the text box
+                                </td>
+                            </tr>
+                            <tr>
+                                <td  valign="top" align="left" >
+                                    <textarea rows="30" id="factoidBox"> </textarea>
+                                </td>
+
+
+                            </tr>
+
+
+                            <tr>
+                                <td><input type="button" id = "factoid-text-clear-button"  value="Clear"> &nbsp;&nbsp;&nbsp;
+
+                                    <input type="button" id = "factoid-text-submit-button"  value="Submit"  class='upload'>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
                     </div>
 
                 </div>
@@ -981,77 +1035,12 @@
             </script>
 
 
-            <script type="text/template" id= "factoid-input-loading-template">
+            <!--//<script type="text/template" id= "factoid-input-loading-template">-->
 
 
-                    <table  border="0" cellpadding="2" width="100%" align="top" >
+                    <!---->
 
-                        <tr><td class='instructions'>Load a manuscript from file </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <label for="factoid-file-input" class="image-file">
-                                    <i class="fa fa-file-text-o"></i> Select File
-                                </label>
-
-                                <input type="file" id="factoid-file-input" accept=".txt,.pdf"></td>
-
-                        </tr>
-
-                        <tr>
-                            <td align="left" height="8">
-                                <b><font color=white  face="Verdana" size="2">Or&nbsp;</font></b>
-                            </td>
-                        </tr>
-
-                        <!--<tr>-->
-                            <!--<td  class = "instructions"  align="left" height="15">-->
-                                <!--Enter PMC ID: <input id="pmcBox" type = "text" value = <%= pmcID %>></input>-->
-                                <!--<input type="button" id = "pmc-id-submit-button"  value="Load">-->
-
-
-                        <!--</tr>-->
-
-
-                        <!--<tr>-->
-                            <!--<td align="left" height="8">-->
-                                <!--<b><font color=white  face="Verdana" size="2">Or&nbsp;</font></b>-->
-                            <!--</td>-->
-                        <!--</tr>-->
-
-
-                        <tr>
-                            <td  class = "instructions"  align="left" height="15">
-                               Write/paste directly into the text box
-                            </td>
-                        </tr>
-                        <tr>
-                            <td  valign="top" align="left" >
-                                <textarea rows="30" id="factoidBox"><%= factoidText %></textarea>
-                            </td>
-
-
-                        </tr>
-
-
-                        <tr>
-                            <td><input type="button" id = "factoid-text-clear-button"  value="Clear"> &nbsp;&nbsp;&nbsp;
-
-                                <input type="button" id = "factoid-text-submit-button"  value="Submit"  class='upload'></td>
-                        </tr>
-
-
-
-
-
-
-
-
-
-                    </table>
-
-
-            </script>
+            <!--</script>-->
 
             <!--</div>-->
 
