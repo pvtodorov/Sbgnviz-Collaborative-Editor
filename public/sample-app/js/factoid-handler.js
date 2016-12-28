@@ -14,7 +14,7 @@ module.exports =  function(menu, modelManager) {
 
     var jsonGraphs;
     var nodeMap;
-    var text= 'We introduce a new method. MDM2 phosphorylates TP53. A Sos-1-E3b1 complex directs Rac activation by entering into a tricomplex with Eps8. MDM2 deactivates RAF.';
+    var text= 'We introduce a new method. MDM2 phosphorylates TP53.  MDM2 deactivates RAF. A Sos-1-E3b1 complex directs Rac activation by entering into a tricomplex with Eps8.';
     var pmcID = "PMC2797771";
 
     return   {
@@ -36,13 +36,8 @@ module.exports =  function(menu, modelManager) {
                 jsonGraphs = factoidModel.jsonGraphs;
                 nodeMap = factoidModel.nodeMap;
 
-                var textFromJsons = "";
-                jsonGraphs.forEach(function(jsonGraph){
-                    textFromJsons+= jsonGraph.sentence;
+                this.updateTextBox(jsonGraphs);
 
-                });
-                text = textFromJsons;
-                 $('#factoidBox')[0].value = text = textFromJsons;
             }
 
 
@@ -51,81 +46,68 @@ module.exports =  function(menu, modelManager) {
 
         },
 
+        updateTextBox: function(jsonGraphs){
+            var textFromJsons = "";
+            for(var i = 0; i < jsonGraphs.length; i++)
+                textFromJsons+= jsonGraphs[i].sentence + '. ';
+
+            text = textFromJsons;
+            $('#factoidBox')[0].value = text = textFromJsons;
+        },
         loadFactoidModel: function(inputStr){
 
 
             //parse each input sentence one by one
 
 
+            var self = this;
             var jsonGraphs = [];
 
-            var lines = inputStr.split(/[.;]+/m);
-
-            lines.pop(); //pop the empty last line
-
-            // console.log(lines);
-
-            var n = noty({layout: "bottom",text: "Sending REACH queries"});
 
 
-            var lengthRequirement = lines.length;
+            var notyView = noty({layout: "bottom",text: "Sending REACH queries"});
+
+
             var p = new Promise(function (resolve) {
-
-                lines.forEach(function (line) {
-
-                    console.log(line);
-                    socket.emit("REACHQuery", "indexcard", line, function (data) {
+                 socket.emit("REACHQuery", "indexcard", inputStr, function (data) {
                         //      console.log(line);
-                        //       console.log(data);
 
-                        try{
+                        var cards = JSON.parse(data).cards;
+                        console.log(cards);
 
-                            //    n.setText("REACH result #" + (jsonGraphs.length + 1) + " of " +lengthRequirement + " sent to JSON conversion.");
-                            var jsonData = idxcardjson.createJson(JSON.parse(data));
+                        cards.forEach(function(card){
+                            var jsonData = idxcardjson.createJson({cards: [card]});
 
-                            jsonGraphs.push({sentence: line, json: jsonData});
+                                jsonGraphs.push({sentence: card.evidence[0], json: jsonData, idxCard:card});
 
-                            console.log(jsonGraphs);
-                            n.setText("REACH result #" + (jsonGraphs.length) + " of " + lengthRequirement + " converted to JSON.");
+//                            n.setText("REACH result #" + (jsonGraphs.length) + " of " + lengthRequirement + " converted to JSON.");
 
-                            if(jsonGraphs.length >= lengthRequirement)
-                                resolve("success");
+                        });
 
-                        }
-                        catch (error){ //incorrect json -- don't add to the graphs to be merged
-                            console.log(error);
-                            n.setText("REACH result #" + (jsonGraphs.length+ 1) + " of " +lengthRequirement + " has a conversion error.");
-                            lengthRequirement--;
 
-                            if(jsonGraphs.length >= lengthRequirement)
-                                resolve("success");
 
-                        }
+                     notyView.setText( "Merging graphs...");
+
+
+                        nodeMap = menu.mergeJsons(jsonGraphs); //mapping between sentences and node labels
+
+
+                     console.log(jsonGraphs);
+
+
+                        //save it to the model
+                        modelManager.updateFactoidModel({jsonGraphs: jsonGraphs, nodeMap: nodeMap, text: text}, "me");
+
+
+
+                     notyView.close();
+
+
+
+
 
                     });
                 });
-            });
-
-            p.then(function(content){
-
-                n.setText( "Merging graphs...");
-
-                jsonGraphs = jsonGraphs;
-                nodeMap = menu.mergeJsons(jsonGraphs); //mapping between sentences and node labels
-
-
-
-                //save it to the model
-                modelManager.updateFactoidModel({jsonGraphs: jsonGraphs, nodeMap: nodeMap, text: text}, "me");
-
-
-
-                n.close();
-            }),
-                function (xhr, status, error) {
-                    console.log(error);
-                    n.setText( error);
-                }
         },
 
 
@@ -146,25 +128,31 @@ module.exports =  function(menu, modelManager) {
 
 
 
-            var sentences = nodeMap[nodeId];
+            var sentences = nodeMap.sentences[nodeId];
 
+            var idxCards = nodeMap.idxCards[nodeId];
+            console.log(nodeMap);
+
+            console.log(idxCards);
+          //  var notyView = noty({layout: "bottom",text: idxCards});
 
             if(sentences) {
 
+                var ranges = [];
+
                 for(var i = 0; i < sentences.length; i++) {
-                    var sentence = sentences[i];
-
-                    var startInd = el[0].value.indexOf(sentence);
-                    var endInd = startInd + sentence.length;
-
-                    el.highlightTextarea({
-                        ranges: [{
-                            color: highlightColor,//('#FFFF0'),
-                            ranges: [[startInd,endInd]]
-                        }]
-                    });
-
+                    var startInd = el[0].value.indexOf(sentences[i]);
+                    var endInd = startInd + sentences[i].length;
+                    ranges.push([startInd, endInd]);
                 }
+                console.log(ranges);
+
+                el.highlightTextarea({
+                    ranges: [{
+                        color: highlightColor,//('#FFFF0'),
+                        ranges: ranges
+                    }]
+                });
 
 
             }

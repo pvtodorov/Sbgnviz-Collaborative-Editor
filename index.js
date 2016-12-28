@@ -471,6 +471,7 @@ app.proto.init = function (model) {
             //node is selected
             if(menu.factoidHandler && model.get('_page.doc.factoid'))
                 menu.factoidHandler.highlightSentenceInText(id, highlightColor);
+
                 //factoidHandler.highlightSentenceInText(model.get('_page.doc.cy.nodes.' + id + '.sbgnlabel'), highlightColor);
         }
 

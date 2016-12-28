@@ -129,39 +129,58 @@ module.exports = function(){
              var jsonObj = jsonGraphs[0].json;
 
 
-             var nodeMap = {};
+             var nodeMap = {sentences:{}, idxCards:{}};
 
 
 
              jsonGraphs[0].json.nodes.forEach(function(node){ //do for the first graph before any changes
                  console.log(node.data.id);
-                     nodeMap[node.data.id] = [jsonGraphs[0].sentence];
+                     nodeMap.sentences[node.data.id] = [jsonGraphs[0].sentence];
+                    nodeMap.idxCards[node.data.id] = [jsonGraphs[0].idxCard];
              });
+
 
 
 
              for(var i = 0; i  < jsonGraphs.length - 1; i++){
 
+                 var mergeResult = jsonMerger.merge(jsonObj, jsonGraphs[i+1].json); //jsonobj's ids remain the same
 
-                 var mergeResult = jsonMerger.merge(jsonGraphs[i+1].json, jsonObj); //jsonobj's ids remain the same
-
-
-                 mergeResult.whichJsn.jsn1.forEach(function(nd){
-                     console.log("jsn1" + nd);
-                 });
 
                  mergeResult.whichJsn.jsn2.forEach(function(nd){
-                     console.log("jsn2" + nd);
+
+
+
+                     if(nodeMap[nd] !== undefined){
+                         nodeMap.sentences[nd].push(jsonGraphs[i+1].sentence);
+                         nodeMap.idxCards[nd].push(jsonGraphs[i+1].idxCard);
+                     }
+                     else {
+                         nodeMap.sentences[nd] = [jsonGraphs[i + 1].sentence];
+                         nodeMap.idxCards[nd] = [jsonGraphs[i + 1].idxCard];
+                     }
+
+
                  });
 
-                 mergeResult.jsonToMerge.nodes.forEach(function(node){
-                     var nodeId = node.data.id;
-                     console.log((i+1) + " " + node.data.id);
-                     if(nodeMap[nodeId] !== undefined)
-                        nodeMap[nodeId].push(jsonGraphs[i+1].sentence);
-                     else
-                         nodeMap[nodeId] = [jsonGraphs[i+1].sentence];
-                 });
+                 console.log(mergeResult);
+                 // mergeResult.whichJsn.jsn2.forEach(function(nd){
+                 //     console.log("jsn2" + nd);
+                 //
+                 //     if(nodeMap[nd] !== undefined)
+                 //         nodeMap[nd].push(jsonObj.sentence);
+                 //     else
+                 //         nodeMap[nd] = [jsonObj.sentence];
+                 // });
+
+                 // mergeResult.jsonToMerge.nodes.forEach(function(node){
+                 //     var nodeId = node.data.id;
+                 //     console.log((i+1) + " " + node.data.id);
+                 //     if(nodeMap[nodeId] !== undefined)
+                 //        nodeMap[nodeId].push(jsonGraphs[i+1].sentence);
+                 //     else
+                 //         nodeMap[nodeId] = [jsonGraphs[i+1].sentence];
+                 // });
 
 
 
@@ -169,8 +188,8 @@ module.exports = function(){
 
              }
 
-             console.log(mergeResult.wholeJson);
-             console.log(nodeMap);
+           //  console.log(mergeResult.wholeJson);
+          //   console.log(nodeMap);
 
              //Map
 

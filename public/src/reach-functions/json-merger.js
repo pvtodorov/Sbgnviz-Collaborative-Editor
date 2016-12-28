@@ -3,7 +3,7 @@
 
 //Author: David Servillo.
 
-//Date of the last change: 11/28/2016.
+//Date of the last change: 12/23/2016.
 
 module.exports = {
 
@@ -93,36 +93,31 @@ module.exports = {
             }
         }
 
-
         var jsnString2 = JSON.stringify(json2);
+        var maxj = json1.nodes.length;
         var nodepositions2 = {};
         var container2 = {};
         //Rename the identifiers under the form glyphN where N is an integer. The identifiers between the two jsons
         //are consistent so no identifiers is repeated.
-        for(i=json1.nodes.length; i<json1.nodes.length+json2.nodes.length; i++) {
-            j = j + 1;
-            while(JSON.stringify(nodepositions1).indexOf("glyph"+(j+1)) != -1)
-                j = j + 1;
+        for(i=0; i<json2.nodes.length; i++) {
+            maxj = maxj + 1;
+            nodepositions2["glyph"+maxj] = i;
 
-            nodepositions2["glyph"+(j+1)] = i-json1.nodes.length;
+            jsnString2 = jsnString2.replace(new RegExp('"glyph'+maxj+'"', "g"), '');
+            jsnString2 = jsnString2.replace(new RegExp('"'+json2.nodes[i].data.id+'"', "g"), '"glyph'+maxj+'"');
+            jsnString2 = jsnString2.replace(new RegExp(':,"', "g"), ':"'+json2.nodes[i].data.id+'","');
+            jsnString2 = jsnString2.replace(new RegExp(':}', "g"), ':"'+json2.nodes[i].data.id+'"}');
 
-            jsnString2 = jsnString2.replace(new RegExp('"glyph'+(j+1)+'"', "g"), '');
-            jsnString2 = jsnString2.replace(new RegExp('"'+json2.nodes[i-json1.nodes.length].data.id+'"', "g"), '"glyph'+(j+1)+'"');
-            jsnString2 = jsnString2.replace(new RegExp(':,"', "g"), ':"'+json2.nodes[i-json1.nodes.length].data.id+'","');
-            jsnString2 = jsnString2.replace(new RegExp(':}', "g"), ':"'+json2.nodes[i-json1.nodes.length].data.id+'"}');
+            jsnString2 = jsnString2.replace(new RegExp('"glyph'+maxj+'-', "g"), '"-');
+            jsnString2 = jsnString2.replace(new RegExp('"'+json2.nodes[i].data.id+'-', "g"), '"glyph'+maxj+'-');
+            jsnString2 = jsnString2.replace(new RegExp(':"-', "g"), ':"'+json2.nodes[i].data.id+'-');
 
-            jsnString2 = jsnString2.replace(new RegExp('"glyph'+(j+1)+'-', "g"), '"-');
-            jsnString2 = jsnString2.replace(new RegExp('"'+json2.nodes[i-json1.nodes.length].data.id+'-', "g"), '"glyph'+(j+1)+'-');
-            jsnString2 = jsnString2.replace(new RegExp(':"-', "g"), ':"'+json2.nodes[i-json1.nodes.length].data.id+'-');
-
-            jsnString2 = jsnString2.replace(new RegExp('-glyph'+(j+1)+'"', "g"), '-');
-            jsnString2 = jsnString2.replace(new RegExp('-'+json2.nodes[i-json1.nodes.length].data.id+'"', "g"), '-glyph'+(j+1)+'"');
-            jsnString2 = jsnString2.replace(new RegExp('-,"', "g"), '-'+json2.nodes[i-json1.nodes.length].data.id+'","');
+            jsnString2 = jsnString2.replace(new RegExp('-glyph'+maxj+'"', "g"), '-');
+            jsnString2 = jsnString2.replace(new RegExp('-'+json2.nodes[i].data.id+'"', "g"), '-glyph'+maxj+'"');
+            jsnString2 = jsnString2.replace(new RegExp('-,"', "g"), '-'+json2.nodes[i].data.id+'","');
 
             json2 = JSON.parse(jsnString2);
         }
-
-
 
         //Identify and store the container nodes, which are nodes able to contain other nodes in it.
         //Store the content of the containers as well.
@@ -196,30 +191,6 @@ module.exports = {
             }
         }
 
-        //var tmp;
-        ////json1 has too be the bigger than json2.
-        //if(json2.nodes.length > json1.nodes.length) {
-        //    tmp = JSON.stringify(json2);
-        //    json2 = JSON.parse(JSON.stringify(json1));
-        //    json1 = JSON.parse(tmp);
-
-        //  tmp = JSON.stringify(nodepositions2);
-        //  nodepositions2 = JSON.parse(JSON.stringify(nodepositions1));
-        //  nodepositions1 = JSON.parse(tmp);
-
-        //tmp = JSON.stringify(container2);
-        //container2 = JSON.parse(JSON.stringify(container1));
-        //container1 = JSON.parse(tmp);
-
-        //tmp = JSON.stringify(outcompsource2);
-        //outcompsource2 = JSON.parse(JSON.stringify(outcompsource2));
-        //outcompsource1 = JSON.parse(tmp);
-
-        //tmp = JSON.stringify(outcomptarget2);
-        //outcomptarget2 = JSON.parse(JSON.stringify(outcomptarget2));
-        //outcomptarget1 = JSON.parse(tmp);
-        // }
-
         var jsn = {"nodes": [], "edges": []};
 
         jsn.nodes = jsn.nodes.concat(JSON.parse(JSON.stringify(json1)).nodes);
@@ -243,10 +214,11 @@ module.exports = {
         var found5;
         var match1;
         var match2;
-        var matches = 0;
         var backward1;
         var backward2;
         var goodmatch;
+        var sharednodes = [];
+
         for(i=0; i<json2.edges.length; i++) {
             goodmatch = 0;
             count1 = 0;
@@ -468,13 +440,6 @@ module.exports = {
 //End of the comparison step.
 //******************************************************************************************
 
-            if(goodmatch) {
-                //console.log(JSON.stringify(json2));
-                //console.log(JSON.stringify(json1));
-                match1 = goodmatch;
-                match2 = match1;
-            }
-
             //The target node is not in json1, then add it to the final json.
             if(found1%(json1.edges.length + 1) != 0 && found2%(json1.edges.length + 1) == 0 && !found4 && !found5) {
                 //The node may be a container with multiple sub-levels of containers in it.
@@ -483,6 +448,8 @@ module.exports = {
                 jsn.edges.push(JSON.parse(JSON.stringify(json2.edges[i])));
                 jsn.edges[jsn.edges.length - 1].data.source = json1.edges[found1 - 1].data.source;
                 jsn.edges[jsn.edges.length - 1].data.portsource = json1.edges[found1 - 1].data.portsource;
+
+                sharednodes.push(json1.edges[found1 - 1].data.source);
             }
 
             //The source node is not in json1, then add it to the final json.
@@ -493,6 +460,8 @@ module.exports = {
                 jsn.edges.push(JSON.parse(JSON.stringify(json2.edges[i])));
                 jsn.edges[jsn.edges.length - 1].data.target = json1.edges[found2 - 1].data.target;
                 jsn.edges[jsn.edges.length - 1].data.porttarget = json1.edges[found2 - 1].data.porttarget;
+
+                sharednodes.push(json1.edges[found2 - 1].data.target);
             }
 
             //The target node is not in json1, then add it to the final json.
@@ -503,6 +472,8 @@ module.exports = {
                 jsn.edges.push(JSON.parse(JSON.stringify(json2.edges[i])));
                 jsn.edges[jsn.edges.length - 1].data.source = json1.edges[found4 - 1].data.target;
                 jsn.edges[jsn.edges.length - 1].data.portsource = json1.edges[found4 - 1].data.porttarget;
+
+                sharednodes.push(json1.edges[found4 - 1].data.target);
             }
 
             //The source node is not in json1, then add it to the final json.
@@ -513,6 +484,8 @@ module.exports = {
                 jsn.edges.push(JSON.parse(JSON.stringify(json2.edges[i])));
                 jsn.edges[jsn.edges.length - 1].data.target = json1.edges[found5 - 1].data.source;
                 jsn.edges[jsn.edges.length - 1].data.porttarget = json1.edges[found5 - 1].data.portsource;
+
+                sharednodes.push(json1.edges[found5 - 1].data.source);
             }
 
             //Neither the target node nor the source node are in json1, then add all the edge.
@@ -532,8 +505,12 @@ module.exports = {
                 jsn.edges[jsn.edges.length - 1].data.source = json1.edges[found1 - 1].data.source;
                 jsn.edges[jsn.edges.length - 1].data.portsource = json1.edges[found1 - 1].data.portsource;
 
+                sharednodes.push(json1.edges[found1 - 1].data.source);
+
                 jsn.edges[jsn.edges.length - 1].data.target = json1.edges[found2 - 1].data.target;
                 jsn.edges[jsn.edges.length - 1].data.porttarget = json1.edges[found2 - 1].data.porttarget;
+
+                sharednodes.push(json1.edges[found2 - 1].data.target);
 
                 //Both the target node and the source node are in json1. Only add the interaction type of the edge.
             } else if(found4 && found5) {
@@ -541,8 +518,12 @@ module.exports = {
                 jsn.edges[jsn.edges.length - 1].data.source = json1.edges[found4 - 1].data.target;
                 jsn.edges[jsn.edges.length - 1].data.portsource = json1.edges[found4 - 1].data.porttarget;
 
+                sharednodes.push(json1.edges[found4 - 1].data.target);
+
                 jsn.edges[jsn.edges.length - 1].data.target = json1.edges[found5 - 1].data.source;
                 jsn.edges[jsn.edges.length - 1].data.porttarget = json1.edges[found5 - 1].data.portsource;
+
+                sharednodes.push(json1.edges[found5 - 1].data.source);
             }
 
             //Both the target node and the source node are in json1. Only add the interaction type of the edge.
@@ -551,8 +532,12 @@ module.exports = {
                 jsn.edges[jsn.edges.length - 1].data.source = json1.edges[found1 - 1].data.source;
                 jsn.edges[jsn.edges.length - 1].data.portsource = json1.edges[found1 - 1].data.portsource;
 
+                sharednodes.push(json1.edges[found1 - 1].data.source);
+
                 jsn.edges[jsn.edges.length - 1].data.target = json1.edges[found5 - 1].data.source;
                 jsn.edges[jsn.edges.length - 1].data.porttarget = json1.edges[found5 - 1].data.portsource;
+
+                sharednodes.push(json1.edges[found5 - 1].data.source);
             }
 
             //Both the target node and the source node are in json1. Only add the interaction type of the edge.
@@ -561,13 +546,13 @@ module.exports = {
                 jsn.edges[jsn.edges.length - 1].data.source = json1.edges[found4 - 1].data.target;
                 jsn.edges[jsn.edges.length - 1].data.portsource = json1.edges[found4 - 1].data.porttarget;
 
+                sharednodes.push(json1.edges[found4 - 1].data.target);
+
                 jsn.edges[jsn.edges.length - 1].data.target = json1.edges[found2 - 1].data.target;
                 jsn.edges[jsn.edges.length - 1].data.porttarget = json1.edges[found2 - 1].data.porttarget;
-            }
 
-            //The source, the target and the interaction type of the edge were all found.
-            if(match1 == match2 && json1.edges[match1 - 1].data.sbgnclass == json2.edges[i].data.sbgnclass)
-                matches = matches + 1;
+                sharednodes.push(json1.edges[found2 - 1].data.target);
+            }
         }
 
         //Some edges were created for the comparison step. They are useless now.
@@ -596,16 +581,17 @@ module.exports = {
             }
         }
 
+        for(i=0; i<sharednodes.length; i++)
+            whichJsn.jsn2.push(sharednodes[i]);
+
+        whichJsn.jsn2.sort();
+
         if(json1.edges.length < jsn.edges.length) {
             for(i=json1.edges.length; i<jsn.edges.length; i++)
                 json1.edges.push(jsn.edges[i]);
         }
 
-        //There were only matches. json2 is useless, only json1 becomes the final json.
-        if(matches == json2.edges.length)
-            jsn = json1;
-
-        return {wholeJson: jsn, jsonToMerge: jsonToMerge, whichJsn: whichJsn};
+        return {wholeJson: json1, jsonToMerge: jsonToMerge, whichJsn: whichJsn};
     },
 
     //Add sub-levels nodes and containers into the final json.
