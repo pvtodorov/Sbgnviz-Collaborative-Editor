@@ -129,14 +129,15 @@ module.exports = function(){
              var jsonObj = jsonGraphs[0].json;
 
 
-             var nodeMap = {sentences:{}, idxCards:{}};
+             var sentenceNodeMap = {};
+             var idxCardNodeMap = {};
 
 
 
              jsonGraphs[0].json.nodes.forEach(function(node){ //do for the first graph before any changes
                  console.log(node.data.id);
-                     nodeMap.sentences[node.data.id] = [jsonGraphs[0].sentence];
-                    nodeMap.idxCards[node.data.id] = [jsonGraphs[0].idxCard];
+                 sentenceNodeMap[node.data.id] = [jsonGraphs[0].sentence];
+                 idxCardNodeMap[node.data.id] = [jsonGraphs[0].idxCard];
              });
 
 
@@ -151,13 +152,13 @@ module.exports = function(){
 
 
 
-                     if(nodeMap[nd] !== undefined){
-                         nodeMap.sentences[nd].push(jsonGraphs[i+1].sentence);
-                         nodeMap.idxCards[nd].push(jsonGraphs[i+1].idxCard);
+                     if(sentenceNodeMap[nd] !== undefined) {
+                         sentenceNodeMap[nd].push(jsonGraphs[i + 1].sentence);
+                         idxCardNodeMap[nd].push(jsonGraphs[i + 1].idxCard);
                      }
                      else {
-                         nodeMap.sentences[nd] = [jsonGraphs[i + 1].sentence];
-                         nodeMap.idxCards[nd] = [jsonGraphs[i + 1].idxCard];
+                         sentenceNodeMap[nd] = [jsonGraphs[i + 1].sentence];
+                         idxCardNodeMap[nd] = [jsonGraphs[i + 1].idxCard];
                      }
 
 
@@ -213,7 +214,7 @@ module.exports = function(){
 
 
 
-             return nodeMap;
+             return {sentences: sentenceNodeMap, idxCards: idxCardNodeMap};
          },
          mergeJsonWithCurrent: function(jsonGraph){
              var currSbgnml = jsonToSbgnml.createSbgnml(cy.nodes(":visible"), cy.edges(":visible"));
