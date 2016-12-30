@@ -645,6 +645,9 @@
             <div id="biogene-container" style="display: none">
             </div>
 
+            <div id="idxCard-container" style="display: none">
+            </div>
+
             <div id="query-pathsbetween-table" title="Paths Between Query Parameters">
                 <!-- paths between query table will be shown here -->
             </div>
@@ -1034,6 +1037,25 @@
                 Right click to a node to see its detailed information
             </script>
 
+
+
+            <script type="text/template" id="idxCard-template">
+                <div class='node-details-text'>
+                    <table class="table-idxCard table-striped">
+
+                        <% var i = 0; %>
+                        <% _.each(idxCards, function(card, index) { %>
+
+                            <tr><td>Card: <%= index %></td></tr>
+                            <tr><td>Evidence: <%= card.evidence %></td></tr>
+                            <tr><td>Participant a: <%= card.extracted_information.participant_a.entity_text %></td></tr>
+                            <tr><td>Participant b: <%= card.extracted_information.participant_b.entity_text %></td></tr>
+                            <tr><td>Interaction type: <%= card.extracted_information.interaction_type %></td></tr>
+
+                            <% }); %>
+                    </table>
+                    </div>
+            </script>
 
             <!--//<script type="text/template" id= "factoid-input-loading-template">-->
 

@@ -290,6 +290,11 @@ menu:not([title]):before{
     margin: 0 auto;
 }
 
+.table-idxCard{
+    text-align:left;
+}
+
+
 .layout-text {
     font-size: 12px !important;
 }

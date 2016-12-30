@@ -11,7 +11,7 @@ module.exports =  function(menu, modelManager) {
     var idxcardjson = require('../../src/reach-functions/idxcardjson-to-json-converter.js');
 
     var socket = io();
-
+    var idxCardView = require('./idxCard-info.js');
     var jsonGraphs;
     var nodeMap;
     var text= 'We introduce a new method. MDM2 phosphorylates TP53.  MDM2 deactivates RAF. A Sos-1-E3b1 complex directs Rac activation by entering into a tricomplex with Eps8.';
@@ -73,14 +73,13 @@ module.exports =  function(menu, modelManager) {
                         //      console.log(line);
 
                         var cards = JSON.parse(data).cards;
-                        console.log(cards);
+                        // console.log(cards);
 
                         cards.forEach(function(card){
                             var jsonData = idxcardjson.createJson({cards: [card]});
 
                                 jsonGraphs.push({sentence: card.evidence[0], json: jsonData, idxCard:card});
 
-//                            n.setText("REACH result #" + (jsonGraphs.length) + " of " + lengthRequirement + " converted to JSON.");
 
                         });
 
@@ -133,8 +132,46 @@ module.exports =  function(menu, modelManager) {
             var idxCards = nodeMap.idxCards[nodeId];
             console.log(nodeMap);
 
-            console.log(idxCards);
-          //  var notyView = noty({layout: "bottom",text: idxCards});
+            // console.log(idxCards);
+
+
+            cy.$(('#' + nodeId)).qtip({
+                content: {
+                    text: function (event, api) {
+
+                        var info = (new idxCardView(idxCards)).render();
+                        var html = $('#idxCard-container').html();
+
+
+                        api.set('content.text', html);
+
+                        return html;
+
+
+                    }
+                },
+                show: {
+                    ready: true
+                },
+                position: {
+                    my: 'top center',
+                    at: 'top middle',
+                    adjust: {
+                        cyViewport: true
+                    },
+                    effect: false
+                },
+                style: {
+                    classes: 'qtip-bootstrap',
+                    tip: {
+                        width: 20,
+                        height: 20
+                    }
+                }
+            });
+
+
+
 
             if(sentences) {
 
