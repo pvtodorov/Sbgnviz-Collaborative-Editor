@@ -61,7 +61,7 @@ module.exports = function(modelManager){
 
         });
 
-        var name = "css." + mapFromCyToModelName(args.name);
+        var name = mapFromCyToModelName(args.name);
         modelManager.changeModelElementGroupAttribute(name, modelElList, paramList, "me");
     }
 

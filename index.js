@@ -317,13 +317,20 @@ app.proto.init = function (model) {
     });
 
     //should handle all css attributes separately as they are so many and cyclic
-    model.on('all', '_page.doc.cy.nodes.backgroundColor', function(id, op, val,prev, passed){
+    model.on('all', '_page.doc.cy.nodes.*.backgroundColor', function(id, op, val,prev, passed){
 
-        console.log(css);
-        console.log(op);
 
         if(docReady && passed.user == null) {
             cy.getElementById(id).css("background-color", val);
+
+        }
+    });
+    //should handle all css attributes separately as they are so many and cyclic
+    model.on('all', '_page.doc.cy.nodes.*.borderWidth', function(id, op, val,prev, passed){
+
+
+        if(docReady && passed.user == null) {
+            cy.getElementById(id).css("border-width", val);
 
         }
     });
