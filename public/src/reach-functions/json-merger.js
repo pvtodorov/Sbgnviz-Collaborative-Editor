@@ -121,7 +121,7 @@ module.exports = {
 
     removeBbox: function(jsn, n) {
 
-        delete jsn.nodes[n].data.sbgnbbox;
+        delete jsn.nodes[n].data.bbox;
 
         var j;
         if('sbgnstatesandinfos' in jsn.nodes[n].data) {

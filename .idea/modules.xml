@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Sbgnviz-Collaborative-Editor Chise Version.iml" filepath="$PROJECT_DIR$/Sbgnviz-Collaborative-Editor Chise Version.iml" />
-      <module fileurl="file://$PROJECT_DIR$/public/node_modules/cytoscape-undo-redo/cytoscape-undo-redo.iml" filepath="$PROJECT_DIR$/public/node_modules/cytoscape-undo-redo/cytoscape-undo-redo.iml" />
     </modules>
   </component>
 </project>

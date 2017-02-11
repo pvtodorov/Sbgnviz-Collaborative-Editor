@@ -96,38 +96,38 @@ module.exports = function () {
             return false;
         },
         bboxProp: function (ele) {
-            var sbgnbbox = new Object();
+            var bbox = new Object();
 
-            sbgnbbox.x = $(ele).find('bbox').attr('x');
-            sbgnbbox.y = $(ele).find('bbox').attr('y');
-            sbgnbbox.w = $(ele).find('bbox').attr('w');
-            sbgnbbox.h = $(ele).find('bbox').attr('h');
+            bbox.x = $(ele).find('bbox').attr('x');
+            bbox.y = $(ele).find('bbox').attr('y');
+            bbox.w = $(ele).find('bbox').attr('w');
+            bbox.h = $(ele).find('bbox').attr('h');
 
             //set positions as center
-            sbgnbbox.x = parseFloat(sbgnbbox.x) + parseFloat(sbgnbbox.w) / 2;
-            sbgnbbox.y = parseFloat(sbgnbbox.y) + parseFloat(sbgnbbox.h) / 2;
+            bbox.x = parseFloat(bbox.x) + parseFloat(bbox.w) / 2;
+            bbox.y = parseFloat(bbox.y) + parseFloat(bbox.h) / 2;
 
-            return sbgnbbox;
+            return bbox;
         },
         stateAndInfoBboxProp: function (ele, parentBbox) {
             var xPos = parseFloat(parentBbox.x);
             var yPos = parseFloat(parentBbox.y);
 
-            var sbgnbbox = new Object();
+            var bbox = new Object();
 
-            sbgnbbox.x = $(ele).find('bbox').attr('x');
-            sbgnbbox.y = $(ele).find('bbox').attr('y');236
-            sbgnbbox.w = $(ele).find('bbox').attr('w');
-            sbgnbbox.h = $(ele).find('bbox').attr('h');
+            bbox.x = $(ele).find('bbox').attr('x');
+            bbox.y = $(ele).find('bbox').attr('y');236
+            bbox.w = $(ele).find('bbox').attr('w');
+            bbox.h = $(ele).find('bbox').attr('h');
 
             //set positions as center
-            sbgnbbox.x = parseFloat(sbgnbbox.x) + parseFloat(sbgnbbox.w) / 2 - xPos;
-            sbgnbbox.y = parseFloat(sbgnbbox.y) + parseFloat(sbgnbbox.h) / 2 - yPos;
+            bbox.x = parseFloat(bbox.x) + parseFloat(bbox.w) / 2 - xPos;
+            bbox.y = parseFloat(bbox.y) + parseFloat(bbox.h) / 2 - yPos;
 
-            sbgnbbox.x = sbgnbbox.x / parseFloat(parentBbox.w) * 100;
-            sbgnbbox.y = sbgnbbox.y / parseFloat(parentBbox.h) * 100;
+            bbox.x = bbox.x / parseFloat(parentBbox.w) * 100;
+            bbox.y = bbox.y / parseFloat(parentBbox.h) * 100;
 
-            return sbgnbbox;
+            return bbox;
         },
         stateAndInfoProp: function (ele, parentBbox) {
             var self = this;
@@ -203,13 +203,13 @@ module.exports = function () {
                 nodeObj.id = null;
 
             //add node bounding box information
-            nodeObj.sbgnbbox = self.bboxProp(ele);
+            nodeObj.bbox = self.bboxProp(ele);
             //add class information
             nodeObj.sbgnclass = $(ele).attr('class');
             //add label information
             nodeObj.sbgnlabel = $(ele).children('label').attr('text');
             //add state and info box information
-            nodeObj.sbgnstatesandinfos = self.stateAndInfoProp(ele, nodeObj.sbgnbbox);
+            nodeObj.sbgnstatesandinfos = self.stateAndInfoProp(ele, nodeObj.bbox);
             // add default label size information
             nodeObj.labelsize = sbgnElementUtilities.canHaveSBGNLabel(sbgnclass) ? sbgnElementUtilities.getDefaultLabelSize(sbgnclass) : undefined;
             // add default font family
@@ -231,11 +231,11 @@ module.exports = function () {
             var ports = [];
             $(ele).find('port').each(function () {
                 var id = $(this).attr('id');
-                var relativeXPos = parseFloat($(this).attr('x')) - nodeObj.sbgnbbox.x;
-                var relativeYPos = parseFloat($(this).attr('y')) - nodeObj.sbgnbbox.y;
+                var relativeXPos = parseFloat($(this).attr('x')) - nodeObj.bbox.x;
+                var relativeYPos = parseFloat($(this).attr('y')) - nodeObj.bbox.y;
 
-                relativeXPos = relativeXPos / parseFloat(nodeObj.sbgnbbox.w) * 100;
-                relativeYPos = relativeYPos / parseFloat(nodeObj.sbgnbbox.h) * 100;
+                relativeXPos = relativeXPos / parseFloat(nodeObj.bbox.w) * 100;
+                relativeYPos = relativeYPos / parseFloat(nodeObj.bbox.h) * 100;
 
                 ports.push({
                     id: $(this).attr('id'),
