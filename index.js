@@ -26,11 +26,9 @@ var menu;
 var userCount;
 var socket;
 
-
-
+var room;
 var modelManager;
 var oneColor = require('onecolor');
-var CircularJSON = require('circular-json');
 app.on('model', function (model) {
 
 
@@ -78,6 +76,9 @@ app.get('/', function (page, model, params) {
         return model.id();
     }
 
+
+
+
     function idIsReserved() {
         var ret = model.get('documents.' + docId) != undefined;
         return ret;
@@ -101,127 +102,239 @@ app.get('/:docId', function (page, model, arg, next) {
     var messagesQuery, room;
     room = arg.docId;
 
+    //   var docPath = model.at('documents.' + arg.docId);
 
-
-
-
+    //model.subscribe('documents', function(err){
     var docPath = 'documents.' + arg.docId;
+    model.ref('_page.doc', ('documents.' + arg.docId));
+
+    model.subscribe(docPath, function (err) {
+        if (err) return next(err);
+
+        model.createNull(docPath, { // create the empty new doc if it doesn't already exist
+            id: arg.docId
+        });
+
+
+        // create a reference to the document
+        var cy = model.at((docPath + '.cy'));
+        var history = model.at((docPath + '.history'));
+        var undoIndex = model.at((docPath + '.undoIndex'));
+        var context = model.at((docPath + '.context'));
+        var images = model.at((docPath + '.images'));
+        cy.subscribe(function () {
+
+            history.subscribe(function () {
+
+                undoIndex.subscribe(function () {
+                    context.subscribe(function () {
+
+                        images.subscribe(function () {
+                            // //chat related
+                            model.set('_page.room', room);
+                            //
+                            model.set('_page.durations', [{name: 'All', id: -1}, {name: 'One day', id: ONE_DAY}, {
+                                name: 'One hour',
+                                id: ONE_HOUR
+                            }, {name: 'One minute', id: ONE_MINUTE}]);
+                            var userId = model.get('_session.userId');
+                            // page.render();
+
+                            messagesQuery = model.query('messages', {
+                                room: room,
+                                date: {
+                                    $gt: 0
+                                },
+                                targets: {
+                                    $elemMatch: {id: userId}
+                                }
+                            });
+
+                            messagesQuery.subscribe(function (err) {
+
+                                if (err) {
+                                    return next(err);
+                                }
+
+                                //just to initialize
+                                 model.set('_page.doc.userIds',[model.get('_session.userId')]);
+
+                                    var usersQuery = model.query('users', '_page.doc.userIds');
+                                    usersQuery.subscribe(function (err) {
+                                        if (err) {
+                                            return next(err);
+                                        }
+                                        var user = model.at('users.' + model.get('_session.userId'));
 
 
 
-    model.subscribe(docPath, 'cy', function(err) {
-            if (err) {
-                return next(err);
-            }
-            model.setNull(docPath, { // create the empty new doc if it doesn't already exist
-                id: arg.docId
-            });
+                                        userCount = model.at('chat.userCount');
+                                       // return page.render();
+
+                                        return userCount.fetch(function (err) {
+                                            if (user.get()) {
+
+                                                if (user.get('colorCode') == null) {
+                                                    user.set('colorCode', getNewColor());
+                                                }
+                                                if (user.get('name') != null)
+                                                    return page.render();
+
+                                            }
+                                            if (err) {
+                                                return next(err);
+                                            }
 
 
-            // create a reference to the document
-            model.ref('_page.doc', 'documents.' + arg.docId);
-            model.subscribe(docPath, 'history');
-            model.subscribe(docPath, 'undoIndex');
-            model.subscribe(docPath, 'context');
+                                            return userCount.increment(function (err) {
+                                                if (err) {
+                                                    return next(err);
+                                                }
+
+                                                //TODO: Users
+                                                // model.createNull(user, { // create the empty new doc if it doesn't already exist
+                                                //         name: 'User ' + userCount.get(),
+                                                //         colorCode: getNewColor()
+                                                // });
+                                                //
 
 
-        }
+                                               // console.log(user.set('name', "hello"));
 
-    );
-    model.subscribe(docPath, 'images');
+                                             //   user.set('name','User ' + userCount.get() );
+                                                // user.set({
+                                                //     name: 'User ' + userCount.get(),
+                                                //     colorCode: getNewColor()
+                                                // });
 
+                                                return page.render();
+                                            });
+                                        });
+                                    });
 
+                            });
+                        });
 
-    //chat related
-    model.set('_page.room', room);
-
-    model.set('_page.durations', [{name: 'All', id: -1}, {name: 'One day', id: ONE_DAY}, {
-        name: 'One hour',
-        id: ONE_HOUR
-    }, {name: 'One minute', id: ONE_MINUTE}]);
-
-
-    model.set('_sbgnviz.samples',
-        [{name: 'Activated STAT1alpha induction of the IRF1 gene', id: 0},
-            {name: 'Glycolysis', id: 1},
-            {name: 'MAPK cascade', id: 2},
-            {name: 'PolyQ proteins interference', id: 3},
-            {name: 'Insulin-like Growth Factor (IGF) signalling', id: 4},
-            {name: 'ATM mediated phosphorylation of repair proteins', id: 5},
-            {name: 'Vitamins B6 activation to pyridoxal phosphate', id: 6},
-            {name: 'MTOR', id: 7}
-
-        ]);
-
-
-
-
-    //model.subscribe('messages');
-    var userId = model.get('_session.userId');
-
-    messagesQuery = model.query('messages', {
-        room: room,
-        date: {
-            $gt: 0
-        },
-        targets: {
-                $elemMatch:{id: userId}
-            }
-    });
-
-    messagesQuery.subscribe(function (err) {
-
-        if (err) {
-            return next(err);
-        }
-
-
-        //just to initialize
-        model.set('_page.doc.userIds',[model.get('_session.userId')]);
-
-        model.subscribe('users');
-        var  usersQuery = model.query('users', '_page.doc.userIds');
-        usersQuery.subscribe(function (err) {
-            if (err) {
-                return next(err);
-            }
-            var  user = model.at('users.' + model.get('_session.userId'));
-
-
-
-            userCount = model.at('chat.userCount');
-
-
-
-            return userCount.fetch(function (err) {
-                if(user.get()) {
-                    if(user.get('colorCode') == null ){
-                        user.set('colorCode', getNewColor());
-                    }
-                    if(user.get('name') != null)
-                        return page.render();
-
-                }
-                if (err) {
-                    return next(err);
-                }
-
-                return userCount.increment(function (err) {
-                    if (err) {
-                        return next(err);
-                    }
-                    user.set({
-                        name: 'User ' + userCount.get(),
-                        colorCode: getNewColor()
                     });
-
-                    return page.render();
-
                 });
+
+
             });
         });
+
     });
 });
+
+
+
+    // model.subscribe(docPath, 'cy', function(err) {
+    //     if (err) {
+    //         return next(err);
+    //     }
+    //     model.setNull(docPath, { // create the empty new doc if it doesn't already exist
+    //         id: arg.docId
+    //     });
+    //
+    //
+    //     // create a reference to the document
+    //     model.ref('_page.doc', 'documents.' + arg.docId);
+    //     model.subscribe(docPath, 'history');
+    //     model.subscribe(docPath, 'undoIndex');
+    //     model.subscribe(docPath, 'context');
+    //
+
+    //    page.render();
+    //
+    // });
+    // model.subscribe(docPath, 'images');
+    //
+    //
+    //
+
+    //
+    // model.set('_sbgnviz.samples',
+    //     [{name: 'Activated STAT1alpha induction of the IRF1 gene', id: 0},
+    //         {name: 'Glycolysis', id: 1},
+    //         {name: 'MAPK cascade', id: 2},
+    //         {name: 'PolyQ proteins interference', id: 3},
+    //         {name: 'Insulin-like Growth Factor (IGF) signalling', id: 4},
+    //         {name: 'ATM mediated phosphorylation of repair proteins', id: 5},
+    //         {name: 'Vitamins B6 activation to pyridoxal phosphate', id: 6},
+    //         {name: 'MTOR', id: 7}
+    //
+    //     ]);
+
+
+
+
+
+
+    //
+    // messagesQuery = model.query('messages', {
+    //     room: room,
+    //     date: {
+    //         $gt: 0
+    //     },
+    //     targets: {
+    //             $elemMatch:{id: userId}
+    //         }
+    // });
+    //
+    // messagesQuery.subscribe(function (err) {
+    //
+    //     if (err) {
+    //         return next(err);
+    //     }
+    //
+    //
+    //     //just to initialize
+    //     model.set('_page.doc.userIds',[model.get('_session.userId')]);
+    //
+    //     // model.subscribe('users');
+    //     // model.subscribe('chat');
+    //     var  usersQuery = model.query('users', '_page.doc.userIds');
+    //     usersQuery.subscribe(function (err) {
+    //         if (err) {
+    //             return next(err);
+    //         }
+    //         var  user = model.at('users.' + model.get('_session.userId'));
+    //
+    //
+    //
+    //
+    //         userCount = model.at('chat.userCount');
+    //
+    //
+    //
+    //         return userCount.fetch(function (err) {
+    //             if(user.get()) {
+    //                 if(user.get('colorCode') == null ){
+    //                     user.set('colorCode', getNewColor());
+    //                 }
+    //                 if(user.get('name') != null)
+    //                     return page.render();
+    //
+    //             }
+    //             if (err) {
+    //                 return next(err);
+    //             }
+    //
+    //             return userCount.increment(function (err) {
+    //                 if (err) {
+    //                     return next(err);
+    //                 }
+    //                 user.set({
+    //                     name: 'User ' + userCount.get(),
+    //                     colorCode: getNewColor()
+    //                 });
+    //
+    //                 return page.render();
+    //
+    //             });
+    //         });
+    //     });
+    // });
+
 
 
 
@@ -301,13 +414,7 @@ app.proto.init = function (model) {
     //
     // });
 
-    // model.on('all', '_page.doc.cy.nodes.*.borderColor', function(id, op, borderColor,prev, passed){
-    //
-    //     if(docReady && passed.user == null) {
-    //         cy.getElementById(id).data("borderColor", borderColor);
-    //
-    //     }
-    // });
+
     model.on('all', '_page.doc.cy.nodes.*.data', function(id, op, data,prev, passed){
 
         if(docReady && passed.user == null) {
@@ -315,6 +422,7 @@ app.proto.init = function (model) {
 
         }
     });
+
 
     //should handle all css attributes separately as they are so many and cyclic
     model.on('all', '_page.doc.cy.nodes.*.backgroundColor', function(id, op, val,prev, passed){
@@ -334,12 +442,142 @@ app.proto.init = function (model) {
 
         }
     });
+    //should handle all css attributes separately as they are so many and cyclic
+    model.on('all', '_page.doc.cy.nodes.*.opacity', function(id, op, val,prev, passed){
+
+
+        if(docReady && passed.user == null) {
+            cy.getElementById(id).css("opacity", val);
+
+        }
+    });
+
+    //should handle all css attributes separately as they are so many and cyclic
+    model.on('all', '_page.doc.cy.edges.*.width', function(id, op, val,prev, passed){
+
+
+        if(docReady && passed.user == null) {
+            cy.getElementById(id).css("width", val);
+
+        }
+    });
+
+    //should handle all css attributes separately as they are so many and cyclic
+    model.on('all', '_page.doc.cy.edges.*.opacity', function(id, op, val,prev, passed){
+
+
+        if(docReady && passed.user == null) {
+            cy.getElementById(id).css("opacity", val);
+
+        }
+    });
+    //should handle all css attributes separately as they are so many and cyclic
+    model.on('all', '_page.doc.cy.nodes.*.visibility', function(id, op, val,prev, passed){
+
+
+        if(docReady && passed.user == null) {
+            cy.getElementById(id).css("visibility", val);
+
+        }
+    });
+
+
+    //should handle all css attributes separately as they are so many and cyclic
+    model.on('all', '_page.doc.cy.nodes.*.display', function(id, op, val,prev, passed){
+
+
+        if(docReady && passed.user == null) {
+            cy.getElementById(id).css("display", val);
+
+        }
+    });
+
+    model.on('all', '_page.doc.cy.nodes.*.expandCollapseStatus', function(id, op, val,prev, passed){
+
+
+
+        if(docReady && passed.user == null) {
+            console.log(val);
+            if(val === "expand")
+                chise.expandNodes(cy.getElementById(id));
+            else
+                chise.collapseNodes(cy.getElementById(id));
+        }
+
+    });
 
     model.on('all', '_page.doc.cy.nodes.*.position', function(id, op, pos,prev, passed){
 
         if(docReady && passed.user == null) {
 
             cy.getElementById(id).position(pos);
+
+        }
+    });
+
+    model.on('all', '_page.doc.cy.nodes.*.highlightStatus', function(id, op, highlightStatus, prev, passed){ //this property must be something that is only changed during insertion
+        if(docReady && passed.user == null) {
+            try{
+                var viewUtilities = cy.viewUtilities('get');
+
+                 if(highlightStatus === "highlighted")
+                     viewUtilities.highlight(cy.getElementById(id));
+                 else
+                     viewUtilities.unhighlight(cy.getElementById(id));
+
+            }
+            catch(e){
+                console.log(e);
+            }
+
+        }
+    });
+    model.on('all', '_page.doc.cy.edges.*.highlightStatus', function(id, op, highlightStatus, prev, passed){ //this property must be something that is only changed during insertion
+        if(docReady && passed.user == null) {
+            var viewUtilities = cy.viewUtilities('get');
+            try{
+                if(highlightStatus === "highlighted")
+                    viewUtilities.highlight(cy.getElementById(id));
+                else
+                    viewUtilities.unhighlight(cy.getElementById(id));
+
+            }
+            catch(e){
+                console.log(e);
+            }
+
+        }
+    });
+    model.on('all', '_page.doc.cy.nodes.*.visibilityStatus', function(id, op, visibilityStatus, prev, passed){ //this property must be something that is only changed during insertion
+        if(docReady && passed.user == null) {
+            try{
+                var viewUtilities = cy.viewUtilities('get');
+
+                if(visibilityStatus === "hide")
+                    viewUtilities.hide(cy.getElementById(id));
+                else
+                    viewUtilities.show(cy.getElementById(id));
+
+            }
+            catch(e){
+                console.log(e);
+            }
+
+        }
+    });
+    model.on('all', '_page.doc.cy.edges.*.visibilityStatus', function(id, op, visibilityStatus, prev, passed){ //this property must be something that is only changed during insertion
+        if(docReady && passed.user == null) {
+            var viewUtilities = cy.viewUtilities('get');
+            try{
+                if(visibilityStatus === "hide")
+                    viewUtilities.hide(cy.getElementById(id));
+                else
+                    viewUtilities.show(cy.getElementById(id));
+
+            }
+            catch(e){
+                console.log(e);
+            }
 
         }
     });
@@ -713,21 +951,6 @@ app.proto.init = function (model) {
 //     });
 //
 //
-//     model.on('all', '_page.doc.cy.nodes.*.highlightStatus', function(id, op, highlightStatus, prev, passed){ //this property must be something that is only changed during insertion
-//         if(docReady && passed.user == null) {
-//             if(highlightStatus == "highlighted")
-//                 cy.getElementById(id).highlight();
-//             else if(highlightStatus == "unhighlighted")
-//                 cy.getElementById(id).unhighlight();
-//             else{
-//                 cy.getElementById(id).removeHighlights();
-//                 //In case border-width was different from default, set it back to its value in the model
-//                 var bw = model.get('_page.doc.cy.nodes.' + id + '.borderWidth');
-//                 cy.getElementById(id).css('border-width', bw);
-//                 cy.getElementById(id)._private.style['border-width'].bypass = null;
-//             }
-//         }
-//     });
 //
 //     model.on('all', '_page.doc.cy.edges.*.highlightStatus', function(id, op, highlightStatus, prev, passed){ //this property must be something that is only changed during insertion
 //         if(docReady && passed.user == null) {
@@ -955,10 +1178,13 @@ app.proto.create = function (model) {
     });
 
 
+
+
     modelManager = require('./public/cwc/modelManager.js')(model, model.get('_page.room'), model.get('_session.userId'),name );
 
 
     var main = require('./public/main.js'); //to initialize appCy, appMenu and relevant modules
+
 
     setTimeout(function(){
 

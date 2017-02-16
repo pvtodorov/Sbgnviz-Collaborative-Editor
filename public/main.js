@@ -49,6 +49,7 @@ libs.jQuery = jQuery;
 libs.cytoscape = cytoscape;
 libs.sbgnviz = sbgnviz;
 
+
 chise({
   networkContainerSelector: '#sbgn-network-container',
   imgPath: 'node_modules/sbgnviz/src/img',

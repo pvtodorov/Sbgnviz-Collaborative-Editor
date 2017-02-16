@@ -131,7 +131,7 @@ module.exports = function () {
       }
     });
 
-    cy.viewUtilities({
+     cy.viewUtilities({
       node: {
         highlighted: {
           'border-width': '10px'

@@ -7,7 +7,7 @@
 
 module.exports = function (model, docId, userId, userName) {
 
-    var user = model.at('users.' + userId);
+    var userPath = model.at('users.' + userId);
 
 
     model.ref('_page.doc', 'documents.' + docId);
@@ -28,7 +28,7 @@ module.exports = function (model, docId, userId, userName) {
         setName: function (userName) {
 
             model.fetch('users', userId, function (err) {
-                user.set('name', userName);
+                userPath.set('name', userName);
             });
         },
 
@@ -280,13 +280,14 @@ module.exports = function (model, docId, userId, userName) {
             return edgePath.get();
         },
 
-        selectModelNode: function (node, noHistUpdate) {
+        selectModelNode: function (node, user, noHistUpdate) {
 
             var nodePath = model.at('_page.doc.cy.nodes.' + node.id());
             if (nodePath.get() == null)
                 return "Node id not found";
-            if (user)
-                nodePath.set('highlightColor', user.get('colorCode'));
+
+            if(userPath)
+                model.pass({user: user}).set('_page.doc.cy.nodes.' + node.id()+ '.highlightColor', userPath.get('colorCode'));
 
 
             return "success";
@@ -294,13 +295,13 @@ module.exports = function (model, docId, userId, userName) {
         },
 
 
-        selectModelEdge: function (edge, noHistUpdate) {
-            var user = model.at('users.' + userId);
+        selectModelEdge: function (edge, user,  noHistUpdate) {
+            var userPath = model.at('users.' + userId);
             var edgePath = model.at('_page.doc.cy.edges.' + edge.id());
             if (edgePath.get() == null)
                 return "Edge id not found";
-            if (user) {
-                edgePath.set('highlightColor', user.get('colorCode'));
+            if (userPath) {
+                model.pass({user: user}).set('_page.doc.cy.edges.' + edge.id()+ 'highlightColor', userPath.get('colorCode'));
 
 
             }
@@ -308,27 +309,27 @@ module.exports = function (model, docId, userId, userName) {
             return "success";
 
         },
-        unselectModelNode: function (node, noHistUpdate) {
+        unselectModelNode: function (node,  user, noHistUpdate) {
 
             var nodePath = model.at('_page.doc.cy.nodes.' + node.id());
 
             if (nodePath.get() == null)
                 return "Node id not found";
 
-            nodePath.set('highlightColor', null);
+            model.pass({user: user}).set('_page.doc.cy.nodes.' + node.id() + '.highlightColor', null);
 
             return "success";
 
         },
 
 
-        unselectModelEdge: function (edge, noHistUpdate) {
+        unselectModelEdge: function (edge,  user, noHistUpdate) {
 
             var edgePath = model.at('_page.doc.cy.edges.' + edge.id());
             if (edgePath.get() == null)
                 return "Edge id not found";
 
-            edgePath.set('highlightColor', null);
+            model.pass({user: user}).set('_page.doc.cy.edges.' + edge.id() + '.highlightColor', null);
 
             return "success";
 
@@ -527,7 +528,9 @@ module.exports = function (model, docId, userId, userName) {
             var prevAttVal = nodePath.get(attStr);
 
 
-            console.log(attStr);
+            if(attStr === "width")
+                attStr = "borderWidth";
+
             nodePath.pass({user: user}).set(attStr, attVal);
 
 
@@ -1084,6 +1087,14 @@ module.exports = function (model, docId, userId, userName) {
                 this.changeModelNodeAttribute('data', node.id(), node.data(), user, noHistUpdate);
 
 
+            var css = nodePath.get('css');
+            if (css != null)
+                node.css(css);
+
+            else
+                this.changeModelNodeAttribute('data', node.id(), node.data(), user, noHistUpdate);
+
+
             var pos = nodePath.get('position');
             if (pos != null)
                 node.position(pos);
@@ -1092,175 +1103,28 @@ module.exports = function (model, docId, userId, userName) {
                 this.changeModelNodeAttribute('position', node.id(), node.position(), user, noHistUpdate);
 
 
-            // var backgroundOpacity = nodePath.get('backgroundOpacity');
-            //
-            // if (backgroundOpacity != null)
-            //     node.data('backgroundOpacity', backgroundOpacity);
-            //
-            // else
-            //     this.changeModelNodeAttribute('backgroundOpacity', node.id(), node.data('backgroundOpacity'), user, noHistUpdate);
 
-
-            //var opacity = nodePath.get('opacity');
-
-            // if (opacity != null)
-            //     //node.css('opacity', opacity );
-            //     node._private.style["opacity"].value = opacity;
             //
-            // else
-            //     this.changeModelNodeAttribute('opacity', node.id(),node.css('opacity'), user, noHistUpdate);
+            // var borderWidth = nodePath.get('borderWidth');
+            // if (borderWidth != null) {
             //
-
-
-            // var ports = nodePath.get('ports');
-            //
-            // if (ports != null)
-            //     node.data('ports', ports);
-            //
-            // else
-            //     this.changeModelNodeAttribute('ports', node.id(), node.data('ports'), user, noHistUpdate);
-            //
-            //
-            // var sbgnclass = nodePath.get('class');
-            //
-            // if (sbgnclass != null)
-            //     node.data('class', sbgnclass);
-            //
-            // else
-            //     this.changeModelNodeAttribute('class', node.id(), node.data('class'), user, noHistUpdate);
-            //
-            // var borderColor = nodePath.get('borderColor');
-            //
-            // if (borderColor != null)
-            //     node.data('borderColor', borderColor);
-            // else
-            //     this.changeModelNodeAttribute('borderColor', node.id(), node.css('border-color'), user, noHistUpdate); //initially css is active, it is then loaded to data('borderColor')
-
-            var borderWidth = nodePath.get('borderWidth');
-            if (borderWidth != null) {
-
-                node.css('border-width', borderWidth); //causes bypass
-                // node._private.style["border-width"].bypass = null;
-                // node._private.style["border-width"].value = borderWidth;
-            }
-            else
-                this.changeModelNodeAttribute('borderWidth', node.id(), node.css('border-width'), user, noHistUpdate);
-
-
-            var backgroundColor = nodePath.get('css.backgroundColor');
-
-            if (backgroundColor != null)
-                node.css('background-color', backgroundColor);
-            //  node._private.style["background-color"].strValue = backgroundColor;
-            else
-                this.changeModelNodeAttribute('backgroundColor', node.id(), node.css('background-color'), user, noHistUpdate);
-
-
-            //SBGN properties are stored in the data component
-
-
-            // var sbgnlabel = nodePath.get('sbgnlabel');
-            //
-            // if (sbgnlabel != null)
-            //     node.data('sbgnlabel', sbgnlabel);
-            //
-            // else
-            //     this.changeModelNodeAttribute('sbgnlabel', node.id(), node.data('sbgnlabel'), user, noHistUpdate);
-
-
-            // var isCloneMarker = nodePath.get('isCloneMarker');
-            //
-            //
-            // if (isCloneMarker != null) {
-            //     node._private.data.sbgnclonemarker = isCloneMarker ? true : undefined;
-            //     node.data('sbgnclonemarker', isCloneMarker ? true : undefined);
-            // }
-            //
-            // else
-            //     this.changeModelNodeAttribute('isCloneMarker', node.id(), node._private.data.sbgnclonemarker, user, noHistUpdate);
-            //this.changeModelNodeAttribute('isCloneMarker', node.id(),node.data('sbgnclonemarker'), user, noHistUpdate);
-
-
-            // var sbgnStatesAndInfos = nodePath.get('sbgnStatesAndInfos');
-            //
-            //
-            // if (sbgnStatesAndInfos != null)
-            //     node.data('sbgnstatesandinfos', sbgnStatesAndInfos);
-            //
-            // else {
-            //
-            //     var si = node.data('sbgnstatesandinfos');
-            //     if (!si) si = [];
-            //     this.changeModelNodeAttribute('sbgnStatesAndInfos', node.id(), si, user, noHistUpdate);
-            // }
-            //
-            // var parent = nodePath.get('parent');
-            //
-            // if (parent != null)
-            //     node.data('parent', parent);
-            // else
-            //     this.changeModelNodeAttribute('parent', node.id(), node.data('parent'), user, noHistUpdate);
-
-
-            // var height = nodePath.get('height');
-            //
-            // if (height != null) {
-            //     node.data('height', height);
-            //     node._private.data.bbox.h = height;
-            // }
-            // else {
-            //     this.changeModelNodeAttribute('height', node.id(), node._private.data.bbox.h, user, noHistUpdate);
-            // }
-            //
-            //
-            // var width = nodePath.get('width');
-            //
-            // if (width != null) {
-            //     node.data('width', width);
-            //     node._private.data.bbox.w = width;
+            //     node.css('border-width', borderWidth); //causes bypass
+            //     // node._private.style["border-width"].bypass = null;
+            //     // node._private.style["border-width"].value = borderWidth;
             // }
             // else
-            //     this.changeModelNodeAttribute('width', node.id(), node._private.data.bbox.w, user, noHistUpdate);
+            //     this.changeModelNodeAttribute('borderWidth', node.id(), node.css('border-width'), user, noHistUpdate);
+            //
+            //
+            // var backgroundColor = nodePath.get('css.backgroundColor');
+            //
+            // if (backgroundColor != null)
+            //     node.css('background-color', backgroundColor);
+            // //  node._private.style["background-color"].strValue = backgroundColor;
+            // else
+            //     this.changeModelNodeAttribute('backgroundColor', node.id(), node.css('background-color'), user, noHistUpdate);
 
 
-            // var labelsize = nodePath.get('labelsize');
-            //
-            // if (labelsize != null) {
-            //     node.data('labelsize', labelsize);
-            //     node._private.data.labelsize = labelsize;
-            // }
-            // else
-            //     this.changeModelNodeAttribute('labelsize', node.id(), node._private.data.labelsize, user, noHistUpdate);
-
-
-            // var fontfamily = nodePath.get('fontfamily');
-            //
-            // if (fontfamily != null) {
-            //     node.data('fontfamily', fontfamily);
-            //     node._private.data.fontfamily = fontfamily;
-            // }
-            // else
-            //     this.changeModelNodeAttribute('fontfamily', node.id(), node._private.data.fontfamily, user, noHistUpdate);
-            //
-            //
-            // var fontweight = nodePath.get('fontweight');
-            //
-            // if (fontweight != null) {
-            //     node.data('fontweight', fontweight);
-            //     node._private.data.fontweight = fontweight;
-            // }
-            // else
-            //     this.changeModelNodeAttribute('fontweight', node.id(), node._private.data.fontweight, user, noHistUpdate);
-            //
-            //
-            // var fontstyle = nodePath.get('fontstyle');
-            //
-            // if (fontstyle != null) {
-            //     node.data('fontstyle', fontstyle);
-            //     node._private.data.fontstyle = fontstyle;
-            // }
-            // else
-            //     this.changeModelNodeAttribute('fontstyle', node.id(), node._private.data.fontstyle, user, noHistUpdate);
 
         },
         initModelEdge: function (edge, user, noHistUpdate) {
@@ -1388,7 +1252,7 @@ module.exports = function (model, docId, userId, userName) {
 
 
         //nodes and edges are cytoscape objects. they have css and data properties
-        initModel: function (/*jsonObj,*/ nodes, edges, user, noHistUpdate) {
+        initModel: function ( nodes, edges, user, noHistUpdate) {
 
             var self = this;
 
