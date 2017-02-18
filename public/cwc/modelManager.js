@@ -734,91 +734,95 @@ module.exports = function (model, docId, userId, userName) {
             var prevParamsEdges = [];
             var self = this;
 
-            selectedEles.edges.forEach(function (edge) {
-                var edgePath = model.at('_page.doc.cy.edges.' + edge.id);
+            if(selectedEles.edges!= null){
+                selectedEles.edges.forEach(function (edge) {
+                    var edgePath = model.at('_page.doc.cy.edges.' + edge.id);
 
-                var source = edgePath.get('source');
-                var target = edgePath.get('target');
-                var sbgnclass = edgePath.get('class');
-                var lineColor = edgePath.get('lineColor');
-                var width = edgePath.get('width');
-                var sbgncardinality = edgePath.get('sbgncardinality');
-                var portsource = edgePath.get('portsource');
-                var porttarget = edgePath.get('porttarget');
-                var bendPointPositions = edgePath.get('bendPointPositions');
-                var opacity = edgePath.get('opacity');
+                    var source = edgePath.get('source');
+                    var target = edgePath.get('target');
+                    var sbgnclass = edgePath.get('class');
+                    var lineColor = edgePath.get('lineColor');
+                    var width = edgePath.get('width');
+                    var sbgncardinality = edgePath.get('sbgncardinality');
+                    var portsource = edgePath.get('portsource');
+                    var porttarget = edgePath.get('porttarget');
+                    var bendPointPositions = edgePath.get('bendPointPositions');
+                    var opacity = edgePath.get('opacity');
 
 
-                prevParamsEdges.push({
-                    source: source,
-                    target: target,
-                    class: sbgnclass,
-                    lineColor: lineColor,
-                    width: width,
-                    sbgncardinality: sbgncardinality,
-                    portsource: portsource,
-                    porttarget: porttarget,
-                    bendPointPositions: bendPointPositions,
-                    opacity: opacity
+                    prevParamsEdges.push({
+                        source: source,
+                        target: target,
+                        class: sbgnclass,
+                        lineColor: lineColor,
+                        width: width,
+                        sbgncardinality: sbgncardinality,
+                        portsource: portsource,
+                        porttarget: porttarget,
+                        bendPointPositions: bendPointPositions,
+                        opacity: opacity
+                    });
                 });
-            });
 
 
-            selectedEles.edges.forEach(function (edge) {
-                self.deleteModelEdge(edge.id, user, true); //will not update children history
-            });
-
-            selectedEles.nodes.forEach(function (node) {
-                var nodePath = model.at('_page.doc.cy.nodes.' + node.id);
-
-                var pos = nodePath.get('position');
-                var sbgnclass = nodePath.get('class');
-
-
-                var borderColor = nodePath.get('borderColor');
-                var borderWidth = nodePath.get('borderWidth');
-                var backgroundColor = nodePath.get('backgroundColor');
-                var width = nodePath.get('width');
-                var height = nodePath.get('height');
-                var parent = nodePath.get('parent');
-                var sbgnlabel = nodePath.get('sbgnlabel');
-                var isCloneMarker = nodePath.get('isCloneMarker');
-                var sbgnStatesAndInfos = nodePath.get('sbgnStatesAndInfos');
-                var highlightColor = nodePath.get('highlightColor');
-                var ports = nodePath.get('ports');
-                var labelsize = nodePath.get('labelsize');
-                var fontfamily = nodePath.get('fontfamily');
-                var fontweight = nodePath.get('fontweight');
-                var fontstyle = nodePath.get('fontstyle');
-                var opacity = nodePath.get('opacity');
-
-                prevParamsNodes.push({
-                    x: pos.x,
-                    y: pos.y,
-                    class: sbgnclass,
-                    width: width,
-                    height: height,
-                    borderColor: borderColor,
-                    borderWidth: borderWidth,
-                    sbgnlabel: sbgnlabel,
-                    sbgnStatesAndInfos: sbgnStatesAndInfos,
-                    parent: parent,
-                    isCloneMarker: isCloneMarker,
-                    highlightColor: highlightColor,
-                    backgroundColor: backgroundColor,
-                    ports: ports,
-                    labelsize: labelsize,
-                    fontweight: fontweight,
-                    fontfamily: fontfamily,
-                    fontstyle: fontstyle,
-                    opacity: opacity
+                selectedEles.edges.forEach(function (edge) {
+                    self.deleteModelEdge(edge.id, user, true); //will not update children history
                 });
-            });
+            }
+
+            if(selectedEles.nodes!= null) {
+                selectedEles.nodes.forEach(function (node) {
+                    var nodePath = model.at('_page.doc.cy.nodes.' + node.id);
+
+                    var pos = nodePath.get('position');
+                    var sbgnclass = nodePath.get('class');
 
 
-            selectedEles.nodes.forEach(function (node) {
-                self.deleteModelNode(node.id, user, true); //will not update children history
-            });
+                    var borderColor = nodePath.get('borderColor');
+                    var borderWidth = nodePath.get('borderWidth');
+                    var backgroundColor = nodePath.get('backgroundColor');
+                    var width = nodePath.get('width');
+                    var height = nodePath.get('height');
+                    var parent = nodePath.get('parent');
+                    var sbgnlabel = nodePath.get('sbgnlabel');
+                    var isCloneMarker = nodePath.get('isCloneMarker');
+                    var sbgnStatesAndInfos = nodePath.get('sbgnStatesAndInfos');
+                    var highlightColor = nodePath.get('highlightColor');
+                    var ports = nodePath.get('ports');
+                    var labelsize = nodePath.get('labelsize');
+                    var fontfamily = nodePath.get('fontfamily');
+                    var fontweight = nodePath.get('fontweight');
+                    var fontstyle = nodePath.get('fontstyle');
+                    var opacity = nodePath.get('opacity');
+
+                    prevParamsNodes.push({
+                        x: pos.x,
+                        y: pos.y,
+                        class: sbgnclass,
+                        width: width,
+                        height: height,
+                        borderColor: borderColor,
+                        borderWidth: borderWidth,
+                        sbgnlabel: sbgnlabel,
+                        sbgnStatesAndInfos: sbgnStatesAndInfos,
+                        parent: parent,
+                        isCloneMarker: isCloneMarker,
+                        highlightColor: highlightColor,
+                        backgroundColor: backgroundColor,
+                        ports: ports,
+                        labelsize: labelsize,
+                        fontweight: fontweight,
+                        fontfamily: fontfamily,
+                        fontstyle: fontstyle,
+                        opacity: opacity
+                    });
+                });
+
+
+                selectedEles.nodes.forEach(function (node) {
+                    self.deleteModelNode(node.id, user, true); //will not update children history
+                });
+            }
             if (!noHistUpdate)
                 this.updateHistory({
                     opName: 'delete',
@@ -1001,25 +1005,7 @@ module.exports = function (model, docId, userId, userName) {
                 if (nodes.hasOwnProperty(att)) {
                     var node = nodes[att];
                     var jsonNode = {
-                        data: {
-                            backgroundOpacity: node.backgroundOpacity,
-                            borderColor: node.borderColor,
-                            id: node.id,
-                            parent: node.parent,
-                            ports: node.ports,
-                            bbox: {x: node.position.x, y: node.position.y, w: node.width, h: node.height},
-                            class: node.class,
-                            sbgnclonemarker: node.isCloneMarker,
-                            sbgnlabel: node.sbgnlabel,
-                            sbgnstatesandinfos: node.sbgnStatesAndInfos,
-                            height: node.height,
-                            width: node.width,
-                            labelsize: node.labelsize,
-                            fontfamily: node.fontfamily,
-                            fontweight: node.fontweight,
-                            fontstyle: node.fontstyle
-
-                        }
+                        data: node.data
                     };
 
                     jsonNodes.push(jsonNode);
@@ -1033,18 +1019,7 @@ module.exports = function (model, docId, userId, userName) {
                     var edge = edges[att];
 
                     var jsonEdge = {
-                        data: {
-                            bendPointPositions: edge.bendPointPositions,
-                            id: edge.id,
-                            lineColor: edge.lineColor,
-                            portsource: edge.portsource,
-                            porttarget: edge.porttarget,
-                            source: edge.source,
-                            target: edge.target,
-                            sbgncardinality: edge.sbgncardinality,
-                            class: edge.class,
-                            parent: edge.parent
-                        }
+                        data: edge.data
                     };
 
                     jsonEdges.push(jsonEdge);

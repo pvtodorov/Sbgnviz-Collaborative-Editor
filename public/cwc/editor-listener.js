@@ -34,14 +34,22 @@ module.exports = function(modelManager){
     //
 
 
+    //A new sample or file is loaded --inform others
+    $(document).on("sbgnvizLoadSample sbgnvizLoadFile",  function(event, file){
+        var sbgnmlText = jsonToSbgnml.createSbgnml();
+
+        console.log(sbgnmlText);
+//        modelManager.updateSbgnmlText(sbgnmlText);
+
+    });
 
 
 
-
-    cy.on("afterDo", function (event, actionName, args) {
+    cy.on("afterDo afterRedo", function (event, actionName, args, res) {
 
         console.log(actionName);
         console.log(args);
+        console.log(res);
 
 
         if (actionName === "changeData" || actionName === "changeFontProperties" ) {
@@ -174,7 +182,78 @@ module.exports = function(modelManager){
                 modelManager.changeModelElementGroupAttribute("position", modelElList, paramList, "me");
             });
         }
+        else if(actionName === "deleteElesSimple"){
 
+            var nodeList = [];
+            var edgeList = [];
+
+            args.eles.forEach(function (el) {
+                if(el.isNode())
+                    nodeList.push({id:el.id()});
+                else
+                    edgeList.push({id:el.id()});
+            });
+
+            modelManager.deleteModelElementGroup({nodes:nodeList,edges: edgeList}, "me"); //edges need to be deleted first
+        }
+
+        else if(actionName === "deleteNodesSmart"){
+
+            var nodeList = [];
+            var edgeList = [];
+
+            res.forEach(function (el) {
+                if(el.isNode())
+                    nodeList.push({id:el.id()});
+                else
+                    edgeList.push({id:el.id()});
+            });
+
+            modelManager.deleteModelElementGroup({nodes:nodeList,edges: edgeList}, "me");
+        }
+
+        else if (actionName === "addNode") {
+            var newNode = args.newNode;
+            var id = res.eles.id();
+            var param = {x: newNode.x, y: newNode.y, class: newNode.class};
+            //Add to the graph first
+            modelManager.addModelNode(id, param, "me");
+            //assign other node properties-- css and data
+            modelManager.initModelNode(res.eles[0], "me");
+
+        }
+
+         else if(actionName === "addEdge"){
+
+            var newEdge = args.newEdge;
+            var id = res.eles.id();
+             var param = { source: newEdge.source, target:newEdge.target, class: newEdge.class};
+             //Add to the graph first
+             modelManager.addModelEdge(id, param, "me");
+            //assign other edge properties-- css and data
+             modelManager.initModelEdge(res.eles[0], "me");
+
+         }
+
+         else if(actionName === "paste"){
+             res.forEach(function(el){ //first add nodes
+                 if(el.isNode()){
+                     var param = {x: el.position("x"), y: el.position("y"), class: el.data("class")};
+                     modelManager.addModelNode(el.id(), param, "me");
+
+                     modelManager.initModelNode(el, "me");
+                 }
+             });
+
+            res.forEach(function(el){ //first add nodes
+                if(el.isEdge()){
+                    var param = { source: el.data("source"), target:el.data("target"), class: el.data("class")};
+                    modelManager.addModelEdge(el.id(), param, "me");
+                    modelManager.initModelEdge(el, "me");
+                }
+            });
+
+        }
 
         // else if(actionName === "changeChildren"){
         //
@@ -201,20 +280,6 @@ module.exports = function(modelManager){
         // }
         //
         //
-        // else if(actionName === "changeVisibilityStatus"){
-        // // cy.on("changeVisibilityStatus", function (event,  visibilityStatus, collection) {
-        //     var modelElList = [];
-        //     var paramList =[]
-        //     collection.forEach(function(ele){
-        //
-        //         modelElList.push({id: ele.id(), isNode: ele.isNode()});
-        //         paramList.push(visibilityStatus);
-        //
-        //     });
-        //
-        //     modelManager.changeModelElementGroupAttribute("visibilityStatus", modelElList, paramList, "me");
-        // }
-        //
         // else if(actionName === "changeClasses"){
         //
         //     // cy.on("changeClasses",  function (event,  collection) {
@@ -239,41 +304,9 @@ module.exports = function(modelManager){
         //
         // }
 
-        // else if (actionName === "addNode") {
-        //     var newNode = args.newNode;
-        //     var param = {id: el.id(), x: newNode.x, y: newNode.y, class: newNode.data('class')};
-        //     modelManager.addModelNode(newNode.id(), param, "me");
-        //     modelManager.initModelNode(newNode, "me", true);
-        //
-        // }
+
     });
-        // cy.on("addEdge", function(event, collection, newEdge){
-        //  else if(actionName === "addEdge"){
-        //
-        //
-        //      collection.forEach(function (el) {
-        //          var param = {id: el.id(), source: newEdge.source, target:newEdge.target, sbgnclass: newEdge.sbgnclass};
-        //          modelManager.addModelEdge(el.id(), param, "me");
-        //          modelManager.initModelEdge(el, "me", true);
-        //      });
-        //
-        //  }
-        //
-        //  else if(actionName === "deleteEles"){
-        //
-        //      // cy.on("deleteEles", function(event, collection){
-        //
-        //      var nodeList = [];
-        //      var edgeList = [];
-        //      collection.forEach(function (el) {
-        //          if(el.isNode())
-        //              nodeList.push({id:el.id()});
-        //          else
-        //              edgeList.push({id:el.id()});
-        //      });
-        //
-        //      modelManager.deleteModelElementGroup({nodes:nodeList, edges:edgeList},"me");
-        //  }
+
 
         // });
         // cy.on("createCompoundForSelectedNodes", function(event, compoundType, compoundNode, collection){
@@ -294,19 +327,7 @@ module.exports = function(modelManager){
         //
         // });
         //
-        // cy.on('layoutstop', function() {
-        //     var modelElList = [];
-        //     var paramList = [];
-        //     cy.nodes().forEach(function(node){
-        //         modelElList.push({id: node.id(), isNode: true});
-        //         paramList.push(node.position());
-        //
-        //     });
-        //     modelManager.changeModelElementGroupAttribute("position", modelElList, paramList, "me");
-        //
-        //
-        // });
-        //
+
 
         cy.on("mouseup", "node", function () {
             modelManager.unselectModelNode(this, "me");

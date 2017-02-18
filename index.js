@@ -227,117 +227,6 @@ app.get('/:docId', function (page, model, arg, next) {
 
 
 
-    // model.subscribe(docPath, 'cy', function(err) {
-    //     if (err) {
-    //         return next(err);
-    //     }
-    //     model.setNull(docPath, { // create the empty new doc if it doesn't already exist
-    //         id: arg.docId
-    //     });
-    //
-    //
-    //     // create a reference to the document
-    //     model.ref('_page.doc', 'documents.' + arg.docId);
-    //     model.subscribe(docPath, 'history');
-    //     model.subscribe(docPath, 'undoIndex');
-    //     model.subscribe(docPath, 'context');
-    //
-
-    //    page.render();
-    //
-    // });
-    // model.subscribe(docPath, 'images');
-    //
-    //
-    //
-
-    //
-    // model.set('_sbgnviz.samples',
-    //     [{name: 'Activated STAT1alpha induction of the IRF1 gene', id: 0},
-    //         {name: 'Glycolysis', id: 1},
-    //         {name: 'MAPK cascade', id: 2},
-    //         {name: 'PolyQ proteins interference', id: 3},
-    //         {name: 'Insulin-like Growth Factor (IGF) signalling', id: 4},
-    //         {name: 'ATM mediated phosphorylation of repair proteins', id: 5},
-    //         {name: 'Vitamins B6 activation to pyridoxal phosphate', id: 6},
-    //         {name: 'MTOR', id: 7}
-    //
-    //     ]);
-
-
-
-
-
-
-    //
-    // messagesQuery = model.query('messages', {
-    //     room: room,
-    //     date: {
-    //         $gt: 0
-    //     },
-    //     targets: {
-    //             $elemMatch:{id: userId}
-    //         }
-    // });
-    //
-    // messagesQuery.subscribe(function (err) {
-    //
-    //     if (err) {
-    //         return next(err);
-    //     }
-    //
-    //
-    //     //just to initialize
-    //     model.set('_page.doc.userIds',[model.get('_session.userId')]);
-    //
-    //     // model.subscribe('users');
-    //     // model.subscribe('chat');
-    //     var  usersQuery = model.query('users', '_page.doc.userIds');
-    //     usersQuery.subscribe(function (err) {
-    //         if (err) {
-    //             return next(err);
-    //         }
-    //         var  user = model.at('users.' + model.get('_session.userId'));
-    //
-    //
-    //
-    //
-    //         userCount = model.at('chat.userCount');
-    //
-    //
-    //
-    //         return userCount.fetch(function (err) {
-    //             if(user.get()) {
-    //                 if(user.get('colorCode') == null ){
-    //                     user.set('colorCode', getNewColor());
-    //                 }
-    //                 if(user.get('name') != null)
-    //                     return page.render();
-    //
-    //             }
-    //             if (err) {
-    //                 return next(err);
-    //             }
-    //
-    //             return userCount.increment(function (err) {
-    //                 if (err) {
-    //                     return next(err);
-    //                 }
-    //                 user.set({
-    //                     name: 'User ' + userCount.get(),
-    //                     colorCode: getNewColor()
-    //                 });
-    //
-    //                 return page.render();
-    //
-    //             });
-    //         });
-    //     });
-    // });
-
-
-
-
 function getNewColor(){
     var gR = 1.618033988749895; //golden ratio
     var h = Math.floor((Math.random() * gR * 360));//Math.floor((cInd * gR - Math.floor(cInd * gR))*360);
@@ -354,7 +243,6 @@ function getNewColor(){
 
 function triggerContentChange(divId){
     //TODO: triggering here is not good
-
 
     $(('#' + divId)).trigger('contentchanged');
 
@@ -385,41 +273,79 @@ app.proto.changeDuration = function () {
 app.proto.init = function (model) {
     var timeSort;
 
-    // model.on('all', '_page.doc.cy.nodes.*', function(id, op, val, prev, passed){
-    //
-    //     if(docReady &&  passed.user == null) {
-    //
-    //         var node  = model.get('_page.doc.cy.nodes.' + id);
-    //
-    //
-    //         if(!node || !node.id){ //node is deleted
-    //             sbgnElementUtilities.deleteElesSimple(cy.getElementById(id));
-    //         }
-    //     }
-    //
-    //
-    // });
-    //
-    // model.on('all', '_page.doc.cy.edges.*', function(id, op, val, prev, passed){
-    //
-    //     if(docReady &&  passed.user == null) {
-    //         var edge  = model.get('_page.doc.cy.edges.' + id); //check
-    //
-    //         if(!edge|| !edge.id){ //edge is deleted
-    //             sbgnElementUtilities.deleteElesSimple(cy.getElementById(id));
-    //
-    //         }
-    //         //else insertion
-    //     }
-    //
-    // });
+    model.on('all', '_page.doc.cy.nodes.*', function(id, op, val, prev, passed){
+
+        if(docReady &&  passed.user == null) {
+
+            var node  = model.get('_page.doc.cy.nodes.' + id);
+
+            if(!node || !node.id){ //node is deleted
+                cy.getElementById(id).remove();
+            }
+        }
+
+
+    });
+
+    model.on('all', '_page.doc.cy.edges.*', function(id, op, val, prev, passed){
+
+        if(docReady &&  passed.user == null) {
+            var edge  = model.get('_page.doc.cy.edges.' + id); //check
+
+            if(!edge|| !edge.id){ //edge is deleted
+                cy.getElementById(id).remove();
+
+            }
+        }
+
+    });
+
+    model.on('all', '_page.doc.cy.nodes.*.addedLater', function(id, op, idName, prev, passed){ //this property must be something that is only changed during insertion
+
+
+        if(docReady && passed.user == null) {
+            var pos = model.get('_page.doc.cy.nodes.'+ id + '.position');
+            var sbgnclass = model.get('_page.doc.cy.nodes.'+ id + '.class');
+            var visibility = model.get('_page.doc.cy.nodes.'+ id + '.visibility');
+            var parent = model.get('_page.doc.cy.nodes.'+ id + 'data.parent');
+
+
+            var newNode = sbgnviz.elementUtilities.addNode(pos.x, pos.y, sbgnclass, parent, visibility, id);
+
+            if(parent!= null) //update parent
+                newNode.move({"parent":parent});
+        }
+
+    });
+
+    model.on('all', '_page.doc.cy.edges.*.addedLater', function(id,op, idName, prev, passed){//this property must be something that is only changed during insertion
+
+
+        if(docReady && passed.user == null ){
+            var source = model.get('_page.doc.cy.edges.'+ id + '.source');
+            var target = model.get('_page.doc.cy.edges.'+ id + '.target');
+            var sbgnclass = model.get('_page.doc.cy.edges.'+ id + '.class');
+            var visibility = model.get('_page.doc.cy.nodes.'+ id + '.visibility');
+
+
+            sbgnviz.elementUtilities.addEdge(source, target, sbgnclass, visibility, id);
+
+        }
+
+    });
 
 
     model.on('all', '_page.doc.cy.nodes.*.data', function(id, op, data,prev, passed){
 
         if(docReady && passed.user == null) {
-            cy.getElementById(id).data(data);
+            //cy.getElementById(id).data(data); //can't call this if cy element does not have a field called "data"
+            cy.getElementById(id)._private.data = data;
+            //to update parent
 
+            if(data.parent!=null)
+                cy.getElementById(id).move({"parent":data.parent});
+
+            cy.getElementById(id).updateStyle();
         }
     });
 
@@ -430,6 +356,7 @@ app.proto.init = function (model) {
 
         if(docReady && passed.user == null) {
             cy.getElementById(id).css("background-color", val);
+
 
         }
     });
@@ -497,11 +424,13 @@ app.proto.init = function (model) {
 
 
         if(docReady && passed.user == null) {
+            var expandCollapse = cy.expandCollapse('get'); //we can't call chise.expand or collapse directly as it causes infinite calls
             console.log(val);
-            if(val === "expand")
-                chise.expandNodes(cy.getElementById(id));
+            if(val === "expand"){
+                expandCollapse.expand(cy.getElementById(id));
+            }
             else
-                chise.collapseNodes(cy.getElementById(id));
+                expandCollapse.collapse(cy.getElementById(id));
         }
 
     });
@@ -583,17 +512,8 @@ app.proto.init = function (model) {
     });
 
 
-//     model.on('all', '_page.doc.sampleInd', function(op, ind, prev, passed){
-//
-//
-//         if(docReady && passed.user == null) {
-//
-//             //menu.updateSample(ind, false); //false = do not delete, sample changing client deleted them already
-//
-//         }
-//
-//     });
-//
+
+
 //
 //
 //     model.on('all', '_page.doc.layoutProperties', function(index){
@@ -605,121 +525,6 @@ app.proto.init = function (model) {
 //             //menu.updateLayoutProperties(layoutProps);
 //
 //         }
-//
-//     });
-//
-//     model.on('all', '_page.doc.cy.nodes.*.classes', function(id, op, val, prev, passed){
-//         if(docReady && passed.user == null) {
-//
-//             cy.getElementById(id)._private.classes =  val;
-//
-//
-//             cy.forceRender();
-//
-//         }
-//     });
-//
-//     model.on('all', '_page.doc.cy.edges.*.classes', function(id, op, val, prev, passed){
-//         if(docReady && passed.user == null) {
-//
-//             cy.getElementById(id)._private.classes =  val;
-//
-//               cy.forceRender();
-//
-//         }
-//     });
-//
-//     model.on('all', '_page.doc.cy.nodes.*.addedLater', function(id, op, idName, prev, passed){ //this property must be something that is only changed during insertion
-//
-//
-//         if(docReady && passed.user == null) {
-//
-//
-//             var pos = model.get('_page.doc.cy.nodes.'+ id + '.position');
-//             var sbgnclass = model.get('_page.doc.cy.nodes.'+ id + '.sbgnclass');
-//             sbgnElementUtilities.addNode(pos.x, pos.y, sbgnclass,null, null, id);
-//
-//
-//         }
-//
-//     });
-//
-//     model.on('all', '_page.doc.cy.edges.*.addedLater', function(id,op, idName, prev, passed){//this property must be something that is only changed during insertion
-//
-//
-//         if(docReady && passed.user == null ){
-//             //check if edge id exists in the current inspector graph
-//             var source = model.get('_page.doc.cy.edges.'+ id + '.source');
-//             var target = model.get('_page.doc.cy.edges.'+ id + '.target');
-//             var sbgnclass = model.get('_page.doc.cy.edges.'+ id + '.sbgnclass');
-//
-//             sbgnElementUtilities.addEdge(source, target, sbgnclass,null,  id);
-//
-//         }
-//
-//     });
-//     model.on('all', '_page.doc.cy.nodes.*.sbgnclass', function(id, op, sbgnclass, prev, passed){ //this property must be something that is only changed during insertion
-//
-//
-//         if(docReady && passed.user == null) {
-//             cy.getElementById(id).data("sbgnclass", sbgnclass);
-//
-//         }
-//
-//
-//
-//     });
-//
-//     model.on('all', '_page.doc.cy.edges.*.sbgnclass', function(id,op, sbgnclass, prev, passed){//this property must be something that is only changed during insertion
-//
-//         if(docReady && passed.user == null ){
-//             cy.getElementById(id).data("sbgnclass", sbgnclass);
-//         }
-//     });
-//     model.on('all', '_page.doc.cy.edges.*.source', function(id,op, source, prev, passed){//this property must be something that is only changed during insertion
-//
-//         if(docReady && passed.user == null ){
-//             cy.getElementById(id).data("source", source);
-//         }
-//
-//     });
-//
-//     model.on('all', '_page.doc.cy.edges.*.target', function(id,op, target, prev, passed){//this property must be something that is only changed during insertion
-//
-//         if(docReady && passed.user == null ){
-//             cy.getElementById(id).data("target", target);
-//
-//         }
-//
-//     });
-//     //
-//     // model.on('all', '_page.doc.cy.edges.*.portsource', function(id,op, portsource, prev, passed){//this property must be something that is only changed during insertion
-//     //
-//     //     if(docReady && passed.user == null ){
-//     //         cy.getElementById(id).data("portsource", portsource);
-//     //
-//     //     }
-//     //
-//     // });
-//     //
-//     // model.on('all', '_page.doc.cy.edges.*.porttarget', function(id,op, porttarget, prev, passed){//this property must be something that is only changed during insertion
-//     //
-//     //     if(docReady && passed.user == null ){
-//     //         cy.getElementById(id).data("porttarget", porttarget);
-//     //     }
-//     //
-//     // });
-//
-//
-//
-//     model.on('change', '_page.doc.cy.nodes.*.position', function(id, pos, prev, passed){
-//
-//         if(docReady && passed.user == null){
-//             cy.getElementById(id).position(pos);
-//
-//
-//         }
-//
 //
 //     });
 //
@@ -762,139 +567,6 @@ app.proto.init = function (model) {
 //
 //     });
 //
-//     model.on('all', '_page.doc.cy.nodes.*.sbgnlabel', function(id, op, label,prev, passed){
-//
-//         if(docReady && passed.user == null) {
-//             cy.getElementById(id).data("sbgnlabel", label);
-//
-//         }
-//     });
-//     model.on('all', '_page.doc.cy.nodes.*.sbgnlabel', function(id, op, label,prev, passed){
-//
-//         if(docReady && passed.user == null) {
-//             cy.getElementById(id).data("sbgnlabel", label);
-//
-//         }
-//     });
-
-
-//     model.on('all', '_page.doc.cy.nodes.*.borderWidth', function(id,  op,borderWidth,prev, passed){
-//
-//         if(docReady && passed.user == null) {
-//             cy.getElementById(id).css("border-width", borderWidth);
-//             cy.getElementById(id)._private.style["border-width"].bypass = null;
-//
-//
-//         }
-//     });
-//
-//     model.on('all', '_page.doc.cy.nodes.*.backgroundColor', function(id,  op, backgroundColor,prev, passed){
-//
-//         if(docReady && passed.user == null) {
-//             cy.getElementById(id).css("background-color", backgroundColor);
-//             cy.getElementById(id)._private.style["background-color"].bypass = null;
-//          //   cy.getElementById(id)._private.style["background-color"].strValue =  backgroundColor;
-//
-//         }
-//     });
-//
-//     model.on('all', '_page.doc.cy.nodes.*.backgroundOpacity', function(id,  op, backgroundOpacity,prev, passed){
-//
-//         if(docReady && passed.user == null) {
-//             cy.getElementById(id).data("backgroundOpacity", backgroundOpacity);
-//
-//         }
-//     });
-//
-//
-//     model.on('all', '_page.doc.cy.edges.*.backgroundOpacity', function(id,  op, backgroundOpacity,prev, passed){
-//
-//         if(docReady && passed.user == null) {
-//             cy.getElementById(id).data("backgroundOpacity", backgroundOpacity);
-//
-//         }
-//     });
-//
-//
-//     // model.on('all', '_page.doc.cy.nodes.*.opacity', function(id,  op, opacity,prev, passed){
-//     //
-//     //     if(docReady && passed.user == null) {
-//     //         //cy.getElementById(id).css("opacity", opacity);
-//     //         cy.getElementById(id)._private.style["opacity"].value =  opacity;
-//     //
-//     //
-//     //     }
-//     // });
-//     //
-//     // model.on('all', '_page.doc.cy.edges.*.opacity', function(id,  op, opacity,prev, passed){
-//     //
-//     //     if(docReady && passed.user == null) {
-//     //         //cy.getElementById(id).css("opacity", opacity);
-//     //         cy.getElementById(id)._private.style["opacity"].value =  opacity;
-//     //
-//     //
-//     //     }
-//     // });
-//
-//     model.on('all', '_page.doc.cy.nodes.*.isCloneMarker', function(id,  op, isCloneMarker, prev, passed){
-//
-//         if(docReady && passed.user == null) {
-//             cy.getElementById(id).data("sbgnclonemarker", isCloneMarker);
-//
-//         }
-//     });
-//
-//     model.on('all', '_page.doc.cy.nodes.*.parent', function(id,  op,parent,prev, passed){
-//
-//
-//         if(docReady && passed.user == null) {
-//             cy.getElementById(id).data("parent", parent);
-//         }
-//     });
-//
-//
-//     model.on('all', '_page.doc.cy.nodes.*.ports', function(id, op, ports, prev, passed){ //this property must be something that is only changed during insertion
-//
-//         if(docReady && passed.user == null) {
-//             cy.getElementById(id).data("ports", ports);
-//
-//         }
-//     });
-//     model.on('all', '_page.doc.cy.nodes.*.labelsize', function(id, op, labelsize, prev, passed){ //this property must be something that is only changed during insertion
-//
-//
-//         if(docReady && passed.user == null) {
-//             cy.getElementById(id).data("labelsize", labelsize);
-//
-//         }
-//     });
-//
-//     model.on('all', '_page.doc.cy.nodes.*.fontfamily', function(id, op, fontfamily, prev, passed){ //this property must be something that is only changed during insertion
-//
-//
-//         if(docReady && passed.user == null) {
-//             cy.getElementById(id).data("fontfamily", fontfamily);
-//
-//         }
-//     });
-//
-//     model.on('all', '_page.doc.cy.nodes.*.fontweight', function(id, op, fontweight, prev, passed){ //this property must be something that is only changed during insertion
-//
-//
-//         if(docReady && passed.user == null) {
-//             cy.getElementById(id).data("fontweight", fontweight);
-//
-//         }
-//     });
-//
-//     model.on('all', '_page.doc.cy.nodes.*.fontstyle', function(id, op, fontstyle, prev, passed){ //this property must be something that is only changed during insertion
-//
-//
-//         if(docReady && passed.user == null) {
-//             cy.getElementById(id).data("fontstyle", fontstyle);
-//
-//         }
-//     });
 //
 //
 //     model.on('all', '_page.doc.cy.nodes.*.width', function(id,  op, width ,prev, passed){
@@ -937,19 +609,7 @@ app.proto.init = function (model) {
 //         }
 //     });
 //
-//
-//
-//     model.on('all', '_page.doc.cy.nodes.*.sbgnStatesAndInfos', function(id,  op, sbgnStatesAndInfos,prev, passed){
-//
-//
-//         if(docReady && passed.user == null) {
-//             cy.getElementById(id).data("sbgnstatesandinfos", sbgnStatesAndInfos);
-//
-//
-//
-//         }
-//     });
-//
+
 //
 //
 //     model.on('all', '_page.doc.cy.edges.*.highlightStatus', function(id, op, highlightStatus, prev, passed){ //this property must be something that is only changed during insertion
@@ -968,86 +628,6 @@ app.proto.init = function (model) {
 //         }
 //     });
 //
-//     model.on('all', '_page.doc.cy.nodes.*.visibilityStatus', function(id, op, visibilityStatus, prev, passed){ //this property must be something that is only changed during insertion
-//         if(docReady && passed.user == null) {
-//             if(visibilityStatus == "show"){
-//                 cy.getElementById(id).css('display', null);
-//             }
-//             else{
-//                 cy.getElementById(id).css('display', "none");
-//                 cy.getElementById(id)._private.style['display'].bypass = null;
-//             }
-//
-//
-//         }
-//     });
-//     model.on('all', '_page.doc.cy.edges.*.visibilityStatus', function(id, op, visibilityStatus, prev, passed){ //this property must be something that is only changed during insertion
-//         if(docReady && passed.user == null) {
-//             if(visibilityStatus == "show"){
-//                 cy.getElementById(id).css('display', null);
-//             }
-//             else{
-//                 cy.getElementById(id).css('display', "none");
-//                 cy.getElementById(id)._private.style['display'].bypass = null;
-//             }
-//
-//
-//         }
-//     });
-//     model.on('all', '_page.doc.cy.edges.*.cyedgebendeditingWeights', function(id,  op, weights, prev, passed) {
-//         cy.getElementById(id).scratch("cyedgebendeditingWeights", weights);
-//     });
-//
-//     model.on('all', '_page.doc.cy.edges.*.cyedgebendeditingDistances', function(id,  op, distances, prev, passed) {
-//         cy.getElementById(id).scratch("cyedgebendeditingDistances", distances);
-//     });
-//
-//
-//     model.on('all', '_page.doc.cy.edges.*.curveStyle', function(id,  op, curveStyle, prev, passed) {
-//         //cy.getElementById(id).css("curve-style", curveStyle);
-//         cy.getElementById(id)._private.style["curve-style"].value =  curveStyle;
-//
-//     });
-//
-//     model.on('all', '_page.doc.cy.edges.*.bendPointPositions', function(id,  op, bendPointPositions, prev, passed){
-//
-//         if(docReady && passed.user == null) {
-//
-//             cy.getElementById(id).data("bendPointPositions", bendPointPositions);
-//         }
-//     });
-//     model.on('all', '_page.doc.cy.edges.*.lineColor', function(id,  op, lineColor,prev, passed){
-//
-//
-//
-//         if(docReady && passed.user == null) {
-//             cy.getElementById(id)._private.style["line-color"] =  lineColor;
-//             //cy.getElementById(id).css("line-color", lineColor);
-//
-//         }
-//     });
-//
-//     model.on('all', '_page.doc.cy.nodes.*.expandCollapseStatus', function(id,  op, expandCollapseStatus, prev, passed){
-//
-//         if(docReady && passed.user == null) {
-//            ;// menu.changeExpandCollapseStatus(id, expandCollapseStatus, false);
-//
-//         }
-//     });
-//
-//
-//
-//
-//
-//
-//     model.on('all', '_page.doc.cy.edges.*.sbgncardinality', function(id, op,  sbgncardinality,prev, passed){
-//
-//         if(docReady && passed.user == null) {
-//             cy.getElementById(id).data("sbgncardinality", sbgncardinality);
-//
-//
-//         }
-//     });
 //
 //     model.on('all', '_page.doc.images', function() {
 //         if (docReady)

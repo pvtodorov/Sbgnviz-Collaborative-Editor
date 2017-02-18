@@ -441,7 +441,8 @@
         <table id="sbgn-inspector-and-canvas">
             <tr>
                 <td>
-                    <div id="sbgn-network-container">
+                    <!--focus should be here add tabindex -->
+                    <div id="sbgn-network-container" tabindex="0">
                     </div>
                 </td>
                 <td>
@@ -1164,7 +1165,7 @@
 
 
 <inspector-view:>
-            <div id ="inspector-tab-area">
+            <div id ="inspector-tab-area" tabindex="1">
 
                 <div id="inspector-tabs">
 
@@ -1181,7 +1182,7 @@
 
                     <div id="sbgn-inspector" class="tab-pane"></div>
 
-                    <div id ="chat-area"  class="tab-pane fade in active">
+                    <div id ="chat-area"  class="tab-pane fade in active"">
                         <div id = "users" as="container"  on-change = "onScroll()">
                             <!--<ul id ="user-list" as = "list">-->
                             <form action=""">
@@ -1208,7 +1209,7 @@
                             User name: <input id="inputs-name" value="{{users[_session.userId].name}}">
                             <button id = "change-user-color" class = "btn btn-mini" on-click ="changeColorCode()">New user color</button>
                             <form id="inputs-form" on-submit="add()">
-                                <textarea id="inputs-comment" rows = "3", wrap = "soft" autofocus>{{_page.newComment}}</textarea>
+                                <textarea id="inputs-comment" rows = "3", wrap = "soft" >{{_page.newComment}}</textarea>
                                 <button  class = "btn btn-info" id = "send-message">Send</button>
 
                             </form>
