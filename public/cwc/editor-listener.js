@@ -7,42 +7,12 @@
 
 module.exports = function(modelManager){
 
-
-
-    // cy.on("data", function(el){
-    //     console.log("data " + el.cyTarget.id());
-    //
-    //     if(el.cyTarget.isNode())
-    //         modelManager.changeModelNodeAttribute("data",el.cyTarget.id(), el.cyTarget.data(), "me");
-    //
-    //     else
-    //         modelManager.changeModelEdgeAttribute("data",el.cyTarget.id(), el.cyTarget.data(), "me");
-    //
-    //     // var modelElList = [];
-    //     // var paramList =[]
-    //     // args.eles.forEach(function(ele) {
-    //     //     //var ele = param.ele;
-    //     //
-    //     //     modelElList.push({id: ele.id(), isNode: ele.isNode()});
-    //     //     paramList.push(ele.data());
-    //     //     // paramList.push(ele.data(args.name));
-    //     //
-    //     // });
-    //     // modelManager.changeModelElementGroupAttribute("data", modelElList, paramList, "me");
-    // });
-    //
-    //
-
-
-    //A new sample or file is loaded --inform others
-    $(document).on("sbgnvizLoadSample sbgnvizLoadFile",  function(event, file){
-        var sbgnmlText = jsonToSbgnml.createSbgnml();
-
-        console.log(sbgnmlText);
-//        modelManager.updateSbgnmlText(sbgnmlText);
+    //A new sample or file is loaded --update model and inform others
+    $(document).on("sbgnvizLoadSampleEnd sbgnvizLoadFileEnd",  function(event, file){
+        modelManager.newModel("me"); //do not delete cytoscape, only the model
+        modelManager.initModel(cy.nodes(), cy.edges());
 
     });
-
 
 
     cy.on("afterDo afterRedo", function (event, actionName, args, res) {
@@ -61,7 +31,6 @@ module.exports = function(modelManager){
 
                 modelElList.push({id: ele.id(), isNode: ele.isNode()});
                 paramList.push(ele.data());
-                // paramList.push(ele.data(args.name));
 
             });
             modelManager.changeModelElementGroupAttribute("data", modelElList, paramList, "me");
@@ -78,7 +47,6 @@ module.exports = function(modelManager){
 
                 modelElList.push({id: ele.id(), isNode: true});
                 paramList.push(ele.data());
-                // paramList.push(ele.data(args.name));
 
             });
             modelManager.changeModelElementGroupAttribute("data", modelElList, paramList, "me");
@@ -120,10 +88,7 @@ module.exports = function(modelManager){
             args.forEach(function (ele) {
                 modelElList.push({id: ele.id(), isNode: ele.isNode()});
                 paramList.push("highlighted");
-
-
             });
-
 
             modelManager.changeModelElementGroupAttribute("highlightStatus", modelElList, paramList, "me");
         }
@@ -254,15 +219,52 @@ module.exports = function(modelManager){
             });
 
         }
+        else if(actionName === "changeParent"){
+            var modelElList = [];
+            var paramListData = [];
+            var paramListPosition = [];
+            res.nodes.forEach(function (ele) {
+                //var ele = param.ele;
 
-        // else if(actionName === "changeChildren"){
-        //
-        //     // cy.on("changeChildren",  function (event, collection) {
-        //     collection.forEach(function(el){
-        //         var nonCircularChildren = CircularJSON.stringify(el._private.children);
-        //         modelManager.updateModelElChildren(el.id(), nonCircularChildren, "me");
-        //     });
-        // }
+                modelElList.push({id: ele.id(), isNode: true});
+                paramListData.push(ele.data());
+                paramListPosition.push(ele.position());
+                // paramList.push(ele.data(args.name));
+
+            });
+            modelManager.changeModelElementGroupAttribute("data", modelElList, paramListData, "me");
+            modelManager.changeModelElementGroupAttribute("position", modelElList, paramListPosition, "me");
+
+
+        }
+        else if(actionName === "createCompoundForGivenNodes"){
+            var paramList = [];
+            var modelElList = [];
+
+            res.children().forEach(function (ele) {
+                //var ele = param.ele;
+
+                modelElList.push({id: ele.id(), isNode: true});
+
+                paramList.push(ele.data()); //includes parent information
+
+            });
+
+
+
+            var compoundAtts = {x: res.position("x"), y: res.position("y"), class:res.data("class")};
+
+
+            modelManager.addModelCompound(res.id(), compoundAtts, modelElList,paramList, "me" );
+
+
+            //assign other node properties-- css and data
+            modelManager.initModelNode(res,"me"); //init with default values
+
+
+        }
+
+
 
         // else if(actionName === "changeHighlightStatus"){
         //
@@ -280,53 +282,12 @@ module.exports = function(modelManager){
         // }
         //
         //
-        // else if(actionName === "changeClasses"){
-        //
-        //     // cy.on("changeClasses",  function (event,  collection) {
-        //
-        //     var modelElList = [];
-        //     var paramListClasses = [];
-        //
-        //
-        //     //TODO: class operations usually affect the whole graph
-        //     // cy.elements().forEach(function (ele) {
-        //     collection.forEach(function (ele) {
-        //         //var ele = param.ele;
-        //         modelElList.push({id: ele.id(), isNode: true});
-        //         paramListClasses.push(ele._private.classes);
-        //
-        //     });
-        //
-        //     modelManager.changeModelElementGroupAttribute("classes", modelElList, paramListClasses, "me");
-        //
-        //
-        //
-        //
-        // }
+
 
 
     });
 
 
-        // });
-        // cy.on("createCompoundForSelectedNodes", function(event, compoundType, compoundNode, collection){
-        //
-        //
-        //     //modelManager.updateModelHistory(compoundType);
-        //     var compoundAtts = {x: compoundNode.position().x, y: compoundNode.position().y, sbgnclass: compoundNode._private.data.sbgnclass,
-        //         width:compoundNode.width(), height: compoundNode.height()};
-        //
-        //     var modelElList = [];
-        //     var paramList = [];
-        //     collection.forEach(function(node){
-        //         modelElList.push({id: node.id(), isNode:true});
-        //         paramList.push(node.data('parent'));  //before changing parents
-        //     });
-        //
-        //     modelManager.addModelCompound(compoundNode.id(), compoundAtts,modelElList, paramList, "me");
-        //
-        // });
-        //
 
 
         cy.on("mouseup", "node", function () {
