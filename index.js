@@ -122,6 +122,9 @@ app.get('/:docId', function (page, model, arg, next) {
         var undoIndex = model.at((docPath + '.undoIndex'));
         var context = model.at((docPath + '.context'));
         var images = model.at((docPath + '.images'));
+        var users = model.at((docPath + '.users'));
+        var messages = model.at((docPath + '.messages'));
+
         cy.subscribe(function () {
 
             history.subscribe(function () {
@@ -140,76 +143,103 @@ app.get('/:docId', function (page, model, arg, next) {
                             var userId = model.get('_session.userId');
                             // page.render();
 
-                            messagesQuery = model.query('messages', {
-                                room: room,
-                                date: {
-                                    $gt: 0
-                                },
-                                targets: {
-                                    $elemMatch: {id: userId}
-                                }
-                            });
+                            // messagesQuery = model.query('messages', {
+                            //     room: room,
+                            //     date: {
+                            //         $gt: 0
+                            //     },
+                            //     targets: {
+                            //         $elemMatch: {id: userId}
+                            //     }
+                            // });
+                            //
+                            // messagesQuery.subscribe(function (err) {
 
-                            messagesQuery.subscribe(function (err) {
-
+                            messages.subscribe(function() {
                                 if (err) {
                                     return next(err);
                                 }
 
+                                var userId = model.get('_session.userId');
+                                //model.add('_page.doc.userIds',userId);
+                                //var userCnt = model.get('_page.doc.userIds').length();
+
+                                users.subscribe(function(){
+                                    var userCnt = Object.keys(users).length;
+
+                                    users.set(userId, {name: ('User ' + userCnt) ,  colorCode: getNewColor()});
+
+
+
+                                    //console.log(users.get());
                                 //just to initialize
-                                 model.set('_page.doc.userIds',[model.get('_session.userId')]);
-
-                                    var usersQuery = model.query('users', '_page.doc.userIds');
-                                    usersQuery.subscribe(function (err) {
-                                        if (err) {
-                                            return next(err);
-                                        }
-                                        var user = model.at('users.' + model.get('_session.userId'));
 
 
+                                    // var usersQuery = model.query('users', '_page.doc.userIds');
+                                    // usersQuery.subscribe(function (err) {
+                                    //     if (err) {
+                                    //         return next(err);
+                                    //     }
+                                    //
+                                    //
+                                    //     var user = model.at('users.' + model.get('_session.userId'));
+                                    //
+                                    //     userCount = model.get('chat.userCount');
 
-                                        userCount = model.at('chat.userCount');
-                                       // return page.render();
 
-                                        return userCount.fetch(function (err) {
-                                            if (user.get()) {
 
-                                                if (user.get('colorCode') == null) {
-                                                    user.set('colorCode', getNewColor());
-                                                }
-                                                if (user.get('name') != null)
+                                        //user.subscribe(function (err) {
+
+                                            // model.createNull(user, { // create the empty new doc if it doesn't already exist
+                                            //     name: 'User' + (++userCount),
+                                            //     colorCode: getNewColor()
+                                            // });
+
+
+                                //            model.set('chat.userCount', userCount);
+                                            //userCount = model.at('chat.userCount');
+
+                                            // return page.render();
+
+                                            // return userCount.fetch(function (err) {
+                                            //     if (user.get()) {
+                                            //
+                                            //         if (user.get('colorCode') == null) {
+                                            //             user.set('colorCode', getNewColor());
+                                            //         }
+                                            //         if (user.get('name') != null)
+                                            //             return page.render();
+                                            //
+                                            //     }
+                                            //     if (err) {
+                                            //         return next(err);
+                                            //     }
+                                            //
+                                            //
+                                            //     return userCount.increment(function (err) {
+                                            //         if (err) {
+                                            //             return next(err);
+                                            //         }
+                                            //
+                                            //         // //TODO: Users
+                                            //         // model.createNull(user, { // create the empty new doc if it doesn't already exist
+                                            //         //         name: 'User ' + userCount.get(),
+                                            //         //         colorCode: getNewColor()
+                                            //         // });
+                                            //
+                                            //
+                                            //         //     console.log(user.set('name', "hello"));
+                                            //
+                                            //          //user.set('name','User ' + userCount.get() );
+                                            //          user.set({
+                                            //              name: 'User ' + userCount.get(),
+                                            //              colorCode: getNewColor()
+                                            //          });
+
                                                     return page.render();
-
-                                            }
-                                            if (err) {
-                                                return next(err);
-                                            }
-
-
-                                            return userCount.increment(function (err) {
-                                                if (err) {
-                                                    return next(err);
-                                                }
-
-                                                //TODO: Users
-                                                // model.createNull(user, { // create the empty new doc if it doesn't already exist
-                                                //         name: 'User ' + userCount.get(),
-                                                //         colorCode: getNewColor()
-                                                // });
-                                                //
-
-
-                                               // console.log(user.set('name', "hello"));
-
-                                             //   user.set('name','User ' + userCount.get() );
-                                                // user.set({
-                                                //     name: 'User ' + userCount.get(),
-                                                //     colorCode: getNewColor()
-                                                // });
-
-                                                return page.render();
-                                            });
-                                        });
+                                      //          });
+                                         //   });
+                                   //     });
                                     });
 
                             });
@@ -362,11 +392,12 @@ app.proto.create = function (model) {
 
     var modelJson = modelManager.getJsonFromModel();
 
+
     setTimeout(function(){
         self.loadCyFromModel();
 
         setTimeout(function() {
-            modelManager.initModel(cy.nodes(), cy.edges());
+            modelManager.initModel(cy.nodes(), cy.edges(), "me");
 
             require('./public/cwc/editor-listener.js')(modelManager);
 
@@ -424,6 +455,19 @@ app.proto.loadCyFromModel = function(){
         });
 
     }
+}
+
+function moveNodeAndChildren(positionDiff, node, notCalcTopMostNodes) {
+        var oldX = node.position("x");
+        var oldY = node.position("y");
+        node.position({
+            x: oldX + positionDiff.x,
+            y: oldY + positionDiff.y
+        });
+        var children = node.children();
+        children.forEach(function(child){
+            moveNodeAndChildren(positionDiff, child, true);
+        });
 }
 
 
@@ -513,6 +557,35 @@ app.proto.init = function (model) {
 
         }
 
+    });
+    model.on('all', '_page.doc.cy.nodes.*.position', function(id, op, pos,prev, passed){
+
+        if(docReady && passed.user == null) {
+            var posDiff = {x: (pos.x - cy.getElementById(id).position("x")), y:(pos.y - cy.getElementById(id).position("y"))} ;
+            moveNodeAndChildren(posDiff, cy.getElementById(id)); //children need to be updated manually here
+
+        }
+    });
+    model.on('all', '_page.doc.cy.nodes.*.highlightColor', function(id, op, val,prev, passed){
+
+        if(docReady && passed.user == null) {
+            if(val == null){
+                cy.getElementById(id).css({
+                    "overlay-color": null,
+                    "overlay-padding": 10,
+                    "overlay-opacity": 0
+                });
+
+            }
+            else
+             cy.getElementById(id).css({
+                 "overlay-color": "blue",
+                 "overlay-padding": 10,
+                 "overlay-opacity": 0.25
+             });
+
+
+        }
     });
 
 
@@ -668,17 +741,6 @@ app.proto.init = function (model) {
 
     });
 
-    model.on('all', '_page.doc.cy.nodes.*.position', function(id, op, pos,prev, passed){
-
-        if(docReady && passed.user == null) {
-
-            cy.getElementById(id).position(pos); //this is not working in compounds
-            //cy.getElementById(id).updateStyle();
-            //cy.getElementById(id)['position'] = pos;
-            cy.getElementById(id)._private.position = pos;
-
-        }
-    });
 
     model.on('all', '_page.doc.cy.nodes.*.highlightStatus', function(id, op, highlightStatus, prev, passed){ //this property must be something that is only changed during insertion
         if(docReady && passed.user == null) {
@@ -804,11 +866,16 @@ app.proto.onScroll = function () {
 };
 
 
-app.proto.changeColorCode = function(){
+app.proto.changeColorCode = function(event){
 
     var  user = this.model.at('users.' + this.model.get('_session.userId'));
 
+    console.log("here");
+
     user.set('colorCode', getNewColor());
+
+
+    console.log(user.get('colorCode'));
 
 };
 app.proto.runUnitTests = function(){

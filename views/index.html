@@ -1206,8 +1206,8 @@
 
                         <!--</div>-->
                         <div id="inputs">
-                            User name: <input id="inputs-name" value="{{users[_session.userId].name}}">
-                            <button id = "change-user-color" class = "btn btn-mini" on-click ="changeColorCode()">New user color</button>
+                            User name: <input id="inputs-name" value="{{_page.doc.users[_session.userId].name}}">
+                            <button id = "change-user-color" class = "btn btn-mini" on-click ="changeColorCode($event)">New user color</button>
                             <form id="inputs-form" on-submit="add()">
                                 <textarea id="inputs-comment" rows = "3", wrap = "soft" >{{_page.newComment}}</textarea>
                                 <button  class = "btn btn-info" id = "send-message">Send</button>
@@ -1261,14 +1261,14 @@
                 <chat-user:>
                     <div class="user" style = background:{{users[#pUserId].colorCode}}>
                         {{if _session.userId === #pUserId}}
-                        <div> {{users[#pUserId].name}}</div>
+                        <div> {{_page.doc.users[#pUserId].name}}</div>
                         {{else}}
-                        <input type="checkbox" id = {{#pUserId}} checked> {{users[#pUserId].name}}<br>
+                        <input type="checkbox" id = {{#pUserId}} checked> {{_page.doc.users[#pUserId].name}}<br>
                         {{/if}}
                     </div>
                     <chat-message:>
                         <div class="message">
                             <div class="time">{{_page.showTime && formatTime(#message)}}</div>
-                            <b><div style = "font-color:{{users[#message.userId].colorCode}};"> {{#message.userName}}</div></b>
+                            <b><div style = "font-color:{{_page.doc.users[#message.userId].colorCode}};"> {{#message.userName}}</div></b>
                             <p>{{#message.comment}}</p>
                         </div>

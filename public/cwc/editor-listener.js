@@ -8,9 +8,9 @@
 module.exports = function(modelManager){
 
     //A new sample or file is loaded --update model and inform others
-    $(document).on("sbgnvizLoadSampleEnd sbgnvizLoadFileEnd",  function(event, file){
-        modelManager.newModel("me"); //do not delete cytoscape, only the model
-        modelManager.initModel(cy.nodes(), cy.edges());
+   $(document).on("sbgnvizLoadSampleEnd sbgnvizLoadFileEnd",  function(event, file){
+       modelManager.newModel("me"); //do not delete cytoscape, only the model
+      modelManager.initModel(cy.nodes(), cy.edges());
 
     });
 
@@ -266,22 +266,6 @@ module.exports = function(modelManager){
 
 
 
-        // else if(actionName === "changeHighlightStatus"){
-        //
-        //         // cy.on("changeHighlightStatus", function (event,  highlightStatus, collection) {
-        //     var modelElList = [];
-        //     var paramList =[]
-        //     collection.forEach(function(ele){
-        //
-        //         modelElList.push({id: ele.id(), isNode: ele.isNode()});
-        //         paramList.push(highlightStatus);
-        //
-        //     });
-        //
-        //     modelManager.changeModelElementGroupAttribute("highlightStatus", modelElList, paramList, "me");
-        // }
-        //
-        //
 
 
 
@@ -299,6 +283,7 @@ module.exports = function(modelManager){
             modelManager.selectModelNode(this, "me");
 
         });
+
         cy.on('unselect', 'node', function () { //causes sync problems in delete op
             modelManager.unselectModelNode(this, "me");
         });
