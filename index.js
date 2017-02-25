@@ -122,7 +122,9 @@ app.get('/:docId', function (page, model, arg, next) {
         var undoIndex = model.at((docPath + '.undoIndex'));
         var context = model.at((docPath + '.context'));
         var images = model.at((docPath + '.images'));
+
         var users = model.at((docPath + '.users'));
+        var userIds = model.at((docPath + '.userIds'));
         var messages = model.at((docPath + '.messages'));
 
         cy.subscribe(function () {
@@ -164,83 +166,84 @@ app.get('/:docId', function (page, model, arg, next) {
                                 //model.add('_page.doc.userIds',userId);
                                 //var userCnt = model.get('_page.doc.userIds').length();
 
-                                users.subscribe(function(){
-                                    var userCnt = Object.keys(users).length;
+                                userIds.subscribe(function() {
+                                    userIds.push(userId);
+                                    users.subscribe(function () {
+                                        var userCnt = Object.keys(users).length;
 
-                                    users.set(userId, {name: ('User ' + userCnt) ,  colorCode: getNewColor()});
-
-
-
-                                    //console.log(users.get());
-                                //just to initialize
+                                        users.set(userId, {name: ('User ' + userCnt), colorCode: getNewColor()});
 
 
-                                    // var usersQuery = model.query('users', '_page.doc.userIds');
-                                    // usersQuery.subscribe(function (err) {
-                                    //     if (err) {
-                                    //         return next(err);
-                                    //     }
-                                    //
-                                    //
-                                    //     var user = model.at('users.' + model.get('_session.userId'));
-                                    //
-                                    //     userCount = model.get('chat.userCount');
+                                        //console.log(users.get());
+                                        //just to initialize
 
+
+                                        // var usersQuery = model.query('users', '_page.doc.userIds');
+                                        // usersQuery.subscribe(function (err) {
+                                        //     if (err) {
+                                        //         return next(err);
+                                        //     }
+                                        //
+                                        //
+                                        //     var user = model.at('users.' + model.get('_session.userId'));
+                                        //
+                                        //     userCount = model.get('chat.userCount');
 
 
                                         //user.subscribe(function (err) {
 
-                                            // model.createNull(user, { // create the empty new doc if it doesn't already exist
-                                            //     name: 'User' + (++userCount),
-                                            //     colorCode: getNewColor()
-                                            // });
+                                        // model.createNull(user, { // create the empty new doc if it doesn't already exist
+                                        //     name: 'User' + (++userCount),
+                                        //     colorCode: getNewColor()
+                                        // });
 
 
-                                //            model.set('chat.userCount', userCount);
-                                            //userCount = model.at('chat.userCount');
+                                        //            model.set('chat.userCount', userCount);
+                                        //userCount = model.at('chat.userCount');
 
-                                            // return page.render();
+                                        // return page.render();
 
-                                            // return userCount.fetch(function (err) {
-                                            //     if (user.get()) {
-                                            //
-                                            //         if (user.get('colorCode') == null) {
-                                            //             user.set('colorCode', getNewColor());
-                                            //         }
-                                            //         if (user.get('name') != null)
-                                            //             return page.render();
-                                            //
-                                            //     }
-                                            //     if (err) {
-                                            //         return next(err);
-                                            //     }
-                                            //
-                                            //
-                                            //     return userCount.increment(function (err) {
-                                            //         if (err) {
-                                            //             return next(err);
-                                            //         }
-                                            //
-                                            //         // //TODO: Users
-                                            //         // model.createNull(user, { // create the empty new doc if it doesn't already exist
-                                            //         //         name: 'User ' + userCount.get(),
-                                            //         //         colorCode: getNewColor()
-                                            //         // });
-                                            //
-                                            //
-                                            //         //     console.log(user.set('name', "hello"));
-                                            //
-                                            //          //user.set('name','User ' + userCount.get() );
-                                            //          user.set({
-                                            //              name: 'User ' + userCount.get(),
-                                            //              colorCode: getNewColor()
-                                            //          });
+                                        // return userCount.fetch(function (err) {
+                                        //     if (user.get()) {
+                                        //
+                                        //         if (user.get('colorCode') == null) {
+                                        //             user.set('colorCode', getNewColor());
+                                        //         }
+                                        //         if (user.get('name') != null)
+                                        //             return page.render();
+                                        //
+                                        //     }
+                                        //     if (err) {
+                                        //         return next(err);
+                                        //     }
+                                        //
+                                        //
+                                        //     return userCount.increment(function (err) {
+                                        //         if (err) {
+                                        //             return next(err);
+                                        //         }
+                                        //
+                                        //         // //TODO: Users
+                                        //         // model.createNull(user, { // create the empty new doc if it doesn't already exist
+                                        //         //         name: 'User ' + userCount.get(),
+                                        //         //         colorCode: getNewColor()
+                                        //         // });
+                                        //
+                                        //
+                                        //         //     console.log(user.set('name', "hello"));
+                                        //
+                                        //          //user.set('name','User ' + userCount.get() );
+                                        //          user.set({
+                                        //              name: 'User ' + userCount.get(),
+                                        //              colorCode: getNewColor()
+                                        //          });
 
-                                                    return page.render();
-                                      //          });
-                                         //   });
-                                   //     });
+                                        return page.render();
+                                        //          });
+                                        //   });
+                                        //     });
                                     });
+                                });
 
                             });
                         });
@@ -311,7 +314,7 @@ app.proto.create = function (model) {
     socket = io();
 
     var id = model.get('_session.userId');
-    var name = model.get('users.' + id +'.name');
+    var name = model.get('_page.doc.users.' + id +'.name');
     socket.emit("subscribeHuman", {userName:name,room:  model.get('_page.room'), userId: id}, function(userList){
 
         var userIds =[];
@@ -866,9 +869,9 @@ app.proto.onScroll = function () {
 };
 
 
-app.proto.changeColorCode = function(event){
+app.proto.changeColorCode = function(){
 
-    var  user = this.model.at('users.' + this.model.get('_session.userId'));
+    var  user = this.model.at('_page.doc.users.' + this.model.get('_session.userId'));
 
     console.log("here");
 
