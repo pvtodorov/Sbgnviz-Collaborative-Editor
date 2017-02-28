@@ -123,8 +123,8 @@ app.get('/:docId', function (page, model, arg, next) {
         var context = model.at((docPath + '.context'));
         var images = model.at((docPath + '.images'));
 
-        var users = model.at((docPath + '.users'));
-        var userIds = model.at((docPath + '.userIds'));
+        var users = model.at((docPath + '.users'));//user lists with names and color codes
+        var userIds = model.at((docPath + '.userIds')); //used for keeping a list of subscribed users
         var messages = model.at((docPath + '.messages'));
 
         cy.subscribe(function () {
@@ -143,105 +143,37 @@ app.get('/:docId', function (page, model, arg, next) {
                                 id: ONE_HOUR
                             }, {name: 'One minute', id: ONE_MINUTE}]);
                             var userId = model.get('_session.userId');
-                            // page.render();
-
-                            // messagesQuery = model.query('messages', {
-                            //     room: room,
-                            //     date: {
-                            //         $gt: 0
-                            //     },
-                            //     targets: {
-                            //         $elemMatch: {id: userId}
-                            //     }
-                            // });
-                            //
-                            // messagesQuery.subscribe(function (err) {
 
                             messages.subscribe(function() {
                                 if (err) {
                                     return next(err);
                                 }
 
-                                var userId = model.get('_session.userId');
+                                    var userId = model.get('_session.userId');
                                 //model.add('_page.doc.userIds',userId);
                                 //var userCnt = model.get('_page.doc.userIds').length();
 
                                 userIds.subscribe(function() {
                                     userIds.push(userId);
                                     users.subscribe(function () {
-                                        var userCnt = Object.keys(users).length;
 
-                                        users.set(userId, {name: ('User ' + userCnt), colorCode: getNewColor()});
-
-
-                                        //console.log(users.get());
-                                        //just to initialize
-
-
-                                        // var usersQuery = model.query('users', '_page.doc.userIds');
-                                        // usersQuery.subscribe(function (err) {
-                                        //     if (err) {
-                                        //         return next(err);
-                                        //     }
-                                        //
-                                        //
-                                        //     var user = model.at('users.' + model.get('_session.userId'));
-                                        //
-                                        //     userCount = model.get('chat.userCount');
+                                        var colorCode = null;
+                                        var userName = null;
+                                        if(users.get(userId)) {
+                                            userName = users.get(userId).name;
+                                            colorCode = users.get(userId).colorCode;
+                                        }
+                                        if(userName == null)
+                                            userName = 'User ' + userId;
+                                        if(colorCode == null)
+                                            colorCode = getNewColor();
 
 
-                                        //user.subscribe(function (err) {
-
-                                        // model.createNull(user, { // create the empty new doc if it doesn't already exist
-                                        //     name: 'User' + (++userCount),
-                                        //     colorCode: getNewColor()
-                                        // });
+                                        users.set(userId, {name: userName, colorCode: colorCode});
 
 
-                                        //            model.set('chat.userCount', userCount);
-                                        //userCount = model.at('chat.userCount');
-
-                                        // return page.render();
-
-                                        // return userCount.fetch(function (err) {
-                                        //     if (user.get()) {
-                                        //
-                                        //         if (user.get('colorCode') == null) {
-                                        //             user.set('colorCode', getNewColor());
-                                        //         }
-                                        //         if (user.get('name') != null)
-                                        //             return page.render();
-                                        //
-                                        //     }
-                                        //     if (err) {
-                                        //         return next(err);
-                                        //     }
-                                        //
-                                        //
-                                        //     return userCount.increment(function (err) {
-                                        //         if (err) {
-                                        //             return next(err);
-                                        //         }
-                                        //
-                                        //         // //TODO: Users
-                                        //         // model.createNull(user, { // create the empty new doc if it doesn't already exist
-                                        //         //         name: 'User ' + userCount.get(),
-                                        //         //         colorCode: getNewColor()
-                                        //         // });
-                                        //
-                                        //
-                                        //         //     console.log(user.set('name', "hello"));
-                                        //
-                                        //          //user.set('name','User ' + userCount.get() );
-                                        //          user.set({
-                                        //              name: 'User ' + userCount.get(),
-                                        //              colorCode: getNewColor()
-                                        //          });
 
                                         return page.render();
-                                        //          });
-                                        //   });
-                                        //     });
                                     });
                                 });
 
@@ -297,7 +229,7 @@ function playSound() {
 
 app.proto.changeDuration = function () {
 
-    return this.model.filter('messages', 'biggerTime').ref('_page.list');
+    return this.model.filter('_page.doc.messages', 'biggerTime').ref('_page.list');
 
 
 };
@@ -315,8 +247,9 @@ app.proto.create = function (model) {
 
     var id = model.get('_session.userId');
     var name = model.get('_page.doc.users.' + id +'.name');
-    socket.emit("subscribeHuman", {userName:name,room:  model.get('_page.room'), userId: id}, function(userList){
+    socket.emit("subscribeHuman", {userName:name, room:  model.get('_page.room'), userId: id}, function(userList){
 
+        console.log(model.get('_page.doc.messages'));
         var userIds =[];
         userList.forEach(function(user){
             userIds.push(user.userId);
@@ -478,6 +411,24 @@ app.proto.init = function (model) {
     var timeSort;
 
     var self = this;
+
+
+    // var docPath = 'documents.' + model.get('_page.room');
+    // console.log(docPath);
+    // model.on('all', (docPath +'.messages.**'), function (id, op, msg ) {
+    //
+    //     console.log("here");
+    //     console.log(id);
+    //     console.log(msg);
+    //     if(msg.date < 0) {
+    //         msgPath = model.at(docPath +'.messages.' + id);
+    //         msgPath.set('date', +(new Date));
+    //     }
+    //
+    // });
+
+
+
     //Cy updated by other clients
     model.on('change', '_page.doc.cy.initTime', function( val, prev, passed){
 
@@ -582,7 +533,7 @@ app.proto.init = function (model) {
             }
             else
              cy.getElementById(id).css({
-                 "overlay-color": "blue",
+                 "overlay-color": val,
                  "overlay-padding": 10,
                  "overlay-opacity": 0.25
              });
@@ -854,7 +805,7 @@ app.proto.init = function (model) {
 
 
 
-    return model.sort('messages', timeSort).ref('_page.list');
+    return model.sort('_page.doc.messages', timeSort).ref('_page.list');
 };
 
 
@@ -916,9 +867,9 @@ app.proto.add = function (model, filePath) {
         }
 
         var msgUserId = model.get('_session.userId');
-        var msgUserName = model.get('users.' + msgUserId +'.name');
+        var msgUserName = model.get('_page.doc.users.' + msgUserId +'.name');
 
-        model.add('messages', {
+        model.add('_page.doc.messages', {
             room: model.get('_page.room'),
             targets: targets,
             userId: msgUserId,
@@ -927,6 +878,8 @@ app.proto.add = function (model, filePath) {
             date: -1//val //server assigns the correct time
         });
 
+    var msgPathName = 'documents.' +  model.get('_page.room') + '.messages';
+        console.log(model.get(msgPathName));
 
 
 

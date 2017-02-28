@@ -7,10 +7,12 @@
 
 module.exports = function (model, docId, userId, userName) {
 
-    var userPath = model.at('users.' + userId);
+
 
 
     model.ref('_page.doc', 'documents.' + docId);
+
+    var userPath = model.at('_page.doc.users.' + userId);
 
     return ModelManager = { //global reference for testing
 
