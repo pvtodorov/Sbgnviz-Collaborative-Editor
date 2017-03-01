@@ -20,12 +20,12 @@
 
 
 <Body:>
-<script src="node_modules/jquery/dist/jquery.js"></script>
-<script src="node_modules/ocanvas/build/dist/latest/ocanvas.min.js"></script>
-<!--<script src="app/bundle.js"></script>-->
-<script src="node_modules/qtip2/dist/jquery.qtip.js"></script>
 
-<script src="lib/js/socket.io.js"></script>
+    <script src="node_modules/ocanvas/build/dist/latest/ocanvas.min.js"></script>
+    <script src="node_modules/jquery/dist/jquery.js"></script>
+    <script src="node_modules/qtip2/dist/jquery.qtip.js"></script>
+
+    <script src="lib/js/socket.io.js"></script>
 
     <!--<body>-->
     <div class="nav-menu sbgn-nav-menu">
@@ -1223,7 +1223,7 @@
 
                     <ul id="messages" as="list"  >
                         {{each _page.list as #message}}
-                        <li><view is="chat-message"></view></li>
+                        <view is="chat-message"></view>
                         {{/each}}
                     </ul>
 
@@ -1295,11 +1295,23 @@
                 {{/if}}
             </div>
             <chat-message:>
-                <div class="message">
-                    <div class="time">{{_page.showTime && formatTime(#message)}}</div>
-                    <b><div style = "font-color:{{_page.doc.users[#message.userId].colorCode}};"> {{#message.userName}}</div></b>
-                    <p>{{#message.comment}}</p>
-                </div>
+            <table class = "message" align="center" valign="center">
+                <tbody>
+                <tr>
+                    <td style = "color:{{_page.doc.users[#message.userId].colorCode}};  padding : 5px">
+                        {{#message.userName}}
+                    </td>
+                    <td class="time" style = "padding : 5px">
+                        {{_page.showTime && formatTime(#message)}}
+                    </td>
+
+                </tr>
+                <tr><td  style = "padding : 10px">
+                    {{#message.comment}}
+                    </td>
+                </tr>
+                </tbody>
+            </table>
 
 
 

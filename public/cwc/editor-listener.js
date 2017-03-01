@@ -147,22 +147,9 @@ module.exports = function(modelManager){
                 modelManager.changeModelElementGroupAttribute("position", modelElList, paramList, "me");
             });
         }
-        else if(actionName === "deleteElesSimple"){
 
-            var nodeList = [];
-            var edgeList = [];
 
-            args.eles.forEach(function (el) {
-                if(el.isNode())
-                    nodeList.push({id:el.id()});
-                else
-                    edgeList.push({id:el.id()});
-            });
-
-            modelManager.deleteModelElementGroup({nodes:nodeList,edges: edgeList}, "me"); //edges need to be deleted first
-        }
-
-        else if(actionName === "deleteNodesSmart"){
+        else if(actionName === "deleteElesSimple" || actionName === "deleteNodesSmart"){
 
             var nodeList = [];
             var edgeList = [];

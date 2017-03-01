@@ -39,8 +39,8 @@ module.exports = function () {
     // time out before loading the default sample. 
     // TODO search for a better way.
     setTimeout(function(){
-      loadSample('neuronal_muscle_signalling.xml');
-      //  loadSample('activated_stat1alpha_induction_of_the_irf1_gene.xml');
+      // loadSample('neuronal_muscle_signalling.xml');
+       loadSample('activated_stat1alpha_induction_of_the_irf1_gene.xml');
       keyboardShortcuts();
     }, 100);
   });
@@ -277,13 +277,14 @@ module.exports = function () {
       layoutPropertiesView.applyLayout(preferences);
     });
 
-    $("#undo-last-action, #undo-icon").click(function (e) {
-      cy.undoRedo().undo();
-    });
-
-    $("#redo-last-action, #redo-icon").click(function (e) {
-      cy.undoRedo().redo();
-    });
+    //FUNDA
+    // $("#undo-last-action, #undo-icon").click(function (e) {
+    //   cy.undoRedo().undo();
+    // });
+    //
+    // $("#redo-last-action, #redo-icon").click(function (e) {
+    //   cy.undoRedo().redo();
+    // });
 
     $("#save-as-png").click(function (evt) {
       chise.saveAsPng(); // the default filename is 'network.png'

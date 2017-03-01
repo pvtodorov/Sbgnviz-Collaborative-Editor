@@ -150,11 +150,12 @@ app.get('/:docId', function (page, model, arg, next) {
                                 }
 
                                     var userId = model.get('_session.userId');
-                                //model.add('_page.doc.userIds',userId);
-                                //var userCnt = model.get('_page.doc.userIds').length();
 
                                 userIds.subscribe(function() {
-                                    userIds.push(userId);
+                                        userIds.push(userId);
+
+                                    var userIdsList = model.get('_page.doc.userIds');
+
                                     users.subscribe(function () {
 
                                         var colorCode = null;
@@ -164,7 +165,7 @@ app.get('/:docId', function (page, model, arg, next) {
                                             colorCode = users.get(userId).colorCode;
                                         }
                                         if(userName == null)
-                                            userName = 'User ' + userId;
+                                            userName = 'User ' + userIdsList.length;
                                         if(colorCode == null)
                                             colorCode = getNewColor();
 
@@ -234,14 +235,17 @@ app.proto.changeDuration = function () {
 
 };
 
+/***
+ * Called only once in a browser after first page rendering
+ * @param model
+ * @returns {*}
+ */
+
 app.proto.create = function (model) {
     model.set('_page.showTime', true);
 
     var self = this;
     docReady = true;
-
-
-
 
     socket = io();
 
@@ -249,7 +253,6 @@ app.proto.create = function (model) {
     var name = model.get('_page.doc.users.' + id +'.name');
     socket.emit("subscribeHuman", {userName:name, room:  model.get('_page.room'), userId: id}, function(userList){
 
-        console.log(model.get('_page.doc.messages'));
         var userIds =[];
         userList.forEach(function(user){
             userIds.push(user.userId);
@@ -326,18 +329,37 @@ app.proto.create = function (model) {
 
     //initially loaded model is sample 1
 
-    var modelJson = modelManager.getJsonFromModel();
+    // var modelJson = modelManager.getJsonFromModel();
 
 
+    //Loading cytoscape and clients
     setTimeout(function(){
-        self.loadCyFromModel();
+         var isModelEmpty = self.loadCyFromModel(model);
 
         setTimeout(function() {
-            modelManager.initModel(cy.nodes(), cy.edges(), "me");
+            if(isModelEmpty)
+                modelManager.initModel(cy.nodes(), cy.edges(), "me");
 
             require('./public/cwc/editor-listener.js')(modelManager);
 
         }, 0);
+
+
+        //Listen to these after cy is loaded
+        $("#undo-last-action, #undo-icon").click(function (e) {
+            if(modelManager.isUndoPossible()){
+                modelManager.undoCommand();
+
+            }
+        });
+
+        $("#redo-last-action, #redo-icon").click(function (e) {
+            if(modelManager.isRedoPossible()){
+                modelManager.redoCommand();
+
+            }
+        });
+
 
     }, 2000);
 
@@ -358,20 +380,38 @@ app.proto.create = function (model) {
     })(this));
 };
 
-app.proto.loadCyFromModel = function(){
-    var modelJson = modelManager.getJsonFromModel();
+app.proto.loadCyFromModel = function(model){
+
+    var isModelEmpty = true;
+    var nodesObj = model.get('_page.doc.cy.nodes');
+    var edgesObj = model.get('_page.doc.cy.edges');
+
+    var nodesArr = [];
+    var edgesArr = [];
+
+    //Convert nodes and edges into array format to update in chise
+    for (var att in nodesObj) {
+        if (nodesObj.hasOwnProperty(att))
+            nodesArr.push(nodesObj[att]);
+    }
+    for (var att in edgesObj) {
+        if (edgesObj.hasOwnProperty(att))
+            edgesArr.push(edgesObj[att]);
+    }
 
 
-    if (modelJson) {
+    if (nodesObj!= null) {
         //Updates data fields and sets style fields to default
         chise.updateGraph({
-            nodes: modelJson.nodes,
-            edges: modelJson.edges
+            nodes: nodesArr,
+            edges: edgesArr
         });
 
         //Update style fields separately
         cy.nodes().forEach(function(node){
-            var modelNode = modelManager.getModelNode(node.id());
+            var modelNode =  nodesObj[node.id()];
+
+            node.position(modelNode.position);
             node.css('background-color', modelNode.backgroundColor);
             node.css('border-width', modelNode.borderWidth);
             node.css('opacity', modelNode.opacity);
@@ -380,7 +420,7 @@ app.proto.loadCyFromModel = function(){
         });
 
         cy.edges().forEach(function(edge){
-            var modelEdge = modelManager.getModelEdge(edge.id());
+            var modelEdge = edgesObj[edge.id()];
             edge.css('line-color', modelEdge.lineColor);
             edge.css('background-color', modelEdge.backgroundColor);
             edge.css('background-opacity', modelEdge.backgroundOpacity);
@@ -390,7 +430,10 @@ app.proto.loadCyFromModel = function(){
 
         });
 
+        isModelEmpty = false;//meaning cy is loaded
     }
+
+    return isModelEmpty;
 }
 
 function moveNodeAndChildren(positionDiff, node, notCalcTopMostNodes) {
@@ -413,28 +456,13 @@ app.proto.init = function (model) {
     var self = this;
 
 
-    // var docPath = 'documents.' + model.get('_page.room');
-    // console.log(docPath);
-    // model.on('all', (docPath +'.messages.**'), function (id, op, msg ) {
-    //
-    //     console.log("here");
-    //     console.log(id);
-    //     console.log(msg);
-    //     if(msg.date < 0) {
-    //         msgPath = model.at(docPath +'.messages.' + id);
-    //         msgPath.set('date', +(new Date));
-    //     }
-    //
-    // });
-
-
 
     //Cy updated by other clients
     model.on('change', '_page.doc.cy.initTime', function( val, prev, passed){
 
         if(docReady &&  passed.user == null) {
 
-            self.loadCyFromModel();
+            self.loadCyFromModel(model);
 
         }
     });
@@ -447,16 +475,7 @@ app.proto.init = function (model) {
 
 
             if(!node || !node.id){ //node is deleted
-                console.log("removal here" + id);
                 cy.getElementById(id).remove();
-
-
-
-                var modelJson = modelManager.getJsonFromModel();
-
-                console.log(modelJson);
-
-
             }
         }
 
@@ -481,18 +500,19 @@ app.proto.init = function (model) {
 
         if(docReady && passed.user == null) {
             var pos = model.get('_page.doc.cy.nodes.'+ id + '.position');
-            var sbgnclass = model.get('_page.doc.cy.nodes.'+ id + '.class');
+            var sbgnclass = model.get('_page.doc.cy.nodes.'+ id + '.data.class');
            var visibility = model.get('_page.doc.cy.nodes.'+ id + '.visibility');
-           var parent = model.get('_page.doc.cy.nodes.'+ id + 'data.parent');
+           var parent = model.get('_page.doc.cy.nodes.'+ id + '.data.parent');
 
            if(parent == undefined) parent = null;
 
 
             var newNode = chise.elementUtilities.addNode(pos.x, pos.y, sbgnclass, id, parent, visibility);
 
-
+            modelManager.initModelNode(newNode,"me", true);
 
             newNode.move({"parent":parent});
+
         }
 
     });
@@ -501,13 +521,15 @@ app.proto.init = function (model) {
 
 
         if(docReady && passed.user == null ){
-            var source = model.get('_page.doc.cy.edges.'+ id + '.source');
-            var target = model.get('_page.doc.cy.edges.'+ id + '.target');
-            var sbgnclass = model.get('_page.doc.cy.edges.'+ id + '.class');
+            var source = model.get('_page.doc.cy.edges.'+ id + '.data.source');
+            var target = model.get('_page.doc.cy.edges.'+ id + '.data.target');
+            var sbgnclass = model.get('_page.doc.cy.edges.'+ id + '.data.class');
             var visibility = model.get('_page.doc.cy.nodes.'+ id + '.visibility');
 
 
-            chise.elementUtilities.addEdge(source, target, id, sbgnclass, visibility);
+            var newEdge = chise.elementUtilities.addEdge(source, target, sbgnclass, id, visibility);
+
+            modelManager.initModelEdge(newEdge,"me", true);
 
         }
 
@@ -541,7 +563,29 @@ app.proto.init = function (model) {
 
         }
     });
+    model.on('all', '_page.doc.cy.edges.*.highlightColor', function(id, op, val,prev, passed){
 
+        if(docReady && passed.user == null) {
+            if(val == null){
+
+                cy.getElementById(id).css({
+                    "overlay-color": null,
+                    "overlay-padding": 10,
+                    "overlay-opacity": 0
+                });
+
+            }
+            else {
+                cy.getElementById(id).css({
+                    "overlay-color": val,
+                    "overlay-padding": 10,
+                    "overlay-opacity": 0.25
+                });
+            }
+
+
+        }
+    });
 
     model.on('all', '_page.doc.cy.nodes.*.data', function(id, op, data,prev, passed){
 
@@ -685,12 +729,11 @@ app.proto.init = function (model) {
 
         if(docReady && passed.user == null) {
             var expandCollapse = cy.expandCollapse('get'); //we can't call chise.expand or collapse directly as it causes infinite calls
-            console.log(val);
-            if(val === "expand"){
-                expandCollapse.expand(cy.getElementById(id));
-            }
-            else
+            if(val === "collapse")
                 expandCollapse.collapse(cy.getElementById(id));
+            else
+                expandCollapse.expand(cy.getElementById(id));
+
         }
 
     });
@@ -762,7 +805,10 @@ app.proto.init = function (model) {
 
         }
     });
-   //    model.on('all', '_page.doc.images', function() {
+
+
+
+    //    model.on('all', '_page.doc.images', function() {
 //         if (docReady)
 //             triggerContentChange('receivedImages');
 //     });
@@ -823,13 +869,7 @@ app.proto.onScroll = function () {
 app.proto.changeColorCode = function(){
 
     var  user = this.model.at('_page.doc.users.' + this.model.get('_session.userId'));
-
-    console.log("here");
-
     user.set('colorCode', getNewColor());
-
-
-    console.log(user.get('colorCode'));
 
 };
 app.proto.runUnitTests = function(){
@@ -869,17 +909,19 @@ app.proto.add = function (model, filePath) {
         var msgUserId = model.get('_session.userId');
         var msgUserName = model.get('_page.doc.users.' + msgUserId +'.name');
 
-        model.add('_page.doc.messages', {
-            room: model.get('_page.room'),
-            targets: targets,
-            userId: msgUserId,
-            userName: msgUserName,
-            comment: comment,
-            date: -1//val //server assigns the correct time
+        socket.emit('getDate', function(date){ //get the date from the server
+
+            model.add('_page.doc.messages', {
+                room: model.get('_page.room'),
+                targets: targets,
+                userId: msgUserId,
+                userName: msgUserName,
+                comment: comment,
+                date: date
+            });
+
         });
 
-    var msgPathName = 'documents.' +  model.get('_page.room') + '.messages';
-        console.log(model.get(msgPathName));
 
 
 
@@ -941,6 +983,8 @@ app.proto.count = function (value) {
 app.proto.formatTime = function (message) {
     var hours, minutes, seconds, period, time;
     time = message && message.date;
+
+
     if (!time) {
         return;
     }
@@ -957,6 +1001,7 @@ app.proto.formatTime = function (message) {
     if (seconds < 10) {
         seconds = '0' + seconds;
     }
+
     return hours + ':' + minutes + ':' + seconds;
 };
 

@@ -29,13 +29,13 @@ module.exports = function (model, docId, userId, userName) {
 
         setName: function (userName) {
 
-            model.fetch('users', userId, function (err) {
+            model.fetch('_page.doc.users', userId, function (err) {
                 userPath.set('name', userName);
             });
         },
 
         getName: function () {
-            return model.get('users.' + userId + '.name');
+            return model.get('_page.doc.users.' + userId + '.name');
         },
 
 
@@ -271,12 +271,12 @@ module.exports = function (model, docId, userId, userName) {
 
 
         selectModelEdge: function (edge, user,  noHistUpdate) {
-            var userPath = model.at('users.' + userId);
+
             var edgePath = model.at('_page.doc.cy.edges.' + edge.id());
             if (edgePath.get() == null)
                 return "Edge id not found";
             if (userPath) {
-                model.pass({user: user}).set('_page.doc.cy.edges.' + edge.id()+ 'highlightColor', userPath.get('colorCode'));
+                model.pass({user: user}).set('_page.doc.cy.edges.' + edge.id()+ '.highlightColor', userPath.get('colorCode'));
 
 
             }
@@ -311,20 +311,6 @@ module.exports = function (model, docId, userId, userName) {
 
         },
 
-        getSelectedModelNodes: function () {
-            var nodes = model.get('_page.doc.cy.nodes');
-            var selectedNodes = [];
-
-            for (var att in nodes) {
-                if (nodes.hasOwnProperty(att)) {
-                    var node = nodes[att];
-                    if (node.highlightColor != null) //could be selected by anyone
-                        selectedNodes.push(node);
-                }
-            }
-
-            return selectedNodes;
-        },
 
         addModelNode: function (nodeId, param, user, noHistUpdate) {
 
@@ -332,9 +318,9 @@ module.exports = function (model, docId, userId, userName) {
             if (model.get("_page.doc.cy.nodes." + nodeId + '.id') != null)
                 return "Node cannot be duplicated";
 
-            model.pass({user: user}).set('_page.doc.cy.nodes.' + nodeId + '.id', nodeId);
+            model.pass({user: user}).set('_page.doc.cy.nodes.' + nodeId + '.data.id', nodeId);
             model.pass({user: user}).set('_page.doc.cy.nodes.' + nodeId + '.position', {x: param.x, y: param.y});
-            model.pass({user: user}).set('_page.doc.cy.nodes.' + nodeId + '.class', param.class);
+            model.pass({user: user}).set('_page.doc.cy.nodes.' + nodeId + '.data.class', param.class);
             //     model.pass({user:user}).set('_page.doc.cy.nodes.' + nodeId+'.sbgnlabel', param.sbgnlabel);
 
             //adding the node in cytoscape
@@ -361,11 +347,11 @@ module.exports = function (model, docId, userId, userName) {
             if (model.get("_page.doc.cy.edges." + edgeId + '.id') != null)
                 return "Edge cannot be duplicated";
 
-            model.pass({user: user}).set('_page.doc.cy.edges.' + edgeId + '.id', edgeId);
-            model.pass({user: user}).set('_page.doc.cy.edges.' + edgeId + '.class', param.class);
+            model.pass({user: user}).set('_page.doc.cy.edges.' + edgeId + '.data.id', edgeId);
+            model.pass({user: user}).set('_page.doc.cy.edges.' + edgeId + '.data.class', param.class);
 
-            model.pass({user: user}).set('_page.doc.cy.edges.' + edgeId + '.source', param.source);
-            model.pass({user: user}).set('_page.doc.cy.edges.' + edgeId + '.target', param.target);
+            model.pass({user: user}).set('_page.doc.cy.edges.' + edgeId + '.data.source', param.source);
+            model.pass({user: user}).set('_page.doc.cy.edges.' + edgeId + '.data.target', param.target);
 
             //adding the edge...other operations should be called after this
             model.pass({user: user}).set('_page.doc.cy.edges.' + edgeId + '.addedLater', true);
@@ -419,12 +405,7 @@ module.exports = function (model, docId, userId, userName) {
 
             this.addModelNode(compoundId, compoundAtts, user, true);
 
-
-
             this.changeModelElementGroupAttribute("data", elList, paramList, user, true);
-
-
-
 
             if (!noHistUpdate)
                 this.updateHistory({
@@ -448,11 +429,13 @@ module.exports = function (model, docId, userId, userName) {
             if (!noHistUpdate) {
 
                 elList.forEach(function (el) {
+
                     var prevAttVal;
                     if (el.isNode)
                         prevAttVal = model.get('_page.doc.cy.nodes.' + el.id + '.' + attStr);
                     else
                         prevAttVal = model.get('_page.doc.cy.edges.' + el.id + '.' + attStr);
+
 
                     prevParamList.push(prevAttVal);
                 });
@@ -494,8 +477,10 @@ module.exports = function (model, docId, userId, userName) {
             var prevAttVal = nodePath.get(attStr);
 
 
-            if(attStr === "width")
+            if(attStr === "width") //as we read this directly from cy.data
                 attStr = "borderWidth";
+
+
 
             nodePath.pass({user: user}).set(attStr, attVal);
 
@@ -503,9 +488,10 @@ module.exports = function (model, docId, userId, userName) {
             if (attStr == "expandCollapseStatus") {
                 if (attVal == "expand")
                     prevAttVal = "collapse";
-                if (attVal == "collapse")
+                else //if null or collapse
                     prevAttVal = "expand";
             }
+
 
 
             if (attStr != 'interactionCount') {
@@ -573,57 +559,11 @@ module.exports = function (model, docId, userId, userName) {
                 return "Node id not found";
 
             if (!noHistUpdate) {
-                var pos = nodePath.get('position');
-                var sbgnclass = nodePath.get('class');
-                var data = nodePath.get('data');
-                var backgroundColor = nodePath.get('backgroundColor');
-
-                // // var borderColor = nodePath.get('borderColor');
-                // var borderWidth = nodePath.get('borderWidth');
-                // var backgroundColor = nodePath.get('backgroundColor');
-                // var width = nodePath.get('width');
-                // var height = nodePath.get('height');
-                // var parent = nodePath.get('parent');
-                // var sbgnlabel = nodePath.get('sbgnlabel');
-                // var isCloneMarker = nodePath.get('isCloneMarker');
-                //
-                // var sbgnStatesAndInfos = nodePath.get('sbgnStatesAndInfos');
-                // var highlightColor = nodePath.get('highlightColor');
-                // var ports = nodePath.get('ports');
-                //
-                // var labelsize = nodePath.get('labelsize');
-                // var fontfamily = nodePath.get('fontfamily');
-                // var fontweight = nodePath.get('fontweight');
-                // var fontstyle = nodePath.get('fontstyle');
-                // var opacity = nodePath.get('opacity');
-                //
-
-                var interactionCount = nodePath.get('interactionCount');
 
 
-                prevParam = {
-                    x: pos.x,
-                    y: pos.y,
-                    data:data,
-                    // css:css
-                    // class: sbgnclass,
-                    // width: width,
-                    // height: height,
-                    // borderColor: borderColor,
-                    // borderWidth: borderWidth,
-                    // sbgnlabel: sbgnlabel,
-                    // sbgnStatesAndInfos: sbgnStatesAndInfos,
-                    // parent: parent,
-                    // isCloneMarker: isCloneMarker,
-                    // highlightColor: highlightColor,
-                    // ports: ports,
-                    // interactionCount: interactionCount,
-                    // labelsize: labelsize,
-                    // fontfamily: fontfamily,
-                    // fontweight: fontweight,
-                    // fontstyle: fontstyle,
-                    // opacity: opacity
-                };
+                prevParam = nodePath.get();
+
+
 
 
                 this.updateHistory({
@@ -652,31 +592,8 @@ module.exports = function (model, docId, userId, userName) {
 
 
             if (!noHistUpdate) {
-                var source = edgePath.get('source');
-                var target = edgePath.get('target');
-                var sbgnClass = edgePath.get('class');
-                var lineColor = edgePath.get('lineColor');
-                var width = edgePath.get('width');
-                var sbgncardinality = edgePath.get('sbgncardinality');
-                var portsource = edgePath.get('portsource');
-                var porttarget = edgePath.get('porttarget');
-                var bendPointPositions = edgePath.get('bendPointPositions');
-                var highlightColor = edgePath.get('highlightColor');
-                var opacity = edgePath.get('opacity');
 
-                prevParam = {
-                    source: source,
-                    target: target,
-                    class: sbgnClass,
-                    lineColor: lineColor,
-                    width: width,
-                    sbgncardinality: sbgncardinality,
-                    portsource: portsource,
-                    porttarget: porttarget,
-                    bendPointPositions: bendPointPositions,
-                    highlightColor: highlightColor,
-                    opacity: opacity
-                };
+                prevParam = edgePath.get();
 
                 this.updateHistory({
                     opName: 'delete',
@@ -703,31 +620,7 @@ module.exports = function (model, docId, userId, userName) {
             if(selectedEles.edges!= null){
                 selectedEles.edges.forEach(function (edge) {
                     var edgePath = model.at('_page.doc.cy.edges.' + edge.id);
-
-                    var source = edgePath.get('source');
-                    var target = edgePath.get('target');
-                    var sbgnclass = edgePath.get('class');
-                    var lineColor = edgePath.get('lineColor');
-                    var width = edgePath.get('width');
-                    var sbgncardinality = edgePath.get('sbgncardinality');
-                    var portsource = edgePath.get('portsource');
-                    var porttarget = edgePath.get('porttarget');
-                    var bendPointPositions = edgePath.get('bendPointPositions');
-                    var opacity = edgePath.get('opacity');
-
-
-                    prevParamsEdges.push({
-                        source: source,
-                        target: target,
-                        class: sbgnclass,
-                        lineColor: lineColor,
-                        width: width,
-                        sbgncardinality: sbgncardinality,
-                        portsource: portsource,
-                        porttarget: porttarget,
-                        bendPointPositions: bendPointPositions,
-                        opacity: opacity
-                    });
+                    prevParamsEdges.push(edgePath.get());
                 });
 
 
@@ -740,48 +633,8 @@ module.exports = function (model, docId, userId, userName) {
                 selectedEles.nodes.forEach(function (node) {
                     var nodePath = model.at('_page.doc.cy.nodes.' + node.id);
 
-                    var pos = nodePath.get('position');
-                    var sbgnclass = nodePath.get('class');
 
-
-                    var borderColor = nodePath.get('borderColor');
-                    var borderWidth = nodePath.get('borderWidth');
-                    var backgroundColor = nodePath.get('backgroundColor');
-                    var width = nodePath.get('width');
-                    var height = nodePath.get('height');
-                    var parent = nodePath.get('parent');
-                    var sbgnlabel = nodePath.get('sbgnlabel');
-                    var isCloneMarker = nodePath.get('isCloneMarker');
-                    var sbgnStatesAndInfos = nodePath.get('sbgnStatesAndInfos');
-                    var highlightColor = nodePath.get('highlightColor');
-                    var ports = nodePath.get('ports');
-                    var labelsize = nodePath.get('labelsize');
-                    var fontfamily = nodePath.get('fontfamily');
-                    var fontweight = nodePath.get('fontweight');
-                    var fontstyle = nodePath.get('fontstyle');
-                    var opacity = nodePath.get('opacity');
-
-                    prevParamsNodes.push({
-                        x: pos.x,
-                        y: pos.y,
-                        class: sbgnclass,
-                        width: width,
-                        height: height,
-                        borderColor: borderColor,
-                        borderWidth: borderWidth,
-                        sbgnlabel: sbgnlabel,
-                        sbgnStatesAndInfos: sbgnStatesAndInfos,
-                        parent: parent,
-                        isCloneMarker: isCloneMarker,
-                        highlightColor: highlightColor,
-                        backgroundColor: backgroundColor,
-                        ports: ports,
-                        labelsize: labelsize,
-                        fontweight: fontweight,
-                        fontfamily: fontfamily,
-                        fontstyle: fontstyle,
-                        opacity: opacity
-                    });
+                    prevParamsNodes.push(nodePath.get());
                 });
 
 
@@ -815,10 +668,9 @@ module.exports = function (model, docId, userId, userName) {
 
             //change parents after adding them all
             for (var i = 0; i < elList.nodes.length; i++) {
-
                 self.changeModelNodeAttribute('parent', elList.nodes[i].id, param.nodes[i].parent, null, false);
             }
-            ;
+
 
 
             if (!noHistUpdate)
@@ -829,27 +681,13 @@ module.exports = function (model, docId, userId, userName) {
          */
         restoreModelNode: function (nodeId, param, user, noHistUpdate) {
 
-            this.addModelNode(nodeId, param, user, noHistUpdate);
+            this.addModelNode(nodeId, {x: param.position.x, y: param.position.y, class:param.data.class}, user, noHistUpdate);
 
-
-            this.changeModelNodeAttribute('interactionCount', nodeId, param.interactionCount, user, noHistUpdate);
-            this.changeModelNodeAttribute('ports', nodeId, param.ports, user, noHistUpdate);
-            this.changeModelNodeAttribute('highlightColor', nodeId, param.highlightColor, user, noHistUpdate);
-            this.changeModelNodeAttribute('class', nodeId, param.class, user, noHistUpdate);
-            this.changeModelNodeAttribute('width', nodeId, param.width, user, noHistUpdate);
-            this.changeModelNodeAttribute('height', nodeId, param.height, user, noHistUpdate);
-            this.changeModelNodeAttribute('sbgnlabel', nodeId, param.sbgnlabel, user, noHistUpdate);
-            this.changeModelNodeAttribute('backgroundColor', nodeId, param.backgroundColor, user, noHistUpdate);
-            this.changeModelNodeAttribute('borderColor', nodeId, param.borderColor, user, noHistUpdate);
-            this.changeModelNodeAttribute('borderWidth', nodeId, param.borderWidth, user, noHistUpdate);
-            this.changeModelNodeAttribute('sbgnStatesAndInfos', nodeId, param.sbgnStatesAndInfos, user, noHistUpdate);
-            this.changeModelNodeAttribute('parent', nodeId, param.parent, user, noHistUpdate);
-            this.changeModelNodeAttribute('isCloneMarker', nodeId, param.isCloneMarker, user, noHistUpdate);
-            this.changeModelNodeAttribute('labelsize', nodeId, param.labelsize, user, noHistUpdate);
-            this.changeModelNodeAttribute('fontfamily', nodeId, param.fontfamily, user, noHistUpdate);
-            this.changeModelNodeAttribute('fontweight', nodeId, param.fontweight, user, noHistUpdate);
-            this.changeModelNodeAttribute('fontstyle', nodeId, param.fontstyle, user, noHistUpdate);
-            this.changeModelNodeAttribute('opacity', nodeId, param.opacity, user, noHistUpdate);
+            for(att in param){
+                if(param.hasOwnProperty(att) && att !== "addedLater"){
+                    model.pass({user:user}).set(('_page.doc.cy.nodes.' + nodeId + '.' + att), param[att]);
+                }
+            }
 
             if (!noHistUpdate)
                 this.updateHistory({opName: 'restore', opTarget: 'element', elType: 'node', elId: nodeId});
@@ -857,17 +695,15 @@ module.exports = function (model, docId, userId, userName) {
 
         restoreModelEdge: function (edgeId, param, user, noHistUpdate) {
 
-            this.addModelEdge(edgeId, param, user, noHistUpdate);
+            this.addModelEdge(edgeId, {source: param.data.source, target:param.data.target, class: param.data.class}, user, noHistUpdate);
 
 
-            this.changeModelEdgeAttribute('lineColor', edgeId, param.lineColor, user, noHistUpdate);
-            this.changeModelEdgeAttribute('width', edgeId, param.width, user, noHistUpdate);
-            this.changeModelEdgeAttribute('sbgncardinality', edgeId, param.sbgncardinality, user, noHistUpdate);
-            this.changeModelEdgeAttribute('portsource', edgeId, param.portsource, user, noHistUpdate);
-            this.changeModelEdgeAttribute('porttarget', edgeId, param.porttarget, user, noHistUpdate);
-            this.changeModelEdgeAttribute('bendPointPositions', edgeId, param.bendPointPositions, user, noHistUpdate);
-            this.changeModelEdgeAttribute('highlightColor', edgeId, param.highlightColor, user, noHistUpdate);
-            this.changeModelEdgeAttribute('opacity', edgeId, param.opacity, user, noHistUpdate);
+
+            for(att in param){
+                if(param.hasOwnProperty(att) && att !== "addedLater"){
+                    model.pass({user:user}).set(('_page.doc.cy.edges.' + edgeId + '.' + att), param[att]);
+                }
+            }
 
 
             if (!noHistUpdate)
@@ -951,7 +787,7 @@ module.exports = function (model, docId, userId, userName) {
 
         },
 
-        //convert model to json structure
+        //convert model to array
         getJsonFromModel: function () {
 
             var nodes = model.get('_page.doc.cy.nodes');
@@ -970,25 +806,17 @@ module.exports = function (model, docId, userId, userName) {
 
                 if (nodes.hasOwnProperty(att)) {
                     var node = nodes[att];
-                    var jsonNode = {
-                        data: node.data
-                    };
-
-                    jsonNodes.push(jsonNode);
+                    jsonNodes.push(node);
                 }
             }
-            ;
 
 
             for (var att in edges) {
                 if (edges.hasOwnProperty(att)) {
                     var edge = edges[att];
 
-                    var jsonEdge = {
-                        data: edge.data
-                    };
 
-                    jsonEdges.push(jsonEdge);
+                    jsonEdges.push(edge);
                 }
             }
 
@@ -1021,7 +849,9 @@ module.exports = function (model, docId, userId, userName) {
                 this.changeModelNodeAttribute('interactionCount', node.id(), 0, user, true); //don't update history
 
             var data = nodePath.get('data');
-            if (data != null)
+            //bbox is a random data parameter to make sure all data parts are already in the model
+            //if the only data parameters are id and class, it means it has just been added without initialization
+            if (data != null && data.bbox!=null) //it means data has been added before
                 node.data(data);
 
             else
@@ -1104,7 +934,9 @@ module.exports = function (model, docId, userId, userName) {
 
 
             var data = edgePath.get('data');
-            if (data != null)
+            //cardinality is a random data parameter to make sure all data parts are already in the model
+            //if the only data parameters are id and class, it means it has just been added without initialization
+            if (data != null && data.cardinality != null)
                 edge.data(data);
 
             else

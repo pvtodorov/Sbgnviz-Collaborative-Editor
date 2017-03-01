@@ -29,12 +29,13 @@
     "express": "^4.13.3",
     "express-session": "^1.11.3",
     "mongodb": "^2.2.9",
+    "onecolor": "*",
     "racer-bundle": "^0.2.5",
     "racer-highway": "^8.0.0",
-    "serve-favicon": "^2.3.0",
-    "onecolor":"*",
-    "sharedb-mongo": "^1.0.0-beta",
     "request": "*",
+    "serve-favicon": "^2.3.0",
+    "sharedb-hooks": "^3.0.0",
+    "sharedb-mongo": "^1.0.0-beta",
     "socket.io": "^1.3.6"
   },
   "devDependencies": {
