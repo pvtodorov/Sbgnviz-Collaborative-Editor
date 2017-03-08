@@ -97,36 +97,35 @@ appUtilities.getExpandCollapseOptions = function () {
   };
 };
 
-//FUNDA changed this
 appUtilities.dynamicResize = function () {
-  var win = $(window);
+    var win = $(window);
 
-  var windowWidth = win.width();
-  var windowHeight = win.height();
+    var windowWidth = win.width();
+    var windowHeight = win.height();
 
-  var canvasWidth = 1200;
-  var canvasHeight = 680;
+    var canvasWidth = 1200;
+    var canvasHeight = 680;
 
-  if (windowWidth > canvasWidth)
-  {
-    $("#sbgn-network-container").width(windowWidth * 0.99 * 0.7);
-    $("#inspector-tab-area").width(windowWidth * 0.99 * 0.3);
+    if (windowWidth > canvasWidth)
+    {
+        $("#sbgn-network-container").width(windowWidth * 0.99 * 0.7);
+        $("#inspector-tab-area").width(windowWidth * 0.99 * 0.3);
 
-    $("#sbgn-inspector").width(windowWidth * 0.99 * 0.3);
-    // var w = $("#sbgn-inspector-and-canvas").width(); //funda
-      var w = $("#sbgn-network-container").width();
-    $(".nav-menu").width(w);
-    $(".navbar").width(w);
+        $("#sbgn-inspector").width(windowWidth * 0.99 * 0.3);
+        // var w = $("#sbgn-inspector-and-canvas").width(); //funda
+        var w = $("#sbgn-network-container").width();
+        $(".nav-menu").width(w);
+        $(".navbar").width(w);
 //    $("#sbgn-info-content").width(windowWidth * 0.85);
-    $("#sbgn-toolbar").width(w);
-  }
+        $("#sbgn-toolbar").width(w);
+    }
 
-  if (windowHeight > canvasHeight)
-  {
-    $("#sbgn-network-container").height(windowHeight * 0.85);
-    // $("#sbgn-inspector").height(windowHeight * 0.85);
-    $("#inspector-tab-area").height(windowHeight * 0.85);
-  }
+    if (windowHeight > canvasHeight)
+    {
+        $("#sbgn-network-container").height(windowHeight * 0.85);
+        // $("#sbgn-inspector").height(windowHeight * 0.85);
+        $("#inspector-tab-area").height(windowHeight * 0.85);
+    }
 };
 
 appUtilities.nodeQtipFunction = function (node) {
@@ -136,37 +135,38 @@ appUtilities.nodeQtipFunction = function (node) {
 
   var qtipContent = chise.getQtipContent(node);
 
-
   if (!qtipContent) {
     return;
   }
-try { //FUNDA
-    node.qtip({
-        content: function () {
-            return qtipContent;
-        },
-        show: {
-            ready: true
-        },
-        position: {
-            my: 'top center',
-            at: 'bottom center',
-            adjust: {
-                cyViewport: true
+
+  //FUNDA
+    try {
+        node.qtip({
+            content: function () {
+                return qtipContent;
+            },
+            show: {
+                ready: true
+            },
+            position: {
+                my: 'top center',
+                at: 'bottom center',
+                adjust: {
+                    cyViewport: true
+                }
+            },
+            style: {
+                classes: 'qtip-bootstrap',
+                tip: {
+                    width: 16,
+                    height: 8
+                }
             }
-        },
-        style: {
-            classes: 'qtip-bootstrap',
-            tip: {
-                width: 16,
-                height: 8
-            }
-        }
-    });
-}
-catch(error){
-    console.log(error);
-}
+        });
+    }
+    catch(error){
+      console.log(error);
+    }
 };
 
 appUtilities.refreshUndoRedoButtonsStatus = function () {
@@ -235,6 +235,15 @@ appUtilities.disableDragAndDropMode = function() {
   $("#sbgn-network-container canvas").removeClass("target-cursor");
   cy.autolock(false);
   cy.autounselectify(false);
+};
+
+// Show given eles and perform incremental layout afterward
+appUtilities.showAndPerformIncrementalLayout = function(eles) {
+  var extendedList = chise.elementUtilities.extendNodeList(eles).filter(':hidden');
+  if (extendedList.length === 0) {
+    return;
+  }
+  chise.showAndPerformLayout(extendedList, this.triggerIncrementalLayout.bind(this));
 };
 
 module.exports = appUtilities;

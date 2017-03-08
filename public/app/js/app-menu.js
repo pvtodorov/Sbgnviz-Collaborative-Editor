@@ -3,8 +3,7 @@ var BackboneViews = require('./backbone-views');
 var appUtilities = require('./app-utilities');
 var modeHandler = require('./app-mode-handler');
 var keyboardShortcuts = require('./keyboard-shortcuts');
-
-
+var _ = require('underscore');
 
 // Handle sbgnviz menu functions which are to be triggered on events
 module.exports = function () {
@@ -20,7 +19,7 @@ module.exports = function () {
   {
     console.log('init the sbgnviz template/page');
     
-    $(window).on('resize', dynamicResize);
+    $(window).on('resize', _.debounce(dynamicResize, 100));
     dynamicResize();
 
     layoutPropertiesView = appUtilities.layoutPropertiesView = new BackboneViews.LayoutPropertiesView({el: '#layout-properties-table'});
@@ -39,8 +38,8 @@ module.exports = function () {
     // time out before loading the default sample. 
     // TODO search for a better way.
     setTimeout(function(){
-      // loadSample('neuronal_muscle_signalling.xml');
-       loadSample('activated_stat1alpha_induction_of_the_irf1_gene.xml');
+       loadSample('neuronal_muscle_signalling.xml');
+      // loadSample('activated_stat1alpha_induction_of_the_irf1_gene.xml');
       keyboardShortcuts();
     }, 100);
   });
@@ -183,6 +182,10 @@ module.exports = function () {
     $("#show-selected, #show-selected-icon").click(function(e) {
       chise.showNodesSmart(cy.nodes(":selected"));
     });
+    
+    $("#show-hidden-neighbors-of-selected").click(function(e) {
+      appUtilities.showAndPerformIncrementalLayout(cy.elements(':selected'));
+    });
 
     $("#show-all").click(function (e) {
       chise.showAll();
@@ -277,6 +280,7 @@ module.exports = function () {
       layoutPropertiesView.applyLayout(preferences);
     });
 
+
     //FUNDA
     // $("#undo-last-action, #undo-icon").click(function (e) {
     //   cy.undoRedo().undo();
@@ -316,29 +320,36 @@ module.exports = function () {
       chise.cloneElements(cy.nodes(':selected'));
     });
     
+    /*
+     * Align selected nodes w.r.t the first selected node start
+     */
     $('#align-horizontal-top,#align-horizontal-top-icon').click(function (e) {
-      chise.align(cy.nodes(":selected"), "top", "none"); // TODO set alignTo parameter to first selected node when we are ready
+      chise.align(cy.nodes(":selected"), "top", "none", appUtilities.firstSelectedNode);
     });
 
     $('#align-horizontal-middle,#align-horizontal-middle-icon').click(function (e) {
-      chise.align(cy.nodes(":selected"), "center", "none"); // TODO set alignTo parameter to first selected node when we are ready
+      chise.align(cy.nodes(":selected"), "center", "none", appUtilities.firstSelectedNode);
     });
 
     $('#align-horizontal-bottom,#align-horizontal-bottom-icon').click(function (e) {
-      chise.align(cy.nodes(":selected"), "bottom", "none"); // TODO set alignTo parameter to first selected node when we are ready
+      chise.align(cy.nodes(":selected"), "bottom", "none", appUtilities.firstSelectedNode);
     });
 
     $('#align-vertical-left,#align-vertical-left-icon').click(function (e) {
-      chise.align(cy.nodes(":selected"), "none", "left"); // TODO set alignTo parameter to first selected node when we are ready
+      chise.align(cy.nodes(":selected"), "none", "left", appUtilities.firstSelectedNode);
     });
 
     $('#align-vertical-center,#align-vertical-center-icon').click(function (e) {
-      chise.align(cy.nodes(":selected"), "none", "center"); // TODO set alignTo parameter to first selected node when we are ready
+      chise.align(cy.nodes(":selected"), "none", "center", appUtilities.firstSelectedNode);
     });
 
     $('#align-vertical-right,#align-vertical-right-icon').click(function (e) {
-      chise.align(cy.nodes(":selected"), "none", "right"); // TODO set alignTo parameter to first selected node when we are ready
+      chise.align(cy.nodes(":selected"), "none", "right", appUtilities.firstSelectedNode);
     });
+    
+    /*
+     * Align selected nodes w.r.t the first selected node end
+     */
     
     // Mode handler related menu items
     $('.add-node-menu-item').click(function (e) {

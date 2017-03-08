@@ -7,9 +7,9 @@ var cytoscape = require('cytoscape');
 require('jquery-expander')($);
 require('bootstrap');
 
-var appUtilities = require('./app/js/app-utilities');
-var appCy = require('./app/js/app-cy');
-var appMenu = require('./app/js/app-menu');
+var appUtilities = require('./js/app-utilities');
+var appCy = require('./js/app-cy');
+var appMenu = require('./js/app-menu');
 
 // Get cy extension instances
 var cyPanzoom = require('cytoscape-panzoom');
@@ -48,7 +48,6 @@ libs.filesaverjs = filesaverjs;
 libs.jQuery = jQuery;
 libs.cytoscape = cytoscape;
 libs.sbgnviz = sbgnviz;
-
 
 chise({
   networkContainerSelector: '#sbgn-network-container',

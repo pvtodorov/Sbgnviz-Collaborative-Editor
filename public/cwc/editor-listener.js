@@ -15,6 +15,8 @@ module.exports = function(modelManager){
     });
 
 
+
+
     cy.on("afterDo afterRedo", function (event, actionName, args, res) {
 
         console.log(actionName);

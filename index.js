@@ -4,7 +4,7 @@
  *	Author: Funda Durupinar Babur<f.durupinar@gmail.com>
  */
 var app = module.exports = require('derby').createApp('cwc', __filename);
-
+var _ = require('./public/node_modules/underscore');
 
 app.loadViews(__dirname + '/views');
 //app.loadStyles(__dirname + '/styles');
@@ -325,7 +325,7 @@ app.proto.create = function (model) {
     modelManager = require('./public/cwc/modelManager.js')(model, model.get('_page.room'), model.get('_session.userId'),name );
 
 
-    var main = require('./public/main.js'); //to initialize appCy, appMenu and relevant modules
+    // var main = require('./public/app/main.js'); //to initialize appCy, appMenu and relevant modules
 
     //initially loaded model is sample 1
 
@@ -334,8 +334,10 @@ app.proto.create = function (model) {
 
     //Loading cytoscape and clients
     setTimeout(function(){
-         var isModelEmpty = self.loadCyFromModel(model);
+         var isModelEmpty = self.loadCyFromModel();
 
+
+        //TODO????????????????
         setTimeout(function() {
             if(isModelEmpty)
                 modelManager.initModel(cy.nodes(), cy.edges(), "me");
@@ -380,60 +382,49 @@ app.proto.create = function (model) {
     })(this));
 };
 
-app.proto.loadCyFromModel = function(model){
-
-    var isModelEmpty = true;
-    var nodesObj = model.get('_page.doc.cy.nodes');
-    var edgesObj = model.get('_page.doc.cy.edges');
-
-    var nodesArr = [];
-    var edgesArr = [];
-
-    //Convert nodes and edges into array format to update in chise
-    for (var att in nodesObj) {
-        if (nodesObj.hasOwnProperty(att))
-            nodesArr.push(nodesObj[att]);
-    }
-    for (var att in edgesObj) {
-        if (edgesObj.hasOwnProperty(att))
-            edgesArr.push(edgesObj[att]);
-    }
+app.proto.loadCyFromModel = function(){
 
 
-    if (nodesObj!= null) {
+    var jsonArr = modelManager.getJsonFromModel();
+
+
+    if (jsonArr!= null) {
         //Updates data fields and sets style fields to default
         chise.updateGraph({
-            nodes: nodesArr,
-            edges: edgesArr
+            nodes: jsonArr.nodes,
+            edges: jsonArr.edges
         });
+
+        console.log(jsonArr.nodes);
+
 
         //Update style fields separately
         cy.nodes().forEach(function(node){
-            var modelNode =  nodesObj[node.id()];
 
-            node.position(modelNode.position);
-            node.css('background-color', modelNode.backgroundColor);
-            node.css('border-width', modelNode.borderWidth);
-            node.css('opacity', modelNode.opacity);
-            node.css('visibility', modelNode.visibility);
-            node.css('display', modelNode.display);
+            var position = modelManager.getModelNodeAttribute('position',node.id());
+
+            node.position({x:position.x, y: position.y});
+            // node._private.position.x = modelNode.position.x;
+            // node._private.position.y = modelNode.position.y;
+            node.css('background-color', modelManager.getModelNodeAttribute('backgroundColor',node.id()));
+            node.css('border-width', modelManager.getModelNodeAttribute('borderWidth',node.id()));
+            node.css('opacity', modelManager.getModelNodeAttribute('opacity,node.id()'));
+            node.css('visibility', modelManager.getModelNodeAttribute('visibility',node.id()));
+            node.css('display', modelManager.getModelNodeAttribute('display',node.id()));
         });
 
         cy.edges().forEach(function(edge){
-            var modelEdge = edgesObj[edge.id()];
-            edge.css('line-color', modelEdge.lineColor);
-            edge.css('background-color', modelEdge.backgroundColor);
-            edge.css('background-opacity', modelEdge.backgroundOpacity);
-            edge.css('border-width', modelEdge.borderWidth);
-            edge.css('width', modelEdge.width);
-            edge.css('opacity', modelEdge.opacity);
+            edge.css('line-color', modelManager.getModelEdgeAttribute('lineColor', edge.id()));
+            edge.css('background-color',  modelManager.getModelEdgeAttribute('backgroundColor', edge.id()));
+            edge.css('background-opacity',  modelManager.getModelEdgeAttribute('backgroundOpacity', edge.id()));
+            edge.css('border-width',  modelManager.getModelEdgeAttribute('borderWidth', edge.id()));
+            edge.css('width',  modelManager.getModelEdgeAttribute('width', edge.id()));
+            edge.css('opacity',  modelManager.getModelEdgeAttribute('opacity', edge.id()));
 
         });
 
-        isModelEmpty = false;//meaning cy is loaded
     }
-
-    return isModelEmpty;
+    return (jsonArr == null);
 }
 
 function moveNodeAndChildren(positionDiff, node, notCalcTopMostNodes) {
@@ -462,7 +453,7 @@ app.proto.init = function (model) {
 
         if(docReady &&  passed.user == null) {
 
-            self.loadCyFromModel(model);
+            self.loadCyFromModel();
 
         }
     });
@@ -744,11 +735,13 @@ app.proto.init = function (model) {
             try{
                 var viewUtilities = cy.viewUtilities('get');
 
+                console.log(highlightStatus);
                  if(highlightStatus === "highlighted")
                      viewUtilities.highlight(cy.getElementById(id));
                  else
                      viewUtilities.unhighlight(cy.getElementById(id));
 
+            //    cy.getElementById(id).updateStyle();
             }
             catch(e){
                 console.log(e);

@@ -1,8 +1,8 @@
 var jQuery = $ = require('jQuery');
 var appUtilities = require('./app-utilities');
-var bioGeneQtip = require('./biogene-qtip');
 var modeHandler = require('./app-mode-handler');
 var inspectorUtilities = require('./inspector-utilities');
+var _ = require('underscore');
 
 module.exports = function () {
   var getExpandCollapseOptions = appUtilities.getExpandCollapseOptions.bind(appUtilities);
@@ -14,6 +14,7 @@ module.exports = function () {
     appUtilities.sbgnNetworkContainer = $('#sbgn-network-container');
     // register extensions and bind events when cy is ready
     cy.ready(function () {
+
       cytoscapeExtensionsAndContextMenu();
       bindCyEvents();
     });
@@ -114,11 +115,25 @@ module.exports = function () {
         coreAsWell: true // Whether core instance have this item on cxttap
       },
       {
-        id: 'ctx-menu-biogene-properties',
-        title: 'BioGene Properties',
-        selector: 'node[class="macromolecule"],[class="nucleic acid feature"],[class="unspecified entity"]',
+        id: 'ctx-menu-select-all-object-of-this-type',
+        title: 'Select Objects of This Type',
+        selector: 'node, edge',
         onClickFunction: function (event) {
-          bioGeneQtip(event.cyTarget);
+          var cyTarget = event.cyTarget;
+          var sbgnclass = cyTarget.data('class');
+
+          cy.elements().unselect();
+          cy.elements('[class="' + sbgnclass + '"]').select();
+        }
+      },
+      {
+        id: 'ctx-menu-show-hidden-neighbors',
+        title: 'Show Hidden Neighbors',
+        selector: 'node',
+        onClickFunction: function (event) {
+          var cyTarget = event.cyTarget;
+          appUtilities.showAndPerformIncrementalLayout(cyTarget);
+//          chise.showAndPerformLayout(chise.elementUtilities.extendNodeList(cyTarget), appUtilities.triggerIncrementalLayout.bind(appUtilities));
         }
       }
     ]);
@@ -131,7 +146,7 @@ module.exports = function () {
       }
     });
 
-     cy.viewUtilities({
+    cy.viewUtilities({
       node: {
         highlighted: {
           'border-width': '10px'
@@ -271,11 +286,13 @@ module.exports = function () {
     cy.on("afterUndo", function (actionName, args) {
       refreshUndoRedoButtonsStatus();
       cy.style().update();
+      inspectorUtilities.handleSBGNInspector();
     });
 
     cy.on("afterRedo", function (actionName, args) {
       refreshUndoRedoButtonsStatus();
       cy.style().update();
+      inspectorUtilities.handleSBGNInspector();
     });
     
     cy.on("mousedown", "node", function (event) {
@@ -366,13 +383,34 @@ module.exports = function () {
       nodeQtipFunction(node);
     });
     
-    // TODO see the effects of these on performance
-    cy.on('select', function() {
+    var handleInspectorThrottled = _.throttle(function() {
       inspectorUtilities.handleSBGNInspector();
+    }, 200);
+    
+    // When we select/unselect many elements in one operation these 'select' / 'unselect' events called may times
+    // and unfortunetaly the inspector is refreshed many times. This seriously decreases the performance. To handle this
+    // problem we call the method used to refresh the inspector in a throttled way and decrease the number of calls.
+    cy.on('select', function() {
+      handleInspectorThrottled();
     });
     
     cy.on('unselect', function() {
-      inspectorUtilities.handleSBGNInspector();
+      handleInspectorThrottled();
+    });
+    
+    /*
+     * Set/unset the first selected node on select/unselect node events to align w.r.t that node when needed
+     */
+    cy.on('select', 'node', function() {
+      if (!appUtilities.firstSelectedNode) {
+        appUtilities.firstSelectedNode = this;
+      }
+    });
+    
+    cy.on('unselect', 'node', function() {
+      if (appUtilities.firstSelectedNode && appUtilities.firstSelectedNode.id() === this.id()) {
+        appUtilities.firstSelectedNode = undefined;
+      }
     });
     
     cy.on('add', function(event) {

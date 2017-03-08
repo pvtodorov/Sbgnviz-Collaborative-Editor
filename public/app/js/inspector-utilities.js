@@ -1,5 +1,6 @@
 var appUtilities = require('./app-utilities');
 var inspectorUtilities = {};
+var fillBioGeneContainer = require('./fill-biogene-container');
 
 inspectorUtilities.fillInspectorStateAndInfos = function (nodes, stateAndInfos, width) {
   //first empty the state variables and infos data in inspector
@@ -38,6 +39,7 @@ inspectorUtilities.fillInspectorStateAndInfos = function (nodes, stateAndInfos, 
       
       $("#inspector-delete-state-and-info" + i).unbind('click').click(function (event) {
         chise.removeStateOrInfoBox(nodes, i);
+        inspectorUtilities.handleSBGNInspector();
       });
     })(i);
   }
@@ -58,6 +60,7 @@ inspectorUtilities.fillInspectorStateAndInfos = function (nodes, stateAndInfos, 
     };
     
     chise.addStateOrInfoBox(nodes, obj);
+    inspectorUtilities.handleSBGNInspector();
   });
 
   $("#inspector-add-unit-of-information").click(function () {
@@ -72,6 +75,7 @@ inspectorUtilities.fillInspectorStateAndInfos = function (nodes, stateAndInfos, 
     };
     
     chise.addStateOrInfoBox(nodes, obj);
+    inspectorUtilities.handleSBGNInspector();
   });
 }
 
@@ -181,7 +185,7 @@ inspectorUtilities.handleSBGNInspector = function () {
         if( chise.elementUtilities.someMustNotBeSquare(selectedEles) ) {
           var imageName;
           var title;
-          if(window.nodeResizeUseAspectRatio) {
+          if(appUtilities.nodeResizeUseAspectRatio) {
             imageName = "lock.png";
             title = "unlock aspect ratio";
           }
@@ -226,7 +230,7 @@ inspectorUtilities.handleSBGNInspector = function () {
       
       if (chise.elementUtilities.trueForAllElements(selectedEles, chise.elementUtilities.canHaveSBGNLabel)) {
         html += "<tr><td style='width: " + width + "px; text-align:right; padding-right: 5px;'>" + "<font class='sbgn-label-font'>Font</font>" + "</td><td style='padding-left: 5px;'>"
-              + "<label id='inspector-font' class='inspector-input-box' style='width: " + buttonwidth + "px;'>"
+              + "<label id='inspector-font' class='inspector-input-box' style='cursor: pointer;width: " + buttonwidth + "px;'>"
               + "..." + "<label/>" + "</td></tr>"; 
       }
       
@@ -343,13 +347,13 @@ inspectorUtilities.handleSBGNInspector = function () {
     }
     
     $("#sbgn-inspector").html(html);
-//    if(selectedEles.length === 1) {
-//      fillBioGeneContainer(selectedEles[0]);
-//    }
+    if(selectedEles.length === 1) {
+      fillBioGeneContainer(selectedEles[0]);
+    }
 
     if (type == "node") {
       if (fillStateAndInfos) {
-        this.fillInspectorStateAndInfos(selectedEles, commonStateAndInfos, width);
+        inspectorUtilities.fillInspectorStateAndInfos(selectedEles, commonStateAndInfos, width);
       }
 
       if (multimerCheck && commonIsMultimer) {
@@ -382,9 +386,9 @@ inspectorUtilities.handleSBGNInspector = function () {
 //        defaults['font-size'] = selected.css('font-size');
         defaults['background-opacity'] = selected.css('background-opacity');
         defaults.labelsize = selected.data('labelsize');
-        defaults.fontfamily = selected.data('fontfamily');
-        defaults.fontweight = selected.data('fontweight');
-        defaults.fontstyle = selected.data('fontstyle');
+        defaults['font-family'] = selected.css('font-family');
+        defaults['font-weight'] = selected.css('font-weight');
+        defaults['font-style'] = selected.csss('font-style');
       });
 
       $("#inspector-node-width, #inspector-node-height").change( function () {
@@ -398,20 +402,20 @@ inspectorUtilities.handleSBGNInspector = function () {
           w = undefined;
         }
         
-        var useAspectRatio = window.nodeResizeUseAspectRatio;
+        var useAspectRatio = appUtilities.nodeResizeUseAspectRatio;
         
         chise.resizeNodes(selectedEles, w, h, useAspectRatio);
       });
 
       $('#inspector-node-sizes-aspect-ratio').on('click', function() {
-        if(window.nodeResizeUseAspectRatio == null) {
-          window.nodeResizeUseAspectRatio = false;
+        if(appUtilities.nodeResizeUseAspectRatio == null) {
+          appUtilities.nodeResizeUseAspectRatio = false;
         }
         
-        window.nodeResizeUseAspectRatio = !window.nodeResizeUseAspectRatio;
+        appUtilities.nodeResizeUseAspectRatio = !appUtilities.nodeResizeUseAspectRatio;
         
         // refresh image
-        if (window.nodeResizeUseAspectRatio) {
+        if (appUtilities.nodeResizeUseAspectRatio) {
           imageName = "lock.png";
           title = "unlock aspect ratio";
         }
