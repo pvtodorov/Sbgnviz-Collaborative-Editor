@@ -49,8 +49,12 @@ sudo apt-get install upstart-sysv
 
 ### Install dependencies on Mac
 
-//
-
+```
+brew install tcl-tk
+brew install redis
+brew install mongodb
+brew install nodejs
+```
 
 ### Clone from github and install node modules
 ```
