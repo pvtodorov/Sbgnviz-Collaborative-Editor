@@ -44,20 +44,18 @@ If mongo does not work:
 ```
 sudo apt-get install upstart-sysv
 ```
-Get project from github:
+Get project from github and install:
 ```
 git clone https://github.com/fdurupinar/Sbgnviz-Collaborative-Editor.git
 cd Sbgnviz-Collaborative-Editor
 sudo rm -rf node_modules
 npm install
 ```
-Run server:
+Run the server:
 ```
 node server
 ```
-In order to open a client:
-
-Enter `http://localhost:3000` in the address bar of your browser.
+In order to open a client enter `http://localhost:3000` in the address bar of your browser.
 
 ### Computer Agent API
 
@@ -238,136 +236,73 @@ History Manager
 Each command is stored in the model as a part of command history.
 Command structure is as follows:
 
-opName: set | add | delete | init
-
-opTarget: node | edge | node group | edge group
-
-opAttr: id| position | sbgnclass | sbgnlabel | width | height |
+- opName: set | add | delete | init
+- opTarget: node | edge | node group | edge group
+- opAttr: id| position | sbgnclass | sbgnlabel | width | height |
 backgroundColor | borderColor | borderWidth | parent | isCloneMarker |
 isMultimer | sbgnStatesAndInfos| source| target |lineColor | lineWidth|
 sbgncardinality
-
-elId: id of the node or edge | id array of the node or edge group
-
-elType: “node” or “edge”
-
-param:
-
-prevParam:
+- elId: id of the node or edge | id array of the node or edge group
+- elType: "node" or "edge"
+- param:
+- prevParam:
 
 ### JSON Model Structure
 
 -   users
-
     -   name
-
 -   page
-
     -   list
-
     -   room
-
     -   doc
-
         -   userIds
-
         -   history
-
         -   undoIndex
-
         -   Images
-
         -   Context
-
             -   name
-
             -   relevance
-
             -   confidence
-
         -   cy //sbgn-related
-
             -   sampleInd //temporary
-
             -   layoutProperties
-
             -   nodes
-
                 -   \[nodeId\]
-
                     -   id
-
                     -   addedLater //to sync. node addition
-
                     -   sbgnclass
-
                     -   position
-
                     -   highlightColor
-
                     -   sbgnlabel
-
                     -   borderColor
-
                     -   borderWidth
-
                     -   backgroundColor
-
                     -   backgroundOpacity
-
                     -   isMultimer
-
                     -   isCloneMarker
-
                     -   ports
-
                     -   width
-
                     -   height
-
                     -   sbgnStatesAndInfos
-
                     -   expandCollapseStatus
-
                     -   highlightStatus
-
                     -   visibilityStatus
-
             -   edges
-
                 -   \[edgeId\]
-
                     -   id
-
                     -   addedLater //to sync. edge addition
-
                     -   sbgnclass
-
                     -   source
-
                     -   target
-
                     -   portsource
-
                     -   porttarget
-
                     -   highlightColor
-
                     -   lineColor
-
                     -   width
-
                     -   bendPointPositions
-
                     -   highlightStatus
-
                     -   visibilityStatus
-
                     -   sbgnCardinality
-
         -   py // pysb-related
-
         -   //biopax-related
 
-<span id="_obz6bh2z35gg" class="anchor"><span id="_6kwbiqf32gph" class="anchor"><span id="_w8hd3o33ow8k" class="anchor"></span></span></span>
----------------------------------------------------------------------------------------------------------------------------------------------
