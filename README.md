@@ -13,6 +13,8 @@ automatic graph layout, editing and highlighting facilities.
 Installation
 ------------
 
+### Install dependencies on Debian/Ubuntu
+
 Install node.js, mongodb and redis servers first.
 
 Node:
@@ -44,20 +46,28 @@ If mongo does not work:
 ```
 sudo apt-get install upstart-sysv
 ```
-Get project from github and install:
+
+### Install dependencies on Mac
+
+//
+
+
+### Clone from github and install node modules
 ```
 git clone https://github.com/fdurupinar/Sbgnviz-Collaborative-Editor.git
 cd Sbgnviz-Collaborative-Editor
 sudo rm -rf node_modules
 npm install
 ```
-Run the server:
+Running the server
+------------------
 ```
 node server
 ```
 In order to open a client enter `http://localhost:3000` in the address bar of your browser.
 
-### Computer Agent API
+Computer Agent API
+------------------
 
 Computer agents are connected to the node.js http server via websockets
 (socket.io.js). An agent is initialized with a *name (string)* and a
@@ -65,7 +75,7 @@ unique *ID (string).*
 
 **Constructor**: Agent (string name, string id)
 
-#### Public Attributes:
+### Public Attributes:
 
 - **agentId**: (string) A unique id
 - **agentName**: (string) Agent name
@@ -86,14 +96,14 @@ format: “*UserName* (*date*): *Command*”.
 - **chatHistory**: Chat history as an array of messages.
 - **userList**: List of connected user ids.
 
-#### Private Attributes:
+### Private Attributes:
 
 - **room**: The document id that identifies the shared model. It is the
 string after http:<ip>:3000/ in the server address.
 - **socket**: The web socket between the server and agent
 - **pageDoc**: The document that the shared model is stored.
 
-#### Methods:
+### Methods:
 
 
 | **Name**                | **Function**                                                                                                                     |      **Parameters**              |       **Returns**                                                             |
@@ -124,7 +134,7 @@ string after http:<ip>:3000/ in the server address.
 |  sendRequest            | Sends an operation request to the node.js server. Model update operations are done using this method.                            |  [*reqName, param*](#sendrequest)|                                                                               |
 
 
-##### sendRequest:
+#### sendRequest:
 
 
 |**reqName**                          |  **param**                                                                         |
