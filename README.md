@@ -48,7 +48,7 @@ Get project from github:
 ```
 git clone https://github.com/fdurupinar/Sbgnviz-Collaborative-Editor.git
 cd Sbgnviz-Collaborative-Editor
-sudo rm -rf node\_modules
+sudo rm -rf node_modules
 npm install
 ```
 Run server:
@@ -57,8 +57,7 @@ node server
 ```
 In order to open a client:
 
-Enter “http://localhost:3000” to the address bar of your browser. <span
-id="_lzkutpoc5320" class="anchor"></span>
+Enter `http://localhost:3000` in the address bar of your browser.
 
 ### Computer Agent API
 
@@ -70,40 +69,31 @@ unique *ID (string).*
 
 #### Public Attributes:
 
-**agentId**: (string) A unique id
-
-**agentName**: (string) Agent name
-
-**colorCode**: A specific color to identify the agent operations. It
+- **agentId**: (string) A unique id
+- **agentName**: (string) Agent name
+- **colorCode**: A specific color to identify the agent operations. It
 should be a string in hsla format as: “hsla(*H*, *S*, *L*%, 1)”, where
 *H (integer)*, *S (float)* and *L (float)* are hue, saturation and
 lightness values.
-
-**selectedNode**: The node object on which the agent is performing
+- **selectedNode**: The node object on which the agent is performing
 operations. It has attributes such as position
 ={x:< posX >,y:< posY >}, width, height, borderWidth,
 borderHeight, backgroundColor, sbgnLabel, sbgnStatesAndInfos =
 {clazz:< className >, state =
 {value:< stateValue >,variable:< stateVariable >}}.
-
-**selectedEdge**: The edge object on which the agent is performing
+- **selectedEdge**: The edge object on which the agent is performing
 operations. It has attributes such as cardinality, lineColor and width.
-
-**opHistory**: History of operations as an array of strings in the
+- **opHistory**: History of operations as an array of strings in the
 format: “*UserName* (*date*): *Command*”.
-
-**chatHistory**: Chat history as an array of messages.
-
-**userList**: List of connected user ids.
+- **chatHistory**: Chat history as an array of messages.
+- **userList**: List of connected user ids.
 
 #### Private Attributes:
 
-**room**: The document id that identifies the shared model. It is the
+- **room**: The document id that identifies the shared model. It is the
 string after http:<ip>:3000/ in the server address.
-
-**socket**: The web socket between the server and agent
-
-**pageDoc**: The document that the shared model is stored.
+- **socket**: The web socket between the server and agent
+- **pageDoc**: The document that the shared model is stored.
 
 #### Methods:
 
@@ -178,14 +168,12 @@ string after http:<ip>:3000/ in the server address.
 
 In order to set up and run an agent:
 
-* ***agent*** = **new** *Agent*(agentName, agentId);
-
- * **var** socket = ***agent***.connectToServer(serverIp, **function**(){
-
- *  *//callback operations*
-
-* });
-
+```javascript
+agent = new Agent(agentName, agentId);
+    var socket = agent.connectToServer(serverIp, function(){
+        //callback operations
+        });
+```
 - socket.on('connect', **function**(){
    - ***agent***.loadModel(**function**() {
       - ***agent***.loadOperationHistory(**function**(){
