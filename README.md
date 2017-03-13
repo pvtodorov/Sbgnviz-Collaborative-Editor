@@ -172,83 +172,65 @@ In order to set up and run an agent:
 agent = new Agent(agentName, agentId);
     var socket = agent.connectToServer(serverIp, function(){
         //callback operations
+    });
+
+socket.on('connect', function(){
+    agent.loadModel(function() {
+        agent.loadOperationHistory(function(){
+            agent.loadChatHistory(function(){
+                //callback operations
+            });
         });
+    });
+
+    agent.listen(function(){
+        socket.on('operation', function(data){
+            //callback operations
+        });
+
+        socket.on('message', function(data){
+            //callback operations
+        });
+
+        socket.on('userList', function(data){
+            //callback operations
+        });
+
+        socket.on('imageFile', function(data){
+            //callback operations
+        });
+
+        socket.on('processToIntegrate', function(data){
+            //callback operations
+        });
+    });
+});
 ```
-- socket.on('connect', **function**(){
-   - ***agent***.loadModel(**function**() {
-      - ***agent***.loadOperationHistory(**function**(){
-         - ***agent***.loadChatHistory(**function**(){
-            - *//callback operations*
-         - });
-      - });
-   - });
-
-  - ***agent***.listen(**function**(){
-    - socket.on('operation', **function**(data){
-      -    *//callback operations*
-    - });
-
-    - socket.on('message', **function**(data){
-      -    *//callback operations*
-    - });
-
-    - socket.on('userList', **function**(data){
-      - *//callback operations*
-    - });
-
-    - socket.on('imageFile', **function**(data){
-      - *//callback operations*
-    - });
-
-    - socket.on('processToIntegrate', **function**(data){
-          - *//callback operations*
-        - });
-  - });
-- });
-
-An example web-based agent can be found in:
-
-Sbgnviz-Collaborative-Editor/agent-interaction/computerAgent.html
+An example web-based agent can be found in: `Sbgnviz-Collaborative-Editor/agent-interaction/computerAgent.html`
 
 Command History:
 
 JSON array as:
-
-\[
-
-{
-
-> userName: //name of the user who gave the command
->
-> name: //name of the command
->
-> id: //id of the affected element
->
-> param: //operation parameters
-
-\[
-
-{
-
-x: //node position x
-
-y: //node position y
-
-> sbgnclass: //node or edge sbgnclass
-
-> source: //edge source
-
-> target: //edge target
-
-}
-
-\]
-
-> date: //date of the command
-
-}
-
-\]
+```
+[
+    {
+    userName: //name of the user who gave the command
+    name: //name of the command
+    id: //id of the affected element
+    param: //operation parameters
+    [
+        {
+        x: //node position x
+        y: //node position y
+        sbgnclass: //node or edge sbgnclass
+        source: //edge source
+        target: //edge target
+        }
+    ]
+    date: //date of the command
+    }
+]
+```
 
 History Manager
 ---------------
