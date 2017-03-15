@@ -50,6 +50,7 @@ sudo apt-get install upstart-sysv
 ### Install dependencies on Mac
 
 ```
+brew install node@4
 brew install tcl-tk
 brew install redis
 brew install mongodb
