@@ -13,73 +13,65 @@ automatic graph layout, editing and highlighting facilities.
 Installation
 ------------
 
+### Install dependencies on Debian/Ubuntu
+
 Install node.js, mongodb and redis servers first.
 
 Node:
 
->curl -sL
-[*https://deb.nodesource.com/setup\_0.12*](https://deb.nodesource.com/setup_0.12)
->| sudo -E bash -
-
->sudo apt-get install -y nodejs
-
+```
+curl -sL https://deb.nodesource.com/setup_0.12 | sudo -E bash -
+sudo apt-get install -y nodejs
+```
 Redis:
 
->sudo apt-get update
-
->sudo apt-get install build-essential
-
->sudo apt-get install tcl8.5
-
-wget
-[*http://download.redis.io/releases/redis-stable.tar.gz*](http://download.redis.io/releases/redis-stable.tar.gz)
-
->tar xzf redis-stable.tar.gz
-
->cd redis-stable
-
->make
+```
+sudo apt-get update
+sudo apt-get install build-essential
+sudo apt-get install tcl8.5
+wget http://download.redis.io/releases/redis-stable.tar.gz
+tar xzf redis-stable.tar.gz
+cd redis-stable
+make
+```
 
 Mongo:
-
->sudo apt-key adv --keyserver
-hkp://[*keyserver.ubuntu.com:80*](http://keyserver.ubuntu.com/) --recv
-EA312927
-
->echo "deb
-[*http://repo.mongodb.org/apt/ubuntu*](http://repo.mongodb.org/apt/ubuntu)
-trusty/mongodb-org/3.2 multiverse" | sudo tee
-/etc/apt/sources.list.d/mongodb-org-3.2.list
-
->sudo apt-get update
-
->sudo apt-get install -y mongodb-org
-
+```
+sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com/ --recv EA312927
+echo "deb http://repo.mongodb.org/apt/ubuntu trusty/mongodb-org/3.2 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.2.list
+sudo apt-get update
+sudo apt-get install -y mongodb-org
+```
 If mongo does not work:
+```
+sudo apt-get install upstart-sysv
+```
 
->sudo apt-get install upstart-sysv
+### Install dependencies on Mac
 
-Get project from github:
+```
+brew install tcl-tk
+brew install redis
+brew install mongodb
+brew install nodejs
+```
 
->git clone
-[*https://github.com/fdurupinar/Sbgnviz-Collaborative-Editor.git*](https://github.com/fdurupinar/Sbgnviz-Collaborative-Editor.git)
+### Clone from github and install node modules
+```
+git clone https://github.com/fdurupinar/Sbgnviz-Collaborative-Editor.git
+cd Sbgnviz-Collaborative-Editor
+sudo rm -rf node_modules
+npm install
+```
+Running the server
+------------------
+```
+node server
+```
+In order to open a client enter `http://localhost:3000` in the address bar of your browser.
 
->cd Sbgnviz-Collaborative-Editor
-
->sudo rm -rf node\_modules
-
->npm install
-
-Run server:
-
->node server
-
-In order to open a client:
-
-Enter “http://localhost:3000” to the address bar of your browser. <span
-id="_lzkutpoc5320" class="anchor"></span>
-
-### Computer Agent API
+Computer Agent API
+------------------
 
 Computer agents are connected to the node.js http server via websockets
 (socket.io.js). An agent is initialized with a *name (string)* and a
@@ -87,44 +79,35 @@ unique *ID (string).*
 
 **Constructor**: Agent (string name, string id)
 
-#### Public Attributes:
+### Public Attributes:
 
-**agentId**: (string) A unique id
-
-**agentName**: (string) Agent name
-
-**colorCode**: A specific color to identify the agent operations. It
+- **agentId**: (string) A unique id
+- **agentName**: (string) Agent name
+- **colorCode**: A specific color to identify the agent operations. It
 should be a string in hsla format as: “hsla(*H*, *S*, *L*%, 1)”, where
 *H (integer)*, *S (float)* and *L (float)* are hue, saturation and
 lightness values.
-
-**selectedNode**: The node object on which the agent is performing
+- **selectedNode**: The node object on which the agent is performing
 operations. It has attributes such as position
 ={x:< posX >,y:< posY >}, width, height, borderWidth,
 borderHeight, backgroundColor, sbgnLabel, sbgnStatesAndInfos =
 {clazz:< className >, state =
 {value:< stateValue >,variable:< stateVariable >}}.
-
-**selectedEdge**: The edge object on which the agent is performing
+- **selectedEdge**: The edge object on which the agent is performing
 operations. It has attributes such as cardinality, lineColor and width.
-
-**opHistory**: History of operations as an array of strings in the
+- **opHistory**: History of operations as an array of strings in the
 format: “*UserName* (*date*): *Command*”.
+- **chatHistory**: Chat history as an array of messages.
+- **userList**: List of connected user ids.
 
-**chatHistory**: Chat history as an array of messages.
+### Private Attributes:
 
-**userList**: List of connected user ids.
-
-#### Private Attributes:
-
-**room**: The document id that identifies the shared model. It is the
+- **room**: The document id that identifies the shared model. It is the
 string after http:<ip>:3000/ in the server address.
+- **socket**: The web socket between the server and agent
+- **pageDoc**: The document that the shared model is stored.
 
-**socket**: The web socket between the server and agent
-
-**pageDoc**: The document that the shared model is stored.
-
-#### Methods:
+### Methods:
 
 
 | **Name**                | **Function**                                                                                                                     |      **Parameters**              |       **Returns**                                                             |
@@ -150,12 +133,12 @@ string after http:<ip>:3000/ in the server address.
 |  changeName             | Sends request to the server to change agent's name                                                                               |       newName                    |                                                                               |
 |  getNodeRequest         | Requests the node with < id > from the server                                                                                      |     id, callback                 |  Node with id                                                                 |
 |  getEdgeRequest         | Requests the edge with < id > from the server                                                                                      |      id, callback                |   Edge with id                                                                |
-|  sendMessage            | Sends chat message < comments > as a string to < targetArr > as an array of targeted user ids \[{id: < id1 >},..., {id: < idn >}\]       |    comment, targetArr, callback  |                                                                               |
+|  agentMessage            | Sends chat message < comments > as a string to < targets > as an array of targeted user ids \[{id: < id1 >},..., {id: < idn >}\]       |    comment, targets, callback  |                                                                               |
 |  listen                 | Socket listener for server requests. Can get “operation”, “message”, “userList” or “imageFile” from the server.                  |   callback                       |                                                                               |
 |  sendRequest            | Sends an operation request to the node.js server. Model update operations are done using this method.                            |  [*reqName, param*](#sendrequest)|                                                                               |
 
 
-##### sendRequest:
+#### sendRequest:
 
 
 |**reqName**                          |  **param**                                                                         |
@@ -197,89 +180,69 @@ string after http:<ip>:3000/ in the server address.
 
 In order to set up and run an agent:
 
-* ***agent*** = **new** *Agent*(agentName, agentId);
+```javascript
+agent = new Agent(agentName, agentId);
+    var socket = agent.connectToServer(serverIp, function(){
+        //callback operations
+    });
 
- * **var** socket = ***agent***.connectToServer(serverIp, **function**(){
+socket.on('connect', function(){
+    agent.loadModel(function() {
+        agent.loadOperationHistory(function(){
+            agent.loadChatHistory(function(){
+                //callback operations
+            });
+        });
+    });
 
- *  *//callback operations*
+    agent.listen(function(){
+        socket.on('operation', function(data){
+            //callback operations
+        });
 
-* });
+        socket.on('message', function(data){
+            //callback operations
+        });
 
-- socket.on('connect', **function**(){
-   - ***agent***.loadModel(**function**() {
-      - ***agent***.loadOperationHistory(**function**(){
-         - ***agent***.loadChatHistory(**function**(){
-            - *//callback operations*
-         - });
-      - });
-   - });
+        socket.on('userList', function(data){
+            //callback operations
+        });
 
-  - ***agent***.listen(**function**(){
-    - socket.on('operation', **function**(data){
-      -    *//callback operations*
-    - });
+        socket.on('imageFile', function(data){
+            //callback operations
+        });
 
-    - socket.on('message', **function**(data){
-      -    *//callback operations*
-    - });
-
-    - socket.on('userList', **function**(data){
-      - *//callback operations*
-    - });
-
-    - socket.on('imageFile', **function**(data){
-      - *//callback operations*
-    - });
-
-    - socket.on('processToIntegrate', **function**(data){
-          - *//callback operations*
-        - });
-  - });
-- });
-
-An example web-based agent can be found in:
-
-Sbgnviz-Collaborative-Editor/agent-interaction/computerAgent.html
+        socket.on('processToIntegrate', function(data){
+            //callback operations
+        });
+    });
+});
+```
+An example web-based agent can be found in: `Sbgnviz-Collaborative-Editor/agent-interaction/computerAgent.html`
 
 Command History:
 
 JSON array as:
-
-\[
-
-{
-
-> userName: //name of the user who gave the command
->
-> name: //name of the command
->
-> id: //id of the affected element
->
-> param: //operation parameters
-
-\[
-
-{
-
-x: //node position x
-
-y: //node position y
-
-> sbgnclass: //node or edge sbgnclass
-
-> source: //edge source
-
-> target: //edge target
-
-}
-
-\]
-
-> date: //date of the command
-
-}
-
-\]
+```
+[
+    {
+    userName: //name of the user who gave the command
+    name: //name of the command
+    id: //id of the affected element
+    param: //operation parameters
+    [
+        {
+        x: //node position x
+        y: //node position y
+        sbgnclass: //node or edge sbgnclass
+        source: //edge source
+        target: //edge target
+        }
+    ]
+    date: //date of the command
+    }
+]
+```
 
 History Manager
 ---------------
@@ -287,136 +250,73 @@ History Manager
 Each command is stored in the model as a part of command history.
 Command structure is as follows:
 
-opName: set | add | delete | init
-
-opTarget: node | edge | node group | edge group
-
-opAttr: id| position | sbgnclass | sbgnlabel | width | height |
+- opName: set | add | delete | init
+- opTarget: node | edge | node group | edge group
+- opAttr: id| position | sbgnclass | sbgnlabel | width | height |
 backgroundColor | borderColor | borderWidth | parent | isCloneMarker |
 isMultimer | sbgnStatesAndInfos| source| target |lineColor | lineWidth|
 sbgncardinality
-
-elId: id of the node or edge | id array of the node or edge group
-
-elType: “node” or “edge”
-
-param:
-
-prevParam:
+- elId: id of the node or edge | id array of the node or edge group
+- elType: "node" or "edge"
+- param:
+- prevParam:
 
 ### JSON Model Structure
 
 -   users
-
     -   name
-
 -   page
-
     -   list
-
     -   room
-
     -   doc
-
         -   userIds
-
         -   history
-
         -   undoIndex
-
         -   Images
-
         -   Context
-
             -   name
-
             -   relevance
-
             -   confidence
-
         -   cy //sbgn-related
-
             -   sampleInd //temporary
-
             -   layoutProperties
-
             -   nodes
-
                 -   \[nodeId\]
-
                     -   id
-
                     -   addedLater //to sync. node addition
-
                     -   sbgnclass
-
                     -   position
-
                     -   highlightColor
-
                     -   sbgnlabel
-
                     -   borderColor
-
                     -   borderWidth
-
                     -   backgroundColor
-
                     -   backgroundOpacity
-
                     -   isMultimer
-
                     -   isCloneMarker
-
                     -   ports
-
                     -   width
-
                     -   height
-
                     -   sbgnStatesAndInfos
-
                     -   expandCollapseStatus
-
                     -   highlightStatus
-
                     -   visibilityStatus
-
             -   edges
-
                 -   \[edgeId\]
-
                     -   id
-
                     -   addedLater //to sync. edge addition
-
                     -   sbgnclass
-
                     -   source
-
                     -   target
-
                     -   portsource
-
                     -   porttarget
-
                     -   highlightColor
-
                     -   lineColor
-
                     -   width
-
                     -   bendPointPositions
-
                     -   highlightStatus
-
                     -   visibilityStatus
-
                     -   sbgnCardinality
-
         -   py // pysb-related
-
         -   //biopax-related
 
-<span id="_obz6bh2z35gg" class="anchor"><span id="_6kwbiqf32gph" class="anchor"><span id="_w8hd3o33ow8k" class="anchor"></span></span></span>
----------------------------------------------------------------------------------------------------------------------------------------------
