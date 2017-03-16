@@ -201,9 +201,7 @@ In order to set up and run an agent:
 agent = new Agent(agentName, agentId);
     var socket = agent.connectToServer(serverIp, function(){
         //callback operations
-    });
-
-socket.on('connect', function(){
+   
     agent.loadModel(function() {
         agent.loadOperationHistory(function(){
             agent.loadChatHistory(function(){
