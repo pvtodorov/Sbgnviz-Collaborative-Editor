@@ -340,66 +340,73 @@
             $('#serverIp')[0].value = ip;
         }
 
-       // agent = new Agent($('#agentName')[0].value, agentId);
+        agent = new Agent($('#agentName')[0].value, agentId);
 
-       agent = new ContextAgent($('#agentName')[0].value, agentId);
+   //     agent = new ContextAgent($('#agentName')[0].value, agentId);
 
-        var socket = agent.connectToServer(serverIp, function(){
 
+
+//        agent.sendRequest("agentActiveRoomsRequest", {param:null}, function(rooms){
+//
+//            console.log(rooms);
+//
+//            if(agent.room == "" && rooms.length > 0){ //select the first available room to connect
+//                var newIp = serverIp+"/" + rooms[0];
+//                //socket.disconnect();
+//                //reconnect with a new room
+//                socket = agent.connectToServer(newIp, function(){
+//
+//                    writeUserList(agent.userList);
+//                });
+//            }
+//
+//        });
+//
+        var socket;
+
+         agent.connectToServer(serverIp, function (data) {
+
+             socket = data;
             writeUserList(agent.userList);
-        });
 
-
-        agent.sendRequest("agentActiveRoomsRequest", {param:null}, function(rooms){
-
-            console.log(rooms);
-        });
-
-        socket.on('connect', function(){
-
-            $('#createAgentButton').attr('disabled','disabled');
+            $('#createAgentButton').attr('disabled', 'disabled');
 
 
 
+            agent.loadModel(function () {
 
 
-            agent.loadModel(function() {
-
-
-
-                if(agent instanceof ContextAgent){
-                   agent.initContext(function(){
-                       fillContextInformation(agent.cancerList,  agent.speciesList, agent.organList);
+                if (agent instanceof ContextAgent) {
+                    agent.initContext(function () {
+                        fillContextInformation(agent.cancerList, agent.speciesList, agent.organList);
                         contextInitialized = true;
 
-                   });
-
+                    });
 
 
                 }
                 fillLayoutProperties();
-                agent.loadOperationHistory(function(){
+                agent.loadOperationHistory(function () {
 
-                    agent.loadChatHistory(function(){
+                    agent.loadChatHistory(function () {
 
-                            //Write history
-                        if(agent.opHistory != null){
-                            agent.opHistory.forEach(function(op){
+                        //Write history
+                        if (agent.opHistory != null) {
+                            agent.opHistory.forEach(function (op) {
                                 writeOperation(op);
                             });
                         }
 
-                        if(agent.chatHistory != null){
-                            for(var ind in agent.chatHistory){
+                        if (agent.chatHistory != null) {
+                            for (var ind in agent.chatHistory) {
                                 writeMessage(agent.chatHistory[ind]);
 
-                            };
+                            }
+                            ;
                         }
 
                         fillNodeIds('nodeId');
                         fillEdgeIds('edgeId');
-
-
 
 
                     });
@@ -407,27 +414,25 @@
             });
 
 
-
             //contextAgent
-            if(agent instanceof ContextAgent)
-                agent.evaluateMessage( function(){
-                    fillContextInformation(agent.cancerList,  agent.speciesList, agent.organList);
+            if (agent instanceof ContextAgent)
+                agent.evaluateMessage(function () {
+                    fillContextInformation(agent.cancerList, agent.speciesList, agent.organList);
                 });
 
 
-
-            socket.on('processToIntegrate', function(graph){
+            socket.on('processToIntegrate', function (graph) {
                 console.log(graph);
-            })
+            });
 
 
-            socket.on('operation', function(op){
+            socket.on('operation', function (op) {
                 agent.opHistory.push(op);
                 writeOperation(op);
-                agent.loadModel(function() { //first make sure to get the latest model
-                    if(agent instanceof ContextAgent) {
+                agent.loadModel(function () { //first make sure to get the latest model
+                    if (agent instanceof ContextAgent) {
 
-                        if(contextInitialized) {
+                        if (contextInitialized) {
                             agent.updateContextCancer(function () {
 
                                 fillContextInformation(agent.cancerList, agent.speciesList, agent.organList);
@@ -440,33 +445,31 @@
 
             });
 
-            if(agent instanceof ContextAgent) {
-                    agent.updateContextSpeciesAndOrgans(function () {
+            if (agent instanceof ContextAgent) {
+                agent.updateContextSpeciesAndOrgans(function () {
 
-                        fillContextInformation(agent.cancerList, agent.speciesList, agent.organList);
+                    fillContextInformation(agent.cancerList, agent.speciesList, agent.organList);
                 });
 
 
             }
 
-            socket.on('message', function(data){
+            socket.on('message', function (data) {
                 agent.chatHistory.push(data);
                 writeMessage(data);
             });
 
-            socket.on('userList', function(data){
+            socket.on('userList', function (data) {
                 agent.userList = data;
                 writeUserList(data);
             });
 
-            socket.on('imageFile', function(data){
+            socket.on('imageFile', function (data) {
                 writeImage(data);
             });
 
 
-
         });
-
     }
 
 
