@@ -35,6 +35,13 @@ cd redis-stable
 make
 ```
 
+You can run redis as
+```
+src/redis-server
+```
+
+For more defailed instructions, see [https://redis.io/download#installation](https://redis.io/download#installation).
+
 Mongo:
 ```
 sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com/ --recv EA312927
@@ -42,10 +49,17 @@ echo "deb http://repo.mongodb.org/apt/ubuntu trusty/mongodb-org/3.2 multiverse" 
 sudo apt-get update
 sudo apt-get install -y mongodb-org
 ```
+You can start mongodb as:
+```
+sudo service mongod start
+```
+
 If mongo does not work:
 ```
 sudo apt-get install upstart-sysv
 ```
+
+For more detailed instructions, see [https://docs.mongodb.com/manual/tutorial/install-mongodb-on-debian/](https://docs.mongodb.com/manual/tutorial/install-mongodb-on-debian/)
 
 ### Install dependencies on Mac
 
@@ -54,18 +68,19 @@ brew install node@4
 brew install tcl-tk
 brew install redis
 brew install mongodb
-brew install nodejs
 ```
 
 ### Clone from github and install node modules
 ```
 git clone https://github.com/fdurupinar/Sbgnviz-Collaborative-Editor.git
 cd Sbgnviz-Collaborative-Editor
-sudo rm -rf node_modules
 npm install
 ```
+If the folder `Sbgnviz-Collaborative-Editor/node_modules` exists and is not empty, it can be removed with `rm -rf node_modules` before doing `npm install`.
+
 Running the server
 ------------------
+First, make sure that mongodb and redis are running. Then, in the `Sbgnviz-Collaborative-Editor` folder, run the server as
 ```
 node server
 ```
