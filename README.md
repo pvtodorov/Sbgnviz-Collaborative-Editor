@@ -199,7 +199,7 @@ In order to set up and run an agent:
 
 ```javascript
 agent = new Agent(agentName, agentId);
-    var socket = agent.connectToServer(serverIp, function(){
+    agent.connectToServer(serverIp, function(socket){
         //callback operations
    
     agent.loadModel(function() {
