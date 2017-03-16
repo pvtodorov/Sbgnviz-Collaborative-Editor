@@ -44,21 +44,59 @@
 
      //Parse
         var self = this;
+        var serverIp;
         var sInd = url.search("3000/") + 5; //roomId index
-        var serverIp = url.slice(0,sInd);
-        this.room = url.slice(sInd, url.length);
-        this.socket =  io(serverIp);
-        this.socket.emit("subscribeAgent", {userName: self.agentName, room: self.room, userId: self.agentId}, function(data){
+        if(sInd <= 5){
+            serverIp = url;
+            self.room = "";
+        }
+        else{
+            serverIp = url.slice(0,sInd);
+            self.room = url.slice(sInd, url.length);
+        }
+        this.socket =  io(serverIp); //server connection
 
-            self.userList = data;
+        var p1 = new Promise(function (resolve, reject) {
+            if (self.room == ""  || self.room == null) {
 
-            if (data == null)
-                self.userList = [];
-
-
-            if (callback != null) callback();
+                self.socket.emit("agentActiveRoomsRequest", {param: null}, function (rooms) {
+                    if (rooms.length > 0)
+                        self.room = rooms[0]; //select the first room
+                    resolve("success");
+                });
+            }
+            else {
+                console.log(self.room);
+                resolve("success");
+            }
         });
-        return this.socket;
+
+        p1.then(function (content) {
+
+
+            self.socket.emit("subscribeAgent", {
+                userName: self.agentName,
+                room: self.room,
+                userId: self.agentId
+            }, function (data) {
+
+
+                self.userList = data;
+
+                if (data == null)
+                    self.userList = [];
+
+           //     console.log("agent connected!!!!");
+
+                if (callback != null) callback(self.socket);
+
+            //    return self.socket;
+            });
+
+
+        }),  function (xhr, status, error) {
+            api.set('content.text', "Error retrieving data: " + error);
+        };
 
     }
 
@@ -69,6 +107,8 @@
     Agent.prototype.loadModel = function (callback) {
 
         var self = this;
+
+        console.log(this.room);
         this.socket.emit('agentPageDocRequest', {room: this.room}, function(data){
 
             self.pageDoc = data;
