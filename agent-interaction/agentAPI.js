@@ -42,23 +42,58 @@ function Agent (name, id) {
 Agent.prototype.connectToServer = function (url, callback) {
 
 
-    //Parse
     var self = this;
+    var serverIp;
     var sInd = url.search("3000/") + 5; //roomId index
-    var serverIp = url.slice(0,sInd);
-    this.room = url.slice(sInd, url.length);
-    this.socket =  io(serverIp);
-    this.socket.emit("subscribeAgent", {userName: self.agentName, room: self.room, userId: self.agentId}, function(data){
+    if(sInd <= 5){
+        serverIp = url;
+        self.room = "";
+    }
+    else{
+        serverIp = url.slice(0,sInd);
+        self.room = url.slice(sInd, url.length);
+    }
+    this.socket =  io(serverIp); //server connection
 
-        self.userList = data;
+    var p1 = new Promise(function (resolve, reject) {
+        if (self.room == ""  || self.room == null) {
 
-        if (data == null)
-            self.userList = [];
-
-
-        if (callback != null) callback();
+            self.socket.emit("agentActiveRoomsRequest", {param: null}, function (rooms) {
+                if (rooms.length > 0)
+                    self.room = rooms[0]; //select the first room
+                resolve("success");
+            });
+        }
+        else {
+            console.log(self.room);
+            resolve("success");
+        }
     });
-    return this.socket;
+
+    p1.then(function (content) {
+
+        self.socket.emit("subscribeAgent", {
+            userName: self.agentName,
+            room: self.room,
+            userId: self.agentId
+        }, function (data) {
+
+
+            self.userList = data;
+
+            if (data == null)
+                self.userList = [];
+
+            //     console.log("agent connected!!!!");
+
+            if (callback != null) callback(self.socket);
+
+        });
+
+
+    }),  function (xhr, status, error) {
+        api.set('content.text', "Error retrieving data: " + error);
+    };
 
 }
 
@@ -69,9 +104,15 @@ Agent.prototype.connectToServer = function (url, callback) {
 Agent.prototype.loadModel = function (callback) {
 
     var self = this;
-    this.socket.emit('agentPageDocRequest', {room: this.room}, function(data){
+    this.socket.emit('agentPageDocRequest', {userId: self.agentId, room: self.room}, function(data){
 
         self.pageDoc = data;
+
+        self.userList = [];
+        for(var userId in data.users) {
+            self.userList.push({userId: userId, userName: data.users[userId].name});
+        }
+
 
 
         if (callback != null) callback();
@@ -100,21 +141,12 @@ Agent.prototype.loadOperationHistory = function (callback) {
 };
 
 /**
- * Gets user list from the node.js server
- * @param callback Function to call after getting user list
+ * Returns userList in the same room as agent
  */
 
-Agent.prototype.loadUserList = function(callback) {
-    var self = this;
-    this.socket.emit('agentUserListRequest', {room: this.room}, function(data){
-
-        self.userList = data;
-        if (data == null)
-            self.userList = [];
-
-        if (callback != null) callback();
-    });
-};
+Agent.prototype.getUserList = function() {
+    return this.userList;
+}
 
 /**
  * Gets chat messages from the node.js server
@@ -131,7 +163,7 @@ Agent.prototype.loadChatHistory= function (callback) {
         if (callback != null) callback();
 
     });
-};
+}
 /**
  *
  * @returns {Object} Node list in the shared model

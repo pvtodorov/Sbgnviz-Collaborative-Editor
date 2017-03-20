@@ -11,6 +11,7 @@ app.loadViews(__dirname + '/views');
 //app.serverUse(module, 'derby-stylus');
 
 
+var testMode = true;
 var ONE_DAY = 1000 * 60 * 60 * 24;
 
 var ONE_HOUR = 1000 * 60 * 60;
@@ -30,32 +31,6 @@ var room;
 var modelManager;
 var oneColor = require('onecolor');
 app.on('model', function (model) {
-
-
-    model.fn('pluckUserIds', function (items, additional) {
-        var ids, item, key;
-
-
-        if (items == null) {
-            items = {};
-        }
-        ids = {};
-        if (additional) {
-            ids[additional] = true;
-
-        }
-        for (key in items) {
-            item = items[key];
-            //do not include previous messages
-
-            if (item != null ? item.userId : void 0) {
-                ids[item.userId] = true;
-            }
-        }
-
-
-        return Object.keys(ids);
-    });
 
     model.fn('biggerTime', function (item) {
         var duration = model.get('_page.durationId');
@@ -104,90 +79,100 @@ app.get('/:docId', function (page, model, arg, next) {
 
     //   var docPath = model.at('documents.' + arg.docId);
 
-    //model.subscribe('documents', function(err){
-    var docPath = 'documents.' + arg.docId;
-    model.ref('_page.doc', ('documents.' + arg.docId));
+    model.subscribe('documents', function() {
+        var docPath = 'documents.' + arg.docId;
+        model.ref('_page.doc', ('documents.' + arg.docId));
 
-    model.subscribe(docPath, function (err) {
-        if (err) return next(err);
+        model.subscribe(docPath, function (err) {
+            if (err) return next(err);
 
-        model.createNull(docPath, { // create the empty new doc if it doesn't already exist
-            id: arg.docId
-        });
-
-
-        // create a reference to the document
-        var cy = model.at((docPath + '.cy'));
-        var history = model.at((docPath + '.history'));
-        var undoIndex = model.at((docPath + '.undoIndex'));
-        var context = model.at((docPath + '.context'));
-        var images = model.at((docPath + '.images'));
-
-        var users = model.at((docPath + '.users'));//user lists with names and color codes
-        var userIds = model.at((docPath + '.userIds')); //used for keeping a list of subscribed users
-        var messages = model.at((docPath + '.messages'));
-
-        cy.subscribe(function () {
-
-            history.subscribe(function () {
-
-                undoIndex.subscribe(function () {
-                    context.subscribe(function () {
-
-                        images.subscribe(function () {
-                            // //chat related
-                            model.set('_page.room', room);
-                            //
-                            model.set('_page.durations', [{name: 'All', id: -1}, {name: 'One day', id: ONE_DAY}, {
-                                name: 'One hour',
-                                id: ONE_HOUR
-                            }, {name: 'One minute', id: ONE_MINUTE}]);
-                            var userId = model.get('_session.userId');
-
-                            messages.subscribe(function() {
-                                if (err) {
-                                    return next(err);
-                                }
-
-                                    var userId = model.get('_session.userId');
-
-                                userIds.subscribe(function() {
-                                        userIds.push(userId);
-
-                                    var userIdsList = model.get('_page.doc.userIds');
-
-                                    users.subscribe(function () {
-
-                                        var colorCode = null;
-                                        var userName = null;
-                                        if(users.get(userId)) {
-                                            userName = users.get(userId).name;
-                                            colorCode = users.get(userId).colorCode;
-                                        }
-                                        if(userName == null)
-                                            userName = 'User ' + userIdsList.length;
-                                        if(colorCode == null)
-                                            colorCode = getNewColor();
-
-
-                                        users.set(userId, {name: userName, colorCode: colorCode});
-
-
-
-                                        return page.render();
-                                    });
-                                });
-
-                            });
-                        });
-
-                    });
-                });
-
-
+            model.createNull(docPath, { // create the empty new doc if it doesn't already exist
+                id: arg.docId
             });
-        });
 
+            // //chat related
+            model.set('_page.room', room);
+            //
+            model.set('_page.durations', [{name: 'All', id: -1}, {name: 'One day', id: ONE_DAY}, {
+                name: 'One hour',
+                id: ONE_HOUR
+            }, {name: 'One minute', id: ONE_MINUTE}]);
+
+
+
+            // create a reference to the document
+            var cy = model.at((docPath + '.cy'));
+            var history = model.at((docPath + '.history'));
+            var undoIndex = model.at((docPath + '.undoIndex'));
+            var context = model.at((docPath + '.context'));
+            var images = model.at((docPath + '.images'));
+
+            var users = model.at((docPath + '.users'));//user lists with names and color codes
+            var userIds = model.at((docPath + '.userIds')); //used for keeping a list of subscribed users
+            var messages = model.at((docPath + '.messages'));
+
+            cy.subscribe(function () {
+            });
+            history.subscribe(function () {
+            });
+
+            undoIndex.subscribe(function () {
+            });
+            context.subscribe(function () {
+            });
+
+            images.subscribe(function () {
+            });
+
+            messages.subscribe(function () {
+            });
+
+
+
+
+            userIds.subscribe(function () {
+                var userId = model.get('_session.userId');
+
+
+
+
+                var userIdsList = userIds.get();
+
+
+
+                if(!userIdsList){
+                    userIdsList = [userId];
+                    userIds.push(userId);
+                }
+                else if( userIdsList.indexOf(userId) < 0) //does not exist
+                    userIds.push(userId);
+
+                userIdsList = userIds.get();
+
+
+
+                users.subscribe(function () {
+
+                    var colorCode = null;
+                    var userName = null;
+                    if (users.get(userId)) {
+                        userName = users.get(userId).name;
+                        colorCode = users.get(userId).colorCode;
+                    }
+                    if (userName == null)
+                        userName = 'User ' + userIdsList.length;
+                    if (colorCode == null)
+                        colorCode = getNewColor();
+
+
+                    users.set(userId, {name: userName, colorCode: colorCode});
+
+
+                    return page.render();
+                });
+            });
+
+        });
     });
 });
 
@@ -232,7 +217,6 @@ app.proto.changeDuration = function () {
 
     return this.model.filter('_page.doc.messages', 'biggerTime').ref('_page.list');
 
-
 };
 
 /***
@@ -251,49 +235,68 @@ app.proto.create = function (model) {
 
     var id = model.get('_session.userId');
     var name = model.get('_page.doc.users.' + id +'.name');
-    socket.emit("subscribeHuman", {userName:name, room:  model.get('_page.room'), userId: id}, function(userList){
 
-        var userIds =[];
-        userList.forEach(function(user){
-            userIds.push(user.userId);
-        });
+    modelManager = require('./public/collaborative-app/modelManager.js')(model, model.get('_page.room'), model.get('_session.userId'),name );
 
-        model.set('_page.doc.userIds', userIds );
+    //Notify server about the client connection
+    socket.emit("subscribeHuman", {userName:name, room:  model.get('_page.room'), userId: id}, function(){
     }); //subscribe to current doc as a new room
 
 
 
-
     //to capture user disconnection, this has to be throuagh sockets-- not model
-    socket.on('userList', function(userList){
-        var userIds =[];
-        userList.forEach(function(user){
-            userIds.push(user.userId);
-        });
-
-        model.set('_page.doc.userIds', userIds );
-
-    });
+    // socket.on('userList', function(userList){
+    //     var userIds =[];
+    //     userList.forEach(function(user){
+    //         userIds.push(user.userId);
+    //     });
+    //
+    //     model.set('_page.doc.userIds', userIds );
+    //
+    // });
 
     // socket.on('loadFile', function(txtFile){
     //     menu.loadFile(txtFile);
     // });
 
     socket.on('newFile', function(){
-        $('#new-file').trigger("click");
+
+        cy.remove(cy.elements());
+        modelManager.newModel("me"); //do not delete cytoscape, only the model
+
+
+
     });
 
-    //better through sockets-- model operation causes complications
-    socket.on('runLayout', function(){
-        $("#perform-layout").trigger('click');
-    });
-
+    // //better through sockets-- model operation causes complications
+    // socket.on('runLayout', function(){
+    //     $("#perform-layout").trigger('click');
+    // });
+    //
+    //
 
     socket.on('addNode', function(data, callback){
-        // var nodeId = menu.addNode(null, data.x, data.y, data.sbgnclass, data.sbgnlabel, true);
-        //
-        // if(callback) callback(nodeId);
+        //does not trigger cy events
+        var newNode = chise.elementUtilities.addNode(data.x, data.y, data.class);
 
+        //notifies other clients
+        modelManager.addModelNode(newNode.id(), data, "me");
+        modelManager.initModelNode(newNode,"me");
+
+        if(callback) callback(newNode.id());
+
+    });
+
+    socket.on('addEdge', function(data, callback){
+
+        //does not trigger cy events
+        var newEdge = chise.elementUtilities.addEdge(source, target, sbgnclass, id, visibility);
+
+        //notifies other clients
+        modelManager.addModelEdge(newNode.id(), data, "me");
+        modelManager.initModelEdge(newEdge,"me");
+
+        if(callback) callback(newEdge.id());
     });
 
     // socket.on('agentContextQuestion', function(socketId){
@@ -305,31 +308,19 @@ app.proto.create = function (model) {
     //
     // });
 
-    //TODO: make this a function in menu-functions
-    socket.on('addCompound', function(data){
-
-        //unselect all others
-        cy.nodes().unselect();
-
-        data.selectedNodeIds.forEach(function(nodeId){
-
-            cy.getElementById( nodeId).select();
-        });
-
-
-    });
-
-
-
-
-    modelManager = require('./public/cwc/modelManager.js')(model, model.get('_page.room'), model.get('_session.userId'),name );
-
-
-    // var main = require('./public/app/main.js'); //to initialize appCy, appMenu and relevant modules
-
-    //initially loaded model is sample 1
-
-    // var modelJson = modelManager.getJsonFromModel();
+    // //TODO: make this a function in menu-functions
+    // socket.on('addCompound', function(data){
+    //
+    //     //unselect all others
+    //     cy.nodes().unselect();
+    //
+    //     data.selectedNodeIds.forEach(function(nodeId){
+    //
+    //         cy.getElementById( nodeId).select();
+    //     });
+    //
+    //
+    // });
 
 
     //Loading cytoscape and clients
@@ -342,7 +333,7 @@ app.proto.create = function (model) {
             if(isModelEmpty)
                 modelManager.initModel(cy.nodes(), cy.edges(), "me");
 
-            require('./public/cwc/editor-listener.js')(modelManager);
+            require('./public/collaborative-app/editor-listener.js')(modelManager);
 
         }, 0);
 
@@ -395,33 +386,31 @@ app.proto.loadCyFromModel = function(){
             edges: jsonArr.edges
         });
 
-        console.log(jsonArr.nodes);
-
 
         //Update style fields separately
-        cy.nodes().forEach(function(node){
-
-            var position = modelManager.getModelNodeAttribute('position',node.id());
-
-            node.position({x:position.x, y: position.y});
-            // node._private.position.x = modelNode.position.x;
-            // node._private.position.y = modelNode.position.y;
-            node.css('background-color', modelManager.getModelNodeAttribute('backgroundColor',node.id()));
-            node.css('border-width', modelManager.getModelNodeAttribute('borderWidth',node.id()));
-            node.css('opacity', modelManager.getModelNodeAttribute('opacity,node.id()'));
-            node.css('visibility', modelManager.getModelNodeAttribute('visibility',node.id()));
-            node.css('display', modelManager.getModelNodeAttribute('display',node.id()));
-        });
-
-        cy.edges().forEach(function(edge){
-            edge.css('line-color', modelManager.getModelEdgeAttribute('lineColor', edge.id()));
-            edge.css('background-color',  modelManager.getModelEdgeAttribute('backgroundColor', edge.id()));
-            edge.css('background-opacity',  modelManager.getModelEdgeAttribute('backgroundOpacity', edge.id()));
-            edge.css('border-width',  modelManager.getModelEdgeAttribute('borderWidth', edge.id()));
-            edge.css('width',  modelManager.getModelEdgeAttribute('width', edge.id()));
-            edge.css('opacity',  modelManager.getModelEdgeAttribute('opacity', edge.id()));
-
-        });
+        // cy.nodes().forEach(function(node){
+        //
+        //     var position = modelManager.getModelNodeAttribute('position',node.id());
+        //
+        //     node.position({x:position.x, y: position.y});
+        //     // node._private.position.x = modelNode.position.x;
+        //     // node._private.position.y = modelNode.position.y;
+        //     node.css('background-color', modelManager.getModelNodeAttribute('backgroundColor',node.id()));
+        //     node.css('border-width', modelManager.getModelNodeAttribute('borderWidth',node.id()));
+        //     node.css('opacity', modelManager.getModelNodeAttribute('opacity,node.id()'));
+        //     node.css('visibility', modelManager.getModelNodeAttribute('visibility',node.id()));
+        //     node.css('display', modelManager.getModelNodeAttribute('display',node.id()));
+        // });
+        //
+        // cy.edges().forEach(function(edge){
+        //     edge.css('line-color', modelManager.getModelEdgeAttribute('lineColor', edge.id()));
+        //     edge.css('background-color',  modelManager.getModelEdgeAttribute('backgroundColor', edge.id()));
+        //     edge.css('background-opacity',  modelManager.getModelEdgeAttribute('backgroundOpacity', edge.id()));
+        //     edge.css('border-width',  modelManager.getModelEdgeAttribute('borderWidth', edge.id()));
+        //     edge.css('width',  modelManager.getModelEdgeAttribute('width', edge.id()));
+        //     edge.css('opacity',  modelManager.getModelEdgeAttribute('opacity', edge.id()));
+        //
+        // });
 
     }
     return (jsonArr == null);
@@ -440,24 +429,7 @@ function moveNodeAndChildren(positionDiff, node, notCalcTopMostNodes) {
         });
 }
 
-
-app.proto.init = function (model) {
-    var timeSort;
-
-    var self = this;
-
-
-
-    //Cy updated by other clients
-    model.on('change', '_page.doc.cy.initTime', function( val, prev, passed){
-
-        if(docReady &&  passed.user == null) {
-
-            self.loadCyFromModel();
-
-        }
-    });
-
+app.proto.listenToNodeOperations = function(model){
     model.on('all', '_page.doc.cy.nodes.*', function(id, op, val, prev, passed){
 
         if(docReady &&  passed.user == null) {
@@ -473,18 +445,6 @@ app.proto.init = function (model) {
 
     });
 
-    model.on('all', '_page.doc.cy.edges.*', function(id, op, val, prev, passed){
-
-        if(docReady &&  passed.user == null) {
-            var edge  = model.get('_page.doc.cy.edges.' + id); //check
-
-            if(!edge|| !edge.id){ //edge is deleted
-                cy.getElementById(id).remove();
-
-            }
-        }
-
-    });
 
     model.on('all', '_page.doc.cy.nodes.*.addedLater', function(id, op, idName, prev, passed){ //this property must be something that is only changed during insertion
 
@@ -492,15 +452,16 @@ app.proto.init = function (model) {
         if(docReady && passed.user == null) {
             var pos = model.get('_page.doc.cy.nodes.'+ id + '.position');
             var sbgnclass = model.get('_page.doc.cy.nodes.'+ id + '.data.class');
-           var visibility = model.get('_page.doc.cy.nodes.'+ id + '.visibility');
-           var parent = model.get('_page.doc.cy.nodes.'+ id + '.data.parent');
+            var visibility = model.get('_page.doc.cy.nodes.'+ id + '.visibility');
+            var parent = model.get('_page.doc.cy.nodes.'+ id + '.data.parent');
 
-           if(parent == undefined) parent = null;
+            if(parent == undefined) parent = null;
 
 
             var newNode = chise.elementUtilities.addNode(pos.x, pos.y, sbgnclass, id, parent, visibility);
 
             modelManager.initModelNode(newNode,"me", true);
+
 
             newNode.move({"parent":parent});
 
@@ -508,23 +469,8 @@ app.proto.init = function (model) {
 
     });
 
-    model.on('all', '_page.doc.cy.edges.*.addedLater', function(id,op, idName, prev, passed){//this property must be something that is only changed during insertion
 
 
-        if(docReady && passed.user == null ){
-            var source = model.get('_page.doc.cy.edges.'+ id + '.data.source');
-            var target = model.get('_page.doc.cy.edges.'+ id + '.data.target');
-            var sbgnclass = model.get('_page.doc.cy.edges.'+ id + '.data.class');
-            var visibility = model.get('_page.doc.cy.nodes.'+ id + '.visibility');
-
-
-            var newEdge = chise.elementUtilities.addEdge(source, target, sbgnclass, id, visibility);
-
-            modelManager.initModelEdge(newEdge,"me", true);
-
-        }
-
-    });
     model.on('all', '_page.doc.cy.nodes.*.position', function(id, op, pos,prev, passed){
 
         if(docReady && passed.user == null) {
@@ -545,15 +491,115 @@ app.proto.init = function (model) {
 
             }
             else
-             cy.getElementById(id).css({
-                 "overlay-color": val,
-                 "overlay-padding": 10,
-                 "overlay-opacity": 0.25
-             });
+                cy.getElementById(id).css({
+                    "overlay-color": val,
+                    "overlay-padding": 10,
+                    "overlay-opacity": 0.25
+                });
 
 
         }
     });
+
+    //Called by agents to change bbox
+    model.on('all', '_page.doc.cy.nodes.*.data.*.*', function(id, att1,att2, op, val,prev, passed){
+        if(docReady && passed.user == null) {
+            var newAtt = cy.getElementById(id).data(att1);
+            newAtt[att2] = val;
+            cy.getElementById(id).data(att1, newAtt);
+        }
+    });
+
+
+    //Called by agents to change specific properties of data
+    model.on('all', '_page.doc.cy.nodes.*.data.*', function(id, att, op, val,prev, passed){
+        if(docReady && passed.user == null) {
+            cy.getElementById(id).data(att, val);
+        }
+    });
+
+
+    model.on('all', '_page.doc.cy.nodes.*.data', function(id,  op, data,prev, passed){
+
+        console.log("only data");
+
+
+        if(docReady && passed.user == null) {
+
+            //cy.getElementById(id).data(data); //can't call this if cy element does not have a field called "data"
+            cy.getElementById(id)._private.data = data;
+
+
+            //to update parent
+            var newParent = data.parent;
+            if(newParent == undefined)
+                newParent = null;  //must be null explicitly
+
+            cy.getElementById(id).move({"parent":newParent});
+            cy.getElementById(id).updateStyle();
+        }
+    });
+
+
+
+    model.on('all', '_page.doc.cy.nodes.*.expandCollapseStatus', function(id, op, val,prev, passed){
+
+
+
+        if(docReady && passed.user == null) {
+            var expandCollapse = cy.expandCollapse('get'); //we can't call chise.expand or collapse directly as it causes infinite calls
+            if(val === "collapse")
+                expandCollapse.collapse(cy.getElementById(id));
+            else
+                expandCollapse.expand(cy.getElementById(id));
+
+        }
+
+    });
+
+
+    model.on('all', '_page.doc.cy.nodes.*.highlightStatus', function(id, op, highlightStatus, prev, passed){ //this property must be something that is only changed during insertion
+        if(docReady && passed.user == null) {
+            try{
+                var viewUtilities = cy.viewUtilities('get');
+
+                console.log(highlightStatus);
+                if(highlightStatus === "highlighted")
+                    viewUtilities.highlight(cy.getElementById(id));
+                else
+                    viewUtilities.unhighlight(cy.getElementById(id));
+
+                //    cy.getElementById(id).updateStyle();
+            }
+            catch(e){
+                console.log(e);
+            }
+
+        }
+    });
+
+    model.on('all', '_page.doc.cy.nodes.*.visibilityStatus', function(id, op, visibilityStatus, prev, passed){ //this property must be something that is only changed during insertion
+        if(docReady && passed.user == null) {
+            try{
+                var viewUtilities = cy.viewUtilities('get');
+
+                if(visibilityStatus === "hide")
+                    viewUtilities.hide(cy.getElementById(id));
+                else
+                    viewUtilities.show(cy.getElementById(id));
+
+            }
+            catch(e){
+                console.log(e);
+            }
+
+        }
+    });
+
+}
+
+app.proto.listenToEdgeOperations = function(model){
+
     model.on('all', '_page.doc.cy.edges.*.highlightColor', function(id, op, val,prev, passed){
 
         if(docReady && passed.user == null) {
@@ -578,19 +624,42 @@ app.proto.init = function (model) {
         }
     });
 
-    model.on('all', '_page.doc.cy.nodes.*.data', function(id, op, data,prev, passed){
+    model.on('all', '_page.doc.cy.edges.*', function(id, op, val, prev, passed){
 
+        if(docReady &&  passed.user == null) {
+            var edge  = model.get('_page.doc.cy.edges.' + id); //check
+
+            if(!edge|| !edge.id){ //edge is deleted
+                cy.getElementById(id).remove();
+
+            }
+        }
+
+    });
+
+    model.on('all', '_page.doc.cy.edges.*.addedLater', function(id,op, idName, prev, passed){//this property must be something that is only changed during insertion
+
+
+        if(docReady && passed.user == null ){
+            var source = model.get('_page.doc.cy.edges.'+ id + '.data.source');
+            var target = model.get('_page.doc.cy.edges.'+ id + '.data.target');
+            var sbgnclass = model.get('_page.doc.cy.edges.'+ id + '.data.class');
+            var visibility = model.get('_page.doc.cy.nodes.'+ id + '.visibility');
+
+
+            var newEdge = chise.elementUtilities.addEdge(source, target, sbgnclass, id, visibility);
+
+            modelManager.initModelEdge(newEdge,"me", true);
+
+        }
+
+    });
+    //Called by agents to change specific properties of data
+    model.on('all', '_page.doc.cy.edges.*.data.*', function(id, att, op, val,prev, passed){
         if(docReady && passed.user == null) {
-            //cy.getElementById(id).data(data); //can't call this if cy element does not have a field called "data"
-            cy.getElementById(id)._private.data = data;
-
-            //to update parent
-            var newParent = data.parent;
-            if(newParent == undefined)
-                newParent = null;  //must be null explicitly
-
-            cy.getElementById(id).move({"parent":newParent});
-            cy.getElementById(id).updateStyle();
+            console.log(att);
+            console.log(val);
+            cy.getElementById(id).data(att, val);
         }
     });
 
@@ -605,150 +674,7 @@ app.proto.init = function (model) {
 
 
 
-    //should handle all css attributes separately as they are so many and cyclic
-    model.on('all', '_page.doc.cy.nodes.*.backgroundColor', function(id, op, val,prev, passed){
 
-
-        if(docReady && passed.user == null) {
-            cy.getElementById(id).css("background-color", val);
-
-
-        }
-    });
-    //should handle all css attributes separately as they are so many and cyclic
-    model.on('all', '_page.doc.cy.nodes.*.borderWidth', function(id, op, val,prev, passed){
-
-
-        if(docReady && passed.user == null) {
-            cy.getElementById(id).css("border-width", val);
-
-        }
-    });
-    //should handle all css attributes separately as they are so many and cyclic
-    model.on('all', '_page.doc.cy.nodes.*.opacity', function(id, op, val,prev, passed){
-
-
-        if(docReady && passed.user == null) {
-            cy.getElementById(id).css("opacity", val);
-
-        }
-    });
-
-    //should handle all css attributes separately as they are so many and cyclic
-    model.on('all', '_page.doc.cy.edges.*.width', function(id, op, val,prev, passed){
-
-
-        if(docReady && passed.user == null) {
-            cy.getElementById(id).css("width", val);
-
-        }
-    });
-
-    //should handle all css attributes separately as they are so many and cyclic
-    model.on('all', '_page.doc.cy.edges.*.opacity', function(id, op, val,prev, passed){
-
-
-        if(docReady && passed.user == null) {
-            cy.getElementById(id).css("opacity", val);
-
-        }
-    });
-
-    //should handle all css attributes separately as they are so many and cyclic
-    model.on('all', '_page.doc.cy.edges.*.lineColor', function(id, op, val,prev, passed){
-
-
-        if(docReady && passed.user == null) {
-            cy.getElementById(id).css("line-color", val);
-
-        }
-    });
-    //should handle all css attributes separately as they are so many and cyclic
-    model.on('all', '_page.doc.cy.edges.*.width', function(id, op, val,prev, passed){
-
-        if(docReady && passed.user == null) {
-            cy.getElementById(id).css("width", val);
-
-        }
-    });
-
-    model.on('all', '_page.doc.cy.edges.*.backgroundOpacity', function(id, op, val,prev, passed){
-
-        if(docReady && passed.user == null) {
-            cy.getElementById(id).css("background-opacity", val);
-
-        }
-    });
-    model.on('all', '_page.doc.cy.edges.*.backgroundColor', function(id, op, val,prev, passed){
-
-        if(docReady && passed.user == null) {
-            cy.getElementById(id).css("background-color", val);
-
-        }
-    });
-    model.on('all', '_page.doc.cy.edges.*.borderWidth', function(id, op, val,prev, passed){
-
-        if(docReady && passed.user == null) {
-            cy.getElementById(id).css("border-width", val);
-
-        }
-    });
-    //should handle all css attributes separately as they are so many and cyclic
-    model.on('all', '_page.doc.cy.nodes.*.visibility', function(id, op, val,prev, passed){
-
-
-        if(docReady && passed.user == null) {
-            cy.getElementById(id).css("visibility", val);
-
-        }
-    });
-
-
-    //should handle all css attributes separately as they are so many and cyclic
-    model.on('all', '_page.doc.cy.nodes.*.display', function(id, op, val,prev, passed){
-
-
-        if(docReady && passed.user == null) {
-            cy.getElementById(id).css("display", val);
-
-        }
-    });
-
-    model.on('all', '_page.doc.cy.nodes.*.expandCollapseStatus', function(id, op, val,prev, passed){
-
-
-
-        if(docReady && passed.user == null) {
-            var expandCollapse = cy.expandCollapse('get'); //we can't call chise.expand or collapse directly as it causes infinite calls
-            if(val === "collapse")
-                expandCollapse.collapse(cy.getElementById(id));
-            else
-                expandCollapse.expand(cy.getElementById(id));
-
-        }
-
-    });
-
-
-    model.on('all', '_page.doc.cy.nodes.*.highlightStatus', function(id, op, highlightStatus, prev, passed){ //this property must be something that is only changed during insertion
-        if(docReady && passed.user == null) {
-            try{
-                var viewUtilities = cy.viewUtilities('get');
-
-                console.log(highlightStatus);
-                 if(highlightStatus === "highlighted")
-                     viewUtilities.highlight(cy.getElementById(id));
-                 else
-                     viewUtilities.unhighlight(cy.getElementById(id));
-
-            //    cy.getElementById(id).updateStyle();
-            }
-            catch(e){
-                console.log(e);
-            }
-
-        }
-    });
     model.on('all', '_page.doc.cy.edges.*.highlightStatus', function(id, op, highlightStatus, prev, passed){ //this property must be something that is only changed during insertion
         if(docReady && passed.user == null) {
             var viewUtilities = cy.viewUtilities('get');
@@ -765,23 +691,7 @@ app.proto.init = function (model) {
 
         }
     });
-    model.on('all', '_page.doc.cy.nodes.*.visibilityStatus', function(id, op, visibilityStatus, prev, passed){ //this property must be something that is only changed during insertion
-        if(docReady && passed.user == null) {
-            try{
-                var viewUtilities = cy.viewUtilities('get');
 
-                if(visibilityStatus === "hide")
-                    viewUtilities.hide(cy.getElementById(id));
-                else
-                    viewUtilities.show(cy.getElementById(id));
-
-            }
-            catch(e){
-                console.log(e);
-            }
-
-        }
-    });
     model.on('all', '_page.doc.cy.edges.*.visibilityStatus', function(id, op, visibilityStatus, prev, passed){ //this property must be something that is only changed during insertion
         if(docReady && passed.user == null) {
             var viewUtilities = cy.viewUtilities('get');
@@ -798,6 +708,30 @@ app.proto.init = function (model) {
 
         }
     });
+
+}
+
+app.proto.init = function (model) {
+    var timeSort;
+
+    var self = this;
+    this.listenToNodeOperations(model);
+    this.listenToEdgeOperations(model);
+
+
+
+    //Listen to other model operations
+
+    //Cy updated by other clients
+    model.on('change', '_page.doc.cy.initTime', function( val, prev, passed){
+
+        if(docReady &&  passed.user == null) {
+
+            self.loadCyFromModel();
+
+        }
+    });
+
 
 
 

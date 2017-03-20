@@ -1,7 +1,7 @@
 var chise = require('chise');
 var sbgnviz = require('sbgnviz');
 var filesaverjs = require('filesaverjs');
-window.jQuery = window.$ = require('jQuery'); // jQuery should be global because jQuery.qtip extension is not compatible with commonjs
+window.jQuery = window.jquery = window.$ = require('jquery'); // jquery should be global because jquery.qtip extension is not compatible with commonjs
 var cytoscape = require('cytoscape');
 
 require('jquery-expander')($);
@@ -45,32 +45,35 @@ cyNodeResize( cytoscape, $ );
 var libs = {};
 
 libs.filesaverjs = filesaverjs;
-libs.jQuery = jQuery;
+libs.jquery = jquery;
 libs.cytoscape = cytoscape;
 libs.sbgnviz = sbgnviz;
 
 chise({
-  networkContainerSelector: '#sbgn-network-container',
-  imgPath: 'node_modules/sbgnviz/src/img',
-  // whether to fit label to nodes
-  fitLabelsToNodes: function () {
-    return appUtilities.currentGeneralProperties.fitLabelsToNodes;
-  },
-  // dynamic label size it may be 'small', 'regular', 'large'
-  dynamicLabelSize: function () {
-    return appUtilities.currentGeneralProperties.dynamicLabelSize;
-  },
-  // percentage used to calculate compound paddings
-  compoundPadding: function () {
-    return appUtilities.currentGeneralProperties.compoundPadding;
-  },
-  // Whether to adjust node label font size automatically.
-  // If this option return false do not adjust label sizes according to node height uses node.data('labelsize')
-  // instead of doing it.
-  adjustNodeLabelFontSizeAutomatically: function() {
-    return false;
-  },
-  undoable: true
+    networkContainerSelector: '#sbgn-network-container',
+    imgPath: 'node_modules/sbgnviz/src/img',
+    // whether to fit label to nodes
+    fitLabelsToNodes: function () {
+        return appUtilities.currentGeneralProperties.fitLabelsToNodes;
+    },
+    // dynamic label size it may be 'small', 'regular', 'large'
+    dynamicLabelSize: function () {
+        return appUtilities.currentGeneralProperties.dynamicLabelSize;
+    },
+    // percentage used to calculate compound paddings
+    compoundPadding: function () {
+        return appUtilities.currentGeneralProperties.compoundPadding;
+    },
+    // Whether to adjust node label font size automatically.
+    // If this option return false do not adjust label sizes according to node height uses node.data('labelsize')
+    // instead of doing it.
+    adjustNodeLabelFontSizeAutomatically: function() {
+        return appUtilities.currentGeneralProperties.adjustNodeLabelFontSizeAutomatically;
+    },
+    undoable: true,
+    undoableDrag: function() {
+        return appUtilities.ctrlKeyDown !== true;
+    }
 }, libs);
 
 appCy();

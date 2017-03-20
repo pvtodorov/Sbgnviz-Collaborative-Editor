@@ -55,8 +55,8 @@ inspectorUtilities.fillInspectorStateAndInfos = function (nodes, stateAndInfos, 
       variable: ""
     };
     obj.bbox = {
-      w: 53,
-      h: 18
+      w: 30,
+      h: 12
     };
     
     chise.addStateOrInfoBox(nodes, obj);
@@ -70,8 +70,8 @@ inspectorUtilities.fillInspectorStateAndInfos = function (nodes, stateAndInfos, 
       text: ""
     };
     obj.bbox = {
-      w: 53,
-      h: 18
+      w: 30,
+      h: 12
     };
     
     chise.addStateOrInfoBox(nodes, obj);
@@ -82,8 +82,9 @@ inspectorUtilities.fillInspectorStateAndInfos = function (nodes, stateAndInfos, 
 inspectorUtilities.handleSBGNInspector = function () {
   var selectedEles = cy.elements(":selected");
   
+  $("#sbgn-inspector-style-panel-group").html("");
+  
   if(selectedEles.length == 0){
-    $("#sbgn-inspector").html("");
     return;
   }
   
@@ -125,7 +126,13 @@ inspectorUtilities.handleSBGNInspector = function () {
       buttonwidth = 50;
     }
 
-    var html = "<div width='100%' style='text-align: center; color: black; font-weight: bold; margin-bottom: 5px;'>" + title + "</div><table cellpadding='0' cellspacing='0' width='100%' align= 'center'>";
+    var html = "";
+    
+    html += "<div  class='panel-heading' data-toggle='collapse' data-target='#inspector-style-properties-toggle'><p class='panel-title accordion-toggle'>" + title + "</p></div>"
+    
+    html += "<div id='inspector-style-properties-toggle' class='panel-collapse collapse in'>";
+    html += "<div class='panel-body'>";
+    html += "<table cellpadding='0' cellspacing='0' width='100%' align= 'center'>";
     var type;
     var fillStateAndInfos;
     var multimerCheck;
@@ -138,7 +145,7 @@ inspectorUtilities.handleSBGNInspector = function () {
     if (allNodes) {
       type = "node";
       
-      var borderColor = chise.elementUtilities.getCommonProperty(selectedEles, "borderColor", "data");
+      var borderColor = chise.elementUtilities.getCommonProperty(selectedEles, "border-color", "data");
       borderColor = borderColor?borderColor:'#FFFFFF';
       
       var backgroundColor = chise.elementUtilities.getCommonProperty(selectedEles, "background-color", "css");
@@ -163,6 +170,7 @@ inspectorUtilities.handleSBGNInspector = function () {
               + "'/>" + "</td></tr>";
       }
       
+      // if at least one node is not a non-resizable parent node
       if( selectedEles.filter(':parent').length != selectedEles.length ) {
         html += "<tr><td style='width: " + width + "px; text-align:right; padding-right: 5px;'>" + "<font class='sbgn-label-font'>Width</font>" + "</td><td style='padding-left: 5px;'>"
                 + "<input id='inspector-node-width' class='inspector-input-box float-input' type='text' min='0' style='width: " + buttonwidth + "px;'";
@@ -230,7 +238,7 @@ inspectorUtilities.handleSBGNInspector = function () {
       
       if (chise.elementUtilities.trueForAllElements(selectedEles, chise.elementUtilities.canHaveSBGNLabel)) {
         html += "<tr><td style='width: " + width + "px; text-align:right; padding-right: 5px;'>" + "<font class='sbgn-label-font'>Font</font>" + "</td><td style='padding-left: 5px;'>"
-              + "<label id='inspector-font' class='inspector-input-box' style='cursor: pointer;width: " + buttonwidth + "px;'>"
+              + "<label id='inspector-font' style='cursor: pointer;width: " + buttonwidth + "px;'>"
               + "..." + "<label/>" + "</td></tr>"; 
       }
       
@@ -284,10 +292,10 @@ inspectorUtilities.handleSBGNInspector = function () {
     else {
       type = "edge";
       
-      var commonLineColor = chise.elementUtilities.getCommonProperty(selectedEles, "lineColor", "data");
+      var commonLineColor = chise.elementUtilities.getCommonProperty(selectedEles, "line-color", "data");
       commonLineColor = commonLineColor?commonLineColor:'#FFFFFF';
       
-      var commonLineWidth = chise.elementUtilities.getCommonProperty(selectedEles, "width", "css");
+      var commonLineWidth = chise.elementUtilities.getCommonProperty(selectedEles, "width", "data");
       
       html += "<tr><td style='width: " + width + "px; text-align:right; padding-right: 5px;'>" + "<font class='sbgn-label-font'>Fill Color</font>" + "</td><td style='padding-left: 5px;'>"
               + "<input id='inspector-line-color' class='inspector-input-box' type='color' style='width: " + buttonwidth + "px;' value='" + commonLineColor
@@ -320,35 +328,39 @@ inspectorUtilities.handleSBGNInspector = function () {
       }
 
     }
-    html += "</table>";
+    html += "</table></div>";
     
     if(selectedEles.length == 1){
       var setAsDefaultTitle = "Set as Default for " + classInfo;
-      html += "<div style='text-align: center; margin-top: 5px;'><button style='align: center;' id='inspector-set-as-default-button'"
+      html += "<div style='text-align: center; margin-top: 5px;'><button class='btn btn-default' style='align: center;' id='inspector-set-as-default-button'"
             + ">" + setAsDefaultTitle + "</button></div>";
     }
     
-    html += "<hr class='inspector-divider' style='border-width: 3px;'>";
+//    html += "<hr class='inspector-divider' style='border-width: 3px;'>";
+    html += "</div>";
+    
+    $('#sbgn-inspector-style-panel-group').append('<div id="sbgn-inspector-style-properties-panel" class="panel" ></div>');
+    $("#sbgn-inspector-style-properties-panel").html(html);
     
     if (selectedEles.length === 1) {
       var geneClass = selectedEles[0]._private.data.class;
       
       if (geneClass === 'macromolecule' || geneClass === 'nucleic acid feature' ||
           geneClass === 'unspecified entity') {
+          html = "";
     
-          html += "<div style='align: center;text-align: center;'><a style='color: black; font-weight: bold;' class='accordion-toggle collapsed' data-toggle='collapse' data-target='#biogene-collapsable'>Properties from EntrezGene</a></div>"
+          html += "<div  class='panel-heading collapsed' data-toggle='collapse' data-target='#biogene-collapsable'><p class='panel-title accordion-toggle'>Properties from EntrezGene</p></div>"
     
-          html += "<div style='margin-top: 5px;align: center;text-align: center;' id='biogene-collapsable' class='collapse'>";
-          html += "<div style='padding-left: 3px;' id='biogene-title'></div>";
+          html += "<div style='margin-top: 5px;align: center;text-align: center;' id='biogene-collapsable' class='panel-collapse collapse'>";
+          html += "<div class='panel-body' style='padding-left: 3px;' id='biogene-title'></div>";
           html += "<div id='biogene-container'></div>";
           html += "</div>";
-          html += "<hr class='inspector-divider'>";
+//          html += "<hr class='inspector-divider'>";
+          
+          $('#sbgn-inspector-style-panel-group').append('<div id="sbgn-inspector-style-entrezgene-panel" class="panel" ></div>');
+          $("#sbgn-inspector-style-entrezgene-panel").html(html);
+          fillBioGeneContainer(selectedEles[0]);
       }
-    }
-    
-    $("#sbgn-inspector").html(html);
-    if(selectedEles.length === 1) {
-      fillBioGeneContainer(selectedEles[0]);
     }
 
     if (type == "node") {
@@ -376,19 +388,23 @@ inspectorUtilities.handleSBGNInspector = function () {
           chise.elementUtilities.defaultProperties[sbgnclass] = {};
         }
         var defaults = chise.elementUtilities.defaultProperties[sbgnclass];
-        defaults.width = selected.width();
-        defaults.height = selected.height();
-        defaults.clonemarker = selected._private.data.clonemarker;
-        defaults.multimer = multimer;
-        defaults['border-width'] = selected.css('border-width');
-        defaults['border-color'] = selected.data('borderColor');
-        defaults['background-color'] = selected.css('background-color');
+
+        var ur = cy.undoRedo();
+        var actions = [];
+        actions.push({name: "setDefaultProperty", param: {class: sbgnclass, name: 'width', value: selected.width()}});
+        actions.push({name: "setDefaultProperty", param: {class: sbgnclass, name: 'height', value: selected.height()}});
+        actions.push({name: "setDefaultProperty", param: {class: sbgnclass, name: 'clonemarker', value: selected._private.data.clonemarker}});
+        actions.push({name: "setDefaultProperty", param: {class: sbgnclass, name: 'multimer', value: multimer}});
+        actions.push({name: "setDefaultProperty", param: {class: sbgnclass, name: 'border-width', value: selected.css('border-width')}});
+        actions.push({name: "setDefaultProperty", param: {class: sbgnclass, name: 'border-color', value: selected.data('borderColor')}});
+        actions.push({name: "setDefaultProperty", param: {class: sbgnclass, name: 'background-color', value: selected.css('background-color')}});
+        actions.push({name: "setDefaultProperty", param: {class: sbgnclass, name: 'background-opacity', value: selected.css('background-opacity')}});
+        actions.push({name: "setDefaultProperty", param: {class: sbgnclass, name: 'labelsize', value: selected.data('labelsize')}});
+        actions.push({name: "setDefaultProperty", param: {class: sbgnclass, name: 'font-family', value: selected.css('font-family')}});
+        actions.push({name: "setDefaultProperty", param: {class: sbgnclass, name: 'font-weight', value: selected.css('font-weight')}});
+        actions.push({name: "setDefaultProperty", param: {class: sbgnclass, name: 'font-style', value: selected.css('font-style')}});
+        ur.do("batch", actions);
 //        defaults['font-size'] = selected.css('font-size');
-        defaults['background-opacity'] = selected.css('background-opacity');
-        defaults.labelsize = selected.data('labelsize');
-        defaults['font-family'] = selected.css('font-family');
-        defaults['font-weight'] = selected.css('font-weight');
-        defaults['font-style'] = selected.csss('font-style');
       });
 
       $("#inspector-node-width, #inspector-node-height").change( function () {
@@ -405,6 +421,24 @@ inspectorUtilities.handleSBGNInspector = function () {
         var useAspectRatio = appUtilities.nodeResizeUseAspectRatio;
         
         chise.resizeNodes(selectedEles, w, h, useAspectRatio);
+
+        // if aspect ratio used, must correctly update the other side length
+        if(useAspectRatio){
+          if( $(this).attr('id') === 'inspector-node-width' ) {
+            var nodeHeight = chise.elementUtilities.getCommonProperty(selectedEles, function(ele) {
+              return ele.height();
+            });
+            $("#inspector-node-height").val(nodeHeight);
+          }
+          else {
+            var nodeWidth = chise.elementUtilities.getCommonProperty(selectedEles, function(ele) {
+              return ele.width();
+            });
+            $("#inspector-node-width").val(nodeWidth);
+          }
+        }
+
+
       });
 
       $('#inspector-node-sizes-aspect-ratio').on('click', function() {
@@ -437,7 +471,7 @@ inspectorUtilities.handleSBGNInspector = function () {
       });
 
       $("#inspector-border-color").on('change', function () {
-        chise.changeData(selectedEles, "borderColor", $("#inspector-border-color").val());
+        chise.changeData(selectedEles, "border-color", $("#inspector-border-color").val());
       });
 
       $("#inspector-label").on('change', function () {
@@ -445,15 +479,15 @@ inspectorUtilities.handleSBGNInspector = function () {
       });
 
       $("#inspector-background-opacity").on('change', function () {
-        chise.changeCss(selectedEles, "background-opacity", $("#inspector-background-opacity").val());
+        chise.changeData(selectedEles, "background-opacity", $("#inspector-background-opacity").val());
       });
 
       $("#inspector-fill-color").on('change', function () {
-        chise.changeCss(selectedEles, "background-color", $("#inspector-fill-color").val());
+        chise.changeData(selectedEles, "background-color", $("#inspector-fill-color").val());
       });
 
       $("#inspector-border-width").change( function () {
-        chise.changeCss(selectedEles, "border-width", $("#inspector-border-width").val());
+        chise.changeData(selectedEles, "border-width", $("#inspector-border-width").val());
       });
       
       // Open font properties dialog
@@ -463,16 +497,23 @@ inspectorUtilities.handleSBGNInspector = function () {
     }
     else {
       $('#inspector-set-as-default-button').on('click', function () {
-        if (chise.elementUtilities.defaultProperties[selectedEles.data('class')] == null) {
-          chise.elementUtilities.defaultProperties[selectedEles.data('class')] = {};
+        var sbgnclass = selectedEles.data('class');
+        if (chise.elementUtilities.defaultProperties[sbgnclass] == null) {
+          chise.elementUtilities.defaultProperties[sbgnclass] = {};
         }
-        var defaults = chise.elementUtilities.defaultProperties[selectedEles.data('class')];
-        defaults['line-color'] = selectedEles.data('lineColor');
-        defaults['width'] = selectedEles.css('width');
+        var defaults = chise.elementUtilities.defaultProperties[sbgnclass];
+
+        var ur = cy.undoRedo();
+        var actions = [];
+        actions.push({name: "setDefaultProperty", param: {class: sbgnclass, name: 'width', value: selectedEles.css('width')}});
+        actions.push({name: "setDefaultProperty", param: {class: sbgnclass, name: 'line-color', value: selectedEles.data('lineColor')}});
+        ur.do("batch", actions);
+        //defaults['line-color'] = selectedEles.data('lineColor');
+        //defaults['width'] = selectedEles.css('width');
       });
 
       $("#inspector-line-color").on('change', function () {
-        chise.changeData(selectedEles, "lineColor", $("#inspector-line-color").val());
+        chise.changeData(selectedEles, "line-color", $("#inspector-line-color").val());
       });
 
       $("#inspector-cardinality").change( function () {
@@ -490,12 +531,9 @@ inspectorUtilities.handleSBGNInspector = function () {
       });
 
       $("#inspector-edge-width").change( function () {
-        chise.changeCss(selectedEles, "width", $("#inspector-edge-width").val());
+        chise.changeData(selectedEles, "width", $("#inspector-edge-width").val());
       });
     }
-  }
-  else {
-    $("#sbgn-inspector").html("");
   }
 };
 

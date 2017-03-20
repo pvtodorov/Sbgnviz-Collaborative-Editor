@@ -109,35 +109,35 @@
         <br>
 
         <input id = "sbgnlabel">
-        <input type="button" value="Update node label" onclick=changeNodeAttribute("sbgnlabel")>
+        <input type="button" value="Update node label" onclick=changeNodeAttribute("sbgnlabel","data.label")>
 
         <br>
         <input id = "width" type = number>
-        <input type="button" value="Update node width" onclick=changeNodeAttribute("width")>
+        <input type="button" value="Update node width" onclick=changeNodeAttribute("width","data.bbox.w")>
 
 
         <input id = "height" type = number>
-        <input type="button" value="Update node height" onclick=changeNodeAttribute("height")>
+        <input type="button" value="Update node height" onclick=changeNodeAttribute("height","data.bbox.h")>
 
 
         <br>
         <input id = "borderColor" type = "color">
-        <input type="button" value="Update border color" onclick=changeNodeAttribute("borderColor")>
+        <input type="button" value="Update border color" onclick=changeNodeAttribute("borderColor","data.border-color")>
 
         <br>
         <input id = "backgroundColor" type = "color">
-        <input type="button" value="Update background color" onclick=changeNodeAttribute("backgroundColor")>
+        <input type="button" value="Update background color" onclick=changeNodeAttribute("backgroundColor","data.background-color")>
 
         <br>
         <input id = "borderWidth">
-        <input type="button" value="Update border width" onclick=changeNodeAttribute("borderWidth")>
+        <input type="button" value="Update border width" onclick=changeNodeAttribute("borderWidth","data.border-width")>
 
 
         <br>
-        Update clone marker status <input id = "isCloneMarker" type="checkbox"  onclick=changeNodeAttribute("isCloneMarker")>
+        Update clone marker status <input id = "isCloneMarker" type="checkbox"  onclick=changeNodeAttribute("isCloneMarker","data.cloneMarker")>
 
         <br>
-        Update multimer status <input id = "isMultimer" type="checkbox"  onclick=changeNodeAttribute("isMultimer")>
+        Update multimer status <input id = "isMultimer" type="checkbox"  onclick=changeNodeAttribute("isMultimer","data.class")>
 
         <br>
         <table>
@@ -152,29 +152,35 @@
 
     <!-- Edge operations-->
     <form id = "edgeOperations">
-        Source : <input  id = "source" name="source" value = "glyph2">
-        Target : <input  id = "target" name="target" value = "glyph8" >
+        Source : <input  id = "source" name="source" value = "">
+        Target : <input  id = "target" name="target" value = "" >
         Sbgnclass: <input id = "sbgnclassEdge" name = "sbgnclassEdge" value = "consumption">
         <input type="button" value="Add edge" onclick=addEdge()>
 
         <br><br>
 
-        <b>Edge Id </b>: <select name="Id" id = "edgeId" ></select>
+        <b>Edge Id </b>: <select multiple name="Id" id = "edgeId" ></select>
         <br><br>
+
+        <input type="button" value="Color selected edge(s)" onclick=highlightEdges()>
+        <input type="button" value="Remove coloring" onclick=unhighlightEdges()>
+        <br>
         <input type="button" value="Delete edge" onclick=deleteEdge()>
 
         <br><br>
         <input id = "sbgncardinality" type = number>
-        <input type="button" value="Update edge cardinality" onclick=changeEdgeAttribute("sbgncardinality")>
+        <input type="button" value="Update edge cardinality" onclick=changeEdgeAttribute("sbgncardinality","data.cardinality")>
 
         <br><br>
         <input id = "widthEdge">
-        <input type="button" value="Update edge width" onclick=changeEdgeAttribute("widthEdge")>
+        <input type="button" value="Update edge width" onclick=changeEdgeAttribute("widthEdge","data.width")>
 
 
         <br><br>
         <input id = "lineColor" type = color>
-        <input type="button" value="Update edge color" onclick=changeEdgeAttribute("lineColor")>
+        <input type="button" value="Update edge color" onclick=changeEdgeAttribute("lineColor","data.line-color")>
+
+
 
     </form>
 </div>
@@ -267,19 +273,26 @@
 
         $('#nodeId').change(function () {
 
+
+
+            if($('#target')[0].value != "")
+                $('#source')[0].value = $('#nodeId')[0].value;
+            else
+                $('#target')[0].value = $('#nodeId')[0].value;
+
             //update node info
             agent.getNodeRequest($('#nodeId')[0].value, function () {
 
                 $('#newPosX')[0].value = preciseRound(agent.selectedNode.position.x, 3);
                 $('#newPosY')[0].value = preciseRound(agent.selectedNode.position.y, 3);
-                if(agent.selectedNode.width == null) agent.selectedNode.width = 0;
-                $('#width')[0].value = preciseRound(agent.selectedNode.width, 3);
-                if(agent.selectedNode.height == null) agent.selectedNode.height = 0;
-                $('#height')[0].value = preciseRound(agent.selectedNode.height, 3);
-                $('#borderWidth')[0].value = agent.selectedNode.borderWidth;
-                $('#borderColor')[0].value = agent.selectedNode.borderColor;
-                $('#backgroundColor')[0].value = agent.selectedNode.backgroundColor;
-                $('#sbgnlabel')[0].value = agent.selectedNode.sbgnlabel;
+                if(agent.selectedNode.data.bbox.w == null) agent.selectedNode.data.bbox.w = 0;
+                $('#width')[0].value = preciseRound(agent.selectedNode.data.bbox.w , 3);
+                if(agent.selectedNode.data.bbox.h == null) agent.selectedNode.data.bbox.h = 0;
+                $('#height')[0].value = preciseRound(agent.selectedNode.data.bbox.h, 3);
+                $('#borderWidth')[0].value = agent.selectedNode.data["border-width"];
+                $('#borderColor')[0].value = agent.selectedNode.data["border-color"];
+                $('#backgroundColor')[0].value = agent.selectedNode.data["background-color"];
+                $('#sbgnlabel')[0].value = agent.selectedNode.data.label;
 
 
                 if (agent.selectedNode.isCloneMarker)
@@ -302,9 +315,9 @@
         $('#edgeId').change(function () {
             //update node info
             agent.getEdgeRequest($('#edgeId')[0].value, function () {
-                $('#sbgncardinality')[0].value = agent.selectedEdge.sbgncardinality;
-                $('#lineColor')[0].value = agent.selectedEdge.lineColor;
-                $('#widthEdge')[0].value = agent.selectedEdge.width;
+                $('#sbgncardinality')[0].value = agent.selectedEdge.data.cardinality;
+                $('#lineColor')[0].value = agent.selectedEdge.data["line-color"];
+                $('#widthEdge')[0].value = agent.selectedEdge.data.width;
             });
         });
 
@@ -340,32 +353,24 @@
             $('#serverIp')[0].value = ip;
         }
 
-        // agent = new Agent($('#agentName')[0].value, agentId);
+         agent = new Agent($('#agentName')[0].value, agentId);
 
-        agent = new ContextAgent($('#agentName')[0].value, agentId);
+//        agent = new ContextAgent($('#agentName')[0].value, agentId);
+//        agent.sendRequest("agentActiveRoomsRequest", {param:null}, function(rooms){
+//
+//            console.log(rooms);
+//        });
 
-        var socket = agent.connectToServer(serverIp, function(){
 
-            writeUserList(agent.userList);
-        });
-
-
-        agent.sendRequest("agentActiveRoomsRequest", {param:null}, function(rooms){
-
-            console.log(rooms);
-        });
-
-        socket.on('connect', function(){
+        agent.connectToServer(serverIp, function(socket){
 
             $('#createAgentButton').attr('disabled','disabled');
 
 
-
-
-
             agent.loadModel(function() {
 
-
+                //get users in that room subscribed to that model
+                writeUserList(agent.userList);
 
                 if(agent instanceof ContextAgent){
                     agent.initContext(function(){
@@ -374,10 +379,8 @@
 
                     });
 
-
-
                 }
-                fillLayoutProperties();
+                //TODO: open later fillLayoutProperties();
                 agent.loadOperationHistory(function(){
 
                     agent.loadChatHistory(function(){
@@ -666,10 +669,10 @@
         var y = $('#posY')[0].value;
         var sbgnclass = $('#sbgnclass')[0].value;
 
-        var param = {x:Number(x), y:Number(y), sbgnclass:sbgnclass }
+        var param = {x:Number(x), y:Number(y), class:sbgnclass }
 
         agent.sendRequest("agentAddNodeRequest", {param:param}, function(nodeId){
-            console.log(nodeId);
+            console.log("New node added " + nodeId);
         });
 
     }
@@ -679,7 +682,7 @@
         var source = $('#source')[0].value;
         var target = $('#target')[0].value;
         var sbgnclass = $('#sbgnclassEdge')[0].value;
-        var param = {source:source, target:target, sbgnclass:sbgnclass }
+        var param = {source:source, target:target, class:sbgnclass }
 
         agent.sendRequest("agentAddEdgeRequest", {id: (source+ "-" + target + "-" + sbgnclass), param:param});
 
@@ -701,6 +704,15 @@
 
     }
 
+    function highlightEdges(callback){
+        var edgeIdList = $('#edgeId').val();
+        edgeIdList.forEach(function(edgeId){
+            agent.sendRequest("agentChangeEdgeAttributeRequest", {id: edgeId, attStr: "highlightColor", attVal: agent.colorCode});
+        });
+
+
+    }
+
     function removeHighlights(){
         agent.sendRequest("agentHighlightStatusRequest", {val:0});
     }
@@ -716,6 +728,12 @@
         var nodeIdList = $('#nodeId').val();
         nodeIdList.forEach(function(nodeId){
             agent.sendRequest("agentChangeNodeAttributeRequest", {id: nodeId, attStr: "highlightColor", attVal: null});
+        });
+    }
+    function unhighlightEdges(){
+        var edgeIdList = $('#edgeId').val();
+        edgeIdList.forEach(function(edgeId){
+            agent.sendRequest("agentChangeEdgeAttributeRequest", {id: edgeId, attStr: "highlightColor", attVal: null});
         });
     }
 
@@ -763,12 +781,11 @@
 
     }
 
-    function changeNodeAttribute(attDiv){
+    function changeNodeAttribute(attDiv, attStr){
 
 
         var val;
         var id = $('#nodeId')[0].value;
-        var attStr = attDiv;
         agent.getNodeRequest(id, function () {
             if (attDiv == 'isCloneMarker')
                 val = ($('#isCloneMarker').attr('checked') == 'checked');
@@ -802,7 +819,7 @@
             });
             agent.sendRequest("agentChangeNodeAttributeRequest", {
                 id: id,
-                attStr: "sbgnStatesAndInfos",
+                attStr: "data.statesandinfos",
                 attVal: states
             });
         });
@@ -827,7 +844,7 @@
             });
             agent.sendRequest("agentChangeNodeAttributeRequest", {
                 id: id,
-                attStr: "sbgnStatesAndInfos",
+                attStr: "data.statesAndInfos",
                 attVal: states
             });
         });
@@ -835,15 +852,12 @@
     }
 
 
-    function changeEdgeAttribute(attDiv){
+    function changeEdgeAttribute(attDiv, attStr){
         var val;
         var id = $('#edgeId')[0].value;
-        var attStr = attDiv;
 
         val = $('#' + attDiv)[0].value;
 
-        if(attDiv == "widthEdge") //same name with node
-            attStr = "width";
         agent.sendRequest("agentChangeEdgeAttributeRequest", {id:id, attStr:attStr, attVal: Number(val)});
 
 

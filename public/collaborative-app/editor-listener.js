@@ -10,7 +10,7 @@ module.exports = function(modelManager){
     //A new sample or file is loaded --update model and inform others
    $(document).on("sbgnvizLoadSampleEnd sbgnvizLoadFileEnd",  function(event, file){
        modelManager.newModel("me"); //do not delete cytoscape, only the model
-      modelManager.initModel(cy.nodes(), cy.edges());
+       modelManager.initModel(cy.nodes(), cy.edges());
 
     });
 
@@ -55,19 +55,19 @@ module.exports = function(modelManager){
 
         }
 
-        else if (actionName === "changeCss") {
-            var modelElList = [];
-            var paramList = [];
-
-            args.eles.forEach(function (ele) {
-                modelElList.push({id: ele.id(), isNode: ele.isNode()});
-                paramList.push(ele.css(args.name));
-
-            });
-
-            var name = mapFromCyToModelName(args.name);
-            modelManager.changeModelElementGroupAttribute(name, modelElList, paramList, "me");
-        }
+        // else if (actionName === "changeCss") {
+        //     var modelElList = [];
+        //     var paramList = [];
+        //
+        //     args.eles.forEach(function (ele) {
+        //         modelElList.push({id: ele.id(), isNode: ele.isNode()});
+        //         paramList.push(ele.css(args.name));
+        //
+        //     });
+        //
+        //     var name = mapFromCyToModelName(args.name);
+        //     modelManager.changeModelElementGroupAttribute(name, modelElList, paramList, "me");
+        // }
 
         else if (actionName === "hide" || actionName === "show") {
             var modelElList = [];
@@ -253,11 +253,6 @@ module.exports = function(modelManager){
 
         }
 
-
-
-
-
-
     });
 
 
@@ -292,33 +287,33 @@ module.exports = function(modelManager){
 
 }
 
-//Listen to explicitly triggered events
-function mapFromCyToModelName(cyName){
-    var modelName = cyName;
-
-    if(cyName == "border-width")
-        modelName = "borderWidth";
-    else if(cyName == "background-color")
-        modelName = "backgroundColor";
-    else if(cyName == "line-color")
-        modelName = "lineColor";
-
-
-    else if(cyName == "sbgnstatesandinfos")
-        modelName = "sbgnStatesAndInfos";
-    else if(cyName == "sbgnclonemarker")
-        modelName = "isCloneMarker";
-
-
-    else if(cyName == "segment-weights")
-        modelName = "segmentWeights";
-    else if(cyName == "curve-style")
-        modelName = "curveStyle";
-    else if(cyName == "segment-distances")
-        modelName = "segmentDistances";
-    else if(cyName == "edge-distances")
-        modelName = "edgeDistances";
-
-
-    return modelName;
-}
+// //Listen to explicitly triggered events
+// function mapFromCyToModelName(cyName){
+//     var modelName = cyName;
+//
+//     if(cyName == "border-width")
+//         modelName = "borderWidth";
+//     else if(cyName == "background-color")
+//         modelName = "backgroundColor";
+//     else if(cyName == "line-color")
+//         modelName = "lineColor";
+//
+//
+//     else if(cyName == "sbgnstatesandinfos")
+//         modelName = "sbgnStatesAndInfos";
+//     else if(cyName == "sbgnclonemarker")
+//         modelName = "isCloneMarker";
+//
+//
+//     else if(cyName == "segment-weights")
+//         modelName = "segmentWeights";
+//     else if(cyName == "curve-style")
+//         modelName = "curveStyle";
+//     else if(cyName == "segment-distances")
+//         modelName = "segmentDistances";
+//     else if(cyName == "edge-distances")
+//         modelName = "edgeDistances";
+//
+//
+//     return modelName;
+// }

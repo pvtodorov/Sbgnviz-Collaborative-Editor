@@ -1,4 +1,4 @@
-var jQuery = $ = require('jQuery');
+var jquery = $ = require('jquery');
 var _ = require('underscore');
 var Backbone = require('backbone');
 
@@ -277,8 +277,12 @@ var GeneralPropertiesView = Backbone.View.extend({
               document.getElementById("rearrange-after-expand-collapse").checked;
       appUtilities.currentGeneralProperties.animateOnDrawingChanges =
               document.getElementById("animate-on-drawing-changes").checked;
+      appUtilities.currentGeneralProperties.adjustNodeLabelFontSizeAutomatically =
+          document.getElementById("adjust-node-label-font-size-automatically").checked;
+      appUtilities.currentGeneralProperties.mapColorScheme = $('select[name="map-color-scheme"] option:selected').val();
 
       chise.refreshPaddings(true); // Refresh paddings and force paddings to be recalculated
+      appUtilities.applyMapColorScheme();
       cy.style().update();
       
       $(self.el).modal('toggle');
@@ -385,6 +389,13 @@ var PathsBetweenQueryView = Backbone.View.extend({
   }
 });
 
+/*
+  There was a side effect of using this modal prompt when clicking on New.
+  If the user would click on save, then the save box asking for the filename (FileSaveView) would appear
+  but the map was already wiped at this point, so after setting the filename and clicking on save
+  the user would end up saving an empty map.
+  So this PromptSaveView isn't used for now, replaced by PromptConfirmationView.
+*/
 var PromptSaveView = Backbone.View.extend({
   
   initialize: function () {
@@ -417,6 +428,68 @@ var PromptSaveView = Backbone.View.extend({
   }
 });
 
+/*
+  Ask for filename before saving and triggering the actual browser download popup.
+*/
+var FileSaveView = Backbone.View.extend({
+  initialize: function () {
+    var self = this;
+    self.template = _.template($("#file-save-template").html());
+  },
+  render: function () {
+    var self = this;
+    self.template = _.template($("#file-save-template").html());
+
+    $(self.el).html(self.template);
+    $(self.el).modal('show');
+
+    var filename = document.getElementById('file-name').innerHTML;
+    $("#file-save-filename").val(filename);
+
+
+    $(document).off("click", "#file-save-accept").on("click", "#file-save-accept", function (evt) { 
+      filename = $("#file-save-filename").val();
+      appUtilities.setFileContent(filename);
+      chise.saveAsSbgnml(filename);
+      $(self.el).modal('toggle');
+    });
+
+    $(document).off("click", "#file-save-cancel").on("click", "#file-save-cancel", function (evt) {
+      $(self.el).modal('toggle');
+    });
+
+    return this;
+  }
+});
+
+/*
+  Simple Yes/No confirmation modal box. See PromptSaveView.
+*/
+var PromptConfirmationView = Backbone.View.extend({
+  initialize: function () {
+    var self = this;
+    self.template = _.template($("#prompt-confirmation-template").html());
+  },
+  render: function (afterFunction) {
+    var self = this;
+    self.template = _.template($("#prompt-confirmation-template").html());
+
+    $(self.el).html(self.template);
+    $(self.el).modal('show');
+
+    $(document).off("click", "#prompt-confirmation-accept").on("click", "#prompt-confirmation-accept", function (evt) { 
+      afterFunction();
+      $(self.el).modal('toggle');
+    });
+
+    $(document).off("click", "#prompt-confirmation-cancel").on("click", "#prompt-confirmation-cancel", function (evt) {
+      $(self.el).modal('toggle');
+    });
+
+    return this;
+  }
+});
+
 var ReactionTemplateView = Backbone.View.extend({
   defaultTemplateParameters: {
     templateType: "association",
@@ -427,7 +500,7 @@ var ReactionTemplateView = Backbone.View.extend({
       var html = "<table>";
       for( var i = 0; i < this.macromoleculeList.length; i++){
         html += "<tr><td>"
-            + "<input type='text' class='template-reaction-textbox input-small layout-text' name='"
+            + "<input type='text' class='template-reaction-textbox sbgn-input-medium layout-text' name='"
             + i + "'" + " value='" + this.macromoleculeList[i] + "'></input>"
             + "</td><td><img style='padding-bottom: 8px;' class='template-reaction-delete-button' width='12px' height='12px' name='" + i + "' src='app/img/delete.png'/></td></tr>";
       }
@@ -437,14 +510,14 @@ var ReactionTemplateView = Backbone.View.extend({
     },
     getComplexHtml: function(){
       var html = "<table>"
-          + "<tr><td><input type='checkbox' class='input-small layout-text' id='template-reaction-enable-complex-name'";
+          + "<tr><td><input type='checkbox' class='sbgn-input-medium layout-text' id='template-reaction-enable-complex-name'";
 
       if(this.templateReactionEnableComplexName){
         html += " checked ";
       }
 
       html += "/>"
-          + "</td><td><input type='text' class='input-small layout-text' id='template-reaction-complex-name' value='"
+          + "</td><td><input type='text' class='sbgn-input-medium layout-text' id='template-reaction-complex-name' value='"
           + this.templateReactionComplexName + "'";
 
       if(!this.templateReactionEnableComplexName){
@@ -481,7 +554,7 @@ var ReactionTemplateView = Backbone.View.extend({
     self.template = self.template(self.currentTemplateParameters);
   },
   copyProperties: function () {
-    this.currentTemplateParameters = jQuery.extend(true, [], this.defaultTemplateParameters);
+    this.currentTemplateParameters = jquery.extend(true, [], this.defaultTemplateParameters);
   },
   render: function () {
     var self = this;
@@ -562,7 +635,7 @@ var ReactionTemplateView = Backbone.View.extend({
     $(document).off("click", "#create-template").on("click", "#create-template", function (evt) {
 
       var templateType = self.currentTemplateParameters.templateType;
-      var macromoleculeList = jQuery.extend(true, [], self.currentTemplateParameters.macromoleculeList);
+      var macromoleculeList = jquery.extend(true, [], self.currentTemplateParameters.macromoleculeList);
       var complexName = self.currentTemplateParameters.templateReactionEnableComplexName?self.currentTemplateParameters.templateReactionComplexName:undefined;
       var tilingPaddingVertical = chise.calculatePaddings(appUtilities.currentLayoutProperties.tilingPaddingVertical);
       var tilingPaddingHorizontal = chise.calculatePaddings(appUtilities.currentLayoutProperties.tilingPaddingHorizontal);
@@ -599,27 +672,59 @@ var GridPropertiesView = Backbone.View.extend({
     $(self.el).html(self.template);
 
     $(self.el).modal('show');
+	
+	// Enable Show Grid when Snap to Grid is enabled
+	$(document).ready(function(){
+	  $("#snap-to-grid").change(function(){
+		$("#show-grid").prop('checked', true);
+	  });
+	});
 
     $(document).off("click", "#save-grid").on("click", "#save-grid", function (evt) {
       appUtilities.currentGridProperties.showGrid = document.getElementById("show-grid").checked;
       appUtilities.currentGridProperties.snapToGrid = document.getElementById("snap-to-grid").checked;
+      appUtilities.currentGridProperties.snapToAlignmentLocation = document.getElementById("snap-to-alignment-location").checked;
       appUtilities.currentGridProperties.gridSize = Number(document.getElementById("grid-size").value);
       appUtilities.currentGridProperties.discreteDrag = document.getElementById("discrete-drag").checked;
       appUtilities.currentGridProperties.autoResizeNodes = document.getElementById("auto-resize-nodes").checked;
-      appUtilities.currentGridProperties.showAlignmentGuidelines = document.getElementById("show-alignment-guidelines").checked;
+      appUtilities.currentGridProperties.showGeometricGuidelines = document.getElementById("show-geometric-guidelines").checked;
+      appUtilities.currentGridProperties.showDistributionGuidelines = document.getElementById("show-distribution-guidelines").checked;
+      appUtilities.currentGridProperties.showInitPosAlignment = document.getElementById("show-init-Pos-Alignment").checked;
       appUtilities.currentGridProperties.guidelineTolerance = Number(document.getElementById("guideline-tolerance").value);
-      appUtilities.currentGridProperties.guidelineColor = document.getElementById("guideline-color").value;
+      appUtilities.currentGridProperties.guidelineColor = document.getElementById("geometric-guideline-color").value;
+      appUtilities.currentGridProperties.horizontalGuidelineColor = document.getElementById("horizontal-guideline-color").value;
+      appUtilities.currentGridProperties.verticalGuidelineColor = document.getElementById("vertical-guideline-color").value;
+      appUtilities.currentGridProperties.initPosAlignmentColor = document.getElementById("init-Pos-Alignment-Color").value;
+      appUtilities.currentGridProperties.geometricAlignmentRange = Number(document.getElementById("geometric-alignment-range").value);
+      appUtilities.currentGridProperties.distributionAlignmentRange = Number(document.getElementById("distribution-alignment-range").value);
 
+	  // Line styles for guidelines
+      appUtilities.currentGridProperties.initPosAlignmentLine = $('select[name="init-Pos-Alignment-Line"] option:selected').val().split(',').map(Number);
+      appUtilities.currentGridProperties.lineDash = $('select[id="geometric-Alignment-Line"] option:selected').val().split(',').map(Number),
+      appUtilities.currentGridProperties.horizontalDistLine = $('select[name="horizontal-Dist-Alignment-Line"] option:selected').val().split(',').map(Number);
+      appUtilities.currentGridProperties.verticalDistLine = $('select[name="vertical-Dist-Alignment-Line"] option:selected').val().split(',').map(Number);
       cy.gridGuide({
         drawGrid: appUtilities.currentGridProperties.showGrid,
         snapToGrid: appUtilities.currentGridProperties.snapToGrid,
+		snapToAlignmentLocation: appUtilities.currentGridProperties.snapToAlignmentLocation,
         gridSpacing: appUtilities.currentGridProperties.gridSize,
         discreteDrag: appUtilities.currentGridProperties.discreteDrag,
         resize: appUtilities.currentGridProperties.autoResizeNodes,
-        guidelines: appUtilities.currentGridProperties.showAlignmentGuidelines,
+        geometricGuideline: appUtilities.currentGridProperties.showGeometricGuidelines,
+        distributionGuidelines: appUtilities.currentGridProperties.showDistributionGuidelines,
+        initPosAlignment: appUtilities.currentGridProperties.showInitPosAlignment,
         guidelinesTolerance: appUtilities.currentGridProperties.guidelineTolerance,
         guidelinesStyle: {
-          strokeStyle: appUtilities.currentGridProperties.guidelineColor
+		  initPosAlignmentLine: appUtilities.currentGridProperties.initPosAlignmentLine,
+		  lineDash: appUtilities.currentGridProperties.lineDash,
+		  horizontalDistLine: appUtilities.currentGridProperties.horizontalDistLine,
+		  verticalDistLine: appUtilities.currentGridProperties.verticalDistLine,
+          strokeStyle: appUtilities.currentGridProperties.guidelineColor,
+		  horizontalDistColor: appUtilities.currentGridProperties.horizontalGuidelineColor,
+		  verticalDistColor: appUtilities.currentGridProperties.verticalGuidelineColor,
+		  initPosAlignmentColor: appUtilities.currentGridProperties.initPosAlignmentColor,
+          geometricGuidelineRange: appUtilities.currentGridProperties.geometricAlignmentRange,
+          range: appUtilities.currentGridProperties.distributionAlignmentRange
         }
       });
       
@@ -710,10 +815,10 @@ var FontPropertiesView = Backbone.View.extend({
     var commonProperties = {};
     
     // Get common properties. Note that we check the data field for labelsize property and css field for other properties.
-    var commonFontSize = chise.elementUtilities.getCommonProperty(eles, "labelsize", "data");
-    var commonFontWeight = chise.elementUtilities.getCommonProperty(eles, "font-weight", "css");
-    var commonFontFamily = chise.elementUtilities.getCommonProperty(eles, "font-family", "css");
-    var commonFontStyle = chise.elementUtilities.getCommonProperty(eles, "font-style", "css");
+    var commonFontSize = parseInt(chise.elementUtilities.getCommonProperty(eles, "font-size", "data"));
+    var commonFontWeight = chise.elementUtilities.getCommonProperty(eles, "font-weight", "data");
+    var commonFontFamily = chise.elementUtilities.getCommonProperty(eles, "font-family", "data");
+    var commonFontStyle = chise.elementUtilities.getCommonProperty(eles, "font-style", "data");
     
     if( commonFontSize != null ) {
       commonProperties.fontSize = commonFontSize;
@@ -745,13 +850,13 @@ var FontPropertiesView = Backbone.View.extend({
     $(document).off("click", "#set-font-properties").on("click", "#set-font-properties", function (evt) {
       var data = {};
       
-      var labelsize = $('#font-properties-font-size').val();
+      var fontsize = $('#font-properties-font-size').val();
       var fontfamily = $('select[name="font-family-select"] option:selected').val();
       var fontweight = $('select[name="font-weight-select"] option:selected').val();
       var fontstyle = $('select[name="font-style-select"] option:selected').val();
       
-      if ( labelsize != '' ) {
-        data.labelsize = parseInt(labelsize);
+      if ( fontsize != '' ) {
+        data['font-size'] = parseInt(fontsize);
       }
       
       if ( fontfamily != '' ) {
@@ -811,6 +916,8 @@ module.exports = {
   GeneralPropertiesView: GeneralPropertiesView,
   PathsBetweenQueryView: PathsBetweenQueryView,
   PromptSaveView: PromptSaveView,
+  FileSaveView: FileSaveView,
+  PromptConfirmationView: PromptConfirmationView,
   ReactionTemplateView: ReactionTemplateView,
   GridPropertiesView: GridPropertiesView,
   FontPropertiesView: FontPropertiesView
