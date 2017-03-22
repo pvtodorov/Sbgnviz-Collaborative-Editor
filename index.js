@@ -27,7 +27,7 @@ var menu;
 var userCount;
 var socket;
 
-var room;
+
 var modelManager;
 var oneColor = require('onecolor');
 app.on('model', function (model) {
@@ -515,6 +515,8 @@ app.proto.listenToNodeOperations = function(model){
     model.on('all', '_page.doc.cy.nodes.*.data.*', function(id, att, op, val,prev, passed){
         if(docReady && passed.user == null) {
             cy.getElementById(id).data(att, val);
+            if(att === "parent")
+                cy.getElementById(id).move({"parent":val});
         }
     });
 
@@ -801,8 +803,9 @@ app.proto.changeColorCode = function(){
 };
 app.proto.runUnitTests = function(){
     //require("./public/test/testsMenuFunctions.js")();
-    require("./public/test/testsModelManager.js")();
-
+    // require("./public/test/testsModelManager.js")();
+    var room = this.model.get('_page.room');
+    require("./public/test/testsAgentAPI.js")(("http://localhost:3000/" + room));
     require("./public/test/testOptions.js")(); //to print out results
 
 }

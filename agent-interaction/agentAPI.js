@@ -8,13 +8,14 @@
  * @param id
  * @constructor
  */
+
+
 function Agent (name, id) {
-
-
     //public
     this.agentId = id;
     this.agentName = name;
-    this.colorCode = getNewColor();
+    this.colorCode = "#00bfff"; //agents have different colors based on specialty
+    // this.colorCode = getNewColor();
 
     this.selectedNode;
     this.selectedEdge;
@@ -25,13 +26,8 @@ function Agent (name, id) {
     this.socket;
     this.room;
 
-    //private variables
-    var nextNodeCnt;
 
 }
-
-
-//var self = this;
 
 /**
  *
@@ -75,7 +71,8 @@ Agent.prototype.connectToServer = function (url, callback) {
         self.socket.emit("subscribeAgent", {
             userName: self.agentName,
             room: self.room,
-            userId: self.agentId
+            userId: self.agentId,
+            colorCode: self.colorCode
         }, function (data) {
 
 
@@ -108,11 +105,11 @@ Agent.prototype.loadModel = function (callback) {
 
         self.pageDoc = data;
 
-        self.userList = [];
-        for(var userId in data.users) {
-            self.userList.push({userId: userId, userName: data.users[userId].name});
-        }
-
+        // self.userList = [];
+        // for(var userId in data.users) {
+        //     self.userList.push({userId: userId, userName: data.users[userId].name});
+        // }
+        //
 
 
         if (callback != null) callback();
@@ -328,15 +325,19 @@ Agent.prototype.sendMessage = function(comment, targets, callback){
  *
  * @returns {string} A specific color to identify the agent
  */
-function getNewColor(){
-    var gR = 1.618033988749895; //golden ratio
-    var h = Math.floor((Math.random() * gR * 360));//Math.floor((cInd * gR - Math.floor(cInd * gR))*360);
-    var cHsl = [h, 70 + Math.random() * 30, 60 + Math.random() * 10];
+// Agent.prototype.getNewColor = function(){
+//     var gR = 1.618033988749895; //golden ratio
+//     var h = Math.floor((Math.random() * gR * 360));//Math.floor((cInd * gR - Math.floor(cInd * gR))*360);
+//     var cHsl = [h, 70 + Math.random() * 30, 60 + Math.random() * 10];
+//
+//     if(typeof module !== 'undefined' && module.exports)
+//         tinycolor = require('tinycolor')();
+//
+//     return tinycolor('hsla('+cHsl[0]  +', '+ cHsl[1] + '%, ' + cHsl[2] +'%, 1)').toHexString();
+//
+// }
 
-    return tinycolor('hsla('+cHsl[0]  +', '+ cHsl[1] + '%, ' + cHsl[2] +'%, 1)').toHexString();
-
-}
-
-
+if(typeof module !== 'undefined' && module.exports)
+    module.exports = Agent;
 
 
