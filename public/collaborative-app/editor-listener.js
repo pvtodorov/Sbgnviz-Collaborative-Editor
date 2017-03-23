@@ -141,9 +141,10 @@ module.exports = function(modelManager){
                 var modelElList = [];
                 var paramList = [];
                 args.eles.forEach(function (ele) {
-                    //var ele = param.ele;
-                    modelElList.push({id: ele.id(), isNode: true});
-                    paramList.push(ele.position());
+                    if(ele.isNode()){
+                        modelElList.push({id: ele.id(), isNode: true});
+                        paramList.push(ele.position());
+                    }
                 });
 
                 modelManager.changeModelElementGroupAttribute("position", modelElList, paramList, "me");

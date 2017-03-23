@@ -41,6 +41,24 @@ module.exports = function (model, docId, userId, userName) {
             return model.get('_page.doc.users.' + userId + '.name');
         },
 
+        getMessages: function(){
+            return model.get('_page.doc.messages');
+        },
+
+        deleteUser: function(userId){
+            console.log("user deleted");
+            model.del('_page.doc.users.'+ userId);
+            var userIds = model.get('_page.doc.userIds');
+
+            for(var i = 0; i < userIds.length; i++){
+
+                if(userIds[i] == userId ){
+                    model.remove('_page.doc.userIds', i) ; //remove from the index
+                    break;
+                }
+            }
+
+        },
 
         updateLayoutProperties: function (layoutProperties, noHistUpdate) {
 
@@ -896,51 +914,10 @@ module.exports = function (model, docId, userId, userName) {
             else
                 this.changeModelNodeAttribute('position', node.id(), node.position(), user, noHistUpdate);
 
-            //Change css-related attributes one by one
 
             //Initializing css properties causes bypass problems!!
 
-            // var backgroundColor = nodePath.get('backgroundColor');
-            // if (backgroundColor != null) {
-            //
-            //     node.css("background-color", backgroundColor);
-            // }
-            // else
-            //     this.changeModelNodeAttribute('backgroundColor', node.id(), node.css('background-color'), user, noHistUpdate);
 
-
-            // var borderWidth = nodePath.get('borderWidth');
-            // if (borderWidth != null) {
-            //
-            //     node.css("border-width", borderWidth);
-            // }
-            // else
-            //     this.changeModelNodeAttribute('borderWidth', node.id(), node.css('border-width'), user, noHistUpdate);
-            //
-            // var opacity = nodePath.get('opacity');
-            // if (opacity != null) {
-            //
-            //     node.css("opacity", opacity);
-            // }
-            // else
-            //     this.changeModelNodeAttribute('opacity', node.id(), node.css('opacity'), user, noHistUpdate);
-            //
-            // var visibility = nodePath.get('visibility');
-            // if (visibility != null) {
-            //
-            //     node.css("visibility", visibility);
-            // }
-            // else
-            //     this.changeModelNodeAttribute('visibility', node.id(), node.css('visibility'), user, noHistUpdate);
-            //
-            //
-            // var display = nodePath.get('display');
-            // if (display != null) {
-            //
-            //     node.css("display", display);
-            // }
-            // else
-            //     this.changeModelNodeAttribute('display', node.id(), node.css('display'), user, noHistUpdate);
 
 
         },
@@ -974,54 +951,6 @@ module.exports = function (model, docId, userId, userName) {
             else
                 this.changeModelEdgeAttribute('data', edge.id(), edge.data(), user, noHistUpdate);
 
-
-            // var opacity = edgePath.get('opacity');
-            //
-            // if (opacity != null)
-            //     edge.css('opacity', opacity );
-            //
-            // else
-            //     this.changeModelEdgeAttribute('opacity', edge.id(),edge.css('opacity'), user, noHistUpdate);
-            //
-            //
-            //
-            // var lineColor = edgePath.get('lineColor');
-            //
-            // if (lineColor != null)
-            //     edge.css('line-color', lineColor);
-            // else
-            //     this.changeModelEdgeAttribute('lineColor', edge.id(), edge.css('line-color'), user, noHistUpdate);
-            //
-            //
-            // var width = edgePath.get('width');
-            //
-            // if (width != null) {
-            //     edge.css('width', width);
-            // }
-            // else
-            //     this.changeModelEdgeAttribute('width', edge.id(), edge.css('width'), user, noHistUpdate);
-            //
-            // var borderWidth = edgePath.get('borderWidth');
-            //
-            // if (borderWidth != null) {
-            //     edge.css('border-width', borderWidth);
-            // }
-            // else
-            //     this.changeModelEdgeAttribute('borderWidth', edge.id(), edge.css('border-width'), user, noHistUpdate);
-            //
-            // var backgroundColor = edgePath.get('backgroundColor');
-            //
-            // if (backgroundColor != null)
-            //     edge.css('background-color', backgroundColor);
-            // else
-            //     this.changeModelEdgeAttribute('backgroundColor', edge.id(), edge.css('background-color'), user, noHistUpdate);
-            //
-            // var backgroundOpacity = edgePath.get('backgroundOpacity');
-            //
-            // if (backgroundOpacity != null)
-            //     edge.css('background-opacity', backgroundOpacity);
-            // else
-            //     this.changeModelEdgeAttribute('backgroundOpacity', edge.id(), edge.css('background-opacity'), user, noHistUpdate);
 
 
 
@@ -1083,237 +1012,7 @@ module.exports = function (model, docId, userId, userName) {
                 this.updateHistory({opName: 'merge', prevParam: prevModelCy, param: modelCy, opTarget: 'model'});
             }
 
-        },
-        performCyAction: function(actionName, args, res){
-            if (actionName === "changeData" || actionName === "changeFontProperties" ) {
-
-                var modelElList = [];
-                var paramList = [];
-                args.eles.forEach(function (ele) {
-                    //var ele = param.ele;
-
-                    modelElList.push({id: ele.id(), isNode: ele.isNode()});
-                    paramList.push(ele.data());
-
-                });
-                modelManager.changeModelElementGroupAttribute("data", modelElList, paramList, "me");
-
-            }
-
-            else if (actionName === "changeNodeLabel" || actionName === "resizeNodes" ||
-                actionName === "addStateOrInfoBox" || actionName === "setMultimerStatus" || actionName === "setCloneMarkerStatus") {
-
-                var modelElList = [];
-                var paramList = []
-                args.nodes.forEach(function (ele) {
-                    //var ele = param.ele;
-
-                    modelElList.push({id: ele.id(), isNode: true});
-                    paramList.push(ele.data());
-
-                });
-                modelManager.changeModelElementGroupAttribute("data", modelElList, paramList, "me");
-
-            }
-
-            else if (actionName === "changeCss") {
-                var modelElList = [];
-                var paramList = [];
-
-                args.eles.forEach(function (ele) {
-                    modelElList.push({id: ele.id(), isNode: ele.isNode()});
-                    paramList.push(ele.css(args.name));
-
-                });
-
-                var name = mapFromCyToModelName(args.name);
-                modelManager.changeModelElementGroupAttribute(name, modelElList, paramList, "me");
-            }
-
-            else if (actionName === "hide" || actionName === "show") {
-                var modelElList = [];
-                var paramList = [];
-
-                args.forEach(function (ele) {
-                    modelElList.push({id: ele.id(), isNode: ele.isNode()});
-                    paramList.push(actionName);
-
-                });
-
-                modelManager.changeModelElementGroupAttribute("visibilityStatus", modelElList, paramList, "me");
-            }
-
-            else if (actionName === "highlight") {
-                var modelElList = [];
-                var paramList = [];
-
-
-                args.forEach(function (ele) {
-                    modelElList.push({id: ele.id(), isNode: ele.isNode()});
-                    paramList.push("highlighted");
-                });
-
-                modelManager.changeModelElementGroupAttribute("highlightStatus", modelElList, paramList, "me");
-            }
-
-            else if(actionName === "removeHighlights"){
-                var modelElList = [];
-                var paramList = [];
-
-
-                cy.elements().forEach(function (ele) {
-                    modelElList.push({id: ele.id(), isNode: ele.isNode()});
-                    paramList.push("unhighlighted");
-
-                });
-
-                modelManager.changeModelElementGroupAttribute("highlightStatus", modelElList, paramList, "me");
-
-            }
-            else if (actionName === "expand" || actionName === "collapse") {
-
-                var modelElList = [];
-                var paramList = []
-                args.nodes.forEach(function (ele) {
-                    modelElList.push({id: ele.id(), isNode: true});
-                    paramList.push(actionName);
-
-                });
-                modelManager.changeModelElementGroupAttribute("expandCollapseStatus", modelElList, paramList, "me");
-            }
-
-
-            else if (actionName === "drag" || actionName === "align") {
-
-                var modelElList = [];
-                var paramList = []
-                args.nodes.forEach(function (ele) {
-                    //var ele = param.ele;
-                    modelElList.push({id: ele.id(), isNode: true});
-                    paramList.push(ele.position());
-                });
-
-                modelManager.changeModelElementGroupAttribute("position", modelElList, paramList, "me");
-            }
-
-            else if (actionName === "layout") {
-                cy.on('layoutstop', function() {
-
-                    var modelElList = [];
-                    var paramList = [];
-                    args.eles.forEach(function (ele) {
-                        //var ele = param.ele;
-                        modelElList.push({id: ele.id(), isNode: true});
-                        paramList.push(ele.position());
-                    });
-
-                    modelManager.changeModelElementGroupAttribute("position", modelElList, paramList, "me");
-                });
-            }
-
-
-            else if(actionName === "deleteElesSimple" || actionName === "deleteNodesSmart"){
-
-                var nodeList = [];
-                var edgeList = [];
-
-                res.forEach(function (el) {
-                    if(el.isNode())
-                        nodeList.push({id:el.id()});
-                    else
-                        edgeList.push({id:el.id()});
-                });
-
-                modelManager.deleteModelElementGroup({nodes:nodeList,edges: edgeList}, "me");
-            }
-
-            else if (actionName === "addNode") {
-                var newNode = args.newNode;
-                var id = res.eles.id();
-                var param = {x: newNode.x, y: newNode.y, class: newNode.class};
-                //Add to the graph first
-                modelManager.addModelNode(id, param, "me");
-                //assign other node properties-- css and data
-                modelManager.initModelNode(res.eles[0], "me");
-
-            }
-
-            else if(actionName === "addEdge"){
-
-                var newEdge = args.newEdge;
-                var id = res.eles.id();
-                var param = { source: newEdge.source, target:newEdge.target, class: newEdge.class};
-                //Add to the graph first
-                modelManager.addModelEdge(id, param, "me");
-                //assign other edge properties-- css and data
-                modelManager.initModelEdge(res.eles[0], "me");
-
-            }
-
-            else if(actionName === "paste"){
-                res.forEach(function(el){ //first add nodes
-                    if(el.isNode()){
-                        var param = {x: el.position("x"), y: el.position("y"), class: el.data("class")};
-                        modelManager.addModelNode(el.id(), param, "me");
-
-                        modelManager.initModelNode(el, "me");
-                    }
-                });
-
-                res.forEach(function(el){ //first add nodes
-                    if(el.isEdge()){
-                        var param = { source: el.data("source"), target:el.data("target"), class: el.data("class")};
-                        modelManager.addModelEdge(el.id(), param, "me");
-                        modelManager.initModelEdge(el, "me");
-                    }
-                });
-
-            }
-            else if(actionName === "changeParent"){
-                var modelElList = [];
-                var paramListData = [];
-                var paramListPosition = [];
-                res.nodes.forEach(function (ele) {
-                    //var ele = param.ele;
-
-                    modelElList.push({id: ele.id(), isNode: true});
-                    paramListData.push(ele.data());
-                    paramListPosition.push(ele.position());
-                    // paramList.push(ele.data(args.name));
-
-                });
-                modelManager.changeModelElementGroupAttribute("data", modelElList, paramListData, "me");
-                modelManager.changeModelElementGroupAttribute("position", modelElList, paramListPosition, "me");
-
-
-            }
-            else if(actionName === "createCompoundForGivenNodes"){
-                var paramList = [];
-                var modelElList = [];
-
-                res.children().forEach(function (ele) {
-                    //var ele = param.ele;
-
-                    modelElList.push({id: ele.id(), isNode: true});
-
-                    paramList.push(ele.data()); //includes parent information
-
-                });
-
-
-
-                var compoundAtts = {x: res.position("x"), y: res.position("y"), class:res.data("class")};
-
-
-                modelManager.addModelCompound(res.id(), compoundAtts, modelElList,paramList, "me" );
-
-
-                //assign other node properties-- css and data
-                modelManager.initModelNode(res,"me"); //init with default values
-
-
-            }
-            
         }
+
     }
 }

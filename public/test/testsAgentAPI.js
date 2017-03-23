@@ -27,6 +27,8 @@ module.exports = function(serverIp){
         });
     }
 
+
+
     function testLoadModel() {
         QUnit.test('Connect to server and load model', function (assert) {
             assert.expect(3);
@@ -53,6 +55,40 @@ module.exports = function(serverIp){
         });
     }
 
+    function testChangeName(){
+        QUnit.test('Change name', function (assert) {
+
+            assert.expect(1);
+            var done1 = assert.async();
+
+            agent.changeName("HAL", function () {
+                setTimeout(function () { //should wait here as well
+                    assert.equal(agent.agentName, "HAL", "Agent name changed.");
+                    done1();
+                }, 100);
+
+            });
+        });
+
+    }
+
+    function testMessages() {
+        QUnit.test('Message send/receive', function (assert) {
+            assert.expect(1);
+            var done1 = assert.async();
+            var targets = agent.getUserList();
+
+            agent.sendMessage("Hello", targets, function (data) {
+                setTimeout(function () { //should wait here as well
+
+                    assert.equal(data, "success", "Agent message sent.");
+                    done1();
+                }, 100);
+            });
+
+        });
+    }
+
     function testGetRequests(){
 
 
@@ -75,6 +111,64 @@ module.exports = function(serverIp){
 
     }
 
+    function testAddDeleteRequests(){
+
+
+        QUnit.test('Agent addNode addEdge deleteNode deleteEdge', function(assert) {
+            assert.expect(4);
+            var done1 = assert.async();
+            var done2 = assert.async();
+            var done3 = assert.async();
+            var done4 = assert.async();
+
+
+            agent.sendRequest("agentAddNodeRequest", {param:{x:30, y:40, class:"macromolecule"}}, function(nodeId){
+                setTimeout(function () { //should wait here as well
+                    var val = ModelManager.getModelNode(nodeId);
+                    assert.ok(val, "Node added.");
+                    done1();
+                },100);
+
+            });
+
+
+            var param = {source:"glyph9", target:"glyph15", class:"consumption"};
+            var edgeId = (param.source+ "-" + param.target + "-" + param.class);
+            agent.sendRequest("agentAddEdgeRequest", {id: edgeId, param:param}, function(){
+                setTimeout(function () { //should wait here as well
+                    var val = ModelManager.getModelEdge(edgeId);
+                    assert.ok(val, "Edge added.");
+                    done2();
+                },100);
+
+            });
+
+
+            var nodeToDelete = "glyph33";
+            agent.sendRequest("agentDeleteNodeRequest", {id:nodeToDelete}, function(nodeId){
+                setTimeout(function () { //should wait here as well
+                    var val = ModelManager.getModelNode(nodeToDelete);
+                    assert.notOk(val, "Node deleted.");
+                    done3();
+                },100);
+
+            });
+
+            var edgeToDelete = "glyph7-glyph24";
+            agent.sendRequest("agentDeleteEdgeRequest", {id:edgeToDelete}, function(nodeId){
+                setTimeout(function () { //should wait here as well
+                    var val = ModelManager.getModelEdge(edgeToDelete);
+                    assert.notOk(val, "Edge deleted.");
+                    done4();
+                },100);
+
+            });
+
+
+        });
+
+    }
+
 
     function testMoveNodeRequest(){
 
@@ -85,7 +179,7 @@ module.exports = function(serverIp){
             assert.expect(1);
             var done1 = assert.async();
 
-            agent.sendRequest("agentMoveNodeRequest", {id: nodeId,  pos:pos}, function(){;
+            agent.sendRequest("agentMoveNodeRequest", {id: nodeId,  pos:pos}, function(){
                 setTimeout(function () { //should wait here as well
                     var val = ModelManager.getModelNodeAttribute("position", nodeId);
                     assert.propEqual(val, pos, "Node move operation is correct.");
@@ -214,9 +308,63 @@ module.exports = function(serverIp){
     }
 
 
+    function testLayout(){
+
+        QUnit.test('Agent layout', function(assert) {
+
+            assert.expect(1);
+            var done1 = assert.async();
+            agent.sendRequest("agentRunLayoutRequest", null, function(val){
+                setTimeout(function () { //should wait here as well
+                    assert.equal(val, "success", "Layout run.") ;
+                    done1();
+                },100);
+            });
+        });
+
+    }
+
+    function testNewFile(){
+
+        QUnit.test('Agent new file', function(assert) {
+
+            assert.expect(1);
+            var done1 = assert.async();
+            agent.sendRequest("agentNewFileRequest", null, function(){
+                setTimeout(function () { //should wait here as well
+                    var cy = ModelManager.getModelCy();
+                    assert.ok((jQuery.isEmptyObject(cy.nodes) && jQuery.isEmptyObject(cy.edges)),"New file loaded") ;
+                    done1();
+                },100);
+            });
+        });
+
+    }
+
+    function testDisconnect(){
+
+        QUnit.test('Agent disconnect', function(assert) {
+
+            assert.expect(1);
+            var done1 = assert.async();
+            console.log(agent.socket);
+            agent.disconnect(function(){
+
+                assert.notOk(agent.socket.connected,"Agent disconnected." ) ;
+                done1();
+            });
+
+
+        });
+
+    }
+
+
     setTimeout(function() {
         testNewAgent();
     }, 100);
+
+
 
     setTimeout(function() {
         testAgentProperties();
@@ -227,9 +375,21 @@ module.exports = function(serverIp){
         testLoadModel();
     }, 100);
 
+
+    //Make sure the model is loaded first
+    setTimeout(function() {
+        testChangeName();
+    }, 100);
+
+    setTimeout(function() {
+        testMessages();
+    }, 100);
+
+
     setTimeout(function() {
         testGetRequests();
     },100);
+
 
     setTimeout(function() {
         testMoveNodeRequest();
@@ -244,4 +404,24 @@ module.exports = function(serverIp){
         testEdgeSetAttributeRequests();
     },100);
 
+    setTimeout(function() {
+        testAddDeleteRequests();
+    },100);
+
+
+    //do this at the end
+    setTimeout(function() {
+        testLayout();
+    }, 1000);
+
+    //do this at the end
+    setTimeout(function() {
+        testNewFile();
+    }, 2000);
+
+
+    //do this at the end
+    setTimeout(function() {
+        testDisconnect();
+    }, 3000);
 };

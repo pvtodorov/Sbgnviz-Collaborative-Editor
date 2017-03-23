@@ -153,6 +153,8 @@ app.get('/:docId', function (page, model, arg, next) {
 
                 users.subscribe(function () {
 
+                    console.log("User is being subscribed");
+                    console.log(users.get());
                     var colorCode = null;
                     var userName = null;
                     if (users.get(userId)) {
@@ -243,6 +245,12 @@ app.proto.create = function (model) {
     }); //subscribe to current doc as a new room
 
 
+    //to capture user disconnection, this has to be throuagh sockets-- not model
+    socket.on('deleteUser',  function(userId){
+        modelManager.deleteUser(userId);
+
+    });
+
 
     //to capture user disconnection, this has to be throuagh sockets-- not model
     // socket.on('userList', function(userList){
@@ -268,12 +276,17 @@ app.proto.create = function (model) {
 
     });
 
-    // //better through sockets-- model operation causes complications
-    // socket.on('runLayout', function(){
-    //     $("#perform-layout").trigger('click');
-    // });
-    //
-    //
+    socket.on('runLayout', function(callback){
+        $("#perform-layout").trigger('click');
+        if(callback) callback("success");
+    });
+    //TODO: find a cleaner way
+    //better through sockets-- model operation causes complications
+    socket.on('runLayout', function(callback){
+        $("#perform-layout").trigger('click');
+        if(callback) callback("success");
+    });
+
 
     socket.on('addNode', function(data, callback){
         //does not trigger cy events
@@ -387,21 +400,17 @@ app.proto.loadCyFromModel = function(){
         });
 
 
-        //Update style fields separately
-        // cy.nodes().forEach(function(node){
-        //
-        //     var position = modelManager.getModelNodeAttribute('position',node.id());
-        //
-        //     node.position({x:position.x, y: position.y});
-        //     // node._private.position.x = modelNode.position.x;
-        //     // node._private.position.y = modelNode.position.y;
-        //     node.css('background-color', modelManager.getModelNodeAttribute('backgroundColor',node.id()));
-        //     node.css('border-width', modelManager.getModelNodeAttribute('borderWidth',node.id()));
-        //     node.css('opacity', modelManager.getModelNodeAttribute('opacity,node.id()'));
-        //     node.css('visibility', modelManager.getModelNodeAttribute('visibility',node.id()));
-        //     node.css('display', modelManager.getModelNodeAttribute('display',node.id()));
-        // });
-        //
+        //Update position fields separately
+        cy.nodes().forEach(function(node){
+
+            var position = modelManager.getModelNodeAttribute('position',node.id());
+
+            node.position({x:position.x, y: position.y});
+            // node._private.position.x = modelNode.position.x;
+            // node._private.position.y = modelNode.position.y;
+
+        });
+
         // cy.edges().forEach(function(edge){
         //     edge.css('line-color', modelManager.getModelEdgeAttribute('lineColor', edge.id()));
         //     edge.css('background-color',  modelManager.getModelEdgeAttribute('backgroundColor', edge.id()));
@@ -628,6 +637,7 @@ app.proto.listenToEdgeOperations = function(model){
 
     model.on('all', '_page.doc.cy.edges.*', function(id, op, val, prev, passed){
 
+
         if(docReady &&  passed.user == null) {
             var edge  = model.get('_page.doc.cy.edges.' + id); //check
 
@@ -651,6 +661,9 @@ app.proto.listenToEdgeOperations = function(model){
 
             var newEdge = chise.elementUtilities.addEdge(source, target, sbgnclass, id, visibility);
 
+
+
+
             modelManager.initModelEdge(newEdge,"me", true);
 
         }
@@ -659,8 +672,6 @@ app.proto.listenToEdgeOperations = function(model){
     //Called by agents to change specific properties of data
     model.on('all', '_page.doc.cy.edges.*.data.*', function(id, att, op, val,prev, passed){
         if(docReady && passed.user == null) {
-            console.log(att);
-            console.log(val);
             cy.getElementById(id).data(att, val);
         }
     });

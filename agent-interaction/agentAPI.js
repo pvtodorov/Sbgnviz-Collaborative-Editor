@@ -32,7 +32,7 @@ function Agent (name, id) {
 /**
  *
  * @param url Server address
- * @param callback After connecting to server we get the user list
+ * @param callback
  * @returns socket Io socket to the node.js server
  */
 Agent.prototype.connectToServer = function (url, callback) {
@@ -96,6 +96,19 @@ Agent.prototype.connectToServer = function (url, callback) {
 
 
 
+/**
+ * Disconnects from the socket
+ * @param callback After disconnecting from server we get success message
+ *
+ */
+Agent.prototype.disconnect = function(callback){
+
+
+    this.socket.disconnect();
+
+    if(callback) callback();
+
+};
 
 //get model for the current room
 Agent.prototype.loadModel = function (callback) {
@@ -192,10 +205,10 @@ Agent.prototype.getLayoutProperties = function(){
  * Sends request to the node.js server to change agent's name
  * @param newName New agent name
  */
-Agent.prototype.changeName = function(newName){
+Agent.prototype.changeName = function(newName, callback){
     this.agentName = newName;
     this.sendRequest("agentChangeNameRequest", {userName: newName, userId: self.agentId});
-
+    if(callback) callback();
 };
 
 
@@ -237,8 +250,8 @@ Agent.prototype.getEdgeRequest = function(id, callback){
  *     <li>reqName: "agentAddImageRequest", param: {img,filePath} </li>
  *     <li>reqName: "agentSetLayoutProperties", param: {name, nodeRepulsion, nodeOverlap, idealEdgeLength, edgeElasticity, nestingFactor, gravity, numIter, tile, animate, randomize} </li>
  *     <li>reqName: "agentRunLayoutRequest", param:null </li>
- *     <li>reqName: "agentAddNodeRequest", param:{x y, sbgnclass} </li>
- *     <li>reqName: "agentAddEdgeRequest", param:{source, target, sbgnclass} </li>\
+ *     <li>reqName: "agentAddNodeRequest", param:{x y, class} </li>
+ *     <li>reqName: "agentAddEdgeRequest", param:{source, target, class} </li>\
  *     <li>reqName: "agentChangeNodeAttributeRequest", param:{id, attStr, attVal} </li>
  *     <li>reqName: "agentChangeEdgeAttributeRequest", param:{id, attStr, attVal} </li>
  *     <li>reqName: "agentMoveNodeRequest", param:{id, pos} </li>
