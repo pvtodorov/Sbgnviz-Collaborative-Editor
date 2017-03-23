@@ -45,9 +45,28 @@ module.exports = function (model, docId, userId, userName) {
             return model.get('_page.doc.messages');
         },
 
+        getUsers: function(){
+            return model.get('_page.doc.users');
+        },
+        getUserIds: function(){
+            return model.get('_page.doc.userIds');
+        },
+
+
+        addUser: function(userId){
+
+
+            var userIds = model.get('_page.doc.userIds');
+
+            if(!userIds || userIds.indexOf(userId) < 0) //user not in the list
+                model.at('_page.doc.userIds').push(userId);
+
+
+        },
+
         deleteUser: function(userId){
-            console.log("user deleted");
-            model.del('_page.doc.users.'+ userId);
+            // console.log("user deleted");
+         //   model.del('_page.doc.users.'+ userId);
             var userIds = model.get('_page.doc.userIds');
 
             for(var i = 0; i < userIds.length; i++){
@@ -59,6 +78,8 @@ module.exports = function (model, docId, userId, userName) {
             }
 
         },
+
+
 
         updateLayoutProperties: function (layoutProperties, noHistUpdate) {
 

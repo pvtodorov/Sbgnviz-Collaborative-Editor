@@ -164,14 +164,15 @@ string after http:<ip>:3000/ in the server address.
 |  “agentAddEdgeRequest”              | {source: < source node id >,  |
 |                                     | target: < target node id >,   |
 |                                     | class: < sbgn class >}    |
+|"agentUpdateVisibilityRequest"       | {val:<"hide" or "show"or "showAll">,  selectedNodeIds:<array of node ids or null for showAll>|
 |  “agentChangeNodeAttributeRequest”  | {id: < node id >,             |
 |                                     | attStr: < node attribute name in the model >             |
 |                                     | attVal:< node attribute value >}                          |
-|                                     | attStr takes the following values: “data”, “data.bbox”, “data.bbox.w”, “data.bbox.h”, “data.class”, “data.cloneMarker”, "data.font-family", "data.font-size", "data.font-weight", "data.font-style", "data.statesandinfos", "data.label", "data.labelsize", "data.parent", "data.ports", "data.border-width", "data.background-color", "data.background-opacity", "highlightColor, expandCollapseStatus", "highlightStatus"   |
+|                                     | attStr takes the following values: “data”, “data.bbox”, “data.bbox.w”, “data.bbox.h”, “data.class”, “data.cloneMarker”, "data.font-family", "data.font-size", "data.font-weight", "data.font-style", "data.statesandinfos", "data.label", "data.labelsize", "data.parent", "data.ports", "data.border-width", "data.background-color", "data.background-opacity", "highlightColor, expandCollapseStatus", "highlightStatus", "visibilityStatus"   |
 |  “agentChangeEdgeAttributeRequest”  | {id: < node id >,                                   |
 |                                     | attStr: < edge attribute name in the model >        |
 |                                     | attVal:< edge attribute value >}                     |
-|                                     | attStr takes the following values: “data.source”, “data.target”, “data.portsource”, “data.porttarget”, “data.class”,   “data.line-color”,  “data.width”, “data.cardinality”,“highlightColor”    |
+|                                     | attStr takes the following values: “data.source”, “data.target”, “data.portsource”, “data.porttarget”, “data.class”,   “data.line-color”,  “data.width”, “data.cardinality”,“highlightColor”, "visibilityStatus", "highlightStatus"    |
 |  “agentMoveNodeRequest”             | {id: < node id >,                                                    |
 |                                     | pos: {x:< new position x >, y: <  new position y >}}                   |
 |  “agentAddCompoundRequest”          | {type: < compound type as “complex” or “compartment” >,              |

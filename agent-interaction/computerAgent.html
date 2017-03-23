@@ -739,19 +739,21 @@
 
     function showNodes(){
         var nodeIdList = $('#nodeId').val();
-        agent.sendRequest("agentVisibilityStatusRequest", {val:0, selectedNodeIds:nodeIdList});
+        agent.sendRequest("agentUpdateVisibilityRequest", {val:"show", selectedNodeIds:nodeIdList});
     }
 
 
     function hideNodes(){
         var nodeIdList = $('#nodeId').val();
-        agent.sendRequest("agentVisibilityStatusRequest", {val:1, selectedNodeIds:nodeIdList});
+        agent.sendRequest("agentUpdateVisibilityRequest", {val:"hide", selectedNodeIds:nodeIdList});
     }
 
 
     function showAll(){
-        highlightNodes();
-        agent.sendRequest("agentVisibilityStatusRequest", {val:3});
+        highlightNodes(); //select all
+
+
+        agent.sendRequest("agentUpdateVisibilityRequest", {val:'showAll'});
     }
 
     function moveNode(){

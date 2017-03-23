@@ -46,6 +46,7 @@ app.on('model', function (model) {
 
 });
 
+
 app.get('/', function (page, model, params) {
     function getId() {
         return model.id();
@@ -77,9 +78,7 @@ app.get('/:docId', function (page, model, arg, next) {
     var messagesQuery, room;
     room = arg.docId;
 
-    //   var docPath = model.at('documents.' + arg.docId);
-
-    model.subscribe('documents', function() {
+    model.subscribe('documents', function () {
         var docPath = 'documents.' + arg.docId;
         model.ref('_page.doc', ('documents.' + arg.docId));
 
@@ -97,7 +96,6 @@ app.get('/:docId', function (page, model, arg, next) {
                 name: 'One hour',
                 id: ONE_HOUR
             }, {name: 'One minute', id: ONE_MINUTE}]);
-
 
 
             // create a reference to the document
@@ -128,33 +126,27 @@ app.get('/:docId', function (page, model, arg, next) {
             });
 
 
-
-
             userIds.subscribe(function () {
                 var userId = model.get('_session.userId');
-
-
 
 
                 var userIdsList = userIds.get();
 
 
-
-                if(!userIdsList){
+                if (!userIdsList) {
                     userIdsList = [userId];
                     userIds.push(userId);
                 }
-                else if( userIdsList.indexOf(userId) < 0) //does not exist
+                else if (userIdsList.indexOf(userId) < 0) //does not exist
                     userIds.push(userId);
 
                 userIdsList = userIds.get();
 
 
-
                 users.subscribe(function () {
 
                     console.log("User is being subscribed");
-                    console.log(users.get());
+
                     var colorCode = null;
                     var userName = null;
                     if (users.get(userId)) {
@@ -242,14 +234,20 @@ app.proto.create = function (model) {
 
     //Notify server about the client connection
     socket.emit("subscribeHuman", {userName:name, room:  model.get('_page.room'), userId: id}, function(){
+        // var userIdsList = model.get('_page.doc.userIds');
+        //
+        // if (!userIdsList || userIdsList.indexOf(userId) < 0) { //Add user id to the current list of users if not still in there
+        //     model.at('_page.doc.userIds').push(userId);
+        // }
+
     }); //subscribe to current doc as a new room
 
 
     //to capture user disconnection, this has to be throuagh sockets-- not model
-    socket.on('deleteUser',  function(userId){
-        modelManager.deleteUser(userId);
-
-    });
+    // socket.on('deleteUser',  function(userId){
+    //     modelManager.deleteUser(userId);
+    //
+    // });
 
 
     //to capture user disconnection, this has to be throuagh sockets-- not model
@@ -267,22 +265,14 @@ app.proto.create = function (model) {
     //     menu.loadFile(txtFile);
     // });
 
-    socket.on('newFile', function(){
 
+    socket.on('newFile', function(data, callback){
         cy.remove(cy.elements());
         modelManager.newModel("me"); //do not delete cytoscape, only the model
-
-
-
-    });
-
-    socket.on('runLayout', function(callback){
-        $("#perform-layout").trigger('click');
         if(callback) callback("success");
     });
-    //TODO: find a cleaner way
-    //better through sockets-- model operation causes complications
-    socket.on('runLayout', function(callback){
+
+    socket.on('runLayout', function(data, callback){
         $("#perform-layout").trigger('click');
         if(callback) callback("success");
     });
@@ -310,6 +300,25 @@ app.proto.create = function (model) {
         modelManager.initModelEdge(newEdge,"me");
 
         if(callback) callback(newEdge.id());
+    });
+
+    socket.on('updateVisibility', function(data, callback){
+
+        if(data.val === "showAll")
+            $("#show-all").trigger('click');
+        else{
+            data.selectedNodeIds.forEach(function(id){
+                cy.getElementById(id).select();
+            });
+
+            if(data.val == "hide")
+                $("#hide-selected").trigger('click');
+            else
+                $("#show-selected").trigger('click');
+        }
+
+
+            if(callback) callback("success");
     });
 
     // socket.on('agentContextQuestion', function(socketId){
@@ -593,6 +602,7 @@ app.proto.listenToNodeOperations = function(model){
         if(docReady && passed.user == null) {
             try{
                 var viewUtilities = cy.viewUtilities('get');
+
 
                 if(visibilityStatus === "hide")
                     viewUtilities.hide(cy.getElementById(id));

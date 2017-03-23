@@ -324,6 +324,49 @@ module.exports = function(serverIp){
 
     }
 
+
+    function testHideShow(){
+
+        QUnit.test('Agent hide show', function(assert) {
+
+            assert.expect(3);
+
+            var done1 = assert.async();
+            var done2 = assert.async();
+            var done3 = assert.async();
+
+            agent.sendRequest("agentUpdateVisibilityRequest", {val:"hide", selectedNodeIds:["glyph8"]}, function(out){
+                setTimeout(function () { //should wait here as well
+                    var vStatus = ModelManager.getModelNodeAttribute("visibilityStatus", "glyph8");
+                    assert.equal(vStatus, "hide", "Nodes hidden.") ;
+                    done1();
+                },100);
+            });
+
+            agent.sendRequest("agentUpdateVisibilityRequest", {val:"show", selectedNodeIds:["glyph28"]}, function(out){
+                setTimeout(function () { //should wait here as well
+                    var vStatus = ModelManager.getModelNodeAttribute("visibilityStatus", "glyph28");
+                    assert.notEqual(vStatus, "hide", "Nodes shown.") ;
+                    done2();
+                },100);
+            });
+
+
+            setTimeout(function () { //wait here not to affect initial hide
+                agent.sendRequest("agentUpdateVisibilityRequest", {val: "showAll"}, function (out) {
+                    setTimeout(function () { //should wait here as well
+                        var vStatus = ModelManager.getModelNodeAttribute("visibilityStatus", "glyph8");
+                        assert.equal(vStatus, "show", "All nodes shown.");
+                        done3();
+                    }, 100);
+                });
+
+            }, 500);
+
+        });
+
+    }
+
     function testNewFile(){
 
         QUnit.test('Agent new file', function(assert) {
@@ -408,11 +451,15 @@ module.exports = function(serverIp){
         testAddDeleteRequests();
     },100);
 
+    setTimeout(function() {
+        testHideShow();
+    }, 100);
 
     //do this at the end
     setTimeout(function() {
         testLayout();
     }, 1000);
+
 
     //do this at the end
     setTimeout(function() {

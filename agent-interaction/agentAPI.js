@@ -104,9 +104,13 @@ Agent.prototype.connectToServer = function (url, callback) {
 Agent.prototype.disconnect = function(callback){
 
 
-    this.socket.disconnect();
+    this.socket.emit('agentManualDisconnect', function(){
+        if(callback) callback("success");
+    });
 
-    if(callback) callback();
+    // this.socket.disconnect();
+
+
 
 };
 
