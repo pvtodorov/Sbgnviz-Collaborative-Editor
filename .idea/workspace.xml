@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/lib/serverSideSocketListener.js" line="244" mnemonic="9" />
+    <bookmark url="file://$PROJECT_DIR$/lib/serverSideSocketListener.js" line="508" mnemonic="9" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9a4da041-f7fe-4258-8b1b-f19f75831c76" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/agent-interaction/agentAPI.js" afterPath="$PROJECT_DIR$/agent-interaction/agentAPI.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/agent-interaction/agentTester.css" afterPath="$PROJECT_DIR$/agent-interaction/agentTester.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/agent-interaction/computerAgent.html" afterPath="$PROJECT_DIR$/agent-interaction/computerAgent.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index.js" afterPath="$PROJECT_DIR$/index.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/serverSideSocketListener.js" afterPath="$PROJECT_DIR$/lib/serverSideSocketListener.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/collaborative-app/editor-listener.js" afterPath="$PROJECT_DIR$/public/collaborative-app/editor-listener.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/node_modules/jquery-expander/test/qunit/qunit.1.19.0.js" afterPath="$PROJECT_DIR$/public/node_modules/jquery-expander/test/qunit/qunit.1.19.0.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/test/testsAgentAPI.js" afterPath="$PROJECT_DIR$/public/test/testsAgentAPI.js" />
     </list>
     <ignored path="Sbgnviz-Collaborative-Editor Chise Version.iws" />
@@ -37,10 +41,12 @@
       <file leaf-file-name="serverSideSocketListener.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/lib/serverSideSocketListener.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="734">
-              <caret line="363" column="0" lean-forward="false" selection-start-line="363" selection-start-column="0" selection-end-line="363" selection-end-column="0" />
+            <state relative-caret-position="347">
+              <caret line="144" column="16" lean-forward="false" selection-start-line="144" selection-start-column="16" selection-end-line="144" selection-end-column="16" />
               <folding>
-                <element signature="e#8582#8600#0" expanded="false" />
+                <element signature="e#2381#2435#0" expanded="false" />
+                <element signature="e#6237#6255#0" expanded="false" />
+                <element signature="e#12941#15119#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -49,29 +55,33 @@
       <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="350">
-              <caret line="265" column="0" lean-forward="true" selection-start-line="265" selection-start-column="0" selection-end-line="265" selection-end-column="0" />
-              <folding />
+            <state relative-caret-position="374">
+              <caret line="248" column="13" lean-forward="true" selection-start-line="248" selection-start-column="13" selection-end-line="248" selection-end-column="13" />
+              <folding>
+                <element signature="e#11718#11774#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="README.md" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/README.md">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="816">
-              <caret line="167" column="0" lean-forward="false" selection-start-line="167" selection-start-column="0" selection-end-line="167" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="testsAgentAPI.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="testsAgentAPI.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/public/test/testsAgentAPI.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="959">
-              <caret line="166" column="0" lean-forward="true" selection-start-line="166" selection-start-column="0" selection-end-line="166" selection-end-column="0" />
+            <state relative-caret-position="773">
+              <caret line="602" column="0" lean-forward="false" selection-start-line="602" selection-start-column="0" selection-end-line="602" selection-end-column="0" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/views/index.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="320">
+              <caret line="1389" column="62" lean-forward="false" selection-start-line="1389" selection-start-column="58" selection-end-line="1389" selection-end-column="62" />
+              <folding>
+                <element signature="n#div#0;n#Body:#0;n#Head:#0;n#Title:#0;n#!!top" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -79,18 +89,18 @@
       <file leaf-file-name="app-menu.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/app/js/app-menu.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="332">
-              <caret line="188" column="18" lean-forward="false" selection-start-line="188" selection-start-column="12" selection-end-line="188" selection-end-column="18" />
+            <state relative-caret-position="299">
+              <caret line="50" column="50" lean-forward="false" selection-start-line="50" selection-start-column="50" selection-end-line="50" selection-end-column="50" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="editor-listener.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="editor-listener.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/collaborative-app/editor-listener.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2465">
-              <caret line="295" column="55" lean-forward="false" selection-start-line="295" selection-start-column="55" selection-end-line="295" selection-end-column="55" />
+            <state relative-caret-position="705">
+              <caret line="222" column="55" lean-forward="true" selection-start-line="222" selection-start-column="55" selection-end-line="222" selection-end-column="55" />
               <folding />
             </state>
           </provider>
@@ -99,15 +109,15 @@
       <file leaf-file-name="computerAgent.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/agent-interaction/computerAgent.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="347">
-              <caret line="747" column="100" lean-forward="true" selection-start-line="747" selection-start-column="8" selection-end-line="747" selection-end-column="100" />
+            <state relative-caret-position="510">
+              <caret line="646" column="50" lean-forward="true" selection-start-line="646" selection-start-column="50" selection-end-line="646" selection-end-column="50" />
               <folding>
-                <marker date="1490309987000" expanded="true" signature="35065:35075" ph="..." />
-                <marker date="1490309987000" expanded="true" signature="35229:35239" ph="..." />
-                <marker date="1490309987000" expanded="true" signature="35384:35407" ph="..." />
-                <marker date="1490309987000" expanded="true" signature="36392:36415" ph="..." />
-                <marker date="1490309987000" expanded="true" signature="37337:37360" ph="..." />
-                <marker date="1490309987000" expanded="true" signature="37462:37485" ph="..." />
+                <marker date="1490396268000" expanded="true" signature="35127:35137" ph="..." />
+                <marker date="1490396268000" expanded="true" signature="35291:35301" ph="..." />
+                <marker date="1490396268000" expanded="true" signature="35446:35469" ph="..." />
+                <marker date="1490396268000" expanded="true" signature="36454:36477" ph="..." />
+                <marker date="1490396268000" expanded="true" signature="37399:37422" ph="..." />
+                <marker date="1490396268000" expanded="true" signature="37524:37547" ph="..." />
               </folding>
             </state>
           </provider>
@@ -116,18 +126,8 @@
       <file leaf-file-name="agentAPI.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/agent-interaction/agentAPI.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="302">
-              <caret line="247" column="3" lean-forward="true" selection-start-line="247" selection-start-column="3" selection-end-line="247" selection-end-column="3" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="modelManager.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/public/collaborative-app/modelManager.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="341">
-              <caret line="299" column="8" lean-forward="false" selection-start-line="299" selection-start-column="8" selection-end-line="299" selection-end-column="8" />
+            <state relative-caret-position="371">
+              <caret line="163" column="0" lean-forward="false" selection-start-line="163" selection-start-column="0" selection-end-line="163" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -144,36 +144,36 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>hide show</find>
-      <find>highlightstatus</find>
-      <find>highlightcolor</find>
-      <find>updatevi</find>
-      <find>expandcollap</find>
-      <find>addnode</find>
-      <find>asl</find>
-      <find>changename</find>
-      <find>updatevisibi</find>
-      <find>getmodelnoe</find>
-      <find>cy.select</find>
-      <find>nodes wh</find>
-      <find>updatevisibility</find>
-      <find>hide</find>
-      <find>sendreq</find>
-      <find>fill</find>
-      <find>askhu</find>
-      <find>roommate</find>
-      <find>bend</find>
-      <find>update</find>
-      <find>updatevisi</find>
-      <find>expandcollapse</find>
-      <find>expand</find>
-      <find>updatevis</find>
-      <find>agentupdate</find>
-      <find>deletenodere</find>
-      <find>askhuman</find>
-      <find>askHuman</find>
-      <find>delete</find>
-      <find>deletenode</find>
+      <find>loadf</find>
+      <find>agentLoadFileRequest</find>
+      <find>search</find>
+      <find>loadfo;e</find>
+      <find>file</find>
+      <find>loadFile</find>
+      <find>writeUserList</find>
+      <find>subscribeagent</find>
+      <find>self.user</find>
+      <find>cy.</find>
+      <find>loadmodel</find>
+      <find>writeuserlist</find>
+      <find>users</find>
+      <find>loadfile</find>
+      <find>image</find>
+      <find>b64toBlob</find>
+      <find>uploadfile</find>
+      <find>scratch</find>
+      <find>userlist</find>
+      <find>ge</find>
+      <find>getuserlist</find>
+      <find>testmessage</find>
+      <find>sendmessage</find>
+      <find>agentmessage</find>
+      <find>message</find>
+      <find>testlayout</find>
+      <find>runlayout</find>
+      <find>runla</find>
+      <find>newfile</find>
+      <find>newf</find>
     </findStrings>
     <replaceStrings>
       <replace>bbox</replace>
@@ -187,6 +187,7 @@
       <replace>attr</replace>
       <replace>id</replace>
       <replace>statesandinfos</replace>
+      <replace>elementIds</replace>
     </replaceStrings>
     <dirStrings>
       <dir>$PROJECT_DIR$/node_modules/cytoscape</dir>
@@ -204,7 +205,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/public/sample-app/js/sample-app-helper-functions.js" />
         <option value="$PROJECT_DIR$/public/sample-app/js/common-app-utilities.js" />
         <option value="$PROJECT_DIR$/public/sample-app/js/app-menu.js" />
         <option value="$PROJECT_DIR$/public/sample-app/js/app-cy.js" />
@@ -225,7 +225,6 @@
         <option value="$PROJECT_DIR$/public/node_modules/cytoscape-undo-redo/cytoscape-undo-redo.js" />
         <option value="$PROJECT_DIR$/public/node_modules/chise/chise.js" />
         <option value="$PROJECT_DIR$/public/node_modules/sbgnviz/src/utilities/json-to-sbgnml-converter.js" />
-        <option value="$PROJECT_DIR$/public/node_modules/sbgnviz/src/utilities/file-utilities.js" />
         <option value="$PROJECT_DIR$/lib/index.js" />
         <option value="$PROJECT_DIR$/public/app/css/sbgnviz.css" />
         <option value="$PROJECT_DIR$/public/node_modules/chise/src/utilities/element-utilities.js" />
@@ -239,7 +238,6 @@
         <option value="$PROJECT_DIR$/public/package.json" />
         <option value="$PROJECT_DIR$/public/app/main.js" />
         <option value="$PROJECT_DIR$/public/app/js/app-cy.js" />
-        <option value="$PROJECT_DIR$/public/app/js/app-menu.js" />
         <option value="$PROJECT_DIR$/public/app/css/chise.css" />
         <option value="$PROJECT_DIR$/public/app/js/app-utilities.js" />
         <option value="$PROJECT_DIR$/public/test/testsModelManager.js" />
@@ -248,12 +246,15 @@
         <option value="$PROJECT_DIR$/agent-interaction/ContextAgent.js" />
         <option value="$PROJECT_DIR$/lib/server.js" />
         <option value="$PROJECT_DIR$/public/collaborative-app/modelManager.js" />
-        <option value="$PROJECT_DIR$/agent-interaction/agentAPI.js" />
-        <option value="$PROJECT_DIR$/agent-interaction/computerAgent.html" />
+        <option value="$PROJECT_DIR$/public/app/js/app-menu.js" />
         <option value="$PROJECT_DIR$/README.md" />
-        <option value="$PROJECT_DIR$/lib/serverSideSocketListener.js" />
+        <option value="$PROJECT_DIR$/agent-interaction/agentTester.css" />
+        <option value="$PROJECT_DIR$/agent-interaction/computerAgent.html" />
+        <option value="$PROJECT_DIR$/public/node_modules/sbgnviz/src/utilities/file-utilities.js" />
         <option value="$PROJECT_DIR$/index.js" />
         <option value="$PROJECT_DIR$/public/collaborative-app/editor-listener.js" />
+        <option value="$PROJECT_DIR$/agent-interaction/agentAPI.js" />
+        <option value="$PROJECT_DIR$/lib/serverSideSocketListener.js" />
         <option value="$PROJECT_DIR$/public/test/testsAgentAPI.js" />
       </list>
     </option>
@@ -366,104 +367,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="public" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Sbgnviz-Collaborative-Editor Chise Version" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Sbgnviz-Collaborative-Editor Chise Version" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="public" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="test" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Sbgnviz-Collaborative-Editor Chise Version" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Sbgnviz-Collaborative-Editor Chise Version" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="public" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="collaborative-app" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Sbgnviz-Collaborative-Editor Chise Version" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Sbgnviz-Collaborative-Editor Chise Version" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="public" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Sbgnviz-Collaborative-Editor Chise Version" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Sbgnviz-Collaborative-Editor Chise Version" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="public" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="js" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Sbgnviz-Collaborative-Editor Chise Version" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Sbgnviz-Collaborative-Editor Chise Version" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="public" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="css" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -968,11 +871,12 @@
     <MESSAGE value="data fields are used instead of css" />
     <MESSAGE value="Agent API test module is included" />
     <MESSAGE value="Agent hide/show added.&#10;User list is correct in the chat window." />
-    <option name="LAST_COMMIT_MESSAGE" value="Agent hide/show added.&#10;User list is correct in the chat window." />
+    <MESSAGE value="Before changing agent API" />
+    <option name="LAST_COMMIT_MESSAGE" value="Before changing agent API" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="27" />
+      <option name="time" value="29" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="JavascriptDebugType">
@@ -981,43 +885,6 @@
     </watches-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/public/node_modules/sbgnviz/src/utilities/graph-utilities.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="296">
-          <caret line="39" column="8" lean-forward="false" selection-start-line="39" selection-start-column="8" selection-end-line="39" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/node_modules/sbgnviz/src/utilities/main-utilities.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="296">
-          <caret line="276" column="30" lean-forward="false" selection-start-line="276" selection-start-column="30" selection-end-line="276" selection-end-column="30" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/node_modules/sbgnviz/src/utilities/ui-utilities.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/app/img/img/tabs/palette.svg" />
-    <entry file="file://$USER_HOME$/Downloads/newt-unstable/app/js/app-cy.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="465">
-          <caret line="31" column="61" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="586" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Downloads/newt-unstable/app/js/app-utilities.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="21" column="19" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="574" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/Downloads/newt-unstable/app/main.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="300">
@@ -1096,20 +963,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/node_modules/chise/package.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-732">
-          <caret line="86" column="2213" lean-forward="false" selection-start-line="86" selection-start-column="2213" selection-end-line="86" selection-end-column="2213" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/package.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="6" column="22" lean-forward="true" selection-start-line="6" selection-start-column="22" selection-end-line="6" selection-end-column="45" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/app/main.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="800">
@@ -1135,13 +988,11 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="210">
           <caret line="22" column="49" lean-forward="false" selection-start-line="22" selection-start-column="49" selection-end-line="22" selection-end-column="49" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/app/js/app-mode-handler.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#564#902#0" expanded="false" />
+            <element signature="e#955#12646#0" expanded="false" />
+            <element signature="e#12676#24162#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1164,11 +1015,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="296">
           <caret line="3273" column="24" lean-forward="false" selection-start-line="3273" selection-start-column="24" selection-end-line="3273" selection-end-column="24" />
-          <folding>
-            <element signature="n#!!doc" expanded="false" />
-            <marker date="1490133427000" expanded="true" signature="89010:89016" ph="..." />
-            <marker date="1490133427000" expanded="true" signature="98914:98920" ph="..." />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1209,14 +1056,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/app/bundle.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="540">
-          <caret line="70352" column="45" lean-forward="false" selection-start-line="70352" selection-start-column="45" selection-end-line="70352" selection-end-column="45" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/lib/index.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="596">
@@ -1243,16 +1082,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/views/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="492">
-          <caret line="1436" column="60" lean-forward="false" selection-start-line="1436" selection-start-column="60" selection-end-line="1436" selection-end-column="60" />
-          <folding>
-            <element signature="n#div#0;n#Body:#0;n#Head:#0;n#Title:#0;n#!!top" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/node_modules/chise/src/utilities/main-utilities.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="332">
@@ -1273,9 +1102,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="n#!!doc" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1287,59 +1114,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/agent-interaction/agentAPI.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="302">
-          <caret line="247" column="3" lean-forward="true" selection-start-line="247" selection-start-column="3" selection-end-line="247" selection-end-column="3" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/app/js/app-menu.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="332">
-          <caret line="188" column="18" lean-forward="false" selection-start-line="188" selection-start-column="12" selection-end-line="188" selection-end-column="18" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/agent-interaction/computerAgent.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="347">
-          <caret line="747" column="100" lean-forward="true" selection-start-line="747" selection-start-column="8" selection-end-line="747" selection-end-column="100" />
-          <folding>
-            <marker date="1490309987000" expanded="true" signature="35065:35075" ph="..." />
-            <marker date="1490309987000" expanded="true" signature="35229:35239" ph="..." />
-            <marker date="1490309987000" expanded="true" signature="35384:35407" ph="..." />
-            <marker date="1490309987000" expanded="true" signature="36392:36415" ph="..." />
-            <marker date="1490309987000" expanded="true" signature="37337:37360" ph="..." />
-            <marker date="1490309987000" expanded="true" signature="37462:37485" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Sbgnviz-Collaborative-Editor Chise Version.iml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/serverSideSocketListener.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="734">
-          <caret line="363" column="0" lean-forward="false" selection-start-line="363" selection-start-column="0" selection-end-line="363" selection-end-column="0" />
-          <folding>
-            <element signature="e#8582#8600#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/README.md">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="816">
-          <caret line="167" column="0" lean-forward="false" selection-start-line="167" selection-start-column="0" selection-end-line="167" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -1352,26 +1130,169 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/index.js">
+    <entry file="file://$PROJECT_DIR$/public/node_modules/chise/chise.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="350">
-          <caret line="265" column="0" lean-forward="true" selection-start-line="265" selection-start-column="0" selection-end-line="265" selection-end-column="0" />
+        <state relative-caret-position="341">
+          <caret line="2114" column="0" lean-forward="false" selection-start-line="2114" selection-start-column="0" selection-end-line="2114" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/test/testsAgentAPI.js">
+    <entry file="file://$PROJECT_DIR$/public/app/bundle.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="959">
-          <caret line="166" column="0" lean-forward="true" selection-start-line="166" selection-start-column="0" selection-end-line="166" selection-end-column="0" />
+        <state relative-caret-position="495">
+          <caret line="9376" column="0" lean-forward="false" selection-start-line="9376" selection-start-column="0" selection-end-line="9376" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/node_modules/chise/src/utilities/undo-redo-action-functions.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="409">
+          <caret line="60" column="48" lean-forward="false" selection-start-line="60" selection-start-column="48" selection-end-line="60" selection-end-column="48" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/app/js/app-mode-handler.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="740">
+          <caret line="147" column="10" lean-forward="false" selection-start-line="147" selection-start-column="10" selection-end-line="147" selection-end-column="10" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="718">
+          <caret line="138" column="172" lean-forward="true" selection-start-line="138" selection-start-column="172" selection-end-line="138" selection-end-column="172" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/app/js/app-menu.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="299">
+          <caret line="50" column="50" lean-forward="false" selection-start-line="50" selection-start-column="50" selection-end-line="50" selection-end-column="50" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="320">
+          <caret line="1389" column="62" lean-forward="false" selection-start-line="1389" selection-start-column="58" selection-end-line="1389" selection-end-column="62" />
+          <folding>
+            <element signature="n#div#0;n#Body:#0;n#Head:#0;n#Title:#0;n#!!top" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/agent-interaction/agentTester.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="536">
+          <caret line="183" column="0" lean-forward="true" selection-start-line="183" selection-start-column="0" selection-end-line="186" selection-end-column="3" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/package.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="6" column="22" lean-forward="true" selection-start-line="6" selection-start-column="22" selection-end-line="6" selection-end-column="45" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/node_modules/sbgnviz/src/utilities/file-utilities.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="395">
+          <caret line="101" column="0" lean-forward="true" selection-start-line="101" selection-start-column="0" selection-end-line="101" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/agent-interaction/computerAgent.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="510">
+          <caret line="646" column="50" lean-forward="true" selection-start-line="646" selection-start-column="50" selection-end-line="646" selection-end-column="50" />
+          <folding>
+            <marker date="1490396268000" expanded="true" signature="35127:35137" ph="..." />
+            <marker date="1490396268000" expanded="true" signature="35291:35301" ph="..." />
+            <marker date="1490396268000" expanded="true" signature="35446:35469" ph="..." />
+            <marker date="1490396268000" expanded="true" signature="36454:36477" ph="..." />
+            <marker date="1490396268000" expanded="true" signature="37399:37422" ph="..." />
+            <marker date="1490396268000" expanded="true" signature="37524:37547" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/node_modules/cytoscape-view-utilities/src/view-utilities.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/node_modules/chise/package.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="341">
+          <caret line="86" column="5613" lean-forward="false" selection-start-line="86" selection-start-column="5613" selection-end-line="86" selection-end-column="5613" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/node_modules/cytoscape-edge-bend-editing/cytoscape-edge-bend-editing.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-6780">
+          <caret line="340" column="18" lean-forward="true" selection-start-line="340" selection-start-column="18" selection-end-line="340" selection-end-column="18" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/public/collaborative-app/editor-listener.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2465">
-          <caret line="295" column="55" lean-forward="false" selection-start-line="295" selection-start-column="55" selection-end-line="295" selection-end-column="55" />
+        <state relative-caret-position="705">
+          <caret line="222" column="55" lean-forward="true" selection-start-line="222" selection-start-column="55" selection-end-line="222" selection-end-column="55" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/agent-interaction/agentAPI.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="371">
+          <caret line="163" column="0" lean-forward="false" selection-start-line="163" selection-start-column="0" selection-end-line="163" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="248" column="13" lean-forward="true" selection-start-line="248" selection-start-column="13" selection-end-line="248" selection-end-column="13" />
+          <folding>
+            <element signature="e#11718#11774#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/serverSideSocketListener.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="347">
+          <caret line="144" column="16" lean-forward="false" selection-start-line="144" selection-start-column="16" selection-end-line="144" selection-end-column="16" />
+          <folding>
+            <element signature="e#2381#2435#0" expanded="false" />
+            <element signature="e#6237#6255#0" expanded="false" />
+            <element signature="e#12941#15119#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/test/testsAgentAPI.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="773">
+          <caret line="602" column="0" lean-forward="false" selection-start-line="602" selection-start-column="0" selection-end-line="602" selection-end-column="0" />
           <folding />
         </state>
       </provider>

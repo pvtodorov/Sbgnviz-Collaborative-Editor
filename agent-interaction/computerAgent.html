@@ -30,7 +30,9 @@
 
     <br>
     <button id = "newFile" onclick = newFile()>New model</button>
+
     <input id="fileInput" type="file" onchange = loadFile() />
+
     <button id = "updateModel" onclick = updateModel()>Request updated model</button>
 
     <!--<input type="button" value="cBioPortal query" onclick=callQuery()>-->
@@ -457,10 +459,11 @@
                 writeMessage(data);
             });
 
-            socket.on('userList', function(data){
-                agent.userList = data;
-                writeUserList(data);
-            });
+            //writeUserList(agent.getUserList());
+//            socket.on('userList', function(data){
+//                agent.userList = data;
+//                writeUserList(data);
+//            });
 
             socket.on('imageFile', function(data){
                 writeImage(data);
@@ -644,15 +647,15 @@
                 if(file.name.indexOf(".owl") > -1)
                     fileType = "owl";
 
-                agent.sendRequest("agentLoadFileRequest",{param:txtContent, fileType:fileType});
+                agent.sendRequest("agentLoadFileRequest",{content:txtContent, fileType:fileType });
             }
         }
 
         reader.readAsText(file);
-//        setFileContent(file.name);
+    //    setFileContent(file.name);
         $("#fileInput").val("");
 
-        //  agent.sendRequest("agentLoadFileRequest",{param:txtFile});
+        //  agent.sendRequest("agentLoadFileRequest",{file:txtFile});
     };
 
     function undoOperation(){

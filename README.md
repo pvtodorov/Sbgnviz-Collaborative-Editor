@@ -164,8 +164,11 @@ string after http:<ip>:3000/ in the server address.
 |  “agentAddEdgeRequest”              | {source: < source node id >,  |
 |                                     | target: < target node id >,   |
 |                                     | class: < sbgn class >}    |
-|"agentDeleteElesRequest"             | type: <"smart" or "simple" < selectedElementIds: <element ids to delete simply> |
-|"agentUpdateVisibilityStatusRequest"       | {val:<"hide" or "show"or "showAll">,  selectedNodeIds:<array of node ids or null for showAll>|
+|"agentSearchByLabelRequest"          | label: < label to be highlighted>   |
+|"agentDeleteElesRequest"             | type: <"smart" or "simple" < elementIds: <element ids to delete simply> |
+|"agentUpdateVisibilityStatusRequest"       | {val:<"hide" or "show" or "showAll">,  elementIds:<array of element ids or null for showAll>|
+|"agentUpdateHighlightStatusRequest"       | {val:<"neighbors" or "processes" or "remove">,  elementIds:<array of element ids or null for remove>|
+|"agentUpdateExpandCollapseStatusRequest"       | {val:<"expand" or "collapse">,  elementIds:<array of element ids>|
 |  “agentChangeNodeAttributeRequest”  | {id: < node id >,             |
 |                                     | attStr: < node attribute name in the model >             |
 |                                     | attVal:< node attribute value >}                          |
@@ -286,41 +289,50 @@ sbgncardinality
             -   layoutProperties
             -   nodes
                 -   \[nodeId\]
-                    -   id
                     -   addedLater //to sync. node addition
-                    -   sbgnclass
-                    -   position
-                    -   highlightColor
-                    -   sbgnlabel
-                    -   borderColor
-                    -   borderWidth
-                    -   backgroundColor
-                    -   backgroundOpacity
-                    -   isMultimer
-                    -   isCloneMarker
-                    -   ports
-                    -   width
-                    -   height
-                    -   sbgnStatesAndInfos
-                    -   expandCollapseStatus
-                    -   highlightStatus
                     -   visibilityStatus
+                    -   highlightStatus
+                    -   expandCollapseStatus
+                    -   highlightColor
+                    -   position
+                    -   data
+                        -   id
+                        -   class
+                        -   label
+                        -   bbox
+                            -   w
+                            -   h
+                        -   border-color
+                        -   border-width
+                        -   background-color
+                        -   background-opacity
+                        -   font-color
+                        -   font-weight
+                        -   font-style
+                        -   font-size
+                        -   cloneMarker
+                        -   parent
+                        -   ports
+                        -   statesAndInfos
+
             -   edges
                 -   \[edgeId\]
                     -   id
                     -   addedLater //to sync. edge addition
-                    -   sbgnclass
-                    -   source
-                    -   target
-                    -   portsource
-                    -   porttarget
-                    -   highlightColor
-                    -   lineColor
-                    -   width
-                    -   bendPointPositions
                     -   highlightStatus
                     -   visibilityStatus
-                    -   sbgnCardinality
+                    -   expandCollapseStatus
+                    -   highlightColor
+                    -   data
+                        -   class
+                        -   source
+                        -   target
+                        -   portsource
+                        -   porttarget
+                        -   line-color
+                        -   width
+                        -   bendPointPositions
+                        -   cardinality
         -   py // pysb-related
         -   //biopax-related
 

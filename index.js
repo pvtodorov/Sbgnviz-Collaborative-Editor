@@ -217,98 +217,259 @@ app.proto.changeDuration = function () {
  * Human listens to agent socket and performs menu operations requested by the agent
  */
 app.proto.listenToAgentSocket = function(){
-    // socket.on('loadFile', function(txtFile){
-    //     menu.loadFile(txtFile);
-    // });
+
+    socket.on('loadFile', function(txtFile, callback){
+        try {
+
+            sbgnviz.loadSBGNMLText(txtFile);
+            if(callback) callback("success");
+        }
+        catch(e){
+            console.log(e);
+            if(callback) callback("fail");
+
+        }
+
+    });
 
     socket.on('newFile', function(data, callback){
-        cy.remove(cy.elements());
-        modelManager.newModel("me"); //do not delete cytoscape, only the model
-        if(callback) callback("success");
+        try{
+            cy.remove(cy.elements());
+            modelManager.newModel("me"); //do not delete cytoscape, only the model
+            if(callback) callback("success");
+        }
+        catch(e){
+            console.log(e);
+            if(callback) callback("fail");
+
+        }
     });
 
     socket.on('runLayout', function(data, callback){
-        $("#perform-layout").trigger('click');
-        if(callback) callback("success");
+        try {
+            $("#perform-layout").trigger('click');
+            if (callback) callback("success");
+        }
+        catch(e){
+            console.log(e);
+            if(callback) callback("fail");
+
+        }
     });
 
 
     socket.on('addNode', function(data, callback){
-        //does not trigger cy events
-        var newNode = chise.elementUtilities.addNode(data.x, data.y, data.class);
+        try {
+            //does not trigger cy events
+            var newNode = chise.elementUtilities.addNode(data.x, data.y, data.class);
 
-        //notifies other clients
-        modelManager.addModelNode(newNode.id(), data, "me");
-        modelManager.initModelNode(newNode,"me");
+            //notifies other clients
+            modelManager.addModelNode(newNode.id(), data, "me");
+            modelManager.initModelNode(newNode, "me");
 
-        if(callback) callback(newNode.id());
+            if (callback) callback(newNode.id());
+        }
+        catch(e){
+            console.log(e);
+            if(callback) callback("fail");
 
+        }
     });
 
 
 
     socket.on('deleteEles', function(data, callback){
+        try {
+            //unselect all others
+            cy.elements().unselect();
 
-        data.selectedElementIds.forEach(function(id){
-            cy.getElementById(id).select();
-        });
 
-        if(data.type === "simple")
-            $("#delete-selected-simple").trigger('click');
-        else //"smart"
-            $("#delete-selected-smart").trigger('click');
+            data.elementIds.forEach(function (id) {
+                cy.getElementById(id).select();
+            });
 
-        if(callback) callback("success");
 
+            if (data.type === "simple")
+                $("#delete-selected-simple").trigger('click');
+            else { //"smart"
+                $("#delete-selected-smart").trigger('click');
+            }
+
+            if (callback) callback("success");
+        }
+        catch(e){
+            console.log(e);
+            if(callback) callback("fail");
+
+        }
     });
 
 
 
 
     socket.on('addEdge', function(data, callback){
+        try {
+            //does not trigger cy events
+            var newEdge = chise.elementUtilities.addEdge(source, target, sbgnclass, id, visibility);
 
-        //does not trigger cy events
-        var newEdge = chise.elementUtilities.addEdge(source, target, sbgnclass, id, visibility);
+            //notifies other clients
+            modelManager.addModelEdge(newNode.id(), data, "me");
+            modelManager.initModelEdge(newEdge, "me");
 
-        //notifies other clients
-        modelManager.addModelEdge(newNode.id(), data, "me");
-        modelManager.initModelEdge(newEdge,"me");
+            if (callback) callback(newEdge.id());
+        }
+        catch(e){
+            console.log(e);
+            if(callback) callback("fail");
 
-        if(callback) callback(newEdge.id());
+        }
     });
 
     socket.on('updateVisibility', function(data, callback){
+        try {
+            //unselect all others
+            cy.elements().unselect();
 
-        if(data.val === "showAll")
-            $("#show-all").trigger('click');
-        else{
-            data.selectedNodeIds.forEach(function(id){
-                cy.getElementById(id).select();
-            });
+            if (data.val === "showAll")
+                $("#show-all").trigger('click');
+            else {
+                data.elementIds.forEach(function (id) {
+                    cy.getElementById(id).select();
+                });
 
-            if(data.val == "hide")
-                $("#hide-selected").trigger('click');
-            else
-                $("#show-selected").trigger('click');
+                if (data.val == "hide")
+                    $("#hide-selected").trigger('click');
+                else
+                    $("#show-selected").trigger('click');
+            }
+
+
+            if (callback) callback("success");
         }
+        catch(e){
+            console.log(e);
+            if(callback) callback("fail");
+
+        }
+    });
+
+    socket.on('searchByLabel', function(data, callback){
+        try {
+            //unselect all others
+            cy.elements().unselect();
+
+            chise.searchByLabel(data.label);
 
 
-        if(callback) callback("success");
+            if (callback) callback("success");
+        }
+        catch(e){
+            console.log(e);
+            if(callback) callback("fail");
+
+        }
+    });
+    socket.on('updateHighlight', function(data, callback){
+        try {
+            //unselect all others
+            cy.elements().unselect();
+
+            if(data.val === "remove"){
+                $("#remove-highlights").trigger('click');
+            }
+            else{
+                data.elementIds.forEach(function (id) {
+                    cy.getElementById(id).select();
+                });
+
+                if (data.val === "neighbors")
+                    $("#highlight-neighbors-of-selected").trigger('click');
+                else if (data.val === "processes")
+                    $("#highlight-processes-of-selected").trigger('click');
+            }
+
+            if (callback) callback("success");
+        }
+        catch(e){
+            console.log(e);
+            if(callback) callback("fail");
+
+        }
     });
 
     socket.on('updateExpandCollapse', function(data, callback){
+        try {
 
-        data.selectedNodeIds.forEach(function(id){
-            cy.getElementById(id).select();
-        });
+            //unselect all others
+            cy.elements().unselect();
 
-        if(data.val === "collapse")
-            $("#collapse-selected").trigger('click');
-        else
-            $("#expand-selected").trigger('click');
+            data.elementIds.forEach(function (id) {
+                cy.getElementById(id).select();
+            });
 
-        if(callback) callback("success");
+            if (data.val === "collapse")
+                $("#collapse-selected").trigger('click');
+            else
+                $("#expand-selected").trigger('click');
+
+            if (callback) callback("success");
+        }
+        catch(e){
+            console.log(e);
+            if(callback) callback("fail");
+
+        }
     });
+
+
+    socket.on('addCompound', function(data, callback){
+        try {
+            //unselect all others
+            cy.elements().unselect();
+
+            data.elementIds.forEach(function (nodeId) {
+
+                cy.getElementById(nodeId).select();
+            });
+
+            if (data.val === "complex")
+                $("#add-complex-for-selected").trigger('click');
+            else
+                $("#add-compartment-for-selected").trigger('click');
+
+
+            if (callback) callback("success");
+        }
+        catch(e){
+            console.log(e);
+            if(callback) callback("fail");
+
+        }
+
+    });
+
+    socket.on('clone', function(data, callback){
+        try {
+            cy.elements().unselect();
+
+            data.elementIds.forEach(function (nodeId) {
+                cy.getElementById(nodeId).select();
+            });
+
+            $("#clone-selected").trigger('click');
+
+
+            if (callback) callback("success");
+        }
+        catch(e){
+            console.log(e);
+            if(callback) callback("fail");
+
+        }
+    });
+
+
+
 
     // socket.on('agentContextQuestion', function(socketId){
     //     setTimeout(function() {
@@ -319,19 +480,6 @@ app.proto.listenToAgentSocket = function(){
     //
     // });
 
-    // //TODO: make this a function in menu-functions
-    // socket.on('addCompound', function(data){
-    //
-    //     //unselect all others
-    //     cy.nodes().unselect();
-    //
-    //     data.selectedNodeIds.forEach(function(nodeId){
-    //
-    //         cy.getElementById( nodeId).select();
-    //     });
-    //
-    //
-    // });
 
 
 }

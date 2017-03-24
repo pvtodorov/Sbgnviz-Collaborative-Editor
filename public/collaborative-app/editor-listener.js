@@ -15,8 +15,6 @@ module.exports = function(modelManager){
     });
 
 
-
-
     cy.on("afterDo afterRedo", function (event, actionName, args, res) {
 
         console.log(actionName);
@@ -70,19 +68,6 @@ module.exports = function(modelManager){
 
         }
 
-        // else if (actionName === "changeCss") {
-        //     var modelElList = [];
-        //     var paramList = [];
-        //
-        //     args.eles.forEach(function (ele) {
-        //         modelElList.push({id: ele.id(), isNode: ele.isNode()});
-        //         paramList.push(ele.css(args.name));
-        //
-        //     });
-        //
-        //     var name = mapFromCyToModelName(args.name);
-        //     modelManager.changeModelElementGroupAttribute(name, modelElList, paramList, "me");
-        // }
 
         else if (actionName === "hide" || actionName === "show") {
             var modelElList = [];
@@ -169,6 +154,7 @@ module.exports = function(modelManager){
 
         else if(actionName === "deleteElesSimple" || actionName === "deleteNodesSmart"){
 
+
             var nodeList = [];
             var edgeList = [];
 
@@ -226,19 +212,30 @@ module.exports = function(modelManager){
         }
         else if(actionName === "changeParent"){
             var modelElList = [];
+            var modelNodeList = [];
             var paramListData = [];
             var paramListPosition = [];
-            res.nodes.forEach(function (ele) {
+            res.movedEles.forEach(function (ele) {
                 //var ele = param.ele;
 
-                modelElList.push({id: ele.id(), isNode: true});
+                modelElList.push({id: ele.id(), isNode: ele.isNode()});
                 paramListData.push(ele.data());
                 paramListPosition.push(ele.position());
-                // paramList.push(ele.data(args.name));
 
             });
+
+            res.movedEles.forEach(function (ele) {
+                //var ele = param.ele;
+
+                if(ele.isNode()) {
+                    modelNodeList.push({id: ele.id(), isNode: ele.isNode()});
+                    paramListPosition.push(ele.position());
+                }
+
+            });
+
             modelManager.changeModelElementGroupAttribute("data", modelElList, paramListData, "me");
-            modelManager.changeModelElementGroupAttribute("position", modelElList, paramListPosition, "me");
+            modelManager.changeModelElementGroupAttribute("position", modelNodeList, paramListPosition, "me");
 
 
         }
@@ -246,7 +243,8 @@ module.exports = function(modelManager){
             var paramList = [];
             var modelElList = [];
 
-            res.children().forEach(function (ele) {
+
+            res.newEles.forEach(function (ele) {
                 //var ele = param.ele;
 
                 modelElList.push({id: ele.id(), isNode: true});
@@ -254,17 +252,28 @@ module.exports = function(modelManager){
                 paramList.push(ele.data()); //includes parent information
 
             });
+            //
+            // res.children().forEach(function (ele) {
+            //     //var ele = param.ele;
+            //
+            //     modelElList.push({id: ele.id(), isNode: true});
+            //
+            //     paramList.push(ele.data()); //includes parent information
+            //
+            // });
 
 
+            var compoundId = res.newEles[0].data("parent");
+            var compound = cy.getElementById(compoundId);
 
-            var compoundAtts = {x: res.position("x"), y: res.position("y"), class:res.data("class")};
+            var compoundAtts = {x: compound.position("x"), y: compound.position("y"), class:compound.data("class")};
 
 
-            modelManager.addModelCompound(res.id(), compoundAtts, modelElList,paramList, "me" );
+            modelManager.addModelCompound(compound.id(), compoundAtts, modelElList,paramList, "me" );
 
 
             //assign other node properties-- css and data
-            modelManager.initModelNode(res,"me"); //init with default values
+            modelManager.initModelNode(compound,"me"); //init with default values
 
 
         }
@@ -305,33 +314,4 @@ module.exports = function(modelManager){
 
 }
 
-// //Listen to explicitly triggered events
-// function mapFromCyToModelName(cyName){
-//     var modelName = cyName;
-//
-//     if(cyName == "border-width")
-//         modelName = "borderWidth";
-//     else if(cyName == "background-color")
-//         modelName = "backgroundColor";
-//     else if(cyName == "line-color")
-//         modelName = "lineColor";
-//
-//
-//     else if(cyName == "sbgnstatesandinfos")
-//         modelName = "sbgnStatesAndInfos";
-//     else if(cyName == "sbgnclonemarker")
-//         modelName = "isCloneMarker";
-//
-//
-//     else if(cyName == "segment-weights")
-//         modelName = "segmentWeights";
-//     else if(cyName == "curve-style")
-//         modelName = "curveStyle";
-//     else if(cyName == "segment-distances")
-//         modelName = "segmentDistances";
-//     else if(cyName == "edge-distances")
-//         modelName = "edgeDistances";
-//
-//
-//     return modelName;
-// }
+

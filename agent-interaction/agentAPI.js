@@ -76,10 +76,10 @@ Agent.prototype.connectToServer = function (url, callback) {
         }, function (data) {
 
 
-            self.userList = data;
+            // self.userList = data;
 
-            if (data == null)
-                self.userList = [];
+            // if (data == null)
+            //     self.userList = [];
 
             //     console.log("agent connected!!!!");
 
@@ -122,11 +122,13 @@ Agent.prototype.loadModel = function (callback) {
 
         self.pageDoc = data;
 
-        // self.userList = [];
-        // for(var userId in data.users) {
-        //     self.userList.push({userId: userId, userName: data.users[userId].name});
-        // }
-        //
+
+        self.userList = [];
+        for(var userId in data.users) {
+
+            self.userList.push({userId: userId, userName: data.users[userId].name});
+        }
+
 
 
         if (callback != null) callback();
@@ -159,7 +161,9 @@ Agent.prototype.loadOperationHistory = function (callback) {
  */
 
 Agent.prototype.getUserList = function() {
-    return this.userList;
+
+
+    return self.userList;
 }
 
 /**
@@ -296,9 +300,9 @@ Agent.prototype.listen = function(callback){
         self.chatHistory.push(data);
     });
 
-    this.socket.on('userList', function(data){
-        self.userList = data;
-    });
+    // this.socket.on('userList', function(data){
+    //     self.userList = data;
+    // });
 
     this.socket.on('imageFile', function(data){
 
@@ -322,7 +326,7 @@ Agent.prototype.sendMessage = function(comment, targets, callback){
     if(targets == "*" || targets == "all"){ //add all users
         targets = [];
         for(var i = 0; i < self.userList.length; i++){ //FIXME: send to all the users for now
-            targets.push({id: self.userList[i].userId});
+            targets.push({userId: self.userList[i].userId});
         }
 
     }
@@ -330,9 +334,12 @@ Agent.prototype.sendMessage = function(comment, targets, callback){
     var message = {room: this.room, comment: comment, userName:this.agentName, userId: this.agentId, time: 1, targets: targets}; //set time on the server
 
 
+    console.log(targets);
+    console.log(comment);
     this.socket.emit('agentMessage', message, function(data){
 
-        if (callback != null) callback(data);
+
+        if (callback) callback(data);
     });
 }
 
