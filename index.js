@@ -214,57 +214,12 @@ app.proto.changeDuration = function () {
 };
 
 /***
- * Called only once in a browser after first page rendering
- * @param model
- * @returns {*}
+ * Human listens to agent socket and performs menu operations requested by the agent
  */
-
-app.proto.create = function (model) {
-    model.set('_page.showTime', true);
-
-    var self = this;
-    docReady = true;
-
-    socket = io();
-
-    var id = model.get('_session.userId');
-    var name = model.get('_page.doc.users.' + id +'.name');
-
-    modelManager = require('./public/collaborative-app/modelManager.js')(model, model.get('_page.room'), model.get('_session.userId'),name );
-
-    //Notify server about the client connection
-    socket.emit("subscribeHuman", {userName:name, room:  model.get('_page.room'), userId: id}, function(){
-        // var userIdsList = model.get('_page.doc.userIds');
-        //
-        // if (!userIdsList || userIdsList.indexOf(userId) < 0) { //Add user id to the current list of users if not still in there
-        //     model.at('_page.doc.userIds').push(userId);
-        // }
-
-    }); //subscribe to current doc as a new room
-
-
-    //to capture user disconnection, this has to be throuagh sockets-- not model
-    // socket.on('deleteUser',  function(userId){
-    //     modelManager.deleteUser(userId);
-    //
-    // });
-
-
-    //to capture user disconnection, this has to be throuagh sockets-- not model
-    // socket.on('userList', function(userList){
-    //     var userIds =[];
-    //     userList.forEach(function(user){
-    //         userIds.push(user.userId);
-    //     });
-    //
-    //     model.set('_page.doc.userIds', userIds );
-    //
-    // });
-
+app.proto.listenToAgentSocket = function(){
     // socket.on('loadFile', function(txtFile){
     //     menu.loadFile(txtFile);
     // });
-
 
     socket.on('newFile', function(data, callback){
         cy.remove(cy.elements());
@@ -289,6 +244,26 @@ app.proto.create = function (model) {
         if(callback) callback(newNode.id());
 
     });
+
+
+
+    socket.on('deleteEles', function(data, callback){
+
+        data.selectedElementIds.forEach(function(id){
+            cy.getElementById(id).select();
+        });
+
+        if(data.type === "simple")
+            $("#delete-selected-simple").trigger('click');
+        else //"smart"
+            $("#delete-selected-smart").trigger('click');
+
+        if(callback) callback("success");
+
+    });
+
+
+
 
     socket.on('addEdge', function(data, callback){
 
@@ -318,7 +293,21 @@ app.proto.create = function (model) {
         }
 
 
-            if(callback) callback("success");
+        if(callback) callback("success");
+    });
+
+    socket.on('updateExpandCollapse', function(data, callback){
+
+        data.selectedNodeIds.forEach(function(id){
+            cy.getElementById(id).select();
+        });
+
+        if(data.val === "collapse")
+            $("#collapse-selected").trigger('click');
+        else
+            $("#expand-selected").trigger('click');
+
+        if(callback) callback("success");
     });
 
     // socket.on('agentContextQuestion', function(socketId){
@@ -343,6 +332,38 @@ app.proto.create = function (model) {
     //
     //
     // });
+
+
+}
+
+/***
+ * Called only once in a browser after first page rendering
+ * @param model
+ * @returns {*}
+ */
+
+app.proto.create = function (model) {
+    model.set('_page.showTime', true);
+
+    var self = this;
+    docReady = true;
+
+    socket = io();
+
+    var id = model.get('_session.userId');
+    var name = model.get('_page.doc.users.' + id +'.name');
+
+    modelManager = require('./public/collaborative-app/modelManager.js')(model, model.get('_page.room'), model.get('_session.userId'),name );
+
+    //Notify server about the client connection
+    socket.emit("subscribeHuman", {userName:name, room:  model.get('_page.room'), userId: id}, function(){
+
+    }); //subscribe to current doc as a new room
+
+
+
+    this.listenToAgentSocket();
+
 
 
     //Loading cytoscape and clients

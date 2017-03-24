@@ -144,22 +144,23 @@ module.exports = function(serverIp){
             });
 
 
-            var nodeToDelete = "glyph33";
-            agent.sendRequest("agentDeleteNodeRequest", {id:nodeToDelete}, function(nodeId){
+
+            var elesToDelete = ["glyph4"];
+            agent.sendRequest("agentDeleteElesRequest", {selectedElementIds: ids, type:"simple"}, function(nodeId){
                 setTimeout(function () { //should wait here as well
-                    var val = ModelManager.getModelNode(nodeToDelete);
-                    assert.notOk(val, "Node deleted.");
+                    var val = ModelManager.getModelEdge("glyph4-glyph18");
+                    assert.notOk(val, "Elements deleted simply.");
                     done3();
                 },100);
 
             });
 
-            var edgeToDelete = "glyph7-glyph24";
-            agent.sendRequest("agentDeleteEdgeRequest", {id:edgeToDelete}, function(nodeId){
+            var elesToDelete = ["glyph28", "glyph7-glyph24"];
+            agent.sendRequest("agentDeleteElesRequest", {selectedElementIds: ids, type:"smart"}, function(nodeId){
                 setTimeout(function () { //should wait here as well
-                    var val = ModelManager.getModelEdge(edgeToDelete);
-                    assert.notOk(val, "Edge deleted.");
-                    done4();
+                    var val = ModelManager.getModelNode("glyph42");
+                    assert.notOk(val, "Elements deleted smartly.");
+                    done3();
                 },100);
 
             });
@@ -335,7 +336,7 @@ module.exports = function(serverIp){
             var done2 = assert.async();
             var done3 = assert.async();
 
-            agent.sendRequest("agentUpdateVisibilityRequest", {val:"hide", selectedNodeIds:["glyph8"]}, function(out){
+            agent.sendRequest("agentUpdateVisibilityStatusRequest", {val:"hide", selectedNodeIds:["glyph8"]}, function(out){
                 setTimeout(function () { //should wait here as well
                     var vStatus = ModelManager.getModelNodeAttribute("visibilityStatus", "glyph8");
                     assert.equal(vStatus, "hide", "Nodes hidden.") ;
@@ -343,7 +344,7 @@ module.exports = function(serverIp){
                 },100);
             });
 
-            agent.sendRequest("agentUpdateVisibilityRequest", {val:"show", selectedNodeIds:["glyph28"]}, function(out){
+            agent.sendRequest("agentUpdateVisibilityStatusRequest", {val:"show", selectedNodeIds:["glyph28"]}, function(out){
                 setTimeout(function () { //should wait here as well
                     var vStatus = ModelManager.getModelNodeAttribute("visibilityStatus", "glyph28");
                     assert.notEqual(vStatus, "hide", "Nodes shown.") ;
@@ -353,7 +354,7 @@ module.exports = function(serverIp){
 
 
             setTimeout(function () { //wait here not to affect initial hide
-                agent.sendRequest("agentUpdateVisibilityRequest", {val: "showAll"}, function (out) {
+                agent.sendRequest("agentUpdateVisibilityStatusRequest", {val: "showAll"}, function (out) {
                     setTimeout(function () { //should wait here as well
                         var vStatus = ModelManager.getModelNodeAttribute("visibilityStatus", "glyph8");
                         assert.equal(vStatus, "show", "All nodes shown.");
@@ -364,8 +365,41 @@ module.exports = function(serverIp){
             }, 500);
 
         });
-
     }
+
+    function testExpandCollapse(){
+
+        QUnit.test('Agent expand collapse', function(assert) {
+
+            assert.expect(2);
+
+            var done1 = assert.async();
+            var done2 = assert.async();
+
+            agent.sendRequest("agentUpdateExpandCollapseStatusRequest", {val:"collapse", selectedNodeIds:["glyph0"]}, function(out){
+                setTimeout(function () { //should wait here as well
+                    var vStatus = ModelManager.getModelNodeAttribute("expandCollapseStatus", "glyph0");
+                    assert.equal(vStatus, "collapse", "Nodes collapsed.") ;
+                    done1();
+                },100);
+            });
+
+            setTimeout(function () { //wait here not to affect initial collapse
+                agent.sendRequest("agentUpdateExpandCollapseStatusRequest", {
+                    val: "expand",
+                    selectedNodeIds: ["glyph0"]
+                }, function (out) {
+                    setTimeout(function () { //should wait here as well
+                        var vStatus = ModelManager.getModelNodeAttribute("expandCollapseStatus", "glyph0");
+                        assert.notEqual(vStatus, "collapse", "Nodes expanded.");
+                        done2();
+                    }, 100);
+                });
+            },500);
+
+        });
+    }
+
 
     function testNewFile(){
 
@@ -455,20 +489,25 @@ module.exports = function(serverIp){
         testHideShow();
     }, 100);
 
-    //do this at the end
+    //Do this after others
     setTimeout(function() {
-        testLayout();
-    }, 1000);
+        testExpandCollapse();
+    }, 500);
 
-
-    //do this at the end
-    setTimeout(function() {
-        testNewFile();
-    }, 2000);
-
-
-    //do this at the end
-    setTimeout(function() {
-        testDisconnect();
-    }, 3000);
+    // //do this at the end
+    // setTimeout(function() {
+    //     testLayout();
+    // }, 1000);
+    //
+    //
+    // //do this at the end
+    // setTimeout(function() {
+    //     testNewFile();
+    // }, 2000);
+    //
+    //
+    // //do this at the end
+    // setTimeout(function() {
+    //     testDisconnect();
+    // }, 3000);
 };

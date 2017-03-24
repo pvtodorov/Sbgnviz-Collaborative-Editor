@@ -39,6 +39,7 @@ module.exports = function(modelManager){
 
         }
 
+
         else if (actionName === "changeNodeLabel" || actionName === "resizeNodes" ||
             actionName === "addStateOrInfoBox" || actionName === "setMultimerStatus" || actionName === "setCloneMarkerStatus") {
 
@@ -51,6 +52,20 @@ module.exports = function(modelManager){
                 paramList.push(ele.data());
 
             });
+            modelManager.changeModelElementGroupAttribute("data", modelElList, paramList, "me");
+
+        }
+
+        else if (actionName === "changeBendPoints") {
+
+            var modelElList = [];
+            var paramList = []
+
+
+            modelElList.push({id: args.edge.id(), isNode: false});
+            paramList.push(args.edge.data());
+
+
             modelManager.changeModelElementGroupAttribute("data", modelElList, paramList, "me");
 
         }
@@ -265,6 +280,7 @@ module.exports = function(modelManager){
 
 
         cy.on('select', 'node', function (event) { //Necessary for multiple selections
+            console.log(this.id()); //TODO delete later
             modelManager.selectModelNode(this, "me");
 
         });
@@ -277,6 +293,7 @@ module.exports = function(modelManager){
         });
 
         cy.on('select', 'edge', function (event) {
+            console.log(this.id()); //TODO delete later
             modelManager.selectModelEdge(this, "me");
 
         });

@@ -164,7 +164,8 @@ string after http:<ip>:3000/ in the server address.
 |  “agentAddEdgeRequest”              | {source: < source node id >,  |
 |                                     | target: < target node id >,   |
 |                                     | class: < sbgn class >}    |
-|"agentUpdateVisibilityRequest"       | {val:<"hide" or "show"or "showAll">,  selectedNodeIds:<array of node ids or null for showAll>|
+|"agentDeleteElesRequest"             | type: <"smart" or "simple" < selectedElementIds: <element ids to delete simply> |
+|"agentUpdateVisibilityStatusRequest"       | {val:<"hide" or "show"or "showAll">,  selectedNodeIds:<array of node ids or null for showAll>|
 |  “agentChangeNodeAttributeRequest”  | {id: < node id >,             |
 |                                     | attStr: < node attribute name in the model >             |
 |                                     | attVal:< node attribute value >}                          |
