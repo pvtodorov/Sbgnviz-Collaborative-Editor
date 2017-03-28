@@ -9,6 +9,7 @@ module.exports = function(modelManager){
 
     //A new sample or file is loaded --update model and inform others
    $(document).on("sbgnvizLoadSampleEnd sbgnvizLoadFileEnd",  function(event, file){
+       console.log("Loading new sample");
        modelManager.newModel("me"); //do not delete cytoscape, only the model
        modelManager.initModel(cy.nodes(), cy.edges());
 

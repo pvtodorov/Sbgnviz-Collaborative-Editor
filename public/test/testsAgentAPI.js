@@ -1,7 +1,7 @@
 QUnit = require('qunitjs');
 // agentAPI = require("../../agent-interaction/agentAPI");
 
-module.exports = function(serverIp){
+module.exports = function(serverIp, modelManager){
 
 
     QUnit.module( "Agent API Tests" );
@@ -9,6 +9,8 @@ module.exports = function(serverIp){
     var agent;
     var agentId = '103abc';
     var agentName = "testAgent";
+    //var modelManager;
+
 
 
     function testNewAgent() {
@@ -37,15 +39,19 @@ module.exports = function(serverIp){
             var done2 = assert.async();
             var done3 = assert.async();
 
-            agent.connectToServer(serverIp, function (socket) {
-                assert.ok(socket, "Socket connection achieved");
+            agent.connectToServer(serverIp, function (data) {
+
+                assert.ok(data.socket, "Socket connection achieved");
                 done1();
+
+
 
                 agent.loadModel(function () {
                     assert.ok(agent.pageDoc, "Agent acquired pageDoc");
                     done2();
 
                     agent.loadOperationHistory(function () {
+
                         assert.ok(agent.opHistory, "Agent acquired opHistory");
                         done3();
                     });
@@ -128,7 +134,7 @@ module.exports = function(serverIp){
 
             agent.sendRequest("agentAddNodeRequest", {x:30, y:40, class:"macromolecule"}, function(nodeId){
                 setTimeout(function () { //should wait here as well
-                    var val = ModelManager.getModelNode(nodeId);
+                    var val = modelManager.getModelNode(nodeId);
                     assert.ok(val, "Node added.");
                     done1();
                 },100);
@@ -140,7 +146,7 @@ module.exports = function(serverIp){
             var edgeId = (param.source+ "-" + param.target + "-" + param.class);
             agent.sendRequest("agentAddEdgeRequest", {id: edgeId, source:param.source, target:param.target, class:param.class}, function(){
                 setTimeout(function () { //should wait here as well
-                    var val = ModelManager.getModelEdge(edgeId);
+                    var val = modelManager.getModelEdge(edgeId);
                     assert.ok(val, "Edge added.");
                     done2();
                 },100);
@@ -148,8 +154,9 @@ module.exports = function(serverIp){
             });
             var elesToDelete = ["glyph4", "glyph7-glyph24"];
             agent.sendRequest("agentDeleteElesRequest", {elementIds: elesToDelete, type:"simple"}, function(nodeId){
+
                 setTimeout(function () { //should wait here as well
-                    var val = ModelManager.getModelEdge("glyph4-glyph18");
+                    var val = modelManager.getModelEdge("glyph4-glyph18");
                     assert.notOk(val, "Elements deleted simply.");
                     done3();
                 },100);
@@ -159,7 +166,7 @@ module.exports = function(serverIp){
             var elesToDelete = ["glyph28"];
             agent.sendRequest("agentDeleteElesRequest", {elementIds: elesToDelete, type:"smart"}, function(nodeId){
                 setTimeout(function () { //should wait here as well
-                    var val = ModelManager.getModelNode("glyph42");
+                    var val = modelManager.getModelNode("glyph42");
                     assert.notOk(val, "Elements deleted smartly.");
                     done4();
                 },100);
@@ -180,6 +187,57 @@ module.exports = function(serverIp){
 
     }
 
+    function testUndoRedoRequest(){
+
+
+        QUnit.test('Agent undo redo', function(assert) {
+            //Test on delete
+            var nodeToDelete = "glyph32";
+
+            assert.expect(3);
+            var done1 = assert.async();
+           var done2 = assert.async();
+           var done3 = assert.async();
+
+            var elesToDelete = [nodeToDelete];
+            agent.sendRequest("agentDeleteElesRequest", {elementIds: elesToDelete, type:"simple"}, function(result){
+                console.log(result);
+                var val = modelManager.getModelNode(nodeToDelete);
+                assert.notOk(val,"Deletion for undo/redo is performed.");
+                done1();
+
+            });
+
+            setTimeout(function(){
+
+                agent.sendRequest("agentUndoRequest",null, function(undoActionStr){
+                    setTimeout(function () { //should wait here as well
+                        var val = modelManager.getModelNode(nodeToDelete);
+                        assert.ok(val, "Undo performed");
+                        done2();
+                    },100);
+
+            });
+            }, 500);
+
+            setTimeout(function() {
+
+                agent.sendRequest("agentRedoRequest", null, function () {
+                    setTimeout(function () { //should wait here as well
+                        var val = modelManager.getModelNode(nodeToDelete);
+                        assert.notOk(val, "Redo performed");
+                        done3();
+                    }, 100);
+                });
+            }, 800);
+
+
+
+
+        });
+
+    }
+
 
     function testMoveNodeRequest(){
 
@@ -192,7 +250,7 @@ module.exports = function(serverIp){
 
             agent.sendRequest("agentMoveNodeRequest", {id: nodeId,  pos:pos}, function(){
                 setTimeout(function () { //should wait here as well
-                    var val = ModelManager.getModelNodeAttribute("position", nodeId);
+                    var val = modelManager.getModelNodeAttribute("position", nodeId);
                     assert.propEqual(val, pos, "Node move operation is correct.");
                     done1();
                 },100);
@@ -203,6 +261,8 @@ module.exports = function(serverIp){
         });
 
     }
+
+
 
     function testNodeSetAttributeRequests() {
 
@@ -258,7 +318,7 @@ module.exports = function(serverIp){
 
                         setTimeout(function () { //should wait here as well
 
-                            var val = ModelManager.getModelNodeAttribute(attStr, id);
+                            var val = modelManager.getModelNodeAttribute(attStr, id);
                             assert.propEqual(val, attVal, (attStr + " is correct"));
                             currDone();
                         }, 100);
@@ -307,7 +367,7 @@ module.exports = function(serverIp){
 
                         setTimeout(function () { //should wait here as well
 
-                            var val = ModelManager.getModelEdgeAttribute(attStr, id);
+                            var val = modelManager.getModelEdgeAttribute(attStr, id);
                             assert.propEqual(val, attVal, (attStr + " is correct"));
                             currDone();
                         }, 100);
@@ -348,7 +408,7 @@ module.exports = function(serverIp){
 
             agent.sendRequest("agentUpdateVisibilityStatusRequest", {val:"hide", elementIds:["glyph8"]}, function(out){
                 setTimeout(function () { //should wait here as well
-                    var vStatus = ModelManager.getModelNodeAttribute("visibilityStatus", "glyph8");
+                    var vStatus = modelManager.getModelNodeAttribute("visibilityStatus", "glyph8");
                     assert.equal(vStatus, "hide", "Nodes hidden.") ;
                     done1();
                 },100);
@@ -356,7 +416,7 @@ module.exports = function(serverIp){
 
             agent.sendRequest("agentUpdateVisibilityStatusRequest", {val:"show", elementIds:["glyph10"]}, function(out){
                 setTimeout(function () { //should wait here as well
-                    var vStatus = ModelManager.getModelNodeAttribute("visibilityStatus", "glyph10");
+                    var vStatus = modelManager.getModelNodeAttribute("visibilityStatus", "glyph10");
                     assert.notEqual(vStatus, "hide", "Nodes shown.") ;
                     done2();
                 },100);
@@ -366,7 +426,7 @@ module.exports = function(serverIp){
             setTimeout(function () { //wait here not to affect initial hide
                 agent.sendRequest("agentUpdateVisibilityStatusRequest", {val: "showAll"}, function (out) {
                     setTimeout(function () { //should wait here as well
-                        var vStatus = ModelManager.getModelNodeAttribute("visibilityStatus", "glyph8");
+                        var vStatus = modelManager.getModelNodeAttribute("visibilityStatus", "glyph8");
                         assert.equal(vStatus, "show", "All nodes shown.");
                         done3();
                     }, 100);
@@ -390,7 +450,7 @@ module.exports = function(serverIp){
 
             agent.sendRequest("agentUpdateHighlightStatusRequest", {val:"neighbors", elementIds:["glyph20"]}, function(out){
                 setTimeout(function () { //should wait here as well
-                    var vStatus = ModelManager.getModelNodeAttribute("highlightStatus", "glyph24");
+                    var vStatus = modelManager.getModelNodeAttribute("highlightStatus", "glyph24");
                     assert.equal(vStatus, "highlighted", "Neighbors highlighted.") ;
                     done1();
                 },100);
@@ -398,7 +458,7 @@ module.exports = function(serverIp){
 
             agent.sendRequest("agentUpdateHighlightStatusRequest", {val:"processes", elementIds:["glyph20"]}, function(out){
                 setTimeout(function () { //should wait here as well
-                    var vStatus = ModelManager.getModelNodeAttribute("highlightStatus", "glyph21");
+                    var vStatus = modelManager.getModelNodeAttribute("highlightStatus", "glyph21");
                     assert.equal(vStatus, "highlighted", "Processes highlighted.") ;
                     done2();
                 },100);
@@ -407,7 +467,7 @@ module.exports = function(serverIp){
             setTimeout(function () { //wait here not to affect initial hide
                 agent.sendRequest("agentUpdateHighlightStatusRequest", {val: "remove"}, function (out) {
                     setTimeout(function () { //should wait here as well
-                        var vStatus = ModelManager.getModelNodeAttribute("highlightStatus", "glyph20");
+                        var vStatus = modelManager.getModelNodeAttribute("highlightStatus", "glyph20");
                         assert.notEqual(vStatus, "highlighted", "Highlights removed.");
                         done3();
                     }, 500);
@@ -417,7 +477,7 @@ module.exports = function(serverIp){
 
             agent.sendRequest("agentSearchByLabelRequest", {label:"myosin"}, function(out){
                 setTimeout(function () { //should wait here as well
-                    var vStatus = ModelManager.getModelNodeAttribute("highlightStatus", "glyph39");
+                    var vStatus = modelManager.getModelNodeAttribute("highlightStatus", "glyph39");
                     assert.equal(vStatus, "highlighted", "Label search successful.") ;
                     done4();
                 },100);
@@ -437,7 +497,7 @@ module.exports = function(serverIp){
 
             agent.sendRequest("agentUpdateExpandCollapseStatusRequest", {val:"collapse", elementIds:["glyph0"]}, function(out){
                 setTimeout(function () { //should wait here as well
-                    var vStatus = ModelManager.getModelNodeAttribute("expandCollapseStatus", "glyph0");
+                    var vStatus = modelManager.getModelNodeAttribute("expandCollapseStatus", "glyph0");
                     assert.equal(vStatus, "collapse", "Nodes collapsed.") ;
                     done1();
                 },100);
@@ -449,7 +509,7 @@ module.exports = function(serverIp){
                     elementIds: ["glyph0"]
                 }, function (out) {
                     setTimeout(function () { //should wait here as well
-                        var vStatus = ModelManager.getModelNodeAttribute("expandCollapseStatus", "glyph0");
+                        var vStatus = modelManager.getModelNodeAttribute("expandCollapseStatus", "glyph0");
                         assert.notEqual(vStatus, "collapse", "Nodes expanded.");
                         done2();
                     }, 100);
@@ -468,8 +528,8 @@ module.exports = function(serverIp){
 
             agent.sendRequest("agentAddCompoundRequest", {val:"complex", elementIds:["glyph8", "glyph9"]}, function(val){
                 setTimeout(function () { //should wait here as well
-                    var node = ModelManager.getModelNode("glyph8");
-                    var parent = ModelManager.getModelNode(node.data.parent);
+                    var node = modelManager.getModelNode("glyph8");
+                    var parent = modelManager.getModelNode(node.data.parent);
 
                     assert.equal(parent.data.class,"complex", "Complex added.");
                     done1();
@@ -479,8 +539,8 @@ module.exports = function(serverIp){
 
             agent.sendRequest("agentAddCompoundRequest", {val:"compartment", elementIds:["glyph26", "glyph27"]}, function(val){
                 setTimeout(function () { //should wait here as well
-                    var node = ModelManager.getModelNode("glyph26");
-                    var parent = ModelManager.getModelNode(node.data.parent);
+                    var node = modelManager.getModelNode("glyph26");
+                    var parent = modelManager.getModelNode(node.data.parent);
                     assert.equal(parent.data.class,"compartment", "Compartment added.");
                     done2();
                 },100);
@@ -498,7 +558,7 @@ module.exports = function(serverIp){
             var done1 = assert.async();
             agent.sendRequest("agentNewFileRequest", null, function(){
                 setTimeout(function () { //should wait here as well
-                    var cy = ModelManager.getModelCy();
+                    var cy = modelManager.getModelCy();
                     assert.ok((jQuery.isEmptyObject(cy.nodes) && jQuery.isEmptyObject(cy.edges)),"New file loaded") ;
                     done1();
                 },100);
@@ -568,9 +628,15 @@ module.exports = function(serverIp){
     },100);
 
 
+
     setTimeout(function() {
         testEdgeSetAttributeRequests();
     },100);
+
+    // setTimeout(function() {
+    //     testUndoRedoRequest();
+    // }, 1000);
+
 
     setTimeout(function() {
         testHighlight();
@@ -588,6 +654,9 @@ module.exports = function(serverIp){
         testHideShow();
     }, 100);
 
+
+
+
     //Do this after others
     setTimeout(function() {
         testExpandCollapse();
@@ -600,11 +669,11 @@ module.exports = function(serverIp){
         testLayout();
     }, 1000);
 
-    //do this at the end
-    setTimeout(function() {
-        testNewFile();
-    }, 2000);
-    //
+    // //do this at the end
+    // setTimeout(function() {
+    //     testNewFile();
+    // }, 2000);
+
     //
     // //do this at the end
     // setTimeout(function() {

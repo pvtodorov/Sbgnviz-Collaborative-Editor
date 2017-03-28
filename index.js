@@ -27,6 +27,7 @@ var menu;
 var userCount;
 var socket;
 
+var pr;
 
 var modelManager;
 var oneColor = require('onecolor');
@@ -216,8 +217,9 @@ app.proto.changeDuration = function () {
 /***
  * Human listens to agent socket and performs menu operations requested by the agent
  */
-app.proto.listenToAgentSocket = function(){
+app.proto.listenToAgentSocket = function(model){
 
+    var modelOp;
     socket.on('loadFile', function(txtFile, callback){
         try {
 
@@ -295,7 +297,23 @@ app.proto.listenToAgentSocket = function(){
                 $("#delete-selected-smart").trigger('click');
             }
 
-            if (callback) callback("success");
+
+            var p1 = new Promise(function (resolve) {
+                if(modelOp === "delete"){
+                    var undoInd =  model.get('_page.doc.undoIndex');
+
+                    var cmd = model.get('_page.doc.history.' + undoInd);
+                    console.log(cmd.opName);
+                    resolve("success");
+                }
+            });
+            p1.then(function(){
+
+                if(callback) callback("deleted!!");
+            });
+
+
+
         }
         catch(e){
             console.log(e);
@@ -304,7 +322,16 @@ app.proto.listenToAgentSocket = function(){
         }
     });
 
+//make sure action is performed on the model
 
+    model.on('change', '_page.doc.undoIndex', function(id, cmdInd){
+
+        var cmd = model.get('_page.doc.history.' + id);
+            modelOp = cmd.opName;
+            //console.log(modelOp);
+
+
+    });
 
 
     socket.on('addEdge', function(data, callback){
@@ -314,7 +341,7 @@ app.proto.listenToAgentSocket = function(){
 
             //notifies other clients
             modelManager.addModelEdge(newNode.id(), data, "me");
-            modelManager.initModelEdge(newEdge, "me");
+            // modelManager.initModelEdge(newEdge, "me");
 
             if (callback) callback(newEdge.id());
         }
@@ -501,16 +528,17 @@ app.proto.create = function (model) {
     var id = model.get('_session.userId');
     var name = model.get('_page.doc.users.' + id +'.name');
 
-    modelManager = require('./public/collaborative-app/modelManager.js')(model, model.get('_page.room'), model.get('_session.userId'),name );
+    modelManager = require('./public/collaborative-app/modelManager.js')(model, model.get('_page.room') );
+    modelManager.setName( model.get('_session.userId'),name);
 
     //Notify server about the client connection
-    socket.emit("subscribeHuman", {userName:name, room:  model.get('_page.room'), userId: id}, function(){
+    socket.emit("subscribeHuman", { userName:name, room:  model.get('_page.room'), userId: id}, function(){
 
     }); //subscribe to current doc as a new room
 
 
 
-    this.listenToAgentSocket();
+    this.listenToAgentSocket(model);
 
 
 
@@ -647,7 +675,7 @@ app.proto.listenToNodeOperations = function(model){
 
             var newNode = chise.elementUtilities.addNode(pos.x, pos.y, sbgnclass, id, parent, visibility);
 
-            modelManager.initModelNode(newNode,"me", true);
+            // modelManager.initModelNode(newNode,"me", true);
 
 
             newNode.move({"parent":parent});
@@ -684,13 +712,15 @@ app.proto.listenToNodeOperations = function(model){
                     "overlay-opacity": 0.25
                 });
 
-
+            console.log("changed highlightcolor");
         }
+
     });
 
     //Called by agents to change bbox
     model.on('all', '_page.doc.cy.nodes.*.data.*.*', function(id, att1,att2, op, val,prev, passed){
         if(docReady && passed.user == null) {
+
             var newAtt = cy.getElementById(id).data(att1);
             newAtt[att2] = val;
             cy.getElementById(id).data(att1, newAtt);
@@ -701,6 +731,7 @@ app.proto.listenToNodeOperations = function(model){
     //Called by agents to change specific properties of data
     model.on('all', '_page.doc.cy.nodes.*.data.*', function(id, att, op, val,prev, passed){
         if(docReady && passed.user == null) {
+
             cy.getElementById(id).data(att, val);
             if(att === "parent")
                 cy.getElementById(id).move({"parent":val});
@@ -713,10 +744,17 @@ app.proto.listenToNodeOperations = function(model){
         console.log("only data");
 
 
+
+
         if(docReady && passed.user == null) {
+
+            console.log("DATAAAAAA");
+            console.log(data);
 
             //cy.getElementById(id).data(data); //can't call this if cy element does not have a field called "data"
             cy.getElementById(id)._private.data = data;
+
+
 
 
             //to update parent
@@ -995,7 +1033,7 @@ app.proto.runUnitTests = function(){
     //require("./public/test/testsMenuFunctions.js")();
     // require("./public/test/testsModelManager.js")();
     var room = this.model.get('_page.room');
-    require("./public/test/testsAgentAPI.js")(("http://localhost:3000/" + room));
+    require("./public/test/testsAgentAPI.js")(("http://localhost:3000/" + room), modelManager);
     require("./public/test/testOptions.js")(); //to print out results
 
 }

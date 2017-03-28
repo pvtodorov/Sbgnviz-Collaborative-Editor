@@ -181,7 +181,6 @@ string after http:<ip>:3000/ in the server address.
 |                                     | pos: {x:< new position x >, y: <  new position y >}}                   |
 |  “agentAddCompoundRequest”          | {type: < compound type as “complex” or “compartment” >,              |
 |                                     | selectedNodeArr: < array of node ids >}                              |
-|  “agentMergeGraphRequest”           |  {graph: < graph to be added >, type: < file type as "sbgn" or "json" > }                        |
 |		"agentActiveRoomsRequest"					| -																																			|
 
 

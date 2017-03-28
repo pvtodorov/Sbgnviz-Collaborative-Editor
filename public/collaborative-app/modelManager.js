@@ -5,16 +5,17 @@
  */
 
 
-module.exports = function (model, docId, userId, userName) {
+module.exports = function (model, docId) {
 
 
 
+    console.log("ModelManager " + docId);
 
     model.ref('_page.doc', 'documents.' + docId);
 
-    var userPath = model.at('_page.doc.users.' + userId);
 
-    return ModelManager = { //global reference for testing
+
+    return {
 
 
         getModel: function () {
@@ -31,13 +32,13 @@ module.exports = function (model, docId, userId, userName) {
                 this.updateHistory({opName: 'add', opTarget: 'image', opAttr: data.filePath});
         },
 
-        setName: function (userName) {
+        setName: function (userId, userName) {
 
             model.set('_page.doc.users.' + userId +'.name', userName);
 
         },
 
-        getName: function () {
+        getName: function (userId) {
             return model.get('_page.doc.users.' + userId + '.name');
         },
 
@@ -120,7 +121,7 @@ module.exports = function (model, docId, userId, userName) {
 
         updateHistory: function (cmd) {
             var command = {
-                userName: userName,
+                // userName: userName,
                 date: new Date,
                 opName: cmd.opName,
                 opTarget: cmd.opTarget,
@@ -136,6 +137,8 @@ module.exports = function (model, docId, userId, userName) {
 
                 var ind = model.push('_page.doc.history', command) - 1;
 
+
+
                 model.set('_page.doc.undoIndex', ind);
             }
 
@@ -143,6 +146,13 @@ module.exports = function (model, docId, userId, userName) {
 
         getHistory: function () {
             return model.get('_page.doc.history');
+        },
+
+        printHistory: function(){
+            console.log("HISTORY:");
+            var hist = model.get('_page.doc.history');
+            for(var i = 0 ; i <hist.length;i++)
+                console.log(i + " " + hist[i].opName);
         },
 
         getUndoActionStr: function () {
@@ -185,6 +195,7 @@ module.exports = function (model, docId, userId, userName) {
             var undoInd = model.get('_page.doc.undoIndex');
             var cmd = model.get('_page.doc.history.' + undoInd); // cmd: opName, opTarget, opAttr, elId, param
 
+
             if (cmd.opName == "set") {
                 if (cmd.opTarget == "element" && cmd.elType == "node")
                     this.changeModelNodeAttribute(cmd.opAttr, cmd.elId, cmd.prevParam, null); //user is null to enable updating in the editor
@@ -206,14 +217,16 @@ module.exports = function (model, docId, userId, userName) {
             else if (cmd.opName == "delete") {
                 if (cmd.opTarget == "element")
                     this.restoreModelElement(cmd.elType, cmd.elId, cmd.prevParam);
-                else if (cmd.opTarget == "element group")
+                else if (cmd.opTarget == "element group"){
+
                     this.restoreModelElementGroup(cmd.elId, cmd.prevParam);
+                }
                 else if (cmd.opTarget == "compound")
                     this.addModelCompound(cmd.elId, cmd.prevParam.compoundAtts, cmd.prevParam.childrenList, cmd.param);
 
             }
             else if (cmd.opName == "init") {
-                this.newModel();
+                this.newModel("me", true);
             }
             else if (cmd.opName == "new") { //delete all
                 this.restoreModel(cmd.prevParam);
@@ -303,8 +316,8 @@ module.exports = function (model, docId, userId, userName) {
             if (nodePath.get() == null)
                 return "Node id not found";
 
-            if(userPath)
-                model.pass({user: user}).set('_page.doc.cy.nodes.' + node.id()+ '.highlightColor', userPath.get('colorCode'));
+            var userPath = model.at('_page.doc.users.' + user);
+            model.pass({user: user}).set('_page.doc.cy.nodes.' + node.id()+ '.highlightColor', userPath.get('colorCode'));
 
 
             return "success";
@@ -317,11 +330,11 @@ module.exports = function (model, docId, userId, userName) {
             var edgePath = model.at('_page.doc.cy.edges.' + edge.id());
             if (edgePath.get() == null)
                 return "Edge id not found";
-            if (userPath) {
-                model.pass({user: user}).set('_page.doc.cy.edges.' + edge.id()+ '.highlightColor', userPath.get('colorCode'));
+            var userPath = model.at('_page.doc.users.' + user);
+            model.pass({user: user}).set('_page.doc.cy.edges.' + edge.id()+ '.highlightColor', userPath.get('colorCode'));
 
 
-            }
+
 
             return "success";
 
@@ -376,7 +389,7 @@ module.exports = function (model, docId, userId, userName) {
                     opTarget: 'element',
                     elType: 'node',
                     elId: nodeId,
-                    param: {x: param.x, y: param.y, sbgnclass: param.sbgnclass}
+                    param: {x: param.x, y: param.y, class: param.class}
                 });
 
 
@@ -447,6 +460,7 @@ module.exports = function (model, docId, userId, userName) {
 
             this.addModelNode(compoundId, compoundAtts, user, true);
 
+
             this.changeModelElementGroupAttribute("data", elList, paramList, user, true);
 
             if (!noHistUpdate)
@@ -454,7 +468,7 @@ module.exports = function (model, docId, userId, userName) {
                     opName: 'add',
                     opTarget: 'compound',
                     elId: compoundId,
-                    param: {paramList: paramList, compoundAtts: compoundAtts},
+                    param: {paramList: paramList, childrenList: elList, compoundAtts: compoundAtts},
                     prevParam: [] //TODO
                 });
 
@@ -673,6 +687,7 @@ module.exports = function (model, docId, userId, userName) {
             var prevParamsEdges = [];
             var self = this;
 
+
             if(selectedEles.edges!= null){
                 selectedEles.edges.forEach(function (edge) {
                     var edgePath = model.at('_page.doc.cy.edges.' + edge.id);
@@ -688,7 +703,6 @@ module.exports = function (model, docId, userId, userName) {
             if(selectedEles.nodes!= null) {
                 selectedEles.nodes.forEach(function (node) {
                     var nodePath = model.at('_page.doc.cy.nodes.' + node.id);
-
 
                     prevParamsNodes.push(nodePath.get());
                 });
@@ -739,8 +753,18 @@ module.exports = function (model, docId, userId, userName) {
 
             this.addModelNode(nodeId, {x: param.position.x, y: param.position.y, class:param.data.class}, user, noHistUpdate);
 
+            //No need to init -- data and position are updated in the next steps
+
+
             for(att in param){
                 if(param.hasOwnProperty(att) && att !== "addedLater"){
+
+
+                    console.log(att);
+                    console.log(param[att]);
+
+
+                    console.log(user);
                     model.pass({user:user}).set(('_page.doc.cy.nodes.' + nodeId + '.' + att), param[att]);
                 }
             }
@@ -752,7 +776,7 @@ module.exports = function (model, docId, userId, userName) {
         restoreModelEdge: function (edgeId, param, user, noHistUpdate) {
 
             this.addModelEdge(edgeId, {source: param.data.source, target:param.data.target, class: param.data.class}, user, noHistUpdate);
-
+            //No need to init -- data and position are updated in the next steps
 
 
             for(att in param){
@@ -801,6 +825,7 @@ module.exports = function (model, docId, userId, userName) {
             var self = this;
             var prevModelCy = model.get('_page.doc.cy');
 
+
             if (!noHistUpdate)
                 this.updateHistory({opName: 'new', prevParam: prevModelCy, opTarget: 'model'});
 
@@ -828,6 +853,7 @@ module.exports = function (model, docId, userId, userName) {
         deleteAll: function (nodes, edges, user, noHistUpdate) {
 
             var self = this;
+
             if (!noHistUpdate)
                 this.updateHistory({opName: 'new', opTarget: 'model'});
 

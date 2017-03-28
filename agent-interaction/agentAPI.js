@@ -68,22 +68,10 @@ Agent.prototype.connectToServer = function (url, callback) {
 
     p1.then(function (content) {
 
-        self.socket.emit("subscribeAgent", {
-            userName: self.agentName,
-            room: self.room,
-            userId: self.agentId,
-            colorCode: self.colorCode
-        }, function (data) {
+        self.socket.emit("subscribeAgent", {userName: self.agentName, room: self.room, userId: self.agentId, colorCode: self.colorCode }, function (data) {
 
 
-            // self.userList = data;
-
-            // if (data == null)
-            //     self.userList = [];
-
-            //     console.log("agent connected!!!!");
-
-            if (callback != null) callback(self.socket);
+            if (callback != null) callback({socket: self.socket});
 
         });
 
@@ -91,6 +79,7 @@ Agent.prototype.connectToServer = function (url, callback) {
     }),  function (xhr, status, error) {
         api.set('content.text', "Error retrieving data: " + error);
     };
+
 
 }
 
