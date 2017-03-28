@@ -71,7 +71,7 @@ Agent.prototype.connectToServer = function (url, callback) {
         self.socket.emit("subscribeAgent", {userName: self.agentName, room: self.room, userId: self.agentId, colorCode: self.colorCode }, function (data) {
 
 
-            if (callback != null) callback({socket: self.socket});
+            if (callback != null) callback(self.socket);
 
         });
 

@@ -245,14 +245,16 @@ module.exports = function(modelManager){
             var modelElList = [];
 
 
-            res.newEles.forEach(function (ele) {
-                //var ele = param.ele;
+            //Last element is the compound, skip it and add the children
+            for(var i = 0; i < res.newEles.length - 1; i++){
+                var ele = res.newEles[i];
+
 
                 modelElList.push({id: ele.id(), isNode: true});
 
                 paramList.push(ele.data()); //includes parent information
 
-            });
+            }
             //
             // res.children().forEach(function (ele) {
             //     //var ele = param.ele;
@@ -274,7 +276,7 @@ module.exports = function(modelManager){
 
 
             //assign other node properties-- css and data
-            modelManager.initModelNode(compound,"me"); //init with default values
+            modelManager.initModelNode(compound,"me", true); //init with default values  -- no history update
 
 
         }

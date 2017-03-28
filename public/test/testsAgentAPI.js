@@ -39,9 +39,9 @@ module.exports = function(serverIp, modelManager){
             var done2 = assert.async();
             var done3 = assert.async();
 
-            agent.connectToServer(serverIp, function (data) {
+            agent.connectToServer(serverIp, function (socket) {
 
-                assert.ok(data.socket, "Socket connection achieved");
+                assert.ok(socket, "Socket connection achieved");
                 done1();
 
 

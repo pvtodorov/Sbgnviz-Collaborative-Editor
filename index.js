@@ -748,14 +748,8 @@ app.proto.listenToNodeOperations = function(model){
 
         if(docReady && passed.user == null) {
 
-            console.log("DATAAAAAA");
-            console.log(data);
-
             //cy.getElementById(id).data(data); //can't call this if cy element does not have a field called "data"
             cy.getElementById(id)._private.data = data;
-
-
-
 
             //to update parent
             var newParent = data.parent;

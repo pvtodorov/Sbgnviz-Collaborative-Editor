@@ -77,7 +77,6 @@ module.exports = function (model, docId) {
                     break;
                 }
             }
-
         },
 
 
@@ -222,7 +221,7 @@ module.exports = function (model, docId) {
                     this.restoreModelElementGroup(cmd.elId, cmd.prevParam);
                 }
                 else if (cmd.opTarget == "compound")
-                    this.addModelCompound(cmd.elId, cmd.prevParam.compoundAtts, cmd.prevParam.childrenList, cmd.param);
+                    this.addModelCompound(cmd.elId, cmd.prevParam.compoundAtts, cmd.prevParam.childrenList, cmd.prevParam.paramList);
 
             }
             else if (cmd.opName == "init") {
@@ -235,7 +234,6 @@ module.exports = function (model, docId) {
             else if (cmd.opName == "merge") {
                 this.newModel("me", true);
                 this.restoreModel(cmd.prevParam);
-
             }
 
 
@@ -264,7 +262,7 @@ module.exports = function (model, docId) {
                 if (cmd.opTarget == "element")
                     this.restoreModelElement(cmd.elType, cmd.elId, cmd.param, null);
                 else if (cmd.opTarget == "compound")
-                    this.addModelCompound(cmd.elId, cmd.param.compoundAtts, cmd.param.childrenList, cmd.param);
+                    this.addModelCompound(cmd.elId, cmd.param.compoundAtts, cmd.param.childrenList, cmd.param.paramList);
 
 
             }
@@ -276,7 +274,7 @@ module.exports = function (model, docId) {
                 else if (cmd.opTarget == "element group")
                     this.deleteModelElementGroup(cmd.elId);
                 else if (cmd.opTarget == "compound")
-                    this.removeModelCompound(cmd.elId, cmd.param.childrenList, cmd.param);
+                    this.removeModelCompound(cmd.elId, cmd.prevParam.childrenList, cmd.param);
 
             }
             else if (cmd.opName == "init") {
@@ -376,7 +374,6 @@ module.exports = function (model, docId) {
             model.pass({user: user}).set('_page.doc.cy.nodes.' + nodeId + '.data.id', nodeId);
             model.pass({user: user}).set('_page.doc.cy.nodes.' + nodeId + '.position', {x: param.x, y: param.y});
             model.pass({user: user}).set('_page.doc.cy.nodes.' + nodeId + '.data.class', param.class);
-            //     model.pass({user:user}).set('_page.doc.cy.nodes.' + nodeId+'.sbgnlabel', param.sbgnlabel);
 
             //adding the node in cytoscape
             model.pass({user: user}).set('_page.doc.cy.nodes.' + nodeId + '.addedLater', true);
@@ -419,34 +416,6 @@ module.exports = function (model, docId) {
 
         },
 
-        //change children's parents to their old parents
-        removeModelCompound: function (compoundId, childrenList, prevParentList, user, noHistUpdate) {
-
-            var nodePath = model.at('_page.doc.cy.nodes.' + compoundId);
-            var compoundAtts = {
-                id: compoundId,
-                class: nodePath.get('class'),
-                x: nodePath.get('position.x'),
-                y: nodePath.get('position.y'),
-                width: nodePath.get('width'),
-                height: nodePath.get('height')
-            };
-
-            //isolate the compound first, then delete
-            this.changeModelElementGroupAttribute("parent", childrenList, prevParentList, null, true);
-            this.deleteModelNode(compoundId, user, true);
-
-
-            if (!noHistUpdate)
-                this.updateHistory({
-                    opName: 'delete',
-                    opTarget: 'compound',
-                    elId: compoundId,
-                    prevParam: {childrenList: childrenList, compoundAtts: compoundAtts},
-                    param: prevParentList
-                });
-
-        },
         /***
          *
          * @param compoundId : new compound's id
@@ -458,10 +427,17 @@ module.exports = function (model, docId) {
          */
         addModelCompound: function (compoundId, compoundAtts, elList, paramList, user, noHistUpdate) {
 
+
+            var prevParentList = [];
+            paramList.forEach(function(param){
+                prevParentList.push(paramList.parent);
+            });
             this.addModelNode(compoundId, compoundAtts, user, true);
 
 
             this.changeModelElementGroupAttribute("data", elList, paramList, user, true);
+
+
 
             if (!noHistUpdate)
                 this.updateHistory({
@@ -469,10 +445,48 @@ module.exports = function (model, docId) {
                     opTarget: 'compound',
                     elId: compoundId,
                     param: {paramList: paramList, childrenList: elList, compoundAtts: compoundAtts},
-                    prevParam: [] //TODO
+                    prevParam:  prevParentList //TODO
                 });
 
         },
+
+        //change children's parents to their old parents
+        removeModelCompound: function (compoundId, childrenList, prevParentList, user, noHistUpdate) {
+
+            var nodePath = model.at('_page.doc.cy.nodes.' + compoundId);
+
+            var compoundAtts = {
+                id: compoundId,
+                class: nodePath.get('class'),
+                x: nodePath.get('position.x'),
+                y: nodePath.get('position.y')
+
+            };
+
+            var paramList = [];
+            childrenList.forEach(function(child){
+                var data = model.get('_page.doc.cy.nodes.'+child.id + '.data');
+                paramList.push(data);
+            });
+
+            //isolate the compound first, then delete
+            this.changeModelElementGroupAttribute("data.parent", childrenList, prevParentList, user, true);
+            this.deleteModelNode(compoundId, user, true);
+
+
+
+
+            if (!noHistUpdate)
+                this.updateHistory({
+                    opName: 'delete',
+                    opTarget: 'compound',
+                    elId: compoundId,
+                    prevParam: {childrenList: childrenList, compoundAtts: compoundAtts, paramList: paramList},
+                    param: prevParentList
+                });
+
+        },
+
 
 
         //attStr: attribute namein the model
@@ -632,9 +646,6 @@ module.exports = function (model, docId) {
 
 
                 prevParam = nodePath.get();
-
-
-
 
                 this.updateHistory({
                     opName: 'delete',
@@ -895,7 +906,6 @@ module.exports = function (model, docId) {
                     jsonNodes.push(jsonNode);
                 }
             }
-            ;
 
 
             for (var att in edges) {
@@ -969,10 +979,6 @@ module.exports = function (model, docId) {
 
         },
         initModelEdge: function (edge, user, noHistUpdate) {
-
-
-
-            //edge.addClass('changeLineColor');
 
 
             var edgePath = model.at('_page.doc.cy.edges.' + edge.id());
