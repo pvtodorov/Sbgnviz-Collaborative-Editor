@@ -241,12 +241,12 @@ module.exports = function(serverIp, modelManager){
 
     function testMoveNodeRequest(){
 
-
         QUnit.test('Agent moveNode', function(assert) {
             var nodeId = "glyph8";
             var pos = {x: 30, y:50};
             assert.expect(1);
             var done1 = assert.async();
+
 
             agent.sendRequest("agentMoveNodeRequest", {id: nodeId,  pos:pos}, function(){
                 setTimeout(function () { //should wait here as well
@@ -262,6 +262,38 @@ module.exports = function(serverIp, modelManager){
 
     }
 
+
+
+    function testAlignRequest(){
+
+        QUnit.test('Agent align', function(assert) {
+            var nodeId = "glyph8";
+
+            assert.expect(2);
+            var done1 = assert.async();
+            var done2 = assert.async();
+
+            agent.sendRequest("agentAlignRequest", {nodeIds: '*', alignTo:nodeId, horizontal:"none", vertical:"center"}, function(res){
+                setTimeout(function () { //should wait here as well
+                    assert.equal(res, "success", "Align successful.");
+                    done1();
+                },100);
+            });
+
+            //UNDO
+            setTimeout(function(){
+                agent.sendRequest("agentUndoRequest",null, function(res){
+                    setTimeout(function () { //should wait here as well
+                        assert.equal(res, "success", "Undo performed");
+                        done2();
+                    },100);
+
+                });
+            }, 500);
+
+
+        });
+    }
 
 
     function testNodeSetAttributeRequests() {
@@ -633,41 +665,46 @@ module.exports = function(serverIp, modelManager){
         testEdgeSetAttributeRequests();
     },100);
 
+
+    setTimeout(function() {
+        testAlignRequest();
+    }, 1000);
+
     // setTimeout(function() {
     //     testUndoRedoRequest();
     // }, 1000);
 
 
-    setTimeout(function() {
-        testHighlight();
-    }, 100);
-
-    setTimeout(function() {
-        testAddCompound();
-    }, 100);
-
-    setTimeout(function() {
-        testAddDeleteRequests();
-    },100);
-
-    setTimeout(function() {
-        testHideShow();
-    }, 100);
-
-
-
-
-    //Do this after others
-    setTimeout(function() {
-        testExpandCollapse();
-    }, 500);
-
-
-
-    //do this at the end
-    setTimeout(function() {
-        testLayout();
-    }, 1000);
+    // setTimeout(function() {
+    //     testHighlight();
+    // }, 100);
+    //
+    // setTimeout(function() {
+    //     testAddCompound();
+    // }, 100);
+    //
+    // setTimeout(function() {
+    //     testAddDeleteRequests();
+    // },100);
+    //
+    // setTimeout(function() {
+    //     testHideShow();
+    // }, 100);
+    //
+    //
+    //
+    //
+    // //Do this after others
+    // setTimeout(function() {
+    //     testExpandCollapse();
+    // }, 500);
+    //
+    //
+    //
+    // //do this at the end
+    // setTimeout(function() {
+    //     testLayout();
+    // }, 1000);
 
     // //do this at the end
     // setTimeout(function() {

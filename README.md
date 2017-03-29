@@ -169,7 +169,7 @@ string after http:<ip>:3000/ in the server address.
 |"agentUpdateVisibilityStatusRequest"       | {val:<"hide" or "show" or "showAll">,  elementIds:<array of element ids or null for showAll>|
 |"agentUpdateHighlightStatusRequest"       | {val:<"neighbors" or "processes" or "remove">,  elementIds:<array of element ids or null for remove>|
 |"agentUpdateExpandCollapseStatusRequest"       | {val:<"expand" or "collapse">,  elementIds:<array of element ids>|
-|  “agentChangeNodeAttributeRequest”  | {id: < node id >,             |
+| “agentChangeNodeAttributeRequest”  | {id: < node id >,             |
 |                                     | attStr: < node attribute name in the model >             |
 |                                     | attVal:< node attribute value >}                          |
 |                                     | attStr takes the following values: “data”, “data.bbox”, “data.bbox.w”, “data.bbox.h”, “data.class”, “data.cloneMarker”, "data.font-family", "data.font-size", "data.font-weight", "data.font-style", "data.statesandinfos", "data.label", "data.labelsize", "data.parent", "data.ports", "data.border-width", "data.background-color", "data.background-opacity", "highlightColor, expandCollapseStatus", "highlightStatus", "visibilityStatus"   |
@@ -178,6 +178,7 @@ string after http:<ip>:3000/ in the server address.
 |                                     | attVal:< edge attribute value >}                     |
 |                                     | attStr takes the following values: “data.source”, “data.target”, “data.portsource”, “data.porttarget”, “data.class”,   “data.line-color”,  “data.width”, “data.cardinality”,“highlightColor”, "visibilityStatus", "highlightStatus"    |
 |  “agentMoveNodeRequest”             | {id: < node id >,                                                    |
+|  “agentAlignRequest”               | {nodeIds: < node ids to align >, horizontal:<"top", "bottom", "center", "none">, vertical:<"top", "bottom", "center", "none"> , alignTo:<node id to align nodes with nodeIds>                                                  |
 |                                     | pos: {x:< new position x >, y: <  new position y >}}                   |
 |  “agentAddCompoundRequest”          | {type: < compound type as “complex” or “compartment” >,              |
 |                                     | selectedNodeArr: < array of node ids >}                              |

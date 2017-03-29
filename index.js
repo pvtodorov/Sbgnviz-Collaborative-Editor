@@ -352,6 +352,28 @@ app.proto.listenToAgentSocket = function(model){
         }
     });
 
+
+    socket.on('align', function(data, callback){
+        try {
+            var nodes = cy.collection();
+            if(data.nodeIds === '*' || data.nodeIds === 'all')
+                nodes = cy.nodes();
+            else
+                data.nodeIds.forEach(function(nodeId){
+                    nodes.add(cy.getElementById(nodeId));
+                });
+
+            chise.align(nodes, data.horizontal, data.vertical, cy.getElementById(data.alignTo));
+
+            if (callback) callback("success");
+        }
+        catch(e){
+            console.log(e);
+            if(callback) callback("fail");
+
+        }
+
+    });
     socket.on('updateVisibility', function(data, callback){
         try {
             //unselect all others
@@ -724,6 +746,8 @@ app.proto.listenToNodeOperations = function(model){
             var newAtt = cy.getElementById(id).data(att1);
             newAtt[att2] = val;
             cy.getElementById(id).data(att1, newAtt);
+
+
         }
     });
 
@@ -758,6 +782,8 @@ app.proto.listenToNodeOperations = function(model){
 
             cy.getElementById(id).move({"parent":newParent});
             cy.getElementById(id).updateStyle();
+
+
         }
     });
 
