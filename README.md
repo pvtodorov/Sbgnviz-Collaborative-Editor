@@ -63,6 +63,13 @@ git clone https://github.com/fdurupinar/Sbgnviz-Collaborative-Editor.git
 cd Sbgnviz-Collaborative-Editor
 sudo rm -rf node_modules
 npm install
+
+### Install cytoscape extensions
+cd public
+npm install
+npm run build-bundle-js
+cd ..
+
 ```
 Running the server
 ------------------
@@ -177,9 +184,8 @@ string after http:<ip>:3000/ in the server address.
 |                                     | attStr: < edge attribute name in the model >        |
 |                                     | attVal:< edge attribute value >}                     |
 |                                     | attStr takes the following values: “data.source”, “data.target”, “data.portsource”, “data.porttarget”, “data.class”,   “data.line-color”,  “data.width”, “data.cardinality”,“highlightColor”, "visibilityStatus", "highlightStatus"    |
-|  “agentMoveNodeRequest”             | {id: < node id >,                                                    |
-|  “agentAlignRequest”               | {nodeIds: < node ids to align >, horizontal:<"top", "bottom", "center", "none">, vertical:<"top", "bottom", "center", "none"> , alignTo:<node id to align nodes with nodeIds>                                                  |
-|                                     | pos: {x:< new position x >, y: <  new position y >}}                   |
+|  “agentMoveNodeRequest”             | {id: < node id >,   pos: {x:< new position x >, y: <  new position y >}}                   |
+|  “agentAlignRequest”               | {nodeIds: < node ids to align >, horizontal:<"top", "bottom", "center", "none">, vertical:<"top", "bottom", "center", "none"> , alignTo:<node id to align nodes with nodeIds>     |
 |  “agentAddCompoundRequest”          | {type: < compound type as “complex” or “compartment” >,              |
 |                                     | selectedNodeArr: < array of node ids >}                              |
 |		"agentActiveRoomsRequest"					| -																																			|
