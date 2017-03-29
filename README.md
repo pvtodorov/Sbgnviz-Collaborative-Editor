@@ -183,12 +183,14 @@ string after http:<ip>:3000/ in the server address.
 |  “agentChangeEdgeAttributeRequest”  | {id: < node id >,                                   |
 |                                     | attStr: < edge attribute name in the model >        |
 |                                     | attVal:< edge attribute value >}                     |
-|                                     | attStr takes the following values: “data.source”, “data.target”, “data.portsource”, “data.porttarget”, “data.class”,   “data.line-color”,  “data.width”, “data.cardinality”,“highlightColor”, "visibilityStatus", "highlightStatus"    |
+|                                     | attStr takes the following values: “data.source”, “data.target”, “data.portsource”, “data.porttarget”, “data.class”,   “data.line-color”,  “data.width”, “data.cardinality”,“highlightColor”, "visibilityStatus", "highlightStatus" , "bendPoints"   |
 |  “agentMoveNodeRequest”             | {id: < node id >,   pos: {x:< new position x >, y: <  new position y >}}                   |
 |  “agentAlignRequest”               | {nodeIds: < node ids to align >, horizontal:<"top", "bottom", "center", "none">, vertical:<"top", "bottom", "center", "none"> , alignTo:<node id to align nodes with nodeIds>     |
 |  “agentAddCompoundRequest”          | {type: < compound type as “complex” or “compartment” >,              |
 |                                     | selectedNodeArr: < array of node ids >}                              |
 |		"agentActiveRoomsRequest"					| -																																			|
+|   "agentUndoRequest"          |   |
+|   "agentRedoRequest"          |   |
 
 
 In order to set up and run an agent:
@@ -247,7 +249,7 @@ JSON array as:
         {
         x: //node position x
         y: //node position y
-        sbgnclass: //node or edge sbgnclass
+        class: //node or edge sbgnclass
         source: //edge source
         target: //edge target
         }
@@ -329,6 +331,7 @@ sbgncardinality
                     -   visibilityStatus
                     -   expandCollapseStatus
                     -   highlightColor
+                    -   bendPoints
                     -   data
                         -   class
                         -   source
