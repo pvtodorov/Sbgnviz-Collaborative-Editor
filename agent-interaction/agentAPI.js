@@ -56,7 +56,7 @@ Agent.prototype.connectToServer = function (url, callback) {
 
             self.socket.emit("agentActiveRoomsRequest", {param: null}, function (rooms) {
                 if (rooms.length > 0)
-                    self.room = rooms[0]; //select the first room
+                    self.room = rooms[rooms.length-1]; //select the latest room
                 resolve("success");
             });
         }
