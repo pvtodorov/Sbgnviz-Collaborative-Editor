@@ -15,6 +15,18 @@ module.exports = function(modelManager){
 
     });
 
+    //$('#save-layout').addEventListener("click", updateLayout, false);
+
+
+    $(document).on("saveLayout", function (evt) {
+
+        console.log("jere");
+
+        var appUtilities = require('../app/js/app-utilities');
+
+        var layoutProperties = appUtilities.currentLayoutProperties;
+        modelManager.updateLayoutProperties(layoutProperties, "me");
+    });
 
     cy.on("afterDo afterRedo", function (event, actionName, args, res) {
 
@@ -62,10 +74,11 @@ module.exports = function(modelManager){
 
 
             modelElList.push({id: args.edge.id(), isNode: false});
-            paramList.push(args.edge.data());
 
 
-            modelManager.changeModelElementGroupAttribute("data", modelElList, paramList, "me");
+            paramList.push({weights: args.edge.scratch('cyedgebendeditingWeights'), distances:args.edge.scratch('cyedgebendeditingDistances')});
+
+            modelManager.changeModelElementGroupAttribute("bendPoints", modelElList, paramList, "me");
 
         }
 

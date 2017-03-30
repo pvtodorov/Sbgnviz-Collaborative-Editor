@@ -373,7 +373,8 @@ module.exports = function(serverIp, modelManager){
                 {str: "data.cardinality", val: 5},
                 {str: "data.line-color", val: "blue"},
                 {str: "data.width", val: 20},
-                {str: "data.class", val: "necessary stimulation"},
+                {str: "data.class", val: "necessary stimulation"}
+                //{str: "bendPoints", val:{distances:[2,2], weights:[0.5,0.4]}}
 
             ];
 
@@ -666,9 +667,9 @@ module.exports = function(serverIp, modelManager){
     },100);
 
 
-    setTimeout(function() {
-        testAlignRequest();
-    }, 1000);
+    // setTimeout(function() {
+    //     testAlignRequest();
+    // }, 1000);
 
     // setTimeout(function() {
     //     testUndoRedoRequest();

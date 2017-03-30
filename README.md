@@ -23,16 +23,6 @@ Node:
 curl -sL https://deb.nodesource.com/setup_0.12 | sudo -E bash -
 sudo apt-get install -y nodejs
 ```
-Redis:
-
-```
-sudo apt-get update
-sudo apt-get install build-essential
-sudo apt-get install tcl8.5
-wget http://download.redis.io/releases/redis-stable.tar.gz
-tar xzf redis-stable.tar.gz
-cd redis-stable
-make
 ```
 
 Mongo:
@@ -50,7 +40,7 @@ sudo apt-get install upstart-sysv
 ### Install dependencies on Mac
 
 ```
-brew install node@4
+brew install node
 brew install tcl-tk
 brew install redis
 brew install mongodb
@@ -59,9 +49,8 @@ brew install nodejs
 
 ### Clone from github and install node modules
 ```
-git clone https://github.com/fdurupinar/Sbgnviz-Collaborative-Editor.git
-cd Sbgnviz-Collaborative-Editor
-sudo rm -rf node_modules
+git clone https://github.com/fdurupinar/Sbgnviz-Collaborative-Editor/tree/collaborativeChise
+cd Sbgnviz-Collaborative-Editor Chise Version
 npm install
 
 ### Install cytoscape extensions

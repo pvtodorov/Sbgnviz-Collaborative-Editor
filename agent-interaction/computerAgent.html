@@ -366,7 +366,8 @@
 
         agent.connectToServer(serverIp, function(socket){
 
-            $('#createAgentButton').attr('disabled','disabled');
+//            $('#createAgentButton').attr('disabled','disabled');
+            $('#serverIp')[0].value = "http://localhost:3000/" + agent.room;
 
 
             agent.loadModel(function() {

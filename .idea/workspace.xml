@@ -7,9 +7,13 @@
     <list default="true" id="9a4da041-f7fe-4258-8b1b-f19f75831c76" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/agent-interaction/computerAgent.html" afterPath="$PROJECT_DIR$/agent-interaction/computerAgent.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index.js" afterPath="$PROJECT_DIR$/index.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/serverSideSocketListener.js" afterPath="$PROJECT_DIR$/lib/serverSideSocketListener.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/app/js/backbone-views.js" afterPath="$PROJECT_DIR$/public/app/js/backbone-views.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/collaborative-app/editor-listener.js" afterPath="$PROJECT_DIR$/public/collaborative-app/editor-listener.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/collaborative-app/modelManager.js" afterPath="$PROJECT_DIR$/public/collaborative-app/modelManager.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/test/testsAgentAPI.js" afterPath="$PROJECT_DIR$/public/test/testsAgentAPI.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/index.html" afterPath="$PROJECT_DIR$/views/index.html" />
     </list>
     <ignored path="Sbgnviz-Collaborative-Editor Chise Version.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -33,24 +37,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="serverSideSocketListener.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/lib/serverSideSocketListener.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="449">
-              <caret line="55" column="0" lean-forward="false" selection-start-line="55" selection-start-column="0" selection-end-line="55" selection-end-column="0" />
-              <folding>
-                <element signature="e#2912#2966#0" expanded="false" />
-                <element signature="e#6764#6782#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="testsAgentAPI.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="testsAgentAPI.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/test/testsAgentAPI.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="377">
-              <caret line="378" column="0" lean-forward="true" selection-start-line="378" selection-start-column="0" selection-end-line="378" selection-end-column="0" />
+            <state relative-caret-position="420">
+              <caret line="359" column="13" lean-forward="true" selection-start-line="359" selection-start-column="13" selection-end-line="359" selection-end-column="13" />
               <folding />
             </state>
           </provider>
@@ -59,8 +50,8 @@
       <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="650">
-              <caret line="355" column="38" lean-forward="false" selection-start-line="355" selection-start-column="38" selection-end-line="355" selection-end-column="38" />
+            <state relative-caret-position="599">
+              <caret line="561" column="0" lean-forward="false" selection-start-line="561" selection-start-column="0" selection-end-line="561" selection-end-column="0" />
               <folding>
                 <element signature="e#13036#13092#0" expanded="false" />
               </folding>
@@ -68,21 +59,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="README.md" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/README.md">
+      <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/views/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="853">
-              <caret line="180" column="204" lean-forward="false" selection-start-line="180" selection-start-column="204" selection-end-line="180" selection-end-column="204" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="app-menu.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/public/app/js/app-menu.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2460">
-              <caret line="49" column="41" lean-forward="true" selection-start-line="49" selection-start-column="41" selection-end-line="49" selection-end-column="41" />
+            <state relative-caret-position="347">
+              <caret line="654" column="70" lean-forward="false" selection-start-line="654" selection-start-column="70" selection-end-line="654" selection-end-column="70" />
               <folding />
             </state>
           </provider>
@@ -91,8 +72,45 @@
       <file leaf-file-name="editor-listener.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/collaborative-app/editor-listener.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="332">
-              <caret line="125" column="63" lean-forward="false" selection-start-line="125" selection-start-column="58" selection-end-line="125" selection-end-column="63" />
+            <state relative-caret-position="150">
+              <caret line="10" column="39" lean-forward="false" selection-start-line="10" selection-start-column="19" selection-end-line="10" selection-end-column="39" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="sbgnviz.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/public/node_modules/sbgnviz/sbgnviz.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="304">
+              <caret line="2810" column="28" lean-forward="false" selection-start-line="2810" selection-start-column="28" selection-end-line="2810" selection-end-column="28" />
+              <folding>
+                <marker date="1490388755000" expanded="true" signature="95673:95706" ph="..." />
+                <marker date="1490388755000" expanded="true" signature="96320:96353" ph="..." />
+                <marker date="1490388755000" expanded="true" signature="96631:96664" ph="..." />
+                <marker date="1490388755000" expanded="true" signature="143252:143361" ph="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="app-utilities.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/public/app/js/app-utilities.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-3495">
+              <caret line="7" column="4" lean-forward="false" selection-start-line="7" selection-start-column="4" selection-end-line="7" selection-end-column="4" />
+              <folding>
+                <marker date="1490043083000" expanded="true" signature="19511:19577" ph="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="app-menu.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/public/app/js/app-menu.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="30">
+              <caret line="2" column="0" lean-forward="false" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="46" />
               <folding />
             </state>
           </provider>
@@ -101,26 +119,31 @@
       <file leaf-file-name="modelManager.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/collaborative-app/modelManager.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="281">
-              <caret line="452" column="56" lean-forward="true" selection-start-line="452" selection-start-column="56" selection-end-line="452" selection-end-column="56" />
+            <state relative-caret-position="30">
+              <caret line="6" column="30" lean-forward="false" selection-start-line="6" selection-start-column="30" selection-end-line="6" selection-end-column="30" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="computerAgent.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/agent-interaction/computerAgent.html">
+      <file leaf-file-name="backbone-views.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/public/app/js/backbone-views.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="287">
-              <caret line="311" column="20" lean-forward="false" selection-start-line="311" selection-start-column="20" selection-end-line="311" selection-end-column="20" />
+            <state relative-caret-position="328">
+              <caret line="431" column="37" lean-forward="false" selection-start-line="431" selection-start-column="37" selection-end-line="431" selection-end-column="37" />
               <folding>
-                <marker date="1490396268000" expanded="true" signature="35127:35137" ph="..." />
-                <marker date="1490396268000" expanded="true" signature="35291:35301" ph="..." />
-                <marker date="1490396268000" expanded="true" signature="35446:35469" ph="..." />
-                <marker date="1490396268000" expanded="true" signature="36454:36477" ph="..." />
-                <marker date="1490396268000" expanded="true" signature="37399:37422" ph="..." />
-                <marker date="1490396268000" expanded="true" signature="37524:37547" ph="..." />
+                <marker date="1490894747000" expanded="true" signature="19685:19748" ph="..." />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="README.md" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/README.md">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="328">
+              <caret line="117" column="16" lean-forward="false" selection-start-line="117" selection-start-column="6" selection-end-line="117" selection-end-column="16" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -136,36 +159,36 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>modelop</find>
-      <find>console.</find>
-      <find>console.log</find>
-      <find>sendreq</find>
-      <find>addmodelnode</find>
-      <find>addModelNode</find>
-      <find>undocomm</find>
-      <find>print</find>
-      <find>printhist</find>
-      <find>compound</find>
-      <find>addModelCompound</find>
-      <find>removeModelCompound</find>
-      <find>addco</find>
-      <find>removemodelc</find>
-      <find>socket.</find>
-      <find>parent</find>
-      <find>require</find>
-      <find>inspectoru</find>
-      <find>inspectorUtilities</find>
-      <find>inspector-style</find>
-      <find>#inspector-style-tab</find>
-      <find>inspector-style-tab</find>
-      <find>inspectorut</find>
-      <find>handle</find>
-      <find>inspector</find>
-      <find>insoec</find>
-      <find>inspec</find>
-      <find>socket</find>
-      <find>align</find>
+      <find>message</find>
+      <find>color</find>
+      <find>connectt</find>
+      <find>file</find>
+      <find>changebend</find>
+      <find>updatestyl</find>
+      <find>segment-weights</find>
+      <find>bendpoint</find>
+      <find>u</find>
       <find>undoreq</find>
+      <find>edge.scratc</find>
+      <find>style</find>
+      <find>lenght</find>
+      <find>listento</find>
+      <find>pass.</find>
+      <find>currentLayoutProperties</find>
+      <find>layout-sett</find>
+      <find>addeventlistener</find>
+      <find>docready</find>
+      <find>save-layout</find>
+      <find>onclick</find>
+      <find>sa</find>
+      <find>savelayout</find>
+      <find>sbgnvizLoadSampleEnd</find>
+      <find>layout</find>
+      <find>node</find>
+      <find>trigger</find>
+      <find>triger</find>
+      <find>l</find>
+      <find>layoutprop</find>
     </findStrings>
     <replaceStrings>
       <replace>bbox</replace>
@@ -200,8 +223,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/public/sample-app/js/common-app-utilities.js" />
-        <option value="$PROJECT_DIR$/public/sample-app/js/app-menu.js" />
         <option value="$PROJECT_DIR$/public/sample-app/js/app-cy.js" />
         <option value="$PROJECT_DIR$/node_modules/racer/lib/Channel.js" />
         <option value="$PROJECT_DIR$/public/src/reach-functions/idxcardjson-to-json-converter.js" />
@@ -236,21 +257,23 @@
         <option value="$PROJECT_DIR$/public/app/css/chise.css" />
         <option value="$PROJECT_DIR$/public/app/js/app-utilities.js" />
         <option value="$PROJECT_DIR$/public/test/testsModelManager.js" />
-        <option value="$PROJECT_DIR$/views/index.html" />
         <option value="$PROJECT_DIR$/public/node_modules/jquery-expander/test/qunit/qunit.1.19.0.js" />
         <option value="$PROJECT_DIR$/agent-interaction/ContextAgent.js" />
         <option value="$PROJECT_DIR$/lib/server.js" />
         <option value="$PROJECT_DIR$/agent-interaction/agentTester.css" />
-        <option value="$PROJECT_DIR$/agent-interaction/computerAgent.html" />
         <option value="$PROJECT_DIR$/public/node_modules/sbgnviz/src/utilities/file-utilities.js" />
+        <option value="$PROJECT_DIR$/public/app/js/app-menu.js" />
+        <option value="$PROJECT_DIR$/lib/serverSideSocketListener.js" />
+        <option value="$PROJECT_DIR$/agent-interaction/computerAgent.html" />
         <option value="$PROJECT_DIR$/agent-interaction/agentAPI.js" />
+        <option value="$PROJECT_DIR$/public/node_modules/cytoscape-edge-bend-editing/cytoscape-edge-bend-editing.js" />
+        <option value="$PROJECT_DIR$/public/test/testsAgentAPI.js" />
+        <option value="$PROJECT_DIR$/index.js" />
+        <option value="$PROJECT_DIR$/views/index.html" />
         <option value="$PROJECT_DIR$/public/collaborative-app/editor-listener.js" />
         <option value="$PROJECT_DIR$/public/collaborative-app/modelManager.js" />
-        <option value="$PROJECT_DIR$/public/app/js/app-menu.js" />
-        <option value="$PROJECT_DIR$/index.js" />
         <option value="$PROJECT_DIR$/README.md" />
-        <option value="$PROJECT_DIR$/lib/serverSideSocketListener.js" />
-        <option value="$PROJECT_DIR$/public/test/testsAgentAPI.js" />
+        <option value="$PROJECT_DIR$/public/app/js/backbone-views.js" />
       </list>
     </option>
   </component>
@@ -295,7 +318,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
       <pane id="Scope">
         <subPane subId="Project Files">
           <PATH>
@@ -325,6 +347,7 @@
         </subPane>
       </pane>
       <pane id="PackagesPane" />
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -848,7 +871,7 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20528302" sideWeight="0.49774775" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Gulp" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="true" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16950959" sideWeight="0.49312377" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17110874" sideWeight="0.49312377" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.28" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -904,9 +927,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="Initial commit" />
-    <MESSAGE value="Most cy functionality working" />
-    <MESSAGE value="Latest chise changes and some refactoring" />
     <MESSAGE value="undo-redo cy trigger updates" />
     <MESSAGE value="Highlight is working" />
     <MESSAGE value="-Directory structure refactoring&#10;-Add node/edge problems corrected --&gt; included initialization afterwards" />
@@ -928,7 +948,11 @@
     <MESSAGE value="Agent API updated." />
     <MESSAGE value="Bug in node add corrected.&#10;Agent undo/redo test." />
     <MESSAGE value="Compound undo/redo" />
-    <option name="LAST_COMMIT_MESSAGE" value="Compound undo/redo" />
+    <MESSAGE value="Agent alignRequest added" />
+    <MESSAGE value="Readme updates" />
+    <MESSAGE value="Gets the last room, not the first one." />
+    <MESSAGE value="Updates" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updates" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -941,42 +965,6 @@
     </watches-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$USER_HOME$/Downloads/newt-unstable/package.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="18" column="23" lean-forward="true" selection-start-line="18" selection-start-column="23" selection-end-line="18" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/app/js/keyboard-shortcuts.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="3" column="0" lean-forward="false" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Downloads/newt-unstable/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="780">
-          <caret line="1289" column="17" lean-forward="true" selection-start-line="464" selection-start-column="8" selection-end-line="1289" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Downloads/newt-unstable/app/css/chise.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="792">
-          <caret line="664" column="0" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="664" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/test/testsMenuFunctions.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="705">
-          <caret line="47" column="63" lean-forward="true" selection-start-line="47" selection-start-column="63" selection-end-line="47" selection-end-column="63" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/node_modules/sbgnviz/src/sbgn-extensions/sbgn-cy-renderer.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="308">
@@ -995,13 +983,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="263">
           <caret line="408" column="39" lean-forward="true" selection-start-line="408" selection-start-column="39" selection-end-line="408" selection-end-column="53" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/app/js/backbone-views.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="638">
-          <caret line="371" column="14" lean-forward="true" selection-start-line="371" selection-start-column="14" selection-end-line="371" selection-end-column="14" />
         </state>
       </provider>
     </entry>
@@ -1038,7 +1019,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="296">
           <caret line="3273" column="24" lean-forward="false" selection-start-line="3273" selection-start-column="24" selection-end-line="3273" selection-end-column="24" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1083,17 +1063,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="420">
           <caret line="101" column="33" lean-forward="true" selection-start-line="101" selection-start-column="33" selection-end-line="101" selection-end-column="33" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/app/js/app-utilities.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="660">
-          <caret line="48" column="38" lean-forward="true" selection-start-line="48" selection-start-column="38" selection-end-line="48" selection-end-column="38" />
-          <folding>
-            <marker date="1490043083000" expanded="true" signature="19511:19577" ph="..." />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1101,7 +1070,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="332">
           <caret line="493" column="135" lean-forward="false" selection-start-line="493" selection-start-column="135" selection-end-line="493" selection-end-column="135" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1109,7 +1077,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="332">
           <caret line="324" column="29" lean-forward="false" selection-start-line="324" selection-start-column="29" selection-end-line="324" selection-end-column="29" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1117,7 +1084,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1157,7 +1123,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="409">
           <caret line="60" column="48" lean-forward="false" selection-start-line="60" selection-start-column="48" selection-end-line="60" selection-end-column="48" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1165,7 +1130,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="740">
           <caret line="147" column="10" lean-forward="false" selection-start-line="147" selection-start-column="10" selection-end-line="147" selection-end-column="10" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1173,14 +1137,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="536">
           <caret line="183" column="0" lean-forward="true" selection-start-line="183" selection-start-column="0" selection-end-line="186" selection-end-column="3" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/package.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="6" column="22" lean-forward="true" selection-start-line="6" selection-start-column="22" selection-end-line="6" selection-end-column="45" />
           <folding />
         </state>
       </provider>
@@ -1197,7 +1153,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1209,29 +1164,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/node_modules/cytoscape-edge-bend-editing/cytoscape-edge-bend-editing.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-6780">
-          <caret line="340" column="18" lean-forward="true" selection-start-line="340" selection-start-column="18" selection-end-line="340" selection-end-column="18" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/node_modules/source-map/build/mini-require.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="920">
           <caret line="151" column="4" lean-forward="false" selection-start-line="151" selection-start-column="4" selection-end-line="151" selection-end-column="4" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/agent-interaction/agentAPI.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="872">
-          <caret line="73" column="54" lean-forward="false" selection-start-line="73" selection-start-column="54" selection-end-line="73" selection-end-column="54" />
-          <folding>
-            <element signature="n#!!doc" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1243,91 +1179,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/agent-interaction/computerAgent.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="287">
-          <caret line="311" column="20" lean-forward="false" selection-start-line="311" selection-start-column="20" selection-end-line="311" selection-end-column="20" />
-          <folding>
-            <marker date="1490396268000" expanded="true" signature="35127:35137" ph="..." />
-            <marker date="1490396268000" expanded="true" signature="35291:35301" ph="..." />
-            <marker date="1490396268000" expanded="true" signature="35446:35469" ph="..." />
-            <marker date="1490396268000" expanded="true" signature="36454:36477" ph="..." />
-            <marker date="1490396268000" expanded="true" signature="37399:37422" ph="..." />
-            <marker date="1490396268000" expanded="true" signature="37524:37547" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="409">
-          <caret line="1278" column="30" lean-forward="true" selection-start-line="1278" selection-start-column="30" selection-end-line="1278" selection-end-column="30" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/app/js/inspector-utilities.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="659">
           <caret line="108" column="65" lean-forward="true" selection-start-line="108" selection-start-column="65" selection-end-line="108" selection-end-column="65" />
-          <folding>
-            <marker date="1490013524000" expanded="true" signature="692:735" ph="..." />
-            <marker date="1490013524000" expanded="true" signature="966:1011" ph="..." />
-            <marker date="1490013524000" expanded="true" signature="1843:1882" ph="..." />
-            <marker date="1490013524000" expanded="true" signature="6609:6670" ph="..." />
-            <marker date="1490013524000" expanded="true" signature="6740:6758" ph="..." />
-            <marker date="1490013524000" expanded="true" signature="6854:6884" ph="..." />
-            <marker date="1490013524000" expanded="true" signature="7132:7193" ph="..." />
-            <marker date="1490013524000" expanded="true" signature="7263:7281" ph="..." />
-            <marker date="1490013524000" expanded="true" signature="7404:7433" ph="..." />
-            <marker date="1490013524000" expanded="true" signature="7592:7653" ph="..." />
-            <marker date="1490013524000" expanded="true" signature="7724:7742" ph="..." />
-            <marker date="1490013524000" expanded="true" signature="7866:7895" ph="..." />
-            <marker date="1490013524000" expanded="true" signature="8810:8871" ph="..." />
-            <marker date="1490013524000" expanded="true" signature="8948:8966" ph="..." />
-            <marker date="1490013524000" expanded="true" signature="9070:9099" ph="..." />
-            <marker date="1490013524000" expanded="true" signature="9192:9253" ph="..." />
-            <marker date="1490013524000" expanded="true" signature="9328:9346" ph="..." />
-            <marker date="1490013524000" expanded="true" signature="9448:9477" ph="..." />
-            <marker date="1490013524000" expanded="true" signature="9574:9635" ph="..." />
-            <marker date="1490013524000" expanded="true" signature="9712:9730" ph="..." />
-            <marker date="1490013524000" expanded="true" signature="9853:9882" ph="..." />
-            <marker date="1490013524000" expanded="true" signature="10063:10124" ph="..." />
-            <marker date="1490013524000" expanded="true" signature="10201:10219" ph="..." />
-            <marker date="1490013524000" expanded="true" signature="10357:10386" ph="..." />
-            <marker date="1490013524000" expanded="true" signature="10617:10678" ph="..." />
-            <marker date="1490013524000" expanded="true" signature="10747:10765" ph="..." />
-            <marker date="1490013524000" expanded="true" signature="10820:10865" ph="..." />
-            <marker date="1490013524000" expanded="true" signature="11363:11424" ph="..." />
-            <marker date="1490013524000" expanded="true" signature="11558:11584" ph="..." />
-            <marker date="1490013524000" expanded="true" signature="11864:11925" ph="..." />
-            <marker date="1490013524000" expanded="true" signature="12069:12095" ph="..." />
-            <marker date="1490013524000" expanded="true" signature="13005:13066" ph="..." />
-            <marker date="1490013524000" expanded="true" signature="13160:13186" ph="..." />
-            <marker date="1490013524000" expanded="true" signature="13331:13392" ph="..." />
-            <marker date="1490013524000" expanded="true" signature="13484:13510" ph="..." />
-            <marker date="1490013524000" expanded="true" signature="13964:14025" ph="..." />
-            <marker date="1490013524000" expanded="true" signature="14100:14118" ph="..." />
-            <marker date="1490013524000" expanded="true" signature="14220:14249" ph="..." />
-            <marker date="1490013524000" expanded="true" signature="14347:14408" ph="..." />
-            <marker date="1490013524000" expanded="true" signature="14478:14496" ph="..." />
-            <marker date="1490013524000" expanded="true" signature="14617:14646" ph="..." />
-            <marker date="1490013524000" expanded="true" signature="15146:15207" ph="..." />
-            <marker date="1490013524000" expanded="true" signature="15283:15301" ph="..." />
-            <marker date="1490013524000" expanded="true" signature="15427:15456" ph="..." />
-            <marker date="1490013524000" expanded="true" signature="15779:15815" ph="..." />
-            <marker date="1490013524000" expanded="true" signature="15856:15870" ph="..." />
-            <marker date="1490013524000" expanded="true" signature="16760:16809" ph="..." />
-            <marker date="1490013524000" expanded="true" signature="16921:16939" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/node_modules/underscore/underscore.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="308">
-          <caret line="780" column="2" lean-forward="false" selection-start-line="780" selection-start-column="2" selection-end-line="780" selection-end-column="2" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1342,52 +1197,49 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/app/js/app-menu.js">
+    <entry file="file://$PROJECT_DIR$/agent-interaction/agentAPI.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2460">
-          <caret line="49" column="41" lean-forward="true" selection-start-line="49" selection-start-column="41" selection-end-line="49" selection-end-column="41" />
+        <state relative-caret-position="596">
+          <caret line="72" column="0" lean-forward="false" selection-start-line="72" selection-start-column="0" selection-end-line="72" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/collaborative-app/modelManager.js">
+    <entry file="file://$PROJECT_DIR$/agent-interaction/computerAgent.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="281">
-          <caret line="452" column="56" lean-forward="true" selection-start-line="452" selection-start-column="56" selection-end-line="452" selection-end-column="56" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/collaborative-app/editor-listener.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="332">
-          <caret line="125" column="63" lean-forward="false" selection-start-line="125" selection-start-column="58" selection-end-line="125" selection-end-column="63" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/README.md">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="853">
-          <caret line="180" column="204" lean-forward="false" selection-start-line="180" selection-start-column="204" selection-end-line="180" selection-end-column="204" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="650">
-          <caret line="355" column="38" lean-forward="false" selection-start-line="355" selection-start-column="38" selection-end-line="355" selection-end-column="38" />
+        <state relative-caret-position="617">
+          <caret line="372" column="22" lean-forward="false" selection-start-line="372" selection-start-column="22" selection-end-line="372" selection-end-column="22" />
           <folding>
-            <element signature="e#13036#13092#0" expanded="false" />
+            <marker date="1490811778000" expanded="true" signature="35206:35216" ph="..." />
+            <marker date="1490811778000" expanded="true" signature="35370:35380" ph="..." />
+            <marker date="1490811778000" expanded="true" signature="35525:35548" ph="..." />
+            <marker date="1490811778000" expanded="true" signature="36533:36556" ph="..." />
+            <marker date="1490811778000" expanded="true" signature="37478:37501" ph="..." />
+            <marker date="1490811778000" expanded="true" signature="37603:37626" ph="..." />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/node_modules/cytoscape-edge-bend-editing/src/bendPointUtilities.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="386">
+          <caret line="259" column="63" lean-forward="true" selection-start-line="259" selection-start-column="19" selection-end-line="259" selection-end-column="63" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/node_modules/cytoscape-edge-bend-editing/cytoscape-edge-bend-editing.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="355">
+          <caret line="186" column="40" lean-forward="false" selection-start-line="186" selection-start-column="34" selection-end-line="186" selection-end-column="40" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/lib/serverSideSocketListener.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="449">
-          <caret line="55" column="0" lean-forward="false" selection-start-line="55" selection-start-column="0" selection-end-line="55" selection-end-column="0" />
+        <state relative-caret-position="284">
+          <caret line="44" column="0" lean-forward="true" selection-start-line="44" selection-start-column="0" selection-end-line="44" selection-end-column="0" />
           <folding>
             <element signature="e#2912#2966#0" expanded="false" />
             <element signature="e#6764#6782#0" expanded="false" />
@@ -1397,8 +1249,131 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/public/test/testsAgentAPI.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="377">
-          <caret line="378" column="0" lean-forward="true" selection-start-line="378" selection-start-column="0" selection-end-line="378" selection-end-column="0" />
+        <state relative-caret-position="420">
+          <caret line="359" column="13" lean-forward="true" selection-start-line="359" selection-start-column="13" selection-end-line="359" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/app/js/app-menu.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="0" lean-forward="false" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="46" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/node_modules/cytoscape-view-utilities/cytoscape-view-utilities.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="304">
+          <caret line="172" column="19" lean-forward="false" selection-start-line="172" selection-start-column="19" selection-end-line="172" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/node_modules/cytoscape-view-utilities/demo.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="600">
+          <caret line="40" column="0" lean-forward="true" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/node_modules/cytoscape-view-utilities/demo-undoable.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="599">
+          <caret line="561" column="0" lean-forward="false" selection-start-line="561" selection-start-column="0" selection-end-line="561" selection-end-column="0" />
+          <folding>
+            <element signature="e#13036#13092#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="347">
+          <caret line="654" column="70" lean-forward="false" selection-start-line="654" selection-start-column="70" selection-end-line="654" selection-end-column="70" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/package.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="6" column="22" lean-forward="true" selection-start-line="6" selection-start-column="22" selection-end-line="6" selection-end-column="45" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/node_modules/underscore/underscore.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="341">
+          <caret line="1276" column="4" lean-forward="false" selection-start-line="1276" selection-start-column="4" selection-end-line="1276" selection-end-column="4" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/collaborative-app/modelManager.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="6" column="30" lean-forward="false" selection-start-line="6" selection-start-column="30" selection-end-line="6" selection-end-column="30" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/collaborative-app/editor-listener.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="10" column="39" lean-forward="false" selection-start-line="10" selection-start-column="19" selection-end-line="10" selection-end-column="39" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/node_modules/sbgnviz/sbgnviz.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="304">
+          <caret line="2810" column="28" lean-forward="false" selection-start-line="2810" selection-start-column="28" selection-end-line="2810" selection-end-column="28" />
+          <folding>
+            <marker date="1490388755000" expanded="true" signature="95673:95706" ph="..." />
+            <marker date="1490388755000" expanded="true" signature="96320:96353" ph="..." />
+            <marker date="1490388755000" expanded="true" signature="96631:96664" ph="..." />
+            <marker date="1490388755000" expanded="true" signature="143252:143361" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/app/js/app-utilities.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-3495">
+          <caret line="7" column="4" lean-forward="false" selection-start-line="7" selection-start-column="4" selection-end-line="7" selection-end-column="4" />
+          <folding>
+            <marker date="1490043083000" expanded="true" signature="19511:19577" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/app/js/backbone-views.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="328">
+          <caret line="431" column="37" lean-forward="false" selection-start-line="431" selection-start-column="37" selection-end-line="431" selection-end-column="37" />
+          <folding>
+            <marker date="1490894747000" expanded="true" signature="19685:19748" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="328">
+          <caret line="117" column="16" lean-forward="false" selection-start-line="117" selection-start-column="6" selection-end-line="117" selection-end-column="16" />
           <folding />
         </state>
       </provider>

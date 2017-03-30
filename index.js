@@ -560,6 +560,7 @@ app.proto.create = function (model) {
 
 
 
+
     this.listenToAgentSocket(model);
 
 
@@ -923,7 +924,32 @@ app.proto.listenToEdgeOperations = function(model){
     });
 
 
+    model.on('all', '_page.doc.cy.edges.*.bendPoints', function(id, op, bendPoints, prev, passed){ //this property must be something that is only changed during insertion
+        if(docReady && passed.user == null) {
 
+            try{
+                var edge = cy.getElementById(id);
+                if(bendPoints.weights && bendPoints.weights.length > 0) {
+                    edge.scratch('cyedgebendeditingWeights', bendPoints.weights);
+                    edge.scratch('cyedgebendeditingDistances', bendPoints.distances);
+                    edge.addClass('edgebendediting-hasbendpoints');
+                }
+                else{
+                    edge.removeScratch('cyedgebendeditingWeights');
+                    edge.removeScratch('cyedgebendeditingDistances');
+                    edge.removeClass('edgebendediting-hasbendpoints');
+                }
+
+                edge.trigger('cyedgebendediting.changeBendPoints');
+             //   cy.getElementById(id).updateStyle();
+
+            }
+            catch(e){
+                console.log(e);
+            }
+
+        }
+    });
 
     model.on('all', '_page.doc.cy.edges.*.highlightStatus', function(id, op, highlightStatus, prev, passed){ //this property must be something that is only changed during insertion
         if(docReady && passed.user == null) {
@@ -982,25 +1008,27 @@ app.proto.init = function (model) {
         }
     });
 
+    model.on('all', '_page.doc.cy.layoutProperties', function(op, val) {
+        if (docReady){
+            var appUtilities = require('./public/app/js/app-utilities');
+            appUtilities.currentLayoutProperties = val;
+        }
+
+    });
 
 
+    //Sometimes works
+    model.on('all', '_page.doc.images', function() {
+        if (docReady)
+            triggerContentChange('receivedImages');
+    });
 
-    //    model.on('all', '_page.doc.images', function() {
-//         if (docReady)
-//             triggerContentChange('receivedImages');
-//     });
-//
-//     model.on('all', '_page.doc.history', function(){
-//         if(docReady){
-//             triggerContentChange('command-history-area');
-//         }
-//     });
-//
-//
-//     model.on('all', '_page.doc.undoIndex', function(){
-//     //    menu.refreshGlobalUndoRedoButtonsStatus();
-//
-//     });
+    model.on('all', '_page.doc.history', function(){
+        if(docReady){
+            triggerContentChange('command-history-area');
+        }
+    });
+
     model.on('insert', '_page.list', function (index) {
 
 

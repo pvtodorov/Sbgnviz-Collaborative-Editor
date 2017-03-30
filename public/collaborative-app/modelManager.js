@@ -4,6 +4,7 @@
  *	Author: Funda Durupinar Babur<f.durupinar@gmail.com>
  */
 
+var _ = require('underscore');
 
 module.exports = function (model, docId) {
 
@@ -81,7 +82,7 @@ module.exports = function (model, docId) {
 
 
 
-        updateLayoutProperties: function (layoutProperties, noHistUpdate) {
+        updateLayoutProperties: function (layoutProperties, user, noHistUpdate) {
 
             var currentLayoutProperties;
             var lp = model.get('_page.doc.layoutProperties');
@@ -92,7 +93,7 @@ module.exports = function (model, docId) {
                 currentLayoutProperties = _.clone(lp);
 
 
-            model.set('_page.doc.layoutProperties', currentLayoutProperties); //synclayout
+            model.pass({user: user}).set('_page.doc.cy.layoutProperties', currentLayoutProperties); //synclayout
 
             if (!noHistUpdate)
                 this.updateHistory({
@@ -102,6 +103,7 @@ module.exports = function (model, docId) {
                 });
             return currentLayoutProperties;
         },
+
         setLayoutProperties: function (layoutProperties, noHistUpdate) {
             model.set('_page.doc.layoutProperties', layoutProperties); //synclayout
             if (!noHistUpdate)
