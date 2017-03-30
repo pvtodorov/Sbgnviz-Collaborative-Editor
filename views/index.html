@@ -25,10 +25,12 @@
     <script src="app/bundle.js"></script>
     <!-- libraries -->
     <script src="node_modules/qtip2/dist/jquery.qtip.js"></script>
+    <!--<script src="node_modules/bootstrap/dist/js/bootstrap.js"></script>-->
+
+    <script src="lib/js/jquery.noty.packaged.js"></script>
 
 
     <!---->
-    <!--<script src="app/bundle.js"></script>-->
     <!--<script src="node_modules/ocanvas/build/dist/latest/ocanvas.min.js"></script>-->
     <!--<script src="node_modules/jquery/dist/jquery.js"></script>-->
     <!--<script src="node_modules/qtip2/dist/jquery.qtip.js"></script>-->
@@ -1259,6 +1261,7 @@
                     <li class = "tab-link"><a data-toggle="tab" href="#image-area">Image Share</a></li>
                     <li class = "tab-link"><a data-toggle="tab" href="#sbgn-inspector">Sbgn Inspector</a></li>
                     <li class = "tab-link"><a data-toggle="tab" href="#command-history-area">Operations</a></li>
+                    <li class = "tab-link"><a data-toggle="tab" href="#factoid-area">Factoid</a></li>
                 </ul>
             </div>
             <div class="tab-content">
@@ -1349,6 +1352,68 @@
                             </div>
                         </div>
                     </div>
+                </div>
+
+                <div id = "factoid-area" class = "tab-pane">
+
+                    <div id= "factoid-input-container">
+
+
+                        <table  border="0" cellpadding="2" width="100%" align="top">
+                            <tbody>
+
+
+                            <tr>
+                                <td class='instructions'>Load a manuscript from file </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label for="factoid-file-input" class="image-file">
+                                        <i class="fa fa-file-text-o"></i> Select File
+                                    </label>
+
+                                    <input type="file" id="factoid-file-input" accept=".txt,.pdf">
+                                </td>
+
+                            </tr>
+
+                            <tr>
+                                <td align="left" height="8">
+                                    <b><font color=white  face="Verdana" size="2">Or&nbsp;</font></b>
+                                </td>
+                            </tr>
+
+                            <!--<tr>-->
+                            <!--<td  class = "instructions"  align="left" height="15">-->
+                            <!--Enter PMC ID: <input id="pmcBox" type = "text" value = <%= pmcID %>></input>-->
+                            <!--<input type="button" id = "pmc-id-submit-button"  value="Load">-->
+
+
+                            <tr>
+                                <td  class = "instructions"  align="left" height="15">
+                                    Write/paste directly into the text box
+                                </td>
+                            </tr>
+                            <tr>
+                                <td  valign="top" align="left" >
+                                    <textarea rows="30" id="factoidBox"> </textarea>
+                                </td>
+
+
+                            </tr>
+
+
+                            <tr>
+                                <td><input type="button" id = "factoid-text-clear-button"  value="Clear"> &nbsp;&nbsp;&nbsp;
+
+                                    <input type="button" id = "factoid-text-submit-button"  value="Submit"  class='upload'>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+
                 </div>
 
                 <div id ="chat-area"  class="tab-pane fade in active"">

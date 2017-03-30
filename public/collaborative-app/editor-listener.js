@@ -15,18 +15,26 @@ module.exports = function(modelManager){
 
     });
 
-    //$('#save-layout').addEventListener("click", updateLayout, false);
-
-
     $(document).on("saveLayout", function (evt) {
-
-        console.log("jere");
-
-        var appUtilities = require('../app/js/app-utilities');
-
-        var layoutProperties = appUtilities.currentLayoutProperties;
+         var layoutProperties = appUtilities.currentLayoutProperties;
         modelManager.updateLayoutProperties(layoutProperties, "me");
     });
+
+    $(document).on("saveGeneralProperties", function (evt) {
+        var generalProperties = appUtilities.currentGeneralProperties;
+        modelManager.updateGeneralProperties(generalProperties, "me");
+    });
+
+    $(document).on("saveGridProperties", function (evt) {
+        var gridProperties = appUtilities.currentGridProperties;
+        modelManager.updateGridProperties(gridProperties, "me");
+    });
+
+    $(document).on("saveFontProperties", function (evt) {
+        var fontProperties = appUtilities.currentFontProperties;
+        modelManager.updateFontProperties(fontProperties, "me");
+    });
+
 
     cy.on("afterDo afterRedo", function (event, actionName, args, res) {
 

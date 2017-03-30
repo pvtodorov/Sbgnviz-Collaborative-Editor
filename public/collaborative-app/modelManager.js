@@ -27,6 +27,7 @@ module.exports = function (model, docId) {
             return model.get('_page.doc');
         },
 
+
         addImage: function (data, user, noHistUpdate) {
             model.pass({user: user}).push('_page.doc.images', data);
             if (!noHistUpdate)
@@ -85,7 +86,7 @@ module.exports = function (model, docId) {
         updateLayoutProperties: function (layoutProperties, user, noHistUpdate) {
 
             var currentLayoutProperties;
-            var lp = model.get('_page.doc.layoutProperties');
+            var lp = model.get('_page.doc.cy.layoutProperties');
 
             if (lp == null)
                 currentLayoutProperties = _.clone(layoutProperties);
@@ -93,7 +94,7 @@ module.exports = function (model, docId) {
                 currentLayoutProperties = _.clone(lp);
 
 
-            model.pass({user: user}).set('_page.doc.cy.layoutProperties', currentLayoutProperties); //synclayout
+            model.pass({user: user}).set('_page.doc.cy.layoutProperties',  currentLayoutProperties); //synclayout
 
             if (!noHistUpdate)
                 this.updateHistory({
@@ -104,13 +105,90 @@ module.exports = function (model, docId) {
             return currentLayoutProperties;
         },
 
-        setLayoutProperties: function (layoutProperties, noHistUpdate) {
-            model.set('_page.doc.layoutProperties', layoutProperties); //synclayout
-            if (!noHistUpdate)
-                this.updateHistory({opName: 'set', opTarget: 'layout', opAttr: JSON.stringify(layoutProperties)});
+        getLayoutProperties: function (layoutProperties, user, noHistUpdate) {
+           return model.get('_page.doc.cy.layoutProperties');
+
         },
 
+        updateGeneralProperties: function (generalProperties, user, noHistUpdate) {
 
+            var currentGeneralProperties;
+            var lp = model.get('_page.doc.cy.generalProperties');
+
+            if (lp == null)
+                currentGeneralProperties = _.clone(generalProperties);
+            else
+                currentGeneralProperties = _.clone(lp);
+
+
+            model.pass({user: user}).set('_page.doc.cy.generalProperties',  currentGeneralProperties); //synclayout
+
+            if (!noHistUpdate)
+                this.updateHistory({
+                    opName: 'set',
+                    opTarget: 'general properties',
+                    opAttr: JSON.stringify(currentGeneralProperties)
+                });
+            return currentGeneralProperties;
+        },
+
+        getGeneralProperties: function (generalProperties, user, noHistUpdate) {
+            return model.get('_page.doc.cy.generalProperties');
+
+        },
+
+        updateGridProperties: function (gridProperties, user, noHistUpdate) {
+
+            var currentGridProperties;
+            var lp = model.get('_page.doc.cy.gridProperties');
+
+            if (lp == null)
+                currentGridProperties = _.clone(gridProperties);
+            else
+                currentGridProperties = _.clone(lp);
+
+
+            model.pass({user: user}).set('_page.doc.cy.gridProperties',  currentGridProperties); //synclayout
+
+            if (!noHistUpdate)
+                this.updateHistory({
+                    opName: 'set',
+                    opTarget: 'grid properties',
+                    opAttr: JSON.stringify(currentGridProperties)
+                });
+            return currentGridProperties;
+        },
+
+        getGridProperties: function (gridProperties, user, noHistUpdate) {
+            return model.get('_page.doc.cy.gridProperties');
+
+        },
+        updateFontProperties: function (fontProperties, user, noHistUpdate) {
+
+            var currentFontProperties;
+            var lp = model.get('_page.doc.cy.fontProperties');
+
+            if (lp == null)
+                currentFontProperties = _.clone(fontProperties);
+            else
+                currentFontProperties = _.clone(lp);
+
+
+            model.pass({user: user}).set('_page.doc.cy.fontProperties',  currentFontProperties); //synclayout
+
+            if (!noHistUpdate)
+                this.updateHistory({
+                    opName: 'set',
+                    opTarget: 'font properties',
+                    opAttr: JSON.stringify(currentFontProperties)
+                });
+            return currentFontProperties;
+        },
+
+        getFontProperties: function (fontProperties, user, noHistUpdate) {
+            return model.get('_page.doc.cy.fontProperties');
+
+        },
         /***
          *
          * @param cmd  {opName, opTarget,  elType, elId, opAttr,param, prevParam}
@@ -1067,7 +1145,22 @@ module.exports = function (model, docId) {
                 this.updateHistory({opName: 'merge', prevParam: prevModelCy, param: modelCy, opTarget: 'model'});
             }
 
+        },
+
+        updateFactoidModel: function(factoidModel, user, noHistUpdate){
+            model.pass({user:user}).set('_page.doc.factoid', factoidModel);
+
+            if(!noHistUpdate){
+                var prevFactoidModel = model.get('_page.doc.factoid');
+                this.updateHistory({opName:'factoid',  prevParam: prevFactoidModel, param: factoidModel, opTarget:'model'});
+            }
+
+        },
+
+        getFactoidModel: function(){
+            return model.get('_page.doc.factoid');
         }
+
 
     }
 }

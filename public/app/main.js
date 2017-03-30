@@ -4,10 +4,11 @@ var filesaverjs = require('filesaverjs');
 window.jQuery = window.jquery = window.$ = require('jquery'); // jquery should be global because jquery.qtip extension is not compatible with commonjs
 var cytoscape = require('cytoscape');
 
+
 require('jquery-expander')($);
 require('bootstrap');
 
-var appUtilities = require('./js/app-utilities');
+appUtilities = require('./js/app-utilities'); //FUNDA MADE THIS GLOBAL
 var appCy = require('./js/app-cy');
 var appMenu = require('./js/app-menu');
 

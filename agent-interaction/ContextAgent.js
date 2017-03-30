@@ -11,7 +11,6 @@ function ContextAgent(name, id) {
 
     this.agentName = name;
     this.agentId = id;
-    this.colorCode = "#8b0000";
 
 
     this.cancerTypes = [

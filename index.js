@@ -6,6 +6,8 @@
 var app = module.exports = require('derby').createApp('cwc', __filename);
 var _ = require('./public/node_modules/underscore');
 
+var bs;
+
 app.loadViews(__dirname + '/views');
 //app.loadStyles(__dirname + '/styles');
 //app.serverUse(module, 'derby-stylus');
@@ -22,12 +24,10 @@ var docReady = false;
 
 var useQunit = true;
 
-var menu;
+var factoidHandler;
 
-var userCount;
 var socket;
 
-var pr;
 
 var modelManager;
 var oneColor = require('onecolor');
@@ -553,6 +553,10 @@ app.proto.create = function (model) {
     modelManager = require('./public/collaborative-app/modelManager.js')(model, model.get('_page.room') );
     modelManager.setName( model.get('_session.userId'),name);
 
+    factoidHandler = require('./public/collaborative-app/factoid-handler')(modelManager) ;
+    factoidHandler.initialize();
+
+
     //Notify server about the client connection
     socket.emit("subscribeHuman", { userName:name, room:  model.get('_page.room'), userId: id}, function(){
 
@@ -567,6 +571,9 @@ app.proto.create = function (model) {
 
     //Loading cytoscape and clients
     setTimeout(function(){
+
+        // require('./public/node_modules/bootstrap/dist/js/bootstrap.js');
+
          var isModelEmpty = self.loadCyFromModel();
 
 
@@ -668,7 +675,14 @@ function moveNodeAndChildren(positionDiff, node, notCalcTopMostNodes) {
 }
 
 app.proto.listenToNodeOperations = function(model){
+
+    //Update inspector
+    model.on('all', '_page.doc.cy.nodes.**', function(id, op, val, prev, passed){
+        inspectorUtilities.handleSBGNInspector();
+    });
+
     model.on('all', '_page.doc.cy.nodes.*', function(id, op, val, prev, passed){
+
 
         if(docReady &&  passed.user == null) {
 
@@ -681,7 +695,10 @@ app.proto.listenToNodeOperations = function(model){
         }
 
 
+
     });
+
+
 
 
     model.on('all', '_page.doc.cy.nodes.*.addedLater', function(id, op, idName, prev, passed){ //this property must be something that is only changed during insertion
@@ -849,6 +866,12 @@ app.proto.listenToNodeOperations = function(model){
 
 app.proto.listenToEdgeOperations = function(model){
 
+    //Update inspector
+    model.on('all', '_page.doc.cy.edges.**', function(id, op, val, prev, passed){
+        inspectorUtilities.handleSBGNInspector();
+    });
+
+
     model.on('all', '_page.doc.cy.edges.*.highlightColor', function(id, op, val,prev, passed){
 
         if(docReady && passed.user == null) {
@@ -998,6 +1021,17 @@ app.proto.init = function (model) {
 
     //Listen to other model operations
 
+    model.on('all', '_page.doc.factoid.*', function(id, op, val, prev, passed){
+
+        if(docReady &&  passed.user == null) {
+            factoidHandler.setFactoidModel(val);
+        }
+
+
+    });
+
+
+
     //Cy updated by other clients
     model.on('change', '_page.doc.cy.initTime', function( val, prev, passed){
 
@@ -1010,12 +1044,48 @@ app.proto.init = function (model) {
 
     model.on('all', '_page.doc.cy.layoutProperties', function(op, val) {
         if (docReady){
-            var appUtilities = require('./public/app/js/app-utilities');
-            appUtilities.currentLayoutProperties = val;
+            for(var att in val){ //assign each attribute separately to keep the functions in currentlayoutproperties
+                if(appUtilities.currentLayoutProperties[att])
+                    appUtilities.currentLayoutProperties[att] = val[att];
+            }
+
         }
 
     });
 
+    model.on('all', '_page.doc.cy.generalProperties', function(op, val) {
+        if (docReady){
+            for(var att in val){ //assign each attribute separately to keep the functions in currentgeneralproperties
+                if(appUtilities.currentGeneralProperties[att])
+                    appUtilities.currentGeneralProperties[att] = val[att];
+            }
+
+        }
+
+    });
+
+    model.on('all', '_page.doc.cy.gridProperties', function(op, val) {
+        if (docReady){
+            for(var att in val){ //assign each attribute separately to keep the functions in currentgridproperties
+                if(appUtilities.currentGridProperties[att])
+                    appUtilities.currentGridProperties[att] = val[att];
+            }
+
+        }
+
+    });
+
+    model.on('all', '_page.doc.cy.fontProperties', function(op, val) {
+        if (docReady){
+
+            for(var att in val){ //assign each attribute separately to keep the functions in currentfontproperties
+                if(appUtilities.currentFontProperties[att])
+                    appUtilities.currentFontProperties[att] = val[att];
+            }
+
+        }
+
+    });
 
     //Sometimes works
     model.on('all', '_page.doc.images', function() {

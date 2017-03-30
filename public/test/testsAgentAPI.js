@@ -9,7 +9,6 @@ module.exports = function(serverIp, modelManager){
     var agent;
     var agentId = '103abc';
     var agentName = "testAgent";
-    //var modelManager;
 
 
 
@@ -600,6 +599,43 @@ module.exports = function(serverIp, modelManager){
 
     }
 
+    function testPropertyRequests(){
+
+        QUnit.test('Property updates', function(assert) {
+
+            assert.expect(1);
+            var done1 = assert.async();
+            var props = {
+                name: 'cose-bilkent',
+                nodeRepulsion: 4500,
+                idealEdgeLength: 50,
+                edgeElasticity: 0.45,
+                nestingFactor: 0.1,
+                gravity: 5,
+                numIter: 1000,
+                tile: true,
+                animationEasing: 'cubic-bezier(0.19, 1, 0.22, 1)',
+                animate: 'end',
+                animationDuration: 1000,
+                randomize: false,
+                tilingPaddingVertical: 20,
+                tilingPaddingHorizontal: 20,
+                gravityRangeCompound: 1.5,
+                gravityCompound: 1.0,
+                gravityRange: 3.8,
+            };
+            agent.sendRequest("agentSetLayoutPropertiesRequest", props, function(val){
+                setTimeout(function () { //should wait here as well
+                    var layoutProps = modelManager.getLayoutProperties();
+                    assert.equal(layoutProps.numIter, 1000, "Layout run.") ;
+                    done1();
+                },100);
+            });
+        });
+
+    }
+
+
 
 
     function testDisconnect(){
@@ -664,6 +700,10 @@ module.exports = function(serverIp, modelManager){
 
     setTimeout(function() {
         testEdgeSetAttributeRequests();
+    },100);
+
+    setTimeout(function() {
+        testPropertyRequests();
     },100);
 
 
