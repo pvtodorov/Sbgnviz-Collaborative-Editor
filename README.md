@@ -160,8 +160,8 @@ string after http:<ip>:3000/ in the server address.
 |  “agentAddEdgeRequest”              | {source: < source node id >,  |
 |                                     | target: < target node id >,   |
 |                                     | class: < sbgn class >}    |
-|"agentSearchByLabelRequest"          | label: < label to be highlighted>   |
-|"agentDeleteElesRequest"             | type: <"smart" or "simple" < elementIds: <element ids to delete simply> |
+|"agentSearchByLabelRequest"          | {label: < label to be highlighted>}   |
+|"agentDeleteElesRequest"             | {type: <"smart" or "simple" < elementIds: <element ids to delete simply>} |
 |"agentUpdateVisibilityStatusRequest"       | {val:<"hide" or "show" or "showAll">,  elementIds:<array of element ids or null for showAll>|
 |"agentUpdateHighlightStatusRequest"       | {val:<"neighbors" or "processes" or "remove">,  elementIds:<array of element ids or null for remove>|
 |"agentUpdateExpandCollapseStatusRequest"       | {val:<"expand" or "collapse">,  elementIds:<array of element ids>|

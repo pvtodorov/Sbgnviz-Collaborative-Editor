@@ -7,13 +7,6 @@
     <list default="true" id="9a4da041-f7fe-4258-8b1b-f19f75831c76" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/agent-interaction/computerAgent.html" afterPath="$PROJECT_DIR$/agent-interaction/computerAgent.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index.js" afterPath="$PROJECT_DIR$/index.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/app/js/backbone-views.js" afterPath="$PROJECT_DIR$/public/app/js/backbone-views.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/collaborative-app/editor-listener.js" afterPath="$PROJECT_DIR$/public/collaborative-app/editor-listener.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/collaborative-app/modelManager.js" afterPath="$PROJECT_DIR$/public/collaborative-app/modelManager.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/test/testsAgentAPI.js" afterPath="$PROJECT_DIR$/public/test/testsAgentAPI.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/index.html" afterPath="$PROJECT_DIR$/views/index.html" />
     </list>
     <ignored path="Sbgnviz-Collaborative-Editor Chise Version.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -40,8 +33,8 @@
       <file leaf-file-name="testsAgentAPI.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/test/testsAgentAPI.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="420">
-              <caret line="359" column="13" lean-forward="true" selection-start-line="359" selection-start-column="13" selection-end-line="359" selection-end-column="13" />
+            <state relative-caret-position="332">
+              <caret line="510" column="49" lean-forward="false" selection-start-line="510" selection-start-column="36" selection-end-line="510" selection-end-column="49" />
               <folding />
             </state>
           </provider>
@@ -141,8 +134,8 @@
       <file leaf-file-name="README.md" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/README.md">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="328">
-              <caret line="117" column="16" lean-forward="false" selection-start-line="117" selection-start-column="6" selection-end-line="117" selection-end-column="16" />
+            <state relative-caret-position="643">
+              <caret line="163" column="113" lean-forward="false" selection-start-line="163" selection-start-column="113" selection-end-line="163" selection-end-column="113" />
               <folding />
             </state>
           </provider>
@@ -159,7 +152,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>message</find>
       <find>color</find>
       <find>connectt</find>
       <find>file</find>
@@ -189,6 +181,7 @@
       <find>triger</find>
       <find>l</find>
       <find>layoutprop</find>
+      <find>searchbylabel</find>
     </findStrings>
     <replaceStrings>
       <replace>bbox</replace>
@@ -272,8 +265,8 @@
         <option value="$PROJECT_DIR$/views/index.html" />
         <option value="$PROJECT_DIR$/public/collaborative-app/editor-listener.js" />
         <option value="$PROJECT_DIR$/public/collaborative-app/modelManager.js" />
-        <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/public/app/js/backbone-views.js" />
+        <option value="$PROJECT_DIR$/README.md" />
       </list>
     </option>
   </component>
@@ -871,7 +864,7 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20528302" sideWeight="0.49774775" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Gulp" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="true" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17110874" sideWeight="0.49312377" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17110874" sideWeight="0.49312377" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.28" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -927,7 +920,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="undo-redo cy trigger updates" />
     <MESSAGE value="Highlight is working" />
     <MESSAGE value="-Directory structure refactoring&#10;-Add node/edge problems corrected --&gt; included initialization afterwards" />
     <MESSAGE value="Delete node/edge working" />
@@ -952,7 +944,8 @@
     <MESSAGE value="Readme updates" />
     <MESSAGE value="Gets the last room, not the first one." />
     <MESSAGE value="Updates" />
-    <option name="LAST_COMMIT_MESSAGE" value="Updates" />
+    <MESSAGE value="Updates on layout properties and bend points." />
+    <option name="LAST_COMMIT_MESSAGE" value="Updates on layout properties and bend points." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1247,14 +1240,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/test/testsAgentAPI.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="420">
-          <caret line="359" column="13" lean-forward="true" selection-start-line="359" selection-start-column="13" selection-end-line="359" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/app/js/app-menu.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="30">
@@ -1370,10 +1355,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/public/test/testsAgentAPI.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="332">
+          <caret line="510" column="49" lean-forward="false" selection-start-line="510" selection-start-column="36" selection-end-line="510" selection-end-column="49" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="328">
-          <caret line="117" column="16" lean-forward="false" selection-start-line="117" selection-start-column="6" selection-end-line="117" selection-end-column="16" />
+        <state relative-caret-position="643">
+          <caret line="163" column="113" lean-forward="false" selection-start-line="163" selection-start-column="113" selection-end-line="163" selection-end-column="113" />
           <folding />
         </state>
       </provider>
