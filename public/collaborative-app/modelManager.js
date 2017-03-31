@@ -88,19 +88,21 @@ module.exports = function (model, docId) {
             var currentLayoutProperties;
             var lp = model.get('_page.doc.cy.layoutProperties');
 
-            if (lp == null)
-                currentLayoutProperties = _.clone(layoutProperties);
-            else
-                currentLayoutProperties = _.clone(lp);
+
+            currentLayoutProperties = _.clone(layoutProperties);
+
 
 
             model.pass({user: user}).set('_page.doc.cy.layoutProperties',  currentLayoutProperties); //synclayout
 
             if (!noHistUpdate)
                 this.updateHistory({
-                    opName: 'set',
-                    opTarget: 'layout',
-                    opAttr: JSON.stringify(currentLayoutProperties)
+                    opName: 'update',
+                    opTarget: 'layout properties',
+                    opAttr: JSON.stringify(currentLayoutProperties),
+                    param: currentLayoutProperties,
+                    prevParam: lp
+
                 });
             return currentLayoutProperties;
         },
@@ -115,19 +117,19 @@ module.exports = function (model, docId) {
             var currentGeneralProperties;
             var lp = model.get('_page.doc.cy.generalProperties');
 
-            if (lp == null)
-                currentGeneralProperties = _.clone(generalProperties);
-            else
-                currentGeneralProperties = _.clone(lp);
+
+            currentGeneralProperties = _.clone(generalProperties);
 
 
             model.pass({user: user}).set('_page.doc.cy.generalProperties',  currentGeneralProperties); //synclayout
 
             if (!noHistUpdate)
                 this.updateHistory({
-                    opName: 'set',
+                    opName: 'update',
                     opTarget: 'general properties',
-                    opAttr: JSON.stringify(currentGeneralProperties)
+                    opAttr: JSON.stringify(currentGeneralProperties),
+                    param:currentGeneralProperties,
+                    prevParam:lp
                 });
             return currentGeneralProperties;
         },
@@ -142,19 +144,19 @@ module.exports = function (model, docId) {
             var currentGridProperties;
             var lp = model.get('_page.doc.cy.gridProperties');
 
-            if (lp == null)
-                currentGridProperties = _.clone(gridProperties);
-            else
-                currentGridProperties = _.clone(lp);
+
+            currentGridProperties = _.clone(gridProperties);
 
 
             model.pass({user: user}).set('_page.doc.cy.gridProperties',  currentGridProperties); //synclayout
 
             if (!noHistUpdate)
                 this.updateHistory({
-                    opName: 'set',
+                    opName: 'update',
                     opTarget: 'grid properties',
-                    opAttr: JSON.stringify(currentGridProperties)
+                    opAttr: JSON.stringify(currentGridProperties),
+                    param:currentGridProperties,
+                    prevParam:lp
                 });
             return currentGridProperties;
         },
@@ -163,32 +165,7 @@ module.exports = function (model, docId) {
             return model.get('_page.doc.cy.gridProperties');
 
         },
-        updateFontProperties: function (fontProperties, user, noHistUpdate) {
 
-            var currentFontProperties;
-            var lp = model.get('_page.doc.cy.fontProperties');
-
-            if (lp == null)
-                currentFontProperties = _.clone(fontProperties);
-            else
-                currentFontProperties = _.clone(lp);
-
-
-            model.pass({user: user}).set('_page.doc.cy.fontProperties',  currentFontProperties); //synclayout
-
-            if (!noHistUpdate)
-                this.updateHistory({
-                    opName: 'set',
-                    opTarget: 'font properties',
-                    opAttr: JSON.stringify(currentFontProperties)
-                });
-            return currentFontProperties;
-        },
-
-        getFontProperties: function (fontProperties, user, noHistUpdate) {
-            return model.get('_page.doc.cy.fontProperties');
-
-        },
         /***
          *
          * @param cmd  {opName, opTarget,  elType, elId, opAttr,param, prevParam}
@@ -304,6 +281,15 @@ module.exports = function (model, docId) {
                     this.addModelCompound(cmd.elId, cmd.prevParam.compoundAtts, cmd.prevParam.childrenList, cmd.prevParam.paramList);
 
             }
+            else if(cmd.opName === "update"){ //properties
+                if(cmd.opTarget.indexOf('general') >= 0)
+                    this.updateGeneralProperties(cmd.prevParam);
+                else if(cmd.opTarget.indexOf('layout') >= 0)
+                    this.updateLayoutProperties(cmd.prevParam);
+                else if(cmd.opTarget.indexOf('grid') >= 0)
+                    this.updateGridProperties(cmd.prevParam);
+
+            }
             else if (cmd.opName == "init") {
                 this.newModel("me", true);
             }
@@ -355,6 +341,15 @@ module.exports = function (model, docId) {
                     this.deleteModelElementGroup(cmd.elId);
                 else if (cmd.opTarget == "compound")
                     this.removeModelCompound(cmd.elId, cmd.prevParam.childrenList, cmd.param);
+
+            }
+            else if(cmd.opName === "update"){ //properties
+                if(cmd.opTarget.indexOf('general') >= 0)
+                    this.updateGeneralProperties(cmd.param);
+                else if(cmd.opTarget.indexOf('layout') >= 0)
+                    this.updateLayoutProperties(cmd.param);
+                else if(cmd.opTarget.indexOf('grid') >= 0)
+                    this.updateGridProperties(cmd.param);
 
             }
             else if (cmd.opName == "init") {
@@ -1090,8 +1085,17 @@ module.exports = function (model, docId) {
         },
 
 
-        //nodes and edges are cytoscape objects. they have css and data properties
-        initModel: function ( nodes, edges, user, noHistUpdate) {
+
+
+        /***
+         *
+         * @param nodes: cy elements
+         * @param edges: cy elements
+         * @param appUtilities: to update properties
+         * @param user
+         * @param noHistUpdate
+         */
+        initModel: function ( nodes, edges, appUtilities, user, noHistUpdate) {
 
             var self = this;
 
@@ -1109,6 +1113,14 @@ module.exports = function (model, docId) {
 
             var newModelCy = model.get('_page.doc.cy');
 
+            if(newModelCy.layoutProperties == null)
+                model.set('_page.doc.cy.layoutProperties', _.clone(appUtilities.defaultLayoutProperties));
+
+            if(newModelCy.generalProperties == null)
+                model.set('_page.doc.cy.generalProperties', _.clone(appUtilities.defaultGeneralProperties));
+
+            if(newModelCy.gridProperties == null)
+                model.set('_page.doc.cy.gridProperties', _.clone(appUtilities.defaultGridProperties));
 
 
 

@@ -11,7 +11,7 @@ module.exports = function(modelManager){
    $(document).on("sbgnvizLoadSampleEnd sbgnvizLoadFileEnd",  function(event, file){
        console.log("Loading new sample");
        modelManager.newModel("me"); //do not delete cytoscape, only the model
-       modelManager.initModel(cy.nodes(), cy.edges());
+       modelManager.initModel(cy.nodes(), cy.edges(), appUtilities);
 
     });
 
@@ -30,10 +30,6 @@ module.exports = function(modelManager){
         modelManager.updateGridProperties(gridProperties, "me");
     });
 
-    $(document).on("saveFontProperties", function (evt) {
-        var fontProperties = appUtilities.currentFontProperties;
-        modelManager.updateFontProperties(fontProperties, "me");
-    });
 
 
     cy.on("afterDo afterRedo", function (event, actionName, args, res) {

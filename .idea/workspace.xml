@@ -1,61 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/lib/serverSideSocketListener.js" line="542" mnemonic="9" />
+    <bookmark url="file://$PROJECT_DIR$/lib/serverSideSocketListener.js" line="565" mnemonic="9" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9a4da041-f7fe-4258-8b1b-f19f75831c76" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/1742-4690-6-111.pdf" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/agent-interaction/TCGA/ACC/scores-mutsig.txt" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/agent-interaction/TCGA/BLCA/scores-mutsig.txt" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/agent-interaction/TCGA/BRCA/scores-mutsig.txt" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/agent-interaction/TCGA/CESC/scores-mutsig.txt" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/agent-interaction/TCGA/CHOL/scores-mutsig.txt" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/agent-interaction/TCGA/COAD/scores-mutsig.txt" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/agent-interaction/TCGA/COADREAD/scores-mutsig.txt" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/agent-interaction/TCGA/DLBC/scores-mutsig.txt" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/agent-interaction/TCGA/GBM/scores-mutsig.txt" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/agent-interaction/TCGA/GBMLGG/scores-mutsig.txt" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/agent-interaction/TCGA/HNSC/scores-mutsig.txt" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/agent-interaction/TCGA/KICH/scores-mutsig.txt" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/agent-interaction/TCGA/KIPAN/scores-mutsig.txt" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/agent-interaction/TCGA/KIRC/scores-mutsig.txt" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/agent-interaction/TCGA/KIRP/scores-mutsig.txt" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/agent-interaction/TCGA/LAML/scores-mutsig.txt" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/agent-interaction/TCGA/LGG/scores-mutsig.txt" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/agent-interaction/TCGA/LIHC/scores-mutsig.txt" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/agent-interaction/TCGA/LUAD/scores-mutsig.txt" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/agent-interaction/TCGA/LUSC/scores-mutsig.txt" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/agent-interaction/TCGA/OV/scores-mutsig.txt" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/agent-interaction/TCGA/PAAD/scores-mutsig.txt" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/agent-interaction/TCGA/PCPG/scores-mutsig.txt" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/agent-interaction/TCGA/PRAD/scores-mutsig.txt" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/agent-interaction/TCGA/READ/scores-mutsig.txt" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/agent-interaction/TCGA/SARC/scores-mutsig.txt" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/agent-interaction/TCGA/SKCM/scores-mutsig.txt" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/agent-interaction/TCGA/STAD/scores-mutsig.txt" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/agent-interaction/TCGA/STES/scores-mutsig.txt" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/agent-interaction/TCGA/TGCT/scores-mutsig.txt" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/agent-interaction/TCGA/THCA/scores-mutsig.txt" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/agent-interaction/TCGA/UCEC/scores-mutsig.txt" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/agent-interaction/TCGA/UCS/scores-mutsig.txt" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/agent-interaction/TCGA/UVM/scores-mutsig.txt" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/collaborative-app/factoid-handler.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/lib/js/jquery.noty.packaged.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/src/reach-functions/idxCard-info.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/agent-interaction/ContextAgent.js" afterPath="$PROJECT_DIR$/agent-interaction/ContextAgent.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index.js" afterPath="$PROJECT_DIR$/index.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/serverSideSocketListener.js" afterPath="$PROJECT_DIR$/lib/serverSideSocketListener.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/app/css/chise.css" afterPath="$PROJECT_DIR$/public/app/css/chise.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/app/js/app-cy.js" afterPath="$PROJECT_DIR$/public/app/js/app-cy.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/app/js/backbone-views.js" afterPath="$PROJECT_DIR$/public/app/js/backbone-views.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/app/main.js" afterPath="$PROJECT_DIR$/public/app/main.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/collaborative-app/editor-listener.js" afterPath="$PROJECT_DIR$/public/collaborative-app/editor-listener.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/collaborative-app/modelManager.js" afterPath="$PROJECT_DIR$/public/collaborative-app/modelManager.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/test/testsAgentAPI.js" afterPath="$PROJECT_DIR$/public/test/testsAgentAPI.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/index.html" afterPath="$PROJECT_DIR$/views/index.html" />
     </list>
     <ignored path="Sbgnviz-Collaborative-Editor Chise Version.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -82,11 +37,11 @@
       <file leaf-file-name="serverSideSocketListener.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/lib/serverSideSocketListener.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="356">
-              <caret line="593" column="0" lean-forward="false" selection-start-line="593" selection-start-column="0" selection-end-line="593" selection-end-column="0" />
+            <state relative-caret-position="446">
+              <caret line="102" column="28" lean-forward="true" selection-start-line="102" selection-start-column="28" selection-end-line="102" selection-end-column="28" />
               <folding>
-                <element signature="e#3007#3061#0" expanded="false" />
-                <element signature="e#6859#6877#0" expanded="false" />
+                <element signature="e#3785#3839#0" expanded="false" />
+                <element signature="e#7637#7655#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -95,31 +50,31 @@
       <file leaf-file-name="testsAgentAPI.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/test/testsAgentAPI.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="165">
-              <caret line="11" column="0" lean-forward="true" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+            <state relative-caret-position="497">
+              <caret line="626" column="48" lean-forward="false" selection-start-line="626" selection-start-column="39" selection-end-line="626" selection-end-column="48" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="README.md" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/README.md">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="352">
+              <caret line="130" column="0" lean-forward="false" selection-start-line="130" selection-start-column="0" selection-end-line="130" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/index.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="347">
-              <caret line="239" column="24" lean-forward="false" selection-start-line="239" selection-start-column="12" selection-end-line="239" selection-end-column="24" />
+              <caret line="1165" column="10" lean-forward="false" selection-start-line="1165" selection-start-column="10" selection-end-line="1165" selection-end-column="10" />
               <folding>
                 <element signature="e#13032#13088#0" expanded="false" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="main.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/public/app/main.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="345">
-              <caret line="23" column="19" lean-forward="false" selection-start-line="23" selection-start-column="4" selection-end-line="23" selection-end-column="19" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -137,28 +92,8 @@
       <file leaf-file-name="modelManager.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/collaborative-app/modelManager.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="356">
-              <caret line="148" column="0" lean-forward="true" selection-start-line="148" selection-start-column="0" selection-end-line="148" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="editor-listener.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/public/collaborative-app/editor-listener.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="330">
-              <caret line="22" column="60" lean-forward="true" selection-start-line="22" selection-start-column="60" selection-end-line="22" selection-end-column="60" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="README.md" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/README.md">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="490">
-              <caret line="131" column="10" lean-forward="false" selection-start-line="131" selection-start-column="10" selection-end-line="131" selection-end-column="10" />
+            <state relative-caret-position="344">
+              <caret line="392" column="47" lean-forward="false" selection-start-line="392" selection-start-column="47" selection-end-line="392" selection-end-column="47" />
               <folding />
             </state>
           </provider>
@@ -167,8 +102,8 @@
       <file leaf-file-name="app-utilities.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/app/js/app-utilities.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2700">
-              <caret line="66" column="21" lean-forward="false" selection-start-line="66" selection-start-column="19" selection-end-line="66" selection-end-column="21" />
+            <state relative-caret-position="795">
+              <caret line="67" column="33" lean-forward="true" selection-start-line="61" selection-start-column="2" selection-end-line="67" selection-end-column="33" />
               <folding>
                 <marker date="1490043083000" expanded="true" signature="19511:19577" ph="..." />
               </folding>
@@ -176,14 +111,12 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="backbone-views.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/public/app/js/backbone-views.js">
+      <file leaf-file-name="editor-listener.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/public/collaborative-app/editor-listener.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="625">
-              <caret line="858" column="36" lean-forward="true" selection-start-line="858" selection-start-column="36" selection-end-line="858" selection-end-column="36" />
-              <folding>
-                <marker date="1490910673000" expanded="true" signature="19790:19853" ph="..." />
-              </folding>
+            <state relative-caret-position="341">
+              <caret line="32" column="0" lean-forward="false" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -199,36 +132,36 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>this.</find>
-      <find>use</find>
-      <find>factoidhandler</find>
-      <find>menu</find>
-      <find>node</find>
-      <find>factoif</find>
-      <find>factoidh</find>
-      <find>noty</find>
-      <find>sending</find>
-      <find>mergej</find>
-      <find>setti</find>
-      <find>setfilecontent</find>
-      <find>bundle</find>
-      <find>apput</find>
-      <find>require</find>
-      <find>handleSBGNInspector</find>
-      <find>inspectorut</find>
-      <find>listentonode</find>
-      <find>grid</find>
-      <find>savelayout</find>
-      <find>savegeneral</find>
-      <find>inspector</find>
-      <find>savefont</find>
-      <find>getl</find>
-      <find>layoutpro</find>
-      <find>general</find>
-      <find>layout</find>
-      <find>trigger</find>
       <find>savegr</find>
+      <find>inspector</find>
+      <find>general</find>
+      <find>undo</find>
+      <find>undocomma</find>
+      <find>changemodelnodeatt</find>
+      <find>updatelayout</find>
       <find>modelmanager</find>
+      <find>undocommand</find>
+      <find>updatela</find>
+      <find>layoutpr</find>
+      <find>apputi</find>
+      <find>loadcyfrm</find>
+      <find>loadcyfrom</find>
+      <find>fontpro</find>
+      <find>updatelayoutp</find>
+      <find>undocomm</find>
+      <find>stringi</find>
+      <find>redocomm</find>
+      <find>undoreq</find>
+      <find>todo</find>
+      <find>initmodel</find>
+      <find>onScroll</find>
+      <find>atBottom</find>
+      <find>fontp</find>
+      <find>fontprop</find>
+      <find>fontproperties</find>
+      <find>layout</find>
+      <find>layoutpro</find>
+      <find>font</find>
     </findStrings>
     <replaceStrings>
       <replace>bbox</replace>
@@ -303,19 +236,19 @@
         <option value="$PROJECT_DIR$/agent-interaction/computerAgent.html" />
         <option value="$PROJECT_DIR$/agent-interaction/agentAPI.js" />
         <option value="$PROJECT_DIR$/public/node_modules/cytoscape-edge-bend-editing/cytoscape-edge-bend-editing.js" />
-        <option value="$PROJECT_DIR$/lib/serverSideSocketListener.js" />
         <option value="$PROJECT_DIR$/agent-interaction/ContextAgent.js" />
         <option value="$PROJECT_DIR$/public/app/css/chise.css" />
         <option value="$PROJECT_DIR$/public/collaborative-app/factoid-handler.js" />
         <option value="$PROJECT_DIR$/views/index.html" />
         <option value="$PROJECT_DIR$/public/app/js/app-cy.js" />
         <option value="$PROJECT_DIR$/public/app/main.js" />
-        <option value="$PROJECT_DIR$/public/collaborative-app/editor-listener.js" />
-        <option value="$PROJECT_DIR$/public/collaborative-app/modelManager.js" />
-        <option value="$PROJECT_DIR$/index.js" />
-        <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/public/app/js/backbone-views.js" />
         <option value="$PROJECT_DIR$/public/test/testsAgentAPI.js" />
+        <option value="$PROJECT_DIR$/index.js" />
+        <option value="$PROJECT_DIR$/public/collaborative-app/editor-listener.js" />
+        <option value="$PROJECT_DIR$/public/collaborative-app/modelManager.js" />
+        <option value="$PROJECT_DIR$/lib/serverSideSocketListener.js" />
+        <option value="$PROJECT_DIR$/README.md" />
       </list>
     </option>
   </component>
@@ -1031,7 +964,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="Highlight is working" />
     <MESSAGE value="-Directory structure refactoring&#10;-Add node/edge problems corrected --&gt; included initialization afterwards" />
     <MESSAGE value="Delete node/edge working" />
     <MESSAGE value="Refactoring with the most recent chise.js" />
@@ -1056,7 +988,8 @@
     <MESSAGE value="Gets the last room, not the first one." />
     <MESSAGE value="Updates" />
     <MESSAGE value="Updates on layout properties and bend points." />
-    <option name="LAST_COMMIT_MESSAGE" value="Updates on layout properties and bend points." />
+    <MESSAGE value="Layout, grid, general and font properties are synchronized." />
+    <option name="LAST_COMMIT_MESSAGE" value="Layout, grid, general and font properties are synchronized." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1210,14 +1143,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/test/testsModelManager.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="359">
-          <caret line="69" column="96" lean-forward="false" selection-start-line="69" selection-start-column="96" selection-end-line="69" selection-end-column="96" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/agent-interaction/agentAPI.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="596">
@@ -1358,14 +1283,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/app/bundle.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="7" column="30" lean-forward="true" selection-start-line="7" selection-start-column="30" selection-end-line="7" selection-end-column="30" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/app/js/app-menu.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="30">
@@ -1450,40 +1367,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/app/main.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="23" column="19" lean-forward="false" selection-start-line="23" selection-start-column="4" selection-end-line="23" selection-end-column="19" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/app/js/app-utilities.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2700">
-          <caret line="66" column="21" lean-forward="false" selection-start-line="66" selection-start-column="19" selection-end-line="66" selection-end-column="21" />
-          <folding>
-            <marker date="1490043083000" expanded="true" signature="19511:19577" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/collaborative-app/editor-listener.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="22" column="60" lean-forward="true" selection-start-line="22" selection-start-column="60" selection-end-line="22" selection-end-column="60" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/README.md">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="490">
-          <caret line="131" column="10" lean-forward="false" selection-start-line="131" selection-start-column="10" selection-end-line="131" selection-end-column="10" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/views/index.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="343">
@@ -1492,10 +1375,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/collaborative-app/modelManager.js">
+    <entry file="file://$PROJECT_DIR$/public/app/main.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="356">
-          <caret line="148" column="0" lean-forward="true" selection-start-line="148" selection-start-column="0" selection-end-line="148" selection-end-column="0" />
+        <state relative-caret-position="345">
+          <caret line="23" column="19" lean-forward="false" selection-start-line="23" selection-start-column="4" selection-end-line="23" selection-end-column="19" />
           <folding />
         </state>
       </provider>
@@ -1510,21 +1393,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/serverSideSocketListener.js">
+    <entry file="file://$PROJECT_DIR$/public/test/testsModelManager.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="356">
-          <caret line="593" column="0" lean-forward="false" selection-start-line="593" selection-start-column="0" selection-end-line="593" selection-end-column="0" />
-          <folding>
-            <element signature="e#3007#3061#0" expanded="false" />
-            <element signature="e#6859#6877#0" expanded="false" />
-          </folding>
+        <state relative-caret-position="569">
+          <caret line="83" column="0" lean-forward="true" selection-start-line="83" selection-start-column="0" selection-end-line="83" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/test/testsAgentAPI.js">
+    <entry file="file://$PROJECT_DIR$/public/app/bundle.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="11" column="0" lean-forward="true" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+        <state relative-caret-position="645">
+          <caret line="2580" column="41" lean-forward="false" selection-start-line="2580" selection-start-column="41" selection-end-line="2580" selection-end-column="41" />
           <folding />
         </state>
       </provider>
@@ -1532,10 +1412,63 @@
     <entry file="file://$PROJECT_DIR$/index.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="347">
-          <caret line="239" column="24" lean-forward="false" selection-start-line="239" selection-start-column="12" selection-end-line="239" selection-end-column="24" />
+          <caret line="1165" column="10" lean-forward="false" selection-start-line="1165" selection-start-column="10" selection-end-line="1165" selection-end-column="10" />
           <folding>
             <element signature="e#13032#13088#0" expanded="false" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/collaborative-app/modelManager.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="344">
+          <caret line="392" column="47" lean-forward="false" selection-start-line="392" selection-start-column="47" selection-end-line="392" selection-end-column="47" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/serverSideSocketListener.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="446">
+          <caret line="102" column="28" lean-forward="true" selection-start-line="102" selection-start-column="28" selection-end-line="102" selection-end-column="28" />
+          <folding>
+            <element signature="e#3785#3839#0" expanded="false" />
+            <element signature="e#7637#7655#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/test/testsAgentAPI.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="497">
+          <caret line="626" column="48" lean-forward="false" selection-start-line="626" selection-start-column="39" selection-end-line="626" selection-end-column="48" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/collaborative-app/editor-listener.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="341">
+          <caret line="32" column="0" lean-forward="false" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/app/js/app-utilities.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="795">
+          <caret line="67" column="33" lean-forward="true" selection-start-line="61" selection-start-column="2" selection-end-line="67" selection-end-column="33" />
+          <folding>
+            <marker date="1490043083000" expanded="true" signature="19511:19577" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="352">
+          <caret line="130" column="0" lean-forward="false" selection-start-line="130" selection-start-column="0" selection-end-line="130" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>

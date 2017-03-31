@@ -580,7 +580,7 @@ app.proto.create = function (model) {
         //TODO????????????????
         setTimeout(function() {
             if(isModelEmpty)
-                modelManager.initModel(cy.nodes(), cy.edges(), "me");
+                modelManager.initModel(cy.nodes(), cy.edges(), appUtilities,"me");
 
             require('./public/collaborative-app/editor-listener.js')(modelManager);
 
@@ -642,20 +642,19 @@ app.proto.loadCyFromModel = function(){
             var position = modelManager.getModelNodeAttribute('position',node.id());
 
             node.position({x:position.x, y: position.y});
-            // node._private.position.x = modelNode.position.x;
-            // node._private.position.y = modelNode.position.y;
 
         });
 
-        // cy.edges().forEach(function(edge){
-        //     edge.css('line-color', modelManager.getModelEdgeAttribute('lineColor', edge.id()));
-        //     edge.css('background-color',  modelManager.getModelEdgeAttribute('backgroundColor', edge.id()));
-        //     edge.css('background-opacity',  modelManager.getModelEdgeAttribute('backgroundOpacity', edge.id()));
-        //     edge.css('border-width',  modelManager.getModelEdgeAttribute('borderWidth', edge.id()));
-        //     edge.css('width',  modelManager.getModelEdgeAttribute('width', edge.id()));
-        //     edge.css('opacity',  modelManager.getModelEdgeAttribute('opacity', edge.id()));
-        //
-        // });
+        var props;
+        //update app utilities as well
+        props = modelManager.getLayoutProperties();
+        if(props) appUtilities.currentLayoutProperties = props;
+
+        props = modelManager.getGeneralProperties();
+        if(props) appUtilities.currentGeneralProperties = props;
+
+        props = modelManager.getGridProperties();
+        if(props) appUtilities.currentGridProperties = props;
 
     }
     return (jsonArr == null);
@@ -1075,17 +1074,6 @@ app.proto.init = function (model) {
 
     });
 
-    model.on('all', '_page.doc.cy.fontProperties', function(op, val) {
-        if (docReady){
-
-            for(var att in val){ //assign each attribute separately to keep the functions in currentfontproperties
-                if(appUtilities.currentFontProperties[att])
-                    appUtilities.currentFontProperties[att] = val[att];
-            }
-
-        }
-
-    });
 
     //Sometimes works
     model.on('all', '_page.doc.images', function() {
@@ -1199,21 +1187,6 @@ app.proto.add = function (model, filePath) {
         });
 
 
-
-
-    //append image  after updating the message list on the page
-        //if(filePath!=null) {
-        //    var msgs = $("div[class='message']");
-        //    //append this to the message with the filepath as a thumbnail
-        //    $("div[class='message']").each(function (index, element) {
-        //        if ($(element).context.innerHTML.indexOf(filePath) > -1) {
-        //            $(element).append("<div class = 'receivedImage' ></div>");
-        //        //
-        //        }
-        //    });
-        //
-
-//s        }
 };
 
 

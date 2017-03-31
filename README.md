@@ -127,9 +127,8 @@ string after http:<ip>:3000/ in the server address.
 |                         |                                                                                                                                  |                                  |     tile:< boolean value to tile disconnected >,                                |
 |                         |                                                                                                                                  |                                  |   animate:< boolean value >,                                                    |
 |                         |                                                                                                                                  |                                  |   randomize:< boolean value >}                                                  |
-|  getGeneralProperties    |                                                                                                                                  |     callback                     |  |
-|  getGridProperties    |                                                                                                                                  |     callback                     |  |
-|  getFontProperties    |                                                                                                                                  |     callback                     |  |
+|  getGeneralProperties    |                                                                                                                                  |     callback                     | General properties of the shared model as an object |
+|  getGridProperties    |                                                                                                                                  |     callback                     |  |Grid properties of the shared model as an object|
 |  changeName             | Sends request to the server to change agent's name                                                                               |       newName                    |                                                                               |
 |  getNodeRequest         | Requests the node with < id > from the server                                                                                      |     id, callback                 |  Node with id                                                                 |
 |  getEdgeRequest         | Requests the edge with < id > from the server                                                                                      |      id, callback                |   Edge with id                                                                |
@@ -158,7 +157,6 @@ string after http:<ip>:3000/ in the server address.
 |                                     | randomize:< boolean value >}  |
 |"agentSetGeneralPropertiesRequest"  |  |
 |"agentSetGridPropertiesRequest"  |  |
-|"agentSetFontPropertiesRequest"  |  |
 |  “agentRunLayoutRequest”            | -                           |
 |  “agentAddNodeRequest”              | {x: < position x >,           |
 |                                     | y: < position y >,         |
