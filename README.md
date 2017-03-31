@@ -286,7 +286,6 @@ sbgncardinality
             -   relevance
             -   confidence
         -   cy //sbgn-related
-            -   sampleInd //temporary
             -   layoutProperties
             -   nodes
                 -   \[nodeId\]

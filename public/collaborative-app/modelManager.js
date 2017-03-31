@@ -898,7 +898,7 @@ module.exports = function (model, docId) {
             var prevParam = model.get('_page.doc.cy');
             model.set('_page.doc.cy', modelCy);
 
-            this.setSampleInd(-1, null, true); //to get a new container
+            // this.setSampleInd(-1, null, true); //to get a new container
 
             if (!noHistUpdate)
                 this.updateHistory({opName: 'restore', prevParam: prevParam, param: modelCy, opTarget: 'model'});

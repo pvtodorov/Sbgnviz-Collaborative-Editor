@@ -7,10 +7,8 @@
     <list default="true" id="9a4da041-f7fe-4258-8b1b-f19f75831c76" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index.js" afterPath="$PROJECT_DIR$/index.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/serverSideSocketListener.js" afterPath="$PROJECT_DIR$/lib/serverSideSocketListener.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/collaborative-app/editor-listener.js" afterPath="$PROJECT_DIR$/public/collaborative-app/editor-listener.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/collaborative-app/modelManager.js" afterPath="$PROJECT_DIR$/public/collaborative-app/modelManager.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/index.html" afterPath="$PROJECT_DIR$/views/index.html" />
     </list>
     <ignored path="Sbgnviz-Collaborative-Editor Chise Version.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -50,18 +48,8 @@
       <file leaf-file-name="testsAgentAPI.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/test/testsAgentAPI.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="497">
-              <caret line="626" column="48" lean-forward="false" selection-start-line="626" selection-start-column="39" selection-end-line="626" selection-end-column="48" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="README.md" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/README.md">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="352">
-              <caret line="130" column="0" lean-forward="false" selection-start-line="130" selection-start-column="0" selection-end-line="130" selection-end-column="0" />
+            <state relative-caret-position="317">
+              <caret line="614" column="30" lean-forward="true" selection-start-line="614" selection-start-column="30" selection-end-line="614" selection-end-column="30" />
               <folding />
             </state>
           </provider>
@@ -82,18 +70,18 @@
       <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/views/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="343">
-              <caret line="24" column="41" lean-forward="true" selection-start-line="24" selection-start-column="41" selection-end-line="24" selection-end-column="41" />
+            <state relative-caret-position="15">
+              <caret line="1" column="32" lean-forward="false" selection-start-line="1" selection-start-column="4" selection-end-line="1" selection-end-column="32" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="modelManager.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="modelManager.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/public/collaborative-app/modelManager.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="344">
-              <caret line="392" column="47" lean-forward="false" selection-start-line="392" selection-start-column="47" selection-end-line="392" selection-end-column="47" />
+            <state relative-caret-position="3707">
+              <caret line="896" column="62" lean-forward="true" selection-start-line="896" selection-start-column="62" selection-end-line="896" selection-end-column="62" />
               <folding />
             </state>
           </provider>
@@ -132,8 +120,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>savegr</find>
-      <find>inspector</find>
       <find>general</find>
       <find>undo</find>
       <find>undocomma</find>
@@ -160,8 +146,10 @@
       <find>fontprop</find>
       <find>fontproperties</find>
       <find>layout</find>
-      <find>layoutpro</find>
       <find>font</find>
+      <find>layoutpro</find>
+      <find>sampleind</find>
+      <find>sample</find>
     </findStrings>
     <replaceStrings>
       <replace>bbox</replace>
@@ -239,16 +227,16 @@
         <option value="$PROJECT_DIR$/agent-interaction/ContextAgent.js" />
         <option value="$PROJECT_DIR$/public/app/css/chise.css" />
         <option value="$PROJECT_DIR$/public/collaborative-app/factoid-handler.js" />
-        <option value="$PROJECT_DIR$/views/index.html" />
         <option value="$PROJECT_DIR$/public/app/js/app-cy.js" />
         <option value="$PROJECT_DIR$/public/app/main.js" />
         <option value="$PROJECT_DIR$/public/app/js/backbone-views.js" />
         <option value="$PROJECT_DIR$/public/test/testsAgentAPI.js" />
         <option value="$PROJECT_DIR$/index.js" />
         <option value="$PROJECT_DIR$/public/collaborative-app/editor-listener.js" />
-        <option value="$PROJECT_DIR$/public/collaborative-app/modelManager.js" />
         <option value="$PROJECT_DIR$/lib/serverSideSocketListener.js" />
         <option value="$PROJECT_DIR$/README.md" />
+        <option value="$PROJECT_DIR$/public/collaborative-app/modelManager.js" />
+        <option value="$PROJECT_DIR$/views/index.html" />
       </list>
     </option>
   </component>
@@ -905,10 +893,10 @@
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32981133" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.16648531" sideWeight="0.50687623" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17132075" sideWeight="0.49774775" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17132075" sideWeight="0.49774775" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Gulp" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="true" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17110874" sideWeight="0.49312377" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17110874" sideWeight="0.49312377" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.28" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -964,7 +952,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="-Directory structure refactoring&#10;-Add node/edge problems corrected --&gt; included initialization afterwards" />
     <MESSAGE value="Delete node/edge working" />
     <MESSAGE value="Refactoring with the most recent chise.js" />
     <MESSAGE value="Refactoring with the most recent chise.js. data, backgroundColor and drag are implemented." />
@@ -989,7 +976,8 @@
     <MESSAGE value="Updates" />
     <MESSAGE value="Updates on layout properties and bend points." />
     <MESSAGE value="Layout, grid, general and font properties are synchronized." />
-    <option name="LAST_COMMIT_MESSAGE" value="Layout, grid, general and font properties are synchronized." />
+    <MESSAGE value="Undo redo for layout, general and grid properties." />
+    <option name="LAST_COMMIT_MESSAGE" value="Undo redo for layout, general and grid properties." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1367,14 +1355,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/views/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="343">
-          <caret line="24" column="41" lean-forward="true" selection-start-line="24" selection-start-column="41" selection-end-line="24" selection-end-column="41" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/app/main.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="345">
@@ -1419,14 +1399,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/collaborative-app/modelManager.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="344">
-          <caret line="392" column="47" lean-forward="false" selection-start-line="392" selection-start-column="47" selection-end-line="392" selection-end-column="47" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/lib/serverSideSocketListener.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="446">
@@ -1435,14 +1407,6 @@
             <element signature="e#3785#3839#0" expanded="false" />
             <element signature="e#7637#7655#0" expanded="false" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/test/testsAgentAPI.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="497">
-          <caret line="626" column="48" lean-forward="false" selection-start-line="626" selection-start-column="39" selection-end-line="626" selection-end-column="48" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1466,8 +1430,32 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="352">
-          <caret line="130" column="0" lean-forward="false" selection-start-line="130" selection-start-column="0" selection-end-line="130" selection-end-column="0" />
+        <state relative-caret-position="45">
+          <caret line="3" column="71" lean-forward="false" selection-start-line="3" selection-start-column="71" selection-end-line="3" selection-end-column="71" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/test/testsAgentAPI.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="317">
+          <caret line="614" column="30" lean-forward="true" selection-start-line="614" selection-start-column="30" selection-end-line="614" selection-end-column="30" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="1" column="32" lean-forward="false" selection-start-line="1" selection-start-column="4" selection-end-line="1" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/collaborative-app/modelManager.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3707">
+          <caret line="896" column="62" lean-forward="true" selection-start-line="896" selection-start-column="62" selection-end-line="896" selection-end-column="62" />
           <folding />
         </state>
       </provider>
