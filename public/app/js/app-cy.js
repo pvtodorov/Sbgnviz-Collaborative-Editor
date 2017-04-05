@@ -1,7 +1,7 @@
 var jquery = $ = require('jquery');
 var appUtilities = require('./app-utilities');
 var modeHandler = require('./app-mode-handler');
-inspectorUtilities = require('./inspector-utilities'); //FUNDA MADE THIS GLOBAL
+var inspectorUtilities = require('./inspector-utilities');
 var _ = require('underscore');
 
 module.exports = function () {

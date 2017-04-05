@@ -1,10 +1,11 @@
 var jquery = $ = require('jquery');
 var BackboneViews = require('./backbone-views');
-var appUtilities = require('./app-utilities');
+appUtilities = require('./app-utilities');  //FUNDA MADE THIS GLOBAL
 var modeHandler = require('./app-mode-handler');
 var keyboardShortcuts = require('./keyboard-shortcuts');
-var inspectorUtilities = require('./inspector-utilities');
+ inspectorUtilities = require('./inspector-utilities'); //FUNDA MADE THIS GLOBAL
 var _ = require('underscore');
+var collaborativeBackboneViews = require("../../collaborative-app/collaborative-backbone-views.js"); //FUNDA
 
 // Handle sbgnviz menu functions which are to be triggered on events
 module.exports = function () {
@@ -24,10 +25,12 @@ module.exports = function () {
         $(window).on('resize', _.debounce(dynamicResize, 100));
         dynamicResize();
 
+
         layoutPropertiesView = appUtilities.layoutPropertiesView = new BackboneViews.LayoutPropertiesView({el: '#layout-properties-table'});
         generalPropertiesView = appUtilities.generalPropertiesView = new BackboneViews.GeneralPropertiesView({el: '#general-properties-table'});
-        pathsBetweenQueryView = appUtilities.pathsBetweenQueryView = new BackboneViews.PathsBetweenQueryView({el: '#query-pathsbetween-table'});
-        //promptSaveView = appUtilities.promptSaveView = new BackboneViews.PromptSaveView({el: '#prompt-save-table'}); // see PromptSaveView in backbone-views.js
+      //FUNDA  pathsBetweenQueryView = appUtilities.pathsBetweenQueryView = new BackboneViews.PathsBetweenQueryView({el: '#query-pathsbetween-table'});
+        collaborativePathsBetweenQueryView = new collaborativeBackboneViews.PathsBetweenQueryView({el: '#query-pathsbetween-table'});//FUNDA--use collaborative versio
+        //promptSaveView = appUtilities.promptSaveView = new BackboneViews.PromptSaveView({el: '#prompt-save-table'}); // see PromptSaveView in collaborative-backbone-views.js
         fileSaveView = appUtilities.fileSaveView = new BackboneViews.FileSaveView({el: '#file-save-table'});
         promptConfirmationView = appUtilities.promptConfirmationView = new BackboneViews.PromptConfirmationView({el: '#prompt-confirmation-table'});
         reactionTemplateView = appUtilities.reactionTemplateView = new BackboneViews.ReactionTemplateView({el: '#reaction-template-table'});
@@ -230,7 +233,10 @@ module.exports = function () {
         });
 
         $("#query-pathsbetween").click(function (e) {
-            pathsBetweenQueryView.render();
+
+            collaborativePathsBetweenQueryView.render();
+
+            //FUNDA pathsBetweenQueryView.render();
         });
 
         $("#grid-properties").click(function (e) {

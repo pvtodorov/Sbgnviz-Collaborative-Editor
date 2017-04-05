@@ -8,7 +8,7 @@ var cytoscape = require('cytoscape');
 require('jquery-expander')($);
 require('bootstrap');
 
-appUtilities = require('./js/app-utilities'); //FUNDA MADE THIS GLOBAL
+var appUtilities = require('./js/app-utilities');
 var appCy = require('./js/app-cy');
 var appMenu = require('./js/app-menu');
 

@@ -8,6 +8,8 @@ var _ = require('./public/node_modules/underscore');
 
 var bs;
 
+
+
 app.loadViews(__dirname + '/views');
 //app.loadStyles(__dirname + '/styles');
 //app.serverUse(module, 'derby-stylus');
@@ -545,7 +547,12 @@ app.proto.create = function (model) {
     var self = this;
     docReady = true;
 
+    var isQueryWindow = false;
+
     socket = io();
+
+
+
 
     var id = model.get('_session.userId');
     var name = model.get('_page.doc.users.' + id +'.name');
@@ -563,6 +570,26 @@ app.proto.create = function (model) {
     }); //subscribe to current doc as a new room
 
 
+    // //If we get a message on a separate window
+
+    window.addEventListener('message', function(event) {
+        if(event.data) { //initialization for a query winddow
+            isQueryWindow = true;
+
+            modelManager.newModel("me"); //do not delete cytoscape, only the model
+
+            chise.updateGraph(JSON.parse(event.data));
+
+
+            setTimeout(function() {
+                console.log(cy.nodes().length);
+                modelManager.initModel(cy.nodes(), cy.edges(), appUtilities, "me");
+            },2000);
+        }
+
+    }, false);
+
+
 
 
     this.listenToAgentSocket(model);
@@ -572,21 +599,21 @@ app.proto.create = function (model) {
     //Loading cytoscape and clients
     setTimeout(function(){
 
-        // require('./public/node_modules/bootstrap/dist/js/bootstrap.js');
-
-         var isModelEmpty = self.loadCyFromModel();
-
-
+    if(!isQueryWindow) { //initialization for a regular window
+        var isModelEmpty = self.loadCyFromModel();
+        console.log("no query");
         //TODO????????????????
-        setTimeout(function() {
-            if(isModelEmpty)
-                modelManager.initModel(cy.nodes(), cy.edges(), appUtilities,"me");
-
-            require('./public/collaborative-app/editor-listener.js')(modelManager);
-
-        }, 0);
+        setTimeout(function () {
+            if (isModelEmpty)
+                modelManager.initModel(cy.nodes(), cy.edges(), appUtilities, "me");
 
 
+
+        }, 1000);
+
+    }
+
+        require('./public/collaborative-app/editor-listener.js')(modelManager);
         //Listen to these after cy is loaded
         $("#undo-last-action, #undo-icon").click(function (e) {
             if(modelManager.isUndoPossible()){
@@ -674,6 +701,9 @@ function moveNodeAndChildren(positionDiff, node, notCalcTopMostNodes) {
 }
 
 app.proto.listenToNodeOperations = function(model){
+
+
+
 
     //Update inspector
     model.on('all', '_page.doc.cy.nodes.**', function(id, op, val, prev, passed){
@@ -865,6 +895,9 @@ app.proto.listenToNodeOperations = function(model){
 
 app.proto.listenToEdgeOperations = function(model){
 
+
+
+
     //Update inspector
     model.on('all', '_page.doc.cy.edges.**', function(id, op, val, prev, passed){
         inspectorUtilities.handleSBGNInspector();
@@ -998,12 +1031,10 @@ app.proto.listenToEdgeOperations = function(model){
                     viewUtilities.hide(cy.getElementById(id));
                 else
                     viewUtilities.show(cy.getElementById(id));
-
             }
             catch(e){
                 console.log(e);
             }
-
         }
     });
 
@@ -1136,11 +1167,14 @@ app.proto.changeColorCode = function(){
 
 };
 app.proto.runUnitTests = function(){
-    //require("./public/test/testsMenuFunctions.js")();
-    // require("./public/test/testsModelManager.js")();
+
     var room = this.model.get('_page.room');
     require("./public/test/testsAgentAPI.js")(("http://localhost:3000/" + room), modelManager);
+    // require("./public/test/testsModelManager.js")();
     require("./public/test/testOptions.js")(); //to print out results
+
+
+
 
 }
 

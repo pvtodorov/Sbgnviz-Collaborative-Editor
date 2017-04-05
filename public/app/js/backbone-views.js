@@ -389,17 +389,31 @@ var PathsBetweenQueryView = Backbone.View.extend({
 
             chise.startSpinner('paths-between-spinner');
 
+
+
             queryURL = queryURL + sources;
+
+
             $.ajax({
                 url: queryURL,
                 type: 'GET',
                 success: function (data) {
-                    chise.updateGraph(chise.convertSbgnmlToJson(data));
+
+                     chise.updateGraph(chise.convertSbgnmlToJson(data));
+                    chise.endSpinner('paths-between-spinner');
+                },
+                error: function (request, status, error) {
+                    console.log(request.responseText);
                     chise.endSpinner('paths-between-spinner');
                 }
+
+
+
             });
 
             $(self.el).modal('toggle');
+
+
         });
 
         $(document).off("click", "#cancel-query-pathsbetween").on("click", "#cancel-query-pathsbetween", function (evt) {

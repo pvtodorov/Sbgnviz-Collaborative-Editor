@@ -1113,15 +1113,16 @@ module.exports = function (model, docId) {
 
             var newModelCy = model.get('_page.doc.cy');
 
-            if(newModelCy.layoutProperties == null)
-                model.set('_page.doc.cy.layoutProperties', _.clone(appUtilities.defaultLayoutProperties));
+            if(newModelCy) {
+                if (newModelCy.layoutProperties == null)
+                    model.set('_page.doc.cy.layoutProperties', _.clone(appUtilities.defaultLayoutProperties));
 
-            if(newModelCy.generalProperties == null)
-                model.set('_page.doc.cy.generalProperties', _.clone(appUtilities.defaultGeneralProperties));
+                if (newModelCy.generalProperties == null)
+                    model.set('_page.doc.cy.generalProperties', _.clone(appUtilities.defaultGeneralProperties));
 
-            if(newModelCy.gridProperties == null)
-                model.set('_page.doc.cy.gridProperties', _.clone(appUtilities.defaultGridProperties));
-
+                if (newModelCy.gridProperties == null)
+                    model.set('_page.doc.cy.gridProperties', _.clone(appUtilities.defaultGridProperties));
+            }
 
 
             if (!noHistUpdate) {
