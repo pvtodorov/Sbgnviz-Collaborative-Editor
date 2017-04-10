@@ -1113,6 +1113,7 @@ module.exports = function (model, docId) {
 
             var newModelCy = model.get('_page.doc.cy');
 
+
             if(newModelCy) {
                 if (newModelCy.layoutProperties == null)
                     model.set('_page.doc.cy.layoutProperties', _.clone(appUtilities.defaultLayoutProperties));
@@ -1128,9 +1129,6 @@ module.exports = function (model, docId) {
             if (!noHistUpdate) {
                 this.updateHistory({opName: 'init', param: newModelCy, opTarget: 'model'});
             }
-
-
-
 
             //notifies other clients to update their cy graphs
            model.pass({user:"me"}).set('_page.doc.cy.initTime', new Date());

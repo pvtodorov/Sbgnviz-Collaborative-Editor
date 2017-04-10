@@ -82,16 +82,16 @@ var PathsBetweenQueryView = Backbone.View.extend({
 
                             w.postMessage(JSON.stringify(json), "*");
 
-                            // //because window opening takes a while
-                            setTimeout(function () {
-                                var json = chise.convertSbgnmlToJson(data);
-                                w.postMessage(JSON.stringify(json), "*");
-                            }, 2000);
+
 
                         });
 
 
-
+                    // //because window opening takes a while
+                    setTimeout(function () {
+                        var json = chise.convertSbgnmlToJson(data);
+                        w.postMessage(JSON.stringify(json), "*");
+                    }, 2000);
 
                     chise.endSpinner('paths-between-spinner');
                 },

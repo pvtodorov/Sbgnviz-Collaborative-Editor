@@ -6,7 +6,7 @@
 
 
 
-module.exports =  function(modelManager) {
+module.exports =  function(app, modelManager) {
 
     var idxcardjson = require('../src/reach-functions/idxcardjson-to-json-converter.js');
 
@@ -70,8 +70,9 @@ module.exports =  function(modelManager) {
 
 
             var p = new Promise(function (resolve) {
-                 socket.emit("REACHQuery", "indexcard", inputStr, function (data) {
+                socket.emit("REACHQuery", "indexcard", inputStr, function (data) {
                         //      console.log(line);
+
 
                         var cards = JSON.parse(data).cards;
                         // console.log(cards);
@@ -89,8 +90,10 @@ module.exports =  function(modelManager) {
                      notyView.setText( "Merging graphs...");
 
 
+
                         //TODO: merge will be implemented
-                        nodeMap = modelManager.mergeJsons(jsonGraphs); //mapping between sentences and node labels
+                        //nodeMap = modelManager.mergeJsons(jsonGraphs); //mapping between sentences and node labels
+                    nodeMap = app.mergeJsons(jsonGraphs); //mapping between sentences and node labels
 
 
                      console.log(jsonGraphs);
