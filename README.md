@@ -15,7 +15,7 @@ Installation
 
 ### Install dependencies on Debian/Ubuntu
 
-Install node.js, mongodb and redis servers first.
+Install node.js and mongodb servers first.
 
 Node:
 
@@ -42,7 +42,6 @@ sudo apt-get install upstart-sysv
 ```
 brew install node
 brew install tcl-tk
-brew install redis
 brew install mongodb
 brew install nodejs
 ```
@@ -65,7 +64,7 @@ Running the server
 ```
 node server
 ```
-or if you made changes to newt or chise (under public/app) run runbundle script:
+or if you made changes to newt or chise (under public/app) run the script: runbundle:
 
 ./runbundle.sh  
 
@@ -188,6 +187,7 @@ string after http:<ip>:3000/ in the server address.
 |		"agentActiveRoomsRequest"					| -																																			|
 |   "agentUndoRequest"          |   |
 |   "agentRedoRequest"          |   |
+|   "agentMessage"          |{room: <room>, comment: <text to be sent>, userName:<agentName>, userId: <agentId>,  targets: <target ids or * for all clients in the agent room>}   |
 
 
 In order to set up and run an agent:
