@@ -1,15 +1,75 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/lib/serverSideSocketListener.js" line="571" mnemonic="9" />
+    <bookmark url="file://$PROJECT_DIR$/lib/serverSideSocketListener.js" line="573" mnemonic="9" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9a4da041-f7fe-4258-8b1b-f19f75831c76" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/app/img/newt-icon.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/app/img/newt-logo.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Sbgnviz-Collaborative-Editor Chise Version.iml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/app/bundle.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/app/img/align/align-horizontal-bottom.svg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/app/img/align/align-horizontal-middle.svg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/app/img/align/align-horizontal-top.svg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/app/img/align/align-vertical-center.svg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/app/img/align/align-vertical-left.svg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/app/img/align/align-vertical-right.svg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/app/img/align/align.svg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/app/img/edges/catalysis.svg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/app/img/edges/consumption.svg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/app/img/edges/inhibition.svg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/app/img/edges/modulation.svg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/app/img/edges/necessary-stimulation.svg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/app/img/edges/production.svg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/app/img/edges/stimulation.svg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/app/img/nodes/and.svg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/app/img/nodes/association.svg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/app/img/nodes/compartment.svg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/app/img/nodes/complex.svg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/app/img/nodes/dissociation.svg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/app/img/nodes/macromolecule.svg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/app/img/nodes/not.svg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/app/img/nodes/nucleic-acid-feature.svg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/app/img/nodes/omitted-process.svg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/app/img/nodes/or.svg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/app/img/nodes/perturbing-agent.svg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/app/img/nodes/phenotype.svg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/app/img/nodes/process.svg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/app/img/nodes/simple-chemical.svg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/app/img/nodes/source-and-sink.svg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/app/img/nodes/tag.svg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/app/img/nodes/uncertain-process.svg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/app/img/nodes/unspecified-entity.svg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/app/img/tabs/palette.svg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/app/img/tabs/properties.svg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/app/img/toolbar/collapse-selected.svg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/app/img/toolbar/delete-simple.svg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/app/img/toolbar/delete-smart.svg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/app/img/toolbar/expand-selected.svg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/app/img/toolbar/grid.svg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/app/img/toolbar/guidelines.svg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/app/img/toolbar/hide-selected.svg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/app/img/toolbar/highlight-neighbors-of-selected.svg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/app/img/toolbar/layout-cose.svg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/app/img/toolbar/layout-properties.svg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/app/img/toolbar/load.svg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/app/img/toolbar/new.svg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/app/img/toolbar/redo.svg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/app/img/toolbar/remove-highlights.svg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/app/img/toolbar/save.svg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/app/img/toolbar/search.svg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/app/img/toolbar/select.svg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/app/img/toolbar/settings.svg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/app/img/toolbar/show-selected.svg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/app/img/toolbar/undo.svg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/derby/cwc-c1104442829d8add6d207659401aace6.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/derby/cwc-c1104442829d8add6d207659401aace6.map.json" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/runbundle.sh" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/simplest.sbgnml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/agent-interaction/agentAPI.js" afterPath="$PROJECT_DIR$/agent-interaction/agentAPI.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index.js" afterPath="$PROJECT_DIR$/index.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/serverSideSocketListener.js" afterPath="$PROJECT_DIR$/lib/serverSideSocketListener.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/test/testsAgentAPI.js" afterPath="$PROJECT_DIR$/public/test/testsAgentAPI.js" />
     </list>
     <ignored path="Sbgnviz-Collaborative-Editor Chise Version.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -36,11 +96,11 @@
       <file leaf-file-name="serverSideSocketListener.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/lib/serverSideSocketListener.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="310">
-              <caret line="46" column="35" lean-forward="false" selection-start-line="46" selection-start-column="19" selection-end-line="46" selection-end-column="35" />
+            <state relative-caret-position="487">
+              <caret line="441" column="11" lean-forward="true" selection-start-line="441" selection-start-column="11" selection-end-line="441" selection-end-column="11" />
               <folding>
                 <element signature="e#7707#7725#0" expanded="false" />
-                <element signature="e#17035#20931#0" expanded="false" />
+                <element signature="e#17088#21044#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -49,11 +109,31 @@
       <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="385">
-              <caret line="1366" column="32" lean-forward="false" selection-start-line="1366" selection-start-column="32" selection-end-line="1366" selection-end-column="32" />
+            <state relative-caret-position="502">
+              <caret line="230" column="31" lean-forward="false" selection-start-line="230" selection-start-column="31" selection-end-line="230" selection-end-column="31" />
               <folding>
-                <element signature="e#13366#13422#0" expanded="false" />
+                <element signature="e#13472#13528#0" expanded="false" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="agentAPI.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/agent-interaction/agentAPI.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="310">
+              <caret line="288" column="27" lean-forward="false" selection-start-line="288" selection-start-column="20" selection-end-line="288" selection-end-column="27" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="app-menu.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/public/app/js/app-menu.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="565">
+              <caret line="349" column="39" lean-forward="true" selection-start-line="349" selection-start-column="39" selection-end-line="349" selection-end-column="39" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -71,8 +151,8 @@
       <file leaf-file-name="testsAgentAPI.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/test/testsAgentAPI.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="482">
-              <caret line="612" column="15" lean-forward="true" selection-start-line="612" selection-start-column="15" selection-end-line="612" selection-end-column="15" />
+            <state relative-caret-position="320">
+              <caret line="87" column="76" lean-forward="true" selection-start-line="87" selection-start-column="30" selection-end-line="87" selection-end-column="76" />
               <folding />
             </state>
           </provider>
@@ -81,8 +161,8 @@
       <file leaf-file-name="bsb.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/../cwc-integ/hms/bioagents/bioagents/bsb/bsb.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="450">
-              <caret line="136" column="24" lean-forward="true" selection-start-line="136" selection-start-column="24" selection-end-line="136" selection-end-column="24" />
+            <state relative-caret-position="580">
+              <caret line="108" column="44" lean-forward="true" selection-start-line="108" selection-start-column="44" selection-end-line="108" selection-end-column="44" />
               <folding />
             </state>
           </provider>
@@ -129,12 +209,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>what</find>
-      <find>on_merge</find>
-      <find>wait</find>
-      <find>logger</find>
-      <find>room</find>
-      <find>'</find>
       <find>\n</find>
       <find>connect</find>
       <find>subscri</find>
@@ -159,6 +233,12 @@
       <find>agentmessage</find>
       <find>agentcurrentroom</find>
       <find>mergejsons</find>
+      <find>undo</find>
+      <find>sendmessage</find>
+      <find>message</find>
+      <find>on_sbgn</find>
+      <find>socket</find>
+      <find>messages</find>
     </findStrings>
     <replaceStrings>
       <replace>bbox</replace>
@@ -243,9 +323,9 @@
         <option value="$PROJECT_DIR$/agent-interaction/agentAPI.js" />
         <option value="$PROJECT_DIR$/public/test/testsAgentAPI.js" />
         <option value="$PROJECT_DIR$/public/node_modules/sbgnviz/src/utilities/file-utilities.js" />
+        <option value="$PROJECT_DIR$/../cwc-integ/hms/bioagents/bioagents/bsb/bsb.py" />
         <option value="$PROJECT_DIR$/index.js" />
         <option value="$PROJECT_DIR$/lib/serverSideSocketListener.js" />
-        <option value="$PROJECT_DIR$/../cwc-integ/hms/bioagents/bioagents/bsb/bsb.py" />
       </list>
     </option>
   </component>
@@ -267,7 +347,7 @@
     <handled-path value="$PROJECT_DIR$/public/node_modules" />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="102" />
+    <option name="x" value="179" />
     <option name="y" value="23" />
     <option name="width" value="1918" />
     <option name="height" value="1417" />
@@ -415,6 +495,46 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="collaborative-app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Sbgnviz-Collaborative-Editor Chise Version" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Sbgnviz-Collaborative-Editor Chise Version" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="public" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Sbgnviz-Collaborative-Editor Chise Version" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Sbgnviz-Collaborative-Editor Chise Version" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="public" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="js" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -832,7 +952,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="102" y="23" width="1918" height="1417" extended-state="0" />
+    <frame x="179" y="23" width="1918" height="1417" extended-state="0" />
     <editor active="false" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32942098" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -900,7 +1020,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="Dependent libraries and Derbyjs are updated." />
     <MESSAGE value="Hide/show, expand/collapse, clone, highlight, delete, add operations added." />
     <MESSAGE value="Model/sample loading, persisting current graph facilities added.&#10; Compound adding included but not working properly." />
     <MESSAGE value="Editor functions are working collaboratively.&#10;" />
@@ -925,7 +1044,8 @@
     <MESSAGE value="PathwayCommons query view made local." />
     <MESSAGE value="Changes in README" />
     <MESSAGE value="Old version of sbgn-merger added to system. Factoid-agent is working." />
-    <option name="LAST_COMMIT_MESSAGE" value="Old version of sbgn-merger added to system. Factoid-agent is working." />
+    <MESSAGE value="Merger and agent API changes" />
+    <option name="LAST_COMMIT_MESSAGE" value="Merger and agent API changes" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1187,14 +1307,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/app/js/app-menu.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="495">
-          <caret line="33" column="74" lean-forward="false" selection-start-line="33" selection-start-column="74" selection-end-line="33" selection-end-column="74" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="885">
@@ -1271,14 +1383,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/agent-interaction/agentAPI.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="337">
-          <caret line="195" column="11" lean-forward="false" selection-start-line="195" selection-start-column="11" selection-end-line="195" selection-end-column="11" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/node_modules/sbgnviz/src/utilities/json-to-sbgnml-converter.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="15">
@@ -1311,24 +1415,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/serverSideSocketListener.js">
+    <entry file="file://$PROJECT_DIR$/public/app/js/app-menu.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="310">
-          <caret line="46" column="35" lean-forward="false" selection-start-line="46" selection-start-column="19" selection-end-line="46" selection-end-column="35" />
-          <folding>
-            <element signature="e#7707#7725#0" expanded="false" />
-            <element signature="e#17035#20931#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="385">
-          <caret line="1366" column="32" lean-forward="false" selection-start-line="1366" selection-start-column="32" selection-end-line="1366" selection-end-column="32" />
-          <folding>
-            <element signature="e#13366#13422#0" expanded="false" />
-          </folding>
+        <state relative-caret-position="565">
+          <caret line="349" column="39" lean-forward="true" selection-start-line="349" selection-start-column="39" selection-end-line="349" selection-end-column="39" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1342,16 +1433,45 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/public/test/testsAgentAPI.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="482">
-          <caret line="612" column="15" lean-forward="true" selection-start-line="612" selection-start-column="15" selection-end-line="612" selection-end-column="15" />
+        <state relative-caret-position="320">
+          <caret line="87" column="76" lean-forward="true" selection-start-line="87" selection-start-column="30" selection-end-line="87" selection-end-column="76" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/agent-interaction/agentAPI.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="310">
+          <caret line="288" column="27" lean-forward="false" selection-start-line="288" selection-start-column="20" selection-end-line="288" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="502">
+          <caret line="230" column="31" lean-forward="false" selection-start-line="230" selection-start-column="31" selection-end-line="230" selection-end-column="31" />
+          <folding>
+            <element signature="e#13472#13528#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/serverSideSocketListener.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="487">
+          <caret line="441" column="11" lean-forward="true" selection-start-line="441" selection-start-column="11" selection-end-line="441" selection-end-column="11" />
+          <folding>
+            <element signature="e#7707#7725#0" expanded="false" />
+            <element signature="e#17088#21044#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/../cwc-integ/hms/bioagents/bioagents/bsb/bsb.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="450">
-          <caret line="136" column="24" lean-forward="true" selection-start-line="136" selection-start-column="24" selection-end-line="136" selection-end-column="24" />
+        <state relative-caret-position="580">
+          <caret line="108" column="44" lean-forward="true" selection-start-line="108" selection-start-column="44" selection-end-line="108" selection-end-column="44" />
           <folding />
         </state>
       </provider>

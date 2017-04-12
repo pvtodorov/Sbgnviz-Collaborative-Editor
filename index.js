@@ -223,6 +223,13 @@ app.proto.listenToAgentSocket = function(model){
 
     var self = this;
     var modelOp;
+
+
+    //For debugging
+    socket.on('message', function (msg){
+
+        console.log(msg.comment);
+    });
     socket.on('loadFile', function(txtFile, callback){
         try {
 
