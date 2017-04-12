@@ -30,8 +30,6 @@ var factoidHandler;
 
 var socket;
 var jsonMerger = require('./public/src/reach-functions/json-merger.js');
-var jsonToSbgnml ;
-var sbgnmlToJson ;
 
 var modelManager;
 var oneColor = require('onecolor');
@@ -524,8 +522,9 @@ app.proto.listenToAgentSocket = function(model){
 
 
 
-    socket.on("mergeSbgn", function(data){
+    socket.on("mergeSbgn", function(data, callback){
         self.mergeSbgn(data);
+        if(callback) callback("success");
     });
 
     socket.on("mergeJsonWithCurrent", function(data){
@@ -573,9 +572,6 @@ app.proto.create = function (model) {
     factoidHandler = require('./public/collaborative-app/factoid-handler')(this, modelManager) ;
     factoidHandler.initialize();
 
-
-    jsonToSbgnml = sbgnviz.getJsonToSbgnml();
-    sbgnmlToJson = sbgnviz.getSbgnmlToJson();
 
     //Notify server about the client connection
     socket.emit("subscribeHuman", { userName:name, room:  model.get('_page.room'), userId: id}, function(){
@@ -1363,7 +1359,7 @@ app.proto.mergeJsons = function(jsonGraphs){
 
         });
 
-        console.log(mergeResult);
+
 
 
 
@@ -1397,10 +1393,10 @@ app.proto.mergeJsons = function(jsonGraphs){
 
 app.proto.mergeJsonWithCurrent = function(jsonGraph){
 
-    var currSbgnml = jsonToSbgnml.createSbgnml(cy.nodes(":visible"), cy.edges(":visible"));
-    var currJson = sbgnmlToJson.convert(currSbgnml);
 
+    var currJson = sbgnviz.createJson();
 
+console.log(jsonGraph);
     modelManager.setRollbackPoint(); //before merging
 
 
@@ -1439,8 +1435,9 @@ app.proto.mergeJsonWithCurrent = function(jsonGraph){
 
 }
 
-app.proto.mergeSbgn = function(sbgnGraph){
+app.proto.mergeSbgn = function(sbgnText){
 
-    var newJson = sbgnmlToJson.convert(sbgnGraph);
+
+    var newJson = sbgnviz.convertSbgnmlTextToJson(sbgnText);
     this.mergeJsonWithCurrent(newJson);
 }

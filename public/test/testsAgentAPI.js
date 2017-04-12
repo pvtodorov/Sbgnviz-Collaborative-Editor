@@ -38,7 +38,7 @@ module.exports = function(serverIp, modelManager){
             var done2 = assert.async();
             var done3 = assert.async();
 
-            agent.connectToServer(serverIp, function (socket) {
+            agent.connectToServer("http://localhost:3000/", function (socket) {
 
                 assert.ok(socket, "Socket connection achieved");
                 done1();
@@ -84,7 +84,8 @@ module.exports = function(serverIp, modelManager){
             var targets = agent.getUserList();
 
             console.log(targets);
-            agent.sendMessage("Hello", targets, function (data) {
+            //agent.sendMessage("Hello", targets, function (data) {
+            agent.sendRequest("agentMessage", {comment:"hello", targets:"*"}, function(data){
 
                 setTimeout(function () { //should wait here as well
 
@@ -599,6 +600,20 @@ module.exports = function(serverIp, modelManager){
 
     }
 
+    function testMerge(){
+        QUnit.test('Agent new file', function(assert) {
+
+            var sbgn = '<sbgn xmlns="http://sbgn.org/libsbgn/pd/0.1"> <map> <glyph id="id_0" class="macromolecule"> <label text="MAP2K1"/> <bbox y="0" h="60" w="140" x="0"/> <glyph id="id_3" class="unit of information"> <label text="mt:prot"/> <bbox y="0" h="18" w="53" x="0"/> </glyph> </glyph> <glyph id="id_1" class="macromolecule">    <label text="MAPK1"/> <bbox y="0" h="60" w="140" x="0"/> <glyph id="id_4" class="unit of information"> <label text="mt:prot"/> <bbox y="0" h="18" w="53" x="0"/> </glyph> <glyph id="id_5" class="state variable"> <state variable="T185" value="P"/> <bbox y="1" h="30" w="70" x="1"/> </glyph> </glyph> <glyph id="id_2" class="macromolecule"> <label text="MAPK1"/> <bbox y="0" h="60" w="140" x="0"/> <glyph id="id_6" class="unit of information"> <label text="mt:prot"/> <bbox y="0" h="18" w="53" x="0"/> </glyph> </glyph> <glyph id="id_7" class="process"> <bbox y="0" h="20" w="20" x="0"/> </glyph> <arc source="id_2" id="id_8" target="id_7" class="consumption"/> <arc source="id_7" id="id_9" target="id_1" class="production"/> <arc source="id_0" id="id_10" target="id_7" class="catalysis"/> </map> </sbgn>'
+            assert.expect(1);
+            var done1 = assert.async();
+            agent.sendRequest('agentMergeGraphRequest', {type: 'sbgn', graph: sbgn}, function (data) {
+                console.log(data);
+                assert.ok(data,"Sbgn graph merged") ;
+                done1();
+            });
+        });
+    }
+
     function testPropertyRequests(){
 
         QUnit.test('Property updates', function(assert) {
@@ -682,29 +697,32 @@ module.exports = function(serverIp, modelManager){
         testMessages();
     }, 100);
 
-
     setTimeout(function() {
-        testGetRequests();
-    },100);
+        testMerge();
+    }, 100);
 
-
-    setTimeout(function() {
-        testMoveNodeRequest();
-    },100);
-
-    setTimeout(function() {
-        testNodeSetAttributeRequests();
-    },100);
-
-
-
-    setTimeout(function() {
-        testEdgeSetAttributeRequests();
-    },100);
-
-    setTimeout(function() {
-        testPropertyRequests();
-    },100);
+    // setTimeout(function() {
+    //     testGetRequests();
+    // },100);
+    //
+    //
+    // setTimeout(function() {
+    //     testMoveNodeRequest();
+    // },100);
+    //
+    // setTimeout(function() {
+    //     testNodeSetAttributeRequests();
+    // },100);
+    //
+    //
+    //
+    // setTimeout(function() {
+    //     testEdgeSetAttributeRequests();
+    // },100);
+    //
+    // setTimeout(function() {
+    //     testPropertyRequests();
+    // },100);
 
 
     // setTimeout(function() {

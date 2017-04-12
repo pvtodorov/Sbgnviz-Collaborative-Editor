@@ -54,9 +54,9 @@ Agent.prototype.connectToServer = function (url, callback) {
     var p1 = new Promise(function (resolve, reject) {
         if (self.room == ""  || self.room == null) {
 
-            self.socket.emit("agentActiveRoomsRequest", {param: null}, function (rooms) {
-                if (rooms.length > 0)
-                    self.room = rooms[rooms.length-1]; //select the latest room
+            self.socket.emit("agentCurrentRoomRequest", function (room) {
+                console.log(room);
+                    self.room = room; //select the latest room
                 resolve("success");
             });
         }
@@ -68,7 +68,8 @@ Agent.prototype.connectToServer = function (url, callback) {
 
     p1.then(function (content) {
 
-        self.socket.emit("subscribeAgent", {userName: self.agentName, room: self.room, userId: self.agentId, colorCode: self.colorCode }, function (data) {
+        self.socket.emit("subscribeAgent", {userName: self.agentName, room: self.room, userId: self.agentId, colorCode: self.colorCode }, function () {
+
 
 
             if (callback != null) callback(self.socket);
