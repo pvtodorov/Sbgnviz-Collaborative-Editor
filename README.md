@@ -140,7 +140,7 @@ string after http:<ip>:3000/ in the server address.
 |  sendRequest            | Sends an operation request to the node.js server. Model update operations are done using this method.                            |  [*reqName, param*](#sendrequest)|                                                                               |
 
 
-#### sendRequest:
+#### Requests to send to the server:
 
 
  **reqName**                          |  **param**                                                                         |
