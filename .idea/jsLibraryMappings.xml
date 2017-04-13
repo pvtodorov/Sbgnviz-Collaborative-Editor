@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project version="4">
-  <component name="JavaScriptLibraryMappings">
-    <file url="file://$PROJECT_DIR$" libraries="{Sbgnviz-Collaborative-Editor Chise Version/node_modules}" />
-    <file url="file://$PROJECT_DIR$/public" libraries="{Sbgnviz-Collaborative-Editor Chise Version/public/node_modules}" />
-  </component>
-</project>

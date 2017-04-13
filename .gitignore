@@ -389,6 +389,8 @@ node_modules/socket.io/lib/
 node_modules/socket.io/node_modules/debug/
 node_modules/socket.io/node_modules/ms/
 node_modules/socket.io/package.json
+node_modules/socket.io/node_modules
+
 node_modules/source-map/
 node_modules/sshpk/
 node_modules/statuses/
@@ -891,4 +893,5 @@ node_modules/derby/
 node_modules/racer-bundle/.jshintrc
 node_modules/racer-bundle/.npmignore
 node_modules/racer-bundle/test/
+node_modules/racer-bundle/node_modules/
 node_modules/racer-highway/
