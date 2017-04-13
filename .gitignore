@@ -9,6 +9,7 @@ out
 gen
 .DS_Store
 .gitignore
+node_modules/
 node_modules/.bin/JSONStream
 node_modules/.bin/acorn
 node_modules/.bin/browser-pack
@@ -882,3 +883,12 @@ public/src/.DS_Store
 node_modules/graceful-fs/
 node_modules/util/
 public/node_modules/miller-rabin/
+node_modules/.bin/
+node_modules/coffee-script/
+node_modules/coffeeify/
+node_modules/connect-mongo/
+node_modules/derby/
+node_modules/racer-bundle/.jshintrc
+node_modules/racer-bundle/.npmignore
+node_modules/racer-bundle/test/
+node_modules/racer-highway/

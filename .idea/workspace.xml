@@ -5,139 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9a4da041-f7fe-4258-8b1b-f19f75831c76" name="Default" comment="Ignored files">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/1742-4690-6-111.pdf" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/.bin/cake" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/.bin/coffee" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffee-script/LICENSE" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffee-script/bin/cake" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffee-script/bin/coffee" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffee-script/lib/coffee-script/browser.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffee-script/lib/coffee-script/cake.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffee-script/lib/coffee-script/coffee-script.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffee-script/lib/coffee-script/command.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffee-script/lib/coffee-script/grammar.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffee-script/lib/coffee-script/helpers.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffee-script/lib/coffee-script/index.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffee-script/lib/coffee-script/lexer.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffee-script/lib/coffee-script/nodes.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffee-script/lib/coffee-script/optparse.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffee-script/lib/coffee-script/parser.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffee-script/lib/coffee-script/register.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffee-script/lib/coffee-script/repl.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffee-script/lib/coffee-script/rewriter.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffee-script/lib/coffee-script/scope.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffee-script/lib/coffee-script/sourcemap.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffee-script/package.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffee-script/register.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffeeify/.npmignore" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffeeify/.travis.yml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffeeify/LICENSE" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffeeify/example/bar.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffeeify/example/bat.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffeeify/example/baz.coffee" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffeeify/example/baz.litcoffee" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffeeify/example/error.coffee" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffeeify/example/foo.coffee" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffeeify/example/foo.litcoffee" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffeeify/example/multiline_error.coffee" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffeeify/index.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffeeify/package.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffeeify/test/bundle.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffeeify/test/error.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/coffeeify/test/transform.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/connect-mongo/.travis.yml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/connect-mongo/Readme.md" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/connect-mongo/index.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/connect-mongo/package.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/derby/.jshintrc" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/derby/.npmignore" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/derby/.pre-commit-config.yaml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/derby/.travis.yml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/derby/History.md" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/derby/README.md" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/derby/docs/guides/components.md" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/derby/index.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/derby/lib/App.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/derby/lib/App.server.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/derby/lib/Controller.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/derby/lib/Derby.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/derby/lib/Derby.server.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/derby/lib/DerbyStandalone.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/derby/lib/Dom.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/derby/lib/Page.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/derby/lib/Page.server.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/derby/lib/_views.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/derby/lib/components.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/derby/lib/documentListeners.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/derby/lib/eventmodel.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/derby/lib/files.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/derby/lib/textDiff.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/derby/package.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/derby/test/.jshintrc" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/derby/test/all/eventmodel.mocha.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/derby/test/browser/as.mocha.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/derby/test/browser/bindings.mocha.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/derby/test/browser/dom-events.mocha.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/derby/test/browser/util.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/derby/test/mocha.opts" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/derby/test/public/index.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/derby/test/server.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/express/History.md" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/express/LICENSE" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/express/Readme.md" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/express/index.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/express/lib/application.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/express/lib/express.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/express/lib/middleware.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/express/lib/request.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/express/lib/response.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/express/lib/router/index.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/express/lib/router/route.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/express/lib/utils.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/express/lib/view.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/express/package.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/onecolor/one-color-all.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/onecolor/one-color.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/onecolor/package.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/racer-bundle/.jshintrc" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/racer-bundle/.npmignore" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/racer-bundle/LICENSE" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/racer-bundle/README.md" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/racer-bundle/index.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/racer-bundle/package.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/racer-bundle/test/.jshintrc" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/racer-bundle/test/mocha.opts" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/racer-bundle/test/test.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/racer-highway/.npmignore" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/racer-highway/README.md" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/racer-highway/lib/browser.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/racer-highway/lib/server.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/racer-highway/package.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/request/CHANGELOG.md" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/request/LICENSE" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/request/README.md" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/request/index.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/request/lib/auth.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/request/lib/cookies.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/request/lib/getProxyFromURI.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/request/lib/har.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/request/lib/helpers.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/request/lib/multipart.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/request/lib/oauth.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/request/lib/querystring.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/request/lib/redirect.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/request/lib/tunnel.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/request/package.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/request/request.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/socket.io/History.md" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/socket.io/LICENSE" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/socket.io/Readme.md" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/socket.io/lib/client.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/socket.io/lib/index.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/socket.io/lib/namespace.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/socket.io/lib/socket.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/socket.io/package.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/simplest.sbgnml" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
@@ -214,16 +81,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="agentAPI.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/agent-interaction/agentAPI.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="637">
-              <caret line="323" column="19" lean-forward="false" selection-start-line="323" selection-start-column="19" selection-end-line="323" selection-end-column="126" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="testsAgentAPI.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/test/testsAgentAPI.js">
           <provider selected="true" editor-type-id="text-editor">
@@ -269,8 +126,8 @@
       <file leaf-file-name=".gitignore" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/.gitignore">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="315">
-              <caret line="830" column="27" lean-forward="false" selection-start-line="830" selection-start-column="27" selection-end-line="830" selection-end-column="27" />
+            <state relative-caret-position="165">
+              <caret line="11" column="13" lean-forward="false" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="13" />
               <folding />
             </state>
           </provider>
@@ -640,6 +497,20 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="agent-interaction" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Sbgnviz-Collaborative-Editor Chise Version" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Sbgnviz-Collaborative-Editor Chise Version" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value=".idea" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -1136,13 +1007,6 @@
     </watches-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/public/node_modules/cytoscape-view-utilities/src/view-utilities.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/node_modules/chise/package.json">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="341">
@@ -1558,10 +1422,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/workspace.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="830" column="27" lean-forward="false" selection-start-line="830" selection-start-column="27" selection-end-line="830" selection-end-column="27" />
+        <state relative-caret-position="165">
+          <caret line="11" column="13" lean-forward="false" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="13" />
           <folding />
         </state>
       </provider>
