@@ -116,9 +116,9 @@ string after http:<ip>:3000/ in the server address.
 
  **reqName**                          |  **param**                                                                         |
 | ----------------------------------- | ---------------------------------------------------- |
-| “agentAddImageRequest”              | {room:<room>, userId:<agentId>, img: < image file >,                         |
+| “agentAddImageRequest”              | {room:< room >, userId:< agentId >, img: < image file >,                         |
 |                                     | filePath: < path of image file > }             |
-| "agentSetLayoutPropertiesRequest"   | {room:<room>, userId:<agentId>,name: < layout name >,                       |
+| "agentSetLayoutPropertiesRequest"   | {room:< room >, userId:< agentId >,name: < layout name >,                       |
 |                                     | nodeRepulsion: < node repulsion value > ,        |
 |                                     | nodeOverlap:< node overlap percentage >,          |
 |                                     | idealEdgeLength:< ideal edge length value >,      |
@@ -129,36 +129,36 @@ string after http:<ip>:3000/ in the server address.
 |                                     | tile:< boolean value to tile disconnected >,|
 |                                     | animate:< boolean value >,    |
 |                                     | randomize:< boolean value >}  |
-|"agentSetGeneralPropertiesRequest"  | {room:<room>, userId:<agentId>} |
-|"agentSetGridPropertiesRequest"  | {room:<room>, userId:<agentId>} |
-|  “agentRunLayoutRequest”            | {room:<room>, userId:<agentId>}                          |
-|  “agentAddNodeRequest”              | {room:<room>, userId:<agentId>,x: < position x >,           |
+|"agentSetGeneralPropertiesRequest"  | {room:< room >, userId:< agentId >} |
+|"agentSetGridPropertiesRequest"  | {room:< room >, userId:< agentId >} |
+|  “agentRunLayoutRequest”            | {room:< room >, userId:< agentId >}                          |
+|  “agentAddNodeRequest”              | {room:< room >, userId:< agentId >,x: < position x >,           |
 |                                     | y: < position y >,         |
 |                                     | class: < sbgn class >}   |
-|  “agentAddEdgeRequest”              | {room:<room>, userId:<agentId>,source: < source node id >,  |
+|  “agentAddEdgeRequest”              | {room:< room >, userId:< agentId >,source: < source node id >,  |
 |                                     | target: < target node id >,   |
 |                                     | class: < sbgn class >}    |
-|"agentSearchByLabelRequest"          | {room:<room>, userId:<agentId>,label: < label to be highlighted>}   |
-|"agentDeleteElesRequest"             | {room:<room>, userId:<agentId>,type: <"smart" or "simple" < elementIds: <element ids to delete simply>} |
-|"agentUpdateVisibilityStatusRequest"       | {room:<room>, userId:<agentId>,val:<"hide" or "show" or "showAll">,  elementIds:<array of element ids or null for showAll>|
-|"agentUpdateHighlightStatusRequest"       | {room:<room>, userId:<agentId>,val:<"neighbors" or "processes" or "remove">,  elementIds:<array of element ids or null for remove>|
-|"agentUpdateExpandCollapseStatusRequest"       | {room:<room>, userId:<agentId>,val:<"expand" or "collapse">,  elementIds:<array of element ids>|
-| “agentChangeNodeAttributeRequest”  | {room:<room>, userId:<agentId>,id: < node id >,             |
+|"agentSearchByLabelRequest"          | {room:< room >, userId:< agentId >,label: < label to be highlighted>}   |
+|"agentDeleteElesRequest"             | {room:< room >, userId:< agentId >,type: < "smart" or "simple" > elementIds: < element ids to delete simply >} |
+|"agentUpdateVisibilityStatusRequest"       | {room:< room >, userId:< agentId >,val:< "hide" or "show" or "showAll" >,  elementIds:< array of element ids or null for showAll >|
+|"agentUpdateHighlightStatusRequest"       | {room:< room >, userId:< agentId >,val:< "neighbors" or "processes" or "remove">,  elementIds:< array of element ids or null for remove >|
+|"agentUpdateExpandCollapseStatusRequest"       | {room:< room >, userId:< agentId >,val:< "expand" or "collapse" >,  elementIds:<array of element ids>|
+| “agentChangeNodeAttributeRequest”  | {room:< room >, userId:< agentId >,id: < node id >,             |
 |                                     | attStr: < node attribute name in the model >             |
 |                                     | attVal:< node attribute value >}                          |
 |                                     | attStr takes the following values: “data”, “data.bbox”, “data.bbox.w”, “data.bbox.h”, “data.class”, “data.cloneMarker”, "data.font-family", "data.font-size", "data.font-weight", "data.font-style", "data.statesandinfos", "data.label", "data.labelsize", "data.parent", "data.ports", "data.border-width", "data.background-color", "data.background-opacity", "highlightColor, expandCollapseStatus", "highlightStatus", "visibilityStatus"   |
-|  “agentChangeEdgeAttributeRequest”  | {room:<room>, userId:<agentId>,id: < node id >,                                   |
+|  “agentChangeEdgeAttributeRequest”  | {room:< room >, userId:< agentId >,id: < node id >,                                   |
 |                                     | attStr: < edge attribute name in the model >        |
 |                                     | attVal:< edge attribute value >}                     |
 |                                     | attStr takes the following values: “data.source”, “data.target”, “data.portsource”, “data.porttarget”, “data.class”,   “data.line-color”,  “data.width”, “data.cardinality”,“highlightColor”, "visibilityStatus", "highlightStatus" , "bendPoints"   |
-|  “agentMoveNodeRequest”             | {room:<room>, userId:<agentId>,id: < node id >,   pos: {x:< new position x >, y: <  new position y >}}                   |
-|  “agentAlignRequest”               | {room:<room>, userId:<agentId>,nodeIds: < node ids to align >, horizontal:<"top", "bottom", "center", "none">, vertical:<"top", "bottom", "center", "none"> , alignTo:<node id to align nodes with nodeIds>     |
-|  “agentAddCompoundRequest”          | {room:<room>, userId:<agentId>,type: < compound type as “complex” or “compartment” >,              |
+|  “agentMoveNodeRequest”             | {room:< room >, userId:< agentId >,id: < node id >,   pos: {x:< new position x >, y: <  new position y >}}                   |
+|  “agentAlignRequest”               | {room:< room >, userId:< agentId >,nodeIds: < node ids to align >, horizontal:<" top", "bottom", "center", "none" >, vertical:< "top", "bottom", "center", "none" > , alignTo:< node id to align nodes with nodeIds >     |
+|  “agentAddCompoundRequest”          | {room:< room >, userId:< agentId >,type: < compound type as “complex” or “compartment” >,              |
 |                                     | selectedNodeArr: < array of node ids >}                              |
-|		"agentActiveRoomsRequest"					| {room:<room>, userId:<agentId>}-																																			|
-|   "agentUndoRequest"          |  {room:<room>, userId:<agentId>} |
-|   "agentRedoRequest"          |   {room:<room>, userId:<agentId>}|
-|   "agentMessage"          |{room: <room>, comment: <text to be sent>, userName:<agentName>, userId: <agentId>,  targets: <target ids or "*" for all clients in the agent room>}   |
+|		"agentActiveRoomsRequest"					| {room:< room >, userId:< agentId >}-																																			|
+|   "agentUndoRequest"          |  {room:< room >, userId:< agentId >} |
+|   "agentRedoRequest"          |   {room:< room >, userId:< agentId >}|
+|   "agentMessage"          |{room: <room>, userId: <agentId>, comment: <text to be sent>, targets: < user ids or * to include all users in the room >}   |
 
 
 In order to set up and run an agent:
