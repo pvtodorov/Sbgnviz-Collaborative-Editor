@@ -7,9 +7,42 @@ var keyboardShortcuts = require('./keyboard-shortcuts');
 var _ = require('underscore');
 var collaborativeBackboneViews = require("../../collaborative-app/collaborative-backbone-views.js"); //FUNDA
 
+
+//FUNDA -- my dynamic resize
+ var dynamicResize = function () {
+    var win = $(window);
+
+    var windowWidth = win.width();
+    var windowHeight = win.height();
+
+    var canvasWidth = 1200;
+    var canvasHeight = 680;
+
+    if (windowWidth > canvasWidth)
+    {
+        $("#sbgn-network-container").width(windowWidth * 0.99 * 0.7);
+        $("#inspector-tab-area").width(windowWidth * 0.99 * 0.3);
+
+        $("#sbgn-inspector").width(windowWidth * 0.99 * 0.3);
+        // var w = $("#sbgn-inspector-and-canvas").width(); //funda
+        var w = $("#sbgn-network-container").width();
+        $(".nav-menu").width(w);
+        $(".navbar").width(w);
+//    $("#sbgn-info-content").width(windowWidth * 0.85);
+        $("#sbgn-toolbar").width(w);
+    }
+
+    if (windowHeight > canvasHeight)
+    {
+        $("#sbgn-network-container").height(windowHeight * 0.85);
+        // $("#sbgn-inspector").height(windowHeight * 0.85);
+        $("#inspector-tab-area").height(windowHeight * 0.85);
+    }
+};
+
 // Handle sbgnviz menu functions which are to be triggered on events
 module.exports = function () {
-    var dynamicResize = appUtilities.dynamicResize.bind(appUtilities);
+    //funda var dynamicResize = appUtilities.dynamicResize.bind(appUtilities);
 
     var layoutPropertiesView, generalPropertiesView, pathsBetweenQueryView, promptSaveView, promptConfirmationView,
         reactionTemplateView, gridPropertiesView, fontPropertiesView, fileSaveView;

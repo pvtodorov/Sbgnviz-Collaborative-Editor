@@ -129,8 +129,6 @@ ContextAgent.prototype.initContext = function(callback){
 
 
     if(callback) callback();
-
-
 }
 
 Agent.prototype.getContext = function(){

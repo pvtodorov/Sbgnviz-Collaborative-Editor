@@ -107,7 +107,7 @@ string after http:<ip>:3000/ in the server address.
 - **socket**: The web socket between the server and agent
 - **pageDoc**: The document that the shared model is stored.
 
-### Methods:
+### Methods for Javascript:
 
  **Name**                | **Function**                                                                                                                     |      **Parameters**              |       **Returns**                                                             |
 | ----------------------- | -------------------------------------------------------------------------------------------------------------------------------- | -------------------------------- | ----------------------------------------------------------------------------- |
@@ -187,7 +187,7 @@ string after http:<ip>:3000/ in the server address.
 |		"agentActiveRoomsRequest"					| -																																			|
 |   "agentUndoRequest"          |   |
 |   "agentRedoRequest"          |   |
-|   "agentMessage"          |{room: <room>, comment: <text to be sent>, userName:<agentName>, userId: <agentId>,  targets: <target ids or * for all clients in the agent room>}   |
+|   "agentMessage"          |{room: <room>, comment: <text to be sent>, userName:<agentName>, userId: <agentId>,  targets: <target ids or "*" for all clients in the agent room>}   |
 
 
 In order to set up and run an agent:
