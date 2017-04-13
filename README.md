@@ -20,17 +20,17 @@ Install node.js and mongodb servers first.
 Node:
 
 ```
-curl -sL https://deb.nodesource.com/setup_0.12 | sudo -E bash -
-sudo apt-get install -y nodejs
+curl -sL https://deb.nodesource.com/setup_0.12 | sudo -E bash - <br />
+sudo apt-get install -y nodejs <br />
 ```
 ```
 
 Mongo:
 ```
-sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com/ --recv EA312927
-echo "deb http://repo.mongodb.org/apt/ubuntu trusty/mongodb-org/3.2 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.2.list
-sudo apt-get update
-sudo apt-get install -y mongodb-org
+sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com/ --recv EA312927 <br />
+echo "deb http://repo.mongodb.org/apt/ubuntu trusty/mongodb-org/3.2 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.2.list <br />
+sudo apt-get update <br />
+sudo apt-get install -y mongodb-org <br />
 ```
 If mongo does not work:
 ```
@@ -40,10 +40,10 @@ sudo apt-get install upstart-sysv
 ### Install dependencies on Mac
 
 ```
-brew install node
-brew install tcl-tk
-brew install mongodb
-brew install nodejs
+brew install node <br />
+brew install tcl-tk <br />
+brew install mongodb <br />
+brew install nodejs <br />
 ```
 
 ### Clone from github and install node modules
@@ -53,10 +53,10 @@ cd Sbgnviz-Collaborative-Editor Chise Version
 npm install
 
 ### Install cytoscape extensions
-cd public
-npm install
-npm run build-bundle-js
-cd ..
+cd public <br />
+npm install <br />
+npm run build-bundle-js <br />
+cd .. <br />
 
 ```
 Running the server
@@ -107,47 +107,15 @@ string after http:<ip>:3000/ in the server address.
 - **socket**: The web socket between the server and agent
 - **pageDoc**: The document that the shared model is stored.
 
-### Methods for Javascript:
-
- **Name**                | **Function**                                                                                                                     |      **Parameters**              |       **Returns**                                                             |
-| ----------------------- | -------------------------------------------------------------------------------------------------------------------------------- | -------------------------------- | ----------------------------------------------------------------------------- |
-|  connectToServer        | Connects the server and returns socket.io socket     |     url, callback           | socket                              |
-|  disconnect        | Disconnects from server    |      callback         |
-|  loadModel              | Gets the model for the current room        |     callback  | |                                                                              |
-|  loadOperationHistory   | Gets history of operations from the node.js server and assigns them to opHistory  |     callback ||
-|  getUserList           | returns userList                                                              |     |                                                                               |
-|  loadChatHistory        | Gets history of chat messages from the node.js server and assigns them to chatHistory    |  callback    |       |
-|  getNodeList            |                                                                                                                                  |      callback                    |   The node list in the shared model as an object of node ids                  |
-|  getLayoutProperties    |                                                                                                                                  |     callback                     |  Layout properties of the shared model as an object with attributes as:       |
-|                         |                                                                                                                                  |                                  |   {name: < layout name >,                                                       |
-|                         |                                                                                                                                  |                                  |   nodeRepulsion: < node repulsion value > ,                                     |
-|                         |                                                                                                                                  |                                  |   nodeOverlap:< node overlap percentage >,                                      |
-|                         |                                                                                                                                  |                                  |   idealEdgeLength:< ideal edge length value >,                                  |
-|                         |                                                                                                                                  |                                  |   edgeElasticity:< edge elasticity value >,                                     |
-|                         |                                                                                                                                  |                                  |   nestingFactor:< nesting factor value >,                                       |
-|                         |                                                                                                                                  |                                  |   gravity:< gravity value >,                                                    |
-|                         |                                                                                                                                  |                                  |   numIter:< number of iterations >,                                             |
-|                         |                                                                                                                                  |                                  |     tile:< boolean value to tile disconnected >,                                |
-|                         |                                                                                                                                  |                                  |   animate:< boolean value >,                                                    |
-|                         |                                                                                                                                  |                                  |   randomize:< boolean value >}                                                  |
-|  getGeneralProperties    |                                                                                                                                  |     callback                     | General properties of the shared model as an object |
-|  getGridProperties    |                                                                                                                                  |     callback                     |  |Grid properties of the shared model as an object|
-|  changeName             | Sends request to the server to change agent's name                                                                               |       newName                    |                                                                               |
-|  getNodeRequest         | Requests the node with < id > from the server                                                                                      |     id, callback                 |  Node with id                                                                 |
-|  getEdgeRequest         | Requests the edge with < id > from the server                                                                                      |      id, callback                |   Edge with id                                                                |
-|  agentMessage            | Sends chat message < comments > as a string to < targets > as an array of targeted user ids \[{id: < id1 >},..., {id: < idn >}\]       |    comment, targets, callback  |                                                                               |
-|  listen                 | Socket listener for server requests. Can get “operation”, “message”, “userList” or “imageFile” from the server.                  |   callback                       |                                                                               |
-|  sendRequest            | Sends an operation request to the node.js server. Model update operations are done using this method.                            |  [*reqName, param*](#sendrequest)|                                                                               |
-
 
 #### Requests to send to the server:
 
 
  **reqName**                          |  **param**                                                                         |
 | ----------------------------------- | ---------------------------------------------------- |
-| “agentAddImageRequest”              | {img: < image file >,                         |
+| “agentAddImageRequest”              | {room:<room>, userId:<agentId>, img: < image file >,                         |
 |                                     | filePath: < path of image file > }             |
-| "agentSetLayoutPropertiesRequest"   | {name: < layout name >,                       |
+| "agentSetLayoutPropertiesRequest"   | {room:<room>, userId:<agentId>,name: < layout name >,                       |
 |                                     | nodeRepulsion: < node repulsion value > ,        |
 |                                     | nodeOverlap:< node overlap percentage >,          |
 |                                     | idealEdgeLength:< ideal edge length value >,      |
@@ -161,32 +129,32 @@ string after http:<ip>:3000/ in the server address.
 |"agentSetGeneralPropertiesRequest"  |  |
 |"agentSetGridPropertiesRequest"  |  |
 |  “agentRunLayoutRequest”            | -                           |
-|  “agentAddNodeRequest”              | {x: < position x >,           |
+|  “agentAddNodeRequest”              | {room:<room>, userId:<agentId>,x: < position x >,           |
 |                                     | y: < position y >,         |
 |                                     | class: < sbgn class >}   |
-|  “agentAddEdgeRequest”              | {source: < source node id >,  |
+|  “agentAddEdgeRequest”              | {room:<room>, userId:<agentId>,source: < source node id >,  |
 |                                     | target: < target node id >,   |
 |                                     | class: < sbgn class >}    |
-|"agentSearchByLabelRequest"          | {label: < label to be highlighted>}   |
-|"agentDeleteElesRequest"             | {type: <"smart" or "simple" < elementIds: <element ids to delete simply>} |
-|"agentUpdateVisibilityStatusRequest"       | {val:<"hide" or "show" or "showAll">,  elementIds:<array of element ids or null for showAll>|
-|"agentUpdateHighlightStatusRequest"       | {val:<"neighbors" or "processes" or "remove">,  elementIds:<array of element ids or null for remove>|
-|"agentUpdateExpandCollapseStatusRequest"       | {val:<"expand" or "collapse">,  elementIds:<array of element ids>|
-| “agentChangeNodeAttributeRequest”  | {id: < node id >,             |
+|"agentSearchByLabelRequest"          | {room:<room>, userId:<agentId>,label: < label to be highlighted>}   |
+|"agentDeleteElesRequest"             | {room:<room>, userId:<agentId>,type: <"smart" or "simple" < elementIds: <element ids to delete simply>} |
+|"agentUpdateVisibilityStatusRequest"       | {room:<room>, userId:<agentId>,val:<"hide" or "show" or "showAll">,  elementIds:<array of element ids or null for showAll>|
+|"agentUpdateHighlightStatusRequest"       | {room:<room>, userId:<agentId>,val:<"neighbors" or "processes" or "remove">,  elementIds:<array of element ids or null for remove>|
+|"agentUpdateExpandCollapseStatusRequest"       | {room:<room>, userId:<agentId>,val:<"expand" or "collapse">,  elementIds:<array of element ids>|
+| “agentChangeNodeAttributeRequest”  | {room:<room>, userId:<agentId>,id: < node id >,             |
 |                                     | attStr: < node attribute name in the model >             |
 |                                     | attVal:< node attribute value >}                          |
 |                                     | attStr takes the following values: “data”, “data.bbox”, “data.bbox.w”, “data.bbox.h”, “data.class”, “data.cloneMarker”, "data.font-family", "data.font-size", "data.font-weight", "data.font-style", "data.statesandinfos", "data.label", "data.labelsize", "data.parent", "data.ports", "data.border-width", "data.background-color", "data.background-opacity", "highlightColor, expandCollapseStatus", "highlightStatus", "visibilityStatus"   |
-|  “agentChangeEdgeAttributeRequest”  | {id: < node id >,                                   |
+|  “agentChangeEdgeAttributeRequest”  | {room:<room>, userId:<agentId>,id: < node id >,                                   |
 |                                     | attStr: < edge attribute name in the model >        |
 |                                     | attVal:< edge attribute value >}                     |
 |                                     | attStr takes the following values: “data.source”, “data.target”, “data.portsource”, “data.porttarget”, “data.class”,   “data.line-color”,  “data.width”, “data.cardinality”,“highlightColor”, "visibilityStatus", "highlightStatus" , "bendPoints"   |
-|  “agentMoveNodeRequest”             | {id: < node id >,   pos: {x:< new position x >, y: <  new position y >}}                   |
-|  “agentAlignRequest”               | {nodeIds: < node ids to align >, horizontal:<"top", "bottom", "center", "none">, vertical:<"top", "bottom", "center", "none"> , alignTo:<node id to align nodes with nodeIds>     |
-|  “agentAddCompoundRequest”          | {type: < compound type as “complex” or “compartment” >,              |
+|  “agentMoveNodeRequest”             | {room:<room>, userId:<agentId>,id: < node id >,   pos: {x:< new position x >, y: <  new position y >}}                   |
+|  “agentAlignRequest”               | {room:<room>, userId:<agentId>,nodeIds: < node ids to align >, horizontal:<"top", "bottom", "center", "none">, vertical:<"top", "bottom", "center", "none"> , alignTo:<node id to align nodes with nodeIds>     |
+|  “agentAddCompoundRequest”          | {room:<room>, userId:<agentId>,type: < compound type as “complex” or “compartment” >,              |
 |                                     | selectedNodeArr: < array of node ids >}                              |
-|		"agentActiveRoomsRequest"					| -																																			|
-|   "agentUndoRequest"          |   |
-|   "agentRedoRequest"          |   |
+|		"agentActiveRoomsRequest"					| {room:<room>, userId:<agentId>}-																																			|
+|   "agentUndoRequest"          |  {room:<room>, userId:<agentId>} |
+|   "agentRedoRequest"          |   {room:<room>, userId:<agentId>}|
 |   "agentMessage"          |{room: <room>, comment: <text to be sent>, userName:<agentName>, userId: <agentId>,  targets: <target ids or "*" for all clients in the agent room>}   |
 
 
