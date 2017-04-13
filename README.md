@@ -23,7 +23,6 @@ Node:
 curl -sL https://deb.nodesource.com/setup_0.12 | sudo -E bash - <br />
 sudo apt-get install -y nodejs <br />
 ```
-```
 
 Mongo:
 ```
@@ -51,8 +50,10 @@ brew install nodejs <br />
 git clone https://github.com/fdurupinar/Sbgnviz-Collaborative-Editor/tree/collaborativeChise
 cd Sbgnviz-Collaborative-Editor Chise Version
 npm install
+```
 
 ### Install cytoscape extensions
+```
 cd public <br />
 npm install <br />
 npm run build-bundle-js <br />
@@ -66,7 +67,9 @@ node server
 ```
 or if you made changes to newt or chise (under public/app) run the script: runbundle:
 
-./runbundle.sh  
+```
+./runbundle.sh
+  ```
 
 In order to open a client enter `http://localhost:3000` in the address bar of your browser.
 
