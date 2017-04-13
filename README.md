@@ -39,10 +39,10 @@ sudo apt-get install upstart-sysv
 ### Install dependencies on Mac
 
 ```
-brew install node <br />
-brew install tcl-tk <br />
-brew install mongodb <br />
-brew install nodejs <br />
+brew install node
+brew install tcl-tk
+brew install mongodb
+brew install nodejs
 ```
 
 ### Clone from github and install node modules
@@ -54,10 +54,10 @@ npm install
 
 ### Install cytoscape extensions
 ```
-cd public <br />
-npm install <br />
-npm run build-bundle-js <br />
-cd .. <br />
+cd public
+npm install
+npm run build-bundle-js
+cd ..
 
 ```
 Running the server
