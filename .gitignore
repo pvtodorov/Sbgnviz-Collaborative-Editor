@@ -896,3 +896,24 @@ node_modules/racer-bundle/test/
 node_modules/racer-bundle/node_modules/
 node_modules/racer-highway/
 public/untitled folder/
+/node_modules/racer-bundle/README.md
+/node_modules/racer-bundle/test/
+/node_modules/racer-bundle/package.json
+/node_modules/racer-bundle/index.js
+/node_modules/racer-bundle/LICENSE
+/node_modules/racer-bundle/.jshintrc
+/node_modules/racer-bundle/.npmignore
+/node_modules/socket.io/LICENSE
+/node_modules/socket.io/History.md
+/node_modules/socket.io/Readme.md
+/node_modules/socket.io/node_modules/
+/node_modules/socket.io/lib/
+/node_modules/socket.io/package.json
+/node_modules/socket.io-client/LICENSE
+/node_modules/socket.io-client/dist/
+/node_modules/socket.io-client/README.md
+/node_modules/socket.io-client/lib/
+/node_modules/socket.io-client/History.md
+/node_modules/socket.io-client/node_modules/
+/node_modules/socket.io-client/package.json
+/node_modules/
