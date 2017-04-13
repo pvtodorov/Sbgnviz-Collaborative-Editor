@@ -879,3 +879,6 @@ public/node_modules/xtend/
 public/src/.DS_Store
 /1742-4690-6-111.pdf
 /simplest.sbgnml
+node_modules/graceful-fs/
+node_modules/util/
+public/node_modules/miller-rabin/
