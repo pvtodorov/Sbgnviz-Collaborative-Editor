@@ -129,9 +129,9 @@ string after http:<ip>:3000/ in the server address.
 |                                     | tile:< boolean value to tile disconnected >,|
 |                                     | animate:< boolean value >,    |
 |                                     | randomize:< boolean value >}  |
-|"agentSetGeneralPropertiesRequest"  |  |
-|"agentSetGridPropertiesRequest"  |  |
-|  “agentRunLayoutRequest”            | -                           |
+|"agentSetGeneralPropertiesRequest"  | {room:<room>, userId:<agentId>} |
+|"agentSetGridPropertiesRequest"  | {room:<room>, userId:<agentId>} |
+|  “agentRunLayoutRequest”            | {room:<room>, userId:<agentId>}                          |
 |  “agentAddNodeRequest”              | {room:<room>, userId:<agentId>,x: < position x >,           |
 |                                     | y: < position y >,         |
 |                                     | class: < sbgn class >}   |
