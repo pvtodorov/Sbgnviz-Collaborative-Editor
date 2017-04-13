@@ -1,4 +1,5 @@
 QUnit = require('qunitjs');
+
 // agentAPI = require("../../agent-interaction/agentAPI");
 
 module.exports = function(serverIp, modelManager){
@@ -97,6 +98,9 @@ module.exports = function(serverIp, modelManager){
 
         });
     }
+
+
+
 
 
 
@@ -695,13 +699,14 @@ module.exports = function(serverIp, modelManager){
         testChangeName();
     }, 100);
 
-    setTimeout(function() {
-        testMessages();
-    }, 100);
 
-    setTimeout(function() {
-        testMerge();
-    }, 100);
+    // setTimeout(function() {
+    //     testMessages();
+    // }, 100);
+    //
+    // setTimeout(function() {
+    //     testMerge();
+    // }, 100);
 
     // setTimeout(function() {
     //     testGetRequests();

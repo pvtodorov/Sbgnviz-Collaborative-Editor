@@ -1502,7 +1502,7 @@
                     <div id = "receivedImages" class="tab-pane">
                         {{ each _page.doc.images as #imageFile}}
                         <br>
-                        {{#imageFile.filePath}}
+                        {{#imageFile.fileName}}
                         <div class = image> <img src= "{{#imageFile.img}}" onclick ="openImage(this)" onmouseover ="showQTip(this)" /> </div>
                         {{/each}}
                     </div>
@@ -1574,3 +1574,41 @@
 
 
 
+<script>
+    function showQTip(el) {
+        $(el).parent().qtip({
+            content: {
+                text: function () {
+
+                    return "Click image to enlarge ";
+                }
+
+            },
+
+            position: {
+                my: 'center',
+                at: 'center',
+                adjust: {
+                    cyViewport: true
+                },
+                effect: false
+            },
+            mouseover: true,
+            style: {
+                classes: 'qtip-image',
+
+                tip: {
+                    width: 16,
+                    height: 8
+                }
+            }
+        });
+    }
+    function openImage(el){
+        if(el.src){
+            var url = el.src;
+            window.open(url, 'Image', 'width=largeImage.stylewidth,height=largeImage.style.height,resizable=1');
+        }
+
+    }
+</script>

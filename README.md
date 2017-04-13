@@ -116,8 +116,8 @@ string after http:<ip>:3000/ in the server address.
 
  **reqName**                          |  **param**                                                                         |
 | ----------------------------------- | ---------------------------------------------------- |
-| “agentAddImageRequest”              | {room:< room >, userId:< agentId >, img: < image file >,                         |
-|                                     | filePath: < path of image file > }             |
+| “agentSendImageRequest”              | {room:< room >, userId:< agentId >, img: < image file >,                         |
+|                                     | fileName < name of image file > }             |
 | "agentSetLayoutPropertiesRequest"   | {room:< room >, userId:< agentId >,name: < layout name >,                       |
 |                                     | nodeRepulsion: < node repulsion value > ,        |
 |                                     | nodeOverlap:< node overlap percentage >,          |

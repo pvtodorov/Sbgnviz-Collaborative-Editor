@@ -31,7 +31,7 @@ module.exports = function (model, docId) {
         addImage: function (data, user, noHistUpdate) {
             model.pass({user: user}).push('_page.doc.images', data);
             if (!noHistUpdate)
-                this.updateHistory({opName: 'add', opTarget: 'image', opAttr: data.filePath});
+                this.updateHistory({opName: 'add', opTarget: 'image', opAttr: data.fileName});
         },
 
         setName: function (userId, userName) {

@@ -245,7 +245,7 @@ Agent.prototype.getEdgeRequest = function(id, callback){
  * @param reqName Operation name
  * @param param Depends on the operation type
  * <ul>
- *     <li>reqName: "agentAddImageRequest", param: {img,filePath} </li>
+ *     <li>reqName: "agentSendImageRequest", param: {img,fileName} </li>
  *     <li>reqName: "agentSetLayoutProperties", param: {name, nodeRepulsion, nodeOverlap, idealEdgeLength, edgeElasticity, nestingFactor, gravity, numIter, tile, animate, randomize} </li>
  *     <li>reqName: "agentRunLayoutRequest", param:null </li>
  *     <li>reqName: "agentAddNodeRequest", param:{x y, class} </li>

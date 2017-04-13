@@ -196,10 +196,10 @@
         <input id="chatMessage" type = "text"> <button onclick = "sendMessage()">Send</button>
 
 
-        <label for="file-upload" class="image-file">
-            <i class="fa fa-cloud-upload"></i> Upload Image
-        </label>
-        <input id="file-upload" type="file"/>
+        <!--<label for="file-upload" class="image-file">-->
+            <!--<i class="fa fa-cloud-upload"></i> Upload Image-->
+        <!--</label>-->
+        <!--<input id="file-upload" type="file"/>-->
 
         <div ><input type="file" id="file-upload" accept="image/*" onchange = "uploadFile(this)"></div>
 
@@ -531,25 +531,26 @@
     function uploadFile(el){
         try{
             var room = agent.room;
-            var fileStr = ($('#imagefile')[0].value).split('\\');
-            var filePath = fileStr[fileStr.length-1];
+            //var fileStr = ($('#imagefile')[0].value).split('\\');
+            //var filePath = fileStr[fileStr.length-1];
 
 
+            var fileName = "dummy";
             //var file = evt.target.files[0];
             var file = el.files[0];
 
             var reader = new FileReader();
             reader.onload = function(evt){
-                var imgParam = {img: evt.target.result, filePath: filePath};
+                var imgParam = {img: evt.target.result, fileName: fileName};
 
-                agent.sendRequest("agentAddImageRequest", imgParam);
+                agent.sendRequest("agentSendImageRequest", imgParam);
             };
 
             reader.readAsDataURL(file);
 
             //Add file name as a text message
 
-            agent.sendMessage(("Sent image: " +filePath), computeTargets());
+            agent.sendMessage(("Sent image: " +fileName), '*');
 
 
         }
