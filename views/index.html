@@ -30,6 +30,11 @@
     <script src="lib/js/jquery.noty.packaged.js"></script>
 
 
+    <script src="lib/js/jquery.panzoom.js"></script>
+    <script src="lib/js/jquery.mousewheel.js"></script>
+
+
+
     <!---->
     <!--<script src="node_modules/ocanvas/build/dist/latest/ocanvas.min.js"></script>-->
     <!--<script src="node_modules/jquery/dist/jquery.js"></script>-->
@@ -361,29 +366,54 @@
             <td>
                 <div id ="canvas-tab-area"  >
                     <div id = "canvas-tabs">
-
                         <ul class="nav nav-tabs">
                             <li class = "active tab-link"><a data-toggle="tab"  href="#sbgn-network-container">Sbgn</a></li>
-                            <li class = "tab-link"><a data-toggle="tab" href="#static-image-container">Image</a></li>
+                            {{ each _page.doc.images as #imageFile}}
+
+                            <li class = "tab-link"><a data-toggle="tab" href={{"#static-image-container-"+#imageFile.tabIndex}}>Image {{#imageFile.tabIndex}}</a></li>
+                            {{/each}}
                         </ul>
                     </div>
                     <div class="tab-content">
                 <!--focus should be here add tabindex -->
                         <div id="sbgn-network-container" tabindex="0" class = "tab-pane fade in active"></div>
-                        <div id="static-image-container" class = "tab-pane">
-                            {{ each _page.doc.images as #imageFile}}
-                            <br>
-                            <div class = image> <img src= "{{#imageFile.img}}" onmouseover ="showQTip(this)" /> </div>
-                            {{/each}}
+                        {{ each _page.doc.images as #imageFile}}
+                        <div id={{"static-image-container-"+#imageFile.tabIndex}} class = "tab-pane">
+                            <section id = {{"section-"+#imageFile.tabIndex}}>
+                                <div class="parent">
+                                <div class="panzoom">
+                                    <img style='height: 100%; width: 100%; object-fit: contain' src= "{{#imageFile.img}}" />
+                                </div>
+                                </div>
+
+                                <script>
+                                    (function() {
+                                        var tabInd = {{#imageFile.tabIndex}};
+                                        var $section = $('#section-' + tabInd);
+                                        var $panzoom = $section.find('.panzoom').panzoom();
+                                        $panzoom.parent().on('mousewheel.focal', function( e ) {
+                                            e.preventDefault();
+                                            var delta = e.delta || e.originalEvent.wheelDelta;
+                                            var zoomOut = delta ? delta < 0 : e.originalEvent.deltaY > 0;
+                                            $panzoom.panzoom('zoom', zoomOut, {
+                                                increment: 0.1,
+                                                animate: false,
+                                                focal: e
+                                            });
+                                        });
+                                    })();
+                                </script>
+                            </section>
+
 
                         </div>
+                        {{/each}}
                     </div>
                 </div>
             </td>
 
             <td>
                 <view is='inspector-view'></view>                    <!--<div id="sbgn-inspector">-->
-                <!--</div>-->
             </td>
         </tr>
         </tbody>
@@ -1316,7 +1346,8 @@
     </script>
 
 
-<inspector-view:>
+
+    <inspector-view:>
 
         <div id ="inspector-tab-area" tabindex="1">
 
@@ -1630,3 +1661,5 @@
 
     }
 </script>
+
+

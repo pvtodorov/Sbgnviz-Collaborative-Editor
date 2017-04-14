@@ -29,7 +29,28 @@ module.exports = function (model, docId) {
 
 
         addImage: function (data, user, noHistUpdate) {
+
+            var images = model.get('_page.doc.images');
+            if(images) {
+                for (var i = 0; i < images.length; i++){
+                    if(images[i].tabIndex === data.tabIndex) { //overwrite
+                        images[i] = data;
+                        if (!noHistUpdate)
+                            this.updateHistory({opName: 'overwrite', opTarget: 'image', opAttr: data.fileName});
+
+                        //overwrite images
+                        model.set('_page.doc.images', images);
+                        return;
+
+                    }
+
+                }
+
+            }
+
+            //if no such tab exists, insert a new tab
             model.pass({user: user}).push('_page.doc.images', data);
+
             if (!noHistUpdate)
                 this.updateHistory({opName: 'add', opTarget: 'image', opAttr: data.fileName});
         },

@@ -117,7 +117,7 @@ string after http:<ip>:3000/ in the server address.
  **reqName**                          |  **param**                                                                         |
 | ----------------------------------- | ---------------------------------------------------- |
 | “agentSendImageRequest”              | {room:< room >, userId:< agentId >, img: < image file >,                         |
-|                                     | fileName < name of image file > }             |
+|                                     | fileName < name of image file >, tabIndex:<index or id of the tab to display image> }             |
 | "agentSetLayoutPropertiesRequest"   | {room:< room >, userId:< agentId >,name: < layout name >,                       |
 |                                     | nodeRepulsion: < node repulsion value > ,        |
 |                                     | nodeOverlap:< node overlap percentage >,          |
@@ -161,6 +161,7 @@ string after http:<ip>:3000/ in the server address.
 |   "agentMessage"          |{room: <room>, userId: <agentId>, comment: <text to be sent>, targets: < user ids or * to include all users in the room >}   |
 
 
+
 In order to set up and run an agent:
 
 ```javascript
@@ -200,8 +201,12 @@ agent = new Agent(agentName, agentId);
     });
 
 });
+
+
 ```
 An example web-based agent can be found in: `Sbgnviz-Collaborative-Editor/agent-interaction/computerAgent.html`
+
+You can zoom and pan with the mouse wheel and left click + moving the mouse
 
 Command History:
 

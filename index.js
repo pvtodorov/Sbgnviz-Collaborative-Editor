@@ -580,11 +580,23 @@ app.proto.create = function (model) {
     factoidHandler.initialize();
 
 
+    //$(window).on('resize', _.debounce(this.dynamicResize, 100));
+
+    var images = model.get('_page.doc.images');
+    self.dynamicResize(model.get('_page.doc.images'));
+
+    $(window).on('resize', function(){
+        var images = model.get('_page.doc.images');
+        self.dynamicResize(images);
+    });
+
+
+
+
     //Notify server about the client connection
     socket.emit("subscribeHuman", { userName:name, room:  model.get('_page.room'), userId: id}, function(){
 
     }); //subscribe to current doc as a new room
-
 
     // //If we get a message on a separate window
 
@@ -607,6 +619,11 @@ app.proto.create = function (model) {
 
 
 
+// Pass options
+//     $("a.panzoom-elements").panzoom({
+//         minScale: 0,
+//         $zoomRange: $("input[type='range']")
+//     });
 
     this.listenToAgentSocket(model);
 
@@ -1131,9 +1148,20 @@ app.proto.init = function (model) {
 
     //Sometimes works
     model.on('all', '_page.doc.images', function() {
-        if (docReady)
-             triggerContentChange('static-image-container');
-             triggerContentChange('receivedImages');
+        if (docReady) {
+            triggerContentChange('static-image-container');
+            triggerContentChange('receivedImages');
+            // $(".panzoom-elements").panzoom({
+            //     minScale: 0,
+            //     $zoomRange: $("input[type='range']")
+            // });
+
+            // // Pass options
+            // $("a.panzoom-elements").panzoom({
+            //     minScale: 0,
+            //     $zoomRange: $("input[type='range']")
+            // });
+        }
     });
 
     model.on('all', '_page.doc.history', function(){
@@ -1248,7 +1276,47 @@ app.proto.add = function (model, filePath) {
 };
 
 
+app.proto.dynamicResize = function (images) {
+    var win = $(window);
 
+    var windowWidth = win.width();
+    var windowHeight = win.height();
+
+    var canvasWidth = 1200;
+    var canvasHeight = 680;
+
+
+    if (windowWidth > canvasWidth)
+    {
+        $("#canvas-tab-area").width(windowWidth * 0.99 * 0.7);
+
+
+        if(images) {
+            images.forEach(function (img) {
+                $("#static-image-container-" + img.tabIndex).width(windowWidth * 0.99 * 0.7);
+            });
+        }
+        $("#inspector-tab-area").width(windowWidth * 0.99 * 0.3);
+
+        $("#sbgn-inspector").width(windowWidth * 0.99 * 0.3);
+        // var w = $("#sbgn-inspector-and-canvas").width(); //funda
+        var w = $("#canvas-tab-area").width();
+        $(".nav-menu").width(w);
+        $(".navbar").width(w);
+        $("#sbgn-toolbar").width(w);
+    }
+
+    if (windowHeight > canvasHeight)
+    {
+        $("#canvas-tab-area").height(windowHeight * 0.85);
+        if(images) {
+            images.forEach(function (img) {
+                $("#static-image-container-" + img.tabIndex).height(windowHeight * 0.85);
+            });
+        }
+        $("#inspector-tab-area").height(windowHeight * 0.85);
+    }
+};
 
 app.proto.uploadFile = function(evt){
 

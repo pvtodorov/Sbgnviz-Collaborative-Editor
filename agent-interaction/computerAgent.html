@@ -201,6 +201,7 @@
         <!--</label>-->
         <!--<input id="file-upload" type="file"/>-->
 
+        <div> Tab id <input type = text id = "imgTab" value = "0"><br></div>
         <div ><input type="file" id="file-upload" accept="image/*" onchange = "uploadFile(this)"></div>
 
     </ul>
@@ -541,7 +542,7 @@
 
             var reader = new FileReader();
             reader.onload = function(evt){
-                var imgParam = {img: evt.target.result, fileName: fileName};
+                var imgParam = {img: evt.target.result, fileName: fileName, tabIndex:$('#imgTab')[0].value};
 
                 agent.sendRequest("agentSendImageRequest", imgParam);
             };

@@ -7,39 +7,39 @@ inspectorUtilities = require('./inspector-utilities'); //FUNDA
 var _ = require('underscore');
 var collaborativeBackboneViews = require("../../collaborative-app/collaborative-backbone-views.js"); //FUNDA
 
-//FUNDA -- my dynamic resize
-var dynamicResize = function () {
-    var win = $(window);
-
-    var windowWidth = win.width();
-    var windowHeight = win.height();
-
-    var canvasWidth = 1200;
-    var canvasHeight = 680;
-
-    if (windowWidth > canvasWidth)
-    {
-        $("#canvas-tab-area").width(windowWidth * 0.99 * 0.7);
-        $("#static-image-container").width(windowWidth * 0.99 * 0.7);
-        $("#inspector-tab-area").width(windowWidth * 0.99 * 0.3);
-
-        $("#sbgn-inspector").width(windowWidth * 0.99 * 0.3);
-        // var w = $("#sbgn-inspector-and-canvas").width(); //funda
-        var w = $("#canvas-tab-area").width();
-        $(".nav-menu").width(w);
-        $(".navbar").width(w);
-//    $("#sbgn-info-content").width(windowWidth * 0.85);
-        $("#sbgn-toolbar").width(w);
-    }
-
-    if (windowHeight > canvasHeight)
-    {
-        $("#canvas-tab-area").height(windowHeight * 0.85);
-        $("#static-image-container").height(windowHeight * 0.85);
-        // $("#sbgn-inspector").height(windowHeight * 0.85);
-        $("#inspector-tab-area").height(windowHeight * 0.85);
-    }
-};
+// //FUNDA -- my dynamic resize
+// var dynamicResize = function () {
+//     var win = $(window);
+//
+//     var windowWidth = win.width();
+//     var windowHeight = win.height();
+//
+//     var canvasWidth = 1200;
+//     var canvasHeight = 680;
+//
+//     if (windowWidth > canvasWidth)
+//     {
+//         $("#canvas-tab-area").width(windowWidth * 0.99 * 0.7);
+//         $("#static-image-container").width(windowWidth * 0.99 * 0.7);
+//         $("#inspector-tab-area").width(windowWidth * 0.99 * 0.3);
+//
+//         $("#sbgn-inspector").width(windowWidth * 0.99 * 0.3);
+//         // var w = $("#sbgn-inspector-and-canvas").width(); //funda
+//         var w = $("#canvas-tab-area").width();
+//         $(".nav-menu").width(w);
+//         $(".navbar").width(w);
+// //    $("#sbgn-info-content").width(windowWidth * 0.85);
+//         $("#sbgn-toolbar").width(w);
+//     }
+//
+//     if (windowHeight > canvasHeight)
+//     {
+//         $("#canvas-tab-area").height(windowHeight * 0.85);
+//         $("#static-image-container").height(windowHeight * 0.85);
+//         // $("#sbgn-inspector").height(windowHeight * 0.85);
+//         $("#inspector-tab-area").height(windowHeight * 0.85);
+//     }
+// };
 
 
 // Handle sbgnviz menu functions which are to be triggered on events
@@ -71,8 +71,8 @@ module.exports = function () {
     {
         console.log('init the sbgnviz template/page');
 
-        $(window).on('resize', _.debounce(dynamicResize, 100));
-        dynamicResize();
+        // $(window).on('resize', _.debounce(dynamicResize, 100));
+        // dynamicResize();
 
         layoutPropertiesView = appUtilities.layoutPropertiesView = new BackboneViews.LayoutPropertiesView({el: '#layout-properties-table'});
         colorSchemeMenuView = appUtilities.colorSchemeMenuView = new BackboneViews.ColorSchemeMenuView({el: '#color-scheme-menu'});
