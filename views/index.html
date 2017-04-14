@@ -367,10 +367,19 @@
                 <div id ="canvas-tab-area"  >
                     <div id = "canvas-tabs">
                         <ul class="nav nav-tabs">
-                            <li class = "active tab-link"><a data-toggle="tab"  href="#sbgn-network-container">Sbgn</a></li>
+
+                            <li class = "active tab-link" ><a data-toggle="tab" id = "defaultOpen" href="#sbgn-network-container">Sbgn</a></li>
                             {{ each _page.doc.images as #imageFile}}
 
-                            <li class = "tab-link"><a data-toggle="tab" href={{"#static-image-container-"+#imageFile.tabIndex}}>Image {{#imageFile.tabIndex}}</a></li>
+
+                            <li class = "tab-link">
+                                <span onclick= closeTab(this) class="close-icon"></span>
+
+                                <a data-toggle="tab" href={{"#static-image-container-"+#imageFile.tabIndex}}>
+
+
+
+                                Image {{#imageFile.tabIndex}}</a></li>
                             {{/each}}
                         </ul>
                     </div>
@@ -379,6 +388,7 @@
                         <div id="sbgn-network-container" tabindex="0" class = "tab-pane fade in active"></div>
                         {{ each _page.doc.images as #imageFile}}
                         <div id={{"static-image-container-"+#imageFile.tabIndex}} class = "tab-pane">
+
                             <section id = {{"section-"+#imageFile.tabIndex}}>
                                 <div class="parent">
                                 <div class="panzoom">
@@ -387,6 +397,11 @@
                                 </div>
 
                                 <script>
+                                    function closeTab(el){
+                                        el.parentElement.style.display='none';
+                                        $("#defaultOpen").click();
+                                    }
+
                                     (function() {
                                         var tabInd = {{#imageFile.tabIndex}};
                                         var $section = $('#section-' + tabInd);

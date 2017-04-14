@@ -618,13 +618,6 @@ app.proto.create = function (model) {
     }, false);
 
 
-
-// Pass options
-//     $("a.panzoom-elements").panzoom({
-//         minScale: 0,
-//         $zoomRange: $("input[type='range']")
-//     });
-
     this.listenToAgentSocket(model);
 
 
@@ -1151,16 +1144,7 @@ app.proto.init = function (model) {
         if (docReady) {
             triggerContentChange('static-image-container');
             triggerContentChange('receivedImages');
-            // $(".panzoom-elements").panzoom({
-            //     minScale: 0,
-            //     $zoomRange: $("input[type='range']")
-            // });
 
-            // // Pass options
-            // $("a.panzoom-elements").panzoom({
-            //     minScale: 0,
-            //     $zoomRange: $("input[type='range']")
-            // });
         }
     });
 
