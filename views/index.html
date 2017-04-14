@@ -354,12 +354,30 @@
         </table>
     </div>
 
+
     <table id="sbgn-inspector-and-canvas">
         <tbody>
         <tr>
             <td>
+                <div id ="canvas-tab-area"  >
+                    <div id = "canvas-tabs">
+
+                        <ul class="nav nav-tabs">
+                            <li class = "active tab-link"><a data-toggle="tab"  href="#sbgn-network-container">Sbgn</a></li>
+                            <li class = "tab-link"><a data-toggle="tab" href="#static-image-container">Image</a></li>
+                        </ul>
+                    </div>
+                    <div class="tab-content">
                 <!--focus should be here add tabindex -->
-                <div id="sbgn-network-container" tabindex="0">
+                        <div id="sbgn-network-container" tabindex="0" class = "tab-pane fade in active"></div>
+                        <div id="static-image-container" class = "tab-pane">
+                            {{ each _page.doc.images as #imageFile}}
+                            <br>
+                            <div class = image> <img src= "{{#imageFile.img}}" onmouseover ="showQTip(this)" /> </div>
+                            {{/each}}
+
+                        </div>
+                    </div>
                 </div>
             </td>
 
@@ -1464,7 +1482,7 @@
 
                 </div>
 
-                <div id ="chat-area"  class="tab-pane fade in active"">
+                <div id ="chat-area"  class="tab-pane fade in active">
                     <div id = "users" as="container"  on-change = "onScroll()">
                         <!--<ul id ="user-list" as = "list">-->
                         <form action=""">

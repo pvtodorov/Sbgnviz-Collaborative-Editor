@@ -164,7 +164,11 @@ body {
     border: 2px solid #F7CAA9;
 }
 
-#sbgn-network-container {
+
+
+
+
+#canvas-tab-area {
     margin: auto;
     border: 1px solid #ddd;
     height: 680px;
@@ -174,6 +178,61 @@ body {
     border-radius: 0.25em;
     /*float: left;*/
 }
+
+
+#canvas-tabs{
+    position: absolute;
+    overflow-x: hidden;
+    bottom: 0px;
+    width: 100%;
+    padding-top: 2px;
+    right: 0px;
+
+    /*border-radius: 0.25em;*/
+}
+
+#sbgn-network-container {
+    margin: auto;
+    border: 1px solid #ddd;
+    width:100%;
+    height:100%;
+    /*height: 680px;*/
+    /*width: 800px;*/
+    overflow: auto !important;
+    overflow: hidden;
+    /*border-radius: 0.25em;*/
+    /*float: left;*/
+}
+#static-image-container {
+    position:absolute;
+
+    top: 100px;
+    margin: auto;
+    border: 1px solid #ddd;
+    /*width:800px;*/
+    /*height:800px;*/
+    /*height: 680px;*/
+    /*width: 800px;*/
+    /*overflow: auto !important;*/
+    overflow: hidden;
+    /*border-radius: 0.25em;*/
+    /*float: left;*/
+}
+
+
+#canvas-tab-area {
+    margin: auto;
+    border: 1px solid #ddd;
+    /*width:100%;*/
+    /*height:100%;*/
+    height: 680px;
+    width: 800px;
+    /*overflow: auto !important;*/
+    overflow: hidden;
+    border-radius: 0.25em;
+    /*float: left;*/
+}
+
 
 #sbgn-inspector-and-canvas {
     margin: 10px;
@@ -992,7 +1051,7 @@ input[type="file"] {
 /*Debug*/
 #unitTestArea{
     position: absolute;
-    left: 10px;
+    right: 30px;
     width: 50px;
 
     bottom: 20px;

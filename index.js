@@ -1132,7 +1132,8 @@ app.proto.init = function (model) {
     //Sometimes works
     model.on('all', '_page.doc.images', function() {
         if (docReady)
-            triggerContentChange('receivedImages');
+             triggerContentChange('static-image-container');
+             triggerContentChange('receivedImages');
     });
 
     model.on('all', '_page.doc.history', function(){

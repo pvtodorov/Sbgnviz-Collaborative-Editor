@@ -19,12 +19,13 @@ var dynamicResize = function () {
 
     if (windowWidth > canvasWidth)
     {
-        $("#sbgn-network-container").width(windowWidth * 0.99 * 0.7);
+        $("#canvas-tab-area").width(windowWidth * 0.99 * 0.7);
+        $("#static-image-container").width(windowWidth * 0.99 * 0.7);
         $("#inspector-tab-area").width(windowWidth * 0.99 * 0.3);
 
         $("#sbgn-inspector").width(windowWidth * 0.99 * 0.3);
         // var w = $("#sbgn-inspector-and-canvas").width(); //funda
-        var w = $("#sbgn-network-container").width();
+        var w = $("#canvas-tab-area").width();
         $(".nav-menu").width(w);
         $(".navbar").width(w);
 //    $("#sbgn-info-content").width(windowWidth * 0.85);
@@ -33,7 +34,8 @@ var dynamicResize = function () {
 
     if (windowHeight > canvasHeight)
     {
-        $("#sbgn-network-container").height(windowHeight * 0.85);
+        $("#canvas-tab-area").height(windowHeight * 0.85);
+        $("#static-image-container").height(windowHeight * 0.85);
         // $("#sbgn-inspector").height(windowHeight * 0.85);
         $("#inspector-tab-area").height(windowHeight * 0.85);
     }
