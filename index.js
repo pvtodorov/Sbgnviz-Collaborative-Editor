@@ -1273,6 +1273,7 @@ app.proto.dynamicResize = function (images) {
     if (windowWidth > canvasWidth)
     {
         $("#canvas-tab-area").width(windowWidth * 0.99 * 0.7);
+        $("#sbgn-network-container").width(windowWidth * 0.99 * 0.7);
 
 
         if(images) {
@@ -1293,6 +1294,7 @@ app.proto.dynamicResize = function (images) {
     if (windowHeight > canvasHeight)
     {
         $("#canvas-tab-area").height(windowHeight * 0.85);
+        $("#sbgn-network-container").height(windowHeight * 0.85);
         if(images) {
             images.forEach(function (img) {
                 $("#static-image-container-" + img.tabIndex).height(windowHeight * 0.85);

@@ -12,6 +12,7 @@
 <script src="./agentAPI.js"></script>
 <script src="./HashMap.js"></script>
 <script src="ContextAgent.js"></script>
+<script src="CausalityAgent.js"></script>
 
 <form>
     <input type="button" value="Delete Cookies" onclick=deleteAllCookies()>
@@ -356,9 +357,10 @@
             $('#serverIp')[0].value = ip;
         }
 
-         agent = new Agent($('#agentName')[0].value, agentId);
+//         agent = new Agent($('#agentName')[0].value, agentId);
 
 //        agent = new ContextAgent($('#agentName')[0].value, agentId);
+        agent = new CausalityAgent($('#agentName')[0].value, agentId);
 //        agent.sendRequest("agentActiveRoomsRequest", {param:null}, function(rooms){
 //
 //            console.log(rooms);
