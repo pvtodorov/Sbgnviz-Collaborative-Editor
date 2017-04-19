@@ -1277,7 +1277,7 @@ app.proto.add = function (model, filePath) {
                 userId: msgUserId,
                 userName: msgUserName,
                 comment: comment,
-               date: date
+                date: date
             });
 
 
