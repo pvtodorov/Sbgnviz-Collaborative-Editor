@@ -699,82 +699,82 @@ module.exports = function(serverIp, modelManager){
     }, 100);
 
 
-    // setTimeout(function() {
-    //     testMessages();
-    // }, 100);
-    //
-    // setTimeout(function() {
-    //     testMerge();
-    // }, 100);
+    setTimeout(function() {
+        testMessages();
+    }, 100);
 
-    // setTimeout(function() {
-    //     testGetRequests();
-    // },100);
-    //
-    //
-    // setTimeout(function() {
-    //     testMoveNodeRequest();
-    // },100);
-    //
-    // setTimeout(function() {
-    //     testNodeSetAttributeRequests();
-    // },100);
-    //
-    //
-    //
-    // setTimeout(function() {
-    //     testEdgeSetAttributeRequests();
-    // },100);
-    //
-    // setTimeout(function() {
-    //     testPropertyRequests();
-    // },100);
+    setTimeout(function() {
+        testMerge();
+    }, 100);
+
+    setTimeout(function() {
+        testGetRequests();
+    },100);
 
 
-    // setTimeout(function() {
-    //     testAlignRequest();
-    // }, 1000);
+    setTimeout(function() {
+        testMoveNodeRequest();
+    },100);
 
-    // setTimeout(function() {
-    //     testUndoRedoRequest();
-    // }, 1000);
+    setTimeout(function() {
+        testNodeSetAttributeRequests();
+    },100);
 
 
-    // setTimeout(function() {
-    //     testHighlight();
-    // }, 100);
-    //
-    // setTimeout(function() {
-    //     testAddCompound();
-    // }, 100);
-    //
-    // setTimeout(function() {
-    //     testAddDeleteRequests();
-    // },100);
-    //
-    // setTimeout(function() {
-    //     testHideShow();
-    // }, 100);
-    //
-    //
-    //
-    //
-    // //Do this after others
-    // setTimeout(function() {
-    //     testExpandCollapse();
-    // }, 500);
-    //
-    //
-    //
-    // //do this at the end
-    // setTimeout(function() {
-    //     testLayout();
-    // }, 1000);
 
-    // //do this at the end
-    // setTimeout(function() {
-    //     testNewFile();
-    // }, 2000);
+    setTimeout(function() {
+        testEdgeSetAttributeRequests();
+    },100);
+
+    setTimeout(function() {
+        testPropertyRequests();
+    },100);
+
+
+    setTimeout(function() {
+        testAlignRequest();
+    }, 1000);
+
+    setTimeout(function() {
+        testUndoRedoRequest();
+    }, 1000);
+
+
+    setTimeout(function() {
+        testHighlight();
+    }, 100);
+
+    setTimeout(function() {
+        testAddCompound();
+    }, 100);
+
+    setTimeout(function() {
+        testAddDeleteRequests();
+    },100);
+
+    setTimeout(function() {
+        testHideShow();
+    }, 100);
+
+
+
+
+    //Do this after others
+    setTimeout(function() {
+        testExpandCollapse();
+    }, 500);
+
+
+
+    //do this at the end
+    setTimeout(function() {
+        testLayout();
+    }, 1000);
+
+    //do this at the end
+    setTimeout(function() {
+        testNewFile();
+    }, 2000);
 
     //
     // //do this at the end

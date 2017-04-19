@@ -1317,6 +1317,14 @@ app.proto.dynamicResize = function (images) {
         $(".navbar").width(w);
         $("#sbgn-toolbar").width(w);
     }
+    else{
+        if(images) {
+            images.forEach(function (img) {
+                $("#static-image-container-" + img.tabIndex).width(800);
+                $("#static-image-container-" + img.tabIndex).height(680);
+            });
+        }
+    }
 
     if (windowHeight > canvasHeight)
     {
@@ -1324,6 +1332,7 @@ app.proto.dynamicResize = function (images) {
         $("#sbgn-network-container").height(windowHeight * 0.85);
         if(images) {
             images.forEach(function (img) {
+
                 $("#static-image-container-" + img.tabIndex).height(windowHeight * 0.85);
             });
         }
