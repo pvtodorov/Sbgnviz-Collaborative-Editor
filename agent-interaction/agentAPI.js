@@ -267,6 +267,8 @@ Agent.prototype.sendRequest = function(reqName, param, callback){ //model operat
     param.userId = this.agentId;
 
     this.socket.emit(reqName, param, function(data){
+
+        console.log(param);
         if(callback)
             callback(data);
         else

@@ -349,25 +349,18 @@
         var ip = getCookie('docId');
 
 
-        if(ip == null || ip == ""){
-            ip = serverIp;
-            document.cookie = 'docId=' +  ip;  //add cookie docId
-        }
-        else{
-            $('#serverIp')[0].value = ip;
-        }
 
-//         agent = new Agent($('#agentName')[0].value, agentId);
+        agent = new Agent($('#agentName')[0].value, agentId);
 
 //        agent = new ContextAgent($('#agentName')[0].value, agentId);
-        agent = new CausalityAgent($('#agentName')[0].value, agentId);
+  //      agent = new CausalityAgent($('#agentName')[0].value, agentId);
 //        agent.sendRequest("agentActiveRoomsRequest", {param:null}, function(rooms){
 //
 //            console.log(rooms);
 //        });
 
 
-        agent.connectToServer(serverIp, function(socket){
+        agent.connectToServer("http://localhost:3000/", function(socket){
 
 //            $('#createAgentButton').attr('disabled','disabled');
             $('#serverIp')[0].value = "http://localhost:3000/" + agent.room;
@@ -384,6 +377,10 @@
                         contextInitialized = true;
 
                     });
+
+                }
+                else if(agent instanceof CausalityAgent) {
+                    agent.init();
 
                 }
                 //TODO: open later fillLayoutProperties();
@@ -498,11 +495,9 @@
     }
     function sendMessage(){
 
-
-        agent.sendMessage($('#chatMessage')[0].value, computeTargets(), function(){
+        agent.sendRequest('agentMessage', {comment:$('#chatMessage')[0].value, targets:"*"}, function(){
             $('#chatMessage')[0].value = "";
-
-        });
+        } );
     };
 
 
@@ -553,7 +548,7 @@
 
             //Add file name as a text message
 
-            agent.sendMessage(("Sent image: " +fileName), '*');
+        //    agent.sendMessage(("Sent image: " +fileName), '*');
 
 
         }

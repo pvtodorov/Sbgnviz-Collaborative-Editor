@@ -1,6 +1,5 @@
 QUnit = require('qunitjs');
 
-// agentAPI = require("../../agent-interaction/agentAPI");
 
 module.exports = function(serverIp, modelManager){
 

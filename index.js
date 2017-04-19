@@ -81,9 +81,16 @@ app.get('/:docId', function (page, model, arg, next) {
     var messagesQuery, room;
     room = arg.docId;
 
+
+
+
+
     model.subscribe('documents', function () {
         var docPath = 'documents.' + arg.docId;
         model.ref('_page.doc', ('documents.' + arg.docId));
+
+
+
 
         model.subscribe(docPath, function (err) {
             if (err) return next(err);
@@ -171,6 +178,12 @@ app.get('/:docId', function (page, model, arg, next) {
 
         });
     });
+
+
+    model.subscribe('pnnl.data', function(){
+        model.createNull('pnnl.data', []);
+    });
+
 });
 
 
@@ -333,6 +346,19 @@ app.proto.listenToAgentSocket = function(model){
     });
 
 //make sure action is performed on the model
+
+    // model.on('insert', '_page.doc.messages.*', function(id, op, msg){
+    //
+    //     timeSort = function (a, b) {
+    //
+    //         return (a != null ? a.date : void 0) - (b != null ? b.date : void 0);
+    //     };
+    //
+    //
+    //
+    //     return model.sort('_page.doc.messages', timeSort).ref('_page.list');
+    //
+    // })
 
     model.on('change', '_page.doc.undoIndex', function(id, cmdInd){
 
@@ -1243,7 +1269,7 @@ app.proto.add = function (model, filePath) {
         var msgUserId = model.get('_session.userId');
         var msgUserName = model.get('_page.doc.users.' + msgUserId +'.name');
 
-        socket.emit('getDate', function(date){ //get the date from the server
+       socket.emit('getDate', function(date){ //get the date from the server
 
             model.add('_page.doc.messages', {
                 room: model.get('_page.room'),
@@ -1251,10 +1277,11 @@ app.proto.add = function (model, filePath) {
                 userId: msgUserId,
                 userName: msgUserName,
                 comment: comment,
-                date: date
+               date: date
             });
 
-        });
+
+       });
 
 
 };
@@ -1314,8 +1341,12 @@ app.proto.uploadFile = function(evt){
         var file = evt.target.files[0];
 
         var reader = new FileReader();
+        var images = this.model.get('_page.doc.images');
+        var imgCnt = 0;
+        if(images)
+            imgCnt = images.length;
         reader.onload = function(evt){
-            modelManager.addImage({ img: evt.target.result,room: room, filePath: filePath});
+            modelManager.addImage({ img: evt.target.result,room: room, fileName: filePath, tabIndex:imgCnt });
 
         };
 
