@@ -539,7 +539,7 @@
 
             var reader = new FileReader();
             reader.onload = function(evt){
-                var imgParam = {img: evt.target.result, fileName: fileName, tabIndex:$('#imgTab')[0].value};
+                var imgParam = {img: evt.target.result, fileName: fileName, tabIndex:$('#imgTab')[0].value, tabLabel:"newLabel"};
 
                 agent.sendRequest("agentSendImageRequest", imgParam);
             };

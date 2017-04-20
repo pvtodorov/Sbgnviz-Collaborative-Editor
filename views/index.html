@@ -371,7 +371,7 @@
                 <!--focus should be here add tabindex -->
                         <div id="sbgn-network-container" tabindex="0" class = "tab-pane fade in active"></div>
                         {{ each _page.doc.images as #imageFile}}
-                        <div id={{"static-image-container-"+#imageFile.tabIndex}} class = "tab-pane" >
+                        <div id={{"static-image-container-"+#imageFile.tabIndex}}  class = "tab-pane" >
 
                             <section id = {{"section-"+#imageFile.tabIndex}} style = 'height:100%; width:100%'>
                                 <div class="parent" style = 'height:100%; width:100%'>
@@ -433,7 +433,7 @@
 
 
 
-                            Image {{#imageFile.tabIndex}}</a></li>
+                             {{#imageFile.tabLabel}}</a></li>
                     {{/each}}
                 </ul>
             </div>

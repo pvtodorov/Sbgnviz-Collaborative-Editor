@@ -1358,7 +1358,7 @@ app.proto.uploadFile = function(evt){
         if(images)
             imgCnt = images.length;
         reader.onload = function(evt){
-            modelManager.addImage({ img: evt.target.result,room: room, fileName: filePath, tabIndex:imgCnt });
+            modelManager.addImage({ img: evt.target.result,room: room, fileName: filePath, tabIndex:imgCnt, tabLabel:filePath});
 
         };
 
