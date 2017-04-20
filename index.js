@@ -180,12 +180,7 @@ app.get('/:docId', function (page, model, arg, next) {
     });
 
 
-    model.subscribe('pnnl.values', function() {
-        model.createNull('pnnl.values', {});
-    });
-    // model.subscribe('pnnl.data', function(){
-    //     model.createNull('pnnl.data', []);
-    // });
+
 
 });
 
@@ -348,20 +343,6 @@ app.proto.listenToAgentSocket = function(model){
         }
     });
 
-//make sure action is performed on the model
-
-    // model.on('insert', '_page.doc.messages.*', function(id, op, msg){
-    //
-    //     timeSort = function (a, b) {
-    //
-    //         return (a != null ? a.date : void 0) - (b != null ? b.date : void 0);
-    //     };
-    //
-    //
-    //
-    //     return model.sort('_page.doc.messages', timeSort).ref('_page.list');
-    //
-    // })
 
     model.on('change', '_page.doc.undoIndex', function(id, cmdInd){
 
@@ -560,6 +541,7 @@ app.proto.listenToAgentSocket = function(model){
 
     socket.on("mergeSbgn", function(data, callback){
         self.mergeSbgn(data);
+        console.log("Merged sbgn");
         if(callback) callback("success");
     });
 

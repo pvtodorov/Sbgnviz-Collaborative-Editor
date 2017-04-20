@@ -353,7 +353,7 @@
         agent = new Agent($('#agentName')[0].value, agentId);
 
 //        agent = new ContextAgent($('#agentName')[0].value, agentId);
-  //      agent = new CausalityAgent($('#agentName')[0].value, agentId);
+     //   agent = new CausalityAgent($('#agentName')[0].value, agentId);
 //        agent.sendRequest("agentActiveRoomsRequest", {param:null}, function(rooms){
 //
 //            console.log(rooms);
@@ -518,7 +518,9 @@
             if(rawFile.readyState === 4) {
                 if(rawFile.status === 200 || rawFile.status == 0) {
                     var allText = rawFile.responseText;
+                    console.log("File reading complete");
                     callback(allText);
+
 
                 }
             }

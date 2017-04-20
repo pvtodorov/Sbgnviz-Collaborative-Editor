@@ -13,51 +13,116 @@ function CausalityAgent(name, id) {
     this.agentId = id;
 
     this.pnnl = [];
-    this.causative = [];
+    this.causality = [];
 
 
 }
 
 
 CausalityAgent.prototype.init = function(){
-    //this.readPNNLData();
-    this.readCausative();
 
- //   console.log(this.pnnl[0]);
-    console.log(this.causative[0]);
-
-
-}
-/**
- * Read pnnl analysis data into memory
- */
-CausalityAgent.prototype.readPNNLData = function(){
     var self = this;
 
+    this.readCausality();
 
-    readTextFile("CausalPath/PNNL-ovarian-correlations.txt", function (fileContent) {
-        var correlations = fileContent.split("\n").slice(1); //start from the second line
+    //
+    // this.sendRequest('agentPNLLRequest', null, function(pnnlArr){
+    //     self.pnnl = pnnlArr;
+    //     console.log("Pnnl data received");
+    // });
 
-        correlations.forEach(function(line){
-            var vals = line.split("\t");
-            self.pnnl.push({id1: vals[0], id2: vals[1], correlation: vals[2], pVal: vals[3]});
-        });
-    });
+    self.showCausality(["RPS6KA3"]);
+
+
 }
 
 /**
  * Read causal relationships into memory
  */
-CausalityAgent.prototype.readCausative = function(){
+CausalityAgent.prototype.readCausality = function(){
     var self = this;
 
 
-    readTextFile("CausalPath/causative.sif", function (fileContent) {
+    readTextFile("./CausalPath/causative.sif", function (fileContent) {
         var causalRels = fileContent.split("\n").slice(1); //start from the second line
 
         causalRels.forEach(function(line){
             var vals = line.split("\t");
-            self.causative.push({id1: vals[0], relationship: vals[1], id2: vals[2], uri: vals[3]});
+            var id1 = vals[0];
+            var id2 = vals[2];
+            var uriArr = [];
+
+            if(vals[3]) {
+                uriArr = vals[3].split(" ");
+
+                if (!uriArr)
+                    uriArr = [vals[3]];
+            }
+
+
+
+            if(self.causality[id1])
+                self.causality[id1].push({relationship: vals[1], id2: id2, uriArr: uriArr});
+            else
+                self.causality[id1] = [{relationship: vals[1], id2: id2, uriArr: uriArr}];
+
+            if(self.causality[id2])
+                self.causality[id2].push({relationship: vals[1], id2: id1, uriArr: uriArr});
+            else
+                self.causality[id2] = [{relationship: vals[1], id2: id1, uriArr: uriArr}];
         });
+
+        console.log("Reading causality data complete");
     });
+}
+
+CausalityAgent.prototype.showCausality = function(geneNames){
+    var self = this;
+
+    geneNames.forEach(function(geneName){
+        var causalGene = self.causality[geneName];
+
+
+        if(causalGene){
+
+            causalGene.forEach(function(causalRelationship){
+
+                if(causalRelationship.uriArr && causalRelationship.uriArr.length > 0) {
+
+                    var mergeGraph = function(uriArr){
+                        self.mergePCQuery(uriArr)
+                        // self.sendPCQuery(uriArr, function(data) {
+                        //     self.sendRequest("agentMergeGraphRequest", data);
+                        // });
+
+                    }(causalRelationship.uriArr);
+
+                }
+            });
+        }
+
+    });
+    
+}
+
+CausalityAgent.prototype.mergePCQuery = function(uriArr, callback){
+    var self = this;
+    var pc2URL = "http://www.pathwaycommons.org/pc2/get?";
+    var format = "format=SBGN";
+
+    var uriStr = "";
+    uriArr.forEach(function(uri){
+        uriStr += "uri=" + uri + "&";
+    });
+
+    pc2URL = pc2URL + uriStr + format;
+
+
+    self.socket.emit('MergePCQuery', {url: pc2URL, type: "sbgn"}, function(data){
+        console.log(data);
+        if(callback) callback();
+    });
+
+
+
 }
