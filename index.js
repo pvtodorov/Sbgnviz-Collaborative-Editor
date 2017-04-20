@@ -180,9 +180,12 @@ app.get('/:docId', function (page, model, arg, next) {
     });
 
 
-    model.subscribe('pnnl.data', function(){
-        model.createNull('pnnl.data', []);
+    model.subscribe('pnnl.values', function() {
+        model.createNull('pnnl.values', {});
     });
+    // model.subscribe('pnnl.data', function(){
+    //     model.createNull('pnnl.data', []);
+    // });
 
 });
 

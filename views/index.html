@@ -410,28 +410,33 @@
                     </div>
                 </div>
 
-                <div id = "canvas-tabs">
-                    <ul class="nav nav-tabs">
 
-                        <li class = "active tab-link" ><a data-toggle="tab" id = "defaultOpen" href="#sbgn-network-container">Sbgn</a></li>
-                        {{ each _page.doc.images as #imageFile}}
-
-
-                        <li class = "tab-link">
-                            <span onclick= closeTab(this) class="close-icon"></span>
-
-                            <a data-toggle="tab" href={{"#static-image-container-"+#imageFile.tabIndex}}>
-
-
-
-                                Image {{#imageFile.tabIndex}}</a></li>
-                        {{/each}}
-                    </ul>
-                </div>
             </td>
 
             <td>
                 <view is='inspector-view'></view>                    <!--<div id="sbgn-inspector">-->
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <div id = "canvas-tabs">
+                <ul class="nav nav-tabs">
+
+                    <li class = "active tab-link" ><a data-toggle="tab" id = "defaultOpen" href="#sbgn-network-container">Sbgn</a></li>
+                    {{ each _page.doc.images as #imageFile}}
+
+
+                    <li class = "tab-link">
+                        <span onclick= closeTab(this) class="close-icon"></span>
+
+                        <a data-toggle="tab" href={{"#static-image-container-"+#imageFile.tabIndex}}>
+
+
+
+                            Image {{#imageFile.tabIndex}}</a></li>
+                    {{/each}}
+                </ul>
+            </div>
             </td>
         </tr>
         </tbody>
@@ -1369,18 +1374,18 @@
 
         <div id ="inspector-tab-area" tabindex="1">
 
-            <div id="inspector-tabs">
 
-                <ul class="nav nav-tabs">
-                    <li class = "active tab-link"><a data-toggle="tab"  href="#chat-area">Chat</a></li>
-                    <li class = "tab-link"><a data-toggle="tab" href="#image-area">Image Share</a></li>
-                    <li class = "tab-link"><a data-toggle="tab" href="#sbgn-inspector">Sbgn Inspector</a></li>
-                    <li class = "tab-link"><a data-toggle="tab" href="#command-history-area">Operations</a></li>
-                    <li class = "tab-link"><a data-toggle="tab" href="#factoid-area">Factoid</a></li>
-                </ul>
-            </div>
             <div class="tab-content">
+                <div id="inspector-tabs">
 
+                    <ul class="nav nav-tabs">
+                        <li class = "active tab-link"><a data-toggle="tab"  href="#chat-area">Chat</a></li>
+                        <li class = "tab-link"><a data-toggle="tab" href="#image-area">Image Share</a></li>
+                        <li class = "tab-link"><a data-toggle="tab" href="#sbgn-inspector">Sbgn Inspector</a></li>
+                        <li class = "tab-link"><a data-toggle="tab" href="#command-history-area">Operations</a></li>
+                        <li class = "tab-link"><a data-toggle="tab" href="#factoid-area">Factoid</a></li>
+                    </ul>
+                </div>
 
 
                 <!--<div id="sbgn-inspector" class="tab-pane"></div>      -->
