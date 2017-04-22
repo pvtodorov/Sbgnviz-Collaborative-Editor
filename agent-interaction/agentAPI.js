@@ -335,7 +335,20 @@ Agent.prototype.sendMessage = function(comment, targets, callback){
     });
 }
 
+/***
+ * Get the latest message from the message list
+ * @param callback
+ */
+Agent.prototype.getMessage = function(callback){
 
+    self.sendRequest("agentPageDocRequest", {}, function(pageDoc){
+
+        if(callback)
+            callback(pageDoc.messages[pageDoc.messages.length-1]);
+
+    })
+
+}
 
 /**
  *

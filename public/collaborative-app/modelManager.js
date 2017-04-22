@@ -1052,9 +1052,12 @@ module.exports = function (model, docId) {
             if (data != null && data.bbox!=null) //it means data has been added before
                 node.data(data);
 
-            else
-                this.changeModelNodeAttribute('data', node.id(), node.data(), user, noHistUpdate);
-
+            else {
+                var nodeData = node.data();
+                if(nodeData == null)
+                    nodeData = node._private.data;
+                this.changeModelNodeAttribute('data', node.id(), nodeData, user, noHistUpdate);
+            }
 
             //make this initially unselected
         //    nodePath.set('highlightColor', null);
@@ -1064,9 +1067,12 @@ module.exports = function (model, docId) {
             if (pos != null)
                 node.position(pos);
 
-            else
-                this.changeModelNodeAttribute('position', node.id(), node.position(), user, noHistUpdate);
-
+            else {
+                var nodePosition = node.position();
+                if(nodePosition == null)
+                    nodePosition = node._private.position;
+                this.changeModelNodeAttribute('position', node.id(), nodePosition, user, noHistUpdate);
+            }
 
             //Initializing css properties causes bypass problems!!
 
@@ -1097,9 +1103,12 @@ module.exports = function (model, docId) {
             if (data != null && data.cardinality != null)
                 edge.data(data);
 
-            else
-                this.changeModelEdgeAttribute('data', edge.id(), edge.data(), user, noHistUpdate);
-
+            else {
+                var edgeData = edge.data();
+                if(edgeData == null)
+                    edgeData = edge._private.data;
+                this.changeModelEdgeAttribute('data', edge.id(), edgeData, user, noHistUpdate);
+            }
 
 
 

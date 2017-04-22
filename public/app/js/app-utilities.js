@@ -22,7 +22,7 @@ appUtilities.defaultLayoutProperties = {
   tile: true,
   animationEasing: 'cubic-bezier(0.19, 1, 0.22, 1)',
   animate: 'end',
-  animationDuration: 1000,
+  animationDuration: 0,//FUNDA1000,
   randomize: false,
   tilingPaddingVertical: 20,
   tilingPaddingHorizontal: 20,
@@ -69,7 +69,7 @@ appUtilities.defaultGeneralProperties = {
   dynamicLabelSize: 'regular',
   fitLabelsToNodes: true, //FUNDA
   rearrangeAfterExpandCollapse: true,
-  animateOnDrawingChanges: true,
+  animateOnDrawingChanges: false, //FUNDA
   adjustNodeLabelFontSizeAutomatically: true, //funda
   mapColorScheme: 'black_white'
 };

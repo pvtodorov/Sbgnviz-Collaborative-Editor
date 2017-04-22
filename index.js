@@ -540,9 +540,11 @@ app.proto.listenToAgentSocket = function(model){
 
 
     socket.on("mergeSbgn", function(data, callback){
-        self.mergeSbgn(data);
-        console.log("Merged sbgn");
-        if(callback) callback("success");
+        self.mergeSbgn(data, function(){
+            if(callback) callback("success");
+        });
+
+
     });
 
     socket.on("mergeJsonWithCurrent", function(data){
@@ -750,9 +752,11 @@ app.proto.listenToNodeOperations = function(model){
     });
 
     //Update inspector
-    model.on('all', '_page.doc.cy.nodes.**', function(id, op, val, prev, passed){
-        inspectorUtilities.handleSBGNInspector();
-    });
+
+//TODO: Open later
+    // model.on('all', '_page.doc.cy.nodes.**', function(id, op, val, prev, passed){
+    //     inspectorUtilities.handleSBGNInspector();
+    // });
 
     model.on('all', '_page.doc.cy.nodes.*', function(id, op, val, prev, passed){
 
@@ -943,9 +947,10 @@ app.proto.listenToEdgeOperations = function(model){
 
 
     //Update inspector
-    model.on('all', '_page.doc.cy.edges.**', function(id, op, val, prev, passed){
-        inspectorUtilities.handleSBGNInspector();
-    });
+    //TODO: open later
+    // model.on('all', '_page.doc.cy.edges.**', function(id, op, val, prev, passed){
+    //     inspectorUtilities.handleSBGNInspector();
+    // });
 
 
     model.on('all', '_page.doc.cy.edges.*.highlightColor', function(id, op, val,prev, passed){
@@ -1266,6 +1271,8 @@ app.proto.add = function (model, filePath) {
             });
 
 
+
+
        });
 
 
@@ -1447,10 +1454,6 @@ app.proto.mergeJsons = function(jsonGraphs){
         });
 
 
-
-
-
-
         jsonObj = mergeResult.wholeJson;
 
     }
@@ -1478,13 +1481,15 @@ app.proto.mergeJsons = function(jsonGraphs){
     return {sentences: sentenceNodeMap, idxCards: idxCardNodeMap};
 }
 
-app.proto.mergeJsonWithCurrent = function(jsonGraph){
+app.proto.mergeJsonWithCurrent = function(jsonGraph, callback){
 
 
+    var self = this;
     var currJson = sbgnviz.createJson();
 
-console.log(jsonGraph);
+
     modelManager.setRollbackPoint(); //before merging
+
 
 
 
@@ -1492,39 +1497,54 @@ console.log(jsonGraph);
     var jsonObj = mergeResult.wholeJson;
     var newJsonIds = mergeResult.jsonToMerge;
 
+
+
+
+
     //get another sbgncontainer and display the new SBGN model.
     modelManager.newModel( "me", true);
 
+    //this takes a while so wait before initing the model
     chise.updateGraph(jsonObj);
+
+    //DEBUG
+    // cy.nodes().forEach(function (node){
+    //     if(node._private.data == null){
+    //         console.log("Data not assigned");
+    //         console.log(node);
+    //     }
+    // });
+
     setTimeout(function(){
         modelManager.initModel(cy.nodes(), cy.edges(), appUtilities, "me");
-    },1000); //wait for chise to complete updating graph
+
+        //select the new graph
+        newJsonIds.nodes.forEach(function(node){
+                cy.getElementById(node.data.id).select();
+
+        });
+
+        //Call Layout
 
 
+        $("#perform-layout").trigger('click');
 
+        //Call merge notification after the layout
+        setTimeout(function(){
+            modelManager.mergeJsons("me", true);
+            if(callback) callback("success");
+        }, 1000);
 
-    //select the new graph
-    newJsonIds.nodes.forEach(function(node){
-            cy.getElementById(node.data.id).select();
-
-    });
-
-    //Call Layout
-
-
-    $("#perform-layout").trigger('click');
-
-    //Call merge notification after the layout
-    setTimeout(function(){
-        modelManager.mergeJsons("me", true);
-    }, 1000);
-
+    },2000); //wait for chise to complete updating graph
 
 }
 
-app.proto.mergeSbgn = function(sbgnText){
+app.proto.mergeSbgn = function(sbgnText, callback){
 
 
     var newJson = sbgnviz.convertSbgnmlTextToJson(sbgnText);
-    this.mergeJsonWithCurrent(newJson);
+    this.mergeJsonWithCurrent(newJson, callback);
+
+
+
 }

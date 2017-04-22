@@ -701,10 +701,10 @@ module.exports = function(serverIp, modelManager){
         testMessages();
     }, 100);
 
-    // setTimeout(function() {
-    //     testMerge();
-    // }, 100);
-    //
+    setTimeout(function() {
+        testMerge();
+    }, 100);
+
     // setTimeout(function() {
     //     testGetRequests();
     // },100);
