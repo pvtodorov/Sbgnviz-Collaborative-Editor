@@ -158,7 +158,7 @@ string after http:<ip>:3000/ in the server address.
 |		"agentActiveRoomsRequest"					| {room:< room >, userId:< agentId >}-																																			|
 |   "agentUndoRequest"          |  {room:< room >, userId:< agentId >} |
 |   "agentRedoRequest"          |   {room:< room >, userId:< agentId >}|
-|   "agentMessage"          |{room: <room>, userId: <agentId>, comment: <text to be sent>, targets: < user ids or * to include all users in the room >}   |
+|   "agentMessage"          |{room: <room>, userId: <agentId>, comment: {text: <text to be sent>, style: <text style>}, targets: < user ids or * to include all users in the room >}   |
 
 
 
