@@ -83,7 +83,7 @@ module.exports = function(serverIp, modelManager){
             var done1 = assert.async();
 
 
-            agent.sendRequest("agentMessage", {comment:"hello", targets:"*"}, function(data){
+            agent.sendRequest("agentMessage", {comment:{text:"hello", style:"color:blue;"}, targets:"*"}, function(data){
 
                 setTimeout(function () { //should wait here as well
 
@@ -701,9 +701,9 @@ module.exports = function(serverIp, modelManager){
         testMessages();
     }, 100);
 
-    setTimeout(function() {
-        testMerge();
-    }, 100);
+    // setTimeout(function() {
+    //     testMerge();
+    // }, 100);
 
     // setTimeout(function() {
     //     testGetRequests();
