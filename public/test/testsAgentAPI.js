@@ -79,8 +79,10 @@ module.exports = function(serverIp, modelManager){
 
     function testMessages() {
         QUnit.test('Message send/receive', function (assert) {
-            assert.expect(1);
+            assert.expect(3);
             var done1 = assert.async();
+            var done2 = assert.async();
+            var done3 = assert.async();
 
 
             agent.sendRequest("agentMessage", {comment:{text:"hello", style:"color:blue;"}, targets:"*"}, function(data){
@@ -90,6 +92,27 @@ module.exports = function(serverIp, modelManager){
 
                     assert.equal(data, "success", "Agent message sent.");
                     done1();
+                }, 100);
+            });
+
+
+            agent.sendRequest("agentMessage", {comment:{text:"hello 2"}, targets:"*"}, function(data){
+
+                setTimeout(function () { //should wait here as well
+
+
+                    assert.equal(data, "success", "Agent message sent.");
+                    done2();
+                }, 100);
+            });
+
+            agent.sendRequest("agentMessage", {comment:{text:"hello 3", link:"http://google.com"}, targets:"*"}, function(data){
+
+                setTimeout(function () { //should wait here as well
+
+
+                    assert.equal(data, "success", "Agent message sent.");
+                    done3();
                 }, 100);
             });
 

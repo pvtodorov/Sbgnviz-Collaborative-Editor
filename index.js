@@ -1222,6 +1222,7 @@ app.proto.runUnitTests = function(){
 
     var room = this.model.get('_page.room');
     require("./public/test/testsAgentAPI.js")(("http://localhost:3000/" + room), modelManager);
+    //require("./public/test/testsCausalityAgent.js")(("http://localhost:3000/" + room), modelManager);
     // require("./public/test/testsModelManager.js")();
     require("./public/test/testOptions.js")(); //to print out results
 

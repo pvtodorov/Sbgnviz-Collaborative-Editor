@@ -495,7 +495,7 @@
     }
     function sendMessage(){
 
-        agent.sendRequest('agentMessage', {comment:$('#chatMessage')[0].value, targets:"*"}, function(){
+        agent.sendRequest('agentMessage', {comment:{text: $('#chatMessage')[0].value}, targets:"*"}, function(){
             $('#chatMessage')[0].value = "";
         } );
     };
@@ -527,6 +527,26 @@
         }
         rawFile.send(null);
     };
+
+
+    function saveFile(data, filename, type) {
+        var a = document.createElement("a"),
+            file = new Blob([data], {type: type});
+        if (window.navigator.msSaveOrOpenBlob) // IE10+
+            window.navigator.msSaveOrOpenBlob(file, filename);
+        else { // Others
+            var url = URL.createObjectURL(file);
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            setTimeout(function() {
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            }, 0);
+        }
+    }
+
 
     function uploadFile(el){
         try{
@@ -975,7 +995,7 @@
 
     function writeMessage(msg){
 
-        var htmlMessage = "<b>" + msg.userName + " (" + formatTime(msg) + "): "+ "</b>"  +msg.comment ;
+        var htmlMessage = "<b>" + msg.userName + " (" + formatTime(msg) + "): "+ "</b>"  + " <p style  =" + msg.comment.style +">" + msg.comment.text + "</p>" ;
         $('#chat').append("<li>" + htmlMessage+ "</li>");
         $('#chat').trigger('contentchanged');
     }

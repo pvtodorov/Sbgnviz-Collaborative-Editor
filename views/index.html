@@ -1563,7 +1563,7 @@
                         User name: <input id="inputs-name" value="{{_page.doc.users[_session.userId].name}}">
                         <button id = "change-user-color" class = "btn btn-mini" on-click ="changeColorCode()">New user color</button>
                         <form id="inputs-form" on-submit="add()">
-                            <textarea id="inputs-comment" rows = "3", wrap = "soft" >{{_page.newComment}}</textarea>
+                            <textarea id="inputs-comment" rows = "3", wrap = "soft" style = {{_page.newComment.style}}>{{_page.newComment.text}}</textarea>
                             <button  class = "btn btn-info" id = "send-message">Send</button>
 
                         </form>
@@ -1637,7 +1637,11 @@
 
                 </tr>
                 <tr><td  style = "padding : 10px">
+                    {{if #message.comment.link}}
+                    <p style = {{#message.comment.style}}><a href={{#message.comment.link}}>{{#message.comment.text}}</a></p>
+                    {{else}}
                     <p style = {{#message.comment.style}}>{{#message.comment.text}}</p>
+                    {{/if}}
                     </td>
                 </tr>
                 </tbody>

@@ -927,3 +927,7 @@ public/src/utilities/
 /agent-interaction/CausalPath/PNNL-ovarian-correlations.txt
 agent-interaction/CausalPath/PNNL-ovarian-correlations.txt
 agent-interaction/CausalPath/causative.sif
+/agent-interaction/CausalPath/PC.sif
+agent-interaction/CausalPath/PC.sif
+/agent-interaction/CausalPath/noncausal.txt
+agent-interaction/CausalPath/
