@@ -5,7 +5,7 @@
 
 //Date of the last change: 07/08/2016
 
-module.exports = {
+var idxCardToJson = {
 
     //Create the viz-compatible JSON
     createJson: function(idxcardjsonObj) {
@@ -299,3 +299,8 @@ module.exports = {
         return jsonObj;
     }
 };
+
+
+
+if( typeof module !== 'undefined' && module.exports) // expose as a nodejs module
+    module.exports = idxCardToJson;
