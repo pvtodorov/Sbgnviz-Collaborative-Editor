@@ -5,7 +5,7 @@
 //Listen and respond to cytoscape events triggered by cytoscape-undo-redo.js
 
 
-module.exports = function(modelManager){
+module.exports = function(modelManager, userId){
 
     //A new sample or file is loaded --update model and inform others
    $(document).on("sbgnvizLoadSampleEnd sbgnvizLoadFileEnd",  function(event, file){
@@ -55,7 +55,7 @@ module.exports = function(modelManager){
         }
 
 
-        else if (actionName === "changeNodeLabel" || actionName === "resizeNodes" ||
+        else if (actionName === "changeNodeLabel" ||actionName === "resizeNodes"||
             actionName === "addStateOrInfoBox" || actionName === "setMultimerStatus" || actionName === "setCloneMarkerStatus") {
 
             var modelElList = [];
@@ -69,6 +69,14 @@ module.exports = function(modelManager){
             });
             modelManager.changeModelElementGroupAttribute("data", modelElList, paramList, "me");
 
+        }
+        else if(actionName === "resize"){
+
+            var modelElList = [{id: res.node.id(), isNode: true}];
+            var paramList = [res.node.data()];
+
+
+            modelManager.changeModelElementGroupAttribute("data", modelElList, paramList, "me");
         }
 
         else if (actionName === "changeBendPoints") {
@@ -310,7 +318,7 @@ module.exports = function(modelManager){
 
         cy.on('select', 'node', function (event) { //Necessary for multiple selections
             console.log(this.id()); //TODO delete later
-            modelManager.selectModelNode(this, "me");
+            modelManager.selectModelNode(this,  userId, "me");
 
         });
 
@@ -318,12 +326,12 @@ module.exports = function(modelManager){
             modelManager.unselectModelNode(this, "me");
         });
         cy.on('grab', 'node', function (event) { //Also works as 'select'
-            modelManager.selectModelNode(this, "me");
+            modelManager.selectModelNode(this, userId, "me");
         });
 
         cy.on('select', 'edge', function (event) {
             console.log(this.id()); //TODO delete later
-            modelManager.selectModelEdge(this, "me");
+            modelManager.selectModelEdge(this, userId, "me");
 
         });
 

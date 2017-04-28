@@ -9,9 +9,14 @@
 <script src="./socket.io.js"></script>
 <script src="./jquery-1.8.2.js"></script>
 <script src="./tinycolor.js"></script>
+<script src="./LineReader.js"></script>
+<script src="../public/collaborative-app/reach-functions/idxcardjson-to-json-converter.js"></script>
+<script src="./dbRead.js"></script>
+
 <script src="./agentAPI.js"></script>
 <script src="./HashMap.js"></script>
 <script src="ContextAgent.js"></script>
+<!--<script src="CausalityAgentMemory.js"></script>-->
 <script src="CausalityAgent.js"></script>
 
 <form>
@@ -22,6 +27,8 @@
     Agent name: <input type = "text" id = "agentName" name="agentName" value = "Agent">
     Server IP: <input type = "text" id = "serverIp" name="serverIp" >
     <input type = "button" id = "createAgentButton" value="Create agent" onclick = getServerIp()>
+    <!--<input id="db-file" type="file" onchange = loadDbFile() />-->
+
 
 </form>
 
@@ -350,6 +357,7 @@
 
 
 
+
   //      agent = new Agent($('#agentName')[0].value, agentId);
 
 //        agent = new ContextAgent($('#agentName')[0].value, agentId);
@@ -380,6 +388,8 @@
 
                 }
                 else if(agent instanceof CausalityAgent) {
+//                    var db = openDB();
+
                     agent.init();
 
                 }
@@ -501,6 +511,7 @@
     };
 
 
+
     function readTextFile(filePath, callback) {
 
         var rawFile;
@@ -531,7 +542,7 @@
 
     function saveFile(data, filename, type) {
         var a = document.createElement("a"),
-            file = new Blob([data], {type: type});
+            file = new Blob(data, {type: type});
         if (window.navigator.msSaveOrOpenBlob) // IE10+
             window.navigator.msSaveOrOpenBlob(file, filename);
         else { // Others
@@ -679,6 +690,26 @@
 
         //  agent.sendRequest("agentLoadFileRequest",{file:txtFile});
     };
+
+    function loadDbFile(){
+        if ($("#db-file").val() == "") {
+            return;
+        }
+
+        var fileInput = $("#db-file")[0];
+
+        var file = fileInput.files[0];
+        if(file){
+            agent.pnnlDb = createPNNLDatabaseFromFile("pnnlFull");
+            agent.pnnlDb.readIntoMemory(file);
+//            agent.pnnlDb.init();
+        }
+
+        //    setFileContent(file.name);
+
+        //  agent.sendRequest("agentLoadFileRequest",{file:txtFile});
+    };
+
 
     function undoOperation(){
         agent.sendRequest("agentUndoRequest");

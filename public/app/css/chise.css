@@ -220,6 +220,7 @@ body {
 
 #sbgn-inspector-and-canvas {
     margin: 10px;
+    margin-top:30px;
     overflow: auto !important;
 }
 

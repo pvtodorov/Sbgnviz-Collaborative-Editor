@@ -404,6 +404,8 @@ module.exports = function () {
                 delete preferences.animate;
             }
             layoutPropertiesView.applyLayout(preferences);
+
+            chise.endSpinner("layout-spinner"); //funda
         });
 
         /* FUNDA

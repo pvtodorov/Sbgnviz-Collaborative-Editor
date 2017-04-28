@@ -29,7 +29,7 @@ var useQunit = true;
 var factoidHandler;
 
 var socket;
-var jsonMerger = require('./public/src/reach-functions/json-merger.js');
+var jsonMerger = require('./public/collaborative-app/reach-functions/json-merger.js');
 
 var modelManager;
 var oneColor = require('onecolor');
@@ -652,7 +652,7 @@ app.proto.create = function (model) {
 
     }
 
-        require('./public/collaborative-app/editor-listener.js')(modelManager);
+        require('./public/collaborative-app/editor-listener.js')(modelManager, id);
         //Listen to these after cy is loaded
         $("#undo-last-action, #undo-icon").click(function (e) {
             if(modelManager.isUndoPossible()){
@@ -1321,15 +1321,15 @@ app.proto.dynamicResize = function (images) {
 
     if (windowHeight > canvasHeight)
     {
-        $("#canvas-tab-area").height(windowHeight * 0.85);
-        $("#sbgn-network-container").height(windowHeight * 0.85);
+        $("#canvas-tab-area").height(windowHeight * 0.84);
+        $("#sbgn-network-container").height(windowHeight * 0.84);
         if(images) {
             images.forEach(function (img) {
 
-                $("#static-image-container-" + img.tabIndex).height(windowHeight * 0.85);
+                $("#static-image-container-" + img.tabIndex).height(windowHeight * 0.84);
             });
         }
-        $("#inspector-tab-area").height(windowHeight * 0.85);
+        $("#inspector-tab-area").height(windowHeight * 0.84);
     }
 };
 

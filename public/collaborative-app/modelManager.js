@@ -404,13 +404,16 @@ module.exports = function (model, docId) {
             return edgePath.get();
         },
 
-        selectModelNode: function (node, user, noHistUpdate) {
+        selectModelNode: function (node, userId, user,  noHistUpdate) {
 
             var nodePath = model.at('_page.doc.cy.nodes.' + node.id());
             if (nodePath.get() == null)
                 return "Node id not found";
 
-            var userPath = model.at('_page.doc.users.' + user);
+            var userPath = model.at('_page.doc.users.' + userId);
+
+
+
             model.pass({user: user}).set('_page.doc.cy.nodes.' + node.id()+ '.highlightColor', userPath.get('colorCode'));
 
 
@@ -419,12 +422,12 @@ module.exports = function (model, docId) {
         },
 
 
-        selectModelEdge: function (edge, user,  noHistUpdate) {
+        selectModelEdge: function (edge, userId, user,  noHistUpdate) {
 
             var edgePath = model.at('_page.doc.cy.edges.' + edge.id());
             if (edgePath.get() == null)
                 return "Edge id not found";
-            var userPath = model.at('_page.doc.users.' + user);
+            var userPath = model.at('_page.doc.users.' + userId);
             model.pass({user: user}).set('_page.doc.cy.edges.' + edge.id()+ '.highlightColor', userPath.get('colorCode'));
 
 

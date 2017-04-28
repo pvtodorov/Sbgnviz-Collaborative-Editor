@@ -8,10 +8,10 @@
 
 module.exports =  function(app, modelManager) {
 
-    var idxcardjson = require('../src/reach-functions/idxcardjson-to-json-converter.js');
+    var idxcardjson = require('./reach-functions/idxcardjson-to-json-converter.js');
 
     var socket = io();
-    var idxCardView = require('../src/reach-functions//idxCard-info.js');
+    var idxCardView = require('./reach-functions/idxCard-info.js');
     var jsonGraphs;
     var nodeMap;
     var text= 'We introduce a new method. MDM2 phosphorylates TP53.  MDM2 deactivates RAF. A Sos-1-E3b1 complex directs Rac activation by entering into a tricomplex with Eps8.';
