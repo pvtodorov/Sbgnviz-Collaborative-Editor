@@ -259,7 +259,7 @@ CausalityAgent.prototype.tellCausality = function(gene, callback) {
     var self = this;
 
 
-    var agentMsg = gene + " " + self.causality[gene][indCausal].rel + " " + self.causality[gene][indCausal].id2 + "; and here's it's graph. ";
+    var agentMsg = gene + " " + self.causality[gene][indCausal].rel + " " + self.causality[gene][indCausal].id2 + ". Here's it's graph. ";
 
 
     self.sendMessage({text: agentMsg}, "*", function () {

@@ -15,6 +15,9 @@ module.exports = function(modelManager, userId){
 
     });
 
+
+
+
     $(document).on("saveLayout", function (evt) {
          var layoutProperties = appUtilities.currentLayoutProperties;
         modelManager.updateLayoutProperties(layoutProperties, "me");
@@ -30,7 +33,10 @@ module.exports = function(modelManager, userId){
         modelManager.updateGridProperties(gridProperties, "me");
     });
 
-
+    $(document).on("newFile", function (evt) {
+        cy.remove(cy.elements());
+        modelManager.newModel("me"); //do not delete cytoscape, only the model
+    });
 
     cy.on("afterDo afterRedo", function (event, actionName, args, res) {
 

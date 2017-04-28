@@ -175,6 +175,9 @@ module.exports = function () {
             };
 
             promptConfirmationView.render(createNewFile);
+
+            //FUNDA
+            $(document).trigger('newFile');
         });
 
         $("#load-file, #load-file-icon").click(function () {
