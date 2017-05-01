@@ -381,12 +381,6 @@
                                 </div>
 
                                 <script>
-                                    function closeTab(el){
-                                        $("#defaultOpen").click();
-                                        el.parentElement.style.display='none';
-                                        console.log(el.parentElement)
-                                    }
-
                                     (function() {
                                         var tabInd = {{#imageFile.tabIndex}};
                                         var $section = $('#section-' + tabInd);
@@ -435,7 +429,7 @@
 
 
 
-                             {{#imageFile.tabLabel}}<span onclick= closeTab(this) class="glyphicon glyphicon-remove"></span></a>
+                             {{#imageFile.tabLabel}}</a>
 
                    </li>
                     {{/each}}
