@@ -118,19 +118,18 @@ CausalityAgent.prototype.readAllSifRelations = function(sifFilePath){
 }
 
 
-CausalityAgent.prototype.convertToOppositeRel = function(rel){
+var convertToOppositeRel = function(rel){
 
     var oppRel ="";
 
-    if(rel === "PHOSPHORYLATES")
-        oppRel = "IS-PHOSPHORYLATED-BY";
-    else if(rel === "DEPHOSPHORYLATES")
-        oppRel = "IS-DEPHOSPHORYLATED-BY";
-    else if(rel === "UPREGULATES-EXPRESSION")
-        oppRel = "EXPRESSION-IS-UPREGULATED-BY";
-    else if(rel === "DOWNREGULATES-EXPRESSION")
-        oppRel = "EXPRESSION-IS-DOWNREGULATED-BY";
-
+    if(rel === "phosphorylates")
+        oppRel = "is-phosphorylated-by";
+    else if(rel === "dephosphorylates")
+        oppRel = "is-dephosphorylated-by";
+    else if(rel === "upregulates-expression")
+        oppRel = "expression-is-upregulated-by";
+    else if(rel === "downregulates-expression")
+        oppRel = "expression-is-downregulated-by";
     return oppRel;
 
 }
@@ -167,6 +166,7 @@ CausalityAgent.prototype.readCausality = function(causalityFilePath, callback){
 
 
 
+
             if(self.causality[id1])
                 self.causality[id1].push({rel: vals[1], id2: id2, uriStr: uriStr});
             else
@@ -174,9 +174,9 @@ CausalityAgent.prototype.readCausality = function(causalityFilePath, callback){
 
 
             if(self.causality[id2])
-                self.causality[id2].push({rel: self.convertToOppositeRel(vals[1]), id2: id1, uriStr: uriStr});
+                self.causality[id2].push({rel: convertToOppositeRel(vals[1]), id2: id1, uriStr: uriStr});
             else
-                self.causality[id2] = [{rel: self.convertToOppositeRel(vals[1]), id2: id1, uriStr: uriStr}];
+                self.causality[id2] = [{rel: convertToOppositeRel(vals[1]), id2: id1, uriStr: uriStr}];
 
 
 
@@ -227,7 +227,7 @@ CausalityAgent.prototype.listenToMessages = function(callback){
             var words = sentence.split(' ');
 
             if(sentence.indexOf("YES")>=0) {
-                var agentMsg  = "OK, I am updating my model."
+                var agentMsg  = "OK, I am updating my model and the graph."
                 self.sendMessage({text: agentMsg}, "*", function () {
                     self.updateAgentModel(data.comment.text, function(){
                         if (callback) callback();
@@ -280,6 +280,31 @@ CausalityAgent.prototype.updateAgentModel = function(text, callback){
 
         cards.forEach(function(card){
             var jsonData = idxCardToJson.createJson({cards: [card]});
+
+            try {
+                var gene1 = card.extracted_information.participant_a.entity_text.toUpperCase();
+                var gene2 = card.extracted_information.participant_b.entity_text.toUpperCase();
+                var rel = card.extracted_information.interaction_type;
+
+
+
+
+                if (gene1 && gene2 && rel) {
+                    if(rel === "adds_modification")
+                        rel = "phosphorylates";
+                    else if(rel === "removes_modification")
+                        rel = "dephosphorylates";
+
+
+                    self.causality[gene1].push({id1: gene1, id2: gene2, rel: rel});
+
+                    self.causality[gene2].push({id1: gene2, id2: gene1, rel: convertToOppositeRel(self.causality[gene1])
+                    });
+                }
+            }
+            catch(error){
+                console.log(error);
+            }
 
             self.sendRequest("agentMergeGraphRequest", {graph: jsonData, type:"json"}, function(){
                 if (callback) callback();
@@ -334,9 +359,6 @@ CausalityAgent.prototype.tellNonCausality = function(gene, callback) {
                     }
                 }
 
-
-                // if(indNonCausal < 0)
-                //    indNonCausal = j;
             }
         }
 
@@ -364,8 +386,9 @@ CausalityAgent.prototype.tellCausality = function(gene, callback) {
 
     var self = this;
 
+    var relText = self.causality[gene][indCausal].rel.replace(/[-]/g, " ");
 
-    var agentMsg = gene + " " + self.causality[gene][indCausal].rel + " " + self.causality[gene][indCausal].id2 + ". Here's it's graph. ";
+    var agentMsg = gene + " " + relText + " " + self.causality[gene][indCausal].id2 + ". Here's it's graph. ";
 
 
     self.sendMessage({text: agentMsg}, "*", function () {
@@ -418,22 +441,25 @@ CausalityAgent.prototype.tellCorrelation = function(gene, callback){
             agentMsg = "The largest explainable correlation about  " + gene + " is the correlation with " + geneCorrArr[indCorr].id2 + " with a value of " + parseFloat(maxCorr).toFixed(3) + ". ";
 
 
-
-
-
-
         }
         else { //no causal explanation around gene
 
             agentMsg = "I can't find any causal relationships about " + gene + ". ";
 
-            console.log(gene + " " + geneCorrArr[0]);
-            var corr = geneCorrArr[0].correlation; //self.pnnl[gene] is sorted so take the first element
-            if (corr)
-                agentMsg += "But it has the highest correlation with " + geneCorrArr[0].id2 + " in PNNL data. ";
+            maxCorr = -1000;
+            var geneCorr;
+            for (var j = 0; j < geneCorrArr.length; j++) {
+                if(geneCorrArr[j]. correlation > maxCorr){
+                    geneCorr = geneCorrArr[j].id2;
+                    maxCorr = geneCorrArr[j].correlation;
+                }
+            }
+
+            if (geneCorr && maxCorr > -1000)
+                agentMsg += "But it has the highest correlation with " + geneCorr + " with a value of " + parseFloat(maxCorr).toFixed(3) + ". ";
 
             //Search common upstreams of gene and its correlated
-            var commonUpstreams = self.findCommonUpstreams(gene, geneCorrArr[0].id2);
+            var commonUpstreams = self.findCommonUpstreams(gene, geneCorr);
             agentMsg += makeUpstreamStr(commonUpstreams);
 
 

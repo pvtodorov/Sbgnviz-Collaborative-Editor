@@ -46,6 +46,15 @@ app.on('model', function (model) {
         return item.date > startTime;
     });
 
+    model.fn('biggerThanCurrentTime', function (item) {
+
+        var clickTime = model.get('_page.clickTime');
+
+
+        return item.date > clickTime;
+    });
+
+
 
 });
 
@@ -1279,6 +1288,12 @@ app.proto.add = function (model, filePath) {
 
 };
 
+app.proto.clearHistory = function () {
+    this.model.set('_page.clickTime', new Date);
+
+    return this.model.filter('_page.doc.messages', 'biggerThanCurrentTime').ref('_page.list');
+    
+}
 
 app.proto.dynamicResize = function (images) {
     var win = $(window);
