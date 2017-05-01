@@ -227,9 +227,11 @@ CausalityAgent.prototype.listenToMessages = function(callback){
             var words = sentence.split(' ');
 
             if(sentence.indexOf("YES")>=0) {
-                var agentMsg  = "OK, I am updating my model and the graph."
+                var agentMsg  = "OK, I am updating my model and the graph..."
                 self.sendMessage({text: agentMsg}, "*", function () {
                     self.updateAgentModel(data.comment.text, function(){
+
+
                         if (callback) callback();
                     });
 
@@ -240,7 +242,7 @@ CausalityAgent.prototype.listenToMessages = function(callback){
             else if(sentence.indexOf("NO")>=0) {
                 setTimeout(function () {
                     self.tellNonCausality(geneContext, callback);
-                }, 2000);
+                }, 1000);
 
 
             }
@@ -257,13 +259,13 @@ CausalityAgent.prototype.listenToMessages = function(callback){
 
                 });
 
-                if (sentence.indexOf("RELATION") >= 0) {
+                if (sentence.indexOf("RELATION") >= 0 ||sentence.indexOf("EXPLANATION") >= 0) {
                     if (indCausal > -1)
                         self.tellCausality(geneContext, callback);
 
                     setTimeout(function () {
                         self.tellNonCausality(geneContext, callback);
-                    }, 2000);
+                    }, 1000);
                 }
             }
 
@@ -273,6 +275,8 @@ CausalityAgent.prototype.listenToMessages = function(callback){
 
 CausalityAgent.prototype.updateAgentModel = function(text, callback){
     var self = this;
+
+
 
     self.socket.emit("REACHQuery", "indexcard", text, function (data) {
 
@@ -289,6 +293,7 @@ CausalityAgent.prototype.updateAgentModel = function(text, callback){
 
 
 
+
                 if (gene1 && gene2 && rel) {
                     if(rel === "adds_modification")
                         rel = "phosphorylates";
@@ -296,10 +301,15 @@ CausalityAgent.prototype.updateAgentModel = function(text, callback){
                         rel = "dephosphorylates";
 
 
-                    self.causality[gene1].push({id1: gene1, id2: gene2, rel: rel});
+                    if(self.causality[gene1])
+                        self.causality[gene1].push({id1: gene1, id2: gene2, rel: rel});
+                    else
+                        self.causality[gene1] = [{id1: gene1, id2: gene2, rel: rel}];
 
-                    self.causality[gene2].push({id1: gene2, id2: gene1, rel: convertToOppositeRel(self.causality[gene1])
-                    });
+                    if(self.causality[gene2])
+                        self.causality[gene2].push({id1: gene2, id2: gene1, rel: convertToOppositeRel(self.causality[gene1])});
+                    else
+                        self.causality[gene2] = [{id1: gene2, id2: gene1, rel: convertToOppositeRel(self.causality[gene1])}];
                 }
             }
             catch(error){
@@ -344,6 +354,7 @@ CausalityAgent.prototype.tellNonCausality = function(gene, callback) {
 
 
         var maxNonCausalCorr = -1000;
+        var indCorr = -1;
         for (var j = 0; j < geneCorrArr.length; j++) {
             var geneCorr = geneCorrArr[j].id2;
 
@@ -352,8 +363,10 @@ CausalityAgent.prototype.tellNonCausality = function(gene, callback) {
                 corrVal = geneCorrArr[j].correlation;
 
                 if(corrVal > maxNonCausalCorr){
-                    maxNonCausalCorr = corrVal;
+
                     if(nextNonCausalCorr < 0 || corrVal < nextNonCausalCorr){
+                        maxNonCausalCorr = corrVal;
+                        indCorr = j;
                        geneNonCausal = geneCorr;
                         nextNonCausalCorr = corrVal;
                     }
@@ -363,8 +376,23 @@ CausalityAgent.prototype.tellNonCausality = function(gene, callback) {
         }
 
         if (geneNonCausal) {
+            var pMsg1 = "";
+            var pMsg2 = "";
+
+            if(geneCorrArr[indCorr].pSite1)
+                pMsg1 = " at " + geneCorrArr[indCorr].pSite1;
+            if(geneCorrArr[indCorr].pSite2)
+                pMsg2 = " at " + geneCorrArr[indCorr].pSite2;
+
+
+
             var agentMsg = "I am looking at the explainable correlations about " + gene + ", but ";
-            agentMsg += "I can't find any causal relationships between " + gene + " and " + geneNonCausal + " although they have a correlation of " + parseFloat(nextNonCausalCorr).toFixed(3) + ". ";
+
+
+            agentMsg += "I can't find any causal relationships between " + gene +" and " + geneNonCausal + " although they have a correlation of " + parseFloat(nextNonCausalCorr).toFixed(3) + ". ";
+
+            agentMsg += "But the highest correlation " + toCorrelationDetailString(geneCorrArr, indCorr, nextNonCausalCorr);
+
 
             var commonUpstreams = self.findCommonUpstreams(gene, geneNonCausal);
 
@@ -401,7 +429,33 @@ CausalityAgent.prototype.tellCausality = function(gene, callback) {
 
 }
 
+function toCorrelationDetailString(geneCorrArr, indCorr, maxCorr){
 
+    var pMsg1 = "";
+    var pMsg2 = "";
+    var agentMsg;
+
+    if(geneCorrArr[indCorr].pSite1)
+        pMsg1 = "of " + geneCorrArr[indCorr].pSite1 + " phosphorylation of " + geneCorrArr[indCorr].id1;
+    else
+        pMsg1 = "of " + geneCorrArr[indCorr].id1 + " total protein";
+
+    if(geneCorrArr[indCorr].pSite2)
+        pMsg2 =  "with " + geneCorrArr[indCorr].pSite2 + " phosphorylation of " + geneCorrArr[indCorr].id2;
+    else
+        pMsg2 =  "with " + geneCorrArr[indCorr].id2 + " total protein";
+
+
+
+    var corrVal = parseFloat(geneCorrArr[indCorr].correlation).toFixed(3);
+    if(maxCorr)
+        corrVal = parseFloat(maxCorr).toFixed(3);
+
+    agentMsg =  pMsg1 + " is the correlation " +  pMsg2 + " with a value of " +  corrVal + ". ";
+
+    return agentMsg;
+
+}
 
 /***
  * Respond to queries from other actors to find explainable relationships around gene
@@ -438,7 +492,9 @@ CausalityAgent.prototype.tellCorrelation = function(gene, callback){
         }
 
         if (indCausal > -1) {
-            agentMsg = "The largest explainable correlation about  " + gene + " is the correlation with " + geneCorrArr[indCorr].id2 + " with a value of " + parseFloat(maxCorr).toFixed(3) + ". ";
+
+            agentMsg = "The largest explainable correlation " + toCorrelationDetailString(geneCorrArr, indCorr);
+
 
 
         }
@@ -447,16 +503,20 @@ CausalityAgent.prototype.tellCorrelation = function(gene, callback){
             agentMsg = "I can't find any causal relationships about " + gene + ". ";
 
             maxCorr = -1000;
-            var geneCorr;
+            var indCorr = -1;
             for (var j = 0; j < geneCorrArr.length; j++) {
                 if(geneCorrArr[j]. correlation > maxCorr){
-                    geneCorr = geneCorrArr[j].id2;
                     maxCorr = geneCorrArr[j].correlation;
+                    indCorr = j;
                 }
             }
 
-            if (geneCorr && maxCorr > -1000)
-                agentMsg += "But it has the highest correlation with " + geneCorr + " with a value of " + parseFloat(maxCorr).toFixed(3) + ". ";
+            if (indCorr > -1) {
+
+
+                agentMsg += "But the highest unexplainable correlation " + toCorrelationDetailString(geneCorrArr, indCorr);
+
+            }
 
             //Search common upstreams of gene and its correlated
             var commonUpstreams = self.findCommonUpstreams(gene, geneCorr);
@@ -532,6 +592,7 @@ CausalityAgent.prototype.mergePCQuery = function(uriStr, callback){
     pc2URL = pc2URL + uriStr + format;
 
     this.socket.emit('MergePCQuery', {url: pc2URL, type: "sbgn"}, function(data){
+
         if(callback) callback(data);
     });
 

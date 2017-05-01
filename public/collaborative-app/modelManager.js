@@ -1056,9 +1056,33 @@ module.exports = function (model, docId) {
                 node.data(data);
 
             else {
+                //correct the labels from PC queries
                 var nodeData = node.data();
                 if(nodeData == null)
                     nodeData = node._private.data;
+
+                if(nodeData.statesandinfos) {
+
+                    for (var i = 0; i < nodeData.statesandinfos.length; i++) {
+
+                        if (nodeData.statesandinfos[i].clazz === "state variable") {
+                            if (nodeData.statesandinfos[i].state.value === "opthr") {
+                                nodeData.statesandinfos[i].state.value = "p";
+                                nodeData.statesandinfos[i].state.variable = "T" + nodeData.statesandinfos[i].state.variable;
+                            }
+                            else if (nodeData.statesandinfos[i].state.value === "opser") {
+                                nodeData.statesandinfos[i].state.value = "p";
+                                nodeData.statesandinfos[i].state.variable = "S" + nodeData.statesandinfos[i].state.variable;
+                            }
+                            else if (nodeData.statesandinfos[i].state.value === "optyr") {
+                                nodeData.statesandinfos[i].state.value = "p";
+                                nodeData.statesandinfos[i].state.variable = "Y" + nodeData.statesandinfos[i].state.variable;
+                            }
+                        }
+
+                    }
+                    node._private.data.statesandinfos = nodeData.statesandinfos;
+                }
                 this.changeModelNodeAttribute('data', node.id(), nodeData, user, noHistUpdate);
             }
 

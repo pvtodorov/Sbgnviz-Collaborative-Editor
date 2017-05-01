@@ -1538,6 +1538,8 @@ app.proto.mergeJsonWithCurrent = function(jsonGraph, callback){
         newJsonIds.nodes.forEach(function(node){
                 cy.getElementById(node.data.id).select();
 
+
+
         });
 
         //Call Layout
