@@ -382,8 +382,9 @@
 
                                 <script>
                                     function closeTab(el){
-                                        el.parentElement.style.display='none';
                                         $("#defaultOpen").click();
+                                        el.parentElement.style.display='none';
+                                        console.log(el.parentElement)
                                     }
 
                                     (function() {
@@ -427,13 +428,16 @@
 
 
                     <li class = "tab-link">
-                        <span onclick= closeTab(this) class="close-icon"></span>
-
-                        <a data-toggle="tab" href={{"#static-image-container-"+#imageFile.tabIndex}}>
 
 
 
-                             {{#imageFile.tabLabel}}</a></li>
+                        <a data-toggle="tab" href={{"#static-image-container-"+#imageFile.tabIndex}} class="pull-left">
+
+
+
+                             {{#imageFile.tabLabel}}<span onclick= closeTab(this) class="glyphicon glyphicon-remove"></span></a>
+
+                   </li>
                     {{/each}}
                 </ul>
             </div>
@@ -1699,5 +1703,3 @@
 
     }
 </script>
-
-
