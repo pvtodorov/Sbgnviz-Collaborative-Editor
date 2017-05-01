@@ -799,8 +799,13 @@ hr.inspector-divider {
 }
 
 .tab-content{
-    width: inherit;
-    height: inherit;
+    height: 100%;
+    width: 100%;
+}
+
+.tab-pane{
+    height: 100%;
+    width: 100%;
 }
 
 
