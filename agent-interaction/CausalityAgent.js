@@ -20,10 +20,11 @@ function CausalityAgent(name, id) {
     this.geneNameArr = []; //all the relevant gene names for OV
 
 
-    var indCausal = -1;
-    var nextNonCausalCorr = -1000;
+    this.indCausal = -1;
+    this.nextNonCausalCorr = -1000;
+    this.currCorr = -1000;
 
-    var geneContext;
+    this.geneContext;
 
 
 }
@@ -240,31 +241,39 @@ CausalityAgent.prototype.listenToMessages = function(callback){
 
             }
             else if(sentence.indexOf("NO")>=0) {
-                setTimeout(function () {
-                    self.tellNonCausality(geneContext, callback);
-                }, 1000);
+                // setTimeout(function () {
+                //     self.tellNextNonCausalityNonCausality(self.geneContext, callback);
+                // }, 1000);
 
 
+                self.tellCorrelation(self.geneContext, callback);
             }
             else {
 
 
                 self.findRelevantGeneFromSentence(words, function (gene) {
-                    geneContext = gene;
-                    console.log(gene);
-                    self.tellMutSig(gene, callback);
+                    if(self.geneContext !== gene){ //a new gene with different values
+                        self.currCorr = -1000;
+                        self.nextNonCausalCorr = -1000;
 
-                    self.tellCorrelation(gene, callback);
+                        self.geneContext = gene;
+
+                        self.tellMutSig(gene, callback);
+
+                        self.tellCorrelation(gene, callback);
+                    }
+
+
 
 
                 });
 
                 if (sentence.indexOf("RELATION") >= 0 ||sentence.indexOf("EXPLANATION") >= 0) {
-                    if (indCausal > -1)
-                        self.tellCausality(geneContext, callback);
+                    if (self.indCausal > -1)
+                        self.tellCausality(self.geneContext, callback);
 
                     setTimeout(function () {
-                        self.tellNonCausality(geneContext, callback);
+                        self.tellNonCausality(self.geneContext, callback);
                     }, 1000);
                 }
             }
@@ -339,8 +348,9 @@ CausalityAgent.prototype.tellMutSig = function(gene, callback) {
         if (callback) callback();
     });
 
-
 }
+
+
 CausalityAgent.prototype.tellNonCausality = function(gene, callback) {
     var self = this;
     //Find non-causal but correlational genes
@@ -350,48 +360,42 @@ CausalityAgent.prototype.tellNonCausality = function(gene, callback) {
 
 
 
-    self.pnnlDb.getEntry("id1", gene, function(geneCorrArr) {
 
+    self.pnnlDb.getEntry("id1", gene, function(geneCorrArr) {
 
         var maxNonCausalCorr = -1000;
         var indCorr = -1;
+
+
+
         for (var j = 0; j < geneCorrArr.length; j++) {
             var geneCorr = geneCorrArr[j].id2;
 
             if (!self.hasCausalRelationship(gene, geneCorr)) {
 
-                corrVal = geneCorrArr[j].correlation;
+                corrVal = Math.abs(geneCorrArr[j].correlation);
 
-                if(corrVal > maxNonCausalCorr){
+                if((corrVal > maxNonCausalCorr) && (corrVal < Math.abs(self.currCorr) ||self.currCorr < - 1 )){
+                    maxNonCausalCorr = corrVal;
+                    indCorr = j;
+                    geneNonCausal = geneCorr;
 
-                    if(nextNonCausalCorr < 0 || corrVal < nextNonCausalCorr){
-                        maxNonCausalCorr = corrVal;
-                        indCorr = j;
-                       geneNonCausal = geneCorr;
-                        nextNonCausalCorr = corrVal;
-                    }
                 }
+
 
             }
         }
 
         if (geneNonCausal) {
-            var pMsg1 = "";
-            var pMsg2 = "";
 
-            if(geneCorrArr[indCorr].pSite1)
-                pMsg1 = " at " + geneCorrArr[indCorr].pSite1;
-            if(geneCorrArr[indCorr].pSite2)
-                pMsg2 = " at " + geneCorrArr[indCorr].pSite2;
+            self.currCorr = geneCorrArr[indCorr].correlation;
+
+            var agentMsg = "I am looking at the next highest correlation about " + gene + ". ";
 
 
+            agentMsg += "I can't find any causal relationships between " + gene +" and " + geneNonCausal + " although they have a correlation of " + parseFloat(maxNonCausalCorr).toFixed(3) + ". ";
 
-            var agentMsg = "I am looking at the explainable correlations about " + gene + ", but ";
-
-
-            agentMsg += "I can't find any causal relationships between " + gene +" and " + geneNonCausal + " although they have a correlation of " + parseFloat(nextNonCausalCorr).toFixed(3) + ". ";
-
-            agentMsg += "But the highest correlation " + toCorrelationDetailString(geneCorrArr, indCorr, nextNonCausalCorr);
+            agentMsg += "But the highest correlation " + toCorrelationDetailString(geneCorrArr, indCorr);
 
 
             var commonUpstreams = self.findCommonUpstreams(gene, geneNonCausal);
@@ -405,6 +409,8 @@ CausalityAgent.prototype.tellNonCausality = function(gene, callback) {
     });
 
 }
+
+
 /***
  * Respond to queries from other actors to find explainable relationships around gene
  * @param gene: gene name
@@ -414,16 +420,17 @@ CausalityAgent.prototype.tellCausality = function(gene, callback) {
 
     var self = this;
 
-    var relText = self.causality[gene][indCausal].rel.replace(/[-]/g, " ");
+    var relText = self.causality[gene][self.indCausal].rel.replace(/[-]/g, " ");
 
-    var agentMsg = gene + " " + relText + " " + self.causality[gene][indCausal].id2 + ". Here's it's graph. ";
+    var agentMsg = gene + " " + relText + " " + self.causality[gene][self.indCausal].id2 + ". Here's it's graph. ";
 
 
     self.sendMessage({text: agentMsg}, "*", function () {
         if (callback) callback();
     });
 
-    self.showCausality(gene, indCausal, callback);
+    self.showCausality(gene, self.indCausal, callback);
+
 
 
 
@@ -457,6 +464,7 @@ function toCorrelationDetailString(geneCorrArr, indCorr, maxCorr){
 
 }
 
+
 /***
  * Respond to queries from other actors to find explainable relationships around gene
  * @param gene: gene name
@@ -467,9 +475,9 @@ CausalityAgent.prototype.tellCorrelation = function(gene, callback){
     var self = this;
     var indCorr = -1;
 
-    indCausal = -1;
+    self.indCausal = -1;
 
-    nextNonCausalCorr = -1000;
+    self.nonCausalCorr = -1000;
     var maxCorr = -1000;
 
     //get pnnl genes
@@ -482,17 +490,19 @@ CausalityAgent.prototype.tellCorrelation = function(gene, callback){
 
                 for (var i = 0; i < self.causality[gene].length; i++) {
                     var geneCausal = self.causality[gene][i].id2;
-                    if (geneCausal === geneCorr && geneCorrArr[j].correlation > maxCorr) {
-                        indCausal = i;
+                    var corrVal = Math.abs(geneCorrArr[j].correlation);
+                    if (geneCausal === geneCorr && corrVal> maxCorr && (self.currCorr < -1 ||  corrVal < Math.abs(self.currCorr))) {
+                        self.indCausal = i;
                         indCorr = j;
-                        maxCorr = geneCorrArr[j].correlation;
+                        maxCorr = Math.abs(geneCorrArr[j].correlation);
                     }
                 }
             }
         }
 
-        if (indCausal > -1) {
+        if (self.indCausal > -1) {
 
+            self.currCorr = geneCorrArr[indCorr].correlation; //highest correlation
             agentMsg = "The largest explainable correlation " + toCorrelationDetailString(geneCorrArr, indCorr);
 
 
@@ -502,26 +512,32 @@ CausalityAgent.prototype.tellCorrelation = function(gene, callback){
 
             agentMsg = "I can't find any causal relationships about " + gene + ". ";
 
-            maxCorr = -1000;
+            //Find and assign maximum correlation
+
             var indCorr = -1;
+
+            maxCorr = -1000;
             for (var j = 0; j < geneCorrArr.length; j++) {
-                if(geneCorrArr[j]. correlation > maxCorr){
-                    maxCorr = geneCorrArr[j].correlation;
+                var corrVal = Math.abs(geneCorrArr[j].correlation );
+                if(corrVal > maxCorr && (self.currCorr < -1  ||  corrVal < Math.abs(self.currCorr))){
                     indCorr = j;
+                    maxCorr = Math.abs(geneCorrArr[j].correlation);
                 }
+
             }
 
-            if (indCorr > -1) {
 
+            if (indCorr > -1) {
+                self.currCorr = geneCorrArr[indCorr].correlation;
 
                 agentMsg += "But the highest unexplainable correlation " + toCorrelationDetailString(geneCorrArr, indCorr);
 
+
+                //Search common upstreams of gene and its correlated
+                var commonUpstreams = self.findCommonUpstreams(gene, geneCorr);
+                agentMsg += makeUpstreamStr(commonUpstreams);
+
             }
-
-            //Search common upstreams of gene and its correlated
-            var commonUpstreams = self.findCommonUpstreams(gene, geneCorr);
-            agentMsg += makeUpstreamStr(commonUpstreams);
-
 
         }
         self.sendMessage({text: agentMsg}, "*", function () {

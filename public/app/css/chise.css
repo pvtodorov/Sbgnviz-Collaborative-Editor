@@ -1035,7 +1035,7 @@ input[type="file"] {
 #inputs-form {
     margin-top: 10px;
     margin-right: 5px;
-
+    overflow-y: hidden;
 }
 
 #send-message{
@@ -1047,6 +1047,7 @@ input[type="file"] {
     /*height: 40px;*/
     font-size:small;
     margin-bottom: 1px;
+    overflow-y: hidden;
 
 }
 

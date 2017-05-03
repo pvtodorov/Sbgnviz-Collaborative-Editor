@@ -592,6 +592,10 @@ app.proto.create = function (model) {
     socket = io();
 
 
+    //change scroll position
+    $('#messages').scrollTop($('#messages')[0].scrollHeight  - $('.message').height());
+
+
     var id = model.get('_session.userId');
     var name = model.get('_page.doc.users.' + id +'.name');
 
@@ -1210,7 +1214,9 @@ app.proto.init = function (model) {
 };
 
 
-app.proto.onScroll = function () {
+app.proto.onScroll = function (element) {
+    console.log(element);
+    console.log(this);
     var bottom, containerHeight, scrollBottom;
     bottom = this.list.offsetHeight;
     containerHeight = this.container.offsetHeight;
@@ -1219,6 +1225,7 @@ app.proto.onScroll = function () {
     return this.atBottom = bottom < containerHeight || scrollBottom > bottom - 10;
 
 };
+
 
 
 app.proto.changeColorCode = function(){
@@ -1240,11 +1247,25 @@ app.proto.runUnitTests = function(){
 
 }
 
+app.proto.enterMessage= function(event){
+
+    if (event.keyCode == 13 && !event.shiftKey) {
+       this.add();
+
+       //  $('#inputs-comment')[0].value = "abc";
+       // // $('#inputs-comment')[0].focus();
+       //  $('#inputs-comment')[0].setSelectionRange(0,0);
+
+        // prevent default behavior
+        event.preventDefault();
+
+    }
+}
 app.proto.add = function (model, filePath) {
 
     if(model == null)
-
         model = this.model;
+
     this.atBottom = true;
 
 
@@ -1280,6 +1301,10 @@ app.proto.add = function (model, filePath) {
                 date: date
             });
 
+
+
+            //change scroll position
+           $('#messages').scrollTop($('#messages')[0].scrollHeight  - $('.message').height());
 
 
 

@@ -1550,7 +1550,9 @@
 
                     </div>
 
-                    <ul id="messages" as="list"  >
+
+                    <ul id="messages" as="list">
+                        <!--on-change = "onScroll()">-->
                         {{each _page.list as #message}}
                         <view is="chat-message"></view>
                         {{/each}}
@@ -1563,7 +1565,10 @@
                         User name: <input id="inputs-name" value="{{_page.doc.users[_session.userId].name}}">
                         <button id = "change-user-color" class = "btn btn-mini" on-click ="changeColorCode()">New user color</button>
                         <form id="inputs-form" on-submit="add()">
-                            <textarea id="inputs-comment" rows = "3", wrap = "soft" style = {{_page.newComment.style}}>{{_page.newComment.text}}</textarea>
+                        <!--<form id="inputs-form">-->
+                            <textarea id="inputs-comment" rows="3", wrap ="soft" style = {{_page.newComment.style}} on-keypress="enterMessage($event)">{{_page.newComment.text}}</textarea>
+                            <!--<input id="inputs-comment" rows = "3", wrap = "soft" style = {{_page.newComment.style}} type = "text">{{_page.newComment.text}}</input>-->
+
                             <button  class = "btn btn-info" id = "send-message">Send</button>
 
                         </form>
@@ -1614,7 +1619,7 @@
         <audio id="notificationAudio" src="http://www.talkingwav.com/various/beep_02.wav" preload="auto"></audio>
 
 
-        <div id ="unitTestArea"> <button class="btn btn-info btn-mini" on-click = "runUnitTests()"> Test</button></div>
+        <!--<div id ="unitTestArea"> <button class="btn btn-info btn-mini" on-click = "runUnitTests()"> Test</button></div>-->
 
         <chat-user:>
             <div class="user" style = background:{{_page.doc.users[#pUserId].colorCode}}>
