@@ -1564,7 +1564,7 @@
                     <div id="inputs">
                         User name: <input id="inputs-name" value="{{_page.doc.users[_session.userId].name}}">
                         <button id = "change-user-color" class = "btn btn-mini" on-click ="changeColorCode()">New user color</button>
-                        <form id="inputs-form" on-submit="add()">
+                        <form id="inputs-form" on-submit="add($event)">
                         <!--<form id="inputs-form">-->
                             <textarea id="inputs-comment" rows="3", wrap ="soft" style = {{_page.newComment.style}} on-keypress="enterMessage($event)">{{_page.newComment.text}}</textarea>
                             <!--<input id="inputs-comment" rows = "3", wrap = "soft" style = {{_page.newComment.style}} type = "text">{{_page.newComment.text}}</input>-->

@@ -436,11 +436,39 @@ CausalityAgent.prototype.tellCausality = function(gene, callback) {
 
 }
 
+/***
+ * Corrects PC psite information
+ * @param pSite
+ * @param letter
+ * @returns {*}
+ */
+function editPSite(pSite, letter){
+
+    if(pSite && pSite.length > 0 ){
+        if(pSite[0] === letter && pSite[pSite.length - 1] === letter)
+            pSite = pSite.slice(0,pSite.length - 1  );
+    }
+    return pSite;
+
+}
+
 function toCorrelationDetailString(geneCorrArr, indCorr, maxCorr){
 
     var pMsg1 = "";
     var pMsg2 = "";
     var agentMsg;
+
+    geneCorrArr[indCorr].pSite1= editPSite(geneCorrArr[indCorr].pSite1, "S");
+    geneCorrArr[indCorr].pSite2=editPSite(geneCorrArr[indCorr].pSite2, "S");
+
+
+    geneCorrArr[indCorr].pSite1= editPSite(geneCorrArr[indCorr].pSite1, "T");
+    geneCorrArr[indCorr].pSite2=editPSite(geneCorrArr[indCorr].pSite2, "T");
+
+
+    geneCorrArr[indCorr].pSite1= editPSite(geneCorrArr[indCorr].pSite1, "Y");
+    geneCorrArr[indCorr].pSite2= editPSite(geneCorrArr[indCorr].pSite2, "Y");
+
 
     if(geneCorrArr[indCorr].pSite1)
         pMsg1 = "of " + geneCorrArr[indCorr].pSite1 + " phosphorylation of " + geneCorrArr[indCorr].id1;

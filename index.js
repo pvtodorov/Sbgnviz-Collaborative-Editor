@@ -1113,6 +1113,16 @@ app.proto.init = function (model) {
 
     //Listen to other model operations
 
+
+    model.on('all', '_page.doc.messages.**', function(id, op, val, prev, passed){
+
+        $('#messages').scrollTop($('#messages')[0].scrollHeight  - $('.message').height());
+
+
+    });
+
+
+
     model.on('all', '_page.doc.factoid.*', function(id, op, val, prev, passed){
 
         if(docReady &&  passed.user == null) {
@@ -1193,6 +1203,7 @@ app.proto.init = function (model) {
         if(docReady){
             triggerContentChange('messages');
 
+
         }
 
         if (com[com.length - 1].userId != myId) {
@@ -1250,7 +1261,7 @@ app.proto.runUnitTests = function(){
 app.proto.enterMessage= function(event){
 
     if (event.keyCode == 13 && !event.shiftKey) {
-       this.add();
+       this.add(event);
 
        //  $('#inputs-comment')[0].value = "abc";
        // // $('#inputs-comment')[0].focus();
@@ -1261,7 +1272,7 @@ app.proto.enterMessage= function(event){
 
     }
 }
-app.proto.add = function (model, filePath) {
+app.proto.add = function (event, model, filePath) {
 
     if(model == null)
         model = this.model;
@@ -1302,6 +1313,7 @@ app.proto.add = function (model, filePath) {
             });
 
 
+           event.preventDefault();
 
             //change scroll position
            $('#messages').scrollTop($('#messages')[0].scrollHeight  - $('.message').height());
@@ -1397,7 +1409,7 @@ app.proto.uploadFile = function(evt){
         //Add file name as a text message
         this.model.set('_page.newComment', [{text: "Sent image: "  + filePath}] );
 
-        this.app.proto.add(this.model, filePath);
+        this.app.proto.add(evt,this.model, filePath);
 
 
     }
