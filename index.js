@@ -591,6 +591,12 @@ app.proto.create = function (model) {
 
     socket = io();
 
+    $('#messages').contentchanged = function () {
+
+        $('#messages').scrollTop($('#messages')[0].scrollHeight  - $('.message').height());
+
+    }
+
 
     //change scroll position
     $('#messages').scrollTop($('#messages')[0].scrollHeight  - $('.message').height());
@@ -696,6 +702,11 @@ app.proto.create = function (model) {
             if (!_this.atBottom) {
                 return;
             }
+
+            document.getElementById("messages").scrollTop= document.getElementById("messages").scrollHeight;
+
+            // $('#messages').scrollTop($('#messages')[0].scrollHeight  - $('.message').height());
+
             return _this.container.scrollTop = _this.list.offsetHeight;
         };
     })(this));
@@ -1102,6 +1113,7 @@ app.proto.listenToEdgeOperations = function(model){
 
 }
 
+
 app.proto.init = function (model) {
     var timeSort;
 
@@ -1114,12 +1126,13 @@ app.proto.init = function (model) {
     //Listen to other model operations
 
 
-    model.on('all', '_page.doc.messages.**', function(id, op, val, prev, passed){
-
-        $('#messages').scrollTop($('#messages')[0].scrollHeight  - $('.message').height());
-
-
-    });
+    // model.on('all', '_page.doc.messages.**', function(id, op, val, prev, passed){
+    //
+    //     // $('#messages').scrollTop($('#messages')[0].scrollHeight  - $('.message').height());
+    //     $('#messages').scrollTop($('#messages')[0].scrollHeight  - $('.message').height());
+    //
+    //
+    // });
 
 
 
