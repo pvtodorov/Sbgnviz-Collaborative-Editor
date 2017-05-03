@@ -505,7 +505,7 @@
     }
     function sendMessage(){
 
-        agent.sendRequest('agentMessage', {comment:{text: $('#chatMessage')[0].value}, targets:"*"}, function(){
+        agent.sendRequest('agentMessage', {comment:[{text: $('#chatMessage')[0].value}], targets:"*"}, function(){
             $('#chatMessage')[0].value = "";
         } );
     };

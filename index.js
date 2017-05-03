@@ -1297,7 +1297,7 @@ app.proto.add = function (model, filePath) {
                 targets: targets,
                 userId: msgUserId,
                 userName: msgUserName,
-                comment: comment,
+                comment: [comment],
                 date: date
             });
 
@@ -1395,7 +1395,7 @@ app.proto.uploadFile = function(evt){
         reader.readAsDataURL(file);
 
         //Add file name as a text message
-        this.model.set('_page.newComment', {text: "Sent image: "  + filePath} );
+        this.model.set('_page.newComment', [{text: "Sent image: "  + filePath}] );
 
         this.app.proto.add(this.model, filePath);
 

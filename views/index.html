@@ -1619,7 +1619,7 @@
         <audio id="notificationAudio" src="http://www.talkingwav.com/various/beep_02.wav" preload="auto"></audio>
 
 
-        <!--<div id ="unitTestArea"> <button class="btn btn-info btn-mini" on-click = "runUnitTests()"> Test</button></div>-->
+        <div id ="unitTestArea"> <button class="btn btn-info btn-mini" on-click = "runUnitTests()"> Test</button></div>
 
         <chat-user:>
             <div class="user" style = background:{{_page.doc.users[#pUserId].colorCode}}>
@@ -1642,11 +1642,15 @@
 
                 </tr>
                 <tr><td  style = "padding : 10px">
-                    {{if #message.comment.link}}
-                    <p style = {{#message.comment.style}}><a href={{#message.comment.link}}>{{#message.comment.text}}</a></p>
+
+                    {{each #message.comment as #cmt}}
+                    {{if #cmt.link}}
+                    <span style = {{#cmt.style}}><a href={{#message.comment.link}}>{{#cmt.text}}</a></span>
                     {{else}}
-                    <p style = {{#message.comment.style}}>{{#message.comment.text}}</p>
+                    <span style = {{#cmt.style}}>{{#cmt.text}}</span>
                     {{/if}}
+                    {{/each}}
+
                     </td>
                 </tr>
                 </tbody>
